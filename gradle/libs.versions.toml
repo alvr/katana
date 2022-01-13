@@ -3,10 +3,13 @@ compose = "1.1.0-rc01"
 compose-compiler = "1.1.0-rc02"
 kotlin = "1.6.10"
 
+[plugins]
+updates = { id = "com.github.ben-manes.versions", version = "0.41.0" }
+
 [libraries]
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version = "1.4.0" }
-androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.4.0" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.4.1" }
 androidx-core = { module = "androidx.core:core-ktx", version = "1.7.0" }
 
 # Compose
@@ -17,7 +20,7 @@ compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref =
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 
 # Design
-design-material = { module = "com.google.android.material:material", version = "1.4.0" }
+design-material = { module = "com.google.android.material:material", version = "1.5.0" }
 
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version = "7.0.4" }
