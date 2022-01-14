@@ -4,14 +4,15 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = KatanaConfiguration.CompileSdk
+    buildToolsVersion = KatanaConfiguration.BuildTools
 
     defaultConfig {
-        applicationId = "dev.alvr.katana"
-        minSdk = 21
-        targetSdk = 31
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = KatanaConfiguration.PackageName
+        minSdk = KatanaConfiguration.MinSdk
+        targetSdk = KatanaConfiguration.TargetSdk
+        versionCode = KatanaConfiguration.VersionCode
+        versionName = KatanaConfiguration.VersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -39,14 +40,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = KatanaConfiguration.UseJavaVersion
+        targetCompatibility = KatanaConfiguration.UseJavaVersion
     }
 
     kotlinOptions {
-        jvmTarget = "11"
-        apiVersion = "1.6"
-        languageVersion = "1.6"
+        jvmTarget = KatanaConfiguration.JvmTarget
+        apiVersion = KatanaConfiguration.KotlinVersion
+        languageVersion = KatanaConfiguration.KotlinVersion
     }
 
     buildFeatures.compose = true

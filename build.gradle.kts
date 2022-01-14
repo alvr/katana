@@ -16,6 +16,7 @@ tasks.register<Delete>("clean") {
 
 tasks.withType<DependencyUpdatesTask> {
     rejectVersionIf {
+        @Suppress("UseIfInsteadOfWhen")
         when (val current = checkDependencyVersion(currentVersion)) {
             ReleaseType.SNAPSHOT -> true // We are using a SNAPSHOT for a reason
             else -> checkDependencyVersion(candidate.version).isLessStableThan(current)
