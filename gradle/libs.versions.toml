@@ -3,7 +3,11 @@ compose = "1.1.0-rc01"
 compose-compiler = "1.1.0-rc02"
 kotlin = "1.6.10"
 
+# Plugins
+detekt = "1.19.0"
+
 [plugins]
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 updates = { id = "com.github.ben-manes.versions", version = "0.41.0" }
 
 [libraries]
@@ -21,6 +25,9 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 
 # Design
 design-material = { module = "com.google.android.material:material", version = "1.5.0" }
+
+# Detekt
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version = "7.0.4" }
