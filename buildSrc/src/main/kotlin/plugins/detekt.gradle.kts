@@ -21,7 +21,7 @@ tasks.register<Detekt>("detektAll") {
 
     reports {
         html.required.set(true)
-        sarif.required.set(false)
+        sarif.required.set(true)
         txt.required.set(false)
         xml.required.set(false)
     }

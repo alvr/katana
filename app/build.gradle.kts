@@ -23,7 +23,7 @@ android {
             isDebuggable = true
             isDefault = true
             isMinifyEnabled = false
-            isTestCoverageEnabled = true
+            isTestCoverageEnabled = false
         }
 
         release {

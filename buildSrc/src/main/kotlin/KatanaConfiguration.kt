@@ -5,7 +5,7 @@ import org.gradle.api.JavaVersion
 object KatanaConfiguration {
     const val CompileSdk = 31
     const val BuildTools = "31.0.0"
-    const val PackageName = "dev.alvr.starter"
+    const val PackageName = "dev.alvr.katana"
     const val MinSdk = 21
     const val TargetSdk = 31
     const val VersionName = "0.0.1"
