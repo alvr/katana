@@ -6,10 +6,6 @@ kotlin = "1.6.10"
 # Plugins
 detekt = "1.19.0"
 
-[plugins]
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-updates = { id = "com.github.ben-manes.versions", version = "0.41.0" }
-
 [libraries]
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version = "1.4.0" }
@@ -31,7 +27,9 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version = "7.0.4" }
+gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.41.0" }
 
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }

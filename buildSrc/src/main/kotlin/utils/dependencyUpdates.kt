@@ -1,5 +1,7 @@
 @file:Suppress("InvalidPackageDeclaration")
 
+package utils
+
 import java.util.Locale
 
 private val stableKeywords = arrayOf("RELEASE", "FINAL", "GA")
@@ -23,7 +25,7 @@ enum class ReleaseType {
     fun isLessStableThan(other: ReleaseType): Boolean = ordinal < other.ordinal
 }
 
-fun checkDependencyVersion(version: String) =
+internal fun checkDependencyVersion(version: String) =
     if (stableKeywords.any { version.toUpperCase(Locale.ROOT).contains(it) }) {
         ReleaseType.RELEASE
     } else {
