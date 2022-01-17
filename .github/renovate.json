@@ -1,0 +1,6 @@
+{
+  "assignees": ["alvr"],
+  "baseBranches": ["develop"],
+  "extends": ["config:base", ":disableDependencyDashboard"],
+  "reviewers": ["alvr"]
+}
