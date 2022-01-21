@@ -1,4 +1,5 @@
 [versions]
+apollo = "3.0.0"
 compose = "1.1.0-rc01"
 compose-compiler = "1.1.0-rc02"
 coroutines = "1.6.0"
@@ -12,9 +13,15 @@ androidx-test = "1.4.0"
 kotest = "5.1.0"
 mockk = "1.12.2"
 
+[plugins]
+apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
+
 [libraries]
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version = "1.4.0" }
+
+# Apollo
+apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
 
 # Compose
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
@@ -79,7 +86,11 @@ common-android = [
 
 app = [
     "androidx-activity",
-    "design-material"
+    "design-material",
+]
+
+data-remote = [
+    "apollo",
 ]
 
 ui-compose = [
