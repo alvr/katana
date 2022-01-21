@@ -1,5 +1,6 @@
 package utils
 
+import KatanaConfiguration
 import com.android.build.gradle.BaseExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
@@ -32,7 +33,12 @@ fun BaseExtension.baseAndroidConfig() {
 
     testOptions {
         animationsDisabled = true
-        unitTests.isIncludeAndroidResources = true
+        unitTests {
+            isIncludeAndroidResources = true
+            all { test ->
+                test.useJUnitPlatform()
+            }
+        }
     }
 }
 

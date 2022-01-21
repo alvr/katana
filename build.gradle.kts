@@ -10,13 +10,12 @@ plugins {
 // https://github.com/gradle/gradle/issues/15383
 buildscript {
     extra.set("detektFormatting", libs.detekt.formatting)
-    extra.set("composeCompiler", libs.versions.compose.compiler.get())
 }
 
 tasks.register<Delete>("clean") {
     delete(buildDir)
 }
 
-tasks.withType<KotlinCompile>() {
+tasks.withType<KotlinCompile> {
     kotlinOptions.configureKotlin()
 }
