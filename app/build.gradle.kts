@@ -56,6 +56,6 @@ dependencies {
 
     testImplementation(libs.bundles.test)
 
-    androidTestImplementation(libs.androidx.test.junit)
-    androidTestImplementation(libs.compose.ui.test)
+    androidTestImplementation(libs.bundles.test.android)
+    androidTestImplementation(libs.bundles.test.android.ui)
 }

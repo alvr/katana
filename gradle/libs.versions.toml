@@ -7,7 +7,9 @@ kotlin = "1.6.10"
 detekt = "1.19.0"
 
 # Tests
+androidx-test = "1.4.0"
 kotest = "5.1.0"
+mockk = "1.12.2"
 
 [libraries]
 # AndroidX
@@ -38,14 +40,42 @@ kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin"
 
 # Tests
 ## AndroidX Test
+androidx-test = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
 androidx-test-junit = { module = "androidx.test.ext:junit-ktx", version = "1.1.3" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
+
+## Fixtures
+fixtures = { module = "com.appmattus.fixture:fixture", version = "1.2.0" }
 
 ## Kotest
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 
+## MockK
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+
+## Turbine
+turbine = { module = "app.cash.turbine:turbine", version = "0.7.0" }
+
 [bundles]
 test = [
+    "fixtures",
     "kotest",
     "kotest-assertions-core",
+    "mockk",
+    "turbine",
+]
+test-android = [
+    "androidx-test",
+    "androidx-test-junit",
+    "androidx-test-rules",
+    "androidx-test-runner",
+    "kotest-assertions-core",
+    "mockk-android",
+    "turbine",
+]
+test-android-ui = [
+    "compose-ui-test",
 ]
