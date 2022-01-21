@@ -46,18 +46,12 @@ android {
 dependencies {
     implementation(libs.bundles.common.android)
 
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.core)
+    implementation(libs.bundles.app)
 
-    implementation(libs.compose.material)
     implementation(libs.compose.ui)
-    implementation(libs.compose.ui.preview)
-    debugImplementation(libs.compose.ui.tooling)
-
-    implementation(libs.design.material)
 
     testImplementation(libs.bundles.test)
 
-    androidTestImplementation(libs.bundles.test.android)
-    androidTestImplementation(libs.bundles.test.android.ui)
+    androidTestImplementation(libs.bundles.test.common.android)
+    androidTestImplementation(libs.bundles.test.ui)
 }
