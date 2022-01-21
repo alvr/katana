@@ -1,6 +1,7 @@
 [versions]
 compose = "1.1.0-rc01"
 compose-compiler = "1.1.0-rc02"
+coroutines = "1.6.0"
 kotlin = "1.6.10"
 
 # Plugins
@@ -22,6 +23,11 @@ compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+
+# Coroutines
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 # Design
 design-material = { module = "com.google.android.material:material", version = "1.5.0" }
@@ -60,7 +66,17 @@ mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 turbine = { module = "app.cash.turbine:turbine", version = "0.7.0" }
 
 [bundles]
+common = [
+    "coroutines",
+    "kotlin",
+]
+common-android = [
+    "coroutines-android",
+    "kotlin",
+]
+
 test = [
+    "coroutines-test",
     "fixtures",
     "kotest",
     "kotest-assertions-core",
@@ -68,6 +84,7 @@ test = [
     "turbine",
 ]
 test-android = [
+    "coroutines-test",
     "androidx-test",
     "androidx-test-junit",
     "androidx-test-rules",
