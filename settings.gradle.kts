@@ -15,6 +15,10 @@ pluginManagement {
     }
 }
 
-include(":app")
+include(
+    ":app",
+    ":data:remote"
+)
 
 enableFeaturePreview("VERSION_CATALOGS")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

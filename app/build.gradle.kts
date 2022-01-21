@@ -44,10 +44,10 @@ android {
 }
 
 dependencies {
+    implementation(projects.data.remote)
+
     implementation(libs.bundles.common.android)
-
     implementation(libs.bundles.app)
-
     implementation(libs.compose.ui)
 
     testImplementation(libs.bundles.test)
