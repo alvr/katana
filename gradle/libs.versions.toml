@@ -3,6 +3,7 @@ apollo = "3.0.0"
 compose = "1.1.0-rc01"
 compose-compiler = "1.1.0-rc02"
 coroutines = "1.6.0"
+koin = "3.1.5"
 kotlin = "1.6.10"
 protobuf = "3.19.3"
 room = "2.4.1"
@@ -57,6 +58,12 @@ gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", v
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.41.0" }
 
+# Koin
+koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 
@@ -82,6 +89,7 @@ fixtures = { module = "com.appmattus.fixture:fixture", version = "1.2.0" }
 ## Kotest
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-koin = { module = "io.kotest.extensions:kotest-extensions-koin", version = "1.1.0" }
 
 ## MockK
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
@@ -93,10 +101,12 @@ turbine = { module = "app.cash.turbine:turbine", version = "0.7.0" }
 [bundles]
 common = [
     "coroutines",
+    "koin",
     "kotlin",
 ]
 common-android = [
     "coroutines-android",
+    "koin-android",
     "kotlin",
 ]
 
@@ -124,13 +134,17 @@ ui-compose = [
     "compose-material-icons",
     "compose-ui",
     "compose-ui-tooling",
+
+    "koin-compose",
 ]
 
 test = [
     "coroutines-test",
     "fixtures",
+    "koin-test",
     "kotest",
     "kotest-assertions-core",
+    "kotest-koin",
     "mockk",
     "turbine",
 ]
