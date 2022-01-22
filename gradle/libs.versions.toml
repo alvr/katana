@@ -4,6 +4,7 @@ compose = "1.1.0-rc01"
 compose-compiler = "1.1.0-rc02"
 coroutines = "1.6.0"
 kotlin = "1.6.10"
+protobuf = "3.19.3"
 
 # Plugins
 detekt = "1.19.0"
@@ -15,6 +16,7 @@ mockk = "1.12.2"
 
 [plugins]
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
+protobuf = { id = "com.google.protobuf", version = "0.8.18" }
 
 [libraries]
 # AndroidX
@@ -38,6 +40,9 @@ coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
+# DataStore
+datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
+
 # Design
 design-material = { module = "com.google.android.material:material", version = "1.5.0" }
 
@@ -52,6 +57,10 @@ gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", versi
 
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+
+# Protobuf
+protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
+protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
 
 # Tests
 ## AndroidX Test
@@ -87,6 +96,11 @@ common-android = [
 app = [
     "androidx-activity",
     "design-material",
+]
+
+data-preferences = [
+    "datastore",
+    "protobuf",
 ]
 
 data-remote = [
