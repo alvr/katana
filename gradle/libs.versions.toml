@@ -75,6 +75,9 @@ leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = 
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 lifecycle-test = { module = "androidx.lifecycle:lifecycle-runtime-testing", version.ref = "lifecycle" }
 
+# Logcat
+logcat = { module = "com.squareup.logcat:logcat", version = "0.1" }
+
 # Navigation
 navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.4.0-rc01" }
 
@@ -119,6 +122,7 @@ common-android = [
     "coroutines-android",
     "koin-android",
     "kotlin",
+    "logcat",
 ]
 
 app = [
