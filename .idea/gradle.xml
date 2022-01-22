@@ -17,6 +17,8 @@
             <option value="$PROJECT_DIR$/data/preferences" />
             <option value="$PROJECT_DIR$/data/remote" />
             <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/ui" />
+            <option value="$PROJECT_DIR$/ui/base" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
