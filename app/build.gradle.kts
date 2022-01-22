@@ -44,6 +44,14 @@ android {
 }
 
 dependencies {
+    implementation(projects.data.database)
+    implementation(projects.data.preferences)
+    implementation(projects.data.remote)
+
+    implementation(projects.domain)
+
+    implementation(projects.ui.base)
+
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.app)
     implementation(libs.compose.ui)
