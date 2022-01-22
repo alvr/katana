@@ -50,6 +50,6 @@ dependencies {
 
     testImplementation(libs.bundles.test)
 
-    androidTestImplementation(libs.bundles.test.common.android)
+    androidTestImplementation(libs.bundles.test.android)
     androidTestImplementation(libs.bundles.test.ui)
 }

@@ -5,6 +5,7 @@ compose-compiler = "1.1.0-rc02"
 coroutines = "1.6.0"
 kotlin = "1.6.10"
 protobuf = "3.19.3"
+room = "2.4.1"
 
 # Plugins
 detekt = "1.19.0"
@@ -16,6 +17,7 @@ mockk = "1.12.2"
 
 [plugins]
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
+ksp = { id = "com.google.devtools.ksp", version = "1.6.10-1.0.2" }
 protobuf = { id = "com.google.protobuf", version = "0.8.18" }
 
 [libraries]
@@ -62,6 +64,11 @@ kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin"
 protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
 
+# Room
+room = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-test = { module = "androidx.room:room-testing", version.ref = "room" }
+
 # Tests
 ## AndroidX Test
 androidx-test = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
@@ -98,11 +105,13 @@ app = [
     "design-material",
 ]
 
+data-db = [
+    "room",
+]
 data-preferences = [
     "datastore",
     "protobuf",
 ]
-
 data-remote = [
     "apollo",
 ]
@@ -125,7 +134,7 @@ test = [
     "mockk",
     "turbine",
 ]
-test-common-android = [
+test-android = [
     "coroutines-test",
     "androidx-test",
     "androidx-test-junit",
@@ -135,6 +144,11 @@ test-common-android = [
     "mockk-android",
     "turbine",
 ]
+
+test-data-db = [
+    "room-test",
+]
+
 test-ui = [
     "compose-ui-test",
 ]
