@@ -75,6 +75,9 @@ leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = 
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 lifecycle-test = { module = "androidx.lifecycle:lifecycle-runtime-testing", version.ref = "lifecycle" }
 
+# Navigation
+navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.4.0-rc01" }
+
 # Protobuf
 protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
@@ -121,6 +124,7 @@ common-android = [
 app = [
     "androidx-activity",
     "design-material",
+    "navigation-compose",
 ]
 
 data-db = [
