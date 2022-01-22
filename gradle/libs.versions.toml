@@ -67,6 +67,9 @@ koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 
+# LeakCanary
+leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "2.8.1" }
+
 # Protobuf
 protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }

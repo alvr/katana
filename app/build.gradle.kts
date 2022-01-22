@@ -56,6 +56,8 @@ dependencies {
     implementation(libs.bundles.app)
     implementation(libs.compose.ui)
 
+    debugImplementation(libs.leakcanary)
+
     testImplementation(libs.bundles.test)
 
     androidTestImplementation(libs.bundles.test.android)
