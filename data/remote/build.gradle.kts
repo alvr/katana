@@ -16,7 +16,6 @@ apollo {
 
 dependencies {
     implementation(libs.bundles.common.android)
-
     implementation(libs.bundles.data.remote)
 
     testImplementation(libs.bundles.test)

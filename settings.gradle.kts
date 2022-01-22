@@ -17,7 +17,8 @@ pluginManagement {
 
 include(
     ":app",
-    ":data:remote"
+    ":data:preferences",
+    ":data:remote",
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
