@@ -5,6 +5,7 @@ compose-compiler = "1.1.0-rc02"
 coroutines = "1.6.0"
 koin = "3.1.5"
 kotlin = "1.6.10"
+lifecycle = "2.4.0"
 protobuf = "3.19.3"
 room = "2.4.1"
 
@@ -69,6 +70,10 @@ kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin"
 
 # LeakCanary
 leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "2.8.1" }
+
+# Lifecycle
+lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-test = { module = "androidx.lifecycle:lifecycle-runtime-testing", version.ref = "lifecycle" }
 
 # Protobuf
 protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
@@ -139,6 +144,8 @@ ui-compose = [
     "compose-ui-tooling",
 
     "koin-compose",
+
+    "lifecycle-viewmodel",
 ]
 
 test = [
@@ -168,4 +175,5 @@ test-data-db = [
 
 test-ui = [
     "compose-ui-test",
+    "lifecycle-test",
 ]
