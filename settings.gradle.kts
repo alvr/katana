@@ -20,6 +20,7 @@ include(
     ":data:database",
     ":data:preferences",
     ":data:remote",
+    ":domain"
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
