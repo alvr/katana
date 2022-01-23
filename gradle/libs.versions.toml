@@ -9,6 +9,9 @@ lifecycle = "2.4.0"
 protobuf = "3.19.3"
 room = "2.4.1"
 
+# Coverage Engine
+intellij = "1.0.647"
+
 # Plugins
 detekt = "1.19.0"
 
@@ -19,6 +22,7 @@ mockk = "1.12.2"
 
 [plugins]
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
+kover = { id = "org.jetbrains.kotlinx.kover", version = "0.5.0-RC2" }
 ksp = { id = "com.google.devtools.ksp", version = "1.6.10-1.0.2" }
 protobuf = { id = "com.google.protobuf", version = "0.8.18" }
 
