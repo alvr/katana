@@ -6,6 +6,8 @@ dependencies {
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.ui.compose)
 
+    implementation(libs.accompanist.systemuicontroller)
+
     testImplementation(libs.bundles.test)
 
     androidTestImplementation(libs.bundles.test.android)
