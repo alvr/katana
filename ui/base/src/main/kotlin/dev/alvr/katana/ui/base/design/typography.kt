@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.base.typography
+package dev.alvr.katana.ui.base.design
 
 import androidx.compose.material.Typography
 

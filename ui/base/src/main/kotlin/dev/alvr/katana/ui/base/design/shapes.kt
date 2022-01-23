@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.base.shapes
+package dev.alvr.katana.ui.base.design
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
