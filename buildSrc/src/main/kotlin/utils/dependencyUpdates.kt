@@ -1,5 +1,3 @@
-@file:Suppress("InvalidPackageDeclaration")
-
 package utils
 
 import java.util.Locale

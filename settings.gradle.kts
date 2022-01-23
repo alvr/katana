@@ -15,6 +15,14 @@ pluginManagement {
     }
 }
 
-include(":app")
+include(
+    ":app",
+    ":data:database",
+    ":data:preferences",
+    ":data:remote",
+    ":domain",
+    ":ui:base",
+)
 
 enableFeaturePreview("VERSION_CATALOGS")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

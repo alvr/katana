@@ -1,21 +1,18 @@
+import utils.baseAndroidConfig
+import utils.configureKotlin
+
 plugins {
-    id("com.android.application")
-    kotlin("android")
+    com.android.application
+    `kotlin-android`
 }
 
 android {
-    compileSdk = KatanaConfiguration.CompileSdk
-    buildToolsVersion = KatanaConfiguration.BuildTools
+    baseAndroidConfig()
 
     defaultConfig {
         applicationId = KatanaConfiguration.PackageName
-        minSdk = KatanaConfiguration.MinSdk
-        targetSdk = KatanaConfiguration.TargetSdk
         versionCode = KatanaConfiguration.VersionCode
         versionName = KatanaConfiguration.VersionName
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -23,7 +20,7 @@ android {
             isDebuggable = true
             isDefault = true
             isMinifyEnabled = false
-            isTestCoverageEnabled = false
+            isTestCoverageEnabled = true
         }
 
         release {
@@ -31,23 +28,7 @@ android {
             isDefault = false
             isMinifyEnabled = true
             isTestCoverageEnabled = false
-
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
-    }
-
-    compileOptions {
-        sourceCompatibility = KatanaConfiguration.UseJavaVersion
-        targetCompatibility = KatanaConfiguration.UseJavaVersion
-    }
-
-    kotlinOptions {
-        jvmTarget = KatanaConfiguration.JvmTarget
-        apiVersion = KatanaConfiguration.KotlinVersion
-        languageVersion = KatanaConfiguration.KotlinVersion
     }
 
     buildFeatures.compose = true
@@ -58,23 +39,27 @@ android {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
+
+    kotlinOptions.configureKotlin()
 }
 
 dependencies {
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.core)
+    implementation(projects.data.database)
+    implementation(projects.data.preferences)
+    implementation(projects.data.remote)
 
-    implementation(libs.compose.material)
+    implementation(projects.domain)
+
+    implementation(projects.ui.base)
+
+    implementation(libs.bundles.common.android)
+    implementation(libs.bundles.app)
     implementation(libs.compose.ui)
-    implementation(libs.compose.ui.preview)
-    debugImplementation(libs.compose.ui.tooling)
 
-    implementation(libs.design.material)
+    debugImplementation(libs.leakcanary)
 
-    testImplementation(libs.junit)
+    testImplementation(libs.bundles.test)
 
-    androidTestImplementation(libs.androidx.test.junit)
-    androidTestImplementation(libs.espresso)
-    androidTestImplementation(libs.compose.ui.test)
+    androidTestImplementation(libs.bundles.test.android)
+    androidTestImplementation(libs.bundles.test.ui)
 }
