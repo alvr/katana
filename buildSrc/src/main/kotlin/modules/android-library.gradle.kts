@@ -14,5 +14,6 @@ kapt.correctErrorTypes = true
 
 android {
     baseAndroidConfig()
+    buildFeatures.buildConfig = false
     kotlinOptions.configureKotlin()
 }
