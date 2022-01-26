@@ -1,0 +1,69 @@
+package dev.alvr.katana.navigation
+
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+
+@Composable
+@ExperimentalAnimationApi
+fun KatanaNavigator() {
+    val navController = rememberAnimatedNavController()
+
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = "",
+        enterTransition = { enterTransition() },
+        exitTransition = { exitTransition() },
+        popEnterTransition = { popEnterTransition() },
+        popExitTransition = { popExitTransition() }
+    ) {
+        // Empty, for now
+    }
+}
+
+@ExperimentalAnimationApi
+private fun NavGraphBuilder.composable(
+    nav: Screen,
+    content: @Composable NavBackStackEntry.() -> Unit
+) {
+    composable(
+        route = nav.route,
+        arguments = nav.arguments,
+    ) {
+        content(it)
+    }
+}
+
+private fun NavHostController.navigate(nav: Screen) {
+    navigate(nav.route)
+}
+
+private inline fun <reified T> NavBackStackEntry.argument(key: String): T =
+    requireNotNull(optionalArgument(key))
+
+private inline fun <reified T> NavBackStackEntry.optionalArgument(key: String): T? =
+    arguments?.get(key) as? T
+
+@ExperimentalAnimationApi
+private fun AnimatedContentScope<*>.enterTransition() =
+    fadeIn() + slideIntoContainer(AnimatedContentScope.SlideDirection.Start)
+
+@ExperimentalAnimationApi
+private fun AnimatedContentScope<*>.exitTransition() =
+    fadeOut() + slideOutOfContainer(AnimatedContentScope.SlideDirection.Start)
+
+@ExperimentalAnimationApi
+private fun AnimatedContentScope<*>.popEnterTransition() =
+    fadeIn() + slideIntoContainer(AnimatedContentScope.SlideDirection.End)
+
+@ExperimentalAnimationApi
+private fun AnimatedContentScope<*>.popExitTransition() =
+    fadeOut() + slideOutOfContainer(AnimatedContentScope.SlideDirection.End)

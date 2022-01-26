@@ -30,6 +30,7 @@ protobuf = { id = "com.google.protobuf", version = "0.8.18" }
 [libraries]
 # Accompanist
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+accompanist-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
 
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version = "1.4.0" }
@@ -134,6 +135,7 @@ common-android = [
 ]
 
 app = [
+    "accompanist-navigation",
     "androidx-activity",
     "design-material",
     "navigation-compose",
@@ -158,9 +160,7 @@ ui-compose = [
     "compose-material-icons",
     "compose-ui",
     "compose-ui-tooling",
-
     "koin-compose",
-
     "lifecycle-viewmodel",
 ]
 
