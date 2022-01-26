@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46666 135.46667"
+   version="1.1"
+   id="svg1030"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="katana_icon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1032"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     inkscape:zoom="0.74118968"
+     inkscape:cx="741.37568"
+     inkscape:cy="320.4308"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1027">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient6344">
+      <stop
+         style="stop-color:#333941;stop-opacity:1"
+         offset="0"
+         id="stop6340" />
+      <stop
+         style="stop-color:#222831;stop-opacity:1"
+         offset="1"
+         id="stop6342" />
+    </linearGradient>
+    <rect
+       x="80.950935"
+       y="110.63295"
+       width="199.67899"
+       height="151.10841"
+       id="rect2765" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6344"
+       id="linearGradient6346"
+       x1="0.21339925"
+       y1="0.21339773"
+       x2="528.95325"
+       y2="135.25327"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.25579808,0,0,1.0015608,0.05342578,-0.10571789)" />
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Capa 2"
+     style="display:inline">
+    <rect
+       style="fill:url(#linearGradient6346);fill-opacity:1;stroke:#3282b8;stroke-width:0.216024;stroke-opacity:0.2"
+       id="rect6228"
+       width="135.25064"
+       height="135.25064"
+       x="0.1080129"
+       y="0.1080129" />
+  </g>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline">
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text2763"
+       style="font-size:40px;line-height:1.25;font-family:'Rampart One';-inkscape-font-specification:'Rampart One';white-space:pre;shape-inside:url(#rect2765)" />
+    <text
+       xml:space="preserve"
+       style="font-size:106.276px;line-height:1.25;font-family:'Rampart One';-inkscape-font-specification:'Rampart One';fill:#bbe1fa;fill-opacity:1;stroke:#3282b8;stroke-width:2.65691;stroke-opacity:0.2"
+       x="15.604955"
+       y="103.65462"
+       id="text4927"><tspan
+         sodipodi:role="line"
+         id="tspan4925"
+         style="fill:#bbe1fa;fill-opacity:1;stroke:#3282b8;stroke-width:2.65691;stroke-opacity:0.2"
+         x="15.604955"
+         y="103.65462">刀</tspan></text>
+  </g>
+</svg>

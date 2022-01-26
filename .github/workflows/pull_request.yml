@@ -31,6 +31,7 @@ jobs:
   instrumentation-tests:
     name: Instrumentation tests
     runs-on: macos-latest
+    needs: [ build ]
     strategy:
       matrix:
         api-level: [ 23, 29, 31 ]

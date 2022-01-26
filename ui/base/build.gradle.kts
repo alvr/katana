@@ -1,10 +1,12 @@
 plugins {
-    id("modules.android-library")
+    id("modules.compose-library")
 }
 
 dependencies {
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.ui.compose)
+
+    implementation(libs.accompanist.systemuicontroller)
 
     testImplementation(libs.bundles.test)
 
