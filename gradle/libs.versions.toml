@@ -87,7 +87,7 @@ lifecycle-test = { module = "androidx.lifecycle:lifecycle-runtime-testing", vers
 logcat = { module = "com.squareup.logcat:logcat", version = "0.1" }
 
 # Navigation
-navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.4.0-rc01" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.4.0" }
 
 # Protobuf
 protobuf = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
