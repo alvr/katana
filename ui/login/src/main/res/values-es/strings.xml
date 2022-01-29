@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="katana_description">Un cliente Android para Anilist</string>
     <!-- Content descriptions -->
     <string name="content_description_background">Fondo de inicio de sesión. Selección variada de Studio Ghibli</string>
+    <string name="content_description_katana_logo">Logo de Katana</string>
 </resources>
