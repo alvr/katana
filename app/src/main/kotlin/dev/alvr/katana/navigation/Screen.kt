@@ -7,6 +7,9 @@ internal sealed class Screen private constructor(
     private val requiredArgs: List<NavArg> = emptyList(),
     private val optionalArgs: List<NavArg> = emptyList(),
 ) {
+
+    object Login : Screen("login")
+
     sealed class ChildScreen(
         parent: Screen,
         baseRoute: String,

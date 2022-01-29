@@ -1,8 +1,8 @@
 [versions]
-accompanist = "0.24.0-alpha"
+accompanist = "0.22.1-rc"
 apollo = "3.0.0"
 compose = "1.1.0-rc03"
-compose-compiler = "1.1.0-rc02"
+compose-compiler = "1.1.0-rc03"
 coroutines = "1.6.0"
 hilt = "2.40.5"
 hiltx = "1.0.0"
