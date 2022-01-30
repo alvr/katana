@@ -37,6 +37,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -127,7 +128,7 @@ private fun Description() {
 
 @Composable
 private fun Bottom(modifier: Modifier = Modifier) {
-    var currentState by remember { mutableStateOf(State.GetStarted) }
+    var currentState by rememberSaveable { mutableStateOf(State.GetStarted) }
 
     Animate(
         delayMillis = BOTTOM_ANIM_DELAY,
@@ -205,7 +206,9 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
     )
 
     TextButton(
-        modifier = Modifier.fillMaxWidth().testTag(GET_STARTED_BUTTON_TAG),
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(GET_STARTED_BUTTON_TAG),
         onClick = { onStartedClick(State.Buttons) }
     ) {
         Text(
@@ -288,8 +291,13 @@ private fun Animate(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    val animVisibleState = remember { MutableTransitionState(false) }.apply {
+    var animationFinished by rememberSaveable { mutableStateOf(false) }
+    val animVisibleState = remember { MutableTransitionState(animationFinished) }.apply {
         targetState = true
+    }
+
+    LaunchedEffect(Unit) {
+        animationFinished = true
     }
 
     AnimatedVisibility(

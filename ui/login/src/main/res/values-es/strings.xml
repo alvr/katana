@@ -2,7 +2,7 @@
 <resources>
     <string name="header_katana_description">Un cliente Android para Anilist</string>
 
-    <string name="get_started_description">Katana es un cliente de Anilist para Android donde puedes rastrear, explorar, descubrir y comentar Anime &amp; Manga.</string>
+    <string name="get_started_description">Katana es un cliente de Anilist para Android donde puedes llevar la cuenta, explorar, descubrir y comentar Anime &amp; Manga.</string>
     <string name="get_started_button">Empezar</string>
 
     <string name="begin_description">Para empezar a usar Katana necesitas una cuenta de Anilist. Toca uno de los botones de abajo para registrarte o iniciar sesión.</string>
