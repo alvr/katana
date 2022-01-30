@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
@@ -119,7 +120,7 @@ private fun KatanaLogo() {
 @Composable
 private fun Description() {
     Text(
-        text = stringResource(id = R.string.katana_header_description),
+        text = stringResource(id = R.string.header_katana_description),
         style = MaterialTheme.typography.h5
     )
 }
@@ -204,7 +205,7 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
     )
 
     TextButton(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().testTag(GET_STARTED_BUTTON_TAG),
         onClick = { onStartedClick(State.Buttons) }
     ) {
         Text(
@@ -327,3 +328,5 @@ private const val BOTTOM_CROSSFADE_ANIM_DURATION = 800
 
 private const val ANILIST_LOGIN = "https://anilist.co/api/v2/oauth/authorize?client_id=7275&response_type=token"
 private const val ANILIST_REGISTER = "https://anilist.co/signup"
+
+internal const val GET_STARTED_BUTTON_TAG = "get_started"

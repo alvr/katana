@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="katana_header_description">Un cliente Android para Anilist</string>
+    <string name="header_katana_description">Un cliente Android para Anilist</string>
 
     <string name="get_started_description">Katana es un cliente de Anilist para Android donde puedes rastrear, explorar, descubrir y comentar Anime &amp; Manga.</string>
     <string name="get_started_button">Empezar</string>

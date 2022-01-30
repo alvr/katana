@@ -44,7 +44,8 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 compose-material-icons = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
-compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
+compose-ui-test-junit = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 
 # Coroutines
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -197,6 +198,6 @@ test-android = [
 ]
 
 test-ui = [
-    "compose-ui-test",
+    "compose-ui-test-junit",
     "lifecycle-test",
 ]

@@ -7,6 +7,7 @@ dependencies {
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.ui.compose)
 
+    debugImplementation(libs.compose.ui.test.manifest)
     testImplementation(libs.bundles.test)
 
     androidTestImplementation(libs.bundles.test.android)
