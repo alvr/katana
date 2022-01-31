@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Katana</string>
+    <string name="app_name" translatable="false">Katana</string>
+    <string name="glichtip_dsn" translatable="false">https://411cb6bc4a184c44a1bdd6aa9c1a3a03@app.glitchtip.com/804</string>
 </resources>

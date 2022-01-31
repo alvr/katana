@@ -84,8 +84,8 @@ leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = 
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 lifecycle-test = { module = "androidx.lifecycle:lifecycle-runtime-testing", version.ref = "lifecycle" }
 
-# Logcat
-logcat = { module = "com.squareup.logcat:logcat", version = "0.1" }
+# Napier
+napier = { module = "io.github.aakira:napier", version = "2.4.0" }
 
 # Navigation
 navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.4.0" }
@@ -98,6 +98,9 @@ protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protob
 room = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-test = { module = "androidx.room:room-testing", version.ref = "room" }
+
+# Sentry
+sentry = { module = "io.sentry:sentry-android", version = "5.6.0" }
 
 # Tests
 ## AndroidX Test
@@ -131,7 +134,7 @@ common-android = [
     "coroutines-android",
     "koin-android",
     "kotlin",
-    "logcat",
+    "napier",
 ]
 
 app = [
@@ -139,6 +142,7 @@ app = [
     "androidx-activity",
     "design-material",
     "navigation-compose",
+    "sentry",
 ]
 
 data-db = [
