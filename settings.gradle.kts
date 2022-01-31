@@ -17,7 +17,6 @@ pluginManagement {
 
 include(
     ":app",
-    ":data:database",
     ":data:preferences",
     ":data:remote",
     ":domain",

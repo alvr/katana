@@ -44,7 +44,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.data.database)
     implementation(projects.data.preferences)
     implementation(projects.data.remote)
 
