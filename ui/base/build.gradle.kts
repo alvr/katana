@@ -8,6 +8,8 @@ dependencies {
 
     implementation(libs.accompanist.systemuicontroller)
 
+    kapt(libs.bundles.kapt.ui)
+
     testImplementation(libs.bundles.test)
 
     androidTestImplementation(libs.bundles.test.android)

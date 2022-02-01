@@ -4,7 +4,8 @@ apollo = "3.0.0"
 compose = "1.1.0-rc03"
 compose-compiler = "1.1.0-rc02"
 coroutines = "1.6.0"
-koin = "3.1.5"
+hilt = "2.40.5"
+hiltx = "1.0.0"
 kotlin = "1.6.10"
 lifecycle = "2.4.0"
 protobuf = "3.19.4"
@@ -63,14 +64,20 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version = "7.1.0" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+gradle-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.41.0" }
 
-# Koin
-koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
-koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+# Hilt
+hilt = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-test = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+
+# HiltX
+hiltx-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltx" }
+hiltx-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltx" }
+hiltx-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version = "1.0.0-alpha03" }
 
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -108,7 +115,6 @@ fixtures = { module = "com.appmattus.fixture:fixture", version = "1.2.0" }
 ## Kotest
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
-kotest-koin = { module = "io.kotest.extensions:kotest-extensions-koin", version = "1.1.0" }
 
 ## MockK
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
@@ -120,12 +126,12 @@ turbine = { module = "app.cash.turbine:turbine", version = "0.7.0" }
 [bundles]
 common = [
     "coroutines",
-    "koin",
+    "hilt",
     "kotlin",
 ]
 common-android = [
     "coroutines-android",
-    "koin-android",
+    "hilt-android",
     "kotlin",
     "napier",
 ]
@@ -136,6 +142,14 @@ app = [
     "design-material",
     "navigation-compose",
     "sentry",
+]
+
+kapt = [
+    "hilt-compiler",
+]
+kapt-ui = [
+    "hilt-compiler",
+    "hiltx-compiler",
 ]
 
 data-preferences = [
@@ -154,17 +168,16 @@ ui-compose = [
     "compose-material-icons",
     "compose-ui",
     "compose-ui-tooling",
-    "koin-compose",
+    "hiltx-navigation",
+    "hiltx-viewmodel",
     "lifecycle-viewmodel",
 ]
 
 test = [
     "coroutines-test",
     "fixtures",
-    "koin-test",
     "kotest",
     "kotest-assertions-core",
-    "kotest-koin",
     "mockk",
     "turbine",
 ]
@@ -174,6 +187,7 @@ test-android = [
     "androidx-test-junit",
     "androidx-test-rules",
     "androidx-test-runner",
+    "hilt-test",
     "kotest-assertions-core",
     "mockk-android",
     "turbine",

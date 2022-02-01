@@ -4,7 +4,11 @@ import utils.configureKotlin
 plugins {
     com.android.application
     `kotlin-android`
+    `kotlin-kapt`
+    id("dagger.hilt.android.plugin")
 }
+
+kapt.correctErrorTypes = true
 
 android {
     baseAndroidConfig()
@@ -46,14 +50,14 @@ android {
 dependencies {
     implementation(projects.data.preferences)
     implementation(projects.data.remote)
-
     implementation(projects.domain)
-
     implementation(projects.ui.base)
 
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.app)
     implementation(libs.compose.ui)
+
+    kapt(libs.bundles.kapt)
 
     debugImplementation(libs.leakcanary)
 
