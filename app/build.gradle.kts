@@ -1,3 +1,5 @@
+import java.io.FileInputStream
+import java.util.Properties
 import utils.baseAndroidConfig
 import utils.configureKotlin
 
@@ -19,6 +21,22 @@ android {
         versionName = KatanaConfiguration.VersionName
     }
 
+    signingConfigs {
+        register("release") {
+            val props = Properties().also { p ->
+                FileInputStream(rootProject.file("local.properties")).use { f -> p.load(f) }
+            }
+
+            enableV3Signing = true
+            enableV4Signing = true
+
+            keyAlias = props.getValue("signingAlias", "SIGNING_ALIAS")
+            keyPassword = props.getValue("signingAliasPass", "SIGNING_ALIAS_PASS")
+            storeFile = rootProject.file(props.getValue("signingFile", "SIGNING_FILE"))
+            storePassword = props.getValue("signingFilePass", "SIGNING_FILE_PASS")
+        }
+    }
+
     buildTypes {
         debug {
             isDebuggable = true
@@ -32,6 +50,8 @@ android {
             isDefault = false
             isMinifyEnabled = true
             isTestCoverageEnabled = false
+
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -66,3 +86,6 @@ dependencies {
     androidTestImplementation(libs.bundles.test.android)
     androidTestImplementation(libs.bundles.test.ui)
 }
+
+fun Properties.getValue(key: String, env: String) =
+    getOrElse(key) { System.getenv(env) } as String
