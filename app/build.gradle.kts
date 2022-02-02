@@ -42,6 +42,7 @@ android {
             isDebuggable = true
             isDefault = true
             isMinifyEnabled = false
+            isShrinkResources = false
             isTestCoverageEnabled = true
         }
 
@@ -49,6 +50,7 @@ android {
             isDebuggable = false
             isDefault = false
             isMinifyEnabled = true
+            isShrinkResources = true
             isTestCoverageEnabled = false
 
             signingConfig = signingConfigs.getByName("release")
@@ -68,7 +70,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.data.preferences)
+    implementation(projects.data.preferences.base)
     implementation(projects.data.remote)
     implementation(projects.domain)
     implementation(projects.ui.base)
