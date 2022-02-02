@@ -8,6 +8,7 @@ hilt = "2.40.5"
 hiltx = "1.0.0"
 kotlin = "1.6.10"
 lifecycle = "2.4.0"
+okhttp = "4.9.3"
 
 # Coverage Engine
 intellij = "1.0.647"
@@ -93,6 +94,10 @@ napier = { module = "io.github.aakira:napier", version = "2.4.0" }
 
 # Navigation
 navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.4.0" }
+
+# OkHttp
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-logger = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 
 # Sentry
 sentry = { module = "io.sentry:sentry-android", version = "5.6.0" }
