@@ -72,7 +72,7 @@ android {
 dependencies {
     implementation(projects.data.preferences.base)
     implementation(projects.data.remote.base)
-    implementation(projects.domain)
+    implementation(projects.domain.base)
     implementation(projects.ui.base)
 
     implementation(libs.bundles.common.android)

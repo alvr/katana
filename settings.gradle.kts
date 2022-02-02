@@ -19,7 +19,7 @@ include(
     ":app",
     ":data:preferences:base",
     ":data:remote:base",
-    ":domain",
+    ":domain:base",
     ":ui:base",
 )
 
