@@ -15,12 +15,13 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 @Module
 @InstallIn(SingletonComponent::class)
-class RemoteBaseModule {
+internal object RemoteBaseModule {
 
     @Provides
-    @Named("anilistTokenInterceptor")
+    @Singleton
+    @AnilistTokenInterceptor
     fun provideAnilistTokenInterceptor(
-        @Named("anilistToken") token: String
+        @Named("anilistToken") token: String?
     ): Interceptor = Interceptor { chain ->
         val request = chain.request().newBuilder()
             .addHeader("Authorization", "Bearer $token")
@@ -34,7 +35,7 @@ class RemoteBaseModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        @Named("anilistTokenInterceptor") tokenInterceptor: Interceptor
+        @AnilistTokenInterceptor tokenInterceptor: Interceptor
     ): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
@@ -62,8 +63,6 @@ class RemoteBaseModule {
         .okHttpClient(client)
         .build()
 
-    private companion object {
-        const val BASE_URL = "https://graphql.anilist.co"
-        const val CLIENT_TIMEOUT = 30L
-    }
+    private const val BASE_URL = "https://graphql.anilist.co"
+    private const val CLIENT_TIMEOUT = 30L
 }
