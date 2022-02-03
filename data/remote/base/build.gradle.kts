@@ -4,19 +4,18 @@ plugins {
 }
 
 apollo {
-    generateAsInternal.set(true)
-    generateTestBuilders.set(true)
-    packageNamesFromFilePaths("dev.alvr.katana.data.remote.gql")
-
-    introspection {
-        endpointUrl.set("https://graphql.anilist.co")
-        schemaFile.set(file("src/main/graphql/schema.graphqls"))
-    }
+    generateApolloMetadata.set(true)
+    packageNamesFromFilePaths()
 }
 
 dependencies {
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.data.remote)
+
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logger)
+
+    kapt(libs.bundles.kapt)
 
     testImplementation(libs.bundles.test)
 

@@ -5,5 +5,7 @@ plugins {
 dependencies {
     implementation(libs.bundles.common)
 
+    kapt(libs.bundles.kapt)
+
     testImplementation(libs.bundles.test)
 }
