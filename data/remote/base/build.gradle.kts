@@ -3,6 +3,10 @@ plugins {
     alias(libs.plugins.apollo)
 }
 
+android {
+    buildFeatures.buildConfig = true
+}
+
 apollo {
     generateApolloMetadata.set(true)
     packageNamesFromFilePaths()
