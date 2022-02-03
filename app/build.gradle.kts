@@ -74,6 +74,7 @@ dependencies {
     implementation(projects.data.remote.base)
     implementation(projects.domain.base)
     implementation(projects.ui.base)
+    implementation(projects.ui.login)
 
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.app)

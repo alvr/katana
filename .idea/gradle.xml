@@ -21,6 +21,7 @@
             <option value="$PROJECT_DIR$/domain/base" />
             <option value="$PROJECT_DIR$/ui" />
             <option value="$PROJECT_DIR$/ui/base" />
+            <option value="$PROJECT_DIR$/ui/login" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

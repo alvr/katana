@@ -21,6 +21,7 @@ include(
     ":data:remote:base",
     ":domain:base",
     ":ui:base",
+    ":ui:login",
 )
 
 enableFeaturePreview("VERSION_CATALOGS")

@@ -8,9 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.navDeepLink
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK
+import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK_TOKEN
+import dev.alvr.katana.ui.login.Login
 
 @Composable
 @ExperimentalAnimationApi
@@ -19,13 +23,18 @@ fun KatanaNavigator() {
 
     AnimatedNavHost(
         navController = navController,
-        startDestination = "",
+        startDestination = Screen.Login.route,
         enterTransition = { enterTransition() },
         exitTransition = { exitTransition() },
         popEnterTransition = { popEnterTransition() },
         popExitTransition = { popExitTransition() }
     ) {
-        // Empty, for now
+        composable(
+            route = Screen.Login.route,
+            deepLinks = listOf(navDeepLink { uriPattern = LOGIN_DEEP_LINK })
+        ) {
+            Login(token = it.optionalArgument(LOGIN_DEEP_LINK_TOKEN))
+        }
     }
 }
 
