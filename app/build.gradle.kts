@@ -72,8 +72,12 @@ android {
 dependencies {
     implementation(projects.data.preferences.base)
     implementation(projects.data.preferences.token)
+
     implementation(projects.data.remote.base)
+
     implementation(projects.domain.base)
+    implementation(projects.domain.token)
+
     implementation(projects.ui.base)
     implementation(projects.ui.login)
 

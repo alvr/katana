@@ -18,3 +18,4 @@ abstract class UseCase<in P, out R>(private val dispatcher: CoroutineDispatcher)
 }
 
 suspend operator fun <R> UseCase<Unit, R>.invoke(): R = this(Unit)
+fun <R> UseCase<Unit, R>.sync(): R = sync(Unit)

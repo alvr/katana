@@ -24,6 +24,7 @@ include(
     ":data:remote:base",
 
     ":domain:base",
+    ":domain:token",
 
     ":ui:base",
     ":ui:login",

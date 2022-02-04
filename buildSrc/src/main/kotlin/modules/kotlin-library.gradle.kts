@@ -1,5 +1,8 @@
 package modules
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import utils.configureKotlin
+
 plugins {
     kotlin
     `kotlin-kapt`
@@ -14,4 +17,8 @@ java {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.configureKotlin()
 }
