@@ -13,6 +13,8 @@ apollo {
 }
 
 dependencies {
+    implementation(projects.domain.token)
+
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.data.remote)
 

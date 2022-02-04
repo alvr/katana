@@ -1,3 +1,5 @@
+@file:Suppress("Filename", "MatchingDeclarationName")
+
 package dev.alvr.katana.data.remote.base
 
 import javax.inject.Qualifier
