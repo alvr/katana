@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.preferences.token
+package dev.alvr.katana.data.preferences.token.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

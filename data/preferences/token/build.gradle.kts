@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(projects.data.preferences.base)
+    implementation(projects.domain.token)
 
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.data.preferences)
