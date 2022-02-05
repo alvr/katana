@@ -3,6 +3,9 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.domain.token)
+    implementation(projects.ui.base)
+
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.ui.compose)
 

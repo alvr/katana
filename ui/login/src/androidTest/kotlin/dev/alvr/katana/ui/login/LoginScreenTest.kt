@@ -19,7 +19,8 @@ internal class LoginScreenTest {
     @Test
     fun test_logoAndDescriptionAreDisplayed() {
         composeTestRule.setContent {
-            Login(token = null)
+            Header()
+            Bottom()
         }
 
         composeTestRule
@@ -34,7 +35,8 @@ internal class LoginScreenTest {
     @Test
     fun test_getStartedBlockIsDisplayed() {
         composeTestRule.setContent {
-            Login(token = null)
+            Header()
+            Bottom()
         }
 
         composeTestRule
@@ -61,7 +63,8 @@ internal class LoginScreenTest {
     @Test
     fun test_beginBlockIsDisplayedAfterClick() {
         composeTestRule.setContent {
-            Login(token = null)
+            Header()
+            Bottom()
         }
 
         composeTestRule

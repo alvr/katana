@@ -31,11 +31,13 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,9 +61,19 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import dev.alvr.katana.ui.base.viewmodel.collectSideEffect
 
 @Composable
-fun Login(token: String?) {
+fun Login(onLogin: () -> Unit) {
+    Login(
+        vm = hiltViewModel(),
+        onLogin = onLogin
+    )
+}
+
+@Composable
+private fun Login(vm: LoginViewModel, onLogin: () -> Unit) {
     val background = rememberSaveable {
         listOf(
             R.drawable.background_chihiro,
@@ -71,23 +83,35 @@ fun Login(token: String?) {
         ).random()
     }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(background),
-            contentDescription = stringResource(id = R.string.content_description_background),
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.alpha(BACKGROUND_ALPHA)
-        )
+    val scaffoldState = rememberScaffoldState()
 
-        Box(modifier = Modifier.padding(24.dp)) {
-            Header(modifier = Modifier.align(Alignment.TopCenter))
-            Bottom(modifier = Modifier.align(Alignment.BottomCenter))
+    val loginError = stringResource(id = R.string.save_token_error)
+    vm.collectSideEffect { effect ->
+        when (effect) {
+            LoginEffect.Error -> scaffoldState.snackbarHostState.showSnackbar(message = loginError)
+            LoginEffect.Saved -> onLogin()
+        }
+    }
+
+    Scaffold(scaffoldState = scaffoldState) {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(background),
+                contentDescription = stringResource(id = R.string.content_description_background),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.alpha(BACKGROUND_ALPHA)
+            )
+
+            Box(modifier = Modifier.padding(24.dp)) {
+                Header(modifier = Modifier.align(Alignment.TopCenter))
+                Bottom(modifier = Modifier.align(Alignment.BottomCenter))
+            }
         }
     }
 }
 
 @Composable
-private fun Header(modifier: Modifier = Modifier) {
+internal fun Header(modifier: Modifier = Modifier) {
     Animate(
         delayMillis = HEADER_ANIMATION_DELAY,
         durationMillis = HEADER_ANIMATION_DURATION,
@@ -127,7 +151,7 @@ private fun Description() {
 }
 
 @Composable
-private fun Bottom(modifier: Modifier = Modifier) {
+internal fun Bottom(modifier: Modifier = Modifier) {
     var currentState by rememberSaveable { mutableStateOf(State.GetStarted) }
 
     Animate(
