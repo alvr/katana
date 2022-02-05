@@ -68,7 +68,7 @@ gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", v
 gradle-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
-gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.41.0" }
+gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.42.0" }
 
 # Hilt
 hilt = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
