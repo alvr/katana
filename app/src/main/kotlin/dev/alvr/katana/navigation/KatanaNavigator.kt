@@ -33,7 +33,7 @@ fun KatanaNavigator() {
             deepLinks = listOf(navDeepLink { uriPattern = LOGIN_DEEP_LINK })
         ) {
             Login {
-                navController.navigate("home") { // TODO: Replace with home route
+                navController.navigate("home") {
                     popUpTo(Screen.Login.route) { inclusive = true }
                 }
             }
