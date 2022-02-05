@@ -63,7 +63,7 @@ design-material = { module = "com.google.android.material:material", version = "
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 # Gradle
-gradle-android = { module = "com.android.tools.build:gradle", version = "7.1.0" }
+gradle-android = { module = "com.android.tools.build:gradle", version = "7.1.1" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
