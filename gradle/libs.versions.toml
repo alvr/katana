@@ -9,9 +9,10 @@ hiltx = "1.0.0"
 kotlin = "1.6.10"
 lifecycle = "2.4.0"
 okhttp = "4.9.3"
+orbit = "4.3.1"
 
 # Coverage Engine
-intellij = "1.0.647"
+intellij = "1.0.656"
 
 # Plugins
 detekt = "1.19.0"
@@ -100,6 +101,10 @@ navigation-compose = { module = "androidx.navigation:navigation-compose", versio
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-logger = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 
+# Orbit
+orbit = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
+orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
+
 # Sentry
 sentry = { module = "io.sentry:sentry-android", version = "5.6.0" }
 
@@ -175,6 +180,7 @@ ui-compose = [
     "hiltx-navigation",
     "hiltx-viewmodel",
     "lifecycle-viewmodel",
+    "orbit",
 ]
 
 test = [
@@ -183,6 +189,7 @@ test = [
     "kotest",
     "kotest-assertions-core",
     "mockk",
+    "orbit-test",
     "turbine",
 ]
 test-android = [

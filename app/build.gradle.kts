@@ -22,9 +22,13 @@ android {
     }
 
     signingConfigs {
-        register("release") {
+        create("release") {
             val props = Properties().also { p ->
-                FileInputStream(rootProject.file("local.properties")).use { f -> p.load(f) }
+                runCatching {
+                    FileInputStream(rootProject.file("local.properties")).use { f ->
+                        p.load(f)
+                    }
+                }
             }
 
             enableV3Signing = true
@@ -32,7 +36,7 @@ android {
 
             keyAlias = props.getValue("signingAlias", "SIGNING_ALIAS")
             keyPassword = props.getValue("signingAliasPass", "SIGNING_ALIAS_PASS")
-            storeFile = rootProject.file(props.getValue("signingFile", "SIGNING_FILE"))
+            storeFile = props.getValue("signingFile", "SIGNING_FILE")?.let { rootProject.file(it) }
             storePassword = props.getValue("signingFilePass", "SIGNING_FILE_PASS")
         }
     }
@@ -71,8 +75,13 @@ android {
 
 dependencies {
     implementation(projects.data.preferences.base)
+    implementation(projects.data.preferences.token)
+
     implementation(projects.data.remote.base)
+
     implementation(projects.domain.base)
+    implementation(projects.domain.token)
+
     implementation(projects.ui.base)
     implementation(projects.ui.login)
 
@@ -91,4 +100,4 @@ dependencies {
 }
 
 fun Properties.getValue(key: String, env: String) =
-    getOrElse(key) { System.getenv(env) } as String
+    getOrElse(key) { System.getenv(env) } as? String

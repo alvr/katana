@@ -1,25 +1,14 @@
 plugins {
     id("modules.android-library")
-    alias(libs.plugins.apollo)
-}
-
-android {
-    buildFeatures.buildConfig = true
-}
-
-apollo {
-    generateApolloMetadata.set(true)
-    packageNamesFromFilePaths()
+    `kotlinx-serialization`
 }
 
 dependencies {
+    implementation(projects.data.preferences.base)
     implementation(projects.domain.token)
 
     implementation(libs.bundles.common.android)
-    implementation(libs.bundles.data.remote)
-
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logger)
+    implementation(libs.bundles.data.preferences)
 
     kapt(libs.bundles.kapt)
 

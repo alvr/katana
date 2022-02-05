@@ -9,6 +9,8 @@
     <string name="begin_register_button">Register</string>
     <string name="begin_login_button">Login</string>
 
+    <string name="save_token_error">There was an error when login, please, try again</string>
+
     <!-- Content descriptions -->
     <string name="content_description_background">Login background. Assorted selection of Studio Ghibli</string>
     <string name="content_description_katana_logo">Katana logo</string>
