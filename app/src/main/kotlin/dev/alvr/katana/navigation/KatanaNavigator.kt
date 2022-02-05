@@ -13,7 +13,6 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK
-import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK_TOKEN
 import dev.alvr.katana.ui.login.Login
 
 @Composable
@@ -33,7 +32,11 @@ fun KatanaNavigator() {
             route = Screen.Login.route,
             deepLinks = listOf(navDeepLink { uriPattern = LOGIN_DEEP_LINK })
         ) {
-            Login(token = it.optionalArgument(LOGIN_DEEP_LINK_TOKEN))
+            Login {
+                navController.navigate("home") { // TODO: Replace with home route
+                    popUpTo(Screen.Login.route) { inclusive = true }
+                }
+            }
         }
     }
 }
@@ -54,12 +57,6 @@ private fun NavGraphBuilder.composable(
 private fun NavHostController.navigate(nav: Screen) {
     navigate(nav.route)
 }
-
-private inline fun <reified T> NavBackStackEntry.argument(key: String): T =
-    requireNotNull(optionalArgument(key))
-
-private inline fun <reified T> NavBackStackEntry.optionalArgument(key: String): T? =
-    arguments?.get(key) as? T
 
 @ExperimentalAnimationApi
 private fun AnimatedContentScope<*>.enterTransition() =
