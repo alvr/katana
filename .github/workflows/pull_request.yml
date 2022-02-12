@@ -26,7 +26,7 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml') }}
       - name: Build Katana
-        run: ./gradlew build detektAll testDebugUnitTest
+        run: ./gradlew --no-daemon build detektAll testDebugUnitTest
 
 #  instrumentation-tests:
 #    name: Instrumentation tests
