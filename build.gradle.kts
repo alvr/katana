@@ -14,7 +14,7 @@ plugins {
 // Version catalogs is not accessible from precompile scripts
 // https://github.com/gradle/gradle/issues/15383
 buildscript {
-    extra.set("composeCompiler", libs.versions.compose.compiler.get())
+    extra.set("composeCompiler", libs.versions.compose.get())
     extra.set("detektFormatting", libs.detekt.formatting)
 }
 
