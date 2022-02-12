@@ -26,7 +26,7 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml') }}
       - name: Build Katana
-        run: ./gradlew build detektAll testDebugUnitTest
+        run: ./gradlew --no-daemon build detektAll testDebugUnitTest
 
 #  instrumentation-tests:
 #    name: Instrumentation tests
@@ -90,4 +90,4 @@ jobs:
 #          force-avd-creation: false
 #          ram-size: 4096M
 #          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
-#          script: ./gradlew connectedDebugAndroidTest
+#          script: ./gradlew --no-daemon connectedDebugAndroidTest

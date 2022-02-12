@@ -62,7 +62,7 @@ android {
     }
 
     buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.get()
 
     packagingOptions {
         resources {
