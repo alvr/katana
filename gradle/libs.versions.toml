@@ -92,7 +92,7 @@ lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose
 lifecycle-test = { module = "androidx.lifecycle:lifecycle-runtime-testing", version.ref = "lifecycle" }
 
 # Napier
-napier = { module = "io.github.aakira:napier", version = "2.4.0" }
+napier = { module = "io.github.aakira:napier", version = "2.4.1" }
 
 # Navigation
 navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.4.0" }
