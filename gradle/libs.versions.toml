@@ -78,7 +78,6 @@ hilt-test = { module = "com.google.dagger:hilt-android-testing", version.ref = "
 # HiltX
 hiltx-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltx" }
 hiltx-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltx" }
-hiltx-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version = "1.0.0-alpha03" }
 
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -177,7 +176,6 @@ ui-compose = [
     "compose-ui",
     "compose-ui-tooling",
     "hiltx-navigation",
-    "hiltx-viewmodel",
     "lifecycle-viewmodel",
     "orbit",
 ]
