@@ -32,8 +32,5 @@
                     android:scheme="katana" />
             </intent-filter>
         </activity>
-
-        <meta-data android:name="io.sentry.dsn" android:value="@string/glichtip_dsn" />
     </application>
-
 </manifest>
