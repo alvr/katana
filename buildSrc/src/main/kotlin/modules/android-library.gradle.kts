@@ -7,7 +7,7 @@ plugins {
     com.android.library
     `kotlin-android`
     `kotlin-kapt`
-    id("dagger.hilt.android.plugin")
+    dagger.hilt.android.plugin
 }
 
 kapt.correctErrorTypes = true
