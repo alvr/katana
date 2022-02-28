@@ -19,7 +19,7 @@ detekt = "1.19.0"
 # Tests
 androidx-test = "1.4.0"
 kotest = "5.1.0"
-mockk = "1.12.2"
+mockk = "1.12.3"
 
 [plugins]
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
