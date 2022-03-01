@@ -27,7 +27,11 @@ include(
     ":domain:token",
 
     ":ui:base",
+    ":ui:account",
+    ":ui:explore",
+    ":ui:lists",
     ":ui:login",
+    ":ui:social",
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
