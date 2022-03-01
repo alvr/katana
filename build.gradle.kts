@@ -45,6 +45,6 @@ tasks.withType<KotlinCompile> {
 
 kover {
     coverageEngine.set(CoverageEngine.INTELLIJ)
-    jacocoEngineVersion.set(libs.versions.intellij.get())
+    intellijEngineVersion.set(libs.versions.intellij.get())
     instrumentAndroidPackage = true
 }

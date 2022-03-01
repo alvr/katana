@@ -15,24 +15,19 @@ pluginManagement {
     }
 }
 
-include(
-    ":app",
+include(":app")
 
-    ":data:preferences:base",
-    ":data:preferences:token",
-
-    ":data:remote:base",
-
-    ":domain:base",
-    ":domain:token",
-
-    ":ui:base",
-    ":ui:account",
-    ":ui:explore",
-    ":ui:lists",
-    ":ui:login",
-    ":ui:social",
-)
+// Include all modules in these directories
+listOf("data/preferences", "data/remote", "domain", "ui").forEach { topDir ->
+    rootDir.resolve(topDir)
+        .walkTopDown()
+        .maxDepth(1)
+        .filter { file ->
+            file.isDirectory && file.resolve("build.gradle.kts").exists()
+        }.forEach { module ->
+            include(":${topDir.replace('/', ':')}:${module.name}")
+        }
+}
 
 enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
