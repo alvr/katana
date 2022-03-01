@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_bar_destination_lists">Listas</string>
+    <string name="navigation_bar_destination_social">Social</string>
+    <string name="navigation_bar_destination_explore">Explorar</string>
+    <string name="navigation_bar_destination_account">Cuenta</string>
+</resources>

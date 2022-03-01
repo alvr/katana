@@ -89,9 +89,11 @@ dependencies {
     implementation(projects.ui.explore)
     implementation(projects.ui.account)
 
+    implementation(libs.accompanist.insets)
+    implementation(libs.accompanist.insets.ui)
+
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.app)
-    implementation(libs.compose.ui)
 
     kapt(libs.bundles.kapt)
 

@@ -64,10 +64,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun Login(onLogin: () -> Unit) {
+fun Login(navigator: LoginNavigator) {
     Login(
         vm = hiltViewModel(),
-        onLogin = onLogin
+        onLogin = navigator::goToHome
     )
 }
 
