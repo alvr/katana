@@ -18,33 +18,59 @@ buildscript {
     extra.set("detektFormatting", libs.detekt.formatting)
 }
 
-tasks.koverMergedHtmlReport {
-    includes = koverIncludes
-    excludes = koverExcludes
-}
+tasks {
+    koverMergedHtmlReport {
+        includes = koverIncludes
+        excludes = koverExcludes
+    }
 
-tasks.koverMergedVerify {
-    includes = koverIncludes
-    excludes = koverExcludes
+    koverMergedVerify {
+        includes = koverIncludes
+        excludes = koverExcludes
 
-    rule {
-        name = "Minimal line coverage rate in percent"
-        bound {
-            minValue = KOVER_MIN_COVERED_LINES
+        rule {
+            name = "Minimal line coverage rate in percent"
+            bound {
+                minValue = KOVER_MIN_COVERED_LINES
+            }
+        }
+    }
+
+    register<Delete>("clean") {
+        delete(buildDir)
+    }
+
+    withType<KotlinCompile> {
+        kotlinOptions.configureKotlin()
+    }
+
+    val unitTests by registering {
+        val androidUnitTest = "testDebugUnitTest"
+        val kotlinUnitTest = "test"
+
+        subprojects.forEach { p ->
+            if (p.tasks.findByName(androidUnitTest) != null) {
+                dependsOn("${p.path}:$androidUnitTest")
+            } else if (p.tasks.findByName(kotlinUnitTest) != null) {
+                dependsOn("${p.path}:$kotlinUnitTest")
+            }
+        }
+    }
+
+    register("allTests") {
+        val instrumentedTests = "connectedDebugAndroidTest"
+
+        dependsOn(unitTests)
+        subprojects.forEach { p ->
+            if (p.tasks.findByName(instrumentedTests) != null) {
+                dependsOn("${p.path}:$instrumentedTests")
+            }
         }
     }
 }
 
-tasks.register<Delete>("clean") {
-    delete(buildDir)
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.configureKotlin()
-}
-
 kover {
     coverageEngine.set(CoverageEngine.INTELLIJ)
-    jacocoEngineVersion.set(libs.versions.intellij.get())
+    intellijEngineVersion.set(libs.versions.intellij.get())
     instrumentAndroidPackage = true
 }

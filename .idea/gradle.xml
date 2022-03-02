@@ -22,8 +22,12 @@
             <option value="$PROJECT_DIR$/domain/base" />
             <option value="$PROJECT_DIR$/domain/token" />
             <option value="$PROJECT_DIR$/ui" />
+            <option value="$PROJECT_DIR$/ui/account" />
             <option value="$PROJECT_DIR$/ui/base" />
+            <option value="$PROJECT_DIR$/ui/explore" />
+            <option value="$PROJECT_DIR$/ui/lists" />
             <option value="$PROJECT_DIR$/ui/login" />
+            <option value="$PROJECT_DIR$/ui/social" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -15,10 +15,12 @@ java {
     targetCompatibility = KatanaConfiguration.UseJavaVersion
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
+tasks {
+    test {
+        useJUnitPlatform()
+    }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.configureKotlin()
+    withType<KotlinCompile> {
+        kotlinOptions.configureKotlin()
+    }
 }

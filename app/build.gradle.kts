@@ -7,7 +7,7 @@ plugins {
     com.android.application
     `kotlin-android`
     `kotlin-kapt`
-    id("dagger.hilt.android.plugin")
+    id("com.google.dagger.hilt.android")
 }
 
 kapt.correctErrorTypes = true
@@ -84,10 +84,16 @@ dependencies {
 
     implementation(projects.ui.base)
     implementation(projects.ui.login)
+    implementation(projects.ui.lists)
+    implementation(projects.ui.social)
+    implementation(projects.ui.explore)
+    implementation(projects.ui.account)
+
+    implementation(libs.accompanist.insets)
+    implementation(libs.accompanist.insets.ui)
 
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.app)
-    implementation(libs.compose.ui)
 
     kapt(libs.bundles.kapt)
 

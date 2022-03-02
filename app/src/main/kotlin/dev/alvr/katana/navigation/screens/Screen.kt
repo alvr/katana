@@ -1,4 +1,4 @@
-package dev.alvr.katana.navigation
+package dev.alvr.katana.navigation.screens
 
 import androidx.navigation.navArgument
 
@@ -9,6 +9,12 @@ internal sealed class Screen private constructor(
 ) {
 
     object Login : Screen("login")
+    object Home : Screen("home") {
+        object Lists : ChildScreen(Home, "lists")
+        object Explore : ChildScreen(Home, "explore")
+        object Social : ChildScreen(Home, "social")
+        object Account : ChildScreen(Home, "account")
+    }
 
     sealed class ChildScreen(
         parent: Screen,

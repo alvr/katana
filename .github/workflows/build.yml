@@ -25,7 +25,7 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml') }}
       - name: Build Katana
-        run: ./gradlew --no-daemon buildDebug detektAll testDebugUnitTest koverMergedReport
+        run: ./gradlew --no-daemon buildDebug detektAll unitTests koverMergedReport
       - name: Upload coverage report
         uses: codecov/codecov-action@v2
         with:

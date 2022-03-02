@@ -11,7 +11,7 @@ okhttp = "4.9.3"
 orbit = "4.3.2"
 
 # Coverage Engine
-intellij = "1.0.656"
+intellij = "1.0.657"
 
 # Plugins
 detekt = "1.19.0"
@@ -27,6 +27,8 @@ kover = { id = "org.jetbrains.kotlinx.kover", version = "0.5.0" }
 
 [libraries]
 # Accompanist
+accompanist-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
+accompanist-insets-ui = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
 
@@ -143,6 +145,7 @@ common-android = [
 app = [
     "accompanist-navigation",
     "androidx-activity",
+    "compose-material-icons",
     "design-material",
     "navigation-compose",
 ]

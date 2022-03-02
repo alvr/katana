@@ -1,4 +1,4 @@
-package dev.alvr.katana.navigation
+package dev.alvr.katana.navigation.screens
 
 import androidx.navigation.NavType
 
