@@ -1,11 +1,12 @@
 package dev.alvr.katana.ui.base.components
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
+import androidx.compose.material.TabPosition
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
@@ -35,29 +36,65 @@ internal fun HomeTopAppBar(
     pagerState: PagerState,
     onTabClicked: (Int) -> Unit
 ) {
-    val shape = RoundedCornerShape(topEnd = 20.dp, topStart = 20.dp)
-
     TopAppBar {
-        Box {
-            TabRow(
-                modifier = Modifier.fillMaxWidth(),
-                selectedTabIndex = pagerState.currentPage,
-                indicator = { tabPositions ->
-                    TabRowDefaults.Indicator(
-                        modifier = Modifier.pagerTabIndicatorOffset(pagerState, tabPositions).clip(shape),
-                        height = 4.dp
-                    )
-                }
-            ) {
-                tabs.forEachIndexed { index, tab ->
-                    Tab(
-                        text = { Text(text = stringResource(id = tab.label)) },
-                        modifier = Modifier.fillMaxHeight(),
-                        selected = index == pagerState.currentPage,
-                        onClick = { onTabClicked(index) }
-                    )
-                }
-            }
-        }
+        TabSelector(
+            tabs = tabs,
+            pagerState = pagerState,
+            onTabClicked = onTabClicked
+        )
     }
 }
+
+@Composable
+@ExperimentalPagerApi
+private fun TabSelector(
+    tabs: Array<out HomeTopAppBar>,
+    pagerState: PagerState,
+    onTabClicked: (Int) -> Unit
+) {
+    val tabList = @Composable {
+        tabs.forEachIndexed { index, tab ->
+            Tab(
+                text = { Text(text = stringResource(id = tab.label)) },
+                modifier = Modifier.fillMaxHeight(),
+                selected = index == pagerState.currentPage,
+                onClick = { onTabClicked(index) }
+            )
+        }
+    }
+
+    val tabRowModifier = Modifier.fillMaxWidth()
+    val tabIndicator = @Composable { tabPositions: List<TabPosition> ->
+        TabRowDefaults.Indicator(
+            modifier = Modifier
+                .pagerTabIndicatorOffset(pagerState, tabPositions)
+                .clip(
+                    RoundedCornerShape(
+                        topEnd = IndicatorRadius,
+                        topStart = IndicatorRadius
+                    )
+                ),
+            height = 4.dp
+        )
+    }
+
+    if (tabs.size > MAX_FIXED_TABS) {
+        ScrollableTabRow(
+            modifier = tabRowModifier,
+            selectedTabIndex = pagerState.currentPage,
+            indicator = tabIndicator,
+            edgePadding = 0.dp,
+            tabs = tabList
+        )
+    } else {
+        TabRow(
+            modifier = tabRowModifier,
+            selectedTabIndex = pagerState.currentPage,
+            indicator = tabIndicator,
+            tabs = tabList
+        )
+    }
+}
+
+private const val MAX_FIXED_TABS = 4
+private val IndicatorRadius = 24.dp
