@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.base.components
+package dev.alvr.katana.ui.base.components.home
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxHeight
