@@ -13,8 +13,10 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
+          distribution: zulu
+          java-package: jdk
           java-version: 11
-          distribution: temurin
+          cache: gradle
       - name: Setup Cache
         uses: actions/cache@v2
         with:
@@ -25,7 +27,7 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml') }}
       - name: Build Katana
-        run: ./gradlew --no-daemon buildDebug detektAll unitTests koverMergedReport
+        run: ./gradlew buildDebug detektAll unitTests koverMergedReport --no-daemon
       - name: Upload coverage report
         uses: codecov/codecov-action@v2
         with:

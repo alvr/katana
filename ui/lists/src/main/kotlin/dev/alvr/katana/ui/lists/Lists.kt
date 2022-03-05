@@ -2,6 +2,7 @@ package dev.alvr.katana.ui.lists
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dev.alvr.katana.ui.base.components.home.HomeScaffold
@@ -25,6 +26,7 @@ fun Lists() {
     )
 }
 
+@Immutable
 private enum class ListTabs(override val label: Int) : HomeTopAppBar {
     Anime(R.string.tab_anime),
     Manga(R.string.tab_manga),
