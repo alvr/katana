@@ -31,6 +31,8 @@ accompanist-insets = { module = "com.google.accompanist:accompanist-insets", ver
 accompanist-insets-ui = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version = "1.4.0" }
@@ -167,6 +169,11 @@ data-remote = [
 ]
 
 ui-compose = [
+    "accompanist-insets",
+    "accompanist-insets-ui",
+    "accompanist-navigation",
+    "accompanist-pager",
+    "accompanist-pager-indicators",
     "compose-animation",
     "compose-foundation",
     "compose-foundation-layout",
