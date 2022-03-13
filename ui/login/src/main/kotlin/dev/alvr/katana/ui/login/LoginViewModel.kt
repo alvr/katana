@@ -27,6 +27,8 @@ internal class LoginViewModel @Inject constructor(
 
     private fun saveAnilistToken(token: String?) {
         token?.let { t ->
+            postSideEffect(LoginEffect.Loading)
+
             executeUseCase({
                 val parsedToken = t.substringBefore('&')
 
