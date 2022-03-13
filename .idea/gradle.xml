@@ -18,9 +18,11 @@
             <option value="$PROJECT_DIR$/data/preferences/token" />
             <option value="$PROJECT_DIR$/data/remote" />
             <option value="$PROJECT_DIR$/data/remote/base" />
+            <option value="$PROJECT_DIR$/data/remote/user" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/domain/base" />
             <option value="$PROJECT_DIR$/domain/token" />
+            <option value="$PROJECT_DIR$/domain/user" />
             <option value="$PROJECT_DIR$/ui" />
             <option value="$PROJECT_DIR$/ui/account" />
             <option value="$PROJECT_DIR$/ui/base" />

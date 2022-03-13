@@ -1,6 +1,7 @@
 package dev.alvr.katana.ui.login
 
 import android.content.res.Configuration
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearEasing
@@ -28,6 +29,7 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -73,6 +75,8 @@ fun Login(navigator: LoginNavigator) {
 
 @Composable
 private fun Login(vm: LoginViewModel, onLogin: () -> Unit) {
+    var loading by remember { mutableStateOf(false) }
+
     val background = rememberSaveable {
         listOf(
             R.drawable.background_chihiro,
@@ -87,25 +91,45 @@ private fun Login(vm: LoginViewModel, onLogin: () -> Unit) {
     val loginError = stringResource(id = R.string.save_token_error)
     vm.collectSideEffect { effect ->
         when (effect) {
-            LoginEffect.Error -> scaffoldState.snackbarHostState.showSnackbar(message = loginError)
+            LoginEffect.Loading -> loading = true
             LoginEffect.Saved -> onLogin()
+            LoginEffect.Error -> {
+                loading = false
+                scaffoldState.snackbarHostState.showSnackbar(message = loginError)
+            }
         }
     }
 
     Scaffold(scaffoldState = scaffoldState) {
         Surface(modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(background),
-                contentDescription = stringResource(id = R.string.content_description_background),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.alpha(BACKGROUND_ALPHA)
-            )
-
-            Box(modifier = Modifier.padding(24.dp)) {
-                Header(modifier = Modifier.align(Alignment.TopCenter))
-                Bottom(modifier = Modifier.align(Alignment.BottomCenter))
+            if (loading) {
+                Loading()
+            } else {
+                MainContent(background = background)
             }
         }
+    }
+}
+
+@Composable
+private fun MainContent(@DrawableRes background: Int) {
+    Image(
+        painter = painterResource(background),
+        contentDescription = stringResource(id = R.string.content_description_background),
+        contentScale = ContentScale.Crop,
+        modifier = Modifier.alpha(BACKGROUND_ALPHA)
+    )
+
+    Box(modifier = Modifier.padding(24.dp)) {
+        Header(modifier = Modifier.align(Alignment.TopCenter))
+        Bottom(modifier = Modifier.align(Alignment.BottomCenter))
+    }
+}
+
+@Composable
+private fun Loading() {
+    Box {
+        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }
 }
 
@@ -344,20 +368,3 @@ private fun Animate(
 }
 
 private enum class State { GetStarted, Buttons }
-
-private const val BACKGROUND_ALPHA = .3f
-private const val LOGO_FULL_SIZE = 1f
-private const val LOGO_RESIZED = .6f
-
-private const val HEADER_ANIMATION_DELAY = 300
-private const val HEADER_ANIMATION_DURATION = 1250
-
-private const val BOTTOM_ANIM_DELAY = HEADER_ANIMATION_DELAY + HEADER_ANIMATION_DURATION / 2
-private const val BOTTOM_ANIM_DURATION = HEADER_ANIMATION_DURATION
-private const val BOTTOM_ARROW_ANIM_DURATION = 750
-private const val BOTTOM_CROSSFADE_ANIM_DURATION = 800
-
-private const val ANILIST_LOGIN = "https://anilist.co/api/v2/oauth/authorize?client_id=7275&response_type=token"
-private const val ANILIST_REGISTER = "https://anilist.co/signup"
-
-internal const val GET_STARTED_BUTTON_TAG = "get_started"
