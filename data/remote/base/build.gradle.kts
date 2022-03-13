@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.data.remote)
 
+    implementation(libs.apollo.cache.sql)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logger)
 

@@ -39,6 +39,8 @@ androidx-activity = { module = "androidx.activity:activity-compose", version = "
 
 # Apollo
 apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
+apollo-cache = { module = "com.apollographql.apollo3:apollo-normalized-cache", version.ref = "apollo" }
+apollo-cache-sql = { module = "com.apollographql.apollo3:apollo-normalized-cache-sqlite", version.ref = "apollo" }
 
 # Compose
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
@@ -166,6 +168,7 @@ data-preferences = [
 ]
 data-remote = [
     "apollo",
+    "apollo-cache",
 ]
 
 ui-compose = [

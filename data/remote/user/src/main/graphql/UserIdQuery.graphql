@@ -1,0 +1,5 @@
+query UserIdQuery {
+    viewer: Viewer {
+        id
+    }
+}
