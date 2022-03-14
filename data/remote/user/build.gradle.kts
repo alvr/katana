@@ -4,8 +4,7 @@ plugins {
 }
 
 apollo {
-    generateApolloMetadata.set(true)
-    packageNamesFromFilePaths("dev.alvr.katana.data.remote.user")
+    packageName.set("dev.alvr.katana.data.remote.user")
 }
 
 dependencies {

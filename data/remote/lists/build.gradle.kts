@@ -3,24 +3,18 @@ plugins {
     alias(libs.plugins.apollo)
 }
 
-android {
-    buildFeatures.buildConfig = true
-}
-
 apollo {
-    generateApolloMetadata.set(true)
-    packageName.set("dev.alvr.katana.data.remote.base")
+    packageName.set("dev.alvr.katana.data.remote.lists")
 }
 
 dependencies {
-    implementation(projects.domain.token)
+    apolloMetadata(projects.data.remote.base)
+    implementation(projects.data.remote.base)
+    implementation(projects.domain.lists)
+    implementation(projects.domain.user)
 
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.data.remote)
-
-    implementation(libs.apollo.cache.sql)
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logger)
 
     kapt(libs.bundles.kapt)
 
