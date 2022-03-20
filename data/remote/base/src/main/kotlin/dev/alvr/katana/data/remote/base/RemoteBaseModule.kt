@@ -2,7 +2,6 @@ package dev.alvr.katana.data.remote.base
 
 import android.content.Context
 import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
 import com.apollographql.apollo3.cache.normalized.api.NormalizedCacheFactory
 import com.apollographql.apollo3.cache.normalized.normalizedCache
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
@@ -28,7 +27,6 @@ internal object RemoteBaseModule {
     private const val ANILIST_BASE_URL = "https://graphql.anilist.co"
     private const val ANILIST_CLIENT_TIMEOUT = 30L
 
-    private const val APOLLO_CACHE_SIZE = 10 * 1024 * 1024
     private const val APOLLO_CACHE_DATABASE = "apollo.db"
 
     @Provides
@@ -72,8 +70,7 @@ internal object RemoteBaseModule {
     @Singleton
     fun provideApolloCache(
         @ApplicationContext context: Context
-    ): NormalizedCacheFactory = MemoryCacheFactory(APOLLO_CACHE_SIZE)
-        .chain(SqlNormalizedCacheFactory(context, APOLLO_CACHE_DATABASE))
+    ): NormalizedCacheFactory = SqlNormalizedCacheFactory(context, APOLLO_CACHE_DATABASE)
 
     @Provides
     @Singleton

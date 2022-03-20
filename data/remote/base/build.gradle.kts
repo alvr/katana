@@ -8,6 +8,7 @@ android {
 }
 
 apollo {
+    alwaysGenerateTypesMatching.set(listOf("Query"))
     generateApolloMetadata.set(true)
     packageName.set("dev.alvr.katana.data.remote.base")
 }

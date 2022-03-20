@@ -1,0 +1,49 @@
+query MediaListCollectionQuery($user: Int!, $type: MediaType!) {
+    collection: MediaListCollection(userId: $user, type: $type) {
+        lists {
+            entries {
+                id
+                score
+                progress
+                progressVolumes
+                repeat
+                priority
+                private
+                notes
+                hiddenFromStatusLists
+                startedAt {
+                    year
+                    month
+                    day
+                }
+                completedAt {
+                    year
+                    month
+                    day
+                }
+                media {
+                    id
+                    title {
+                        userPreferred
+                    }
+                    episodes
+                    duration
+                    chapters
+                    volumes
+                    coverImage {
+                        large
+                    }
+                    genres
+                    nextAiringEpisode {
+                        airingAt
+                        episode
+                    }
+                }
+            }
+            name
+            isCustomList
+            isSplitCompletedList
+            status
+        }
+    }
+}

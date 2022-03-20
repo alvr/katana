@@ -4,6 +4,7 @@ plugins {
 }
 
 apollo {
+    generateAsInternal.set(true)
     packageName.set("dev.alvr.katana.data.remote.lists")
 }
 
