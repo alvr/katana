@@ -23,6 +23,7 @@ query MediaListCollectionQuery($user: Int!, $type: MediaType!) {
                 }
                 media {
                     id
+                    status
                     title {
                         userPreferred
                     }
@@ -43,7 +44,6 @@ query MediaListCollectionQuery($user: Int!, $type: MediaType!) {
             name
             isCustomList
             isSplitCompletedList
-            status
         }
     }
 }
