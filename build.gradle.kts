@@ -18,6 +18,12 @@ buildscript {
     extra.set("detektFormatting", libs.detekt.formatting)
 }
 
+allprojects {
+    tasks.withType<KotlinCompile> {
+        kotlinOptions.configureKotlin()
+    }
+}
+
 tasks {
     koverMergedHtmlReport {
         includes = koverIncludes
@@ -38,10 +44,6 @@ tasks {
 
     register<Delete>("clean") {
         delete(buildDir)
-    }
-
-    withType<KotlinCompile> {
-        kotlinOptions.configureKotlin()
     }
 
     val unitTests by registering {
