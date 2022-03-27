@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.gradle.detekt)
     implementation(libs.gradle.hilt)
     implementation(libs.gradle.kotlin)
+    implementation(libs.gradle.kover)
     implementation(libs.gradle.serialization)
     implementation(libs.gradle.updates)
 }

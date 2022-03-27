@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.remote.base
+package dev.alvr.katana.data.remote.base.di
 
 import android.content.Context
 import com.apollographql.apollo3.ApolloClient
