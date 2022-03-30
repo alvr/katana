@@ -1,4 +1,4 @@
-package dev.alvr.katana.domain.lists.models
+package dev.alvr.katana.domain.lists.models.entries
 
 data class MangaEntry(
     val entry: MediaEntry,

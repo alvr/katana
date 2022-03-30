@@ -7,8 +7,8 @@ import com.apollographql.apollo3.cache.normalized.watch
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.mappers.responses.mediaList
-import dev.alvr.katana.domain.lists.models.AnimeEntry
-import dev.alvr.katana.domain.lists.models.MangaEntry
+import dev.alvr.katana.domain.lists.models.entries.AnimeEntry
+import dev.alvr.katana.domain.lists.models.entries.MangaEntry
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import javax.inject.Inject

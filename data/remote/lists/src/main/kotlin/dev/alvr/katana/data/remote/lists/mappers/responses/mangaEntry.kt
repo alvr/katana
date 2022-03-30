@@ -1,9 +1,9 @@
 package dev.alvr.katana.data.remote.lists.mappers.responses
 
-import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
-import dev.alvr.katana.domain.lists.models.MangaEntry
+import dev.alvr.katana.domain.lists.models.entries.MangaEntry
+import dev.alvr.katana.data.remote.lists.fragment.MediaEntry as MediaEntryFragment
 
-internal fun MediaListCollectionQuery.Media?.mangaEntry() = let { entry ->
+internal fun MediaEntryFragment?.mangaEntry() = let { entry ->
     MangaEntry(
         entry = mediaEntry(),
         chapters = entry?.chapters,

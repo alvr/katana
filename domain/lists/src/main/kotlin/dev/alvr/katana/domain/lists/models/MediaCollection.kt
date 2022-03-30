@@ -1,8 +1,8 @@
 package dev.alvr.katana.domain.lists.models
 
-data class MediaCollection<T : MediaEntry>(
-    val entries: List<MediaList<T>>,
-    val name: String,
-    val isCustomList: Boolean,
-    val isSplitCompletedList: Boolean,
+import dev.alvr.katana.domain.lists.models.entries.MediaEntry
+
+@JvmInline
+value class MediaCollection<T : MediaEntry>(
+    val lists: List<MediaList<T>> = emptyList()
 )

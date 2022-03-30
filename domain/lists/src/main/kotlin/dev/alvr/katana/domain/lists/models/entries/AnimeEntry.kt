@@ -1,4 +1,4 @@
-package dev.alvr.katana.domain.lists.models
+package dev.alvr.katana.domain.lists.models.entries
 
 import java.time.LocalDateTime
 
@@ -9,6 +9,6 @@ data class AnimeEntry(
 ) : MediaEntry(entry) {
     data class NextEpisode(
         val number: Int,
-        val timeUntilAiring: LocalDateTime
+        val at: LocalDateTime
     )
 }
