@@ -51,5 +51,5 @@ fun KotlinJvmOptions.configureKotlin() {
     jvmTarget = KatanaConfiguration.JvmTarget
     apiVersion = KatanaConfiguration.KotlinVersion
     languageVersion = KatanaConfiguration.KotlinVersion
-    freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+    freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")
 }
