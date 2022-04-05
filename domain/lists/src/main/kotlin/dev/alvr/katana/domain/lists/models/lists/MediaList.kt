@@ -1,8 +1,8 @@
-package dev.alvr.katana.domain.lists.models
+package dev.alvr.katana.domain.lists.models.lists
 
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 
-data class MediaList<T : MediaEntry>(
+data class MediaList<out T : MediaEntry>(
     val name: String,
     val listType: ListType,
     val entries: List<MediaListEntry<T>>,

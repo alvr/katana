@@ -1,10 +1,10 @@
-package dev.alvr.katana.domain.lists.models
+package dev.alvr.katana.domain.lists.models.lists
 
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-data class MediaListEntry<T : MediaEntry>(
+data class MediaListEntry<out T : MediaEntry>(
     val id: Int,
     val score: Double,
     val progress: Int,

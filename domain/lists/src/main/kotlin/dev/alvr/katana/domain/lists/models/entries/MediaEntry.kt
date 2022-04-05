@@ -1,13 +1,15 @@
 package dev.alvr.katana.domain.lists.models.entries
 
-open class MediaEntry(
+import java.time.LocalDateTime
+
+sealed class MediaEntry(
     val id: Int,
     val title: String,
     val coverImage: String,
-    val format: Format,
+    val format: CommonMediaEntry.Format,
     val genres: List<String>,
 ) {
-    constructor(entry: MediaEntry) : this(
+    constructor(entry: CommonMediaEntry) : this(
         id = entry.id,
         title = entry.title,
         coverImage = entry.coverImage,
@@ -15,17 +17,20 @@ open class MediaEntry(
         genres = entry.genres
     )
 
-    enum class Format {
-        TV,
-        TV_SHORT,
-        MOVIE,
-        SPECIAL,
-        OVA,
-        ONA,
-        MUSIC,
-        MANGA,
-        NOVEL,
-        ONE_SHOT,
-        UNKNOWN,
+    data class Anime(
+        val entry: CommonMediaEntry,
+        val episodes: Int?,
+        val nextEpisode: NextEpisode?
+    ) : MediaEntry(entry) {
+        data class NextEpisode(
+            val number: Int,
+            val at: LocalDateTime
+        )
     }
+
+    data class Manga(
+        val entry: CommonMediaEntry,
+        val chapters: Int?,
+        val volumes: Int?,
+    ) : MediaEntry(entry)
 }

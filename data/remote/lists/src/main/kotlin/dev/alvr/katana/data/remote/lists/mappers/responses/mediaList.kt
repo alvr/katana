@@ -1,20 +1,18 @@
 package dev.alvr.katana.data.remote.lists.mappers.responses
 
+import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.domain.lists.models.MediaCollection
-import dev.alvr.katana.domain.lists.models.MediaList
-import dev.alvr.katana.domain.lists.models.MediaListEntry
-import dev.alvr.katana.domain.lists.models.entries.AnimeEntry
-import dev.alvr.katana.domain.lists.models.entries.MangaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
-import kotlin.time.ExperimentalTime
+import dev.alvr.katana.domain.lists.models.lists.MediaList
+import dev.alvr.katana.domain.lists.models.lists.MediaListEntry
 import dev.alvr.katana.data.remote.lists.fragment.MediaEntry as MediaEntryFragment
 
-@OptIn(ExperimentalTime::class)
-internal inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data?.mediaList(): MediaCollection<T> {
+@Suppress("UNCHECKED_CAST")
+internal fun <T : MediaEntry> MediaListCollectionQuery.Data?.mediaList(type: MediaType): MediaCollection<T> {
     val lists = this?.collection?.lists?.asSequence().orEmpty().mapNotNull { list ->
         val entries = list?.entries?.asSequence().orEmpty().mapNotNull { entry ->
-            entry.toModel<T>()
+            entry.toModel(type)
         }
 
         MediaList(
@@ -24,10 +22,10 @@ internal inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data?.medi
         )
     }.sortedBy { it.listType }
 
-    return MediaCollection(lists.toList())
+    return MediaCollection(lists.toList() as List<MediaList<T>>)
 }
 
-private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry?.toModel() =
+private fun MediaListCollectionQuery.Entry?.toModel(type: MediaType) =
     this?.mediaListEntry.let { entry ->
         MediaListEntry(
             id = entry?.id ?: 0,
@@ -46,12 +44,12 @@ private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry?.toMo
                 dateMapper(date.day, date.month, date.year)
             },
             updatedAt = entry?.updatedAt?.toLocalDateTime(),
-            media = this?.media?.mediaEntry.toMedia<T>()
+            media = this?.media?.mediaEntry.toMedia(type)
         )
     }
 
-private inline fun <reified T : MediaEntry> MediaEntryFragment?.toMedia(): T = when (T::class) {
-    AnimeEntry::class -> this?.animeEntry()
-    MangaEntry::class -> this?.mangaEntry()
-    else -> error("only AnimeEntry and MangaEntry are accepted")
-} as T
+private fun MediaEntryFragment?.toMedia(type: MediaType): MediaEntry = when (type) {
+    MediaType.ANIME -> this?.animeEntry()
+    MediaType.MANGA -> this?.mangaEntry()
+    MediaType.UNKNOWN__ -> error("only AnimeEntry and MangaEntry are accepted")
+} as MediaEntry

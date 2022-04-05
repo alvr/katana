@@ -7,8 +7,7 @@ import com.apollographql.apollo3.cache.normalized.watch
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.mappers.responses.mediaList
-import dev.alvr.katana.domain.lists.models.entries.AnimeEntry
-import dev.alvr.katana.domain.lists.models.entries.MangaEntry
+import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import javax.inject.Inject
@@ -20,19 +19,15 @@ internal class ListsRemoteRepositoryImpl @Inject constructor(
     private val client: ApolloClient,
     private val userId: UserIdManager
 ) : ListsRepository {
-    override val animeList = getMediaCollection(MediaType.ANIME).mapNotNull { res ->
-        res.data.mediaList<AnimeEntry>()
-    }
+    override val animeList = getMediaCollection<MediaEntry.Anime>(MediaType.ANIME)
+    override val mangaList = getMediaCollection<MediaEntry.Manga>(MediaType.MANGA)
 
-    override val mangaList = getMediaCollection(MediaType.MANGA).mapNotNull { res ->
-        res.data.mediaList<MangaEntry>()
-    }
-
-    private fun getMediaCollection(type: MediaType) = flow {
+    private fun <T : MediaEntry> getMediaCollection(type: MediaType) = flow {
         val response = client
             .query(MediaListCollectionQuery(userId.getId(), type))
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch()
+            .mapNotNull { res -> res.data.mediaList<T>(type) }
         emitAll(response)
     }
 }

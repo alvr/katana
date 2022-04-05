@@ -2,12 +2,12 @@ package dev.alvr.katana.domain.lists.usecases
 
 import dev.alvr.katana.domain.base.FlowUseCase
 import dev.alvr.katana.domain.lists.models.MediaCollection
-import dev.alvr.katana.domain.lists.models.entries.AnimeEntry
+import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
 import javax.inject.Inject
 
-class GetAnimeListUseCase @Inject constructor(
+class ObserveMangaListUseCase @Inject constructor(
     private val repository: ListsRepository
-) : FlowUseCase<Unit, MediaCollection<AnimeEntry>>() {
-    override fun createFlow(params: Unit) = repository.animeList
+) : FlowUseCase<Unit, MediaCollection<MediaEntry.Manga>>() {
+    override fun createFlow(params: Unit) = repository.mangaList
 }

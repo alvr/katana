@@ -1,11 +1,11 @@
 package dev.alvr.katana.data.remote.lists.mappers.responses
 
 import dev.alvr.katana.data.remote.base.type.MediaFormat
-import dev.alvr.katana.domain.lists.models.entries.MediaEntry
+import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.data.remote.lists.fragment.MediaEntry as MediaEntryFragment
 
 internal fun MediaEntryFragment?.mediaEntry() = let { entry ->
-    MediaEntry(
+    CommonMediaEntry(
         id = entry?.id ?: 0,
         title = entry?.title?.userPreferred.orEmpty(),
         coverImage = entry?.coverImage?.large.orEmpty(),
@@ -15,16 +15,16 @@ internal fun MediaEntryFragment?.mediaEntry() = let { entry ->
 }
 
 private fun MediaFormat?.toFormat() = when (this) {
-    MediaFormat.TV -> MediaEntry.Format.TV
-    MediaFormat.TV_SHORT -> MediaEntry.Format.TV_SHORT
-    MediaFormat.MOVIE -> MediaEntry.Format.MOVIE
-    MediaFormat.SPECIAL -> MediaEntry.Format.SPECIAL
-    MediaFormat.OVA -> MediaEntry.Format.OVA
-    MediaFormat.ONA -> MediaEntry.Format.ONA
-    MediaFormat.MUSIC -> MediaEntry.Format.MUSIC
-    MediaFormat.MANGA -> MediaEntry.Format.MANGA
-    MediaFormat.NOVEL -> MediaEntry.Format.NOVEL
-    MediaFormat.ONE_SHOT -> MediaEntry.Format.ONE_SHOT
-    MediaFormat.UNKNOWN__ -> MediaEntry.Format.UNKNOWN
-    null -> MediaEntry.Format.UNKNOWN
+    MediaFormat.TV -> CommonMediaEntry.Format.TV
+    MediaFormat.TV_SHORT -> CommonMediaEntry.Format.TV_SHORT
+    MediaFormat.MOVIE -> CommonMediaEntry.Format.MOVIE
+    MediaFormat.SPECIAL -> CommonMediaEntry.Format.SPECIAL
+    MediaFormat.OVA -> CommonMediaEntry.Format.OVA
+    MediaFormat.ONA -> CommonMediaEntry.Format.ONA
+    MediaFormat.MUSIC -> CommonMediaEntry.Format.MUSIC
+    MediaFormat.MANGA -> CommonMediaEntry.Format.MANGA
+    MediaFormat.NOVEL -> CommonMediaEntry.Format.NOVEL
+    MediaFormat.ONE_SHOT -> CommonMediaEntry.Format.ONE_SHOT
+    MediaFormat.UNKNOWN__ -> CommonMediaEntry.Format.UNKNOWN
+    null -> CommonMediaEntry.Format.UNKNOWN
 }
