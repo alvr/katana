@@ -99,7 +99,7 @@ lifecycle-test = { module = "androidx.lifecycle:lifecycle-runtime-testing", vers
 napier = { module = "io.github.aakira:napier", version = "2.5.0" }
 
 # Navigation
-navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.4.1" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.4.2" }
 
 # OkHttp
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
