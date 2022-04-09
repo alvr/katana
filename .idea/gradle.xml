@@ -32,6 +32,10 @@
             <option value="$PROJECT_DIR$/ui/lists" />
             <option value="$PROJECT_DIR$/ui/login" />
             <option value="$PROJECT_DIR$/ui/social" />
+            <option value="$PROJECT_DIR$/utils" />
+            <option value="$PROJECT_DIR$/utils/tests" />
+            <option value="$PROJECT_DIR$/utils/tests/android" />
+            <option value="$PROJECT_DIR$/utils/tests/unit" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
