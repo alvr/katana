@@ -78,9 +78,11 @@ dependencies {
     implementation(projects.data.preferences.token)
 
     implementation(projects.data.remote.base)
+    implementation(projects.data.remote.lists)
     implementation(projects.data.remote.user)
 
     implementation(projects.domain.base)
+    implementation(projects.domain.lists)
     implementation(projects.domain.token)
     implementation(projects.domain.user)
 

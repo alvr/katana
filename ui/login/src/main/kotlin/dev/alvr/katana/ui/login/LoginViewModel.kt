@@ -32,8 +32,6 @@ internal class LoginViewModel @Inject constructor(
             executeUseCase({
                 val parsedToken = t.substringBefore('&')
 
-                Napier.d { "Saving Anilist token $parsedToken" }
-
                 saveAnilistTokenUseCase(AnilistToken(parsedToken))
                 saveUserIdUseCase()
 
@@ -41,6 +39,6 @@ internal class LoginViewModel @Inject constructor(
             }, {
                 postSideEffect(LoginEffect.Error)
             })
-        } ?: Napier.d { "No token found in StateHandle" }
+        } ?: Napier.i { "No token found in StateHandle" }
     }
 }

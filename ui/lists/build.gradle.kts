@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(projects.ui.base)
+    implementation(projects.domain.lists)
 
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.ui.compose)

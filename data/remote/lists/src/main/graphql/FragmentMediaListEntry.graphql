@@ -1,0 +1,22 @@
+fragment MediaListEntry on MediaList {
+    id
+    score
+    progress
+    progressVolumes
+    repeat
+    priority
+    private
+    notes
+    hiddenFromStatusLists
+    startedAt {
+        year
+        month
+        day
+    }
+    completedAt {
+        year
+        month
+        day
+    }
+    updatedAt
+}

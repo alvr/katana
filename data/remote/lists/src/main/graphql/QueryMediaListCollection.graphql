@@ -1,0 +1,13 @@
+query MediaListCollection($user: Int!, $type: MediaType!) {
+    collection: MediaListCollection(userId: $user, type: $type) {
+        lists {
+            entries {
+                ...MediaListEntry
+                media {
+                    ...MediaEntry
+                }
+            }
+            name
+        }
+    }
+}

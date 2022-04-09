@@ -1,14 +1,11 @@
-import kotlinx.kover.api.CoverageEngine
+
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import utils.KOVER_MIN_COVERED_LINES
 import utils.configureKotlin
-import utils.koverExcludes
-import utils.koverIncludes
 
 plugins {
     plugins.dependencies
     plugins.detekt
-    alias(libs.plugins.kover)
+    plugins.kover
 }
 
 // Version catalogs is not accessible from precompile scripts
@@ -16,32 +13,18 @@ plugins {
 buildscript {
     extra.set("composeCompiler", libs.versions.compose.get())
     extra.set("detektFormatting", libs.detekt.formatting)
+    extra.set("intellijEngine", libs.versions.intellij.get())
+}
+
+allprojects {
+    tasks.withType<KotlinCompile> {
+        kotlinOptions.configureKotlin()
+    }
 }
 
 tasks {
-    koverMergedHtmlReport {
-        includes = koverIncludes
-        excludes = koverExcludes
-    }
-
-    koverMergedVerify {
-        includes = koverIncludes
-        excludes = koverExcludes
-
-        rule {
-            name = "Minimal line coverage rate in percent"
-            bound {
-                minValue = KOVER_MIN_COVERED_LINES
-            }
-        }
-    }
-
     register<Delete>("clean") {
         delete(buildDir)
-    }
-
-    withType<KotlinCompile> {
-        kotlinOptions.configureKotlin()
     }
 
     val unitTests by registering {
@@ -67,10 +50,4 @@ tasks {
             }
         }
     }
-}
-
-kover {
-    coverageEngine.set(CoverageEngine.INTELLIJ)
-    intellijEngineVersion.set(libs.versions.intellij.get())
-    instrumentAndroidPackage = true
 }

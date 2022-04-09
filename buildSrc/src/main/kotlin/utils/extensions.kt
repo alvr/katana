@@ -2,6 +2,8 @@ package utils
 
 import KatanaConfiguration
 import com.android.build.gradle.BaseExtension
+import kotlinx.kover.api.KoverTaskExtension
+import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 fun BaseExtension.baseAndroidConfig() {
@@ -37,6 +39,9 @@ fun BaseExtension.baseAndroidConfig() {
             isIncludeAndroidResources = true
             all { test ->
                 test.useJUnitPlatform()
+                test.extensions.configure<KoverTaskExtension> {
+                    isDisabled = test.name != "testDebugUnitTest"
+                }
             }
         }
     }
