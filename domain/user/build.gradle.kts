@@ -9,5 +9,6 @@ dependencies {
 
     kapt(libs.bundles.kapt)
 
+    testImplementation(projects.utils.tests.unit)
     testImplementation(libs.bundles.test)
 }
