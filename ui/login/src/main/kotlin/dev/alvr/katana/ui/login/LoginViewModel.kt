@@ -2,7 +2,7 @@ package dev.alvr.katana.ui.login
 
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.alvr.katana.domain.base.invoke
+import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.token.models.AnilistToken
 import dev.alvr.katana.domain.token.usecases.SaveAnilistTokenUseCase
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
