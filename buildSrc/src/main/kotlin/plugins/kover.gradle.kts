@@ -20,6 +20,7 @@ val koverExcludes = listOf(
     "*.remote.*.fragment.*",
     "*.remote.*.selections.*",
     "*.remote.*.type.*",
+    "*.remote.*.*Query",
 
     // Compose
     "*.*ComposableSingletons*",

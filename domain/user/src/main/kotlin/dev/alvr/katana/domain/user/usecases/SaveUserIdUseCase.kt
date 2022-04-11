@@ -1,7 +1,7 @@
 package dev.alvr.katana.domain.user.usecases
 
-import dev.alvr.katana.domain.base.IoDispatcher
-import dev.alvr.katana.domain.base.UseCase
+import dev.alvr.katana.domain.base.di.IoDispatcher
+import dev.alvr.katana.domain.base.usecases.UseCase
 import dev.alvr.katana.domain.user.repositories.UserRemoteRepository
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher

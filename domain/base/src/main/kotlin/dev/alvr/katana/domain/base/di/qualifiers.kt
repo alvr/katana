@@ -1,4 +1,4 @@
-package dev.alvr.katana.domain.base
+package dev.alvr.katana.domain.base.di
 
 import javax.inject.Qualifier
 

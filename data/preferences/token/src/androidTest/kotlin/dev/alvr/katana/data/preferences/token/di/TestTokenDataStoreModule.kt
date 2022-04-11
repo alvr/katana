@@ -30,7 +30,7 @@ internal object TestTokenDataStoreModule {
 
     @Provides
     @Singleton
-    fun provideScope() = TestScope()
+    fun provideScope(): TestScope = TestScope()
 
     @Provides
     @Singleton

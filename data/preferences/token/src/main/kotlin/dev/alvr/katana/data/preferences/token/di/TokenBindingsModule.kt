@@ -9,10 +9,7 @@ import dev.alvr.katana.domain.token.repositories.TokenPreferencesRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
-@Suppress("UnnecessaryAbstractClass")
 internal abstract class TokenBindingsModule {
     @Binds
-    abstract fun provideTokenPreferencesRepository(
-        impl: TokenPreferencesRepositoryImpl
-    ): TokenPreferencesRepository
+    abstract fun bindTokenPreferencesRepository(impl: TokenPreferencesRepositoryImpl): TokenPreferencesRepository
 }
