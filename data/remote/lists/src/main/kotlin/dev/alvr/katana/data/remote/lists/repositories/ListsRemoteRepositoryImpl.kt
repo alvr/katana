@@ -11,6 +11,7 @@ import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import javax.inject.Inject
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.mapNotNull
@@ -27,7 +28,9 @@ internal class ListsRemoteRepositoryImpl @Inject constructor(
             .query(MediaListCollectionQuery(userId.getId(), type))
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch()
+            .distinctUntilChanged()
             .mapNotNull { res -> res.data.mediaList<T>(type) }
+            .distinctUntilChanged()
         emitAll(response)
     }
 }

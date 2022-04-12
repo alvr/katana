@@ -35,21 +35,17 @@ internal class ApolloUserIdTest : BehaviorSpec({
             client.enqueueTestResponse(UserIdQuery(), query)
 
             then("the first time should make a HTTP request") {
-                val data = client
-                    .query(UserIdQuery())
-                    .execute().also { res ->
-                        res.isFromCache.shouldBeFalse()
-                    }.data.shouldNotBeNull()
+                val data = client.query(UserIdQuery()).execute().also { res ->
+                    res.isFromCache.shouldBeFalse()
+                }.data.shouldNotBeNull()
 
                 data.viewer.shouldNotBeNull() shouldBeEqualToComparingFields query.viewer.shouldNotBeNull()
             }
 
             then("from the second onwards it should be read from cache") {
-                val data = client
-                    .query(UserIdQuery())
-                    .execute().also { res ->
-                        res.isFromCache.shouldBeTrue()
-                    }.data.shouldNotBeNull()
+                val data = client.query(UserIdQuery()).execute().also { res ->
+                    res.isFromCache.shouldBeTrue()
+                }.data.shouldNotBeNull()
 
                 data.viewer.shouldNotBeNull() shouldBeEqualToComparingFields query.viewer.shouldNotBeNull()
             }
@@ -67,11 +63,9 @@ internal class ApolloUserIdTest : BehaviorSpec({
             client.enqueueTestResponse(UserIdQuery(), query)
 
             then("the next request should be fetched again from HTTP") {
-                val data = client
-                    .query(UserIdQuery())
-                    .execute().also { res ->
-                        res.isFromCache.shouldBeFalse()
-                    }.data.shouldNotBeNull()
+                val data = client.query(UserIdQuery()).execute().also { res ->
+                    res.isFromCache.shouldBeFalse()
+                }.data.shouldNotBeNull()
 
                 data.viewer.shouldNotBeNull() shouldBeEqualToComparingFields query.viewer.shouldNotBeNull()
             }
