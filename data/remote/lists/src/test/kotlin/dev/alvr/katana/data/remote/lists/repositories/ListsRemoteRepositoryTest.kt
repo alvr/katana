@@ -26,7 +26,8 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldBeEmpty
-import io.kotest.matchers.types.shouldBeInstanceOf
+import io.kotest.matchers.types.shouldBeTypeOf
+import io.kotest.matchers.types.shouldNotBeTypeOf
 import io.mockk.coEvery
 import io.mockk.mockk
 import java.time.LocalDate
@@ -168,7 +169,10 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                                         startedAt.shouldBeNull()
                                         completedAt.shouldBeNull()
                                         with(media) {
-                                            this.shouldBeInstanceOf<MediaEntry.Anime>()
+                                            shouldBeTypeOf<MediaEntry.Anime>()
+                                            shouldNotBeTypeOf<MediaEntry>()
+                                            shouldNotBeTypeOf<MediaEntry.Manga>()
+
                                             id shouldBe 0
                                             title.shouldBeEmpty()
                                             coverImage.shouldBeEmpty()
@@ -257,7 +261,10 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                                         startedAt?.shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
                                         completedAt?.shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
                                         with(media) {
-                                            this.shouldBeInstanceOf<MediaEntry.Anime>()
+                                            shouldBeTypeOf<MediaEntry.Anime>()
+                                            shouldNotBeTypeOf<MediaEntry>()
+                                            shouldNotBeTypeOf<MediaEntry.Manga>()
+
                                             id shouldBe 100
                                             title shouldBe "My anime entry"
                                             coverImage shouldBe "https://www.fillmurray.com/128/256"
@@ -295,7 +302,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                     then("the error should be propagated") {
                         repo.animeList.test {
-                            awaitError().shouldBeInstanceOf<ApolloNetworkException>()
+                            awaitError().shouldBeTypeOf<ApolloNetworkException>()
                         }
                     }
                 }
@@ -425,7 +432,10 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                                         startedAt.shouldBeNull()
                                         completedAt.shouldBeNull()
                                         with(media) {
-                                            this.shouldBeInstanceOf<MediaEntry.Manga>()
+                                            shouldBeTypeOf<MediaEntry.Manga>()
+                                            shouldNotBeTypeOf<MediaEntry>()
+                                            shouldNotBeTypeOf<MediaEntry.Anime>()
+
                                             id shouldBe 0
                                             title.shouldBeEmpty()
                                             coverImage.shouldBeEmpty()
@@ -511,7 +521,10 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                                         startedAt?.shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
                                         completedAt?.shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
                                         with(media) {
-                                            this.shouldBeInstanceOf<MediaEntry.Manga>()
+                                            shouldBeTypeOf<MediaEntry.Manga>()
+                                            shouldNotBeTypeOf<MediaEntry>()
+                                            shouldNotBeTypeOf<MediaEntry.Anime>()
+
                                             id shouldBe 100
                                             title shouldBe "My manga entry"
                                             coverImage shouldBe "https://www.fillmurray.com/128/256"
@@ -546,7 +559,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                     then("the error should be propagated") {
                         repo.mangaList.test {
-                            awaitError().shouldBeInstanceOf<ApolloNetworkException>()
+                            awaitError().shouldBeTypeOf<ApolloNetworkException>()
                         }
                     }
                 }

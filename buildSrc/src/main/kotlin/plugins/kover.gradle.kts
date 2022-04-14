@@ -12,8 +12,8 @@ val intellijEngine: String by rootProject.extra
 
 val koverIncludes = listOf("dev.alvr.katana.*")
 val koverExcludes = listOf(
-    // Common Android
-    "*.BuildConfig",
+    // Anonymous
+    "*$$*",
 
     // Apollo
     "*.remote.*.adapter.*",
@@ -21,6 +21,9 @@ val koverExcludes = listOf(
     "*.remote.*.selections.*",
     "*.remote.*.type.*",
     "*.remote.*.*Query",
+
+    // Common Android
+    "*.BuildConfig",
 
     // Compose
     "*.*ComposableSingletons*",
