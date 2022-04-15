@@ -11,17 +11,13 @@ import kotlinx.coroutines.flow.first
 internal class TokenPreferencesRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Token>
 ) : TokenPreferencesRepository {
-    private var token: AnilistToken? = null
-
     override suspend fun deleteAnilistToken() {
         Napier.d { "Deleting Anilist token" }
         dataStore.updateData { p -> p.copy(anilistToken = null) }
     }
 
     override suspend fun getAnilistToken(): AnilistToken? =
-        token ?: dataStore.data.first().anilistToken?.let { token -> AnilistToken(token) }?.also {
-            token = it
-        }
+        dataStore.data.first().anilistToken?.let { token -> AnilistToken(token) }
 
     override suspend fun saveAnilistToken(anilistToken: AnilistToken) {
         Napier.d { "Token saved: ${anilistToken.token}" }
