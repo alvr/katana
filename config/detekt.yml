@@ -747,6 +747,7 @@ style:
     acceptableLength: 5
   UnnecessaryAbstractClass:
     active: true
+    ignoreAnnotated: ['Module'] # TODO Change to dagger.Module when updating to 1.20.0
   UnnecessaryAnnotationUseSiteTarget:
     active: true
   UnnecessaryApply:

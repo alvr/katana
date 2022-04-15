@@ -18,9 +18,6 @@
     <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
     <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
     <DebugAllEnabled>false</DebugAllEnabled>
-    <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Unit Tests" run_configuration_type="GradleRunConfiguration" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Instrumentation Tests" run_configuration_type="GradleRunConfiguration" />
-    </method>
+    <method v="2" />
   </configuration>
 </component>

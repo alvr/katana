@@ -1,4 +1,4 @@
-package dev.alvr.katana.domain.base
+package dev.alvr.katana.domain.base.usecases
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking

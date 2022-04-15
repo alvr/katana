@@ -1,7 +1,7 @@
 package dev.alvr.katana.domain.token.usecases
 
-import dev.alvr.katana.domain.base.IoDispatcher
-import dev.alvr.katana.domain.base.UseCase
+import dev.alvr.katana.domain.base.di.IoDispatcher
+import dev.alvr.katana.domain.base.usecases.UseCase
 import dev.alvr.katana.domain.token.models.AnilistToken
 import dev.alvr.katana.domain.token.repositories.TokenPreferencesRepository
 import javax.inject.Inject

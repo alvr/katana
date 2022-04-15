@@ -1,4 +1,4 @@
-package dev.alvr.katana.domain.base
+package dev.alvr.katana.domain.base.usecases
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow

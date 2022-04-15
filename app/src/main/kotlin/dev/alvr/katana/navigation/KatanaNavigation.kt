@@ -15,7 +15,7 @@ import dev.alvr.katana.ui.base.components.BottomNavigationBar
 
 @Composable
 @OptIn(ExperimentalAnimationApi::class)
-fun KatanaNavigator() {
+internal fun KatanaNavigator() {
     val appState = rememberKatanaAppState()
     val vm = viewModel<MainViewModel>()
 

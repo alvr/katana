@@ -1,4 +1,4 @@
-package dev.alvr.katana.domain.base
+package dev.alvr.katana.domain.base.di
 
 import dagger.Module
 import dagger.Provides
@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(SingletonComponent::class)
-class CoroutineDispatchersModule {
+internal object CoroutineDispatchersModule {
 
     @Provides
     @DefaultDispatcher

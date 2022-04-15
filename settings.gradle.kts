@@ -18,7 +18,7 @@ pluginManagement {
 include(":app")
 
 // Include all modules in these directories
-listOf("data/preferences", "data/remote", "domain", "ui").forEach { topDir ->
+listOf("data/preferences", "data/remote", "domain", "ui", "utils/tests").forEach { topDir ->
     rootDir.resolve(topDir)
         .walkTopDown()
         .maxDepth(1)

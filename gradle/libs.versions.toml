@@ -11,7 +11,7 @@ okhttp = "4.9.3"
 orbit = "4.3.2"
 
 # Coverage Engine
-intellij = "1.0.657"
+intellij = "1.0.663"
 
 # Plugins
 detekt = "1.19.0"
@@ -40,6 +40,8 @@ androidx-activity = { module = "androidx.activity:activity-compose", version = "
 apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
 apollo-cache = { module = "com.apollographql.apollo3:apollo-normalized-cache", version.ref = "apollo" }
 apollo-cache-sql = { module = "com.apollographql.apollo3:apollo-normalized-cache-sqlite", version.ref = "apollo" }
+apollo-mockserver = { module = "com.apollographql.apollo3:apollo-mockserver", version.ref = "apollo" }
+apollo-testing = { module = "com.apollographql.apollo3:apollo-testing-support", version.ref = "apollo" }
 
 # Compose
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
@@ -154,6 +156,7 @@ app = [
     "androidx-activity",
     "compose-material-icons",
     "design-material",
+    "hiltx-navigation",
     "navigation-compose",
 ]
 
@@ -213,6 +216,10 @@ test-android = [
     "turbine",
 ]
 
+test-data-remote = [
+    "apollo-mockserver",
+    "apollo-testing",
+]
 test-ui = [
     "compose-ui-test-junit",
     "lifecycle-test",

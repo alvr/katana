@@ -27,6 +27,10 @@ jobs:
             ~/.gradle/caches/build-cache-*
             ~/.gradle/wrapper
           key: gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml') }}
+      - name: Setup timezone
+        uses: zcong1993/setup-timezone@v1.1.2
+        with:
+          timezone: Europe/Madrid
       - name: Build Katana
         run: ./gradlew buildDebug lintDebug detektAll unitTests --no-daemon
 

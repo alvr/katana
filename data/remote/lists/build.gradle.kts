@@ -5,6 +5,7 @@ plugins {
 
 apollo {
     generateAsInternal.set(true)
+    generateTestBuilders.set(true)
     packageName.set("dev.alvr.katana.data.remote.lists")
 }
 
@@ -27,7 +28,11 @@ dependencies {
 
     kapt(libs.bundles.kapt)
 
+    testImplementation(projects.utils.tests.unit)
     testImplementation(libs.bundles.test)
+    testImplementation(libs.bundles.test.data.remote)
 
+    androidTestImplementation(projects.utils.tests.android)
     androidTestImplementation(libs.bundles.test.android)
+    kaptAndroidTest(libs.bundles.kapt)
 }

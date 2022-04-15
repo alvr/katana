@@ -5,7 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import io.github.aakira.napier.Napier
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
@@ -29,14 +34,35 @@ abstract class BaseViewModel<S : Any, E : Any> : ViewModel() {
 
     @Composable
     @SuppressLint("ComposableNaming")
-    fun collectSideEffect(effect: (suspend (sideEffect: E) -> Unit)) {
-        LaunchedEffect(this) {
-            host.container.sideEffectFlow.collect { effect(it) }
+    fun collectSideEffect(
+        lifecycleState: Lifecycle.State = Lifecycle.State.STARTED,
+        effect: suspend (sideEffect: E) -> Unit
+    ) {
+        val sideEffectFlow = container.sideEffectFlow
+        val lifecycleOwner = LocalLifecycleOwner.current
+
+        LaunchedEffect(sideEffectFlow, lifecycleOwner) {
+            lifecycleOwner.lifecycle.repeatOnLifecycle(lifecycleState) {
+                sideEffectFlow.collect { effect(it) }
+            }
         }
     }
 
     @Composable
-    fun collectAsState(): State<S> = host.container.stateFlow.collectAsState()
+    fun collectAsState(
+        lifecycleState: Lifecycle.State = Lifecycle.State.STARTED
+    ): State<S> {
+        val stateFlow = container.stateFlow
+        val lifecycleOwner = LocalLifecycleOwner.current
+
+        val stateFlowLifecycleAware = remember(stateFlow, lifecycleOwner) {
+            stateFlow.flowWithLifecycle(lifecycleOwner.lifecycle, lifecycleState)
+        }
+
+        @SuppressLint("StateFlowValueCalledInComposition")
+        val initialValue = stateFlow.value
+        return stateFlowLifecycleAware.collectAsState(initialValue)
+    }
 
     protected fun executeUseCase(
         execute: suspend SimpleSyntax<S, E>.() -> Unit,
