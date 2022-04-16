@@ -69,7 +69,7 @@ internal class MediaListMapperTest : WordSpec({
                         name = ""
                         entries = emptyList()
                     },
-                    null
+                    null,
                 )
             }
         }
@@ -509,4 +509,4 @@ internal class MediaListMapperTest : WordSpec({
             }
         }
     }
-})
+},)

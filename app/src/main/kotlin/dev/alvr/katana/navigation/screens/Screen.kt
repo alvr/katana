@@ -24,7 +24,7 @@ internal sealed class Screen private constructor(
     ) : Screen(
         baseRoute = "${parent.baseRoute}/$baseRoute",
         requiredArgs = requiredArgs,
-        optionalArgs = optionalArgs
+        optionalArgs = optionalArgs,
     )
 
     val route = run {
@@ -42,7 +42,7 @@ internal sealed class Screen private constructor(
     private fun List<NavArg>.toRoute(
         separator: String,
         prefix: String,
-        transform: (NavArg) -> CharSequence
+        transform: (NavArg) -> CharSequence,
     ) = takeIf { isNotEmpty() }
         ?.joinToString(separator = separator, prefix = prefix, transform = transform)
         ?: NO_ARGUMENT

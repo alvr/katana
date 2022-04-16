@@ -29,16 +29,16 @@ fun BottomNavigationBar(
                         icon = {
                             Icon(
                                 imageVector = destination.icon,
-                                contentDescription = stringResource(id = destination.label)
+                                contentDescription = stringResource(id = destination.label),
                             )
                         },
                         label = { Text(text = stringResource(id = destination.label)) },
                         alwaysShowLabel = true,
                         selected = destination.route == currentRoute,
-                        onClick = { navigation(destination.route) }
+                        onClick = { navigation(destination.route) },
                     )
                 }
             }
-        }
+        },
     )
 }

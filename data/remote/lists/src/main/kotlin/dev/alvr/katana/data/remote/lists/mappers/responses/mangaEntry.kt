@@ -7,6 +7,6 @@ internal fun MediaEntryFragment?.mangaEntry() = let { entry ->
     MediaEntry.Manga(
         entry = mediaEntry(),
         chapters = entry?.chapters,
-        volumes = entry?.volumes
+        volumes = entry?.volumes,
     )
 }

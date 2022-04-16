@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 
 class DeleteAnilistTokenUseCase @Inject constructor(
     private val repository: TokenPreferencesRepository,
-    @IoDispatcher dispatcher: CoroutineDispatcher
+    @IoDispatcher dispatcher: CoroutineDispatcher,
 ) : UseCase<Unit, Unit>(dispatcher) {
     override suspend fun doWork(params: Unit) {
         repository.deleteAnilistToken()

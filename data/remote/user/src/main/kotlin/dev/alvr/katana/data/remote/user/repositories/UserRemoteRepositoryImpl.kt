@@ -6,7 +6,7 @@ import dev.alvr.katana.domain.user.repositories.UserRemoteRepository
 import javax.inject.Inject
 
 internal class UserRemoteRepositoryImpl @Inject constructor(
-    private val client: ApolloClient
+    private val client: ApolloClient,
 ) : UserRemoteRepository {
     override suspend fun saveUserId() {
         client.query(UserIdQuery()).execute()

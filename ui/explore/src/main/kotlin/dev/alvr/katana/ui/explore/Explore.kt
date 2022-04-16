@@ -16,13 +16,13 @@ import dev.alvr.katana.ui.explore.pages.Manga
 fun Explore() {
     HomeScaffold(
         tabs = enumValues<ExploreTabs>(),
-        backContent = { /* TODO */ },
+        backContent = { },
         pageContent = { page ->
             when (page) {
                 ExploreTabs.Anime -> Anime()
                 ExploreTabs.Manga -> Manga()
             }
-        }
+        },
     )
 }
 

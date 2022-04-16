@@ -16,13 +16,13 @@ import dev.alvr.katana.ui.lists.pages.MangaList
 fun Lists() {
     HomeScaffold(
         tabs = enumValues<ListTabs>(),
-        backContent = { /* TODO */ },
+        backContent = { },
         pageContent = { page ->
             when (page) {
                 ListTabs.Anime -> AnimeList()
                 ListTabs.Manga -> MangaList()
             }
-        }
+        },
     )
 }
 

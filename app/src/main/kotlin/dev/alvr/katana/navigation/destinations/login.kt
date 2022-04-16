@@ -13,7 +13,7 @@ import dev.alvr.katana.ui.login.Login
 internal fun NavGraphBuilder.login(navigator: ScreensNavigator) {
     composable(
         route = Screen.Login.route,
-        deepLinks = listOf(navDeepLink { uriPattern = LOGIN_DEEP_LINK })
+        deepLinks = listOf(navDeepLink { uriPattern = LOGIN_DEEP_LINK }),
     ) {
         Login(navigator)
     }

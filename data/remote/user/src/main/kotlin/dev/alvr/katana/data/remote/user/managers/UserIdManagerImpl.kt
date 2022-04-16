@@ -9,7 +9,7 @@ import javax.inject.Singleton
 
 @Singleton
 internal class UserIdManagerImpl @Inject constructor(
-    private val client: ApolloClient
+    private val client: ApolloClient,
 ) : UserIdManager {
     override suspend fun getId(): Int =
         client.query(UserIdQuery()).execute().data().id

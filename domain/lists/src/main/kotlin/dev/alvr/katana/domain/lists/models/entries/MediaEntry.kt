@@ -14,17 +14,17 @@ sealed class MediaEntry(
         title = entry.title,
         coverImage = entry.coverImage,
         format = entry.format,
-        genres = entry.genres
+        genres = entry.genres,
     )
 
     data class Anime(
         val entry: CommonMediaEntry,
         val episodes: Int?,
-        val nextEpisode: NextEpisode?
+        val nextEpisode: NextEpisode?,
     ) : MediaEntry(entry) {
         data class NextEpisode(
             val number: Int,
-            val at: LocalDateTime
+            val at: LocalDateTime,
         )
     }
 

@@ -22,7 +22,7 @@ fun BaseExtension.baseAndroidConfig() {
         getByName("release") {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             consumerProguardFile("consumer-rules.pro")
         }

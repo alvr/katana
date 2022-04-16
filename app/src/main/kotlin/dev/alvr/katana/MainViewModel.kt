@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
-    private val getAnilistTokenUseCase: GetAnilistTokenUseCase
+    private val getAnilistTokenUseCase: GetAnilistTokenUseCase,
 ) : ViewModel() {
     val initialRoute
         get() = if (getAnilistTokenUseCase.sync() != null) {

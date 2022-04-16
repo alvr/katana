@@ -45,7 +45,7 @@ internal class MangaEntryMapperTest : WordSpec({
             format = null,
             coverImage = null,
             genres = null,
-            nextAiringEpisode = null
+            nextAiringEpisode = null,
         )
 
         "be mapped to the default values" {
@@ -138,4 +138,4 @@ internal class MangaEntryMapperTest : WordSpec({
             )
         }
     }
-})
+},)

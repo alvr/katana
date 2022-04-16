@@ -56,4 +56,4 @@ internal class TokenPreferencesRepositoryTest : BehaviorSpec({
             }
         }
     }
-})
+},)

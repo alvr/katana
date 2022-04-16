@@ -16,7 +16,7 @@ import dev.alvr.katana.ui.social.Social
 internal fun NavGraphBuilder.home() {
     navigation(
         route = Screen.Home.route,
-        startDestination = Screen.Home.Lists.route
+        startDestination = Screen.Home.Lists.route,
     ) {
         lists()
         explore()
@@ -30,7 +30,7 @@ private fun NavGraphBuilder.lists() {
     composable(
         route = Screen.Home.Lists.route,
         enterTransition = homeEnterTransition,
-        exitTransition = homeExitTransition
+        exitTransition = homeExitTransition,
     ) {
         Lists()
     }
@@ -41,7 +41,7 @@ private fun NavGraphBuilder.explore() {
     composable(
         route = Screen.Home.Explore.route,
         enterTransition = homeEnterTransition,
-        exitTransition = homeExitTransition
+        exitTransition = homeExitTransition,
     ) {
         Explore()
     }
@@ -52,7 +52,7 @@ private fun NavGraphBuilder.social() {
     composable(
         route = Screen.Home.Social.route,
         enterTransition = homeEnterTransition,
-        exitTransition = homeExitTransition
+        exitTransition = homeExitTransition,
     ) {
         Social()
     }
@@ -63,7 +63,7 @@ private fun NavGraphBuilder.account() {
     composable(
         route = Screen.Home.Account.route,
         enterTransition = homeEnterTransition,
-        exitTransition = homeExitTransition
+        exitTransition = homeExitTransition,
     ) {
         Account()
     }

@@ -21,7 +21,7 @@ internal class MediaEntryMapperTest : WordSpec({
                 format = format,
                 coverImage = null,
                 genres = null,
-                nextAiringEpisode = null
+                nextAiringEpisode = null,
             ).mediaEntry().format
         }
 
@@ -42,7 +42,7 @@ internal class MediaEntryMapperTest : WordSpec({
                 format = MediaFormat.UNKNOWN__,
                 coverImage = null,
                 genres = null,
-                nextAiringEpisode = null
+                nextAiringEpisode = null,
             ).mediaEntry().format
 
             "the format should be UNKNOWN" {
@@ -61,7 +61,7 @@ internal class MediaEntryMapperTest : WordSpec({
                 format = null,
                 coverImage = null,
                 genres = null,
-                nextAiringEpisode = null
+                nextAiringEpisode = null,
             ).mediaEntry().format
 
             "the format should be UNKNOWN" {
@@ -69,4 +69,4 @@ internal class MediaEntryMapperTest : WordSpec({
             }
         }
     }
-})
+},)

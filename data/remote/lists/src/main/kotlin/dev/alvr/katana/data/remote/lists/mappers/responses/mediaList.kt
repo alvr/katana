@@ -38,7 +38,7 @@ private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry.toMod
                 dateMapper(date.day, date.month, date.year)
             },
             updatedAt = entry.updatedAt?.toLocalDateTime(),
-            media = media.mediaEntry.toMedia() as T
+            media = media.mediaEntry.toMedia() as T,
         )
     }
 

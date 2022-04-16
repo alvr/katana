@@ -36,7 +36,7 @@ abstract class BaseViewModel<S : Any, E : Any> : ViewModel() {
     @SuppressLint("ComposableNaming")
     fun collectSideEffect(
         lifecycleState: Lifecycle.State = Lifecycle.State.STARTED,
-        effect: suspend (sideEffect: E) -> Unit
+        effect: suspend (sideEffect: E) -> Unit,
     ) {
         val sideEffectFlow = container.sideEffectFlow
         val lifecycleOwner = LocalLifecycleOwner.current
@@ -50,7 +50,7 @@ abstract class BaseViewModel<S : Any, E : Any> : ViewModel() {
 
     @Composable
     fun collectAsState(
-        lifecycleState: Lifecycle.State = Lifecycle.State.STARTED
+        lifecycleState: Lifecycle.State = Lifecycle.State.STARTED,
     ): State<S> {
         val stateFlow = container.stateFlow
         val lifecycleOwner = LocalLifecycleOwner.current
@@ -66,7 +66,7 @@ abstract class BaseViewModel<S : Any, E : Any> : ViewModel() {
 
     protected fun executeUseCase(
         execute: suspend SimpleSyntax<S, E>.() -> Unit,
-        error: suspend SimpleSyntax<S, E>.(Throwable) -> Unit = {}
+        error: suspend SimpleSyntax<S, E>.(Throwable) -> Unit = {},
     ) {
         @Suppress("TooGenericExceptionCaught")
         host.intent {
