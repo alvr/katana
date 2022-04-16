@@ -16,13 +16,13 @@ import dev.alvr.katana.ui.social.pages.Global
 fun Social() {
     HomeScaffold(
         tabs = enumValues<SocialTabs>(),
-        backContent = { /* TODO */ },
+        backContent = { },
         pageContent = { page ->
             when (page) {
                 SocialTabs.Following -> Following()
                 SocialTabs.Global -> Global()
             }
-        }
+        },
     )
 }
 

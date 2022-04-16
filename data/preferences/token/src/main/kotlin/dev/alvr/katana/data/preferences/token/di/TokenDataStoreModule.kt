@@ -27,6 +27,6 @@ internal object TokenDataStoreModule {
     fun provideTokenDataStore(@ApplicationContext context: Context): DataStore<Token> =
         DataStoreFactory.create(
             produceFile = { context.dataStoreFile(DATASTORE_FILE) },
-            serializer = TokenSerializer.encoded()
+            serializer = TokenSerializer.encoded(),
         )
 }

@@ -55,7 +55,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(USER_ID, MediaType.ANIME),
-                        query
+                        query,
                     )
 
                     then("the result list should be also empty") {
@@ -92,7 +92,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(USER_ID, MediaType.ANIME),
-                        query
+                        query,
                     )
 
                     then("the result lists' entries should also be empty") {
@@ -149,7 +149,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(USER_ID, MediaType.ANIME),
-                        query
+                        query,
                     )
 
                     then("the result entry should have the default values") {
@@ -241,7 +241,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(USER_ID, MediaType.ANIME),
-                        query
+                        query,
                     )
 
                     then("the result entry should have the default values") {
@@ -286,7 +286,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                 `when`("the returned data is null") {
                     client.registerTestResponse(
                         MediaListCollectionQuery(USER_ID, MediaType.ANIME),
-                        null
+                        null,
                     )
 
                     then("the result list should be empty") {
@@ -318,7 +318,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(USER_ID, MediaType.MANGA),
-                        query
+                        query,
                     )
 
                     then("the result list should be also empty") {
@@ -355,7 +355,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(USER_ID, MediaType.MANGA),
-                        query
+                        query,
                     )
 
                     then("the result lists' entries should also be empty") {
@@ -412,7 +412,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(USER_ID, MediaType.MANGA),
-                        query
+                        query,
                     )
 
                     then("the result entry should have the default values") {
@@ -501,7 +501,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(USER_ID, MediaType.MANGA),
-                        query
+                        query,
                     )
 
                     then("the result entry should have the default values") {
@@ -543,7 +543,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                 `when`("the returned data is null") {
                     client.registerTestResponse(
                         MediaListCollectionQuery(USER_ID, MediaType.MANGA),
-                        null
+                        null,
                     )
 
                     then("the result list should be empty") {

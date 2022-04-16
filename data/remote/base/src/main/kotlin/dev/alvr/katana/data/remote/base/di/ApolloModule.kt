@@ -30,7 +30,7 @@ internal object ApolloModule {
     @Provides
     @Singleton
     fun provideApolloCache(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): NormalizedCacheFactory = SqlNormalizedCacheFactory(context, CACHE_DATABASE)
 
     @Provides
@@ -42,7 +42,7 @@ internal object ApolloModule {
         val cacheKeyGenerator = object : CacheKeyGenerator {
             override fun cacheKeyForObject(
                 obj: Map<String, Any?>,
-                context: CacheKeyGeneratorContext
+                context: CacheKeyGeneratorContext,
             ): CacheKey? = if (
                 obj[CACHE_ID_KEY] != null &&
                 obj[CACHE_TYPE_KEY] != null

@@ -10,7 +10,7 @@ import dev.alvr.katana.ui.base.design.KatanaTypography
 
 @Composable
 internal fun KatanaTheme(
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colors = KatanaDarkTheme
     val systemUiController = rememberSystemUiController()
@@ -23,6 +23,6 @@ internal fun KatanaTheme(
         colors = colors,
         typography = KatanaTypography,
         shapes = KatanaShapes,
-        content = content
+        content = content,
     )
 }

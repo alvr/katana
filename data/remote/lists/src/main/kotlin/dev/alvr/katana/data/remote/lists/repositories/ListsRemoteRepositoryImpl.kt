@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.map
 
 internal class ListsRemoteRepositoryImpl @Inject constructor(
     private val client: ApolloClient,
-    private val userId: UserIdManager
+    private val userId: UserIdManager,
 ) : ListsRepository {
     override val animeList = getMediaCollection<MediaEntry.Anime>(MediaType.ANIME)
     override val mangaList = getMediaCollection<MediaEntry.Manga>(MediaType.MANGA)

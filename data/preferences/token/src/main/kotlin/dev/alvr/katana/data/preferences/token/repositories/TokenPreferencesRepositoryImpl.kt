@@ -9,7 +9,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 
 internal class TokenPreferencesRepositoryImpl @Inject constructor(
-    private val dataStore: DataStore<Token>
+    private val dataStore: DataStore<Token>,
 ) : TokenPreferencesRepository {
     override suspend fun deleteAnilistToken() {
         Napier.d { "Deleting Anilist token" }

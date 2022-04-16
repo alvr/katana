@@ -12,7 +12,7 @@ fun Account() {
     Scaffold { paddingValues ->
         Text(
             text = stringResource(id = R.string.title),
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
         )
     }
 }

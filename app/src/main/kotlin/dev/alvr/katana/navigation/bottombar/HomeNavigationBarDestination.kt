@@ -14,7 +14,7 @@ import dev.alvr.katana.ui.base.navigation.NavigationBarDestination
 internal enum class HomeNavigationBarDestination(
     @StringRes override val label: Int,
     override val icon: ImageVector,
-    override val route: String
+    override val route: String,
 ) : NavigationBarDestination {
     Lists(R.string.navigation_bar_destination_lists, Icons.TwoTone.FactCheck, Screen.Home.Lists.route),
     Explore(R.string.navigation_bar_destination_explore, Icons.TwoTone.Explore, Screen.Home.Explore.route),

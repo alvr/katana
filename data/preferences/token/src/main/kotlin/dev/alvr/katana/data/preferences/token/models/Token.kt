@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class Token(
     @SerialName("anilistToken")
-    val anilistToken: String? = null
+    val anilistToken: String? = null,
 )

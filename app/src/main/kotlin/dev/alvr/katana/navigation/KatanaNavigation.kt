@@ -25,9 +25,9 @@ internal fun KatanaNavigator() {
                 isVisible = appState.isBottomBarVisible,
                 currentRoute = appState.currentRoute,
                 destinations = appState.navigationBarDestinations,
-                navigation = appState::bottomBarNavigation
+                navigation = appState::bottomBarNavigation,
             )
-        }
+        },
     ) { paddingValues ->
         AnimatedNavHost(
             modifier = Modifier.padding(paddingValues),

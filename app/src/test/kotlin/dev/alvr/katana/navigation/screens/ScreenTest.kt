@@ -50,4 +50,4 @@ class ScreenTest : FeatureSpec({
             }
         }
     }
-})
+},)

@@ -35,7 +35,7 @@ internal class KatanaAppState(
     val navController: NavHostController,
     val navigator: ScreensNavigator,
     val navigationBarDestinations: Array<out NavigationBarDestination>,
-    val isBottomBarVisible: Boolean
+    val isBottomBarVisible: Boolean,
 ) {
     private val NavGraph.startDestination: NavDestination?
         get() = findNode(startDestinationId)

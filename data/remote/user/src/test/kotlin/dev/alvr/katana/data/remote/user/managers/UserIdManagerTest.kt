@@ -57,4 +57,4 @@ internal class UserIdManagerTest : BehaviorSpec({
             }
         }
     }
-})
+},)

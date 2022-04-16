@@ -17,5 +17,5 @@ data class MediaListEntry<out T : MediaEntry>(
     val startedAt: LocalDate?,
     val completedAt: LocalDate?,
     val updatedAt: LocalDateTime?,
-    val media: T
+    val media: T,
 )

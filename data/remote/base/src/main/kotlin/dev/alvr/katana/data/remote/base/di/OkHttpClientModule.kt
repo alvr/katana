@@ -25,7 +25,7 @@ internal object OkHttpClientModule {
     @Singleton
     @AnilistTokenInterceptor
     fun provideAnilistTokenInterceptor(
-        getAnilistTokenUseCase: GetAnilistTokenUseCase
+        getAnilistTokenUseCase: GetAnilistTokenUseCase,
     ): Interceptor = Interceptor { chain ->
         val request = chain.request().newBuilder()
             .addHeader("Authorization", "Bearer ${getAnilistTokenUseCase.sync()?.token}")
@@ -40,7 +40,7 @@ internal object OkHttpClientModule {
     @Singleton
     @SessionInterceptor
     fun provideSessionInterceptor(
-        deleteAnilistTokenUseCase: DeleteAnilistTokenUseCase
+        deleteAnilistTokenUseCase: DeleteAnilistTokenUseCase,
     ): Interceptor = Interceptor { chain ->
         val response = chain.proceed(chain.request())
 

@@ -34,13 +34,13 @@ interface HomeTopAppBar {
 internal fun HomeTopAppBar(
     tabs: Array<out HomeTopAppBar>,
     pagerState: PagerState,
-    onTabClicked: (Int) -> Unit
+    onTabClicked: (Int) -> Unit,
 ) {
     TopAppBar {
         TabSelector(
             tabs = tabs,
             pagerState = pagerState,
-            onTabClicked = onTabClicked
+            onTabClicked = onTabClicked,
         )
     }
 }
@@ -50,7 +50,7 @@ internal fun HomeTopAppBar(
 private fun TabSelector(
     tabs: Array<out HomeTopAppBar>,
     pagerState: PagerState,
-    onTabClicked: (Int) -> Unit
+    onTabClicked: (Int) -> Unit,
 ) {
     val tabList = @Composable {
         tabs.forEachIndexed { index, tab ->
@@ -58,7 +58,7 @@ private fun TabSelector(
                 text = { Text(text = stringResource(id = tab.label)) },
                 modifier = Modifier.fillMaxHeight(),
                 selected = index == pagerState.currentPage,
-                onClick = { onTabClicked(index) }
+                onClick = { onTabClicked(index) },
             )
         }
     }
@@ -71,10 +71,10 @@ private fun TabSelector(
                 .clip(
                     RoundedCornerShape(
                         topEnd = IndicatorRadius,
-                        topStart = IndicatorRadius
-                    )
+                        topStart = IndicatorRadius,
+                    ),
                 ),
-            height = 4.dp
+            height = 4.dp,
         )
     }
 
@@ -84,14 +84,14 @@ private fun TabSelector(
             selectedTabIndex = pagerState.currentPage,
             indicator = tabIndicator,
             edgePadding = 0.dp,
-            tabs = tabList
+            tabs = tabList,
         )
     } else {
         TabRow(
             modifier = tabRowModifier,
             selectedTabIndex = pagerState.currentPage,
             indicator = tabIndicator,
-            tabs = tabList
+            tabs = tabList,
         )
     }
 }

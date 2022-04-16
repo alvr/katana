@@ -46,7 +46,7 @@ internal class AnimeEntryMapperTest : WordSpec({
             format = null,
             coverImage = null,
             genres = null,
-            nextAiringEpisode = null
+            nextAiringEpisode = null,
         )
 
         "be mapped to the default values" {
@@ -131,7 +131,7 @@ internal class AnimeEntryMapperTest : WordSpec({
                 episodes = 1000,
                 nextEpisode = MediaEntry.Anime.NextEpisode(
                     1001,
-                    LocalDateTime.of(2009, 5, 5, 12, 0, 0)
+                    LocalDateTime.of(2009, 5, 5, 12, 0, 0),
                 ),
             )
 
@@ -140,9 +140,9 @@ internal class AnimeEntryMapperTest : WordSpec({
                 episodes = 1000,
                 nextEpisode = MediaEntry.Anime.NextEpisode(
                     1001,
-                    LocalDateTime.of(2009, 5, 5, 12, 0, 0)
+                    LocalDateTime.of(2009, 5, 5, 12, 0, 0),
                 ),
             )
         }
     }
-})
+},)

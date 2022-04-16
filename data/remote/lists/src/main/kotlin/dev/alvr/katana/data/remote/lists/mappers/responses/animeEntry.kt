@@ -10,8 +10,8 @@ internal fun MediaEntryFragment?.animeEntry() = let { entry ->
         nextEpisode = entry?.nextAiringEpisode?.let { next ->
             MediaEntry.Anime.NextEpisode(
                 number = next.episode,
-                at = next.airingAt.toLocalDateTime()
+                at = next.airingAt.toLocalDateTime(),
             )
-        }
+        },
     )
 }

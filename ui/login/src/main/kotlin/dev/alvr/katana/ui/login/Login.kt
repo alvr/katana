@@ -69,7 +69,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun Login(navigator: LoginNavigator) {
     Login(
         vm = hiltViewModel(),
-        onLogin = navigator::goToHome
+        onLogin = navigator::goToHome,
     )
 }
 
@@ -82,7 +82,7 @@ private fun Login(vm: LoginViewModel, onLogin: () -> Unit) {
             R.drawable.background_chihiro,
             R.drawable.background_howl,
             R.drawable.background_mononoke,
-            R.drawable.background_totoro
+            R.drawable.background_totoro,
         ).random()
     }
 
@@ -117,7 +117,7 @@ private fun MainContent(@DrawableRes background: Int) {
         painter = painterResource(background),
         contentDescription = stringResource(id = R.string.content_description_background),
         contentScale = ContentScale.Crop,
-        modifier = Modifier.alpha(BACKGROUND_ALPHA)
+        modifier = Modifier.alpha(BACKGROUND_ALPHA),
     )
 
     Box(modifier = Modifier.padding(24.dp)) {
@@ -169,7 +169,7 @@ private fun KatanaLogo() {
 private fun Description() {
     Text(
         text = stringResource(id = R.string.header_katana_description),
-        style = MaterialTheme.typography.h5
+        style = MaterialTheme.typography.h5,
     )
 }
 
@@ -184,7 +184,7 @@ internal fun Bottom(modifier: Modifier = Modifier) {
     ) {
         Crossfade(
             targetState = currentState,
-            animationSpec = tween(durationMillis = BOTTOM_CROSSFADE_ANIM_DURATION)
+            animationSpec = tween(durationMillis = BOTTOM_CROSSFADE_ANIM_DURATION),
         ) { state ->
             when (state) {
                 State.GetStarted -> GetStarted { changedState ->
@@ -209,7 +209,7 @@ private fun GetStarted(onStartedClick: (State) -> Unit) {
 private fun GetStartedDescription() {
     Text(
         text = stringResource(id = R.string.get_started_description),
-        textAlign = TextAlign.Justify
+        textAlign = TextAlign.Justify,
     )
 }
 
@@ -229,10 +229,10 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
         animationSpec = infiniteRepeatable(
             animation = tween(
                 durationMillis = BOTTOM_ARROW_ANIM_DURATION,
-                easing = LinearEasing
+                easing = LinearEasing,
             ),
-            repeatMode = RepeatMode.Reverse
-        )
+            repeatMode = RepeatMode.Reverse,
+        ),
     )
 
     val inlineContent = mapOf(
@@ -240,29 +240,29 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
             Placeholder(
                 width = MaterialTheme.typography.h5.fontSize,
                 height = MaterialTheme.typography.h5.fontSize,
-                placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
-            )
+                placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
+            ),
         ) {
             Icon(
                 imageVector = Icons.Filled.ArrowForward,
                 contentDescription = stringResource(id = R.string.content_description_get_started_arrow),
                 modifier = Modifier.offset(x = translation),
-                tint = MaterialTheme.colors.onSurface
+                tint = MaterialTheme.colors.onSurface,
             )
-        }
+        },
     )
 
     TextButton(
         modifier = Modifier
             .fillMaxWidth()
             .testTag(GET_STARTED_BUTTON_TAG),
-        onClick = { onStartedClick(State.Buttons) }
+        onClick = { onStartedClick(State.Buttons) },
     ) {
         Text(
             text = text,
             inlineContent = inlineContent,
             style = MaterialTheme.typography.h5,
-            color = MaterialTheme.colors.onSurface
+            color = MaterialTheme.colors.onSurface,
         )
     }
 }
@@ -274,19 +274,19 @@ private fun Begin() {
         Spacer(modifier = Modifier.height(8.dp))
         BoxWithConstraints(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             val buttonWidth = maxWidth / 2 - 16.dp
 
             BeginRegisterButton(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .width(buttonWidth)
+                    .width(buttonWidth),
             )
             BeginLoginButton(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
-                    .width(buttonWidth)
+                    .width(buttonWidth),
             )
         }
     }
@@ -296,7 +296,7 @@ private fun Begin() {
 private fun BeginText() {
     Text(
         text = stringResource(id = R.string.begin_description),
-        textAlign = TextAlign.Justify
+        textAlign = TextAlign.Justify,
     )
 }
 
@@ -307,11 +307,11 @@ private fun BeginRegisterButton(modifier: Modifier = Modifier) {
     OutlinedButton(
         modifier = modifier,
         colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent),
-        onClick = { uriHandler.openUri(ANILIST_REGISTER) }
+        onClick = { uriHandler.openUri(ANILIST_REGISTER) },
     ) {
         Text(
             text = stringResource(id = R.string.begin_register_button),
-            color = MaterialTheme.colors.onSurface
+            color = MaterialTheme.colors.onSurface,
         )
     }
 }
@@ -322,11 +322,11 @@ private fun BeginLoginButton(modifier: Modifier = Modifier) {
 
     Button(
         modifier = modifier,
-        onClick = { uriHandler.openUri(ANILIST_LOGIN) }
+        onClick = { uriHandler.openUri(ANILIST_LOGIN) },
     ) {
         Text(
             text = stringResource(id = R.string.begin_login_button),
-            color = MaterialTheme.colors.onSurface
+            color = MaterialTheme.colors.onSurface,
         )
     }
 }
@@ -336,7 +336,7 @@ private fun Animate(
     delayMillis: Int,
     durationMillis: Int,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     var animationFinished by rememberSaveable { mutableStateOf(false) }
     val animVisibleState = remember { MutableTransitionState(animationFinished) }.apply {
@@ -353,15 +353,15 @@ private fun Animate(
         enter = slideInVertically(
             animationSpec = tween(
                 delayMillis = delayMillis,
-                durationMillis = durationMillis
-            )
+                durationMillis = durationMillis,
+            ),
         ) { height -> height / 2 } + fadeIn(
             animationSpec = tween(
                 delayMillis = delayMillis,
-                durationMillis = durationMillis
+                durationMillis = durationMillis,
             ),
-            initialAlpha = 0f
-        )
+            initialAlpha = 0f,
+        ),
     ) {
         content()
     }

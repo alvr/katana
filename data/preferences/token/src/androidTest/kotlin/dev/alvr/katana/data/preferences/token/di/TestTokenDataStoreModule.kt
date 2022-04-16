@@ -36,7 +36,7 @@ internal object TestTokenDataStoreModule {
     @Singleton
     fun provideTokenDataStore(
         @ApplicationContext context: Context,
-        scope: TestScope
+        scope: TestScope,
     ): DataStore<Token> = DataStoreFactory.create(
         produceFile = { context.dataStoreFile(DATASTORE_FILE) },
         scope = scope,

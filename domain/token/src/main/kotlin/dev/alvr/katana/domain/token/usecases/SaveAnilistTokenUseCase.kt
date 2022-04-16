@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 
 class SaveAnilistTokenUseCase @Inject constructor(
     private val repository: TokenPreferencesRepository,
-    @IoDispatcher dispatcher: CoroutineDispatcher
+    @IoDispatcher dispatcher: CoroutineDispatcher,
 ) : UseCase<AnilistToken, Unit>(dispatcher) {
     override suspend fun doWork(params: AnilistToken) {
         repository.saveAnilistToken(params)

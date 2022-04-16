@@ -38,4 +38,4 @@ internal class DateMapperTest : StringSpec({
     "no nulls" {
         dateMapper(13, 4, 2022)?.shouldBeEqualComparingTo(LocalDate.of(2022, 4, 13))
     }
-})
+},)

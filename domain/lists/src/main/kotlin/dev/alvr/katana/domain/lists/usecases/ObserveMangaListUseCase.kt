@@ -7,7 +7,7 @@ import dev.alvr.katana.domain.lists.repositories.ListsRepository
 import javax.inject.Inject
 
 class ObserveMangaListUseCase @Inject constructor(
-    private val repository: ListsRepository
+    private val repository: ListsRepository,
 ) : FlowUseCase<Unit, MediaCollection<MediaEntry.Manga>>() {
     override fun createFlow(params: Unit) = repository.mangaList
 }

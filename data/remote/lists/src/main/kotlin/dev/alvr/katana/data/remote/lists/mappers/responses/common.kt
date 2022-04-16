@@ -6,5 +6,5 @@ import java.time.ZoneId
 
 internal fun Number.toLocalDateTime() = LocalDateTime.ofInstant(
     Instant.ofEpochSecond(toLong()),
-    ZoneId.systemDefault()
+    ZoneId.systemDefault(),
 )

@@ -10,7 +10,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 
 @ExperimentalSerializationApi
 private class EncodedPreferencesSerializer<T>(
-    private val delegate: PreferencesSerializer<T>
+    private val delegate: PreferencesSerializer<T>,
 ) : Serializer<T> by delegate {
     override suspend fun readFrom(input: InputStream): T {
         val encryptedInput = Base64.decode(input.readBytes(), Base64.NO_WRAP)

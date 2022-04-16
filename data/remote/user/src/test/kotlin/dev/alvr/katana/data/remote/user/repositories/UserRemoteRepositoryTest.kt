@@ -24,4 +24,4 @@ internal class UserRemoteRepositoryTest : BehaviorSpec({
             }
         }
     }
-})
+},)

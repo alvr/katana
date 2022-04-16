@@ -16,7 +16,7 @@ import org.orbitmvi.orbit.viewmodel.container
 internal class LoginViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val saveAnilistTokenUseCase: SaveAnilistTokenUseCase,
-    private val saveUserIdUseCase: SaveUserIdUseCase
+    private val saveUserIdUseCase: SaveUserIdUseCase,
 ) : BaseViewModel<Unit, LoginEffect>() {
 
     override val container = container<Unit, LoginEffect>(Unit)
@@ -38,7 +38,7 @@ internal class LoginViewModel @Inject constructor(
                 postSideEffect(LoginEffect.Saved)
             }, {
                 postSideEffect(LoginEffect.Error)
-            })
+            },)
         } ?: Napier.i { "No token found in StateHandle" }
     }
 }

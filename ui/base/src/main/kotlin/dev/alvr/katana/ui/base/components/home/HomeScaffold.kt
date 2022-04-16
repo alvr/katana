@@ -45,7 +45,7 @@ fun <T : HomeTopAppBar> HomeScaffold(
         appBar = {
             HomeTopAppBar(
                 pagerState = pagerState,
-                tabs = tabs
+                tabs = tabs,
             ) { page ->
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(page)
