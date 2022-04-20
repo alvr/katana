@@ -94,7 +94,7 @@ hiltx-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.r
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 
 # LeakCanary
-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "2.9" }
+leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "2.9.1" }
 
 # Lifecycle
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
