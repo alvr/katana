@@ -1,8 +1,0 @@
-<resources>
-    <style name="Theme.Katana" parent="Theme.MaterialComponents.DayNight.DarkActionBar" />
-
-    <style name="Theme.Katana.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-</resources>
