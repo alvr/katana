@@ -62,9 +62,6 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 # DataStore
 datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
 
-# Design
-design-material = { module = "com.google.android.material:material", version = "1.5.0" }
-
 # Desugaring
 desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "1.1.5" }
 
@@ -155,7 +152,6 @@ app = [
     "accompanist-navigation",
     "androidx-activity",
     "compose-material-icons",
-    "design-material",
     "hiltx-navigation",
     "navigation-compose",
 ]
