@@ -8,6 +8,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: alvrme/alpine-android:android-31-jdk11
     if: github.event_name != 'pull_request'
     steps:
       - name: Checkout
