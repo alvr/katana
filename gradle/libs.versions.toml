@@ -136,7 +136,7 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 
 ## Turbine
-turbine = { module = "app.cash.turbine:turbine", version = "0.7.0" }
+turbine = { module = "app.cash.turbine:turbine", version = "0.8.0" }
 
 [bundles]
 common = [
