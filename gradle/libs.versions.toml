@@ -1,7 +1,7 @@
 [versions]
-accompanist = "0.23.1"
+accompanist = "0.24.7-alpha"
 apollo = "3.3.0"
-compose = "1.2.0-alpha08"
+compose = "1.2.0-beta01"
 coroutines = "1.6.1"
 hilt = "2.42"
 hiltx = "1.0.0"
@@ -26,8 +26,6 @@ apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
 
 [libraries]
 # Accompanist
-accompanist-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
-accompanist-insets-ui = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-navigation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
@@ -152,6 +150,7 @@ common-android = [
 app = [
     "accompanist-navigation",
     "androidx-activity",
+    "compose-material",
     "compose-material-icons",
     "hiltx-navigation",
     "navigation-compose",
@@ -175,8 +174,6 @@ data-remote = [
 ]
 
 ui-compose = [
-    "accompanist-insets",
-    "accompanist-insets-ui",
     "accompanist-navigation",
     "accompanist-pager",
     "accompanist-pager-indicators",

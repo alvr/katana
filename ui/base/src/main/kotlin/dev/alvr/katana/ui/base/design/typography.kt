@@ -26,7 +26,7 @@ private fun getGoogleFontFamily(
     provider: GoogleFont.Provider = GoogleFont.Provider(
         providerAuthority = "com.google.android.gms.fonts",
         providerPackage = "com.google.android.gms",
-        certificates = R.array.com_google_android_gms_fonts_certs
+        certificates = R.array.com_google_android_gms_fonts_certs,
     ),
 ) = FontFamily(weights.map { Font(GoogleFont(name), provider, it) })
 

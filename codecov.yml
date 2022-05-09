@@ -1,3 +1,4 @@
 ignore:
   - '**/build/**'
+  - 'ui/**/^((?!ViewModel|State|Effect).)*$'
   - 'utils'
