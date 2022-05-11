@@ -51,11 +51,3 @@ tasks {
         }
     }
 }
-
-configurations.all {
-    resolutionStrategy.eachDependency {
-        if (requested.group == "org.jetbrains.kotlin" && requested.name == "kotlin-reflect") {
-            useVersion(libs.versions.kotlin.get())
-        }
-    }
-}
