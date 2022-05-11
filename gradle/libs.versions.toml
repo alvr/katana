@@ -11,7 +11,7 @@ okhttp = "4.9.3"
 orbit = "4.3.2"
 
 # Coverage Engine
-intellij = "1.0.663"
+intellij = "1.0.668"
 
 # Plugins
 detekt = "1.20.0"
