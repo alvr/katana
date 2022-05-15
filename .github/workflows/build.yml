@@ -22,22 +22,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 1
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: zulu
-          java-version: 11
-      - name: Setup cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml', '**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
+          fetch-depth: 0
+      - name: Common Steps
+        uses: ./.github/actions/common-steps
       - name: Assemble Katana
         run: ./gradlew assembleDebug
 
@@ -51,41 +38,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 1
-      - name: Setup Java
-        uses: actions/setup-java@v3
+          fetch-depth: 0
+      - name: Common Steps
+        uses: ./.github/actions/common-steps
+      - name: Run detekt
+        run: ./gradlew detektAll lintDebug
+      - name: Upload static report artifacts
+        uses: actions/upload-artifact@v3.0.0
         with:
-          distribution: zulu
-          java-version: 11
-      - name: Setup Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.8
-      - name: Setup cache
-        uses: actions/cache@v3
-        with:
+          name: static-report
           path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml', '**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
-      - name: Detekt Katana
-        run: ./gradlew detektAll
+            build/reports/detekt/detekt.xml
+            **/build/reports/lint-results-debug.xml
+          retention-days: 1
       - name: Upload detekt report
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: build/reports/detekt/detekt.sarif
           checkout_path: ${{ github.workspace }}
-      - name: Run mobsfscan
-        uses: MobSF/mobsfscan@a60d10a83af68e23e0b30611c6515da604f06f65
-        with:
-          args: . --sarif --output results.sarif || true
-      - name: Upload mobsfscan report
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: results.sarif
 
   unit-tests:
     name: Unit testing
@@ -94,25 +64,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 1
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: zulu
-          java-version: 11
-      - name: Setup cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml', '**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
-      - name: Build Katana
+          fetch-depth: 0
+      - name: Common Steps
+        uses: ./.github/actions/common-steps
+      - name: Run unit tests
         run: ./gradlew unitTests koverMergedReport
-      - name: Upload coverage report
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: coverage-report
+          path: build/reports/kover/report.xml
+          retention-days: 1
+      - name: Upload report to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -132,22 +95,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 1
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: zulu
-          java-version: 11
-      - name: Setup Gradle cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml', '**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
+          fetch-depth: 0
+      - name: Common Steps
+        uses: ./.github/actions/common-steps
       - name: Setup AVD cache
         uses: actions/cache@v3
         id: avd-cache
@@ -157,8 +107,6 @@ jobs:
             ~/.android/adb*
           key: ${{ runner.os }}-avd-${{ matrix.api-level }}
           restore-keys: ${{ runner.os }}-avd
-      - name: Assemble Katana for debug testing
-        run: ./gradlew assembleDebugAndroidTest
       - name: Create AVD snapshot
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -180,9 +128,37 @@ jobs:
           ram-size: 4096M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
           script: ./gradlew connectedDebugAndroidTest
-      - name : Upload results
-        if : ${{ always() }}
-        uses : actions/upload-artifact@v2
-        with :
-          name : instrumentation-test-results-${{ matrix.api-level }}
-          path : '**/build/reports/androidTests/connected/**'
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: instrumentation-test-results-${{ matrix.api-level }}
+          path: '**/build/reports/androidTests/connected/**'
+
+  sonar:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: [ static-analysis, unit-tests ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Common Steps
+        uses: ./.github/actions/common-steps
+      - name: Download static report artifacts
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: static-report
+          path: .
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: coverage-report
+          path: build/reports/kover
+      - name: Run SonarQube
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonarqube

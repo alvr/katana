@@ -23,7 +23,7 @@ tasks.register<Detekt>("detektAll") {
         html.required.set(true)
         sarif.required.set(true)
         txt.required.set(false)
-        xml.required.set(false)
+        xml.required.set(true)
     }
 }
 

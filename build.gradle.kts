@@ -6,6 +6,7 @@ plugins {
     plugins.dependencies
     plugins.detekt
     plugins.kover
+    plugins.sonarqube
 }
 
 // Version catalogs is not accessible from precompile scripts

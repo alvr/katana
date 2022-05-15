@@ -1,0 +1,22 @@
+name: Common Steps
+
+description: Common steps for Katana workflows
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: zulu
+        java-version: 11
+    - name: Setup cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches/modules-*
+          ~/.gradle/caches/jars-*
+          ~/.gradle/caches/build-cache-*
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml', '**/*.gradle.kts') }}
+        restore-keys: ${{ runner.os }}-gradle
