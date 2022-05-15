@@ -1,4 +1,4 @@
-name: Build Katana
+name: Katana
 
 on: [ push ]
 
@@ -6,27 +6,83 @@ env:
   TZ: Europe/Madrid
 
 jobs:
-  build:
+  assemble:
+    name: Assembling
     runs-on: ubuntu-latest
-    container: alvrme/alpine-android:android-31-jdk11
-    if: github.event_name != 'pull_request'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
       - name: Setup Cache
         uses: actions/cache@v3
-        continue-on-error: true
         with:
           path: |
             ~/.gradle/caches/modules-*
             ~/.gradle/caches/jars-*
             ~/.gradle/caches/build-cache-*
             ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml', '**/*.gradle.kts') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Assemble Katana
+        run: ./gradlew assembleDebug
+
+  static-analysis:
+    name: Static analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+      - name: Setup Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml', '**/*.gradle.kts') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Detekt Katana
+        run: ./gradlew detektAll
+
+  unit-tests:
+    name: Unit testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+      - name: Setup Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml', '**/*.gradle.kts') }}
+          restore-keys: ${{ runner.os }}-gradle
       - name: Build Katana
-        run: ./gradlew buildDebug detektAll unitTests koverMergedReport
+        run: ./gradlew unitTests koverMergedReport
       - name: Upload coverage report
         uses: codecov/codecov-action@v3
         with:
@@ -34,3 +90,41 @@ jobs:
           files: build/reports/kover/report.xml
           flags: unittests
           verbose: true
+
+  instrumentation-tests:
+    name: Instrumentation testing
+    runs-on: macos-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        api-level: [ 21, 29 ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+      - name: Setup Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches/modules-*
+            ~/.gradle/caches/jars-*
+            ~/.gradle/caches/build-cache-*
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml', '**/*.gradle.kts') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Assemble Katana for debug testing
+        run: ./gradlew assembleDebugAndroidTest
+      - name: Instrumentation Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          profile: Galaxy Nexus
+          api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          script: ./gradlew connectedDebugAndroidTest
