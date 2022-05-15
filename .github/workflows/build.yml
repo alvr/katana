@@ -44,6 +44,9 @@ jobs:
   static-analysis:
     name: Static analysis
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -54,6 +57,10 @@ jobs:
         with:
           distribution: zulu
           java-version: 11
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
       - name: Setup cache
         uses: actions/cache@v3
         with:
@@ -66,6 +73,19 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Detekt Katana
         run: ./gradlew detektAll
+      - name: Upload detekt report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: build/reports/detekt/detekt.sarif
+          checkout_path: ${{ github.workspace }}
+      - name: Run mobsfscan
+        uses: MobSF/mobsfscan@a60d10a83af68e23e0b30611c6515da604f06f65
+        with:
+          args: . --sarif --output results.sarif || true
+      - name: Upload mobsfscan report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: results.sarif
 
   unit-tests:
     name: Unit testing
