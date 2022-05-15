@@ -6,6 +6,15 @@ env:
   TZ: Europe/Madrid
 
 jobs:
+  cancel-stale-jobs:
+    name: Cancel stale jobs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Stale Jobs
+        uses: styfle/cancel-workflow-action@0.9.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   assemble:
     name: Assembling
     runs-on: ubuntu-latest
@@ -19,7 +28,7 @@ jobs:
         with:
           distribution: zulu
           java-version: 11
-      - name: Setup Cache
+      - name: Setup cache
         uses: actions/cache@v3
         with:
           path: |
@@ -45,7 +54,7 @@ jobs:
         with:
           distribution: zulu
           java-version: 11
-      - name: Setup Cache
+      - name: Setup cache
         uses: actions/cache@v3
         with:
           path: |
@@ -71,7 +80,7 @@ jobs:
         with:
           distribution: zulu
           java-version: 11
-      - name: Setup Cache
+      - name: Setup cache
         uses: actions/cache@v3
         with:
           path: |
@@ -98,7 +107,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [ 21, 29 ]
+        api-level: [ 29, 31 ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -109,7 +118,7 @@ jobs:
         with:
           distribution: zulu
           java-version: 11
-      - name: Setup Cache
+      - name: Setup Gradle cache
         uses: actions/cache@v3
         with:
           path: |
@@ -119,12 +128,41 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties', '**/gradle/libs.versions.toml', '**/*.gradle.kts') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: Setup AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: ${{ runner.os }}-avd-${{ matrix.api-level }}
+          restore-keys: ${{ runner.os }}-avd
       - name: Assemble Katana for debug testing
         run: ./gradlew assembleDebugAndroidTest
+      - name: Create AVD snapshot
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          disable-animations: true
+          force-avd-creation: false
+          ram-size: 4096M
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: echo "Generated AVD snapshot."
       - name: Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          profile: Galaxy Nexus
           api-level: ${{ matrix.api-level }}
           arch: x86_64
+          disable-animations: true
+          force-avd-creation: false
+          ram-size: 4096M
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
           script: ./gradlew connectedDebugAndroidTest
+      - name : Upload results
+        if : ${{ always() }}
+        uses : actions/upload-artifact@v2
+        with :
+          name : instrumentation-test-results-${{ matrix.api-level }}
+          path : '**/build/reports/androidTests/connected/**'
