@@ -162,3 +162,39 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonarqube
+
+  deploy:
+    name: Deployment
+    runs-on: ubuntu-latest
+    needs: [ assemble, static-analysis, unit-tests, instrumentation-tests ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Common Steps
+        uses: ./.github/actions/common-steps
+      - name: Decode keystore
+        uses: timheuer/base64-to-file@v1.1
+        with:
+          fileDir: .
+          fileName: ${{ secrets.SIGNING_FILE }}
+          encodedString: ${{ secrets.SIGNING_FILE_BASE64 }}
+      - name: Build staging APK
+        if: github.ref == 'refs/heads/develop'
+        env:
+          SIGNING_ALIAS: ${{ secrets.SIGNING_ALIAS }}
+          SIGNING_ALIAS_PASS: ${{ secrets.SIGNING_ALIAS_PASS }}
+          SIGNING_FILE: ${{ secrets.SIGNING_FILE }}
+          SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
+        run: ./gradlew assembleRelease
+      - name: Publish staging APK to AppCenter
+        uses: wzieba/AppCenter-Github-Action@v1
+        if: github.ref == 'refs/heads/develop'
+        with:
+          appName: KatanaApp/Katana
+          token: ${{ secrets.APPCENTER_TOKEN }}
+          group: Testers
+          file: app/build/outputs/apk/release/app-release.apk
+          notifyTesters: true
+          debug: false
