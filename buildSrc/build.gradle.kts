@@ -16,5 +16,6 @@ dependencies {
     implementation(libs.gradle.kotlin)
     implementation(libs.gradle.kover)
     implementation(libs.gradle.serialization)
+    implementation(libs.gradle.sonarqube)
     implementation(libs.gradle.updates)
 }
