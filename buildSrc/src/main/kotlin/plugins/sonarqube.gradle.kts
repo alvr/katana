@@ -1,5 +1,7 @@
 package plugins
 
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformAndroidPlugin
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformJvmPlugin
 import org.sonarqube.gradle.SonarQubeExtension
 import org.sonarqube.gradle.SonarQubePlugin
 
@@ -13,26 +15,30 @@ configure<SonarQubeExtension> {
         property("sonar.projectName", "Katana")
         property("sonar.sourceEncoding", "UTF-8")
 
-        property("sonar.coverage.jacoco.xmlReportPaths", "${rootProject.buildDir}/reports/kover/report.xml")
         property("sonar.kotlin.detekt.reportPaths", "${rootProject.buildDir}/reports/detekt/detekt.xml")
 
-        subprojects {
-            val isAndroidModule = plugins.run {
+        subprojects.filter {
+            it.plugins.hasPlugin(KotlinPlatformJvmPlugin::class) ||
+                it.plugins.hasPlugin(KotlinPlatformAndroidPlugin::class)
+        }.forEach { p ->
+            val isAndroidModule = p.plugins.run {
                 hasPlugin("com.android.library") || hasPlugin("com.android.application")
             }
 
+            val sonarTestSources = mutableListOf("src/test/**").apply {
+                if (isAndroidModule) add("src/androidTest/**")
+            }
+
+            property("sonar.projectName", p.displayName)
+            property("sonar.sources", "src/main/**")
+            property("sonar.tests", sonarTestSources)
+
+            property("sonar.coverage.jacoco.xmlReportPaths", "${p.buildDir}/reports/kover/project-xml/report.xml")
+
             if (isAndroidModule) {
                 property(
-                    "$path.sonar.androidLint.reportPaths",
-                    "$buildDir/reports/lint-results-debug.xml",
-                )
-                property(
-                    "$path.sonar.sources",
-                    "src/main/kotlin",
-                )
-                property(
-                    "$path.sonar.tests",
-                    "src/test/kotlin",
+                    "sonar.androidLint.reportPaths",
+                    "${p.buildDir}/reports/lint-results-debug.xml",
                 )
             }
         }

@@ -5,12 +5,21 @@ import kotlinx.kover.api.CoverageEngine
 import kotlinx.kover.api.KoverExtension
 import kotlinx.kover.tasks.KoverMergedHtmlReportTask
 import kotlinx.kover.tasks.KoverMergedVerificationTask
+import kotlinx.kover.tasks.KoverXmlReportTask
 
 apply<KoverPlugin>()
 
 val intellijEngine: String by rootProject.extra
 
-val koverIncludes = listOf("dev.alvr.katana.*")
+val koverIncludes = listOf(
+    "dev.alvr.katana.navigation.screens.*",
+    "dev.alvr.katana.*.*ViewModel",
+    "dev.alvr.katana.data.*",
+    "dev.alvr.katana.domain.*",
+    "dev.alvr.katana.ui.*.*Effect",
+    "dev.alvr.katana.ui.*.*State",
+    "dev.alvr.katana.ui.*.*ViewModel",
+)
 val koverExcludes = listOf(
     // Anonymous
     "*$$*",
@@ -24,6 +33,7 @@ val koverExcludes = listOf(
 
     // Common Android
     "*.BuildConfig",
+    "*.base.*",
 
     // Compose
     "*.*ComposableSingletons*",
@@ -38,6 +48,11 @@ val koverExcludes = listOf(
 val koverMinCoveredLines = 50
 
 tasks {
+    withType<KoverXmlReportTask> {
+        includes = koverIncludes
+        excludes = koverExcludes
+    }
+
     getByName<KoverMergedHtmlReportTask>("koverMergedHtmlReport") {
         includes = koverIncludes
         excludes = koverExcludes
