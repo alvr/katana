@@ -44,7 +44,7 @@ jobs:
       - name: Run detekt
         run: ./gradlew detektAll lintDebug
       - name: Upload static report artifacts
-        uses: actions/upload-artifact@v3.0.0
+        uses: actions/upload-artifact@v3
         with:
           name: static-report
           path: |
@@ -70,7 +70,7 @@ jobs:
       - name: Run unit tests
         run: ./gradlew unitTests koverXmlReport koverMergedReport
       - name: Upload coverage report artifact
-        uses: actions/upload-artifact@v3.0.0
+        uses: actions/upload-artifact@v3
         with:
           name: coverage-reports
           path: '**/build/reports/kover/project-xml/report.xml'
@@ -106,7 +106,6 @@ jobs:
             ~/.android/avd/*
             ~/.android/adb*
           key: ${{ runner.os }}-avd-${{ matrix.api-level }}
-          restore-keys: ${{ runner.os }}-avd
       - name: Create AVD snapshot
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -130,7 +129,7 @@ jobs:
           script: ./gradlew connectedDebugAndroidTest
       - name: Upload results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: instrumentation-test-results-${{ matrix.api-level }}
           path: '**/build/reports/androidTests/connected/**'
@@ -148,12 +147,12 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Download static report artifacts
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3
         with:
           name: static-report
           path: .
       - name: Download coverage artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3
         with:
           name: coverage-reports
           path: .
