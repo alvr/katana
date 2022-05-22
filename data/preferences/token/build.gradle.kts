@@ -1,6 +1,6 @@
 plugins {
-    id("modules.android-library")
     `kotlinx-serialization`
+    modules.`android-library`
 }
 
 dependencies {

@@ -1,11 +1,40 @@
 package plugins
 
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformAndroidPlugin
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformJvmPlugin
+import KatanaConfiguration
 import org.sonarqube.gradle.SonarQubeExtension
 import org.sonarqube.gradle.SonarQubePlugin
 
 apply<SonarQubePlugin>()
+
+val codeExclusions = listOf(
+    "**/R.*",
+    "**/R$*.*",
+    "**/BuildConfig.*",
+)
+
+val coverageExclusions = listOf(
+    "**/R.*",
+    "**/R$*.*",
+    "**/BuildConfig.*",
+    "**/*Module_*Factory.*",
+    "**Activity.kt",
+    "**Fragment.kt",
+    "/*Parcel.class",
+    "**/*\$CREATOR.class",
+    "android/**/*.*",
+    "**/Lambda$*.class",
+    "**/Lambda.class",
+    "**/*Lambda.class",
+    "**/*Lambda*.class",
+    "**Module.kt",
+    "**/base/**",
+    "**/KatanaApp*.kt",
+    "**/navigation/bottombar/**",
+    "**/navigation/destinations/**",
+    "**/navigation/KatanaNavigation.kt",
+    "**/navigation/transitions.kt",
+    "**/utils/tests/**",
+)
 
 configure<SonarQubeExtension> {
     properties {
@@ -13,34 +42,24 @@ configure<SonarQubeExtension> {
         property("sonar.organization", "alvr")
         property("sonar.projectKey", "alvr_katana")
         property("sonar.projectName", "Katana")
-        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.projectVersion", "${KatanaConfiguration.VersionName}_(${KatanaConfiguration.VersionCode})")
 
+        property("sonar.pullrequest.provider", "GitHub")
+        property("sonar.pullrequest.github.repository", "alvr/katana")
+
+        property("sonar.coverage.exclusions", coverageExclusions.joinToString(separator = ","))
+        property("sonar.exclusions", codeExclusions.joinToString(separator = ","))
+        property("sonar.java.coveragePlugin", "jacoco")
         property("sonar.kotlin.detekt.reportPaths", "${rootProject.buildDir}/reports/detekt/detekt.xml")
+        property("sonar.language", "kotlin")
+        property("sonar.log.level", "TRACE")
+        property("sonar.qualitygate.wait", true)
+        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.tags", "android")
+        property("sonar.verbose", true)
+    }
 
-        subprojects.filter {
-            it.plugins.hasPlugin(KotlinPlatformJvmPlugin::class) ||
-                it.plugins.hasPlugin(KotlinPlatformAndroidPlugin::class)
-        }.forEach { p ->
-            val isAndroidModule = p.plugins.run {
-                hasPlugin("com.android.library") || hasPlugin("com.android.application")
-            }
-
-            val sonarTestSources = mutableListOf("src/test/**").apply {
-                if (isAndroidModule) add("src/androidTest/**")
-            }
-
-            property("sonar.projectName", p.displayName)
-            property("sonar.sources", "src/main/**")
-            property("sonar.tests", sonarTestSources)
-
-            property("sonar.coverage.jacoco.xmlReportPaths", "${p.buildDir}/reports/kover/project-xml/report.xml")
-
-            if (isAndroidModule) {
-                property(
-                    "sonar.androidLint.reportPaths",
-                    "${p.buildDir}/reports/lint-results-debug.xml",
-                )
-            }
-        }
+    subprojects {
+        androidVariant = "debug"
     }
 }

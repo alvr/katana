@@ -1,6 +1,6 @@
 plugins {
-    id("modules.android-library")
     alias(libs.plugins.apollo)
+    modules.`android-library`
 }
 
 apollo {

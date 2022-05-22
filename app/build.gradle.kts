@@ -5,9 +5,10 @@ import utils.configureKotlin
 
 plugins {
     com.android.application
+    com.google.dagger.hilt.android
     `kotlin-android`
     `kotlin-kapt`
-    id("com.google.dagger.hilt.android")
+    plugins.`sonarqube-android`
 }
 
 kapt.correctErrorTypes = true

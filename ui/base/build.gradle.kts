@@ -1,5 +1,5 @@
 plugins {
-    id("modules.compose-library")
+    modules.`compose-library`
 }
 
 dependencies {

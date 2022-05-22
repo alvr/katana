@@ -6,6 +6,7 @@ import utils.configureKotlin
 plugins {
     kotlin
     `kotlin-kapt`
+    id("plugins.sonarqube-kotlin")
 }
 
 kapt.correctErrorTypes = true

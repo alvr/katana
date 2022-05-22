@@ -1,5 +1,5 @@
 plugins {
-    id("modules.android-library")
+    modules.`android-library`
 }
 
 dependencies {

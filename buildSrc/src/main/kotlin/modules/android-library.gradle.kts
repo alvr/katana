@@ -8,6 +8,7 @@ plugins {
     `kotlin-android`
     `kotlin-kapt`
     dagger.hilt.android.plugin
+    id("plugins.sonarqube-android")
 }
 
 kapt.correctErrorTypes = true
