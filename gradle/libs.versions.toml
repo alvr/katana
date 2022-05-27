@@ -2,7 +2,7 @@
 accompanist = "0.24.7-alpha"
 apollo = "3.3.0"
 compose = "1.2.0-beta02"
-coroutines = "1.6.1"
+coroutines = "1.6.2"
 hilt = "2.42"
 hiltx = "1.0.0"
 kotlin = "1.6.21"
