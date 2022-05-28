@@ -2,6 +2,11 @@ plugins {
     modules.`compose-library`
 }
 
+ksp {
+    arg("compose-destinations.mode", "destinations")
+    arg("compose-destinations.moduleName", "social")
+}
+
 dependencies {
     implementation(projects.ui.base)
 
@@ -9,6 +14,7 @@ dependencies {
     implementation(libs.bundles.ui.compose)
 
     kapt(libs.bundles.kapt.ui)
+    ksp(libs.bundles.ksp.ui)
 
     debugImplementation(libs.compose.ui.test.manifest)
 

@@ -1,6 +1,7 @@
 package modules
 
 plugins {
+    com.google.devtools.ksp
     id("modules.android-library")
 }
 
