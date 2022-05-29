@@ -1,41 +1,34 @@
 package dev.alvr.katana.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import dev.alvr.katana.MainViewModel
-import dev.alvr.katana.navigation.destinations.home
-import dev.alvr.katana.navigation.destinations.login
-import dev.alvr.katana.rememberKatanaAppState
-import dev.alvr.katana.ui.base.components.BottomNavigationBar
+import androidx.compose.runtime.remember
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
+import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
+import com.ramcosta.composedestinations.navigation.dependency
+import com.ramcosta.composedestinations.scope.DestinationScope
 
 @Composable
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
 internal fun KatanaNavigator() {
-    val appState = rememberKatanaAppState()
-    val vm = viewModel<MainViewModel>()
+    val navController = rememberAnimatedNavController()
 
-    Scaffold(
-        bottomBar = {
-            BottomNavigationBar(
-                isVisible = appState.isBottomBarVisible,
-                currentRoute = appState.currentRoute,
-                destinations = appState.navigationBarDestinations,
-                navigation = appState::bottomBarNavigation,
-            )
+    DestinationsNavHost(
+        engine = rememberAnimatedNavHostEngine(
+            rootDefaultAnimations = RootNavGraphDefaultAnimations.ACCOMPANIST_FADING,
+        ),
+        navController = navController,
+        navGraph = NavGraph.root,
+        dependenciesContainerBuilder = {
+            dependency(currentNavigator())
         },
-    ) { paddingValues ->
-        AnimatedNavHost(
-            modifier = Modifier.padding(paddingValues),
-            navController = appState.navController,
-            startDestination = vm.initialRoute,
-        ) {
-            login(appState.navigator)
-            home()
-        }
-    }
+    )
+}
+
+@Composable
+private fun DestinationScope<*>.currentNavigator(): Navigator = remember {
+    Navigator(navController = navController)
 }

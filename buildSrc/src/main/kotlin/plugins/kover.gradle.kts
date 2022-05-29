@@ -12,13 +12,9 @@ apply<KoverPlugin>()
 val intellijEngine: String by rootProject.extra
 
 val koverIncludes = listOf(
-    "dev.alvr.katana.navigation.screens.*",
-    "dev.alvr.katana.*.*ViewModel",
     "dev.alvr.katana.data.*",
     "dev.alvr.katana.domain.*",
-    "dev.alvr.katana.ui.*.*Effect",
-    "dev.alvr.katana.ui.*.*State",
-    "dev.alvr.katana.ui.*.*ViewModel",
+    "dev.alvr.katana.ui.*.viewmodel.*",
 )
 val koverExcludes = listOf(
     // Anonymous
