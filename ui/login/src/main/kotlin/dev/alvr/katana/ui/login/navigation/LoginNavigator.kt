@@ -1,7 +1,7 @@
-package dev.alvr.katana.ui.login
+package dev.alvr.katana.ui.login.navigation
 
 import dev.alvr.katana.ui.base.navigation.BaseNavigator
 
 interface LoginNavigator : BaseNavigator {
-    fun goToHome()
+    fun goToHomeFromLogin()
 }

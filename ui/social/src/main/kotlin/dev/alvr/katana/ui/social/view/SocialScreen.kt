@@ -1,19 +1,20 @@
-package dev.alvr.katana.ui.social
+package dev.alvr.katana.ui.social.view
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.ui.base.components.home.HomeScaffold
 import dev.alvr.katana.ui.base.components.home.HomeTopAppBar
-import dev.alvr.katana.ui.social.pages.Following
-import dev.alvr.katana.ui.social.pages.Global
+import dev.alvr.katana.ui.social.R
+import dev.alvr.katana.ui.social.view.pages.Following
+import dev.alvr.katana.ui.social.view.pages.Global
 
-@Preview
 @Composable
+@Destination
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
-fun Social() {
+internal fun Social() {
     HomeScaffold(
         tabs = enumValues<SocialTabs>(),
         backContent = { },

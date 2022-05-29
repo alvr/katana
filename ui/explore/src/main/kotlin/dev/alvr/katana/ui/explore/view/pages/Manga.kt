@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.explore.pages
+package dev.alvr.katana.ui.explore.view.pages
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

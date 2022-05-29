@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.login
+package dev.alvr.katana.ui.login.view
 
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
@@ -64,12 +64,36 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ramcosta.composedestinations.annotation.DeepLink
+import com.ramcosta.composedestinations.annotation.Destination
+import dev.alvr.katana.ui.login.ANILIST_LOGIN
+import dev.alvr.katana.ui.login.ANILIST_REGISTER
+import dev.alvr.katana.ui.login.BACKGROUND_ALPHA
+import dev.alvr.katana.ui.login.BOTTOM_ANIM_DELAY
+import dev.alvr.katana.ui.login.BOTTOM_ANIM_DURATION
+import dev.alvr.katana.ui.login.BOTTOM_ARROW_ANIM_DURATION
+import dev.alvr.katana.ui.login.BOTTOM_CROSSFADE_ANIM_DURATION
+import dev.alvr.katana.ui.login.GET_STARTED_BUTTON_TAG
+import dev.alvr.katana.ui.login.HEADER_ANIMATION_DELAY
+import dev.alvr.katana.ui.login.HEADER_ANIMATION_DURATION
+import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK
+import dev.alvr.katana.ui.login.LOGO_FULL_SIZE
+import dev.alvr.katana.ui.login.LOGO_RESIZED
+import dev.alvr.katana.ui.login.R
+import dev.alvr.katana.ui.login.navigation.LoginNavigator
+import dev.alvr.katana.ui.login.viewmodel.LoginEffect
+import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
 
 @Composable
+@Destination(
+    deepLinks = [
+        DeepLink(uriPattern = LOGIN_DEEP_LINK),
+    ],
+)
 fun Login(navigator: LoginNavigator) {
     Login(
         vm = hiltViewModel(),
-        onLogin = navigator::goToHome,
+        onLogin = navigator::goToHomeFromLogin,
     )
 }
 
@@ -100,8 +124,8 @@ private fun Login(vm: LoginViewModel, onLogin: () -> Unit) {
         }
     }
 
-    Scaffold(scaffoldState = scaffoldState) {
-        Surface(modifier = Modifier.fillMaxSize()) {
+    Scaffold(scaffoldState = scaffoldState) { padding ->
+        Surface(modifier = Modifier.fillMaxSize().padding(padding)) {
             if (loading) {
                 Loading()
             } else {

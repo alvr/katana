@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.login
+package dev.alvr.katana.ui.login.viewmodel
 
 internal sealed class LoginEffect {
     object Loading : LoginEffect()

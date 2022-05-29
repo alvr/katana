@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.login
+package dev.alvr.katana.ui.login.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -7,6 +7,7 @@ import dev.alvr.katana.domain.token.models.AnilistToken
 import dev.alvr.katana.domain.token.usecases.SaveAnilistTokenUseCase
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
+import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK_TOKEN
 import io.github.aakira.napier.Napier
 import javax.inject.Inject
 import org.orbitmvi.orbit.syntax.simple.postSideEffect

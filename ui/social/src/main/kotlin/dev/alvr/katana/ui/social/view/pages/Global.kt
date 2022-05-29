@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.social.pages
+package dev.alvr.katana.ui.social.view.pages
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
