@@ -17,4 +17,16 @@ android {
     baseAndroidConfig()
     buildFeatures.buildConfig = false
     kotlinOptions.configureKotlin()
+
+    libraryVariants.all {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/$name/kotlin")
+            }
+        }
+    }
+}
+
+hilt {
+    enableAggregatingTask = true
 }

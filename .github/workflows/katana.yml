@@ -180,7 +180,7 @@ jobs:
     name: Staging deployment
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
-    needs: [ assemble, static-analysis, unit-tests, instrumentation-tests ]
+    needs: [ assemble, static-analysis, unit-tests ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -215,7 +215,7 @@ jobs:
     name: Production deployment
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [ assemble, static-analysis, unit-tests, instrumentation-tests ]
+    needs: [ assemble, static-analysis, unit-tests ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3

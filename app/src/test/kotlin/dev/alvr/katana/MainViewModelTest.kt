@@ -5,7 +5,8 @@ import com.appmattus.kotlinfixture.decorator.nullability.nullabilityStrategy
 import com.appmattus.kotlinfixture.kotlinFixture
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.token.usecases.GetAnilistTokenUseCase
-import dev.alvr.katana.navigation.screens.Screen
+import dev.alvr.katana.navigation.NavGraphs
+import dev.alvr.katana.ui.login.navigation.LoginNavGraph
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
@@ -21,16 +22,16 @@ internal class MainViewModelTest : BehaviorSpec({
         `when`("the user does not have a saved token") {
             coEvery { getAnilistTokenUseCase.sync() } returns null
 
-            then("the initial route should be login") {
-                vm.initialRoute shouldBe Screen.Login.route
+            then("the initial navGraph should be `LoginNavGraph`") {
+                vm.initialNavGraph shouldBe LoginNavGraph
             }
         }
 
         `when`("the user does have a saved token") {
             coEvery { getAnilistTokenUseCase.sync() } returns fixture()
 
-            then("the initial route should be home") {
-                vm.initialRoute shouldBe Screen.Home.route
+            then("the initial navGraph should be `NavGraphs.home`") {
+                vm.initialNavGraph shouldBe NavGraphs.home
             }
         }
     }

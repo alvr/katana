@@ -27,13 +27,13 @@ val coverageExclusions = listOf(
     "**/*Lambda.class",
     "**/*Lambda*.class",
     "**Module.kt",
+    "**NavGraph.kt",
+    "**/KatanaApp.kt",
     "**/base/**",
-    "**/KatanaApp*.kt",
-    "**/navigation/bottombar/**",
-    "**/navigation/destinations/**",
-    "**/navigation/KatanaNavigation.kt",
-    "**/navigation/transitions.kt",
+    "**/navigation/**",
     "**/utils/tests/**",
+    "**/ui/**/navigation/**",
+    "**/ui/**/view/**",
 )
 
 configure<SonarQubeExtension> {

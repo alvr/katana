@@ -66,11 +66,23 @@ android {
     composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.get()
     kotlinOptions.configureKotlin()
 
+    applicationVariants.all {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/$name/kotlin")
+            }
+        }
+    }
+
     packagingOptions {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
+}
+
+hilt {
+    enableAggregatingTask = true
 }
 
 dependencies {

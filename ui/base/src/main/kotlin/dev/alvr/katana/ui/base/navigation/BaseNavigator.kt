@@ -5,4 +5,6 @@ import androidx.compose.runtime.Stable
 
 @Stable
 @Immutable
-interface BaseNavigator
+interface BaseNavigator {
+    fun goBack()
+}
