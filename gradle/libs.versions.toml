@@ -1,9 +1,9 @@
 [versions]
-accompanist = "0.24.7-alpha"
+accompanist = "0.24.10-beta"
 apollo = "3.3.0"
 compose = "1.2.0-beta02"
 coroutines = "1.6.2"
-destinations = "1.5.8-beta"
+destinations = "1.5.9-beta"
 hilt = "2.42"
 hiltx = "1.0.0"
 kotlin = "1.6.21"
