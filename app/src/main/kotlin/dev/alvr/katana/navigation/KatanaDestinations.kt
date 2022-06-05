@@ -35,7 +35,7 @@ internal fun KatanaDestinations() {
             ),
             navController = navController,
             navGraph = NavGraphs.root,
-            startRoute = viewModel.initialRoute,
+            startRoute = viewModel.initialNavGraph,
             dependenciesContainerBuilder = {
                 dependency(currentNavigator())
             },

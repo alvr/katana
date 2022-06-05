@@ -12,7 +12,7 @@ import javax.inject.Inject
 internal class MainViewModel @Inject constructor(
     private val getAnilistTokenUseCase: GetAnilistTokenUseCase,
 ) : ViewModel() {
-    val initialRoute
+    val initialNavGraph
         get() = if (getAnilistTokenUseCase.sync() != null) {
             NavGraphs.home
         } else {
