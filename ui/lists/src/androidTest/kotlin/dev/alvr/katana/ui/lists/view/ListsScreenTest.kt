@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.lists
+package dev.alvr.katana.ui.lists.view
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
@@ -12,6 +12,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
 import androidx.test.platform.app.InstrumentationRegistry
+import dev.alvr.katana.ui.lists.R
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

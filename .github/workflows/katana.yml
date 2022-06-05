@@ -97,7 +97,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [ 29, 32 ]
+        api-level: [ 29, 31 ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3

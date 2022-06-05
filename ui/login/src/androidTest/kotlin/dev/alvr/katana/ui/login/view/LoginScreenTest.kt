@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.login
+package dev.alvr.katana.ui.login.view
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -7,6 +7,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
+import dev.alvr.katana.ui.login.GET_STARTED_BUTTON_TAG
+import dev.alvr.katana.ui.login.R
 import org.junit.Rule
 import org.junit.Test
 

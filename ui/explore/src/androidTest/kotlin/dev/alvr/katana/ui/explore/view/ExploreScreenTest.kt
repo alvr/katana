@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.social
+package dev.alvr.katana.ui.explore.view
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
@@ -12,11 +12,12 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
 import androidx.test.platform.app.InstrumentationRegistry
+import dev.alvr.katana.ui.explore.R
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-internal class SocialScreenTest {
+internal class ExploreScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -25,75 +26,75 @@ internal class SocialScreenTest {
     @Before
     fun init() {
         composeTestRule.setContent {
-            Social()
+            Explore()
         }
     }
 
     @Test
-    fun test_FollowingTabSelectedByDefault() {
+    fun test_AnimeTabSelectedByDefault() {
         composeTestRule
-            .onAllNodesWithText(text = context.getString(R.string.tab_following))
+            .onAllNodesWithText(text = context.getString(R.string.tab_anime))
             .onFirst()
             .assertIsSelected()
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText(text = context.getString(R.string.tab_global))
+            .onAllNodesWithText(text = context.getString(R.string.tab_manga))
             .onFirst()
             .assertIsNotSelected()
             .assertIsDisplayed()
     }
 
     @Test
-    fun test_GlobalTabSelectedWhenSwiping() {
+    fun test_MangaTabSelectedWhenSwiping() {
         composeTestRule.onRoot().performTouchInput {
             swipeLeft()
         }
 
         composeTestRule
-            .onAllNodesWithText(text = context.getString(R.string.tab_following))
+            .onAllNodesWithText(text = context.getString(R.string.tab_anime))
             .onFirst()
             .assertIsNotSelected()
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText(text = context.getString(R.string.tab_global))
+            .onAllNodesWithText(text = context.getString(R.string.tab_manga))
             .onFirst()
             .assertIsSelected()
             .assertIsDisplayed()
     }
 
     @Test
-    fun test_GlobalTabSelectedWhenClicking() {
+    fun test_MangaTabSelectedWhenClicking() {
         composeTestRule
-            .onAllNodesWithText(text = context.getString(R.string.tab_global))
+            .onAllNodesWithText(text = context.getString(R.string.tab_manga))
             .onFirst()
             .performClick()
             .assertIsSelected()
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText(text = context.getString(R.string.tab_following))
+            .onAllNodesWithText(text = context.getString(R.string.tab_anime))
             .onFirst()
             .assertIsNotSelected()
             .assertIsDisplayed()
     }
 
     @Test
-    fun test_FollowingTabSelectedWhenSwipingLeftAndRight() {
+    fun test_AnimeTabSelectedWhenSwipingLeftAndRight() {
         composeTestRule.onRoot().performTouchInput {
             swipeLeft()
             swipeRight()
         }
 
         composeTestRule
-            .onAllNodesWithText(text = context.getString(R.string.tab_following))
+            .onAllNodesWithText(text = context.getString(R.string.tab_anime))
             .onFirst()
             .assertIsSelected()
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText(text = context.getString(R.string.tab_global))
+            .onAllNodesWithText(text = context.getString(R.string.tab_manga))
             .onFirst()
             .assertIsNotSelected()
             .assertIsDisplayed()
