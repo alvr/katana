@@ -93,7 +93,7 @@ import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
 fun Login(navigator: LoginNavigator) {
     Login(
         vm = hiltViewModel(),
-        onLogin = navigator::goToHomeFromLogin,
+        onLogin = navigator::toHome,
     )
 }
 

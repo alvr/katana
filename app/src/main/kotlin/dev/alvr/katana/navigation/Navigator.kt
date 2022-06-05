@@ -1,21 +1,19 @@
 package dev.alvr.katana.navigation
 
-import androidx.navigation.NavController
-import com.ramcosta.composedestinations.navigation.navigate
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
-import dev.alvr.katana.ui.home.view.destinations.HomeDestination
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
 
 internal class Navigator(
-    private val navController: NavController,
+    private val navigator: DestinationsNavigator,
 ) : LoginNavigator {
     override fun goBack() {
-        navController.navigateUp()
+        navigator.navigateUp()
     }
 
-    override fun goToHomeFromLogin() {
-        navController.navigate(HomeDestination) {
+    override fun toHome() {
+        navigator.navigate(NavGraphs.home) {
             popUpTo(LoginDestination) {
                 inclusive = true
             }
