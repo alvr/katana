@@ -97,7 +97,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [ 29, 31 ]
+        api-level: [ 29, 32 ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -180,7 +180,7 @@ jobs:
     name: Staging deployment
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
-    needs: [ assemble, static-analysis, unit-tests, instrumentation-tests ]
+    needs: [ assemble, static-analysis, unit-tests ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
