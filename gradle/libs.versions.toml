@@ -33,6 +33,7 @@ accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pa
 
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version = "1.4.0" }
+androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.1.1" }
 
 # Apollo
 apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
@@ -116,6 +117,9 @@ orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
 # Serialization
 protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.3.3" }
 
+# Startup
+startup = { module = "io.github.idisfkj:android-startup", version = "1.1.0" }
+
 # Tests
 ## AndroidX Test
 androidx-test = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
@@ -152,10 +156,12 @@ common-android = [
 
 app = [
     "androidx-activity",
+    "androidx-startup",
     "compose-material",
     "compose-material-icons",
     "destinations",
     "hiltx-navigation",
+    "startup",
 ]
 
 kapt = [

@@ -30,7 +30,7 @@ internal fun BottomNavigationBar(
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentNavGraph = currentBackStackEntry?.destination?.navGraph()
 
-    val isVisible = currentNavGraph !is LoginNavGraph
+    val isVisible = currentNavGraph != null && currentNavGraph !is LoginNavGraph
 
     @Suppress("UseIfInsteadOfWhen") // Remove when adding another NavGraph
     val bottomBarDestination: Array<out BottomBarDestinations> = when (currentNavGraph) {
