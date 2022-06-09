@@ -5,6 +5,7 @@ import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.token.models.AnilistToken
 import dev.alvr.katana.domain.token.usecases.SaveAnilistTokenUseCase
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
+import io.kotest.assertions.timing.eventually
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -27,14 +28,16 @@ internal class LoginViewModelTest : BehaviorSpec({
         every { stateHandle.get<String>(any()) } returns null
 
         and("a lazily created viewModel") {
-            val viewModel by lazy { LoginViewModel(stateHandle, saveAnilistToken, saveUserId) }
+            eventually(retries = 10) {
+                val viewModel by lazy { LoginViewModel(stateHandle, saveAnilistToken, saveUserId) }
 
-            `when`("saving the token") {
-                then("it should not be saved because is null") {
-                    viewModel.hashCode() // dummy call to initialize
+                `when`("saving the token") {
+                    then("it should not be saved because is null") {
+                        viewModel.hashCode() // dummy call to initialize
 
-                    coVerify(exactly = 0) { saveAnilistToken(AnilistToken(any())) }
-                    coVerify(exactly = 0) { saveUserId() }
+                        coVerify(exactly = 0) { saveAnilistToken(AnilistToken(any())) }
+                        coVerify(exactly = 0) { saveUserId() }
+                    }
                 }
             }
         }
@@ -44,14 +47,16 @@ internal class LoginViewModelTest : BehaviorSpec({
         every { stateHandle.get<String>(any()) } returns tokenWithParams
 
         and("a lazily created viewModel") {
-            val viewModel by lazy { LoginViewModel(stateHandle, saveAnilistToken, saveUserId) }
+            eventually(retries = 10) {
+                val viewModel by lazy { LoginViewModel(stateHandle, saveAnilistToken, saveUserId) }
 
-            `when`("saving the token") {
-                then("it should not be saved without params") {
-                    viewModel.hashCode() // dummy call to initialize
+                `when`("saving the token") {
+                    then("it should not be saved without params") {
+                        viewModel.hashCode() // dummy call to initialize
 
-                    coVerify(exactly = 1) { saveAnilistToken(AnilistToken(cleanToken)) }
-                    coVerify(exactly = 1) { saveUserId() }
+                        coVerify(exactly = 1) { saveAnilistToken(AnilistToken(cleanToken)) }
+                        coVerify(exactly = 1) { saveUserId() }
+                    }
                 }
             }
         }
@@ -61,14 +66,16 @@ internal class LoginViewModelTest : BehaviorSpec({
         every { stateHandle.get<String>(any()) } returns cleanToken
 
         and("a lazily created viewModel") {
-            val viewModel by lazy { LoginViewModel(stateHandle, saveAnilistToken, saveUserId) }
+            eventually(retries = 10) {
+                val viewModel by lazy { LoginViewModel(stateHandle, saveAnilistToken, saveUserId) }
 
-            `when`("saving the token") {
-                then("it should not be saved without params") {
-                    viewModel.hashCode() // dummy call to initialize
+                `when`("saving the token") {
+                    then("it should not be saved without params") {
+                        viewModel.hashCode() // dummy call to initialize
 
-                    coVerify(exactly = 1) { saveAnilistToken(AnilistToken(cleanToken)) }
-                    coVerify(exactly = 1) { saveUserId() }
+                        coVerify(exactly = 1) { saveAnilistToken(AnilistToken(cleanToken)) }
+                        coVerify(exactly = 1) { saveUserId() }
+                    }
                 }
             }
         }
@@ -78,14 +85,16 @@ internal class LoginViewModelTest : BehaviorSpec({
         every { stateHandle.get<String>(any()) } returns ""
 
         and("a lazily created viewModel") {
-            val viewModel by lazy { LoginViewModel(stateHandle, saveAnilistToken, saveUserId) }
+            eventually(retries = 10) {
+                val viewModel by lazy { LoginViewModel(stateHandle, saveAnilistToken, saveUserId) }
 
-            `when`("saving the token") {
-                then("it should not be saved because is empty") {
-                    viewModel.hashCode() // dummy call to initialize
+                `when`("saving the token") {
+                    then("it should not be saved because is empty") {
+                        viewModel.hashCode() // dummy call to initialize
 
-                    coVerify(exactly = 0) { saveAnilistToken(AnilistToken(any())) }
-                    coVerify(exactly = 0) { saveUserId() }
+                        coVerify(exactly = 0) { saveAnilistToken(AnilistToken(any())) }
+                        coVerify(exactly = 0) { saveUserId() }
+                    }
                 }
             }
         }
