@@ -8,9 +8,11 @@ plugins {
     com.google.dagger.hilt.android
     `kotlin-android`
     `kotlin-kapt`
+    plugins.sentry
     plugins.`sonarqube-android`
 }
 
+hilt.enableAggregatingTask = true
 kapt.correctErrorTypes = true
 
 android {
@@ -83,10 +85,6 @@ android {
     buildFeatures.compose = true
     composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.get()
     kotlinOptions.configureKotlin()
-}
-
-hilt {
-    enableAggregatingTask = true
 }
 
 dependencies {

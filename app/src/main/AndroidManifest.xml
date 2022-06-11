@@ -38,6 +38,8 @@
             </intent-filter>
         </activity>
 
+        <meta-data android:name="io.sentry.dsn" android:value="@string/sentry_dsn" />
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"

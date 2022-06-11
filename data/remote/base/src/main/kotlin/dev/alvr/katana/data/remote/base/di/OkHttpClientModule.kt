@@ -4,10 +4,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dev.alvr.katana.data.remote.base.BuildConfig
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.token.usecases.DeleteAnilistTokenUseCase
 import dev.alvr.katana.domain.token.usecases.GetAnilistTokenUseCase
-import io.github.aakira.napier.BuildConfig
 import java.net.HttpURLConnection
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton

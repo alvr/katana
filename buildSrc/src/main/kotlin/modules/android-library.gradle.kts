@@ -11,6 +11,7 @@ plugins {
     id("plugins.sonarqube-android")
 }
 
+hilt.enableAggregatingTask = true
 kapt.correctErrorTypes = true
 
 android {
@@ -25,8 +26,4 @@ android {
             }
         }
     }
-}
-
-hilt {
-    enableAggregatingTask = true
 }
