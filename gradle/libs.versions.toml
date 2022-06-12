@@ -8,7 +8,7 @@ hilt = "2.42"
 hiltx = "1.0.0"
 kotlin = "1.6.21"
 lifecycle = "2.4.1"
-okhttp = "4.9.3"
+okhttp = "4.10.0"
 orbit = "4.3.2"
 
 # Coverage Engine
