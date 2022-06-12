@@ -11,10 +11,10 @@ import dev.alvr.katana.domain.user.repositories.UserRemoteRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class UserBindingsModule {
+internal sealed interface UserBindingsModule {
     @Binds
-    abstract fun bindUserRemoteRepository(impl: UserRemoteRepositoryImpl): UserRemoteRepository
+    fun bindUserRemoteRepository(impl: UserRemoteRepositoryImpl): UserRemoteRepository
 
     @Binds
-    abstract fun bindUserIdManager(impl: UserIdManagerImpl): UserIdManager
+    fun bindUserIdManager(impl: UserIdManagerImpl): UserIdManager
 }
