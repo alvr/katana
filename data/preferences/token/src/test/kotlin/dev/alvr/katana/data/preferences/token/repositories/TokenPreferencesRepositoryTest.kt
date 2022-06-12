@@ -3,10 +3,10 @@ package dev.alvr.katana.data.preferences.token.repositories
 import androidx.datastore.core.DataStore
 import dev.alvr.katana.data.preferences.token.models.Token
 import dev.alvr.katana.domain.token.models.AnilistToken
+import io.kotest.assertions.arrow.core.shouldBeNone
+import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -22,8 +22,8 @@ internal class TokenPreferencesRepositoryTest : BehaviorSpec({
             coEvery { store.data } returns flowOf(Token(null))
             val token = repository.getAnilistToken()
 
-            then("the token object should be null") {
-                token.shouldBeNull()
+            then("the token object should be None") {
+                token.shouldBeNone()
                 coVerify(exactly = 1) { store.data }
             }
         }
@@ -40,7 +40,7 @@ internal class TokenPreferencesRepositoryTest : BehaviorSpec({
                 val token = repository.getAnilistToken()
 
                 then("the token should be read from memory") {
-                    token.shouldNotBeNull().token shouldBe AnilistToken("saved-token")
+                    token.shouldBeSome(AnilistToken("saved-token"))
                     coVerify(exactly = 0) { store.data }
                 }
             }

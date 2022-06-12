@@ -6,8 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.alvr.katana.data.remote.base.BuildConfig
 import dev.alvr.katana.domain.base.usecases.sync
+import dev.alvr.katana.domain.token.managers.GetTokenBearerManager
 import dev.alvr.katana.domain.token.usecases.DeleteAnilistTokenUseCase
-import dev.alvr.katana.domain.token.usecases.GetAnilistTokenUseCase
 import java.net.HttpURLConnection
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -25,10 +25,10 @@ internal object OkHttpClientModule {
     @Singleton
     @AnilistTokenInterceptor
     fun provideAnilistTokenInterceptor(
-        getAnilistTokenUseCase: GetAnilistTokenUseCase,
+        tokenBearerManager: GetTokenBearerManager,
     ): Interceptor = Interceptor { chain ->
         val request = chain.request().newBuilder()
-            .addHeader("Authorization", "Bearer ${getAnilistTokenUseCase.sync()?.token}")
+            .addHeader("Authorization", "Bearer ${tokenBearerManager.token}")
             .addHeader("Accept", "application/json")
             .addHeader("Content-Type", "application/json")
             .build()

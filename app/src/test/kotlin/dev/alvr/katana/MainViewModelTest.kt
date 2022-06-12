@@ -1,5 +1,7 @@
 package dev.alvr.katana
 
+import arrow.core.none
+import arrow.core.some
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.token.models.AnilistToken
 import dev.alvr.katana.domain.token.usecases.GetAnilistTokenUseCase
@@ -19,7 +21,7 @@ internal class MainViewModelTest : BehaviorSpec({
         val vm = MainViewModel(getAnilistTokenUseCase)
 
         `when`("the user does not have a saved token") {
-            coEvery { getAnilistTokenUseCase.sync() } returns null
+            coEvery { getAnilistTokenUseCase.sync() } returns none()
 
             then("the initial navGraph should be `LoginNavGraph`") {
                 vm.initialNavGraph shouldBe LoginNavGraph
@@ -27,7 +29,7 @@ internal class MainViewModelTest : BehaviorSpec({
         }
 
         `when`("the user does have a saved token") {
-            coEvery { getAnilistTokenUseCase.sync() } returns Arb.bind<AnilistToken>().next()
+            coEvery { getAnilistTokenUseCase.sync() } returns Arb.bind<AnilistToken>().next().some()
 
             then("the initial navGraph should be `NavGraphs.home`") {
                 vm.initialNavGraph shouldBe NavGraphs.home

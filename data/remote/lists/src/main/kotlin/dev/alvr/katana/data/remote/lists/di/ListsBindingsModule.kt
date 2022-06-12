@@ -9,7 +9,7 @@ import dev.alvr.katana.domain.lists.repositories.ListsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class ListsBindingsModule {
+internal sealed interface ListsBindingsModule {
     @Binds
-    abstract fun bindListsRemoteRepository(impl: ListsRemoteRepositoryImpl): ListsRepository
+    fun bindListsRemoteRepository(impl: ListsRemoteRepositoryImpl): ListsRepository
 }
