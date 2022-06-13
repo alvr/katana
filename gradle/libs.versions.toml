@@ -19,7 +19,7 @@ detekt = "1.20.0"
 
 # Tests
 androidx-test = "1.4.0"
-kotest = "5.3.0"
+kotest = "5.3.1"
 mockk = "1.12.4"
 
 [plugins]
