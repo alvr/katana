@@ -1,6 +1,6 @@
 [versions]
 accompanist = "0.24.10-beta"
-apollo = "3.3.0"
+apollo = "3.3.1"
 compose = "1.2.0-beta03"
 coroutines = "1.6.2"
 destinations = "1.5.9-beta"
