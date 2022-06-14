@@ -173,6 +173,7 @@ internal class MediaListMapperTest : WordSpec({
                                 private = true
                                 notes = "My notes :)"
                                 hiddenFromStatusLists = true
+                                updatedAt = 1_649_790_000
                                 startedAt = startedAt {
                                     day = 23
                                     month = 12
@@ -194,7 +195,6 @@ internal class MediaListMapperTest : WordSpec({
                                     coverImage = coverImage {
                                         large = "https://www.fillmurray.com/128/256"
                                     }
-                                    updatedAt = 1_649_790_000
                                     genres = listOf("Action", "Adventure")
                                     nextAiringEpisode = nextAiringEpisode {
                                         airingAt = 1_649_790_000
@@ -221,8 +221,9 @@ internal class MediaListMapperTest : WordSpec({
                         private.shouldBeTrue()
                         notes shouldBe "My notes :)"
                         hiddenFromStatusLists.shouldBeTrue()
-                        startedAt?.shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
-                        completedAt?.shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
+                        startedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
+                        completedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
+                        updatedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDateTime.of(2022, 4, 12, 21, 0, 0))
                         with(media) {
                             shouldBeTypeOf<MediaEntry.Anime>()
                             shouldNotBeTypeOf<MediaEntry>()
@@ -234,8 +235,6 @@ internal class MediaListMapperTest : WordSpec({
                             format shouldBe CommonMediaEntry.Format.TV
                             genres.shouldContainAll("Action", "Adventure")
                             episodes shouldBe 23
-                            updatedAt.shouldNotBeNull()
-                                .shouldBeEqualComparingTo(LocalDateTime.of(2022, 4, 12, 21, 0, 0))
                             with(nextEpisode.shouldNotBeNull()) {
                                 at.shouldBeEqualComparingTo(LocalDateTime.of(2022, 4, 12, 21, 0, 0))
                                 number shouldBe 13
@@ -270,6 +269,7 @@ internal class MediaListMapperTest : WordSpec({
                                 private = true
                                 notes = "My notes :)"
                                 hiddenFromStatusLists = true
+                                updatedAt = 1_649_790_000
                                 startedAt = startedAt {
                                     day = 23
                                     month = 12
@@ -291,7 +291,6 @@ internal class MediaListMapperTest : WordSpec({
                                     coverImage = coverImage {
                                         large = "https://www.fillmurray.com/128/256"
                                     }
-                                    updatedAt = 1_649_790_000
                                     genres = listOf("Action", "Adventure")
                                     nextAiringEpisode = null
                                 }
@@ -315,8 +314,9 @@ internal class MediaListMapperTest : WordSpec({
                         private.shouldBeTrue()
                         notes shouldBe "My notes :)"
                         hiddenFromStatusLists.shouldBeTrue()
-                        startedAt?.shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
-                        completedAt?.shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
+                        startedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
+                        completedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
+                        updatedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDateTime.of(2022, 4, 12, 21, 0, 0))
                         with(media) {
                             shouldBeTypeOf<MediaEntry.Manga>()
                             shouldNotBeTypeOf<MediaEntry>()
@@ -327,8 +327,6 @@ internal class MediaListMapperTest : WordSpec({
                             coverImage shouldBe "https://www.fillmurray.com/128/256"
                             format shouldBe CommonMediaEntry.Format.NOVEL
                             genres.shouldContainAll("Action", "Adventure")
-                            updatedAt.shouldNotBeNull()
-                                .shouldBeEqualComparingTo(LocalDateTime.of(2022, 4, 12, 21, 0, 0))
                             chapters shouldBe 23
                             volumes shouldBe 2
                         }
@@ -363,6 +361,7 @@ internal class MediaListMapperTest : WordSpec({
                                 hiddenFromStatusLists = null
                                 startedAt = null
                                 completedAt = null
+                                updatedAt = null
                                 media = media {
                                     id = 0
                                     title = null
@@ -371,7 +370,6 @@ internal class MediaListMapperTest : WordSpec({
                                     format = null
                                     coverImage = null
                                     genres = null
-                                    updatedAt = null
                                     nextAiringEpisode = null
                                 }
                             },
@@ -401,6 +399,7 @@ internal class MediaListMapperTest : WordSpec({
                         hiddenFromStatusLists.shouldBeFalse()
                         startedAt.shouldBeNull()
                         completedAt.shouldBeNull()
+                        updatedAt.shouldBeNull()
                         with(media) {
                             shouldBeTypeOf<MediaEntry.Anime>()
                             shouldNotBeTypeOf<MediaEntry>()
@@ -411,7 +410,6 @@ internal class MediaListMapperTest : WordSpec({
                             coverImage.shouldBeEmpty()
                             format shouldBe CommonMediaEntry.Format.UNKNOWN
                             genres.shouldBeEmpty()
-                            updatedAt.shouldBeNull()
                             episodes.shouldBeNull()
                             nextEpisode.shouldBeNull()
                         }
@@ -446,6 +444,7 @@ internal class MediaListMapperTest : WordSpec({
                                 hiddenFromStatusLists = null
                                 startedAt = null
                                 completedAt = null
+                                updatedAt = null
                                 media = media {
                                     id = 0
                                     title = null
@@ -454,7 +453,6 @@ internal class MediaListMapperTest : WordSpec({
                                     format = null
                                     coverImage = null
                                     genres = null
-                                    updatedAt = null
                                     nextAiringEpisode = null
                                 }
                             },
@@ -484,6 +482,7 @@ internal class MediaListMapperTest : WordSpec({
                         hiddenFromStatusLists.shouldBeFalse()
                         startedAt.shouldBeNull()
                         completedAt.shouldBeNull()
+                        updatedAt.shouldBeNull()
                         with(media) {
                             shouldBeTypeOf<MediaEntry.Manga>()
                             shouldNotBeTypeOf<MediaEntry>()
@@ -494,7 +493,6 @@ internal class MediaListMapperTest : WordSpec({
                             coverImage.shouldBeEmpty()
                             format shouldBe CommonMediaEntry.Format.UNKNOWN
                             genres.shouldBeEmpty()
-                            updatedAt.shouldBeNull()
                             chapters.shouldBeNull()
                             volumes.shouldBeNull()
                         }
