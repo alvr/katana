@@ -1,4 +1,18 @@
 ignore:
   - '**/build/**'
-  - 'ui/**/^((?!ViewModel|State|Effect).)*$'
+
+  # App
+  - '**/KatanaApp.kt'
+  - '**/initializers/**'
+
+  # Common Android
+  - '**/*Activity'
+  - '**/*Fragment'
+  - '**/base/**'
+  - '**/navigation/**'
+
+  # Ui
+  - 'ui/**/view/**'
+
+  # Utils
   - 'utils'

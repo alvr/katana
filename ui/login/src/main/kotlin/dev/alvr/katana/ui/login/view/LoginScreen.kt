@@ -90,7 +90,7 @@ import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
         DeepLink(uriPattern = LOGIN_DEEP_LINK),
     ],
 )
-fun Login(navigator: LoginNavigator) {
+internal fun Login(navigator: LoginNavigator) {
     Login(
         vm = hiltViewModel(),
         onLogin = navigator::toHome,

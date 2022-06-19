@@ -13,7 +13,7 @@ internal class Navigator(
     }
 
     override fun toHome() {
-        navigator.navigate(NavGraphs.home) {
+        navigator.navigate(NavGraphs.home, onlyIfResumed = true) {
             popUpTo(LoginDestination) {
                 inclusive = true
             }

@@ -3,6 +3,7 @@ package dev.alvr.katana.data.preferences.token.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.dataStoreFile
 import dagger.Module
 import dagger.Provides
@@ -26,7 +27,8 @@ internal object TokenDataStoreModule {
     @ExperimentalSerializationApi
     fun provideTokenDataStore(@ApplicationContext context: Context): DataStore<Token> =
         DataStoreFactory.create(
-            produceFile = { context.dataStoreFile(DATASTORE_FILE) },
             serializer = TokenSerializer.encoded(),
+            corruptionHandler = ReplaceFileCorruptionHandler { Token() },
+            produceFile = { context.dataStoreFile(DATASTORE_FILE) },
         )
 }

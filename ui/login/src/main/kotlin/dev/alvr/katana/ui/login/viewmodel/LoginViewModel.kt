@@ -31,15 +31,29 @@ internal class LoginViewModel @Inject constructor(
             postSideEffect(LoginEffect.Loading)
 
             executeUseCase({
-                val parsedToken = t.substringBefore('&')
-
-                saveAnilistTokenUseCase(AnilistToken(parsedToken))
-                saveUserIdUseCase()
-
-                postSideEffect(LoginEffect.Saved)
+                val parsedToken = t.substringBefore(TOKEN_SEPARATOR)
+                saveToken(parsedToken)
             }, {
                 postSideEffect(LoginEffect.Error)
             },)
         } ?: Napier.i { "No token found in StateHandle" }
+    }
+
+    private suspend fun saveToken(token: String) {
+        saveAnilistTokenUseCase(AnilistToken(token)).fold(
+            ifLeft = { postSideEffect(LoginEffect.Error) },
+            ifRight = { saveUserId() }
+        )
+    }
+
+    private suspend fun saveUserId() {
+        saveUserIdUseCase().fold(
+            ifLeft = { postSideEffect(LoginEffect.Error) },
+            ifRight = { postSideEffect(LoginEffect.Saved) }
+        )
+    }
+
+    companion object {
+        private const val TOKEN_SEPARATOR = '&'
     }
 }
