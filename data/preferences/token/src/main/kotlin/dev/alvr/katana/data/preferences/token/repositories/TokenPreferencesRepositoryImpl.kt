@@ -19,30 +19,36 @@ import kotlinx.coroutines.flow.map
 internal class TokenPreferencesRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Token>,
 ) : TokenPreferencesRepository {
-    override suspend fun deleteAnilistToken() = Either.catch {
-        dataStore.updateData { p -> p.copy(anilistToken = null) }
-        Napier.d { "Anilist token deleted" }
-    }.mapLeft { error ->
-        if (error is IOException) {
-            PreferencesTokenFailure.DeletingFailure
-        } else {
-            Failure.Unknown
-        }
-    }
+    override suspend fun deleteAnilistToken() = Either.catch(
+        f = {
+            dataStore.updateData { p -> p.copy(anilistToken = null) }
+            Napier.d { "Anilist token deleted" }
+        },
+        fe = { error ->
+            if (error is IOException) {
+                PreferencesTokenFailure.DeletingFailure
+            } else {
+                Failure.Unknown
+            }
+        },
+    )
 
     override suspend fun getAnilistToken() = dataStore.data
         .map { token -> token.anilistToken?.let { AnilistToken(it) }.toOption() }
         .catch { emit(None) }
         .first()
 
-    override suspend fun saveAnilistToken(anilistToken: AnilistToken) = Either.catch {
-        dataStore.updateData { p -> p.copy(anilistToken = anilistToken.token) }
-        Napier.d { "Token saved: ${anilistToken.token}" }
-    }.mapLeft { error ->
-        if (error is IOException) {
-            PreferencesTokenFailure.SavingFailure
-        } else {
-            Failure.Unknown
-        }
-    }
+    override suspend fun saveAnilistToken(anilistToken: AnilistToken) = Either.catch(
+        f = {
+            dataStore.updateData { p -> p.copy(anilistToken = anilistToken.token) }
+            Napier.d { "Token saved: ${anilistToken.token}" }
+        },
+        fe = { error ->
+            if (error is IOException) {
+                PreferencesTokenFailure.SavingFailure
+            } else {
+                Failure.Unknown
+            }
+        },
+    )
 }

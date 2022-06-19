@@ -42,14 +42,14 @@ internal class LoginViewModel @Inject constructor(
     private suspend fun saveToken(token: String) {
         saveAnilistTokenUseCase(AnilistToken(token)).fold(
             ifLeft = { postSideEffect(LoginEffect.Error) },
-            ifRight = { saveUserId() }
+            ifRight = { saveUserId() },
         )
     }
 
     private suspend fun saveUserId() {
         saveUserIdUseCase().fold(
             ifLeft = { postSideEffect(LoginEffect.Error) },
-            ifRight = { postSideEffect(LoginEffect.Saved) }
+            ifRight = { postSideEffect(LoginEffect.Saved) },
         )
     }
 
