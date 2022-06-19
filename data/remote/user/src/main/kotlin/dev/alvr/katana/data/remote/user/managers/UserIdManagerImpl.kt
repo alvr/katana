@@ -10,5 +10,5 @@ import javax.inject.Singleton
 internal class UserIdManagerImpl @Inject constructor(
     private val getUserIdUseCase: GetUserIdUseCase,
 ) : UserIdManager {
-    override suspend fun getId(): Int = getUserIdUseCase().id
+    override suspend fun getId() = getUserIdUseCase().map { it.id }
 }

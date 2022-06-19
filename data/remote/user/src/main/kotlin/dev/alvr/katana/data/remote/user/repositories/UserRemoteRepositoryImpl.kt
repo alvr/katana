@@ -1,8 +1,11 @@
 package dev.alvr.katana.data.remote.user.repositories
 
+import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.cache.normalized.FetchPolicy
+import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.exception.ApolloException
 import dev.alvr.katana.data.remote.base.failures.CommonRemoteFailure
 import dev.alvr.katana.data.remote.user.UserIdQuery
@@ -15,7 +18,10 @@ import javax.inject.Inject
 internal class UserRemoteRepositoryImpl @Inject constructor(
     private val client: ApolloClient,
 ) : UserRemoteRepository {
-    override suspend fun getUserId() = client.query(UserIdQuery()).execute().data()
+    override suspend fun getUserId() = Either.catch(
+        f = { client.query(UserIdQuery()).fetchPolicy(FetchPolicy.CacheOnly).execute().data() },
+        fe = { UserFailure.UserIdFailure },
+    )
 
     override suspend fun saveUserId() = try {
         client.query(UserIdQuery()).execute()

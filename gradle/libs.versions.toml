@@ -236,6 +236,7 @@ test-android = [
     "androidx-test-rules",
     "androidx-test-runner",
     "hilt-test",
+    "kotest-assertions-arrow",
     "kotest-assertions-core",
     "mockk-android",
     "turbine",

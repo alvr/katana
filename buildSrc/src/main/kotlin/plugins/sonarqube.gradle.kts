@@ -13,27 +13,28 @@ val codeExclusions = listOf(
 )
 
 val coverageExclusions = listOf(
-    "**/R.*",
-    "**/R$*.*",
-    "**/BuildConfig.*",
-    "**/*Module_*Factory.*",
+    // App
+    "**/KatanaApp.kt",
+    "**/initializers/**",
+
+    // Common Android
     "**Activity.kt",
     "**Fragment.kt",
-    "/*Parcel.class",
-    "**/*\$CREATOR.class",
-    "android/**/*.*",
-    "**/Lambda$*.class",
-    "**/Lambda.class",
-    "**/*Lambda.class",
-    "**/*Lambda*.class",
-    "**Module.kt",
-    "**NavGraph.kt",
-    "**/KatanaApp.kt",
+    "**/BuildConfig.*",
     "**/base/**",
     "**/navigation/**",
-    "**/utils/tests/**",
-    "**/ui/**/navigation/**",
+
+    // Hilt
+    "**/di/**",
+    "**/*Hilt_*",
+    "**/*HiltModules*",
+    "*/*_Factory",
+
+    // Ui
     "**/ui/**/view/**",
+
+    // Utils
+    "**/utils/tests/**",
 )
 
 configure<SonarQubeExtension> {

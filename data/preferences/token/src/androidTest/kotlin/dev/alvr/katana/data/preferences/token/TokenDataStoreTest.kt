@@ -5,11 +5,11 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.alvr.katana.domain.token.models.AnilistToken
 import dev.alvr.katana.domain.token.repositories.TokenPreferencesRepository
+import io.kotest.assertions.arrow.core.shouldBeNone
+import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.assertions.asClue
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -38,9 +38,9 @@ internal class TokenDataStoreTest {
     }
 
     @Test
-    fun test_initialToken_shouldBeNull() {
+    fun test_initialToken_shouldBeNone() {
         scope.runTest {
-            repository.getAnilistToken().shouldBeNull()
+            repository.getAnilistToken().shouldBeNone()
         }
     }
 
@@ -69,17 +69,16 @@ internal class TokenDataStoreTest {
 
             repository.saveAnilistToken(token)
             repository.getAnilistToken().asClue { t ->
-                t.shouldNotBeNull()
-                t shouldBeEqualToComparingFields token
+                t.shouldBeSome().token shouldBeEqualToComparingFields token
             }
         }
     }
 
     @Test
-    fun test_deletingTokenAndGetting_shouldBeNull() {
+    fun test_deletingTokenAndGetting_shouldBeNone() {
         scope.runTest {
             repository.deleteAnilistToken()
-            repository.getAnilistToken().shouldBeNull()
+            repository.getAnilistToken().shouldBeNone()
         }
     }
 }
