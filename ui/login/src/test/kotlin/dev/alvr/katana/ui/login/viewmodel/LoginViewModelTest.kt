@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.domain.base.usecases.invoke
-import dev.alvr.katana.domain.token.failures.PreferencesTokenFailure
+import dev.alvr.katana.domain.token.failures.TokenPreferencesFailure
 import dev.alvr.katana.domain.token.models.AnilistToken
 import dev.alvr.katana.domain.token.usecases.SaveAnilistTokenUseCase
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
@@ -69,7 +69,7 @@ internal class LoginViewModelTest : BehaviorSpec({
 
                     coEvery {
                         saveAnilistToken(AnilistToken(any()))
-                    } returns PreferencesTokenFailure.SavingFailure.left()
+                    } returns TokenPreferencesFailure.SavingFailure.left()
                     coEvery { saveUserId() } returns Unit.right()
 
                     then("it should not be saved without params") {

@@ -6,7 +6,7 @@ import arrow.core.None
 import arrow.core.toOption
 import dev.alvr.katana.data.preferences.token.models.Token
 import dev.alvr.katana.domain.base.failures.Failure
-import dev.alvr.katana.domain.token.failures.PreferencesTokenFailure
+import dev.alvr.katana.domain.token.failures.TokenPreferencesFailure
 import dev.alvr.katana.domain.token.models.AnilistToken
 import dev.alvr.katana.domain.token.repositories.TokenPreferencesRepository
 import io.github.aakira.napier.Napier
@@ -26,7 +26,7 @@ internal class TokenPreferencesRepositoryImpl @Inject constructor(
         },
         fe = { error ->
             if (error is IOException) {
-                PreferencesTokenFailure.DeletingFailure
+                TokenPreferencesFailure.DeletingFailure
             } else {
                 Failure.Unknown
             }
@@ -45,7 +45,7 @@ internal class TokenPreferencesRepositoryImpl @Inject constructor(
         },
         fe = { error ->
             if (error is IOException) {
-                PreferencesTokenFailure.SavingFailure
+                TokenPreferencesFailure.SavingFailure
             } else {
                 Failure.Unknown
             }

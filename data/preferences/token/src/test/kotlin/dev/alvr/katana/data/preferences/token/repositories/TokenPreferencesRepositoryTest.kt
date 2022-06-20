@@ -3,7 +3,7 @@ package dev.alvr.katana.data.preferences.token.repositories
 import androidx.datastore.core.DataStore
 import dev.alvr.katana.data.preferences.token.models.Token
 import dev.alvr.katana.domain.base.failures.Failure
-import dev.alvr.katana.domain.token.failures.PreferencesTokenFailure
+import dev.alvr.katana.domain.token.failures.TokenPreferencesFailure
 import dev.alvr.katana.domain.token.models.AnilistToken
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeNone
@@ -82,7 +82,7 @@ internal class TokenPreferencesRepositoryTest : BehaviorSpec({
                     coEvery { store.updateData(any()) } throws IOException()
 
                     then("should be a left of PreferencesTokenFailure.DeletingFailure") {
-                        repository.deleteAnilistToken().shouldBeLeft(PreferencesTokenFailure.DeletingFailure)
+                        repository.deleteAnilistToken().shouldBeLeft(TokenPreferencesFailure.DeletingFailure)
                     }
                 }
             }
@@ -103,7 +103,7 @@ internal class TokenPreferencesRepositoryTest : BehaviorSpec({
                     coEvery { store.updateData(any()) } throws IOException()
 
                     then("should be a left of PreferencesTokenFailure.SavingFailure") {
-                        repository.saveAnilistToken(token).shouldBeLeft(PreferencesTokenFailure.SavingFailure)
+                        repository.saveAnilistToken(token).shouldBeLeft(TokenPreferencesFailure.SavingFailure)
                     }
                 }
             }
