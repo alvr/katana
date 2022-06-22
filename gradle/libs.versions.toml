@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.24.10-beta"
 apollo = "3.3.2"
-compose = "1.2.0-rc01"
+compose = "1.2.0-rc02"
 coroutines = "1.6.3"
 destinations = "1.5.9-beta"
 hilt = "2.42"
