@@ -36,7 +36,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @OptIn(ApolloExperimental::class)
-internal class ListsRemoteRepositoryTest : BehaviorSpec() {
+internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
     init {
         given("an Apollo client with responses") {
             val client = ApolloClient.Builder()

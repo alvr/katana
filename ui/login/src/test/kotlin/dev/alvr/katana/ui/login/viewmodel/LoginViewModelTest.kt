@@ -24,7 +24,7 @@ internal class LoginViewModelTest : BehaviorSpec({
     val tokenWithParams = "my-token-from-anilist&param1=true&anotherOne=69420"
     val cleanToken = "my-token-from-anilist"
 
-    given("a deeplink without token") {
+    xgiven("a deeplink without token") {
         every { stateHandle.get<String>(any()) } returns null
         coEvery { saveAnilistToken(AnilistToken(any())) } returns Unit.right()
         coEvery { saveUserId() } returns Unit.right()
