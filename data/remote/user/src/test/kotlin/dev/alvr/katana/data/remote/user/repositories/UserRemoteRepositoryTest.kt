@@ -34,6 +34,14 @@ internal class UserRemoteRepositoryTest : BehaviorSpec({
         val repo = UserRemoteRepositoryImpl(client)
 
         `when`("getting the userId") {
+            and("the server returns no data") {
+                client.enqueueTestResponse(UserIdQuery())
+
+                then("it should be a UserFailure.UserIdFailure") {
+                    repo.getUserId().shouldBeLeft(UserFailure.UserIdFailure)
+                }
+            }
+
             and("the server returns an empty userId") {
                 val query = UserIdQuery.Data { viewer = null }
                 client.enqueueTestResponse(UserIdQuery(), query)

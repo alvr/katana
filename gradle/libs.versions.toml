@@ -1,5 +1,5 @@
 [versions]
-accompanist = "0.24.10-beta"
+accompanist = "0.24.12-rc"
 apollo = "3.3.2"
 compose = "1.2.0-rc02"
 coroutines = "1.6.3"
@@ -119,7 +119,7 @@ orbit = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
 orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
 
 # Sentry
-sentry = { module = "io.sentry:sentry-android-core", version = "6.0.0" }
+sentry = { module = "io.sentry:sentry-android-core", version = "6.1.3" }
 
 # Serialization
 protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.3.3" }

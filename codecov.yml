@@ -9,6 +9,7 @@ ignore:
   - '**/*Activity'
   - '**/*Fragment'
   - '**/base/**'
+  - '**/di/**'
   - '**/navigation/**'
 
   # Ui

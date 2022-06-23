@@ -45,7 +45,7 @@ internal class LoginViewModelTest : BehaviorSpec({
         }
     }
 
-    given("a deeplink with token with params") {
+    xgiven("a deeplink with token with params") {
         every { stateHandle.get<String>(any()) } returns tokenWithParams
 
         and("a lazily created viewModel") {
@@ -83,7 +83,7 @@ internal class LoginViewModelTest : BehaviorSpec({
         }
     }
 
-    given("a deeplink with token without params") {
+    xgiven("a deeplink with token without params") {
         every { stateHandle.get<String>(any()) } returns cleanToken
         coEvery { saveAnilistToken(AnilistToken(any())) } returns Unit.right()
         coEvery { saveUserId() } returns Unit.right()
@@ -104,7 +104,7 @@ internal class LoginViewModelTest : BehaviorSpec({
         }
     }
 
-    given("a deeplink that is empty") {
+    xgiven("a deeplink that is empty") {
         every { stateHandle.get<String>(any()) } returns ""
         coEvery { saveAnilistToken(AnilistToken(any())) } returns Unit.right()
         coEvery { saveUserId() } returns Unit.right()

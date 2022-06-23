@@ -37,6 +37,9 @@ import java.time.LocalDateTime
 
 @OptIn(ApolloExperimental::class)
 internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
+    private val userId = 37_384.right()
+    private val userIdOpt = userId.optional()
+
     init {
         given("an Apollo client with responses") {
             val client = ApolloClient.Builder()
@@ -45,7 +48,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
             val userIdManager = mockk<UserIdManager>()
             val repo = ListsRemoteRepositoryImpl(client, userIdManager)
 
-            coEvery { userIdManager.getId() } returns USER_ID
+            coEvery { userIdManager.getId() } returns userId
 
             and("an anime collection") {
                 `when`("the collection has no lists") {
@@ -56,7 +59,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional(), MediaType.ANIME),
+                        MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
                         query,
                     )
 
@@ -93,7 +96,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional(), MediaType.ANIME),
+                        MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
                         query,
                     )
 
@@ -150,7 +153,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional(), MediaType.ANIME),
+                        MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
                         query,
                     )
 
@@ -242,7 +245,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional(), MediaType.ANIME),
+                        MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
                         query,
                     )
 
@@ -287,7 +290,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
 
                 `when`("the returned data is null") {
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional(), MediaType.ANIME),
+                        MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
                         null,
                     )
 
@@ -300,7 +303,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                 }
 
                 `when`("an error occurs") {
-                    client.registerTestNetworkError(MediaListCollectionQuery(USER_ID.optional(), MediaType.ANIME))
+                    client.registerTestNetworkError(MediaListCollectionQuery(userIdOpt, MediaType.ANIME))
 
                     then("the error should be propagated") {
                         repo.animeList.test {
@@ -319,7 +322,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional(), MediaType.MANGA),
+                        MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
                         query,
                     )
 
@@ -356,7 +359,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional(), MediaType.MANGA),
+                        MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
                         query,
                     )
 
@@ -413,7 +416,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional(), MediaType.MANGA),
+                        MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
                         query,
                     )
 
@@ -502,7 +505,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional(), MediaType.MANGA),
+                        MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
                         query,
                     )
 
@@ -544,7 +547,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
 
                 `when`("the returned data is null") {
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional(), MediaType.MANGA),
+                        MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
                         null,
                     )
 
@@ -557,7 +560,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                 }
 
                 `when`("an error occurs") {
-                    client.registerTestNetworkError(MediaListCollectionQuery(USER_ID.optional(), MediaType.MANGA))
+                    client.registerTestNetworkError(MediaListCollectionQuery(userIdOpt, MediaType.MANGA))
 
                     then("the error should be propagated") {
                         repo.mangaList.test {
@@ -567,9 +570,5 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                 }
             }
         }
-    }
-
-    companion object {
-        private val USER_ID = 37_384.right()
     }
 }
