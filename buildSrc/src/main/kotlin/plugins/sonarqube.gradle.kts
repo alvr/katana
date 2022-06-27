@@ -20,21 +20,17 @@ val coverageExclusions = listOf(
     // Common Android
     "**Activity.kt",
     "**Fragment.kt",
-    "**/BuildConfig.*",
     "**/base/**",
     "**/navigation/**",
 
     // Hilt
     "**/di/**",
-    "**/*Hilt_*",
-    "**/*HiltModules*",
-    "*/*_Factory",
 
     // Ui
     "**/ui/**/view/**",
 
     // Utils
-    "**/utils/tests/**",
+    "**/utils/**",
 )
 
 configure<SonarQubeExtension> {

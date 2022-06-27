@@ -122,6 +122,7 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
         state.saved -> onLogin()
         state.loading -> loading = true
         state.errorMessage != null -> {
+            loading = false
             val loginError = stringResource(id = state.errorMessage)
             LaunchedEffect(state.errorMessage) {
                 scaffoldState.snackbarHostState.showSnackbar(loginError)
