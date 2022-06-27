@@ -9,7 +9,8 @@
     <string name="begin_register_button">Registrarse</string>
     <string name="begin_login_button">Iniciar sesión</string>
 
-    <string name="save_token_error">Ha habido un error al iniciar sesión, por favor, inténtalo de nuevo</string>
+    <string name="fetch_userid_error">Ha habido un error al obtener el usuario, por favor, inténtalo de nuevo.</string>
+    <string name="save_token_error">Ha habido un error al iniciar sesión, por favor, inténtalo de nuevo.</string>
 
     <!-- Content descriptions -->
     <string name="content_description_background">Fondo de inicio de sesión. Selección variada de Studio Ghibli</string>
