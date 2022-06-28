@@ -7,7 +7,7 @@ import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuild
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
-import io.kotest.assertions.throwables.shouldThrowExactlyUnit
+import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.booleans.shouldBeFalse
@@ -246,7 +246,7 @@ internal class MediaListMapperTest : WordSpec({
         }
 
         "throw an exception when using wrong MediaEntry" {
-            shouldThrowExactlyUnit<IllegalStateException> {
+            shouldThrowExactly<IllegalStateException> {
                 data.mediaList<MediaEntry>()
             }
         }
@@ -336,7 +336,7 @@ internal class MediaListMapperTest : WordSpec({
         }
 
         "throw an exception when using wrong MediaEntry" {
-            shouldThrowExactlyUnit<IllegalStateException> {
+            shouldThrowExactly<IllegalStateException> {
                 data.mediaList<MediaEntry>()
             }
         }
@@ -419,7 +419,7 @@ internal class MediaListMapperTest : WordSpec({
         }
 
         "throw an exception when using wrong MediaEntry" {
-            shouldThrowExactlyUnit<IllegalStateException> {
+            shouldThrowExactly<IllegalStateException> {
                 data.mediaList<MediaEntry>()
             }
         }
@@ -502,7 +502,7 @@ internal class MediaListMapperTest : WordSpec({
         }
 
         "throw an exception when using wrong MediaEntry" {
-            shouldThrowExactlyUnit<IllegalStateException> {
+            shouldThrowExactly<IllegalStateException> {
                 data.mediaList<MediaEntry>()
             }
         }

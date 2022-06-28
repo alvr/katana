@@ -11,25 +11,28 @@ apply<KoverPlugin>()
 
 val intellijEngine: String by rootProject.extra
 
-val koverIncludes = listOf(
-    "dev.alvr.katana.data.*",
-    "dev.alvr.katana.domain.*",
-    "dev.alvr.katana.ui.*.viewmodel.*",
-)
+val koverIncludes = listOf("dev.alvr.katana.*")
 val koverExcludes = listOf(
     // Anonymous
     "*$$*",
+
+    // App
+    "*.KatanaApp",
+    "*.initializers.*",
 
     // Apollo
     "*.remote.*.adapter.*",
     "*.remote.*.fragment.*",
     "*.remote.*.selections.*",
     "*.remote.*.type.*",
-    "*.remote.*.*Query",
+    "*.remote.*.*Query*",
 
     // Common Android
     "*.BuildConfig",
+    "*.*Activity",
+    "*.*Fragment",
     "*.base.*",
+    "*.navigation.*",
 
     // Compose
     "*.*ComposableSingletons*",
@@ -39,9 +42,15 @@ val koverExcludes = listOf(
     "*.*Hilt_*",
     "*.*HiltModules*",
     "*.*_Factory",
+
+    // Ui
+    "*.ui.*.view.*",
+
+    // Utils
+    "*.utils.*",
 )
 
-val koverMinCoveredLines = 50
+val koverMinCoveredLines = 80
 
 tasks {
     withType<KoverXmlReportTask> {

@@ -1,12 +1,14 @@
 package dev.alvr.katana.data.remote.lists.repositories
 
 import app.cash.turbine.test
+import arrow.core.right
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.apollographql.apollo3.testing.MapTestNetworkTransport
 import com.apollographql.apollo3.testing.registerTestNetworkError
 import com.apollographql.apollo3.testing.registerTestResponse
+import dev.alvr.katana.data.remote.base.extensions.optional
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
@@ -34,7 +36,10 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @OptIn(ApolloExperimental::class)
-internal class ListsRemoteRepositoryTest : BehaviorSpec() {
+internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
+    private val userId = 37_384.right()
+    private val userIdOpt = userId.optional()
+
     init {
         given("an Apollo client with responses") {
             val client = ApolloClient.Builder()
@@ -43,7 +48,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
             val userIdManager = mockk<UserIdManager>()
             val repo = ListsRemoteRepositoryImpl(client, userIdManager)
 
-            coEvery { userIdManager.getId() } returns USER_ID
+            coEvery { userIdManager.getId() } returns userId
 
             and("an anime collection") {
                 `when`("the collection has no lists") {
@@ -54,7 +59,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID, MediaType.ANIME),
+                        MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
                         query,
                     )
 
@@ -91,7 +96,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID, MediaType.ANIME),
+                        MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
                         query,
                     )
 
@@ -148,7 +153,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID, MediaType.ANIME),
+                        MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
                         query,
                     )
 
@@ -240,7 +245,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID, MediaType.ANIME),
+                        MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
                         query,
                     )
 
@@ -285,7 +290,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                 `when`("the returned data is null") {
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID, MediaType.ANIME),
+                        MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
                         null,
                     )
 
@@ -298,7 +303,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                 }
 
                 `when`("an error occurs") {
-                    client.registerTestNetworkError(MediaListCollectionQuery(USER_ID, MediaType.ANIME))
+                    client.registerTestNetworkError(MediaListCollectionQuery(userIdOpt, MediaType.ANIME))
 
                     then("the error should be propagated") {
                         repo.animeList.test {
@@ -317,7 +322,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID, MediaType.MANGA),
+                        MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
                         query,
                     )
 
@@ -354,7 +359,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID, MediaType.MANGA),
+                        MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
                         query,
                     )
 
@@ -411,7 +416,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID, MediaType.MANGA),
+                        MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
                         query,
                     )
 
@@ -500,7 +505,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                     }
 
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID, MediaType.MANGA),
+                        MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
                         query,
                     )
 
@@ -542,7 +547,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
 
                 `when`("the returned data is null") {
                     client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID, MediaType.MANGA),
+                        MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
                         null,
                     )
 
@@ -555,7 +560,7 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                 }
 
                 `when`("an error occurs") {
-                    client.registerTestNetworkError(MediaListCollectionQuery(USER_ID, MediaType.MANGA))
+                    client.registerTestNetworkError(MediaListCollectionQuery(userIdOpt, MediaType.MANGA))
 
                     then("the error should be propagated") {
                         repo.mangaList.test {
@@ -565,9 +570,5 @@ internal class ListsRemoteRepositoryTest : BehaviorSpec() {
                 }
             }
         }
-    }
-
-    companion object {
-        private const val USER_ID = 37_384
     }
 }

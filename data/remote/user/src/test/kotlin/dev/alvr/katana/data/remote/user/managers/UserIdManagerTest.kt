@@ -1,59 +1,36 @@
 package dev.alvr.katana.data.remote.user.managers
 
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.annotations.ApolloExperimental
-import com.apollographql.apollo3.testing.QueueTestNetworkTransport
-import com.apollographql.apollo3.testing.enqueueTestResponse
-import dev.alvr.katana.data.remote.user.UserIdQuery
-import dev.alvr.katana.data.remote.user.test.UserIdQuery_TestBuilder.Data
-import io.kotest.assertions.throwables.shouldThrowExactly
+import arrow.core.left
+import arrow.core.right
+import dev.alvr.katana.domain.base.usecases.invoke
+import dev.alvr.katana.domain.user.failures.UserFailure
+import dev.alvr.katana.domain.user.managers.UserIdManager
+import dev.alvr.katana.domain.user.models.UserId
+import dev.alvr.katana.domain.user.usecases.GetUserIdUseCase
+import io.kotest.assertions.arrow.core.shouldBeLeft
+import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.ints.shouldBeExactly
-import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
+import io.mockk.mockk
 
-@OptIn(ApolloExperimental::class)
 internal class UserIdManagerTest : BehaviorSpec({
     given("an userIdManager") {
-        val client = ApolloClient.Builder()
-            .networkTransport(QueueTestNetworkTransport())
-            .build()
-        val manager = UserIdManagerImpl(client)
+        val getUserId = mockk<GetUserIdUseCase>()
+        val manager: UserIdManager = UserIdManagerImpl(getUserId)
 
-        `when`("server return null") {
-            client.enqueueTestResponse(UserIdQuery())
+        `when`("server fails to return something") {
+            coEvery { getUserId() } returns UserFailure.UserIdFailure.left()
 
             then("the mapper should throw an exception") {
-                shouldThrowExactly<IllegalStateException> {
-                    manager.getId()
-                }.message shouldBe "UserId is required"
-            }
-        }
-
-        `when`("server return viewer is null") {
-            val query = UserIdQuery.Data {
-                viewer = null
-            }
-
-            client.enqueueTestResponse(UserIdQuery(), query)
-
-            then("the mapper should throw an exception") {
-                shouldThrowExactly<IllegalStateException> {
-                    manager.getId()
-                }.message shouldBe "UserId is required"
+                manager.getId().shouldBeLeft(UserFailure.UserIdFailure)
             }
         }
 
         `when`("server return viewer is valid") {
-            val query = UserIdQuery.Data {
-                viewer = viewer {
-                    id = 37_384
-                }
-            }
-
-            client.enqueueTestResponse(UserIdQuery(), query)
+            coEvery { getUserId() } returns UserId(37_384).right()
 
             then("it should return the id of the user") {
-                manager.getId() shouldBeExactly 37_384
+                manager.getId().shouldBeRight(37_384)
             }
         }
     }

@@ -10,13 +10,5 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.gradle.android)
-    implementation(libs.gradle.detekt)
-    implementation(libs.gradle.hilt)
-    implementation(libs.gradle.kotlin)
-    implementation(libs.gradle.kover)
-    implementation(libs.gradle.ksp)
-    implementation(libs.gradle.serialization)
-    implementation(libs.gradle.sonarqube)
-    implementation(libs.gradle.updates)
+    implementation(libs.bundles.gradle)
 }

@@ -81,8 +81,9 @@ import dev.alvr.katana.ui.login.LOGO_FULL_SIZE
 import dev.alvr.katana.ui.login.LOGO_RESIZED
 import dev.alvr.katana.ui.login.R
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
-import dev.alvr.katana.ui.login.viewmodel.LoginEffect
+import dev.alvr.katana.ui.login.viewmodel.LoginState
 import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 @Destination(
@@ -90,15 +91,20 @@ import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
         DeepLink(uriPattern = LOGIN_DEEP_LINK),
     ],
 )
-fun Login(navigator: LoginNavigator) {
+internal fun Login(
+    navigator: LoginNavigator,
+    vm: LoginViewModel = hiltViewModel(),
+) {
+    val state by vm.collectAsState()
+
     Login(
-        vm = hiltViewModel(),
+        state = state,
         onLogin = navigator::toHome,
     )
 }
 
 @Composable
-private fun Login(vm: LoginViewModel, onLogin: () -> Unit) {
+private fun Login(state: LoginState, onLogin: () -> Unit) {
     var loading by remember { mutableStateOf(false) }
 
     val background = rememberSaveable {
@@ -112,14 +118,14 @@ private fun Login(vm: LoginViewModel, onLogin: () -> Unit) {
 
     val scaffoldState = rememberScaffoldState()
 
-    val loginError = stringResource(id = R.string.save_token_error)
-    vm.collectSideEffect { effect ->
-        when (effect) {
-            LoginEffect.Loading -> loading = true
-            LoginEffect.Saved -> onLogin()
-            LoginEffect.Error -> {
-                loading = false
-                scaffoldState.snackbarHostState.showSnackbar(message = loginError)
+    when {
+        state.saved -> onLogin()
+        state.loading -> loading = true
+        state.errorMessage != null -> {
+            loading = false
+            val loginError = stringResource(id = state.errorMessage)
+            LaunchedEffect(state.errorMessage) {
+                scaffoldState.snackbarHostState.showSnackbar(loginError)
             }
         }
     }

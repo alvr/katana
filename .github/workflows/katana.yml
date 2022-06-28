@@ -74,7 +74,7 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Run unit tests
-        run: ./gradlew unitTests koverXmlReport koverMergedReport
+        run: ./gradlew unitTests koverXmlReport koverMergedReport koverMergedVerify
       - name: Upload coverage report artifact
         uses: actions/upload-artifact@v3
         with:

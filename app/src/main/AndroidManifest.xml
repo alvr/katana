@@ -37,5 +37,18 @@
                     android:scheme="katana" />
             </intent-filter>
         </activity>
+
+        <meta-data android:name="io.sentry.dsn" android:value="@string/sentry_dsn" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+
+            <meta-data
+                android:name="dev.alvr.katana.initializers.LoggerInitializer"
+                android:value="androidx.startup" />
+        </provider>
     </application>
 </manifest>

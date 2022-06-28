@@ -33,10 +33,6 @@ fun BaseExtension.baseAndroidConfig() {
         targetCompatibility = KatanaConfiguration.UseJavaVersion
     }
 
-    lintOptions {
-        isAbortOnError = false
-    }
-
     testOptions {
         animationsDisabled = true
         unitTests {

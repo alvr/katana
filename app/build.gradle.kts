@@ -8,9 +8,11 @@ plugins {
     com.google.dagger.hilt.android
     `kotlin-android`
     `kotlin-kapt`
+    plugins.sentry
     plugins.`sonarqube-android`
 }
 
+hilt.enableAggregatingTask = true
 kapt.correctErrorTypes = true
 
 android {
@@ -62,10 +64,6 @@ android {
         }
     }
 
-    buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.get()
-    kotlinOptions.configureKotlin()
-
     applicationVariants.all {
         kotlin.sourceSets {
             getByName(name) {
@@ -74,15 +72,19 @@ android {
         }
     }
 
+    lint {
+        abortOnError = false
+    }
+
     packagingOptions {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
-}
 
-hilt {
-    enableAggregatingTask = true
+    buildFeatures.compose = true
+    composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.get()
+    kotlinOptions.configureKotlin()
 }
 
 dependencies {

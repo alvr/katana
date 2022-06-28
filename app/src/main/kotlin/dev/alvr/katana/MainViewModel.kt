@@ -13,7 +13,7 @@ internal class MainViewModel @Inject constructor(
     private val getAnilistTokenUseCase: GetAnilistTokenUseCase,
 ) : ViewModel() {
     val initialNavGraph
-        get() = if (getAnilistTokenUseCase.sync() != null) {
+        get() = if (getAnilistTokenUseCase.sync().nonEmpty()) {
             NavGraphs.home
         } else {
             LoginNavGraph

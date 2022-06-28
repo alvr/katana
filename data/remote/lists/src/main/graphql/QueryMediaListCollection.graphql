@@ -1,4 +1,4 @@
-query MediaListCollection($user: Int!, $type: MediaType!) {
+query MediaListCollection($user: Int, $type: MediaType!) {
     collection: MediaListCollection(userId: $user, type: $type) @nonnull {
         lists @nonnull {
             entries @nonnull {
