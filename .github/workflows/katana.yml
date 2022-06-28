@@ -200,6 +200,9 @@ jobs:
           SIGNING_ALIAS_PASS: ${{ secrets.SIGNING_ALIAS_PASS }}
           SIGNING_FILE: ${{ secrets.SIGNING_FILE }}
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew assembleRelease
       - name: Publish staging APK to AppCenter
         uses: wzieba/AppCenter-Github-Action@v1
@@ -235,6 +238,9 @@ jobs:
           SIGNING_ALIAS_PASS: ${{ secrets.SIGNING_ALIAS_PASS }}
           SIGNING_FILE: ${{ secrets.SIGNING_FILE }}
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew bundleRelease
       - name: Publish production AAB to Google Play
         uses: r0adkll/upload-google-play@v1
