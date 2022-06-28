@@ -1,4 +1,4 @@
-package dev.alvr.katana
+package dev.alvr.katana.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

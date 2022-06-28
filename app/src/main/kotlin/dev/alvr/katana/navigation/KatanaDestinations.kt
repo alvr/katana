@@ -4,6 +4,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,14 +15,17 @@ import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultA
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.scope.DestinationScope
-import dev.alvr.katana.MainViewModel
 import dev.alvr.katana.navigation.bottombar.BottomNavigationBar
+import dev.alvr.katana.ui.main.MainViewModel
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
 internal fun KatanaDestinations() {
     val navController = rememberAnimatedNavController()
-    val viewModel = hiltViewModel<MainViewModel>()
+    val vm = hiltViewModel<MainViewModel>()
+
+    val state by vm.collectAsState()
 
     Scaffold(
         bottomBar = {
@@ -35,7 +39,7 @@ internal fun KatanaDestinations() {
             ),
             navController = navController,
             navGraph = NavGraphs.root,
-            startRoute = viewModel.initialNavGraph,
+            startRoute = state.initialNavGraph,
             dependenciesContainerBuilder = {
                 dependency(currentNavigator())
             },
