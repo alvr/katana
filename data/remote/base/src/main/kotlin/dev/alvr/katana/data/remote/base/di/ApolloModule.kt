@@ -18,8 +18,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.alvr.katana.domain.base.usecases.invoke
-import dev.alvr.katana.domain.token.usecases.DeleteAnilistTokenUseCase
-import dev.alvr.katana.domain.token.usecases.GetAnilistTokenUseCase
+import dev.alvr.katana.domain.session.usecases.DeleteAnilistTokenUseCase
+import dev.alvr.katana.domain.session.usecases.GetAnilistTokenUseCase
 import java.net.HttpURLConnection
 import javax.inject.Singleton
 import okhttp3.OkHttpClient

@@ -1,27 +1,14 @@
 plugins {
-    alias(libs.plugins.apollo)
+    `kotlinx-serialization`
     modules.`android-library`
 }
 
-android {
-    buildFeatures.buildConfig = true
-}
-
-apollo {
-    alwaysGenerateTypesMatching.set(listOf("Query"))
-    generateApolloMetadata.set(true)
-    packageName.set("dev.alvr.katana.data.remote.base")
-}
-
 dependencies {
+    implementation(projects.data.preferences.base)
     implementation(projects.domain.session)
 
     implementation(libs.bundles.common.android)
-    implementation(libs.bundles.data.remote)
-
-    implementation(libs.apollo.cache.sql)
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logger)
+    implementation(libs.bundles.data.preferences)
 
     kapt(libs.bundles.kapt)
 

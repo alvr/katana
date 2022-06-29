@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.domain.base.usecases.invoke
-import dev.alvr.katana.domain.token.failures.TokenPreferencesFailure
-import dev.alvr.katana.domain.token.models.AnilistToken
-import dev.alvr.katana.domain.token.usecases.SaveAnilistTokenUseCase
+import dev.alvr.katana.domain.session.failures.TokenPreferencesFailure
+import dev.alvr.katana.domain.session.models.AnilistToken
+import dev.alvr.katana.domain.session.usecases.SaveAnilistTokenUseCase
 import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
 import dev.alvr.katana.ui.login.R

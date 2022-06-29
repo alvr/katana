@@ -3,8 +3,8 @@ package dev.alvr.katana
 import arrow.core.none
 import arrow.core.some
 import dev.alvr.katana.domain.base.usecases.sync
-import dev.alvr.katana.domain.token.models.AnilistToken
-import dev.alvr.katana.domain.token.usecases.GetAnilistTokenUseCase
+import dev.alvr.katana.domain.session.models.AnilistToken
+import dev.alvr.katana.domain.session.usecases.GetAnilistTokenUseCase
 import dev.alvr.katana.navigation.NavGraphs
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
 import dev.alvr.katana.ui.main.MainViewModel
