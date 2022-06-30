@@ -6,7 +6,7 @@ import arrow.core.right
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.session.failures.SessionPreferencesFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
-import dev.alvr.katana.domain.session.usecases.SaveAnilistTokenUseCase
+import dev.alvr.katana.domain.session.usecases.SaveSessionUseCase
 import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
 import dev.alvr.katana.ui.login.R
@@ -19,7 +19,7 @@ import org.orbitmvi.orbit.test
 
 internal class LoginViewModelTest : BehaviorSpec({
     val stateHandle = mockk<SavedStateHandle>(relaxed = true)
-    val saveAnilistToken = mockk<SaveAnilistTokenUseCase>()
+    val saveAnilistToken = mockk<SaveSessionUseCase>()
     val saveUserId = mockk<SaveUserIdUseCase>()
 
     // Return values

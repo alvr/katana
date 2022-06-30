@@ -5,8 +5,8 @@ import dev.alvr.katana.domain.session.models.AnilistToken
 import dev.alvr.katana.domain.session.repositories.SessionPreferencesRepository
 import javax.inject.Inject
 
-class SaveAnilistTokenUseCase @Inject constructor(
+class SaveSessionUseCase @Inject constructor(
     private val repository: SessionPreferencesRepository,
 ) : EitherUseCase<AnilistToken, Unit> {
-    override suspend fun invoke(token: AnilistToken) = repository.saveAnilistToken(token)
+    override suspend fun invoke(token: AnilistToken) = repository.saveSession(token)
 }

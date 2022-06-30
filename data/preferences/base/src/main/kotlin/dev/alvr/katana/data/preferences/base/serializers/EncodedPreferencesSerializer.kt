@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.preferences.base
+package dev.alvr.katana.data.preferences.base.serializers
 
 import android.util.Base64
 import androidx.datastore.core.Serializer

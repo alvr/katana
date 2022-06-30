@@ -58,12 +58,12 @@ internal object ApolloModule {
     @Singleton
     @SessionInterceptor
     fun provideSessionInterceptor(
-        deleteAnilistToken: DeleteAnilistTokenUseCase,
+        deleteSession: DeleteAnilistTokenUseCase,
     ): HttpInterceptor = object : HttpInterceptor {
         override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain) =
             chain.proceed(request).also { response ->
                 if (response.statusCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                    deleteAnilistToken()
+                    deleteSession()
                 }
             }
     }

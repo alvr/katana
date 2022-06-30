@@ -1,6 +1,6 @@
 package dev.alvr.katana.data.preferences.session.serializers
 
-import dev.alvr.katana.data.preferences.base.PreferencesSerializer
+import dev.alvr.katana.data.preferences.base.serializers.PreferencesSerializer
 import dev.alvr.katana.data.preferences.session.models.Session
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer

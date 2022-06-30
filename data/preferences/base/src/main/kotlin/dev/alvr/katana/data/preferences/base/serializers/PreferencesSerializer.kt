@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.preferences.base
+package dev.alvr.katana.data.preferences.base.serializers
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer

@@ -18,50 +18,50 @@ import io.mockk.mockk
 
 internal class SaveAnilistTokenUseCaseTest : FunSpec({
     val repo = mockk<SessionPreferencesRepository>()
-    val useCase = SaveAnilistTokenUseCase(repo)
+    val useCase = SaveSessionUseCase(repo)
 
     val token = Arb.bind<AnilistToken>().next()
 
     context("successful saving") {
-        coEvery { repo.saveAnilistToken(token) } returns Unit.right()
+        coEvery { repo.saveSession(token) } returns Unit.right()
 
         test("invoke should save the token") {
             useCase(token).shouldBeRight()
-            coVerify(exactly = 1) { repo.saveAnilistToken(token) }
+            coVerify(exactly = 1) { repo.saveSession(token) }
         }
 
         test("sync should return user") {
             useCase.sync(token).shouldBeRight()
-            coVerify(exactly = 1) { repo.saveAnilistToken(token) }
+            coVerify(exactly = 1) { repo.saveSession(token) }
         }
     }
 
     context("failure saving") {
         context("is a TokenPreferencesFailure.DeletingFailure") {
-            coEvery { repo.saveAnilistToken(token) } returns SessionPreferencesFailure.SavingFailure.left()
+            coEvery { repo.saveSession(token) } returns SessionPreferencesFailure.SavingFailure.left()
 
             test("invoke should return failure") {
                 useCase(token).shouldBeLeft(SessionPreferencesFailure.SavingFailure)
-                coVerify(exactly = 1) { repo.saveAnilistToken(token) }
+                coVerify(exactly = 1) { repo.saveSession(token) }
             }
 
             test("sync should return failure") {
                 useCase.sync(token).shouldBeLeft(SessionPreferencesFailure.SavingFailure)
-                coVerify(exactly = 1) { repo.saveAnilistToken(token) }
+                coVerify(exactly = 1) { repo.saveSession(token) }
             }
         }
 
         context("is a Failure.Unknown") {
-            coEvery { repo.saveAnilistToken(token) } returns Failure.Unknown.left()
+            coEvery { repo.saveSession(token) } returns Failure.Unknown.left()
 
             test("invoke should return failure") {
                 useCase(token).shouldBeLeft(Failure.Unknown)
-                coVerify(exactly = 1) { repo.saveAnilistToken(token) }
+                coVerify(exactly = 1) { repo.saveSession(token) }
             }
 
             test("sync should return failure") {
                 useCase.sync(token).shouldBeLeft(Failure.Unknown)
-                coVerify(exactly = 1) { repo.saveAnilistToken(token) }
+                coVerify(exactly = 1) { repo.saveSession(token) }
             }
         }
     }

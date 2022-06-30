@@ -48,7 +48,7 @@ internal class SessionDataStoreTest {
     fun test_savingEmptyToken_shouldThrowException() {
         scope.runTest {
             shouldThrowExactly<IllegalArgumentException> {
-                repository.saveAnilistToken(AnilistToken(""))
+                repository.saveSession(AnilistToken(""))
             }
         }
     }
@@ -57,7 +57,7 @@ internal class SessionDataStoreTest {
     fun test_savingBlankToken_shouldThrowException() {
         scope.runTest {
             shouldThrowExactly<IllegalArgumentException> {
-                repository.saveAnilistToken(AnilistToken("    "))
+                repository.saveSession(AnilistToken("    "))
             }
         }
     }
@@ -67,7 +67,7 @@ internal class SessionDataStoreTest {
         scope.runTest {
             val token = AnilistToken("saved-token")
 
-            repository.saveAnilistToken(token)
+            repository.saveSession(token)
             repository.getAnilistToken().asClue { t ->
                 t.shouldBeSome().token shouldBeEqualToComparingFields token
             }

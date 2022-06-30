@@ -5,7 +5,7 @@ import arrow.core.Option
 import dev.alvr.katana.domain.base.failures.Failure
 import kotlinx.coroutines.runBlocking
 
-interface UseCase<in P, out R> : suspend (P) -> R {
+sealed interface UseCase<in P, out R> : suspend (P) -> R {
     fun sync(params: P): R = runBlocking {
         invoke(params)
     }

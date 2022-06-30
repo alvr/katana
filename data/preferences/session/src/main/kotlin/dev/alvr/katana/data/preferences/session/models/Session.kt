@@ -7,4 +7,6 @@ import kotlinx.serialization.Serializable
 internal data class Session(
     @SerialName("anilistToken")
     val anilistToken: String? = null,
+    @SerialName("sessionActive")
+    val sessionActive: Boolean = false,
 )

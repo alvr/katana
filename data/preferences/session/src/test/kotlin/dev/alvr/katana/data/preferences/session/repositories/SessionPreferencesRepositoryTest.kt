@@ -40,7 +40,7 @@ internal class SessionPreferencesRepositoryTest : BehaviorSpec({
 
         `when`("saving a token") {
             coJustRun { store.updateData(any()) }
-            repository.saveAnilistToken(AnilistToken(savedToken))
+            repository.saveSession(AnilistToken(savedToken))
 
             then("the token should updated in the store") {
                 coVerify(exactly = 1) { store.updateData(any()) }
@@ -96,14 +96,14 @@ internal class SessionPreferencesRepositoryTest : BehaviorSpec({
                     coJustRun { store.updateData(update) }
 
                     then("should be a left of Failure.Unknown") {
-                        repository.saveAnilistToken(token).shouldBeLeft(Failure.Unknown)
+                        repository.saveSession(token).shouldBeLeft(Failure.Unknown)
                     }
                 }
                 and("it's a writing Exception") {
                     coEvery { store.updateData(any()) } throws IOException()
 
                     then("should be a left of PreferencesTokenFailure.SavingFailure") {
-                        repository.saveAnilistToken(token).shouldBeLeft(SessionPreferencesFailure.SavingFailure)
+                        repository.saveSession(token).shouldBeLeft(SessionPreferencesFailure.SavingFailure)
                     }
                 }
             }

@@ -8,5 +8,5 @@ import dev.alvr.katana.domain.session.models.AnilistToken
 interface SessionPreferencesRepository {
     suspend fun deleteAnilistToken(): Either<Failure, Unit>
     suspend fun getAnilistToken(): Option<AnilistToken>
-    suspend fun saveAnilistToken(anilistToken: AnilistToken): Either<Failure, Unit>
+    suspend fun saveSession(anilistToken: AnilistToken): Either<Failure, Unit>
 }

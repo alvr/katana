@@ -38,9 +38,9 @@ internal class SessionPreferencesRepositoryImpl @Inject constructor(
         .catch { emit(None) }
         .first()
 
-    override suspend fun saveAnilistToken(anilistToken: AnilistToken) = Either.catch(
+    override suspend fun saveSession(anilistToken: AnilistToken) = Either.catch(
         f = {
-            dataStore.updateData { p -> p.copy(anilistToken = anilistToken.token) }
+            dataStore.updateData { p -> p.copy(anilistToken = anilistToken.token, sessionActive = true) }
             Napier.d { "Token saved: ${anilistToken.token}" }
         },
         fe = { error ->
