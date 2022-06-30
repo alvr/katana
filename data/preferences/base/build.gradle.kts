@@ -3,6 +3,8 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.domain.base)
+
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.data.preferences)
 

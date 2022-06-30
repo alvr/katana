@@ -82,7 +82,7 @@ internal class SessionPreferencesRepositoryTest : BehaviorSpec({
                     coEvery { store.updateData(any()) } throws IOException()
 
                     then("should be a left of PreferencesTokenFailure.DeletingFailure") {
-                        repository.deleteAnilistToken().shouldBeLeft(SessionPreferencesFailure.DeletingFailure)
+                        repository.deleteAnilistToken().shouldBeLeft(SessionPreferencesFailure.DeletingTokenFailure)
                     }
                 }
             }

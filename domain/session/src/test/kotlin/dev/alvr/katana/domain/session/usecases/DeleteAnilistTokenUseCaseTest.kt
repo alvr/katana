@@ -34,15 +34,15 @@ internal class DeleteAnilistTokenUseCaseTest : FunSpec({
 
     context("failure deletion") {
         context("is a TokenPreferencesFailure.DeletingFailure") {
-            coEvery { repo.deleteAnilistToken() } returns SessionPreferencesFailure.DeletingFailure.left()
+            coEvery { repo.deleteAnilistToken() } returns SessionPreferencesFailure.DeletingTokenFailure.left()
 
             test("invoke should return failure") {
-                useCase().shouldBeLeft(SessionPreferencesFailure.DeletingFailure)
+                useCase().shouldBeLeft(SessionPreferencesFailure.DeletingTokenFailure)
                 coVerify(exactly = 1) { repo.deleteAnilistToken() }
             }
 
             test("sync should return failure") {
-                useCase.sync().shouldBeLeft(SessionPreferencesFailure.DeletingFailure)
+                useCase.sync().shouldBeLeft(SessionPreferencesFailure.DeletingTokenFailure)
                 coVerify(exactly = 1) { repo.deleteAnilistToken() }
             }
         }
