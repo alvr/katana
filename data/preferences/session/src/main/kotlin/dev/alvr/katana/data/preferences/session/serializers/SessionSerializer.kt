@@ -1,12 +1,12 @@
 package dev.alvr.katana.data.preferences.session.serializers
 
 import dev.alvr.katana.data.preferences.base.PreferencesSerializer
-import dev.alvr.katana.data.preferences.session.models.Token
+import dev.alvr.katana.data.preferences.session.models.Session
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 
 @ExperimentalSerializationApi
-internal object TokenSerializer : PreferencesSerializer<Token> {
-    override val defaultValue: Token = Token()
-    override val serializer: KSerializer<Token> = Token.serializer()
+internal object SessionSerializer : PreferencesSerializer<Session> {
+    override val defaultValue: Session = Session()
+    override val serializer: KSerializer<Session> = Session.serializer()
 }

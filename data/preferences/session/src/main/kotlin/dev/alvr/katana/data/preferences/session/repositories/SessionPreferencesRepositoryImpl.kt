@@ -4,11 +4,11 @@ import androidx.datastore.core.DataStore
 import arrow.core.Either
 import arrow.core.None
 import arrow.core.toOption
-import dev.alvr.katana.data.preferences.session.models.Token
+import dev.alvr.katana.data.preferences.session.models.Session
 import dev.alvr.katana.domain.base.failures.Failure
-import dev.alvr.katana.domain.session.failures.TokenPreferencesFailure
+import dev.alvr.katana.domain.session.failures.SessionPreferencesFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
-import dev.alvr.katana.domain.session.repositories.TokenPreferencesRepository
+import dev.alvr.katana.domain.session.repositories.SessionPreferencesRepository
 import io.github.aakira.napier.Napier
 import java.io.IOException
 import javax.inject.Inject
@@ -16,9 +16,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-internal class TokenPreferencesRepositoryImpl @Inject constructor(
-    private val dataStore: DataStore<Token>,
-) : TokenPreferencesRepository {
+internal class SessionPreferencesRepositoryImpl @Inject constructor(
+    private val dataStore: DataStore<Session>,
+) : SessionPreferencesRepository {
     override suspend fun deleteAnilistToken() = Either.catch(
         f = {
             dataStore.updateData { p -> p.copy(anilistToken = null) }
@@ -26,7 +26,7 @@ internal class TokenPreferencesRepositoryImpl @Inject constructor(
         },
         fe = { error ->
             if (error is IOException) {
-                TokenPreferencesFailure.DeletingFailure
+                SessionPreferencesFailure.DeletingFailure
             } else {
                 Failure.Unknown
             }
@@ -45,7 +45,7 @@ internal class TokenPreferencesRepositoryImpl @Inject constructor(
         },
         fe = { error ->
             if (error is IOException) {
-                TokenPreferencesFailure.SavingFailure
+                SessionPreferencesFailure.SavingFailure
             } else {
                 Failure.Unknown
             }

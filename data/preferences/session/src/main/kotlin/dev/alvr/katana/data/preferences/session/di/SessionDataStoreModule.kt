@@ -11,24 +11,24 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.alvr.katana.data.preferences.base.encoded
-import dev.alvr.katana.data.preferences.session.models.Token
-import dev.alvr.katana.data.preferences.session.serializers.TokenSerializer
+import dev.alvr.katana.data.preferences.session.models.Session
+import dev.alvr.katana.data.preferences.session.serializers.SessionSerializer
 import javax.inject.Singleton
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object TokenDataStoreModule {
+internal object SessionDataStoreModule {
 
-    private const val DATASTORE_FILE = "token.pb"
+    private const val DATASTORE_FILE = "session.pb"
 
     @Provides
     @Singleton
     @ExperimentalSerializationApi
-    fun provideTokenDataStore(@ApplicationContext context: Context): DataStore<Token> =
+    fun provideSessionDataStore(@ApplicationContext context: Context): DataStore<Session> =
         DataStoreFactory.create(
-            serializer = TokenSerializer.encoded(),
-            corruptionHandler = ReplaceFileCorruptionHandler { Token() },
+            serializer = SessionSerializer.encoded(),
+            corruptionHandler = ReplaceFileCorruptionHandler { Session() },
             produceFile = { context.dataStoreFile(DATASTORE_FILE) },
         )
 }

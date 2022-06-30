@@ -5,7 +5,7 @@ import arrow.core.some
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.session.models.AnilistToken
-import dev.alvr.katana.domain.session.repositories.TokenPreferencesRepository
+import dev.alvr.katana.domain.session.repositories.SessionPreferencesRepository
 import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.core.spec.style.FunSpec
@@ -17,7 +17,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 
 internal class GetAnilistTokenUseCaseTest : FunSpec({
-    val repo = mockk<TokenPreferencesRepository>()
+    val repo = mockk<SessionPreferencesRepository>()
     val useCase = GetAnilistTokenUseCase(repo)
 
     val token = Arb.bind<AnilistToken>().next()

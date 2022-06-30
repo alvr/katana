@@ -1,9 +1,9 @@
 package dev.alvr.katana.data.preferences.session.repositories
 
 import androidx.datastore.core.DataStore
-import dev.alvr.katana.data.preferences.session.models.Token
+import dev.alvr.katana.data.preferences.session.models.Session
 import dev.alvr.katana.domain.base.failures.Failure
-import dev.alvr.katana.domain.session.failures.TokenPreferencesFailure
+import dev.alvr.katana.domain.session.failures.SessionPreferencesFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeNone
@@ -21,15 +21,15 @@ import io.mockk.mockk
 import java.io.IOException
 import kotlinx.coroutines.flow.flowOf
 
-internal class TokenPreferencesRepositoryTest : BehaviorSpec({
+internal class SessionPreferencesRepositoryTest : BehaviorSpec({
     val savedToken = "saved-token"
 
     given("a repository") {
-        val store = mockk<DataStore<Token>>()
-        val repository = TokenPreferencesRepositoryImpl(store)
+        val store = mockk<DataStore<Session>>()
+        val repository = SessionPreferencesRepositoryImpl(store)
 
         `when`("getting a token from datastore for the first time") {
-            coEvery { store.data } returns flowOf(Token(null))
+            coEvery { store.data } returns flowOf(Session(null))
             val token = repository.getAnilistToken()
 
             then("the token object should be None") {
@@ -47,7 +47,7 @@ internal class TokenPreferencesRepositoryTest : BehaviorSpec({
             }
 
             and("getting the saved token") {
-                coEvery { store.data } returns flowOf(Token(savedToken))
+                coEvery { store.data } returns flowOf(Session(savedToken))
                 val token = repository.getAnilistToken()
 
                 then("the token should be read from memory") {
@@ -57,7 +57,7 @@ internal class TokenPreferencesRepositoryTest : BehaviorSpec({
             }
 
             and("deleting the saved token") {
-                coEvery { store.data } returns flowOf(Token(null))
+                coEvery { store.data } returns flowOf(Session(null))
                 coJustRun { store.updateData(any()) }
                 repository.deleteAnilistToken().shouldBeRight()
 
@@ -70,7 +70,7 @@ internal class TokenPreferencesRepositoryTest : BehaviorSpec({
         `when`("something fails") {
             and("it's the deleting token") {
                 and("it's a common Exception") {
-                    val update = mockk<(Token) -> Token>()
+                    val update = mockk<(Session) -> Session>()
                     every { update(any()) } throws Exception()
                     coJustRun { store.updateData(update) }
 
@@ -82,7 +82,7 @@ internal class TokenPreferencesRepositoryTest : BehaviorSpec({
                     coEvery { store.updateData(any()) } throws IOException()
 
                     then("should be a left of PreferencesTokenFailure.DeletingFailure") {
-                        repository.deleteAnilistToken().shouldBeLeft(TokenPreferencesFailure.DeletingFailure)
+                        repository.deleteAnilistToken().shouldBeLeft(SessionPreferencesFailure.DeletingFailure)
                     }
                 }
             }
@@ -91,7 +91,7 @@ internal class TokenPreferencesRepositoryTest : BehaviorSpec({
                 val token = Arb.bind<AnilistToken>().next()
 
                 and("it's a common Exception") {
-                    val update = mockk<(Token) -> Token>()
+                    val update = mockk<(Session) -> Session>()
                     every { update(any()) } throws Exception()
                     coJustRun { store.updateData(update) }
 
@@ -103,7 +103,7 @@ internal class TokenPreferencesRepositoryTest : BehaviorSpec({
                     coEvery { store.updateData(any()) } throws IOException()
 
                     then("should be a left of PreferencesTokenFailure.SavingFailure") {
-                        repository.saveAnilistToken(token).shouldBeLeft(TokenPreferencesFailure.SavingFailure)
+                        repository.saveAnilistToken(token).shouldBeLeft(SessionPreferencesFailure.SavingFailure)
                     }
                 }
             }

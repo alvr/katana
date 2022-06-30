@@ -1,6 +1,6 @@
 package dev.alvr.katana.data.preferences.session.serializers
 
-import dev.alvr.katana.data.preferences.session.models.Token
+import dev.alvr.katana.data.preferences.session.models.Session
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -12,7 +12,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 
 @OptIn(ExperimentalSerializationApi::class)
 @Suppress("BlockingMethodInNonBlockingContext")
-internal class TokenSerializerTest : BehaviorSpec() {
+internal class SessionSerializerTest : BehaviorSpec() {
     private val tempFile = createTempFile()
 
     init {
@@ -21,7 +21,7 @@ internal class TokenSerializerTest : BehaviorSpec() {
         }
 
         given("a TokenSerializer") {
-            val tokenSerializer = TokenSerializer
+            val tokenSerializer = SessionSerializer
 
             `when`("reading from a file") {
                 val token = tokenSerializer.readFrom(tempFile.inputStream())
@@ -32,7 +32,7 @@ internal class TokenSerializerTest : BehaviorSpec() {
             }
 
             `when`("when writing to a file") {
-                tokenSerializer.writeTo(Token(anilistToken = "saved-token"), tempFile.outputStream())
+                tokenSerializer.writeTo(Session(anilistToken = "saved-token"), tempFile.outputStream())
 
                 and("reading it later") {
                     val token = tokenSerializer.readFrom(tempFile.inputStream())

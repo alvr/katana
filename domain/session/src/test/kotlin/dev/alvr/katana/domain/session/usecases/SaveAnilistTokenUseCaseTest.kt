@@ -3,9 +3,9 @@ package dev.alvr.katana.domain.session.usecases
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.domain.base.failures.Failure
-import dev.alvr.katana.domain.session.failures.TokenPreferencesFailure
+import dev.alvr.katana.domain.session.failures.SessionPreferencesFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
-import dev.alvr.katana.domain.session.repositories.TokenPreferencesRepository
+import dev.alvr.katana.domain.session.repositories.SessionPreferencesRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
@@ -17,7 +17,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 
 internal class SaveAnilistTokenUseCaseTest : FunSpec({
-    val repo = mockk<TokenPreferencesRepository>()
+    val repo = mockk<SessionPreferencesRepository>()
     val useCase = SaveAnilistTokenUseCase(repo)
 
     val token = Arb.bind<AnilistToken>().next()
@@ -38,15 +38,15 @@ internal class SaveAnilistTokenUseCaseTest : FunSpec({
 
     context("failure saving") {
         context("is a TokenPreferencesFailure.DeletingFailure") {
-            coEvery { repo.saveAnilistToken(token) } returns TokenPreferencesFailure.SavingFailure.left()
+            coEvery { repo.saveAnilistToken(token) } returns SessionPreferencesFailure.SavingFailure.left()
 
             test("invoke should return failure") {
-                useCase(token).shouldBeLeft(TokenPreferencesFailure.SavingFailure)
+                useCase(token).shouldBeLeft(SessionPreferencesFailure.SavingFailure)
                 coVerify(exactly = 1) { repo.saveAnilistToken(token) }
             }
 
             test("sync should return failure") {
-                useCase.sync(token).shouldBeLeft(TokenPreferencesFailure.SavingFailure)
+                useCase.sync(token).shouldBeLeft(SessionPreferencesFailure.SavingFailure)
                 coVerify(exactly = 1) { repo.saveAnilistToken(token) }
             }
         }

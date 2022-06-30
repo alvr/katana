@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class Token(
+internal data class Session(
     @SerialName("anilistToken")
     val anilistToken: String? = null,
 )

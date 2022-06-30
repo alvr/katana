@@ -5,8 +5,8 @@ import arrow.core.right
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
-import dev.alvr.katana.domain.session.failures.TokenPreferencesFailure
-import dev.alvr.katana.domain.session.repositories.TokenPreferencesRepository
+import dev.alvr.katana.domain.session.failures.SessionPreferencesFailure
+import dev.alvr.katana.domain.session.repositories.SessionPreferencesRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
@@ -15,7 +15,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 
 internal class DeleteAnilistTokenUseCaseTest : FunSpec({
-    val repo = mockk<TokenPreferencesRepository>()
+    val repo = mockk<SessionPreferencesRepository>()
     val useCase = DeleteAnilistTokenUseCase(repo)
 
     context("successful deletion") {
@@ -34,15 +34,15 @@ internal class DeleteAnilistTokenUseCaseTest : FunSpec({
 
     context("failure deletion") {
         context("is a TokenPreferencesFailure.DeletingFailure") {
-            coEvery { repo.deleteAnilistToken() } returns TokenPreferencesFailure.DeletingFailure.left()
+            coEvery { repo.deleteAnilistToken() } returns SessionPreferencesFailure.DeletingFailure.left()
 
             test("invoke should return failure") {
-                useCase().shouldBeLeft(TokenPreferencesFailure.DeletingFailure)
+                useCase().shouldBeLeft(SessionPreferencesFailure.DeletingFailure)
                 coVerify(exactly = 1) { repo.deleteAnilistToken() }
             }
 
             test("sync should return failure") {
-                useCase.sync().shouldBeLeft(TokenPreferencesFailure.DeletingFailure)
+                useCase.sync().shouldBeLeft(SessionPreferencesFailure.DeletingFailure)
                 coVerify(exactly = 1) { repo.deleteAnilistToken() }
             }
         }

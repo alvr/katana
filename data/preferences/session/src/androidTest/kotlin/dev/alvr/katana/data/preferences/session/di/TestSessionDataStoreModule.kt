@@ -10,8 +10,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import dev.alvr.katana.data.preferences.base.encoded
-import dev.alvr.katana.data.preferences.session.models.Token
-import dev.alvr.katana.data.preferences.session.serializers.TokenSerializer
+import dev.alvr.katana.data.preferences.session.models.Session
+import dev.alvr.katana.data.preferences.session.serializers.SessionSerializer
 import javax.inject.Singleton
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -20,13 +20,13 @@ import kotlinx.serialization.ExperimentalSerializationApi
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [TokenDataStoreModule::class],
+    replaces = [SessionDataStoreModule::class],
 )
 @ExperimentalCoroutinesApi
 @ExperimentalSerializationApi
-internal object TestTokenDataStoreModule {
+internal object TestSessionDataStoreModule {
 
-    private const val DATASTORE_FILE = "test_token.pb"
+    private const val DATASTORE_FILE = "test_session.pb"
 
     @Provides
     @Singleton
@@ -34,12 +34,12 @@ internal object TestTokenDataStoreModule {
 
     @Provides
     @Singleton
-    fun provideTokenDataStore(
+    fun provideSessionDataStore(
         @ApplicationContext context: Context,
         scope: TestScope,
-    ): DataStore<Token> = DataStoreFactory.create(
+    ): DataStore<Session> = DataStoreFactory.create(
         produceFile = { context.dataStoreFile(DATASTORE_FILE) },
         scope = scope,
-        serializer = TokenSerializer.encoded(),
+        serializer = SessionSerializer.encoded(),
     )
 }

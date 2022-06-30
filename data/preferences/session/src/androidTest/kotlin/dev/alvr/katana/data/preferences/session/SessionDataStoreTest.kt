@@ -4,7 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dev.alvr.katana.domain.session.models.AnilistToken
-import dev.alvr.katana.domain.session.repositories.TokenPreferencesRepository
+import dev.alvr.katana.domain.session.repositories.SessionPreferencesRepository
 import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.assertions.asClue
@@ -22,12 +22,12 @@ import org.junit.runner.RunWith
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class TokenDataStoreTest {
+internal class SessionDataStoreTest {
     @get:Rule
     internal val hiltRule = HiltAndroidRule(this)
 
     @Inject
-    internal lateinit var repository: TokenPreferencesRepository
+    internal lateinit var repository: SessionPreferencesRepository
 
     @Inject
     internal lateinit var scope: TestScope
