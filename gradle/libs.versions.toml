@@ -6,7 +6,7 @@ destinations = "1.5.9-beta"
 hilt = "2.42"
 hiltx = "1.0.0"
 kotlin = "1.6.21"
-lifecycle = "2.4.1"
+lifecycle = "2.5.0"
 okhttp = "4.10.0"
 orbit = "4.3.2"
 
