@@ -7,7 +7,7 @@ import dev.alvr.katana.domain.session.models.AnilistToken
 import kotlinx.coroutines.flow.Flow
 
 interface SessionPreferencesRepository {
-    val isSessionExpired: Flow<Boolean>
+    fun isSessionActive(): Flow<Boolean>
 
     suspend fun clearActiveSession(): Either<Failure, Unit>
     suspend fun deleteAnilistToken(): Either<Failure, Unit>

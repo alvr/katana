@@ -8,14 +8,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
 import com.ramcosta.composedestinations.navigation.dependency
+import com.ramcosta.composedestinations.navigation.navigate
+import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.scope.DestinationScope
 import dev.alvr.katana.navigation.bottombar.BottomNavigationBar
+import dev.alvr.katana.ui.components.SessionExpiredDialog
+import dev.alvr.katana.ui.login.view.destinations.LoginDestination
 import dev.alvr.katana.ui.main.MainViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -26,6 +31,11 @@ internal fun KatanaDestinations() {
     val vm = hiltViewModel<MainViewModel>()
 
     val state by vm.collectAsState()
+
+    SessionExpiredDialog(visible = !state.isSessionActive) {
+        vm.clearSession()
+        navController.logout()
+    }
 
     Scaffold(
         bottomBar = {
@@ -50,4 +60,12 @@ internal fun KatanaDestinations() {
 @Composable
 private fun DestinationScope<*>.currentNavigator(): Navigator = remember {
     Navigator(navigator = destinationsNavigator)
+}
+
+private fun NavController.logout() {
+    navigate(LoginDestination) {
+        popUpTo(NavGraphs.home) {
+            inclusive = true
+        }
+    }
 }

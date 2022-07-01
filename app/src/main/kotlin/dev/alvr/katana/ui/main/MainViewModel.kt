@@ -5,7 +5,7 @@ import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.session.usecases.ClearActiveSessionUseCase
 import dev.alvr.katana.domain.session.usecases.GetAnilistTokenUseCase
-import dev.alvr.katana.domain.session.usecases.ObserveSessionUseCase
+import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.navigation.NavGraphs
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
@@ -18,7 +18,7 @@ import org.orbitmvi.orbit.viewmodel.container
 internal class MainViewModel @Inject constructor(
     private val clearActiveSessionUseCase: ClearActiveSessionUseCase,
     private val getAnilistTokenUseCase: GetAnilistTokenUseCase,
-    private val observeSessionUseCase: ObserveSessionUseCase,
+    private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,
 ) : BaseViewModel<MainState, Nothing>() {
     override val container = container<MainState, Nothing>(
         MainState(
@@ -40,11 +40,11 @@ internal class MainViewModel @Inject constructor(
     }
 
     private fun observeSession() {
-        observeSessionUseCase()
+        observeActiveSessionUseCase()
 
         intent {
-            observeSessionUseCase.flow.collect { expired ->
-                reduce { state.copy(isSessionExpired = expired) }
+            observeActiveSessionUseCase.flow.collect { active ->
+                reduce { state.copy(isSessionActive = active) }
             }
         }
     }

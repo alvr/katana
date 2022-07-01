@@ -19,13 +19,13 @@ import kotlinx.coroutines.flow.map
 internal class SessionPreferencesRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Session>,
 ) : SessionPreferencesRepository {
-    override val isSessionExpired = dataStore.data.map { session ->
-        session.anilistToken == null && session.sessionActive
+    override fun isSessionActive() = dataStore.data.map { session ->
+        (session.anilistToken == null && session.isSessionActive).not()
     }
 
     override suspend fun clearActiveSession() = Either.catch(
         f = {
-            dataStore.updateData { p -> p.copy(sessionActive = false) }
+            dataStore.updateData { p -> p.copy(isSessionActive = false) }
             Napier.d { "Session cleared" }
         },
         fe = { error ->
@@ -56,7 +56,7 @@ internal class SessionPreferencesRepositoryImpl @Inject constructor(
 
     override suspend fun saveSession(anilistToken: AnilistToken) = Either.catch(
         f = {
-            dataStore.updateData { p -> p.copy(anilistToken = anilistToken.token, sessionActive = true) }
+            dataStore.updateData { p -> p.copy(anilistToken = anilistToken.token, isSessionActive = true) }
             Napier.d { "Token saved: ${anilistToken.token}" }
         },
         fe = { error ->
