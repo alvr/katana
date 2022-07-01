@@ -27,6 +27,7 @@ val coverageExclusions = listOf(
     "**/di/**",
 
     // Ui
+    "**/ui/**/components/**",
     "**/ui/**/view/**",
 
     // Utils

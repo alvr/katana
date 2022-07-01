@@ -44,6 +44,7 @@ val koverExcludes = listOf(
     "*.*_Factory",
 
     // Ui
+    "*.ui.*.components.*",
     "*.ui.*.view.*",
 
     // Utils
