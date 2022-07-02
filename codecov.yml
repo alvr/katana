@@ -13,8 +13,8 @@ ignore:
   - '**/navigation/**'
 
   # Ui
-  - 'ui/**/components/**'
-  - 'ui/**/view/**'
+  - '**/ui/**/components/**'
+  - '**/ui/**/view/**'
 
   # Utils
   - 'utils'
