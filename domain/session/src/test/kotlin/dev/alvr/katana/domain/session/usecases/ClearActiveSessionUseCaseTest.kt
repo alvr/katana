@@ -14,50 +14,50 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 
-internal class DeleteAnilistTokenUseCaseTest : FunSpec({
+internal class ClearActiveSessionUseCaseTest : FunSpec({
     val repo = mockk<SessionPreferencesRepository>()
-    val useCase = DeleteAnilistTokenUseCase(repo)
+    val useCase = ClearActiveSessionUseCase(repo)
 
-    context("successful deletion") {
-        coEvery { repo.deleteAnilistToken() } returns Unit.right()
+    context("successful clearing") {
+        coEvery { repo.clearActiveSession() } returns Unit.right()
 
-        test("invoke should delete the token") {
+        test("invoke should clear the session") {
             useCase().shouldBeRight()
-            coVerify(exactly = 1) { repo.deleteAnilistToken() }
+            coVerify(exactly = 1) { repo.clearActiveSession() }
         }
 
-        test("sync should delete the token") {
+        test("sync should clear the session") {
             useCase.sync().shouldBeRight()
-            coVerify(exactly = 1) { repo.deleteAnilistToken() }
+            coVerify(exactly = 1) { repo.clearActiveSession() }
         }
     }
 
-    context("failure deletion") {
-        context("is a SessionPreferencesFailure.DeletingTokenFailure") {
-            coEvery { repo.deleteAnilistToken() } returns SessionPreferencesFailure.DeletingTokenFailure.left()
+    context("failure clearing") {
+        context("is a SessionPreferencesFailure.ClearingSessionFailure") {
+            coEvery { repo.clearActiveSession() } returns SessionPreferencesFailure.ClearingSessionFailure.left()
 
             test("invoke should return failure") {
-                useCase().shouldBeLeft(SessionPreferencesFailure.DeletingTokenFailure)
-                coVerify(exactly = 1) { repo.deleteAnilistToken() }
+                useCase().shouldBeLeft(SessionPreferencesFailure.ClearingSessionFailure)
+                coVerify(exactly = 1) { repo.clearActiveSession() }
             }
 
             test("sync should return failure") {
-                useCase.sync().shouldBeLeft(SessionPreferencesFailure.DeletingTokenFailure)
-                coVerify(exactly = 1) { repo.deleteAnilistToken() }
+                useCase.sync().shouldBeLeft(SessionPreferencesFailure.ClearingSessionFailure)
+                coVerify(exactly = 1) { repo.clearActiveSession() }
             }
         }
 
         context("is a Failure.Unknown") {
-            coEvery { repo.deleteAnilistToken() } returns Failure.Unknown.left()
+            coEvery { repo.clearActiveSession() } returns Failure.Unknown.left()
 
             test("invoke should return failure") {
                 useCase().shouldBeLeft(Failure.Unknown)
-                coVerify(exactly = 1) { repo.deleteAnilistToken() }
+                coVerify(exactly = 1) { repo.clearActiveSession() }
             }
 
             test("sync should return failure") {
                 useCase.sync().shouldBeLeft(Failure.Unknown)
-                coVerify(exactly = 1) { repo.deleteAnilistToken() }
+                coVerify(exactly = 1) { repo.clearActiveSession() }
             }
         }
     }

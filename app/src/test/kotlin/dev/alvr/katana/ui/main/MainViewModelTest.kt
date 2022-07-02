@@ -15,6 +15,8 @@ import io.kotest.property.Arb
 import io.kotest.property.arbitrary.bind
 import io.kotest.property.arbitrary.next
 import io.mockk.coEvery
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -48,17 +50,30 @@ internal class MainViewModelTest : BehaviorSpec({
                 }
             }
 
-            `when`("the user does have a saved tokean") {
+            and("has an active session") {
                 every { observeSession.flow } returns flowOf(true, true, false)
 
-                vm.runOnCreate()
+                `when`("the session expires") {
+                    vm.runOnCreate()
 
-                then("the initial navGraph should be `NavGraphs.home`") {
-                    vm.assert(MainState(initialNavGraph = NavGraphs.home)) {
-                        states(
-                            { copy(initialNavGraph = NavGraphs.home) },
-                            { copy(isSessionActive = false) },
-                        )
+                    then("the initial navGraph should be `NavGraphs.home`") {
+                        vm.assert(MainState(initialNavGraph = NavGraphs.home)) {
+                            states(
+                                { copy(initialNavGraph = NavGraphs.home) },
+                                { copy(isSessionActive = false) },
+                            )
+                        }
+                    }
+                }
+
+                and("the session expires") {
+                    vm.runOnCreate()
+
+                    `when`("the user clear the active session") {
+                        coJustRun { clearActiveSession() }
+                        vm.testIntent { clearSession() }
+
+                        coVerify(exactly = 1) { clearActiveSession() }
                     }
                 }
             }
