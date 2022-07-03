@@ -3,8 +3,8 @@ package dev.alvr.katana.ui.login.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.alvr.katana.domain.base.usecases.invoke
-import dev.alvr.katana.domain.token.models.AnilistToken
-import dev.alvr.katana.domain.token.usecases.SaveAnilistTokenUseCase
+import dev.alvr.katana.domain.session.models.AnilistToken
+import dev.alvr.katana.domain.session.usecases.SaveSessionUseCase
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK_TOKEN
@@ -17,7 +17,7 @@ import org.orbitmvi.orbit.viewmodel.container
 @HiltViewModel
 internal class LoginViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val saveAnilistTokenUseCase: SaveAnilistTokenUseCase,
+    private val saveSessionUseCase: SaveSessionUseCase,
     private val saveUserIdUseCase: SaveUserIdUseCase,
 ) : BaseViewModel<LoginState, Nothing>() {
     override val container = container<LoginState, Nothing>(LoginState.initial()) {
@@ -36,7 +36,7 @@ internal class LoginViewModel @Inject constructor(
     }
 
     private suspend fun saveToken(token: String) {
-        saveAnilistTokenUseCase(AnilistToken(token)).fold(
+        saveSessionUseCase(AnilistToken(token)).fold(
             ifLeft = {
                 updateState { copy(loading = false, errorMessage = R.string.save_token_error) }
             },

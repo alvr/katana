@@ -183,6 +183,8 @@ app = [
     "compose-material-icons",
     "destinations",
     "hiltx-navigation",
+    "orbit",
+    "orbit-compose",
     "sentry",
 ]
 

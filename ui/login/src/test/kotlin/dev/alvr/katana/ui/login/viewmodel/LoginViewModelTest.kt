@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.domain.base.usecases.invoke
-import dev.alvr.katana.domain.token.failures.TokenPreferencesFailure
-import dev.alvr.katana.domain.token.models.AnilistToken
-import dev.alvr.katana.domain.token.usecases.SaveAnilistTokenUseCase
+import dev.alvr.katana.domain.session.failures.SessionPreferencesFailure
+import dev.alvr.katana.domain.session.models.AnilistToken
+import dev.alvr.katana.domain.session.usecases.SaveSessionUseCase
 import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
 import dev.alvr.katana.ui.login.R
@@ -19,7 +19,7 @@ import org.orbitmvi.orbit.test
 
 internal class LoginViewModelTest : BehaviorSpec({
     val stateHandle = mockk<SavedStateHandle>(relaxed = true)
-    val saveAnilistToken = mockk<SaveAnilistTokenUseCase>()
+    val saveAnilistToken = mockk<SaveSessionUseCase>()
     val saveUserId = mockk<SaveUserIdUseCase>()
 
     // Return values
@@ -71,7 +71,7 @@ internal class LoginViewModelTest : BehaviorSpec({
             }
 
             `when`("saving the token, it returns a left") {
-                coEvery { saveAnilistToken(AnilistToken(any())) } returns TokenPreferencesFailure.SavingFailure.left()
+                coEvery { saveAnilistToken(AnilistToken(any())) } returns SessionPreferencesFailure.SavingFailure.left()
                 coEvery { saveUserId() } returns Unit.right()
 
                 then("it should not be saved without params") {

@@ -8,7 +8,7 @@ ksp {
 }
 
 dependencies {
-    implementation(projects.domain.token)
+    implementation(projects.domain.session)
     implementation(projects.domain.user)
     implementation(projects.ui.base)
 

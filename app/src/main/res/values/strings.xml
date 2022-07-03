@@ -6,4 +6,8 @@
     <string name="navigation_bar_destination_social">Social</string>
     <string name="navigation_bar_destination_explore">Explore</string>
     <string name="navigation_bar_destination_account">Account</string>
+
+    <string name="session_expired_error_title">Session expired</string>
+    <string name="session_expired_error_message">Anilist\'s session has expired. To continue using Katana you need to log in again.</string>
+    <string name="session_expired_error_confirm_button">Log in</string>
 </resources>
