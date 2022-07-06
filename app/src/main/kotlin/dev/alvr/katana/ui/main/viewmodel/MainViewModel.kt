@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.main
+package dev.alvr.katana.ui.main.viewmodel
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.alvr.katana.domain.base.usecases.invoke
