@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.main
+package dev.alvr.katana.ui.main.viewmodel
 
 import androidx.compose.runtime.Stable
 import com.ramcosta.composedestinations.spec.NavGraphSpec
