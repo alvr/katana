@@ -20,8 +20,8 @@ import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.scope.DestinationScope
 import dev.alvr.katana.navigation.bottombar.BottomNavigationBar
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
-import dev.alvr.katana.ui.main.viewmodel.MainViewModel
 import dev.alvr.katana.ui.main.components.SessionExpiredDialog
+import dev.alvr.katana.ui.main.viewmodel.MainViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
