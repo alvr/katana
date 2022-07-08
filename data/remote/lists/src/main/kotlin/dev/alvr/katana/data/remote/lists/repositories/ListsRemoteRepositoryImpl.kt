@@ -1,8 +1,6 @@
 package dev.alvr.katana.data.remote.lists.repositories
 
 import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.cache.normalized.FetchPolicy
-import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.watch
 import dev.alvr.katana.data.remote.base.extensions.optional
 import dev.alvr.katana.data.remote.base.type.MediaType
@@ -28,7 +26,6 @@ internal class ListsRemoteRepositoryImpl @Inject constructor(
     private inline fun <reified T : MediaEntry> getMediaCollection(type: MediaType) = flow {
         val response = client
             .query(MediaListCollectionQuery(userId.getId().optional(), type))
-            .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch()
             .distinctUntilChanged()
             .map { res -> MediaCollection(res.data?.mediaList<T>().orEmpty()) }
