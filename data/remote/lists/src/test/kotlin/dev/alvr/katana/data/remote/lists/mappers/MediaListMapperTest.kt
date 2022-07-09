@@ -8,14 +8,12 @@ import dev.alvr.katana.data.remote.lists.mappers.responses.mediaList
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
-import dev.alvr.katana.domain.lists.models.lists.MediaList
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldBeSortedWith
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldExist
 import io.kotest.matchers.collections.shouldHaveSize
@@ -73,13 +71,19 @@ internal class MediaListMapperTest : WordSpec({
                     },
                     null,
                 )
+                user = user {
+                    mediaListOptions = mediaListOptions {
+                        animeList = animeList {
+                            sectionOrder = emptyList()
+                        }
+                    }
+                }
             }
         }
 
         "return a CUSTOM list without name" {
             data.mediaList<MediaEntry.Anime>().forAll { list ->
                 list.name.shouldBeEmpty()
-                list.listType shouldBe MediaList.ListType.CUSTOM
             }
         }
     }
@@ -105,17 +109,23 @@ internal class MediaListMapperTest : WordSpec({
                         entries = emptyList()
                     },
                 )
+                user = user {
+                    mediaListOptions = mediaListOptions {
+                        animeList = animeList {
+                            sectionOrder = listOf("Watching", "Rewatching", "Completed TV", "Paused")
+                        }
+                    }
+                }
             }
         }
 
         "return a sorted media list" {
             data.mediaList<MediaEntry.Anime>()
-                .shouldBeSortedWith { m1, m2 -> m1.listType.compareTo(m2.listType) }
                 .also { list ->
-                    list[0].listType shouldBe MediaList.ListType.WATCHING
-                    list[1].listType shouldBe MediaList.ListType.REWATCHING
-                    list[2].listType shouldBe MediaList.ListType.COMPLETED_TV
-                    list[3].listType shouldBe MediaList.ListType.PAUSED
+                    list[0].name shouldBe "Watching"
+                    list[1].name shouldBe "Rewatching"
+                    list[2].name shouldBe "Completed TV"
+                    list[3].name shouldBe "Paused"
                 }
                 .shouldHaveSize(4)
         }
@@ -142,17 +152,23 @@ internal class MediaListMapperTest : WordSpec({
                         entries = emptyList()
                     },
                 )
+                user = user {
+                    mediaListOptions = mediaListOptions {
+                        mangaList = mangaList {
+                            sectionOrder = listOf("Reading", "Rereading", "Completed Novel", "Paused")
+                        }
+                    }
+                }
             }
         }
 
         "return a sorted media list" {
-            data.mediaList<MediaEntry.Anime>()
-                .shouldBeSortedWith { m1, m2 -> m1.listType.compareTo(m2.listType) }
+            data.mediaList<MediaEntry.Manga>()
                 .also { list ->
-                    list[0].listType shouldBe MediaList.ListType.READING
-                    list[1].listType shouldBe MediaList.ListType.REREADING
-                    list[2].listType shouldBe MediaList.ListType.COMPLETED_NOVEL
-                    list[3].listType shouldBe MediaList.ListType.PAUSED
+                    list[0].name shouldBe "Reading"
+                    list[1].name shouldBe "Rereading"
+                    list[2].name shouldBe "Completed Novel"
+                    list[3].name shouldBe "Paused"
                 }
                 .shouldHaveSize(4)
         }
@@ -382,8 +398,7 @@ internal class MediaListMapperTest : WordSpec({
         }
 
         "return a sorted media list" {
-            data.mediaList<MediaEntry.Anime>()
-                .shouldExist { it.listType == MediaList.ListType.WATCHING }
+            data.mediaList<MediaEntry.Anime>().shouldExist { it.name == "Watching" }
         }
 
         "the media should be type of MediaEntry.Anime" {
@@ -465,8 +480,7 @@ internal class MediaListMapperTest : WordSpec({
         }
 
         "return a sorted media list" {
-            data.mediaList<MediaEntry.Manga>()
-                .shouldExist { it.listType == MediaList.ListType.READING }
+            data.mediaList<MediaEntry.Manga>().shouldExist { it.name == "Reading" }
         }
 
         "the media should be type of MediaEntry.Manga" {

@@ -14,10 +14,9 @@ internal inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data.media
 
         MediaList(
             name = list?.name.orEmpty(),
-            listType = MediaList.ListType.of(list?.name),
             entries = entries,
         )
-    }.sortedBy { it.listType }.toList()
+    }.sortedBy { sortLists<T>(it.name) }.toList()
 
 private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry.toModel() =
     mediaListEntry.let { entry ->
@@ -38,12 +37,25 @@ private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry.toMod
                 dateMapper(date.day, date.month, date.year)
             },
             updatedAt = entry.updatedAt?.toLocalDateTime(),
-            media = media.mediaEntry.toMedia() as T,
+            media = media.mediaEntry.toMedia<T>() as T,
         )
     }
 
-private inline fun <reified T : MediaEntry> MediaEntryFragment.toMedia(): T = when (T::class) {
-    MediaEntry.Anime::class -> animeEntry()
-    MediaEntry.Manga::class -> mangaEntry()
-    else -> error("only MediaEntry.Anime and MediaEntry.Manga are accepted")
-} as T
+private inline fun <reified T : MediaEntry> MediaEntryFragment.toMedia() = onMediaEntry<T, MediaEntry>(
+    anime = ::animeEntry,
+    manga = ::mangaEntry,
+)
+
+private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data.sortLists(listName: String) =
+    with(collection.user?.mediaListOptions) {
+        onMediaEntry<T, Int>(
+            anime = { this?.animeList?.sectionOrder.orEmpty().listPosition(listName) },
+            manga = { this?.mangaList?.sectionOrder.orEmpty().listPosition(listName) },
+        )
+    }
+
+private fun List<String?>.listPosition(listName: String) = if (listName.isEmpty()) {
+    size
+} else {
+    indexOf(listName)
+}
