@@ -14,13 +14,11 @@ import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
-import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldBeSortedWith
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
@@ -92,6 +90,13 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                     entries = emptyList()
                                 },
                             )
+                            user = user {
+                                mediaListOptions = mediaListOptions {
+                                    animeList = animeList {
+                                        sectionOrder = listOf("Watching", "Completed TV", "Custom List")
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -104,11 +109,10 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                         repo.animeList.test {
                             awaitItem().lists
                                 .shouldHaveSize(4)
-                                .shouldBeSortedWith { m1, m2 -> m1.listType.compareTo(m2.listType) }
                                 .also { lists ->
                                     with(lists.first()) {
                                         entries.shouldBeEmpty()
-                                        listType shouldBe MediaList.ListType.WATCHING
+                                        name shouldBe "Watching"
                                     }
                                 }
                             awaitComplete()
@@ -355,6 +359,13 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                     entries = emptyList()
                                 },
                             )
+                            user = user {
+                                mediaListOptions = mediaListOptions {
+                                    mangaList = mangaList {
+                                        sectionOrder = listOf("Custom List", "Reading", "Rereading")
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -367,11 +378,10 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                         repo.mangaList.test {
                             awaitItem().lists
                                 .shouldHaveSize(4)
-                                .shouldBeSortedWith { m1, m2 -> m1.listType.compareTo(m2.listType) }
                                 .also { lists ->
                                     with(lists.first()) {
                                         entries.shouldBeEmpty()
-                                        listType shouldBe MediaList.ListType.READING
+                                        name shouldBe "Custom List"
                                     }
                                 }
                             awaitComplete()

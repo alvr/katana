@@ -2,6 +2,12 @@ plugins {
     modules.`compose-library`
 }
 
+android {
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+    }
+}
+
 ksp {
     arg("compose-destinations.mode", "destinations")
     arg("compose-destinations.moduleName", "lists")
@@ -10,6 +16,8 @@ ksp {
 dependencies {
     implementation(projects.domain.lists)
     implementation(projects.ui.base)
+
+    coreLibraryDesugaring(libs.desugaring)
 
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.ui.compose)
