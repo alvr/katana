@@ -5,7 +5,6 @@ data class CommonMediaEntry(
     val title: String,
     val coverImage: String,
     val format: Format,
-    val genres: List<String>,
 ) {
     enum class Format {
         TV,

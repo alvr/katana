@@ -26,7 +26,6 @@ private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry.toMod
             progress = entry.progress ?: 0,
             progressVolumes = entry.progressVolumes,
             repeat = entry.repeat ?: 0,
-            priority = entry.priority ?: 0,
             private = entry.private ?: false,
             notes = entry.notes.orEmpty(),
             hiddenFromStatusLists = entry.hiddenFromStatusLists ?: false,

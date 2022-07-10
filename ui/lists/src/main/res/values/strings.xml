@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tab_anime">Anime</string>
-    <string name="tab_manga">Manga</string>
+    <string name="entry_format_tv">TV</string>
+    <string name="entry_format_tv_short">TV Short</string>
+    <string name="entry_format_movie">Movie</string>
+    <string name="entry_format_special">Special</string>
+    <string name="entry_format_ova">OVA</string>
+    <string name="entry_format_ona">ONA</string>
+    <string name="entry_format_music">Music</string>
+    <string name="entry_format_manga">Manga</string>
+    <string name="entry_format_novel">Light Novel</string>
+    <string name="entry_format_one_shot">One Shot</string>
+    <string name="entry_format_unknown">Unknown</string>
 </resources>
