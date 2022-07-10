@@ -10,7 +10,6 @@ internal fun MediaEntryFragment?.mediaEntry() = let { entry ->
         title = entry?.title?.userPreferred.orEmpty(),
         coverImage = entry?.coverImage?.large.orEmpty(),
         format = entry?.format.toFormat(),
-        genres = entry?.genres?.filterNotNull().orEmpty(),
     )
 }
 

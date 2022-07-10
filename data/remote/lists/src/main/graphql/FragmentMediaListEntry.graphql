@@ -4,7 +4,6 @@ fragment MediaListEntry on MediaList {
     progress
     progressVolumes
     repeat
-    priority
     private
     notes
     hiddenFromStatusLists
