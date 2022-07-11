@@ -45,6 +45,9 @@ apollo-testing = { module = "com.apollographql.apollo3:apollo-testing-support", 
 # Arrow
 arrow = { module = "io.arrow-kt:arrow-core", version = "1.1.2" }
 
+# Coil
+coil = { module = "io.coil-kt:coil-compose", version = "2.1.0" }
+
 # Compose
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
 compose-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "compose" }
@@ -64,6 +67,9 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 
 # DataStore
 datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
+
+# Design
+design-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1"}
 
 # Destiantions
 destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "destinations" }
@@ -207,6 +213,8 @@ data-remote = [
 ui-compose = [
     "accompanist-pager",
     "accompanist-pager-indicators",
+    "accompanist-swiperefresh",
+    "coil",
     "compose-animation",
     "compose-foundation",
     "compose-foundation-layout",
@@ -214,6 +222,7 @@ ui-compose = [
     "compose-material-icons",
     "compose-ui",
     "compose-ui-tooling",
+    "design-constraintlayout",
     "destinations",
     "hiltx-navigation",
     "lifecycle-viewmodel",
