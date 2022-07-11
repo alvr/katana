@@ -45,7 +45,7 @@ internal sealed interface MediaListItem {
         override val progress: Int,
         override val total: Int?,
         override val updatedAt: LocalDateTime?,
-        val volumesProgress: Int?,
+        val volumesProgress: Int,
         val volumesTotal: Int?,
     ) : MediaListItem
 

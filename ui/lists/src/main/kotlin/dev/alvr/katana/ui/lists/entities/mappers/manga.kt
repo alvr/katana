@@ -18,6 +18,6 @@ private fun MediaListEntry<MediaEntry.Manga>.toMediaItem() = MediaListItem.Manga
     progress = progress,
     total = media.chapters,
     updatedAt = updatedAt,
-    volumesProgress = progressVolumes,
+    volumesProgress = progressVolumes ?: 0,
     volumesTotal = media.volumes,
 )
