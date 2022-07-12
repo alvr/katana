@@ -8,8 +8,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.ui.base.components.home.HomeScaffold
 import dev.alvr.katana.ui.base.components.home.HomeTopAppBar
 import dev.alvr.katana.ui.lists.R
-import dev.alvr.katana.ui.lists.view.pages.AnimeList
-import dev.alvr.katana.ui.lists.view.pages.MangaList
+import dev.alvr.katana.ui.lists.view.pages.AnimeLists
+import dev.alvr.katana.ui.lists.view.pages.MangaLists
 
 @Composable
 @Destination
@@ -20,8 +20,8 @@ internal fun Lists() {
         backContent = { },
         pageContent = { page ->
             when (page) {
-                ListTabs.Anime -> AnimeList()
-                ListTabs.Manga -> MangaList()
+                ListTabs.Anime -> AnimeLists()
+                ListTabs.Manga -> MangaLists()
             }
         },
     )
