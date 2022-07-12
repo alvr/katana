@@ -27,7 +27,7 @@ internal class LoginViewModelTest : BehaviorSpec({
     val tokenWithParams = "my-token-from-anilist&param1=true&anotherOne=69420"
     val cleanToken = "my-token-from-anilist"
 
-    val viewModel = LoginViewModel(stateHandle, saveAnilistToken, saveUserId).test(LoginState.initial())
+    val viewModel = LoginViewModel(stateHandle, saveAnilistToken, saveUserId).test(LoginState())
 
     given("a deeplink without token") {
         every { stateHandle.get<String>(any()) } returns null
@@ -38,7 +38,7 @@ internal class LoginViewModelTest : BehaviorSpec({
             `when`("saving the token") {
                 then("it should not be saved because is null") {
                     viewModel.runOnCreate()
-                    viewModel.assert(LoginState.initial()) {
+                    viewModel.assert(LoginState()) {
                         states()
                     }
 
@@ -59,7 +59,7 @@ internal class LoginViewModelTest : BehaviorSpec({
 
                 then("it should not be saved without params") {
                     viewModel.runOnCreate()
-                    viewModel.assert(LoginState.initial()) {
+                    viewModel.assert(LoginState()) {
                         states(
                             { copy(loading = true) },
                             { copy(loading = false, saved = true) },
@@ -77,7 +77,7 @@ internal class LoginViewModelTest : BehaviorSpec({
 
                 then("it should not be saved without params") {
                     viewModel.runOnCreate()
-                    viewModel.assert(LoginState.initial()) {
+                    viewModel.assert(LoginState()) {
                         states(
                             { copy(loading = true) },
                             { copy(loading = false, errorMessage = R.string.save_token_error) },
@@ -95,7 +95,7 @@ internal class LoginViewModelTest : BehaviorSpec({
 
                 then("it should not be saved without params") {
                     viewModel.runOnCreate()
-                    viewModel.assert(LoginState.initial()) {
+                    viewModel.assert(LoginState()) {
                         states(
                             { copy(loading = true) },
                             { copy(loading = false, errorMessage = R.string.fetch_userid_error) },
@@ -118,7 +118,7 @@ internal class LoginViewModelTest : BehaviorSpec({
             `when`("saving the token") {
                 then("it should not be saved without params") {
                     viewModel.runOnCreate()
-                    viewModel.assert(LoginState.initial()) {
+                    viewModel.assert(LoginState()) {
                         states(
                             { copy(loading = true) },
                             { copy(loading = false, saved = true) },
@@ -140,7 +140,7 @@ internal class LoginViewModelTest : BehaviorSpec({
         and("a lazily created viewModel") {
             `when`("saving the token") {
                 viewModel.runOnCreate()
-                viewModel.assert(LoginState.initial()) {
+                viewModel.assert(LoginState()) {
                     states()
                 }
 

@@ -16,12 +16,10 @@ internal class MediaEntryMapperTest : WordSpec({
                 id = Int.zero,
                 title = null,
                 episodes = null,
-                duration = null,
                 chapters = null,
                 volumes = null,
                 format = format,
                 coverImage = null,
-                genres = null,
                 nextAiringEpisode = null,
             ).mediaEntry().format
         }
@@ -37,12 +35,10 @@ internal class MediaEntryMapperTest : WordSpec({
                 id = Int.zero,
                 title = null,
                 episodes = null,
-                duration = null,
                 chapters = null,
                 volumes = null,
                 format = MediaFormat.UNKNOWN__,
                 coverImage = null,
-                genres = null,
                 nextAiringEpisode = null,
             ).mediaEntry().format
 
@@ -56,12 +52,10 @@ internal class MediaEntryMapperTest : WordSpec({
                 id = Int.zero,
                 title = null,
                 episodes = null,
-                duration = null,
                 chapters = null,
                 volumes = null,
                 format = null,
                 coverImage = null,
-                genres = null,
                 nextAiringEpisode = null,
             ).mediaEntry().format
 

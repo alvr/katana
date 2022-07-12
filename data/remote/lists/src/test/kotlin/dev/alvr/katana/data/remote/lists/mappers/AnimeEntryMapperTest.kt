@@ -23,7 +23,6 @@ internal class AnimeEntryMapperTest : WordSpec({
                     title = String.empty,
                     coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
-                    genres = emptyList(),
                 ),
                 episodes = null,
                 nextEpisode = null,
@@ -42,12 +41,10 @@ internal class AnimeEntryMapperTest : WordSpec({
             id = Int.zero,
             title = null,
             episodes = null,
-            duration = null,
             chapters = null,
             volumes = null,
             format = null,
             coverImage = null,
-            genres = null,
             nextAiringEpisode = null,
         )
 
@@ -58,7 +55,6 @@ internal class AnimeEntryMapperTest : WordSpec({
                     title = String.empty,
                     coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
-                    genres = emptyList(),
                 ),
                 episodes = null,
                 nextEpisode = null,
@@ -77,12 +73,10 @@ internal class AnimeEntryMapperTest : WordSpec({
             id = Int.zero,
             title = MediaEntryFragment.Title(null),
             episodes = null,
-            duration = null,
             chapters = null,
             volumes = null,
             format = null,
             coverImage = MediaEntryFragment.CoverImage(null),
-            genres = null,
             nextAiringEpisode = null,
         )
 
@@ -93,7 +87,6 @@ internal class AnimeEntryMapperTest : WordSpec({
                     title = String.empty,
                     coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
-                    genres = emptyList(),
                 ),
                 episodes = null,
                 nextEpisode = null,
@@ -112,12 +105,10 @@ internal class AnimeEntryMapperTest : WordSpec({
             id = Int.zero,
             title = MediaEntryFragment.Title("One Piece"),
             episodes = 1000,
-            duration = 23,
             chapters = null,
             volumes = null,
             format = MediaFormat.ONA,
             coverImage = MediaEntryFragment.CoverImage("https://www.fillmurray.com/128/256"),
-            genres = listOf("Comedy", "Slice of Life"),
             nextAiringEpisode = MediaEntryFragment.NextAiringEpisode(1_241_517_600, 1001),
         )
 
@@ -128,7 +119,6 @@ internal class AnimeEntryMapperTest : WordSpec({
                     title = "One Piece",
                     coverImage = "https://www.fillmurray.com/128/256",
                     format = CommonMediaEntry.Format.ONA,
-                    genres = listOf("Comedy", "Slice of Life"),
                 ),
                 episodes = 1000,
                 nextEpisode = MediaEntry.Anime.NextEpisode(

@@ -46,6 +46,8 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix = ".beta"
+
             isDebuggable = true
             isDefault = true
             isMinifyEnabled = false

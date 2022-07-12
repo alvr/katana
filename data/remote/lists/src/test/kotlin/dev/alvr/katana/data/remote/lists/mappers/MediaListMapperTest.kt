@@ -14,7 +14,6 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldExist
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
@@ -187,7 +186,6 @@ internal class MediaListMapperTest : WordSpec({
                                 progress = 12
                                 progressVolumes = null
                                 repeat = 2
-                                priority = 2
                                 private = true
                                 notes = "My notes :)"
                                 hiddenFromStatusLists = true
@@ -208,12 +206,10 @@ internal class MediaListMapperTest : WordSpec({
                                         userPreferred = "My anime entry"
                                     }
                                     episodes = 23
-                                    duration = 24
                                     format = "TV"
                                     coverImage = coverImage {
                                         large = "https://www.fillmurray.com/128/256"
                                     }
-                                    genres = listOf("Action", "Adventure")
                                     nextAiringEpisode = nextAiringEpisode {
                                         airingAt = 1_649_790_000
                                         episode = 13
@@ -235,7 +231,6 @@ internal class MediaListMapperTest : WordSpec({
                         progress shouldBe 12
                         progressVolumes.shouldBeNull()
                         repeat shouldBe 2
-                        priority shouldBe 2
                         private.shouldBeTrue()
                         notes shouldBe "My notes :)"
                         hiddenFromStatusLists.shouldBeTrue()
@@ -251,7 +246,6 @@ internal class MediaListMapperTest : WordSpec({
                             title shouldBe "My anime entry"
                             coverImage shouldBe "https://www.fillmurray.com/128/256"
                             format shouldBe CommonMediaEntry.Format.TV
-                            genres.shouldContainAll("Action", "Adventure")
                             episodes shouldBe 23
                             with(nextEpisode.shouldNotBeNull()) {
                                 at.shouldBeEqualComparingTo(LocalDateTime.of(2022, 4, 12, 21, 0, 0))
@@ -283,7 +277,6 @@ internal class MediaListMapperTest : WordSpec({
                                 progress = 12
                                 progressVolumes = 1
                                 repeat = 2
-                                priority = 2
                                 private = true
                                 notes = "My notes :)"
                                 hiddenFromStatusLists = true
@@ -309,7 +302,6 @@ internal class MediaListMapperTest : WordSpec({
                                     coverImage = coverImage {
                                         large = "https://www.fillmurray.com/128/256"
                                     }
-                                    genres = listOf("Action", "Adventure")
                                     nextAiringEpisode = null
                                 }
                             },
@@ -328,7 +320,6 @@ internal class MediaListMapperTest : WordSpec({
                         progress shouldBe 12
                         progressVolumes shouldBe 1
                         repeat shouldBe 2
-                        priority shouldBe 2
                         private.shouldBeTrue()
                         notes shouldBe "My notes :)"
                         hiddenFromStatusLists.shouldBeTrue()
@@ -344,7 +335,6 @@ internal class MediaListMapperTest : WordSpec({
                             title shouldBe "My manga entry"
                             coverImage shouldBe "https://www.fillmurray.com/128/256"
                             format shouldBe CommonMediaEntry.Format.NOVEL
-                            genres.shouldContainAll("Action", "Adventure")
                             chapters shouldBe 23
                             volumes shouldBe 2
                         }
@@ -373,7 +363,6 @@ internal class MediaListMapperTest : WordSpec({
                                 progress = null
                                 progressVolumes = null
                                 repeat = null
-                                priority = null
                                 private = null
                                 notes = null
                                 hiddenFromStatusLists = null
@@ -384,10 +373,8 @@ internal class MediaListMapperTest : WordSpec({
                                     id = Int.zero
                                     title = null
                                     episodes = null
-                                    duration = null
                                     format = null
                                     coverImage = null
-                                    genres = null
                                     nextAiringEpisode = null
                                 }
                             },
@@ -410,7 +397,6 @@ internal class MediaListMapperTest : WordSpec({
                         progress shouldBe 0
                         progressVolumes.shouldBeNull()
                         repeat shouldBe 0
-                        priority shouldBe 0
                         private.shouldBeFalse()
                         notes.shouldBeEmpty()
                         hiddenFromStatusLists.shouldBeFalse()
@@ -426,7 +412,6 @@ internal class MediaListMapperTest : WordSpec({
                             title.shouldBeEmpty()
                             coverImage.shouldBeEmpty()
                             format shouldBe CommonMediaEntry.Format.UNKNOWN
-                            genres.shouldBeEmpty()
                             episodes.shouldBeNull()
                             nextEpisode.shouldBeNull()
                         }
@@ -455,7 +440,6 @@ internal class MediaListMapperTest : WordSpec({
                                 progress = null
                                 progressVolumes = null
                                 repeat = null
-                                priority = null
                                 private = null
                                 notes = null
                                 hiddenFromStatusLists = null
@@ -469,7 +453,6 @@ internal class MediaListMapperTest : WordSpec({
                                     volumes = null
                                     format = null
                                     coverImage = null
-                                    genres = null
                                     nextAiringEpisode = null
                                 }
                             },
@@ -492,7 +475,6 @@ internal class MediaListMapperTest : WordSpec({
                         progress shouldBe 0
                         progressVolumes.shouldBeNull()
                         repeat shouldBe 0
-                        priority shouldBe 0
                         private.shouldBeFalse()
                         notes.shouldBeEmpty()
                         hiddenFromStatusLists.shouldBeFalse()
@@ -508,7 +490,6 @@ internal class MediaListMapperTest : WordSpec({
                             title.shouldBeEmpty()
                             coverImage.shouldBeEmpty()
                             format shouldBe CommonMediaEntry.Format.UNKNOWN
-                            genres.shouldBeEmpty()
                             chapters.shouldBeNull()
                             volumes.shouldBeNull()
                         }
