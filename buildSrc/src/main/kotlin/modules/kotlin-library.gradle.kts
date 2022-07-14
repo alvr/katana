@@ -21,7 +21,7 @@ tasks {
         useJUnitPlatform()
     }
 
-    withType<KotlinCompile> {
+    withType<KotlinCompile>().configureEach {
         kotlinOptions.configureKotlin()
     }
 }
