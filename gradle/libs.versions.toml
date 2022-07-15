@@ -2,17 +2,17 @@
 accompanist = "0.24.12-rc"
 apollo = "3.4.0"
 coroutines = "1.6.4"
-destinations = "1.5.9-beta"
+destinations = "1.6.13-beta"
 hilt = "2.42"
 hiltx = "1.0.0"
-kotlin = "1.6.21"
+kotlin = "1.7.0"
 lifecycle = "2.5.0"
 okhttp = "4.10.0"
 orbit = "4.3.2"
 
 # Compose
 compose = "1.2.0-rc03"
-compose-compiler = "1.2.0-rc02"
+compose-compiler = "1.2.0"
 
 # Coverage Engine
 intellij = "1.0.673"
@@ -84,7 +84,7 @@ gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", v
 gradle-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx:kover", version = "0.5.1" }
-gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.6.21-1.0.5" }
+gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.7.0-1.0.6" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.1.2" }
 gradle-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "3.4.0.2513" }
