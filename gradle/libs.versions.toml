@@ -18,7 +18,7 @@ compose-compiler = "1.2.0"
 intellij = "1.0.673"
 
 # Plugins
-detekt = "1.20.0"
+detekt = "1.21.0"
 
 # Tests
 androidx-test = "1.4.0"
