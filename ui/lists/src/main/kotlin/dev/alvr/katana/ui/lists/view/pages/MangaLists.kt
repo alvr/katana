@@ -1,10 +1,9 @@
 package dev.alvr.katana.ui.lists.view.pages
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.view.components.MediaList
 import dev.alvr.katana.ui.lists.viewmodel.manga.MangaListsState
 import dev.alvr.katana.ui.lists.viewmodel.manga.MangaListsViewModel
@@ -15,13 +14,22 @@ internal fun MangaLists(
     vm: MangaListsViewModel = hiltViewModel(),
 ) {
     val state by vm.collectAsState()
-    MangaLists(state)
+    MangaLists(
+        state = state,
+        onRefresh = vm::fetchMangaLists,
+    )
 }
 
 @Composable
-private fun MangaLists(state: MangaListsState) {
+private fun MangaLists(
+    state: MangaListsState,
+    onRefresh: () -> Unit,
+) {
     MediaList(
         items = state.currentListItems,
-        modifier = Modifier.fillMaxSize(),
+        isEmpty = state.isEmpty,
+        isLoading = state.isLoading,
+        emptyStateRes = R.string.empty_manga_list,
+        onRefresh = onRefresh,
     )
 }

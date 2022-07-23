@@ -1,6 +1,7 @@
 package dev.alvr.katana.ui.lists.view.components
 
 import android.os.Build
+import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,8 +19,10 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.LinearProgressIndicator
@@ -44,6 +48,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import dev.alvr.katana.ui.base.components.EmptyState
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import io.github.aakira.napier.Napier
@@ -59,15 +66,52 @@ private val LocalMediaListItem =
 @OptIn(ExperimentalFoundationApi::class)
 internal fun MediaList(
     items: List<MediaListItem>,
+    isEmpty: Boolean,
+    isLoading: Boolean,
+    @StringRes emptyStateRes: Int,
+    onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     addPlusOne: (Int) -> Unit = { Napier.d { "Adding +1 to $it" } },
     editEntry: (Int) -> Unit = { Napier.d { "Editing entry $it" } },
     openDetails: (Int) -> Unit = { Napier.d { "Opening details $it" } },
 ) {
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isLoading),
+        onRefresh = onRefresh,
+        modifier = modifier,
+    ) {
+        if (isEmpty && !isLoading) {
+            EmptyState(
+                text = stringResource(id = emptyStateRes),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+            )
+        } else {
+            MediaList(
+                items = items,
+                modifier = Modifier.fillMaxSize(),
+                addPlusOne = addPlusOne,
+                editEntry = editEntry,
+                openDetails = openDetails,
+            )
+        }
+    }
+}
+
+@Composable
+@ExperimentalFoundationApi
+private fun MediaList(
+    items: List<MediaListItem>,
+    addPlusOne: (Int) -> Unit,
+    editEntry: (Int) -> Unit,
+    openDetails: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Adaptive(minSize = CARD_WIDTH),
-        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+        columns = GridCells.Adaptive(CARD_WIDTH),
+        contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -77,9 +121,7 @@ internal fun MediaList(
         ) { item ->
             CompositionLocalProvider(LocalMediaListItem provides item) {
                 MediaListItem(
-                    modifier = Modifier
-                        .animateItemPlacement()
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     addPlusOne = addPlusOne,
                     editEntry = editEntry,
                     openDetails = openDetails,
@@ -126,34 +168,34 @@ private fun CardContent(
                 .widthIn(max = COVER_MAX_WIDTH)
                 .fillMaxHeight()
                 .constrainAs(image) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    bottom.linkTo(parent.bottom)
+                    top.linkTo(anchor = parent.top)
+                    start.linkTo(anchor = parent.start)
+                    bottom.linkTo(anchor = parent.bottom)
                 },
         )
 
         Score(
             modifier = modifier.constrainAs(score) {
-                start.linkTo(parent.start)
-                bottom.linkTo(parent.bottom)
+                start.linkTo(anchor = parent.start)
+                bottom.linkTo(anchor = parent.bottom)
             },
         )
 
         Title(
             modifier = modifier.constrainAs(title) {
                 width = Dimension.fillToConstraints
-                top.linkTo(parent.top, margin = 4.dp)
-                start.linkTo(image.end, margin = 8.dp)
-                end.linkTo(parent.end, margin = 8.dp)
+                top.linkTo(anchor = parent.top, margin = 4.dp)
+                start.linkTo(anchor = image.end, margin = 8.dp)
+                end.linkTo(anchor = parent.end, margin = 8.dp)
             },
         )
 
         Subtitle(
             modifier = modifier.constrainAs(subtitle) {
                 width = Dimension.fillToConstraints
-                top.linkTo(title.bottom, margin = 4.dp)
-                start.linkTo(image.end, margin = 8.dp)
-                end.linkTo(parent.end, margin = 8.dp)
+                top.linkTo(anchor = title.bottom, margin = 4.dp)
+                start.linkTo(anchor = image.end, margin = 8.dp)
+                end.linkTo(anchor = parent.end, margin = 8.dp)
             },
         )
 
@@ -161,17 +203,17 @@ private fun CardContent(
             addPlusOne = addPlusOne,
             modifier = modifier.constrainAs(plusOne) {
                 width = Dimension.wrapContent
-                bottom.linkTo(progress.top)
-                end.linkTo(parent.end, margin = 8.dp)
+                end.linkTo(anchor = parent.end, margin = 8.dp)
+                bottom.linkTo(anchor = progress.top)
             },
         )
 
         Progress(
             modifier = modifier.constrainAs(progress) {
                 width = Dimension.fillToConstraints
-                start.linkTo(image.end)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
+                start.linkTo(anchor = image.end)
+                end.linkTo(anchor = parent.end)
+                bottom.linkTo(anchor = parent.bottom)
             },
         )
     }
@@ -181,17 +223,14 @@ private fun CardContent(
 private fun Cover(
     modifier: Modifier = Modifier,
 ) {
-    val cover = LocalMediaListItem.current.cover
-    val title = LocalMediaListItem.current.title
-
     AsyncImage(
         modifier = modifier,
         model = ImageRequest.Builder(LocalContext.current)
-            .data(cover)
+            .data(LocalMediaListItem.current.cover)
             .error(R.drawable.default_cover)
             .crossfade(true)
             .build(),
-        contentDescription = title,
+        contentDescription = LocalMediaListItem.current.title,
         contentScale = ContentScale.Crop,
     )
 }
@@ -200,10 +239,8 @@ private fun Cover(
 private fun Title(
     modifier: Modifier = Modifier,
 ) {
-    val title = LocalMediaListItem.current.title
-
     Text(
-        text = title,
+        text = LocalMediaListItem.current.title,
         modifier = modifier,
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,

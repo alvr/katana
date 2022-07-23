@@ -11,4 +11,7 @@
     <string name="entry_format_novel">Light Novel</string>
     <string name="entry_format_one_shot">One Shot</string>
     <string name="entry_format_unknown">Unknown</string>
+
+    <string name="empty_anime_list">This Anime list is empty</string>
+    <string name="empty_manga_list">This Manga list is empty</string>
 </resources>

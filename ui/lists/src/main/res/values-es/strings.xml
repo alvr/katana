@@ -11,4 +11,7 @@
     <string name="entry_format_novel">Novela Ligera</string>
     <string name="entry_format_one_shot">One Shot</string>
     <string name="entry_format_unknown">Desconocido</string>
+
+    <string name="empty_anime_list">Esta lista de Anime está vacía</string>
+    <string name="empty_manga_list">Esta lista de Manga está vacía</string>
 </resources>

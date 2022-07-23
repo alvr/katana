@@ -18,12 +18,25 @@ internal class MangaListsViewModel @Inject constructor(
         observeMangaLists()
     }
 
-    private fun observeMangaLists() {
+    fun fetchMangaLists() {
+        updateState { copy(isLoading = true) }
         observeMangaListUseCase()
+    }
+
+    private fun observeMangaLists() {
+        fetchMangaLists()
 
         intent {
             observeMangaListUseCase.flow.collect { active ->
-                reduce { state.copy(currentListItems = active.lists.toMediaItems()) }
+                val items = active.lists.toMediaItems()
+
+                reduce {
+                    state.copy(
+                        currentListItems = items,
+                        isEmpty = items.isEmpty(),
+                        isLoading = false,
+                    )
+                }
             }
         }
     }

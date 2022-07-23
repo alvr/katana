@@ -18,12 +18,25 @@ internal class AnimeListsViewModel @Inject constructor(
         observeAnimeLists()
     }
 
-    private fun observeAnimeLists() {
+    fun fetchAnimeLists() {
+        updateState { copy(isLoading = true) }
         observeAnimeListUseCase()
+    }
+
+    private fun observeAnimeLists() {
+        fetchAnimeLists()
 
         intent {
             observeAnimeListUseCase.flow.collect { active ->
-                reduce { state.copy(currentListItems = active.lists.toMediaItems()) }
+                val items = active.lists.toMediaItems()
+
+                reduce {
+                    state.copy(
+                        currentListItems = items,
+                        isEmpty = items.isEmpty(),
+                        isLoading = false,
+                    )
+                }
             }
         }
     }
