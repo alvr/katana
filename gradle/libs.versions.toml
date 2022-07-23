@@ -5,16 +5,17 @@ coroutines = "1.6.4"
 destinations = "1.6.13-beta"
 hilt = "2.43.1"
 hiltx = "1.0.0"
-kotlin = "1.7.0"
+kotlin = "1.7.10"
 okhttp = "4.10.0"
 orbit = "4.3.2"
+sentry = "6.3.0"
 
 # Compose
 compose = "1.2.0"
-compose-compiler = "1.2.0"
+compose-compiler = "1.3.0-beta01"
 
 # Coverage Engine
-intellij = "1.0.673"
+intellij = "1.0.674"
 
 # Plugins
 detekt = "1.21.0"
@@ -30,6 +31,7 @@ apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
+accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version = "1.5.1" }
@@ -87,7 +89,7 @@ gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", v
 gradle-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx:kover", version = "0.5.1" }
-gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.7.0-1.0.6" }
+gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.7.10-1.0.6" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.1.3" }
 gradle-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "3.4.0.2513" }
@@ -125,7 +127,8 @@ orbit-compose = { module = "org.orbit-mvi:orbit-compose", version.ref = "orbit" 
 orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
 
 # Sentry
-sentry = { module = "io.sentry:sentry-android-core", version = "6.3.0" }
+sentry = { module = "io.sentry:sentry-android-core", version.ref = "sentry" }
+sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry" }
 
 # Serialization
 protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.3.3" }
@@ -187,6 +190,7 @@ app = [
     "orbit",
     "orbit-compose",
     "sentry",
+    "sentry-compose",
 ]
 
 kapt = [
