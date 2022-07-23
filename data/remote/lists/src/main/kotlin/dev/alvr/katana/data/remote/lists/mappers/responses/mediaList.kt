@@ -2,17 +2,17 @@ package dev.alvr.katana.data.remote.lists.mappers.responses
 
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
+import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.domain.lists.models.lists.MediaList
-import dev.alvr.katana.domain.lists.models.lists.MediaListEntry
 import dev.alvr.katana.data.remote.lists.fragment.MediaEntry as MediaEntryFragment
 
-internal inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data.mediaList(): List<MediaList<T>> =
+internal inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data.mediaList(): List<MediaListGroup<T>> =
     collection.lists.asSequence().map { list ->
         val entries = list?.entries.orEmpty().asSequence().mapNotNull { entry ->
             entry?.toModel<T>()
         }.toList()
 
-        MediaList(
+        MediaListGroup(
             name = list?.name.orEmpty(),
             entries = entries,
         )
@@ -20,7 +20,7 @@ internal inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data.media
 
 private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry.toModel() =
     mediaListEntry.let { entry ->
-        MediaListEntry(
+        MediaList(
             id = entry.id,
             score = entry.score ?: 0.0,
             progress = entry.progress ?: 0,
