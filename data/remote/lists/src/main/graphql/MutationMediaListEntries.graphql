@@ -1,0 +1,27 @@
+mutation MediaListEntries(
+    $id: Int!,
+    $score: Float,
+    $progress: Int,
+    $progressVolumes: Int,
+    $repeat: Int,
+    $private: Boolean,
+    $notes: String,
+    $hiddenFromStatusLists: Boolean,
+    $startedAt: FuzzyDateInput,
+    $completedAt: FuzzyDateInput,
+) {
+    updateEntry: UpdateMediaListEntries(
+        ids: [$id],
+        score: $score,
+        progress: $progress,
+        progressVolumes: $progressVolumes,
+        repeat: $repeat,
+        private: $private,
+        notes: $notes,
+        hiddenFromStatusLists: $hiddenFromStatusLists,
+        startedAt: $startedAt,
+        completedAt: $completedAt,
+    ) {
+        ...MediaListEntry
+    }
+}

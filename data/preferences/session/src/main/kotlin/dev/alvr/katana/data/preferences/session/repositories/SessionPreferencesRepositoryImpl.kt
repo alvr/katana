@@ -13,6 +13,7 @@ import dev.alvr.katana.domain.session.repositories.SessionPreferencesRepository
 import io.github.aakira.napier.Napier
 import javax.inject.Inject
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
@@ -21,7 +22,7 @@ internal class SessionPreferencesRepositoryImpl @Inject constructor(
 ) : SessionPreferencesRepository {
     override fun isSessionActive() = dataStore.data.map { session ->
         (session.anilistToken == null && session.isSessionActive).not()
-    }
+    }.distinctUntilChanged()
 
     override suspend fun clearActiveSession() = Either.catch(
         f = {

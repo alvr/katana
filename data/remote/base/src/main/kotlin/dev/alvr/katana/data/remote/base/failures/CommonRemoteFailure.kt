@@ -1,6 +1,5 @@
 package dev.alvr.katana.data.remote.base.failures
 
-import com.apollographql.apollo3.exception.ApolloException
 import com.apollographql.apollo3.exception.ApolloHttpException
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.apollographql.apollo3.exception.ApolloParseException
@@ -17,7 +16,7 @@ sealed interface CommonRemoteFailure : Failure {
     object UnknownFailure : CommonRemoteFailure
 
     companion object {
-        fun fromApollo(ex: ApolloException) = when (ex) {
+        operator fun invoke(ex: Throwable) = when (ex) {
             is ApolloHttpException -> NetworkFailure
             is ApolloNetworkException -> NetworkFailure
             is CacheMissException -> CacheFailure
