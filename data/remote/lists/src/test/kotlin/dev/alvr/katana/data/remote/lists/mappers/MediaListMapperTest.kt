@@ -225,7 +225,7 @@ internal class MediaListMapperTest : WordSpec({
         "the media should be type of MediaEntry.Anime" {
             data.mediaList<MediaEntry.Anime>().forAll { list ->
                 list.entries.forAll { entry ->
-                    with(entry) {
+                    with(entry.list) {
                         id shouldBe 100
                         score shouldBe 7.3
                         progress shouldBe 12
@@ -237,20 +237,21 @@ internal class MediaListMapperTest : WordSpec({
                         startedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
                         completedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
                         updatedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDateTime.of(2022, 4, 12, 21, 0, 0))
-                        with(media) {
-                            shouldBeTypeOf<MediaEntry.Anime>()
-                            shouldNotBeTypeOf<MediaEntry>()
-                            shouldNotBeTypeOf<MediaEntry.Manga>()
+                    }
 
-                            id shouldBe 100
-                            title shouldBe "My anime entry"
-                            coverImage shouldBe "https://www.fillmurray.com/128/256"
-                            format shouldBe CommonMediaEntry.Format.TV
-                            episodes shouldBe 23
-                            with(nextEpisode.shouldNotBeNull()) {
-                                at.shouldBeEqualComparingTo(LocalDateTime.of(2022, 4, 12, 21, 0, 0))
-                                number shouldBe 13
-                            }
+                    with(entry.entry) {
+                        shouldBeTypeOf<MediaEntry.Anime>()
+                        shouldNotBeTypeOf<MediaEntry>()
+                        shouldNotBeTypeOf<MediaEntry.Manga>()
+
+                        id shouldBe 100
+                        title shouldBe "My anime entry"
+                        coverImage shouldBe "https://www.fillmurray.com/128/256"
+                        format shouldBe CommonMediaEntry.Format.TV
+                        episodes shouldBe 23
+                        with(nextEpisode.shouldNotBeNull()) {
+                            at.shouldBeEqualComparingTo(LocalDateTime.of(2022, 4, 12, 21, 0, 0))
+                            number shouldBe 13
                         }
                     }
                 }
@@ -314,7 +315,7 @@ internal class MediaListMapperTest : WordSpec({
         "the media should be type of MediaEntry.Manga" {
             data.mediaList<MediaEntry.Manga>().forAll { list ->
                 list.entries.forAll { entry ->
-                    with(entry) {
+                    with(entry.list) {
                         id shouldBe 100
                         score shouldBe 7.3
                         progress shouldBe 12
@@ -326,18 +327,19 @@ internal class MediaListMapperTest : WordSpec({
                         startedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
                         completedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
                         updatedAt.shouldNotBeNull().shouldBeEqualComparingTo(LocalDateTime.of(2022, 4, 12, 21, 0, 0))
-                        with(media) {
-                            shouldBeTypeOf<MediaEntry.Manga>()
-                            shouldNotBeTypeOf<MediaEntry>()
-                            shouldNotBeTypeOf<MediaEntry.Anime>()
+                    }
 
-                            id shouldBe 100
-                            title shouldBe "My manga entry"
-                            coverImage shouldBe "https://www.fillmurray.com/128/256"
-                            format shouldBe CommonMediaEntry.Format.NOVEL
-                            chapters shouldBe 23
-                            volumes shouldBe 2
-                        }
+                    with(entry.entry) {
+                        shouldBeTypeOf<MediaEntry.Manga>()
+                        shouldNotBeTypeOf<MediaEntry>()
+                        shouldNotBeTypeOf<MediaEntry.Anime>()
+
+                        id shouldBe 100
+                        title shouldBe "My manga entry"
+                        coverImage shouldBe "https://www.fillmurray.com/128/256"
+                        format shouldBe CommonMediaEntry.Format.NOVEL
+                        chapters shouldBe 23
+                        volumes shouldBe 2
                     }
                 }
             }
@@ -391,7 +393,7 @@ internal class MediaListMapperTest : WordSpec({
         "the media should be type of MediaEntry.Anime" {
             data.mediaList<MediaEntry.Anime>().forAll { list ->
                 list.entries.forAll { entry ->
-                    with(entry) {
+                    with(entry.list) {
                         id shouldBe 0
                         score shouldBe 0.0
                         progress shouldBe 0
@@ -403,18 +405,19 @@ internal class MediaListMapperTest : WordSpec({
                         startedAt.shouldBeNull()
                         completedAt.shouldBeNull()
                         updatedAt.shouldBeNull()
-                        with(media) {
-                            shouldBeTypeOf<MediaEntry.Anime>()
-                            shouldNotBeTypeOf<MediaEntry>()
-                            shouldNotBeTypeOf<MediaEntry.Manga>()
+                    }
 
-                            id shouldBe 0
-                            title.shouldBeEmpty()
-                            coverImage.shouldBeEmpty()
-                            format shouldBe CommonMediaEntry.Format.UNKNOWN
-                            episodes.shouldBeNull()
-                            nextEpisode.shouldBeNull()
-                        }
+                    with(entry.entry) {
+                        shouldBeTypeOf<MediaEntry.Anime>()
+                        shouldNotBeTypeOf<MediaEntry>()
+                        shouldNotBeTypeOf<MediaEntry.Manga>()
+
+                        id shouldBe 0
+                        title.shouldBeEmpty()
+                        coverImage.shouldBeEmpty()
+                        format shouldBe CommonMediaEntry.Format.UNKNOWN
+                        episodes.shouldBeNull()
+                        nextEpisode.shouldBeNull()
                     }
                 }
             }
@@ -469,7 +472,7 @@ internal class MediaListMapperTest : WordSpec({
         "the media should be type of MediaEntry.Manga" {
             data.mediaList<MediaEntry.Manga>().forAll { list ->
                 list.entries.forAll { entry ->
-                    with(entry) {
+                    with(entry.list) {
                         id shouldBe 0
                         score shouldBe 0.0
                         progress shouldBe 0
@@ -481,18 +484,19 @@ internal class MediaListMapperTest : WordSpec({
                         startedAt.shouldBeNull()
                         completedAt.shouldBeNull()
                         updatedAt.shouldBeNull()
-                        with(media) {
-                            shouldBeTypeOf<MediaEntry.Manga>()
-                            shouldNotBeTypeOf<MediaEntry>()
-                            shouldNotBeTypeOf<MediaEntry.Anime>()
+                    }
 
-                            id shouldBe 0
-                            title.shouldBeEmpty()
-                            coverImage.shouldBeEmpty()
-                            format shouldBe CommonMediaEntry.Format.UNKNOWN
-                            chapters.shouldBeNull()
-                            volumes.shouldBeNull()
-                        }
+                    with(entry.entry) {
+                        shouldBeTypeOf<MediaEntry.Manga>()
+                        shouldNotBeTypeOf<MediaEntry>()
+                        shouldNotBeTypeOf<MediaEntry.Anime>()
+
+                        id shouldBe 0
+                        title.shouldBeEmpty()
+                        coverImage.shouldBeEmpty()
+                        format shouldBe CommonMediaEntry.Format.UNKNOWN
+                        chapters.shouldBeNull()
+                        volumes.shouldBeNull()
                     }
                 }
             }

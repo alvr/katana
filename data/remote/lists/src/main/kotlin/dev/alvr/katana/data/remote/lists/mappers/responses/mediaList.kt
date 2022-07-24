@@ -2,8 +2,9 @@ package dev.alvr.katana.data.remote.lists.mappers.responses
 
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
-import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.domain.lists.models.lists.MediaList
+import dev.alvr.katana.domain.lists.models.lists.MediaListEntry
+import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.data.remote.lists.fragment.MediaEntry as MediaEntryFragment
 
 internal inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data.mediaList(): List<MediaListGroup<T>> =
@@ -20,7 +21,7 @@ internal inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data.media
 
 private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry.toModel() =
     mediaListEntry.let { entry ->
-        MediaList(
+        val list = MediaList(
             id = entry.id,
             score = entry.score ?: 0.0,
             progress = entry.progress ?: 0,
@@ -36,7 +37,10 @@ private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry.toMod
                 dateMapper(date.day, date.month, date.year)
             },
             updatedAt = entry.updatedAt?.toLocalDateTime(),
-            media = media.mediaEntry.toMedia<T>() as T,
+        )
+        MediaListEntry(
+            list = list,
+            entry = media.mediaEntry.toMedia<T>() as T,
         )
     }
 
