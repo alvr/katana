@@ -53,7 +53,6 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import dev.alvr.katana.ui.base.components.EmptyState
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
-import io.github.aakira.napier.Napier
 import java.text.DecimalFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
@@ -71,9 +70,9 @@ internal fun MediaList(
     @StringRes emptyStateRes: Int,
     onRefresh: () -> Unit,
     addPlusOne: (MediaListItem) -> Unit,
+    editEntry: (Int) -> Unit,
+    mediaDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    editEntry: (Int) -> Unit = { Napier.d { "Editing entry $it" } },
-    openDetails: (Int) -> Unit = { Napier.d { "Opening details $it" } },
 ) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(isLoading),
@@ -93,7 +92,7 @@ internal fun MediaList(
                 modifier = Modifier.fillMaxSize(),
                 addPlusOne = addPlusOne,
                 editEntry = editEntry,
-                openDetails = openDetails,
+                mediaDetails = mediaDetails,
             )
         }
     }
@@ -105,7 +104,7 @@ private fun MediaList(
     items: List<MediaListItem>,
     addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
-    openDetails: (Int) -> Unit,
+    mediaDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -124,7 +123,7 @@ private fun MediaList(
                     modifier = Modifier.fillMaxWidth(),
                     addPlusOne = addPlusOne,
                     editEntry = editEntry,
-                    openDetails = openDetails,
+                    mediaDetails = mediaDetails,
                 )
             }
         }
@@ -136,7 +135,7 @@ private fun MediaList(
 private fun MediaListItem(
     addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
-    openDetails: (Int) -> Unit,
+    mediaDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val entry = LocalMediaListItem.current
@@ -146,7 +145,7 @@ private fun MediaListItem(
             .height(144.dp)
             .combinedClickable(
                 enabled = true,
-                onClick = { openDetails(entry.entryId) },
+                onClick = { mediaDetails(entry.entryId) },
                 onDoubleClick = { addPlusOne(entry) },
                 onLongClick = { editEntry(entry.entryId) },
             ),
