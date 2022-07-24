@@ -70,8 +70,8 @@ internal fun MediaList(
     isLoading: Boolean,
     @StringRes emptyStateRes: Int,
     onRefresh: () -> Unit,
+    addPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
-    addPlusOne: (Int) -> Unit = { Napier.d { "Adding +1 to $it" } },
     editEntry: (Int) -> Unit = { Napier.d { "Editing entry $it" } },
     openDetails: (Int) -> Unit = { Napier.d { "Opening details $it" } },
 ) {
@@ -103,7 +103,7 @@ internal fun MediaList(
 @ExperimentalFoundationApi
 private fun MediaList(
     items: List<MediaListItem>,
-    addPlusOne: (Int) -> Unit,
+    addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
     openDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -134,21 +134,21 @@ private fun MediaList(
 @Composable
 @ExperimentalFoundationApi
 private fun MediaListItem(
-    addPlusOne: (Int) -> Unit,
+    addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
     openDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val entryId = LocalMediaListItem.current.entryId
+    val entry = LocalMediaListItem.current
 
     Card(
         modifier = modifier
             .height(144.dp)
             .combinedClickable(
                 enabled = true,
-                onClick = { openDetails(entryId) },
-                onDoubleClick = { addPlusOne(entryId) },
-                onLongClick = { editEntry(entryId) },
+                onClick = { openDetails(entry.entryId) },
+                onDoubleClick = { addPlusOne(entry) },
+                onLongClick = { editEntry(entry.entryId) },
             ),
     ) {
         CardContent(addPlusOne = addPlusOne)
@@ -157,7 +157,7 @@ private fun MediaListItem(
 
 @Composable
 private fun CardContent(
-    addPlusOne: (Int) -> Unit,
+    addPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConstraintLayout {
@@ -302,7 +302,7 @@ private fun Score(
 
 @Composable
 private fun PlusOne(
-    addPlusOne: (Int) -> Unit,
+    addPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val item = LocalMediaListItem.current
@@ -321,13 +321,13 @@ private fun PlusOne(
 @Composable
 private fun PlusOneButton(
     progress: String,
-    addPlusOne: (Int) -> Unit,
+    addPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val entryId = LocalMediaListItem.current.entryId
+    val entry = LocalMediaListItem.current
 
     TextButton(
-        onClick = { addPlusOne(entryId) },
+        onClick = { addPlusOne(entry) },
         modifier = modifier,
         shape = CircleShape,
         colors = ButtonDefaults.outlinedButtonColors(

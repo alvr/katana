@@ -3,9 +3,11 @@ package dev.alvr.katana.ui.lists.entities
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import dev.alvr.katana.ui.lists.R
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Immutable
+@Suppress("ComplexInterface")
 internal sealed interface MediaListItem {
     val entryId: Int
     val mediaId: Int
@@ -15,6 +17,12 @@ internal sealed interface MediaListItem {
     val cover: String
     val progress: Int
     val total: Int?
+    val repeat: Int
+    val private: Boolean
+    val notes: String
+    val hiddenFromStatusLists: Boolean
+    val startedAt: LocalDate?
+    val completedAt: LocalDate?
     val updatedAt: LocalDateTime?
 
     data class AnimeListItem(
@@ -26,6 +34,12 @@ internal sealed interface MediaListItem {
         override val cover: String,
         override val progress: Int,
         override val total: Int?,
+        override val repeat: Int,
+        override val private: Boolean,
+        override val notes: String,
+        override val hiddenFromStatusLists: Boolean,
+        override val startedAt: LocalDate?,
+        override val completedAt: LocalDate?,
         override val updatedAt: LocalDateTime?,
         val nextEpisode: NextEpisode?,
     ) : MediaListItem {
@@ -44,6 +58,12 @@ internal sealed interface MediaListItem {
         override val cover: String,
         override val progress: Int,
         override val total: Int?,
+        override val repeat: Int,
+        override val private: Boolean,
+        override val notes: String,
+        override val hiddenFromStatusLists: Boolean,
+        override val startedAt: LocalDate?,
+        override val completedAt: LocalDate?,
         override val updatedAt: LocalDateTime?,
         val volumesProgress: Int,
         val volumesTotal: Int?,
