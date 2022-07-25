@@ -72,6 +72,13 @@ android {
         }
     }
 
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(KatanaConfiguration.JvmTarget.toInt()))
+            vendor.set(JvmVendorSpec.AZUL)
+        }
+    }
+
     lint {
         abortOnError = false
     }

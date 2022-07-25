@@ -42,6 +42,7 @@ fun BaseExtension.baseAndroidConfig() {
                 test.extensions.configure<KoverTaskExtension> {
                     isDisabled = test.name != "testDebugUnitTest"
                 }
+                test.jvmArgs = listOf("-noverify")
             }
         }
     }
