@@ -27,8 +27,4 @@ dependencies {
 
     testImplementation(projects.utils.tests.unit)
     testImplementation(libs.bundles.test)
-
-    androidTestImplementation(projects.utils.tests.android)
-    androidTestImplementation(libs.bundles.test.android)
-    kaptAndroidTest(libs.bundles.kapt)
 }

@@ -39,15 +39,4 @@ tasks {
             }
         }
     }
-
-    register("allTests") {
-        val instrumentedTests = "connectedDebugAndroidTest"
-
-        dependsOn(unitTests)
-        subprojects.forEach { p ->
-            if (p.tasks.findByName(instrumentedTests) != null) {
-                dependsOn("${p.path}:$instrumentedTests")
-            }
-        }
-    }
 }

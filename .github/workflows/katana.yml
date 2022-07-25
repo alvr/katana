@@ -89,58 +89,6 @@ jobs:
           flags: unittests
           verbose: true
 
-  instrumentation-tests:
-    name: Instrumentation testing
-    runs-on: macos-latest
-    if: github.event_name == 'pull_request'
-    timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        api-level: [ 29, 31 ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Common Steps
-        uses: ./.github/actions/common-steps
-      - name: Setup AVD cache
-        uses: actions/cache@v3
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: ${{ runner.os }}-avd-${{ matrix.api-level }}
-      - name: Create AVD snapshot
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          disable-animations: true
-          force-avd-creation: false
-          ram-size: 4096M
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: echo "Generated AVD snapshot."
-      - name: Instrumentation Tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          disable-animations: true
-          force-avd-creation: false
-          ram-size: 4096M
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
-          script: ./gradlew connectedDebugAndroidTest
-      - name: Upload results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: instrumentation-test-results-${{ matrix.api-level }}
-          path: '**/build/reports/androidTests/connected/**'
-
   sonar:
     name: SonarQube
     runs-on: ubuntu-latest

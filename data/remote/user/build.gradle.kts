@@ -22,8 +22,4 @@ dependencies {
     testImplementation(projects.utils.tests.unit)
     testImplementation(libs.bundles.test)
     testImplementation(libs.bundles.test.data.remote)
-
-    androidTestImplementation(projects.utils.tests.android)
-    androidTestImplementation(libs.bundles.test.android)
-    kaptAndroidTest(libs.bundles.kapt)
 }
