@@ -56,7 +56,7 @@ internal class SessionDataStoreTest {
 
                 data.first() shouldBeEqualToComparingFields Session(
                     anilistToken = "token",
-                    isSessionActive = true
+                    isSessionActive = true,
                 )
             }
         }

@@ -27,7 +27,7 @@ tasks {
         delete(buildDir)
     }
 
-    val unitTests by registering {
+    register("unitTests") {
         val androidUnitTest = "testDebugUnitTest"
         val kotlinUnitTest = "test"
 
