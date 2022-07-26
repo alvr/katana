@@ -3,6 +3,8 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.common.core)
+
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.ui.compose)
 

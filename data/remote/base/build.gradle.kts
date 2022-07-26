@@ -14,6 +14,7 @@ apollo {
 }
 
 dependencies {
+    implementation(projects.common.core)
     implementation(projects.domain.session)
 
     implementation(libs.bundles.common.android)

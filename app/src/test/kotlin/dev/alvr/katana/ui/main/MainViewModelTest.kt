@@ -12,7 +12,6 @@ import dev.alvr.katana.navigation.NavGraphs
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.property.Arb
-import io.kotest.property.arbitrary.bind
 import io.kotest.property.arbitrary.next
 import io.kotest.property.arbitrary.string
 import io.mockk.coEvery

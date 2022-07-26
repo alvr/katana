@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.common.core)
     api(projects.domain.base)
 
     implementation(libs.bundles.common)

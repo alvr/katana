@@ -1,5 +1,7 @@
 package dev.alvr.katana.data.remote.lists.mappers
 
+import dev.alvr.katana.common.core.empty
+import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.base.type.MediaFormat
 import dev.alvr.katana.data.remote.lists.mappers.responses.animeEntry
 import dev.alvr.katana.data.remote.lists.mappers.responses.mediaEntry
@@ -17,9 +19,9 @@ internal class AnimeEntryMapperTest : WordSpec({
         "be mapped to the default values" {
             entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = CommonMediaEntry(
-                    id = 0,
-                    title = "",
-                    coverImage = "",
+                    id = Int.zero,
+                    title = String.empty,
+                    coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
                     genres = emptyList(),
                 ),
@@ -37,7 +39,7 @@ internal class AnimeEntryMapperTest : WordSpec({
 
     "an entry with null values" should {
         val entry = MediaEntryFragment(
-            id = 0,
+            id = Int.zero,
             title = null,
             episodes = null,
             duration = null,
@@ -52,9 +54,9 @@ internal class AnimeEntryMapperTest : WordSpec({
         "be mapped to the default values" {
             entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = CommonMediaEntry(
-                    id = 0,
-                    title = "",
-                    coverImage = "",
+                    id = Int.zero,
+                    title = String.empty,
+                    coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
                     genres = emptyList(),
                 ),
@@ -72,7 +74,7 @@ internal class AnimeEntryMapperTest : WordSpec({
 
     "an entry with null values but data classes with null" should {
         val entry = MediaEntryFragment(
-            id = 0,
+            id = Int.zero,
             title = MediaEntryFragment.Title(null),
             episodes = null,
             duration = null,
@@ -87,9 +89,9 @@ internal class AnimeEntryMapperTest : WordSpec({
         "be mapped to the default values" {
             entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = CommonMediaEntry(
-                    id = 0,
-                    title = "",
-                    coverImage = "",
+                    id = Int.zero,
+                    title = String.empty,
+                    coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
                     genres = emptyList(),
                 ),
@@ -107,7 +109,7 @@ internal class AnimeEntryMapperTest : WordSpec({
 
     "an entry with all properties" should {
         val entry = MediaEntryFragment(
-            id = 0,
+            id = Int.zero,
             title = MediaEntryFragment.Title("One Piece"),
             episodes = 1000,
             duration = 23,
@@ -122,7 +124,7 @@ internal class AnimeEntryMapperTest : WordSpec({
         "be mapped to a `MediaEntry.Anime` class" {
             entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = CommonMediaEntry(
-                    id = 0,
+                    id = Int.zero,
                     title = "One Piece",
                     coverImage = "https://www.fillmurray.com/128/256",
                     format = CommonMediaEntry.Format.ONA,

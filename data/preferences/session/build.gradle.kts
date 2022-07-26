@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.common.core)
     implementation(projects.data.preferences.base)
     implementation(projects.domain.session)
 

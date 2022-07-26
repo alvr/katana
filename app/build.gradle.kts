@@ -95,6 +95,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.common.core)
+
     implementation(projects.data.preferences.base)
     implementation(projects.data.preferences.session)
 

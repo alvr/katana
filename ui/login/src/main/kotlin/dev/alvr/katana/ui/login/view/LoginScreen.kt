@@ -66,6 +66,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
+import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.login.ANILIST_LOGIN
 import dev.alvr.katana.ui.login.ANILIST_REGISTER
 import dev.alvr.katana.ui.login.BACKGROUND_ALPHA
@@ -253,7 +254,7 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
     }
 
     val translation by rememberInfiniteTransition().animateValue(
-        initialValue = 0.dp,
+        initialValue = Int.zero.dp,
         targetValue = 5.dp,
         typeConverter = Dp.VectorConverter,
         animationSpec = infiniteRepeatable(

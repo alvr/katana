@@ -1,6 +1,8 @@
 package dev.alvr.katana.data.remote.lists.mappers
 
 import com.apollographql.apollo3.annotations.ApolloExperimental
+import dev.alvr.katana.common.core.empty
+import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.mappers.responses.mediaList
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
@@ -66,7 +68,7 @@ internal class MediaListMapperTest : WordSpec({
                         entries = emptyList()
                     },
                     list {
-                        name = ""
+                        name = String.empty
                         entries = emptyList()
                     },
                     null,
@@ -350,7 +352,7 @@ internal class MediaListMapperTest : WordSpec({
                         name = "Watching"
                         entries = listOf(
                             entry {
-                                id = 0
+                                id = Int.zero
                                 score = null
                                 progress = null
                                 progressVolumes = null
@@ -363,7 +365,7 @@ internal class MediaListMapperTest : WordSpec({
                                 completedAt = null
                                 updatedAt = null
                                 media = media {
-                                    id = 0
+                                    id = Int.zero
                                     title = null
                                     episodes = null
                                     duration = null
@@ -433,7 +435,7 @@ internal class MediaListMapperTest : WordSpec({
                         name = "Reading"
                         entries = listOf(
                             entry {
-                                id = 0
+                                id = Int.zero
                                 score = null
                                 progress = null
                                 progressVolumes = null
@@ -446,7 +448,7 @@ internal class MediaListMapperTest : WordSpec({
                                 completedAt = null
                                 updatedAt = null
                                 media = media {
-                                    id = 0
+                                    id = Int.zero
                                     title = null
                                     chapters = null
                                     volumes = null

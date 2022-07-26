@@ -8,6 +8,7 @@ ksp {
 }
 
 dependencies {
+    implementation(projects.common.core)
     implementation(projects.ui.base)
 
     implementation(libs.bundles.common.android)

@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.common.core)
     implementation(libs.bundles.common)
 
     kapt(libs.bundles.kapt)

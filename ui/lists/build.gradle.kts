@@ -8,6 +8,7 @@ ksp {
 }
 
 dependencies {
+    implementation(projects.common.core)
     implementation(projects.domain.lists)
     implementation(projects.ui.base)
 
