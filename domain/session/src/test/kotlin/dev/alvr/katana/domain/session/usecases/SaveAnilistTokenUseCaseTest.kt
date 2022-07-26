@@ -10,8 +10,8 @@ import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.property.Arb
-import io.kotest.property.arbitrary.bind
 import io.kotest.property.arbitrary.next
+import io.kotest.property.arbitrary.string
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -20,7 +20,7 @@ internal class SaveAnilistTokenUseCaseTest : FunSpec({
     val repo = mockk<SessionPreferencesRepository>()
     val useCase = SaveSessionUseCase(repo)
 
-    val token = Arb.bind<AnilistToken>().next()
+    val token = AnilistToken(Arb.string(minSize = 1).next())
 
     context("successful saving") {
         coEvery { repo.saveSession(token) } returns Unit.right()

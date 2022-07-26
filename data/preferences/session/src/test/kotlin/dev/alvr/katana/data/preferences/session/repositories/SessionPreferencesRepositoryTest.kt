@@ -13,8 +13,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.property.Arb
-import io.kotest.property.arbitrary.bind
 import io.kotest.property.arbitrary.next
+import io.kotest.property.arbitrary.string
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -130,7 +130,7 @@ internal class SessionPreferencesRepositoryTest : BehaviorSpec({
             }
 
             and("it's the saving token") {
-                val token = Arb.bind<AnilistToken>().next()
+                val token = AnilistToken(Arb.string(minSize = 1).next())
 
                 and("it's a common Exception") {
                     val update = mockk<(Session) -> Session>()

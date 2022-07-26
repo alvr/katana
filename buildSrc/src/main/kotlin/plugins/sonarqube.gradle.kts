@@ -17,6 +17,9 @@ val coverageExclusions = listOf(
     "**/KatanaApp.kt",
     "**/initializers/**",
 
+    // Common
+    "**/common/**",
+
     // Common Android
     "**Activity.kt",
     "**Fragment.kt",
@@ -29,9 +32,6 @@ val coverageExclusions = listOf(
     // Ui
     "**/ui/**/components/**",
     "**/ui/**/view/**",
-
-    // Utils
-    "**/utils/**",
 )
 
 configure<SonarQubeExtension> {

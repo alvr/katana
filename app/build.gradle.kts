@@ -121,7 +121,7 @@ dependencies {
 
     debugImplementation(libs.leakcanary)
 
-    testImplementation(projects.utils.tests.unit)
+    testImplementation(projects.common.tests)
     testImplementation(libs.bundles.test)
 }
 

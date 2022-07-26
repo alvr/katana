@@ -12,6 +12,9 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
+            <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/common/core" />
+            <option value="$PROJECT_DIR$/common/tests" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/data/preferences" />
             <option value="$PROJECT_DIR$/data/preferences/base" />
@@ -32,9 +35,6 @@
             <option value="$PROJECT_DIR$/ui/lists" />
             <option value="$PROJECT_DIR$/ui/login" />
             <option value="$PROJECT_DIR$/ui/social" />
-            <option value="$PROJECT_DIR$/utils" />
-            <option value="$PROJECT_DIR$/utils/tests" />
-            <option value="$PROJECT_DIR$/utils/tests/unit" />
           </set>
         </option>
       </GradleProjectSettings>

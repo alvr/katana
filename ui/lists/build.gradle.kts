@@ -19,6 +19,6 @@ dependencies {
 
     debugImplementation(libs.compose.ui.test.manifest)
 
-    testImplementation(projects.utils.tests.unit)
+    testImplementation(projects.common.tests)
     testImplementation(libs.bundles.test)
 }

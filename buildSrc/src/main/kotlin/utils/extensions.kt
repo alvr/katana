@@ -14,7 +14,6 @@ fun BaseExtension.baseAndroidConfig() {
         minSdk = KatanaConfiguration.MinSdk
         targetSdk = KatanaConfiguration.TargetSdk
 
-        testInstrumentationRunner = "dev.alvr.katana.utils.tests.android.HiltTestRunner"
         vectorDrawables.useSupportLibrary = true
     }
 

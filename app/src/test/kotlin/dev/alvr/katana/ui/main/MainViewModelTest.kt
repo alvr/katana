@@ -14,6 +14,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.bind
 import io.kotest.property.arbitrary.next
+import io.kotest.property.arbitrary.string
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -33,7 +34,7 @@ internal class MainViewModelTest : BehaviorSpec({
         and("the user is logged in") {
             justRun { observeSession() }
 
-            coEvery { getAnilistToken.sync() } returns Arb.bind<AnilistToken>().next().some()
+            coEvery { getAnilistToken.sync() } returns AnilistToken(Arb.string(minSize = 1).next()).some()
             val vm = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
 
             `when`("the user does have a saved token") {
