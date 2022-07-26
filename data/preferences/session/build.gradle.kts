@@ -13,7 +13,7 @@ dependencies {
 
     kapt(libs.bundles.kapt)
 
-    testImplementation(projects.common.tests)
+    testImplementation(projects.common.testsAndroid)
     testImplementation(libs.bundles.test)
     testImplementation(libs.bundles.test.android)
     kaptTest(libs.bundles.kapt)

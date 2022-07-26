@@ -21,6 +21,7 @@ dependencies {
 
     debugImplementation(libs.compose.ui.test.manifest)
 
-    testImplementation(projects.common.tests)
+    testImplementation(projects.common.testsAndroid)
     testImplementation(libs.bundles.test)
+    testImplementation(libs.bundles.test.android)
 }

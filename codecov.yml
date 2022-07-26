@@ -12,6 +12,9 @@ ignore:
   - '**/KatanaApp.kt'
   - '**/initializers/**'
 
+  # Common
+  - 'common'
+
   # Common Android
   - '**/*Activity'
   - '**/*Fragment'
@@ -22,6 +25,3 @@ ignore:
   # Ui
   - '**/ui/**/components/**'
   - '**/ui/**/view/**'
-
-  # Utils
-  - 'utils'
