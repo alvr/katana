@@ -75,20 +75,21 @@ jobs:
         uses: ./.github/actions/common-steps
       - name: Run unit tests
         run: ./gradlew unitTests koverXmlReport koverMergedReport koverMergedVerify
-      - name: Upload coverage reports artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-reports
-          path: '**/build/reports/kover/project-xml/report.xml'
-          retention-days: 1
       - name: Upload tests reports artifact
         uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: tests-reports
           path: |
             **/build/reports/tests/test
             **/build/reports/tests/testDebugUnitTest
           retention-days: 7
+      - name: Upload coverage reports artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-reports
+          path: '**/build/reports/kover/project-xml/report.xml'
+          retention-days: 1
       - name: Upload report to Codecov
         uses: codecov/codecov-action@v3
         with:

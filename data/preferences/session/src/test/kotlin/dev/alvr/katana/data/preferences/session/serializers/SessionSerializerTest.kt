@@ -40,7 +40,7 @@ internal class SessionSerializerTest : BehaviorSpec() {
             }
 
             `when`("when writing to a file") {
-                val token = Arb.string().next()
+                val token = Arb.string(minSize = 1).next()
 
                 sessionSerializer.writeTo(
                     Session(

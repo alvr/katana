@@ -1,6 +1,7 @@
-package dev.alvr.katana.data.preferences.session.datastore
+package dev.alvr.katana.data.preferences.session.di
 
 import android.content.Context
+import android.util.Base64
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
@@ -11,7 +12,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import dev.alvr.katana.data.preferences.base.serializers.encoded
-import dev.alvr.katana.data.preferences.session.di.SessionDataStoreModule
 import dev.alvr.katana.data.preferences.session.models.Session
 import dev.alvr.katana.data.preferences.session.serializers.SessionSerializer
 import javax.inject.Named
@@ -54,7 +54,7 @@ internal object TestSessionDataStoreModule {
             createTempFile()
                 .toFile()
                 .absoluteFile
-                .also { it.writeText("corrupted-${Random.nextBytes(64)}") }
+                .also { it.writeText(Base64.encodeToString(Random.nextBytes(64), Base64.NO_WRAP)) }
                 .copyTo(context.dataStoreFile(CORRUPTED_DATASTORE_FILE))
         }
 
