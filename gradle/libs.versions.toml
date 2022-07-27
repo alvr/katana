@@ -70,7 +70,7 @@ destinations = { module = "io.github.raamcosta.compose-destinations:animations-c
 destinations-compiler = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "destinations" }
 
 # Desugaring
-desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "1.1.6" }
+desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "1.2.0" }
 
 # Detekt
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
