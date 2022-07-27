@@ -12,11 +12,11 @@ import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
 import dev.alvr.katana.common.tests.ComposeTest
 import dev.alvr.katana.ui.social.R
-import org.junit.Before
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 internal class SocialScreenTest : ComposeTest() {
-    @Before
     override fun setUp() {
         super.setUp()
         composeTestRule.setContent {
@@ -25,7 +25,7 @@ internal class SocialScreenTest : ComposeTest() {
     }
 
     @Test
-    fun test_followingTabSelectedByDefault() {
+    fun `Following tab should be selected by default`() {
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_following))
             .onFirst()
@@ -40,7 +40,7 @@ internal class SocialScreenTest : ComposeTest() {
     }
 
     @Test
-    fun test_globalTabSelectedWhenSwiping() {
+    fun `Global tab should be selected when swiping left`() {
         composeTestRule.onRoot().performTouchInput {
             swipeLeft()
         }
@@ -59,7 +59,7 @@ internal class SocialScreenTest : ComposeTest() {
     }
 
     @Test
-    fun test_globalTabSelectedWhenClicking() {
+    fun `Global tab should be selected when clicking its tab`() {
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_global))
             .onFirst()
@@ -75,7 +75,7 @@ internal class SocialScreenTest : ComposeTest() {
     }
 
     @Test
-    fun test_followingTabSelectedWhenSwipingLeftAndRight() {
+    fun `Following tab should be selected when swiping left and right`() {
         composeTestRule.onRoot().performTouchInput {
             swipeLeft()
             swipeRight()

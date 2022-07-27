@@ -12,11 +12,11 @@ import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
 import dev.alvr.katana.common.tests.ComposeTest
 import dev.alvr.katana.ui.explore.R
-import org.junit.Before
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 internal class ExploreScreenTest : ComposeTest() {
-    @Before
     override fun setUp() {
         super.setUp()
         composeTestRule.setContent {
@@ -25,7 +25,7 @@ internal class ExploreScreenTest : ComposeTest() {
     }
 
     @Test
-    fun test_animeTabSelectedByDefault() {
+    fun `Anime tab should be selected by default`() {
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_anime))
             .onFirst()
@@ -40,7 +40,7 @@ internal class ExploreScreenTest : ComposeTest() {
     }
 
     @Test
-    fun test_mangaTabSelectedWhenSwiping() {
+    fun `Manga tab should be selected when swiping left`() {
         composeTestRule.onRoot().performTouchInput {
             swipeLeft()
         }
@@ -59,7 +59,7 @@ internal class ExploreScreenTest : ComposeTest() {
     }
 
     @Test
-    fun test_mangaTabSelectedWhenClicking() {
+    fun `Manga tab should be selected when clicking its tab`() {
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_manga))
             .onFirst()
@@ -75,7 +75,7 @@ internal class ExploreScreenTest : ComposeTest() {
     }
 
     @Test
-    fun test_animeTabSelectedWhenSwipingLeftAndRight() {
+    fun `Anime tab should be selected when swiping left and right`() {
         composeTestRule.onRoot().performTouchInput {
             swipeLeft()
             swipeRight()

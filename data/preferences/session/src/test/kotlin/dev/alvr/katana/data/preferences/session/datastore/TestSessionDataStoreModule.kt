@@ -29,20 +29,14 @@ import kotlinx.serialization.ExperimentalSerializationApi
 )
 internal object TestSessionDataStoreModule {
 
-    internal const val DATASTORE_FILE = "test_session.pb"
+    private const val DATASTORE_FILE = "test_session.pb"
 
     @Provides
     @Singleton
-    fun provideScope(): TestScope = TestScope()
-
-    @Provides
-    @Singleton
-    fun provideSessionDataStore(
-        @ApplicationContext context: Context,
-        scope: TestScope,
-    ): DataStore<Session> = DataStoreFactory.create(
-        produceFile = { context.dataStoreFile(DATASTORE_FILE) },
-        scope = scope,
-        serializer = SessionSerializer.encoded(),
-    )
+    fun provideSessionDataStore(@ApplicationContext context: Context): DataStore<Session> =
+        DataStoreFactory.create(
+            produceFile = { context.dataStoreFile(DATASTORE_FILE) },
+            scope = TestScope(),
+            serializer = SessionSerializer.encoded(),
+        )
 }

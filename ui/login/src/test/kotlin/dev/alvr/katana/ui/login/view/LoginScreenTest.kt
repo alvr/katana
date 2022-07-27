@@ -8,11 +8,13 @@ import androidx.compose.ui.test.performClick
 import dev.alvr.katana.common.tests.ComposeTest
 import dev.alvr.katana.ui.login.GET_STARTED_BUTTON_TAG
 import dev.alvr.katana.ui.login.R
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 internal class LoginScreenTest : ComposeTest() {
     @Test
-    fun test_logoAndDescriptionAreDisplayed() {
+    fun `Logo and Description should be displayed`() {
         composeTestRule.setContent {
             Header()
             Bottom()
@@ -28,7 +30,7 @@ internal class LoginScreenTest : ComposeTest() {
     }
 
     @Test
-    fun test_getStartedBlockIsDisplayed() {
+    fun `GetStarted should be displayed`() {
         composeTestRule.setContent {
             Header()
             Bottom()
@@ -56,7 +58,7 @@ internal class LoginScreenTest : ComposeTest() {
     }
 
     @Test
-    fun test_beginBlockIsDisplayedAfterClick() {
+    fun `Begin block should be displayed after clicking`() {
         composeTestRule.setContent {
             Header()
             Bottom()

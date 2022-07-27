@@ -8,8 +8,6 @@ import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 @HiltAndroidTest
@@ -19,19 +17,16 @@ internal class SessionDataStoreTest : HiltTest() {
     @Inject
     internal lateinit var dataStore: DataStore<Session>
 
-    @Inject
-    internal lateinit var scope: TestScope
-
     @Test
     fun `initial session should equal to the Session class`() {
-        scope.runTest {
+        runTest {
             dataStore.data.first() shouldBeEqualToComparingFields Session()
         }
     }
 
     @Test
     fun `saving a session should return the same values`() {
-        scope.runTest {
+        runTest {
             with(dataStore) {
                 updateData { p -> p.copy(anilistToken = "token", isSessionActive = true) }
 
