@@ -49,7 +49,7 @@ jobs:
         uses: ./.github/actions/common-steps
       - name: Run detekt
         run: ./gradlew detektAll lintDebug
-      - name: Upload static report artifacts
+      - name: Upload static reports artifact
         uses: actions/upload-artifact@v3
         with:
           name: static-report
@@ -57,7 +57,7 @@ jobs:
             build/reports/detekt/detekt.xml
             **/build/reports/lint-results-debug.xml
           retention-days: 1
-      - name: Upload detekt report
+      - name: Analyze detekt report
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: build/reports/detekt/detekt.sarif
@@ -75,7 +75,16 @@ jobs:
         uses: ./.github/actions/common-steps
       - name: Run unit tests
         run: ./gradlew unitTests koverXmlReport koverMergedReport koverMergedVerify
-      - name: Upload coverage report artifact
+      - name: Upload tests reports artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: tests-reports
+          path: |
+            **/build/reports/tests/test
+            **/build/reports/tests/testDebugUnitTest
+          retention-days: 7
+      - name: Upload coverage reports artifact
         uses: actions/upload-artifact@v3
         with:
           name: coverage-reports
@@ -88,58 +97,6 @@ jobs:
           files: build/reports/kover/report.xml
           flags: unittests
           verbose: true
-
-  instrumentation-tests:
-    name: Instrumentation testing
-    runs-on: macos-latest
-    if: github.event_name == 'pull_request'
-    timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        api-level: [ 29, 31 ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Common Steps
-        uses: ./.github/actions/common-steps
-      - name: Setup AVD cache
-        uses: actions/cache@v3
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: ${{ runner.os }}-avd-${{ matrix.api-level }}
-      - name: Create AVD snapshot
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          disable-animations: true
-          force-avd-creation: false
-          ram-size: 4096M
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: echo "Generated AVD snapshot."
-      - name: Instrumentation Tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          disable-animations: true
-          force-avd-creation: false
-          ram-size: 4096M
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
-          script: ./gradlew connectedDebugAndroidTest
-      - name: Upload results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: instrumentation-test-results-${{ matrix.api-level }}
-          path: '**/build/reports/androidTests/connected/**'
 
   sonar:
     name: SonarQube

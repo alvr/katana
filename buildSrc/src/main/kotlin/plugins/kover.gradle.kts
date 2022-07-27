@@ -27,6 +27,9 @@ val koverExcludes = listOf(
     "*.remote.*.type.*",
     "*.remote.*.*Query*",
 
+    // Common
+    "*.common.*",
+
     // Common Android
     "*.BuildConfig",
     "*.*Activity",
@@ -46,9 +49,6 @@ val koverExcludes = listOf(
     // Ui
     "*.ui.*.components.*",
     "*.ui.*.view.*",
-
-    // Utils
-    "*.utils.*",
 )
 
 val koverMinCoveredLines = 80

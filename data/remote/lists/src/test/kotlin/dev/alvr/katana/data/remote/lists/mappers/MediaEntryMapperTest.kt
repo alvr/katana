@@ -1,5 +1,6 @@
 package dev.alvr.katana.data.remote.lists.mappers
 
+import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.base.type.MediaFormat
 import dev.alvr.katana.data.remote.lists.mappers.responses.mediaEntry
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
@@ -12,7 +13,7 @@ internal class MediaEntryMapperTest : WordSpec({
     "when the format is known" should {
         val formats = MediaFormat.knownValues().map { format ->
             MediaEntryFragment(
-                id = 0,
+                id = Int.zero,
                 title = null,
                 episodes = null,
                 duration = null,
@@ -33,7 +34,7 @@ internal class MediaEntryMapperTest : WordSpec({
     "the format is not known" `when` {
         "is unknown" should {
             val entryFormat = MediaEntryFragment(
-                id = 0,
+                id = Int.zero,
                 title = null,
                 episodes = null,
                 duration = null,
@@ -52,7 +53,7 @@ internal class MediaEntryMapperTest : WordSpec({
 
         "is null" should {
             val entryFormat = MediaEntryFragment(
-                id = 0,
+                id = Int.zero,
                 title = null,
                 episodes = null,
                 duration = null,

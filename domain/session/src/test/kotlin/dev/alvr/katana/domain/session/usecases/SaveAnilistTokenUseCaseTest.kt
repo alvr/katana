@@ -2,6 +2,7 @@ package dev.alvr.katana.domain.session.usecases
 
 import arrow.core.left
 import arrow.core.right
+import dev.alvr.katana.common.tests.valueMockk
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.session.failures.SessionPreferencesFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
@@ -9,9 +10,6 @@ import dev.alvr.katana.domain.session.repositories.SessionPreferencesRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.property.Arb
-import io.kotest.property.arbitrary.bind
-import io.kotest.property.arbitrary.next
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -20,7 +18,7 @@ internal class SaveAnilistTokenUseCaseTest : FunSpec({
     val repo = mockk<SessionPreferencesRepository>()
     val useCase = SaveSessionUseCase(repo)
 
-    val token = Arb.bind<AnilistToken>().next()
+    val token = valueMockk<AnilistToken>()
 
     context("successful saving") {
         coEvery { repo.saveSession(token) } returns Unit.right()

@@ -14,7 +14,6 @@ fun BaseExtension.baseAndroidConfig() {
         minSdk = KatanaConfiguration.MinSdk
         targetSdk = KatanaConfiguration.TargetSdk
 
-        testInstrumentationRunner = "dev.alvr.katana.utils.tests.android.HiltTestRunner"
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -42,6 +41,7 @@ fun BaseExtension.baseAndroidConfig() {
                 test.extensions.configure<KoverTaskExtension> {
                     isDisabled = test.name != "testDebugUnitTest"
                 }
+                test.jvmArgs = listOf("-noverify")
             }
         }
     }

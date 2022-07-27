@@ -1,9 +1,23 @@
+coverage:
+  status:
+    patch:
+      default:
+        target: 80%
+        threshold: 1%
+    project:
+      default:
+        target: 80%
+        threshold: 1%
+
 ignore:
   - '**/build/**'
 
   # App
   - '**/KatanaApp.kt'
   - '**/initializers/**'
+
+  # Common
+  - '**/common/**'
 
   # Common Android
   - '**/*Activity'
@@ -15,6 +29,3 @@ ignore:
   # Ui
   - '**/ui/**/components/**'
   - '**/ui/**/view/**'
-
-  # Utils
-  - 'utils'

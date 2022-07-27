@@ -14,6 +14,7 @@ apollo {
 }
 
 dependencies {
+    implementation(projects.common.core)
     implementation(projects.domain.session)
 
     implementation(libs.bundles.common.android)
@@ -25,10 +26,6 @@ dependencies {
 
     kapt(libs.bundles.kapt)
 
-    testImplementation(projects.utils.tests.unit)
+    testImplementation(projects.common.tests)
     testImplementation(libs.bundles.test)
-
-    androidTestImplementation(projects.utils.tests.android)
-    androidTestImplementation(libs.bundles.test.android)
-    kaptAndroidTest(libs.bundles.kapt)
 }

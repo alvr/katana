@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
+import dev.alvr.katana.common.core.zero
 
 @Stable
 @Immutable
@@ -83,7 +84,7 @@ private fun TabSelector(
             modifier = tabRowModifier,
             selectedTabIndex = pagerState.currentPage,
             indicator = tabIndicator,
-            edgePadding = 0.dp,
+            edgePadding = Int.zero.dp,
             tabs = tabList,
         )
     } else {

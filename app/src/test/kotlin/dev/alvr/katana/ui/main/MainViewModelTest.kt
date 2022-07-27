@@ -2,6 +2,7 @@ package dev.alvr.katana.ui.main
 
 import arrow.core.none
 import arrow.core.some
+import dev.alvr.katana.common.tests.valueMockk
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.session.models.AnilistToken
@@ -11,9 +12,6 @@ import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.navigation.NavGraphs
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.property.Arb
-import io.kotest.property.arbitrary.bind
-import io.kotest.property.arbitrary.next
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -33,7 +31,7 @@ internal class MainViewModelTest : BehaviorSpec({
         and("the user is logged in") {
             justRun { observeSession() }
 
-            coEvery { getAnilistToken.sync() } returns Arb.bind<AnilistToken>().next().some()
+            coEvery { getAnilistToken.sync() } returns valueMockk<AnilistToken>().some()
             val vm = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
 
             `when`("the user does have a saved token") {

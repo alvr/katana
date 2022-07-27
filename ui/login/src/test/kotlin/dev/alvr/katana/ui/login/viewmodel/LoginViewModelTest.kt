@@ -3,6 +3,7 @@ package dev.alvr.katana.ui.login.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import arrow.core.left
 import arrow.core.right
+import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.session.failures.SessionPreferencesFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
@@ -132,7 +133,7 @@ internal class LoginViewModelTest : BehaviorSpec({
     }
 
     given("a deeplink that is empty") {
-        every { stateHandle.get<String>(any()) } returns ""
+        every { stateHandle.get<String>(any()) } returns String.empty
         coEvery { saveAnilistToken(AnilistToken(any())) } returns Unit.right()
         coEvery { saveUserId() } returns Unit.right()
 

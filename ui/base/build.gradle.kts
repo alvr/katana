@@ -3,17 +3,16 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.common.core)
+
     implementation(libs.bundles.common.android)
     implementation(libs.bundles.ui.compose)
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.compose.fonts)
 
-    testImplementation(projects.utils.tests.unit)
-    testImplementation(libs.bundles.test)
+    kapt(libs.bundles.kapt.ui)
 
-    androidTestImplementation(projects.utils.tests.android)
-    androidTestImplementation(libs.bundles.test.android)
-    androidTestImplementation(libs.bundles.test.ui)
-    kaptAndroidTest(libs.bundles.kapt)
+    testImplementation(projects.common.tests)
+    testImplementation(libs.bundles.test)
 }

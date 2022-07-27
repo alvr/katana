@@ -8,6 +8,7 @@ import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.apollographql.apollo3.testing.MapTestNetworkTransport
 import com.apollographql.apollo3.testing.registerTestNetworkError
 import com.apollographql.apollo3.testing.registerTestResponse
+import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.base.extensions.optional
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
@@ -124,7 +125,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                     name = "Watching"
                                     entries = listOf(
                                         entry {
-                                            id = 0
+                                            id = Int.zero
                                             score = null
                                             progress = null
                                             progressVolumes = null
@@ -136,7 +137,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                             startedAt = null
                                             completedAt = null
                                             media = media {
-                                                id = 0
+                                                id = Int.zero
                                                 title = null
                                                 episodes = null
                                                 duration = null
@@ -387,7 +388,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                     name = "Reading"
                                     entries = listOf(
                                         entry {
-                                            id = 0
+                                            id = Int.zero
                                             score = null
                                             progress = null
                                             progressVolumes = null
@@ -399,7 +400,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                             startedAt = null
                                             completedAt = null
                                             media = media {
-                                                id = 0
+                                                id = Int.zero
                                                 title = null
                                                 chapters = null
                                                 volumes = null

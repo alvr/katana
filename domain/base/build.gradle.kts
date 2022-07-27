@@ -3,10 +3,11 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.common.core)
     implementation(libs.bundles.common)
 
     kapt(libs.bundles.kapt)
 
-    testImplementation(projects.utils.tests.unit)
+    testImplementation(projects.common.tests)
     testImplementation(libs.bundles.test)
 }

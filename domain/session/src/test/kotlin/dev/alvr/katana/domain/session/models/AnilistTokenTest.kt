@@ -1,5 +1,6 @@
 package dev.alvr.katana.domain.session.models
 
+import dev.alvr.katana.common.core.empty
 import io.kotest.assertions.throwables.shouldNotThrowExactlyUnit
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.WordSpec
@@ -13,7 +14,7 @@ internal class AnilistTokenTest : WordSpec({
     "if the token is empty" should {
         "throw an exception" {
             shouldThrowExactly<IllegalArgumentException> {
-                AnilistToken("")
+                AnilistToken(String.empty)
             } shouldHaveMessage "Token should not be empty."
         }
     }

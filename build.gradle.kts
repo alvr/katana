@@ -27,7 +27,7 @@ tasks {
         delete(buildDir)
     }
 
-    val unitTests by registering {
+    register("unitTests") {
         val androidUnitTest = "testDebugUnitTest"
         val kotlinUnitTest = "test"
 
@@ -36,17 +36,6 @@ tasks {
                 dependsOn("${p.path}:$androidUnitTest")
             } else if (p.tasks.findByName(kotlinUnitTest) != null) {
                 dependsOn("${p.path}:$kotlinUnitTest")
-            }
-        }
-    }
-
-    register("allTests") {
-        val instrumentedTests = "connectedDebugAndroidTest"
-
-        dependsOn(unitTests)
-        subprojects.forEach { p ->
-            if (p.tasks.findByName(instrumentedTests) != null) {
-                dependsOn("${p.path}:$instrumentedTests")
             }
         }
     }

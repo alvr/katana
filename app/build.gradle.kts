@@ -72,6 +72,13 @@ android {
         }
     }
 
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(KatanaConfiguration.JvmTarget.toInt()))
+            vendor.set(JvmVendorSpec.AZUL)
+        }
+    }
+
     lint {
         abortOnError = false
     }
@@ -88,6 +95,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.common.core)
+
     implementation(projects.data.preferences.base)
     implementation(projects.data.preferences.session)
 
@@ -114,13 +123,8 @@ dependencies {
 
     debugImplementation(libs.leakcanary)
 
-    testImplementation(projects.utils.tests.unit)
+    testImplementation(projects.common.tests)
     testImplementation(libs.bundles.test)
-
-    androidTestImplementation(projects.utils.tests.android)
-    androidTestImplementation(libs.bundles.test.android)
-    androidTestImplementation(libs.bundles.test.ui)
-    kaptAndroidTest(libs.bundles.kapt)
 }
 
 fun Properties.getValue(key: String, env: String) =

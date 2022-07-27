@@ -8,6 +8,7 @@ ksp {
 }
 
 dependencies {
+    implementation(projects.common.core)
     implementation(projects.domain.lists)
     implementation(projects.ui.base)
 
@@ -19,11 +20,7 @@ dependencies {
 
     debugImplementation(libs.compose.ui.test.manifest)
 
-    testImplementation(projects.utils.tests.unit)
+    testImplementation(projects.common.testsAndroid)
     testImplementation(libs.bundles.test)
-
-    androidTestImplementation(projects.utils.tests.android)
-    androidTestImplementation(libs.bundles.test.android)
-    androidTestImplementation(libs.bundles.test.ui)
-    kaptAndroidTest(libs.bundles.kapt)
+    testImplementation(libs.bundles.test.android)
 }
