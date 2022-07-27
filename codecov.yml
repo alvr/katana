@@ -1,5 +1,9 @@
 coverage:
   status:
+    patch:
+      default:
+        target: 80%
+        threshold: 1%
     project:
       default:
         target: 80%
@@ -13,7 +17,7 @@ ignore:
   - '**/initializers/**'
 
   # Common
-  - 'common'
+  - '**/common/**'
 
   # Common Android
   - '**/*Activity'

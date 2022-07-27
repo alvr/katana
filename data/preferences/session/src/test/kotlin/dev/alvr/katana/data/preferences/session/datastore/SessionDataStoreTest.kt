@@ -6,6 +6,7 @@ import dev.alvr.katana.common.tests.HiltTest
 import dev.alvr.katana.data.preferences.session.models.Session
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import javax.inject.Inject
+import javax.inject.Named
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import org.junit.Test
@@ -15,7 +16,12 @@ import org.junit.Test
 internal class SessionDataStoreTest : HiltTest() {
 
     @Inject
+    @Named("dataStore")
     internal lateinit var dataStore: DataStore<Session>
+
+    @Inject
+    @Named("corruptedDataStore")
+    internal lateinit var corruptedDataStore: DataStore<Session>
 
     @Test
     fun `initial session should equal to the Session class`() {
@@ -35,6 +41,13 @@ internal class SessionDataStoreTest : HiltTest() {
                     isSessionActive = true,
                 )
             }
+        }
+    }
+
+    @Test
+    fun `corrupted dataStore should recreate again the file with initial values`() {
+        runTest {
+            corruptedDataStore.data.first() shouldBeEqualToComparingFields Session(anilistToken = "recreated")
         }
     }
 }
