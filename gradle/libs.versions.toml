@@ -10,7 +10,7 @@ okhttp = "4.10.0"
 orbit = "4.3.2"
 
 # Compose
-compose = "1.2.0-rc03"
+compose = "1.2.0"
 compose-compiler = "1.2.0"
 
 # Coverage Engine
