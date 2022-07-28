@@ -20,7 +20,7 @@ intellij = "1.0.673"
 detekt = "1.21.0"
 
 # Tests
-kotest = "5.4.0"
+kotest = "5.4.1"
 
 [plugins]
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
