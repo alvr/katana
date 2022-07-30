@@ -1,36 +1,35 @@
-package dev.alvr.katana.data.remote.lists.mappers
+package dev.alvr.katana.data.remote.lists.mappers.responses
 
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.base.type.MediaFormat
-import dev.alvr.katana.data.remote.lists.mappers.responses.mangaEntry
-import dev.alvr.katana.data.remote.lists.mappers.responses.mediaEntry
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import java.time.LocalDateTime
 import dev.alvr.katana.data.remote.lists.fragment.MediaEntry as MediaEntryFragment
 
-internal class MangaEntryMapperTest : WordSpec({
+internal class AnimeEntryMapperTest : WordSpec({
     "a null entry" should {
         val entry: MediaEntryFragment? = null
 
         "be mapped to the default values" {
-            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
+            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = CommonMediaEntry(
                     id = Int.zero,
                     title = String.empty,
                     coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
                 ),
-                chapters = null,
-                volumes = null,
+                episodes = null,
+                nextEpisode = null,
             )
 
-            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
+            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = entry.mediaEntry(),
-                chapters = null,
-                volumes = null,
+                episodes = null,
+                nextEpisode = null,
             )
         }
     }
@@ -48,21 +47,21 @@ internal class MangaEntryMapperTest : WordSpec({
         )
 
         "be mapped to the default values" {
-            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
+            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = CommonMediaEntry(
                     id = Int.zero,
                     title = String.empty,
                     coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
                 ),
-                chapters = null,
-                volumes = null,
+                episodes = null,
+                nextEpisode = null,
             )
 
-            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
+            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = entry.mediaEntry(),
-                chapters = null,
-                volumes = null,
+                episodes = null,
+                nextEpisode = null,
             )
         }
     }
@@ -80,21 +79,21 @@ internal class MangaEntryMapperTest : WordSpec({
         )
 
         "be mapped to the default values" {
-            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
+            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = CommonMediaEntry(
                     id = Int.zero,
                     title = String.empty,
                     coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
                 ),
-                chapters = null,
-                volumes = null,
+                episodes = null,
+                nextEpisode = null,
             )
 
-            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
+            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = entry.mediaEntry(),
-                chapters = null,
-                volumes = null,
+                episodes = null,
+                nextEpisode = null,
             )
         }
     }
@@ -103,30 +102,36 @@ internal class MangaEntryMapperTest : WordSpec({
         val entry = MediaEntryFragment(
             id = Int.zero,
             title = MediaEntryFragment.Title("One Piece"),
-            episodes = null,
-            chapters = 1046,
-            volumes = 101,
-            format = MediaFormat.MANGA,
+            episodes = 1000,
+            chapters = null,
+            volumes = null,
+            format = MediaFormat.ONA,
             coverImage = MediaEntryFragment.CoverImage("https://www.fillmurray.com/128/256"),
-            nextAiringEpisode = null,
+            nextAiringEpisode = MediaEntryFragment.NextAiringEpisode(1_241_517_600, 1001),
         )
 
-        "be mapped to a `MediaEntry.Manga` class" {
-            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
+        "be mapped to a `MediaEntry.Anime` class" {
+            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = CommonMediaEntry(
                     id = Int.zero,
                     title = "One Piece",
                     coverImage = "https://www.fillmurray.com/128/256",
-                    format = CommonMediaEntry.Format.MANGA,
+                    format = CommonMediaEntry.Format.ONA,
                 ),
-                chapters = 1046,
-                volumes = 101,
+                episodes = 1000,
+                nextEpisode = MediaEntry.Anime.NextEpisode(
+                    1001,
+                    LocalDateTime.of(2009, 5, 5, 12, 0, 0),
+                ),
             )
 
-            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
+            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
                 entry = entry.mediaEntry(),
-                chapters = 1046,
-                volumes = 101,
+                episodes = 1000,
+                nextEpisode = MediaEntry.Anime.NextEpisode(
+                    1001,
+                    LocalDateTime.of(2009, 5, 5, 12, 0, 0),
+                ),
             )
         }
     }

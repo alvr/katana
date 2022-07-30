@@ -1,8 +1,7 @@
-package dev.alvr.katana.data.remote.lists.mappers
+package dev.alvr.katana.data.remote.lists.mappers.responses
 
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.base.type.MediaFormat
-import dev.alvr.katana.data.remote.lists.mappers.responses.mediaEntry
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldNotContain

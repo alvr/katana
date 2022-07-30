@@ -1,6 +1,5 @@
-package dev.alvr.katana.data.remote.lists.mappers
+package dev.alvr.katana.data.remote.lists.mappers.responses
 
-import dev.alvr.katana.data.remote.lists.mappers.responses.dateMapper
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
 import io.kotest.matchers.nulls.shouldBeNull

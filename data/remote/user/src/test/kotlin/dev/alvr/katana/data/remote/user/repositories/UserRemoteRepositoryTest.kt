@@ -21,7 +21,6 @@ import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coEvery
-import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.spyk
@@ -63,7 +62,7 @@ internal class UserRemoteRepositoryTest : BehaviorSpec({
 
         `when`("saving the userId") {
             and("is successful") {
-                coJustRun { client.query(UserIdQuery()).execute() }
+                coEvery { client.query(UserIdQuery()).execute() } returns mockk()
 
                 then("it just execute the UserIdQuery") {
                     repo.saveUserId().shouldBeRight()

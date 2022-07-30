@@ -1,10 +1,9 @@
-package dev.alvr.katana.data.remote.lists.mappers
+package dev.alvr.katana.data.remote.lists.mappers.responses
 
 import com.apollographql.apollo3.annotations.ApolloExperimental
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
-import dev.alvr.katana.data.remote.lists.mappers.responses.mediaList
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
@@ -26,6 +25,7 @@ import io.kotest.matchers.types.shouldNotBeTypeOf
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+@Suppress("LargeClass")
 @OptIn(ApolloExperimental::class)
 internal class MediaListMapperTest : WordSpec({
     "a null response from server" should {
@@ -44,6 +44,7 @@ internal class MediaListMapperTest : WordSpec({
         val data = MediaListCollectionQuery.Data {
             collection = collection {
                 lists = emptyList()
+                user = null
             }
         }
 
@@ -130,6 +131,129 @@ internal class MediaListMapperTest : WordSpec({
         }
     }
 
+    "a collection of animes without entries and sectionOrder" should {
+        val data = MediaListCollectionQuery.Data {
+            collection = collection {
+                lists = listOf(
+                    list {
+                        name = "Rewatching"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Watching"
+                        entries = listOf(null)
+                    },
+                    list {
+                        name = "Paused"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Completed TV"
+                        entries = emptyList()
+                    },
+                )
+                user = user {
+                    mediaListOptions = mediaListOptions {
+                        animeList = animeList {
+                            sectionOrder = null
+                        }
+                    }
+                }
+            }
+        }
+
+        "return a sorted media list" {
+            data.mediaList<MediaEntry.Anime>()
+                .also { list ->
+                    list[0].name shouldBe "Rewatching"
+                    list[1].name shouldBe "Watching"
+                    list[2].name shouldBe "Paused"
+                    list[3].name shouldBe "Completed TV"
+                }
+                .shouldHaveSize(4)
+        }
+    }
+
+    "a collection of animes without entries and mediaListOptions" should {
+        val data = MediaListCollectionQuery.Data {
+            collection = collection {
+                lists = listOf(
+                    list {
+                        name = "Rewatching"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Watching"
+                        entries = listOf(null)
+                    },
+                    list {
+                        name = "Paused"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Completed TV"
+                        entries = emptyList()
+                    },
+                )
+                user = user {
+                    mediaListOptions = null
+                }
+            }
+        }
+
+        "return a sorted media list" {
+            data.mediaList<MediaEntry.Anime>()
+                .also { list ->
+                    list[0].name shouldBe "Rewatching"
+                    list[1].name shouldBe "Watching"
+                    list[2].name shouldBe "Paused"
+                    list[3].name shouldBe "Completed TV"
+                }
+                .shouldHaveSize(4)
+        }
+    }
+
+    "a collection of animes without entries and animeListSorting" should {
+        val data = MediaListCollectionQuery.Data {
+            collection = collection {
+                lists = listOf(
+                    list {
+                        name = "Rewatching"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Watching"
+                        entries = listOf(null)
+                    },
+                    list {
+                        name = "Paused"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Completed TV"
+                        entries = emptyList()
+                    },
+                )
+                user = user {
+                    mediaListOptions = mediaListOptions {
+                        animeList = null
+                    }
+                }
+            }
+        }
+
+        "return a sorted media list" {
+            data.mediaList<MediaEntry.Anime>()
+                .also { list ->
+                    list[0].name shouldBe "Rewatching"
+                    list[1].name shouldBe "Watching"
+                    list[2].name shouldBe "Paused"
+                    list[3].name shouldBe "Completed TV"
+                }
+                .shouldHaveSize(4)
+        }
+    }
+
     "a collection of mangas without entries" should {
         val data = MediaListCollectionQuery.Data {
             collection = collection {
@@ -168,6 +292,129 @@ internal class MediaListMapperTest : WordSpec({
                     list[1].name shouldBe "Rereading"
                     list[2].name shouldBe "Completed Novel"
                     list[3].name shouldBe "Paused"
+                }
+                .shouldHaveSize(4)
+        }
+    }
+
+    "a collection of mangas without entries and sectionOrder" should {
+        val data = MediaListCollectionQuery.Data {
+            collection = collection {
+                lists = listOf(
+                    list {
+                        name = "Rereading"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Reading"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Paused"
+                        entries = listOf(null)
+                    },
+                    list {
+                        name = "Completed Novel"
+                        entries = emptyList()
+                    },
+                )
+                user = user {
+                    mediaListOptions = mediaListOptions {
+                        mangaList = mangaList {
+                            sectionOrder = null
+                        }
+                    }
+                }
+            }
+        }
+
+        "return a sorted media list" {
+            data.mediaList<MediaEntry.Manga>()
+                .also { list ->
+                    list[0].name shouldBe "Rereading"
+                    list[1].name shouldBe "Reading"
+                    list[2].name shouldBe "Paused"
+                    list[3].name shouldBe "Completed Novel"
+                }
+                .shouldHaveSize(4)
+        }
+    }
+
+    "a collection of mangas without entries and mediaListOptions" should {
+        val data = MediaListCollectionQuery.Data {
+            collection = collection {
+                lists = listOf(
+                    list {
+                        name = "Rereading"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Reading"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Paused"
+                        entries = listOf(null)
+                    },
+                    list {
+                        name = "Completed Novel"
+                        entries = emptyList()
+                    },
+                )
+                user = user {
+                    mediaListOptions = null
+                }
+            }
+        }
+
+        "return a sorted media list" {
+            data.mediaList<MediaEntry.Manga>()
+                .also { list ->
+                    list[0].name shouldBe "Rereading"
+                    list[1].name shouldBe "Reading"
+                    list[2].name shouldBe "Paused"
+                    list[3].name shouldBe "Completed Novel"
+                }
+                .shouldHaveSize(4)
+        }
+    }
+
+    "a collection of mangas without entries and mangaListSorting" should {
+        val data = MediaListCollectionQuery.Data {
+            collection = collection {
+                lists = listOf(
+                    list {
+                        name = "Rereading"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Reading"
+                        entries = emptyList()
+                    },
+                    list {
+                        name = "Paused"
+                        entries = listOf(null)
+                    },
+                    list {
+                        name = "Completed Novel"
+                        entries = emptyList()
+                    },
+                )
+                user = user {
+                    mediaListOptions = mediaListOptions {
+                        mangaList = null
+                    }
+                }
+            }
+        }
+
+        "return a sorted media list" {
+            data.mediaList<MediaEntry.Manga>()
+                .also { list ->
+                    list[0].name shouldBe "Rereading"
+                    list[1].name shouldBe "Reading"
+                    list[2].name shouldBe "Paused"
+                    list[3].name shouldBe "Completed Novel"
                 }
                 .shouldHaveSize(4)
         }
@@ -394,11 +641,11 @@ internal class MediaListMapperTest : WordSpec({
             data.mediaList<MediaEntry.Anime>().forAll { list ->
                 list.entries.forAll { entry ->
                     with(entry.list) {
-                        id shouldBe 0
-                        score shouldBe 0.0
-                        progress shouldBe 0
+                        id shouldBe Int.zero
+                        score shouldBe Double.zero
+                        progress shouldBe Int.zero
                         progressVolumes.shouldBeNull()
-                        repeat shouldBe 0
+                        repeat shouldBe Int.zero
                         private.shouldBeFalse()
                         notes.shouldBeEmpty()
                         hiddenFromStatusLists.shouldBeFalse()
@@ -412,7 +659,7 @@ internal class MediaListMapperTest : WordSpec({
                         shouldNotBeTypeOf<MediaEntry>()
                         shouldNotBeTypeOf<MediaEntry.Manga>()
 
-                        id shouldBe 0
+                        id shouldBe Int.zero
                         title.shouldBeEmpty()
                         coverImage.shouldBeEmpty()
                         format shouldBe CommonMediaEntry.Format.UNKNOWN
@@ -473,11 +720,11 @@ internal class MediaListMapperTest : WordSpec({
             data.mediaList<MediaEntry.Manga>().forAll { list ->
                 list.entries.forAll { entry ->
                     with(entry.list) {
-                        id shouldBe 0
-                        score shouldBe 0.0
-                        progress shouldBe 0
+                        id shouldBe Int.zero
+                        score shouldBe Double.zero
+                        progress shouldBe Int.zero
                         progressVolumes.shouldBeNull()
-                        repeat shouldBe 0
+                        repeat shouldBe Int.zero
                         private.shouldBeFalse()
                         notes.shouldBeEmpty()
                         hiddenFromStatusLists.shouldBeFalse()
@@ -491,7 +738,7 @@ internal class MediaListMapperTest : WordSpec({
                         shouldNotBeTypeOf<MediaEntry>()
                         shouldNotBeTypeOf<MediaEntry.Anime>()
 
-                        id shouldBe 0
+                        id shouldBe Int.zero
                         title.shouldBeEmpty()
                         coverImage.shouldBeEmpty()
                         format shouldBe CommonMediaEntry.Format.UNKNOWN

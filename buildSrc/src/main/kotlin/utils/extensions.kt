@@ -4,6 +4,7 @@ import KatanaConfiguration
 import com.android.build.gradle.BaseExtension
 import kotlinx.kover.api.KoverTaskExtension
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.systemProperties
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 fun BaseExtension.baseAndroidConfig() {
@@ -41,7 +42,11 @@ fun BaseExtension.baseAndroidConfig() {
                 test.extensions.configure<KoverTaskExtension> {
                     isDisabled = test.name != "testDebugUnitTest"
                 }
-                test.jvmArgs = listOf("-noverify")
+                test.jvmArgs = listOf("-noverify", "-Xmx8G")
+                test.systemProperties(
+                    "robolectric.usePreinstrumentedJars" to "true",
+                    "robolectric.logging.enabled" to "true",
+                )
             }
         }
     }

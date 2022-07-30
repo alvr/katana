@@ -16,7 +16,7 @@ internal class AnimeListsViewModel @Inject constructor(
     updateListUseCase: UpdateListUseCase,
     private val observeAnimeListUseCase: ObserveAnimeListUseCase,
 ) : ListsBaseViewModel<MediaEntry.Anime, MediaListItem.AnimeListItem>(updateListUseCase) {
-    override val listsFlow = observeAnimeListUseCase.flow
+    override val listsFlow get() = observeAnimeListUseCase.flow
 
     override fun fetchLists() {
         super.fetchLists()

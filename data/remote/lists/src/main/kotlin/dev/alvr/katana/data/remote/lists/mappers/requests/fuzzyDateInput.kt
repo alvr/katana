@@ -9,3 +9,7 @@ internal fun LocalDate?.toFuzzyDate() = FuzzyDateInput(
     month = Optional.presentIfNotNull(this?.monthValue),
     day = Optional.presentIfNotNull(this?.dayOfMonth),
 )
+
+internal fun FuzzyDateInput.takeIfValid() = takeIf {
+    year !is Optional.Absent && month !is Optional.Absent && day !is Optional.Absent
+}

@@ -1,5 +1,6 @@
 package dev.alvr.katana.ui.lists.entities.mappers
 
+import dev.alvr.katana.common.core.orZero
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaListEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
@@ -24,6 +25,6 @@ private fun MediaListEntry<MediaEntry.Manga>.toMediaItem() = MediaListItem.Manga
     startedAt = list.startedAt,
     completedAt = list.completedAt,
     updatedAt = list.updatedAt,
-    volumesProgress = list.progressVolumes ?: 0,
+    volumesProgress = list.progressVolumes.orZero(),
     volumesTotal = entry.volumes,
 )

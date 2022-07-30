@@ -13,10 +13,11 @@ import io.kotest.core.spec.style.FunSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.spyk
 
 internal class DeleteAnilistTokenUseCaseTest : FunSpec({
     val repo = mockk<SessionPreferencesRepository>()
-    val useCase = DeleteAnilistTokenUseCase(repo)
+    val useCase = spyk(DeleteAnilistTokenUseCase(repo))
 
     context("successful deletion") {
         coEvery { repo.deleteAnilistToken() } returns Unit.right()
@@ -60,5 +61,21 @@ internal class DeleteAnilistTokenUseCaseTest : FunSpec({
                 coVerify(exactly = 1) { repo.deleteAnilistToken() }
             }
         }
+    }
+
+    test("invoke the use case should call the invoke operator") {
+        coEvery { repo.deleteAnilistToken() } returns mockk()
+
+        useCase()
+
+        coVerify(exactly = 1) { useCase.invoke(Unit) }
+    }
+
+    test("sync the use case should call the invoke operator") {
+        coEvery { repo.deleteAnilistToken() } returns mockk()
+
+        useCase.sync()
+
+        coVerify(exactly = 1) { useCase.sync(Unit) }
     }
 },)

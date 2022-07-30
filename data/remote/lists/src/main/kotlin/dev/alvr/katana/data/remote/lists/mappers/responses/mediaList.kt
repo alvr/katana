@@ -1,5 +1,6 @@
 package dev.alvr.katana.data.remote.lists.mappers.responses
 
+import dev.alvr.katana.common.core.orZero
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
@@ -23,10 +24,10 @@ private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry.toMod
     mediaListEntry.let { entry ->
         val list = MediaList(
             id = entry.id,
-            score = entry.score ?: 0.0,
-            progress = entry.progress ?: 0,
+            score = entry.score.orZero(),
+            progress = entry.progress.orZero(),
             progressVolumes = entry.progressVolumes,
-            repeat = entry.repeat ?: 0,
+            repeat = entry.repeat.orZero(),
             private = entry.private ?: false,
             notes = entry.notes.orEmpty(),
             hiddenFromStatusLists = entry.hiddenFromStatusLists ?: false,

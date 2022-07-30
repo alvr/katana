@@ -1,37 +1,34 @@
-package dev.alvr.katana.data.remote.lists.mappers
+package dev.alvr.katana.data.remote.lists.mappers.responses
 
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.base.type.MediaFormat
-import dev.alvr.katana.data.remote.lists.mappers.responses.animeEntry
-import dev.alvr.katana.data.remote.lists.mappers.responses.mediaEntry
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
-import java.time.LocalDateTime
 import dev.alvr.katana.data.remote.lists.fragment.MediaEntry as MediaEntryFragment
 
-internal class AnimeEntryMapperTest : WordSpec({
+internal class MangaEntryMapperTest : WordSpec({
     "a null entry" should {
         val entry: MediaEntryFragment? = null
 
         "be mapped to the default values" {
-            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
+            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
                 entry = CommonMediaEntry(
                     id = Int.zero,
                     title = String.empty,
                     coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
                 ),
-                episodes = null,
-                nextEpisode = null,
+                chapters = null,
+                volumes = null,
             )
 
-            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
+            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
                 entry = entry.mediaEntry(),
-                episodes = null,
-                nextEpisode = null,
+                chapters = null,
+                volumes = null,
             )
         }
     }
@@ -49,21 +46,21 @@ internal class AnimeEntryMapperTest : WordSpec({
         )
 
         "be mapped to the default values" {
-            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
+            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
                 entry = CommonMediaEntry(
                     id = Int.zero,
                     title = String.empty,
                     coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
                 ),
-                episodes = null,
-                nextEpisode = null,
+                chapters = null,
+                volumes = null,
             )
 
-            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
+            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
                 entry = entry.mediaEntry(),
-                episodes = null,
-                nextEpisode = null,
+                chapters = null,
+                volumes = null,
             )
         }
     }
@@ -81,21 +78,21 @@ internal class AnimeEntryMapperTest : WordSpec({
         )
 
         "be mapped to the default values" {
-            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
+            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
                 entry = CommonMediaEntry(
                     id = Int.zero,
                     title = String.empty,
                     coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
                 ),
-                episodes = null,
-                nextEpisode = null,
+                chapters = null,
+                volumes = null,
             )
 
-            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
+            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
                 entry = entry.mediaEntry(),
-                episodes = null,
-                nextEpisode = null,
+                chapters = null,
+                volumes = null,
             )
         }
     }
@@ -104,36 +101,30 @@ internal class AnimeEntryMapperTest : WordSpec({
         val entry = MediaEntryFragment(
             id = Int.zero,
             title = MediaEntryFragment.Title("One Piece"),
-            episodes = 1000,
-            chapters = null,
-            volumes = null,
-            format = MediaFormat.ONA,
+            episodes = null,
+            chapters = 1046,
+            volumes = 101,
+            format = MediaFormat.MANGA,
             coverImage = MediaEntryFragment.CoverImage("https://www.fillmurray.com/128/256"),
-            nextAiringEpisode = MediaEntryFragment.NextAiringEpisode(1_241_517_600, 1001),
+            nextAiringEpisode = null,
         )
 
-        "be mapped to a `MediaEntry.Anime` class" {
-            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
+        "be mapped to a `MediaEntry.Manga` class" {
+            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
                 entry = CommonMediaEntry(
                     id = Int.zero,
                     title = "One Piece",
                     coverImage = "https://www.fillmurray.com/128/256",
-                    format = CommonMediaEntry.Format.ONA,
+                    format = CommonMediaEntry.Format.MANGA,
                 ),
-                episodes = 1000,
-                nextEpisode = MediaEntry.Anime.NextEpisode(
-                    1001,
-                    LocalDateTime.of(2009, 5, 5, 12, 0, 0),
-                ),
+                chapters = 1046,
+                volumes = 101,
             )
 
-            entry.animeEntry() shouldBeEqualToComparingFields MediaEntry.Anime(
+            entry.mangaEntry() shouldBeEqualToComparingFields MediaEntry.Manga(
                 entry = entry.mediaEntry(),
-                episodes = 1000,
-                nextEpisode = MediaEntry.Anime.NextEpisode(
-                    1001,
-                    LocalDateTime.of(2009, 5, 5, 12, 0, 0),
-                ),
+                chapters = 1046,
+                volumes = 101,
             )
         }
     }

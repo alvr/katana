@@ -8,7 +8,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +50,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import dev.alvr.katana.common.core.unknown
+import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.components.EmptyState
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
@@ -144,7 +146,6 @@ private fun MediaListItem(
         modifier = modifier
             .height(144.dp)
             .combinedClickable(
-                enabled = true,
                 onClick = { mediaDetails(entry.entryId) },
                 onDoubleClick = { addPlusOne(entry) },
                 onLongClick = { editEntry(entry.entryId) },
@@ -177,7 +178,7 @@ private fun CardContent(
             modifier = modifier.constrainAs(score) {
                 start.linkTo(anchor = parent.start)
                 bottom.linkTo(anchor = parent.bottom)
-            },
+            }.testTag(ITEM_SCORE_TAG),
         )
 
         Title(
@@ -186,7 +187,7 @@ private fun CardContent(
                 top.linkTo(anchor = parent.top, margin = 4.dp)
                 start.linkTo(anchor = image.end, margin = 8.dp)
                 end.linkTo(anchor = parent.end, margin = 8.dp)
-            },
+            }.testTag(ITEM_TITLE_TAG),
         )
 
         Subtitle(
@@ -195,7 +196,7 @@ private fun CardContent(
                 top.linkTo(anchor = title.bottom, margin = 4.dp)
                 start.linkTo(anchor = image.end, margin = 8.dp)
                 end.linkTo(anchor = parent.end, margin = 8.dp)
-            },
+            }.testTag(ITEM_SUBTITLE_TAG),
         )
 
         PlusOne(
@@ -204,7 +205,7 @@ private fun CardContent(
                 width = Dimension.wrapContent
                 end.linkTo(anchor = parent.end, margin = 8.dp)
                 bottom.linkTo(anchor = progress.top)
-            },
+            }.testTag(ITEM_PLUSONE_TAG),
         )
 
         Progress(
@@ -282,7 +283,7 @@ private fun Score(
 ) {
     val score = LocalMediaListItem.current.score
 
-    if (score != DEFAULT_SCORE) {
+    if (score != Double.zero) {
         Box(
             modifier = modifier
                 .clip(RoundedCornerShape(topEnd = 4.dp))
@@ -308,12 +309,11 @@ private fun PlusOne(
 
     // Episodes - Chapters (Anime & Manga)
     if (item.progress != item.total) {
-        Row(modifier = modifier) {
-            PlusOneButton(
-                progress = stringResource(id = R.string.progress, item.progress, item.total ?: "?"),
-                addPlusOne = addPlusOne,
-            )
-        }
+        PlusOneButton(
+            progress = stringResource(id = R.string.progress, item.progress, item.total ?: String.unknown),
+            addPlusOne = addPlusOne,
+            modifier = modifier,
+        )
     }
 }
 
@@ -380,5 +380,9 @@ private val scoreFormatter = { score: Double ->
 private val CARD_WIDTH = 384.dp
 private val COVER_MAX_WIDTH = CARD_WIDTH / 4f
 
-private const val DEFAULT_SCORE = 0.0
 private const val PROGRESS_IF_UNKNOWN = .1f
+
+internal const val ITEM_TITLE_TAG = "itemTitle"
+internal const val ITEM_SUBTITLE_TAG = "itemSubtitle"
+internal const val ITEM_SCORE_TAG = "itemScore"
+internal const val ITEM_PLUSONE_TAG = "itemPlusOne"

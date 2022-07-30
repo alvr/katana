@@ -4,6 +4,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -14,7 +15,7 @@ abstract class FlowUseCase<in P, out R> {
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
 
-    val flow: Flow<R> = paramState.flatMapLatest { createFlow(it) }
+    val flow: Flow<R> = paramState.flatMapLatest { createFlow(it).distinctUntilChanged() }
 
     operator fun invoke(params: P) {
         paramState.tryEmit(params)

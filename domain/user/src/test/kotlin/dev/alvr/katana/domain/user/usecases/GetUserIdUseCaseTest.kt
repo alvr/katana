@@ -2,6 +2,7 @@ package dev.alvr.katana.domain.user.usecases
 
 import arrow.core.left
 import arrow.core.right
+import dev.alvr.katana.common.tests.valueMockk
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.user.failures.UserFailure
@@ -10,18 +11,16 @@ import dev.alvr.katana.domain.user.repositories.UserRemoteRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.property.Arb
-import io.kotest.property.arbitrary.bind
-import io.kotest.property.arbitrary.next
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.spyk
 
 internal class GetUserIdUseCaseTest : FunSpec({
     val repo = mockk<UserRemoteRepository>()
-    val useCase = GetUserIdUseCase(repo)
+    val useCase = spyk(GetUserIdUseCase(repo))
 
-    val user = Arb.bind<UserId>().next()
+    val user = valueMockk<UserId>()
 
     context("successful userId") {
         coEvery { repo.getUserId() } returns user.right()
@@ -49,5 +48,21 @@ internal class GetUserIdUseCaseTest : FunSpec({
             useCase.sync().shouldBeLeft(UserFailure.UserIdFailure)
             coVerify(exactly = 1) { repo.getUserId() }
         }
+    }
+
+    test("invoke the use case should call the invoke operator") {
+        coEvery { repo.getUserId() } returns mockk()
+
+        useCase()
+
+        coVerify(exactly = 1) { useCase.invoke(Unit) }
+    }
+
+    test("sync the use case should call the invoke operator") {
+        coEvery { repo.getUserId() } returns mockk()
+
+        useCase.sync()
+
+        coVerify(exactly = 1) { useCase.sync(Unit) }
     }
 },)

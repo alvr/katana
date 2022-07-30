@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.remote.lists.repositories
+package dev.alvr.katana.data.remote.lists.client
 
 import app.cash.turbine.test
 import arrow.core.right
@@ -12,6 +12,7 @@ import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.base.extensions.optional
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
+import dev.alvr.katana.data.remote.lists.repositories.ListsRemoteRepositoryImpl
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
@@ -164,11 +165,11 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
                                 with(entry.list) {
-                                    id shouldBe 0
-                                    score shouldBe 0.0
-                                    progress shouldBe 0
+                                    id shouldBe Int.zero
+                                    score shouldBe Double.zero
+                                    progress shouldBe Int.zero
                                     progressVolumes.shouldBeNull()
-                                    repeat shouldBe 0
+                                    repeat shouldBe Int.zero
                                     private.shouldBeFalse()
                                     notes.shouldBeEmpty()
                                     hiddenFromStatusLists.shouldBeFalse()
@@ -181,7 +182,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                     shouldNotBeTypeOf<MediaEntry>()
                                     shouldNotBeTypeOf<MediaEntry.Manga>()
 
-                                    id shouldBe 0
+                                    id shouldBe Int.zero
                                     title.shouldBeEmpty()
                                     coverImage.shouldBeEmpty()
                                     format shouldBe CommonMediaEntry.Format.UNKNOWN
@@ -437,11 +438,11 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
                                 with(entry.list) {
-                                    id shouldBe 0
-                                    score shouldBe 0.0
-                                    progress shouldBe 0
+                                    id shouldBe Int.zero
+                                    score shouldBe Double.zero
+                                    progress shouldBe Int.zero
                                     progressVolumes.shouldBeNull()
-                                    repeat shouldBe 0
+                                    repeat shouldBe Int.zero
                                     private.shouldBeFalse()
                                     notes.shouldBeEmpty()
                                     hiddenFromStatusLists.shouldBeFalse()
@@ -454,7 +455,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                     shouldNotBeTypeOf<MediaEntry>()
                                     shouldNotBeTypeOf<MediaEntry.Anime>()
 
-                                    id shouldBe 0
+                                    id shouldBe Int.zero
                                     title.shouldBeEmpty()
                                     coverImage.shouldBeEmpty()
                                     format shouldBe CommonMediaEntry.Format.UNKNOWN

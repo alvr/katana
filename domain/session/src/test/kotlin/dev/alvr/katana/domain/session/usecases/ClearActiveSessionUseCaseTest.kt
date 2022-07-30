@@ -13,10 +13,11 @@ import io.kotest.core.spec.style.FunSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.spyk
 
 internal class ClearActiveSessionUseCaseTest : FunSpec({
     val repo = mockk<SessionPreferencesRepository>()
-    val useCase = ClearActiveSessionUseCase(repo)
+    val useCase = spyk(ClearActiveSessionUseCase(repo))
 
     context("successful clearing") {
         coEvery { repo.clearActiveSession() } returns Unit.right()
@@ -60,5 +61,21 @@ internal class ClearActiveSessionUseCaseTest : FunSpec({
                 coVerify(exactly = 1) { repo.clearActiveSession() }
             }
         }
+    }
+
+    test("invoke the use case should call the invoke operator") {
+        coEvery { repo.clearActiveSession() } returns mockk()
+
+        useCase(Unit)
+
+        coVerify(exactly = 1) { useCase.invoke(Unit) }
+    }
+
+    test("sync the use case should call the invoke operator") {
+        coEvery { repo.clearActiveSession() } returns mockk()
+
+        useCase.sync()
+
+        coVerify(exactly = 1) { useCase.sync(Unit) }
     }
 },)
