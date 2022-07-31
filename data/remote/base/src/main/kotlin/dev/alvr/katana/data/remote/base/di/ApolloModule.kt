@@ -3,10 +3,12 @@ package dev.alvr.katana.data.remote.base.di
 import android.content.Context
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.http.HttpRequest
+import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.api.CacheKey
 import com.apollographql.apollo3.cache.normalized.api.CacheKeyGenerator
 import com.apollographql.apollo3.cache.normalized.api.CacheKeyGeneratorContext
 import com.apollographql.apollo3.cache.normalized.api.NormalizedCacheFactory
+import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.normalizedCache
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.http.HttpInterceptor
@@ -94,6 +96,7 @@ internal object ApolloModule {
             .serverUrl(ANILIST_BASE_URL)
             .addHttpInterceptor(anilistTokenInterceptor)
             .addHttpInterceptor(sessionInterceptor)
+            .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .okHttpClient(client)
             .normalizedCache(
                 normalizedCacheFactory = cache,

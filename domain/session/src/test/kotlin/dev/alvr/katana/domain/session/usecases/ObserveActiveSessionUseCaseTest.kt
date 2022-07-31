@@ -9,17 +9,18 @@ import io.kotest.matchers.booleans.shouldBeTrue
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.spyk
 import kotlinx.coroutines.flow.flowOf
 
 internal class ObserveActiveSessionUseCaseTest : FunSpec({
     val repo = mockk<SessionPreferencesRepository>()
-    val useCase = ObserveActiveSessionUseCase(repo)
+    val useCase = spyk(ObserveActiveSessionUseCase(repo))
 
-    context("successful clearing") {
+    context("active session observer") {
         coEvery { repo.isSessionActive() } returns flowOf(false, true, false, true, true, false)
         useCase()
 
-        test("invoke should clear the session") {
+        test("invoke should observe if the session is active") {
             useCase.flow.testIn(this).run {
                 awaitItem().shouldBeFalse()
                 awaitItem().shouldBeTrue()
@@ -30,5 +31,13 @@ internal class ObserveActiveSessionUseCaseTest : FunSpec({
             }
             coVerify(exactly = 1) { repo.isSessionActive() }
         }
+    }
+
+    test("invoke the use case should call the invoke operator") {
+        coEvery { repo.isSessionActive() } returns mockk()
+
+        useCase(Unit)
+
+        coVerify(exactly = 1) { useCase.invoke(Unit) }
     }
 },)

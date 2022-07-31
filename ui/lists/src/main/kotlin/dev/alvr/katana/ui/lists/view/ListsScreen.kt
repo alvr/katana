@@ -8,20 +8,23 @@ import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.ui.base.components.home.HomeScaffold
 import dev.alvr.katana.ui.base.components.home.HomeTopAppBar
 import dev.alvr.katana.ui.lists.R
-import dev.alvr.katana.ui.lists.view.pages.AnimeList
-import dev.alvr.katana.ui.lists.view.pages.MangaList
+import dev.alvr.katana.ui.lists.navigation.ListsNavigator
+import dev.alvr.katana.ui.lists.view.pages.AnimeLists
+import dev.alvr.katana.ui.lists.view.pages.MangaLists
 
 @Composable
 @Destination
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
-internal fun Lists() {
+internal fun Lists(
+    navigator: ListsNavigator,
+) {
     HomeScaffold(
         tabs = enumValues<ListTabs>(),
         backContent = { },
         pageContent = { page ->
             when (page) {
-                ListTabs.Anime -> AnimeList()
-                ListTabs.Manga -> MangaList()
+                ListTabs.Anime -> AnimeLists(navigator = navigator)
+                ListTabs.Manga -> MangaLists(navigator = navigator)
             }
         },
     )

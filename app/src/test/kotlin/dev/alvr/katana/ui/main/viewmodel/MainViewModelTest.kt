@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.main
+package dev.alvr.katana.ui.main.viewmodel
 
 import arrow.core.none
 import arrow.core.some

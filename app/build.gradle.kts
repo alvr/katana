@@ -46,6 +46,8 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix = ".beta"
+
             isDebuggable = true
             isDefault = true
             isMinifyEnabled = false
@@ -59,6 +61,11 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             isTestCoverageEnabled = false
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
 
             signingConfig = signingConfigs.getByName("release")
         }

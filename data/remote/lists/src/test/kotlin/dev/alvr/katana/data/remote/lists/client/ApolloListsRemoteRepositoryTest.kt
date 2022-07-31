@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.remote.lists.repositories
+package dev.alvr.katana.data.remote.lists.client
 
 import app.cash.turbine.test
 import arrow.core.right
@@ -12,17 +12,15 @@ import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.base.extensions.optional
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
+import dev.alvr.katana.data.remote.lists.repositories.ListsRemoteRepositoryImpl
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
-import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldBeSortedWith
-import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
 import io.kotest.matchers.nulls.shouldBeNull
@@ -93,6 +91,13 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                     entries = emptyList()
                                 },
                             )
+                            user = user {
+                                mediaListOptions = mediaListOptions {
+                                    animeList = animeList {
+                                        sectionOrder = listOf("Watching", "Completed TV", "Custom List")
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -105,11 +110,10 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                         repo.animeList.test {
                             awaitItem().lists
                                 .shouldHaveSize(4)
-                                .shouldBeSortedWith { m1, m2 -> m1.listType.compareTo(m2.listType) }
                                 .also { lists ->
                                     with(lists.first()) {
                                         entries.shouldBeEmpty()
-                                        listType shouldBe MediaList.ListType.WATCHING
+                                        name shouldBe "Watching"
                                     }
                                 }
                             awaitComplete()
@@ -130,7 +134,6 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                             progress = null
                                             progressVolumes = null
                                             repeat = null
-                                            priority = null
                                             private = null
                                             notes = null
                                             hiddenFromStatusLists = null
@@ -140,10 +143,8 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                                 id = Int.zero
                                                 title = null
                                                 episodes = null
-                                                duration = null
                                                 format = null
                                                 coverImage = null
-                                                genres = null
                                                 nextAiringEpisode = null
                                             }
                                         },
@@ -160,35 +161,35 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
 
                     then("the result entry should have the default values") {
                         repo.animeList.test {
-                            awaitItem().lists
-                                .also { lists ->
-                                    with(lists.first().entries.shouldHaveSize(1).first()) {
-                                        id shouldBe 0
-                                        score shouldBe 0.0
-                                        progress shouldBe 0
-                                        progressVolumes.shouldBeNull()
-                                        repeat shouldBe 0
-                                        priority shouldBe 0
-                                        private.shouldBeFalse()
-                                        notes.shouldBeEmpty()
-                                        hiddenFromStatusLists.shouldBeFalse()
-                                        startedAt.shouldBeNull()
-                                        completedAt.shouldBeNull()
-                                        with(media) {
-                                            shouldBeTypeOf<MediaEntry.Anime>()
-                                            shouldNotBeTypeOf<MediaEntry>()
-                                            shouldNotBeTypeOf<MediaEntry.Manga>()
+                            awaitItem().lists.also { lists ->
+                                val entry = lists.first().entries.shouldHaveSize(1).first()
 
-                                            id shouldBe 0
-                                            title.shouldBeEmpty()
-                                            coverImage.shouldBeEmpty()
-                                            format shouldBe CommonMediaEntry.Format.UNKNOWN
-                                            genres.shouldBeEmpty()
-                                            episodes.shouldBeNull()
-                                            nextEpisode.shouldBeNull()
-                                        }
-                                    }
+                                with(entry.list) {
+                                    id shouldBe Int.zero
+                                    score shouldBe Double.zero
+                                    progress shouldBe Int.zero
+                                    progressVolumes.shouldBeNull()
+                                    repeat shouldBe Int.zero
+                                    private.shouldBeFalse()
+                                    notes.shouldBeEmpty()
+                                    hiddenFromStatusLists.shouldBeFalse()
+                                    startedAt.shouldBeNull()
+                                    completedAt.shouldBeNull()
                                 }
+
+                                with(entry.entry) {
+                                    shouldBeTypeOf<MediaEntry.Anime>()
+                                    shouldNotBeTypeOf<MediaEntry>()
+                                    shouldNotBeTypeOf<MediaEntry.Manga>()
+
+                                    id shouldBe Int.zero
+                                    title.shouldBeEmpty()
+                                    coverImage.shouldBeEmpty()
+                                    format shouldBe CommonMediaEntry.Format.UNKNOWN
+                                    episodes.shouldBeNull()
+                                    nextEpisode.shouldBeNull()
+                                }
+                            }
                             awaitComplete()
                         }
                     }
@@ -207,7 +208,6 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                             progress = 12
                                             progressVolumes = null
                                             repeat = 2
-                                            priority = 2
                                             private = true
                                             notes = "My notes :)"
                                             hiddenFromStatusLists = true
@@ -227,12 +227,10 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                                     userPreferred = "My anime entry"
                                                 }
                                                 episodes = 23
-                                                duration = 24
                                                 format = "TV"
                                                 coverImage = coverImage {
                                                     large = "https://www.fillmurray.com/128/256"
                                                 }
-                                                genres = listOf("Action", "Adventure")
                                                 nextAiringEpisode = nextAiringEpisode {
                                                     airingAt = 1_649_790_000
                                                     episode = 13
@@ -252,38 +250,47 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
 
                     then("the result entry should have the default values") {
                         repo.animeList.test {
-                            awaitItem().lists
-                                .also { lists ->
-                                    with(lists.first().entries.shouldHaveSize(1).first()) {
-                                        id shouldBe 100
-                                        score shouldBe 7.3
-                                        progress shouldBe 12
-                                        progressVolumes.shouldBeNull()
-                                        repeat shouldBe 2
-                                        priority shouldBe 2
-                                        private.shouldBeTrue()
-                                        notes shouldBe "My notes :)"
-                                        hiddenFromStatusLists.shouldBeTrue()
-                                        startedAt?.shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
-                                        completedAt?.shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
-                                        with(media) {
-                                            shouldBeTypeOf<MediaEntry.Anime>()
-                                            shouldNotBeTypeOf<MediaEntry>()
-                                            shouldNotBeTypeOf<MediaEntry.Manga>()
+                            awaitItem().lists.also { lists ->
+                                val entry = lists.first().entries.shouldHaveSize(1).first()
 
-                                            id shouldBe 100
-                                            title shouldBe "My anime entry"
-                                            coverImage shouldBe "https://www.fillmurray.com/128/256"
-                                            format shouldBe CommonMediaEntry.Format.TV
-                                            genres.shouldContainAll("Action", "Adventure")
-                                            episodes shouldBe 23
-                                            with(nextEpisode.shouldNotBeNull()) {
-                                                at.shouldBeEqualComparingTo(LocalDateTime.of(2022, 4, 12, 21, 0, 0))
-                                                number shouldBe 13
-                                            }
-                                        }
+                                with(entry.list) {
+                                    id shouldBe 100
+                                    score shouldBe 7.3
+                                    progress shouldBe 12
+                                    progressVolumes.shouldBeNull()
+                                    repeat shouldBe 2
+                                    private.shouldBeTrue()
+                                    notes shouldBe "My notes :)"
+                                    hiddenFromStatusLists.shouldBeTrue()
+                                    startedAt?.shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
+                                    completedAt?.shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
+                                }
+
+                                with(entry.entry) {
+                                    shouldBeTypeOf<MediaEntry.Anime>()
+                                    shouldNotBeTypeOf<MediaEntry>()
+                                    shouldNotBeTypeOf<MediaEntry.Manga>()
+
+                                    id shouldBe 100
+                                    title shouldBe "My anime entry"
+                                    coverImage shouldBe "https://www.fillmurray.com/128/256"
+                                    format shouldBe CommonMediaEntry.Format.TV
+                                    episodes shouldBe 23
+                                    with(nextEpisode.shouldNotBeNull()) {
+                                        at.shouldBeEqualComparingTo(
+                                            LocalDateTime.of(
+                                                2022,
+                                                4,
+                                                12,
+                                                21,
+                                                0,
+                                                0,
+                                            ),
+                                        )
+                                        number shouldBe 13
                                     }
                                 }
+                            }
                             awaitComplete()
                         }
                     }
@@ -356,6 +363,13 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                     entries = emptyList()
                                 },
                             )
+                            user = user {
+                                mediaListOptions = mediaListOptions {
+                                    mangaList = mangaList {
+                                        sectionOrder = listOf("Custom List", "Reading", "Rereading")
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -368,11 +382,10 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                         repo.mangaList.test {
                             awaitItem().lists
                                 .shouldHaveSize(4)
-                                .shouldBeSortedWith { m1, m2 -> m1.listType.compareTo(m2.listType) }
                                 .also { lists ->
                                     with(lists.first()) {
                                         entries.shouldBeEmpty()
-                                        listType shouldBe MediaList.ListType.READING
+                                        name shouldBe "Custom List"
                                     }
                                 }
                             awaitComplete()
@@ -393,7 +406,6 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                             progress = null
                                             progressVolumes = null
                                             repeat = null
-                                            priority = null
                                             private = null
                                             notes = null
                                             hiddenFromStatusLists = null
@@ -406,7 +418,6 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                                 volumes = null
                                                 format = null
                                                 coverImage = null
-                                                genres = null
                                                 nextAiringEpisode = null
                                             }
                                         },
@@ -423,35 +434,35 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
 
                     then("the result entry should have the default values") {
                         repo.mangaList.test {
-                            awaitItem().lists
-                                .also { lists ->
-                                    with(lists.first().entries.shouldHaveSize(1).first()) {
-                                        id shouldBe 0
-                                        score shouldBe 0.0
-                                        progress shouldBe 0
-                                        progressVolumes.shouldBeNull()
-                                        repeat shouldBe 0
-                                        priority shouldBe 0
-                                        private.shouldBeFalse()
-                                        notes.shouldBeEmpty()
-                                        hiddenFromStatusLists.shouldBeFalse()
-                                        startedAt.shouldBeNull()
-                                        completedAt.shouldBeNull()
-                                        with(media) {
-                                            shouldBeTypeOf<MediaEntry.Manga>()
-                                            shouldNotBeTypeOf<MediaEntry>()
-                                            shouldNotBeTypeOf<MediaEntry.Anime>()
+                            awaitItem().lists.also { lists ->
+                                val entry = lists.first().entries.shouldHaveSize(1).first()
 
-                                            id shouldBe 0
-                                            title.shouldBeEmpty()
-                                            coverImage.shouldBeEmpty()
-                                            format shouldBe CommonMediaEntry.Format.UNKNOWN
-                                            genres.shouldBeEmpty()
-                                            chapters.shouldBeNull()
-                                            volumes.shouldBeNull()
-                                        }
-                                    }
+                                with(entry.list) {
+                                    id shouldBe Int.zero
+                                    score shouldBe Double.zero
+                                    progress shouldBe Int.zero
+                                    progressVolumes.shouldBeNull()
+                                    repeat shouldBe Int.zero
+                                    private.shouldBeFalse()
+                                    notes.shouldBeEmpty()
+                                    hiddenFromStatusLists.shouldBeFalse()
+                                    startedAt.shouldBeNull()
+                                    completedAt.shouldBeNull()
                                 }
+
+                                with(entry.entry) {
+                                    shouldBeTypeOf<MediaEntry.Manga>()
+                                    shouldNotBeTypeOf<MediaEntry>()
+                                    shouldNotBeTypeOf<MediaEntry.Anime>()
+
+                                    id shouldBe Int.zero
+                                    title.shouldBeEmpty()
+                                    coverImage.shouldBeEmpty()
+                                    format shouldBe CommonMediaEntry.Format.UNKNOWN
+                                    chapters.shouldBeNull()
+                                    volumes.shouldBeNull()
+                                }
+                            }
                             awaitComplete()
                         }
                     }
@@ -470,7 +481,6 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                             progress = 12
                                             progressVolumes = 1
                                             repeat = 2
-                                            priority = 2
                                             private = true
                                             notes = "My notes :)"
                                             hiddenFromStatusLists = true
@@ -495,7 +505,6 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                                                 coverImage = coverImage {
                                                     large = "https://www.fillmurray.com/128/256"
                                                 }
-                                                genres = listOf("Action", "Adventure")
                                                 nextAiringEpisode = null
                                             }
                                         },
@@ -512,35 +521,35 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
 
                     then("the result entry should have the default values") {
                         repo.mangaList.test {
-                            awaitItem().lists
-                                .also { lists ->
-                                    with(lists.first().entries.shouldHaveSize(1).first()) {
-                                        id shouldBe 100
-                                        score shouldBe 7.3
-                                        progress shouldBe 12
-                                        progressVolumes shouldBe 1
-                                        repeat shouldBe 2
-                                        priority shouldBe 2
-                                        private.shouldBeTrue()
-                                        notes shouldBe "My notes :)"
-                                        hiddenFromStatusLists.shouldBeTrue()
-                                        startedAt?.shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
-                                        completedAt?.shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
-                                        with(media) {
-                                            shouldBeTypeOf<MediaEntry.Manga>()
-                                            shouldNotBeTypeOf<MediaEntry>()
-                                            shouldNotBeTypeOf<MediaEntry.Anime>()
+                            awaitItem().lists.also { lists ->
+                                val entry = lists.first().entries.shouldHaveSize(1).first()
 
-                                            id shouldBe 100
-                                            title shouldBe "My manga entry"
-                                            coverImage shouldBe "https://www.fillmurray.com/128/256"
-                                            format shouldBe CommonMediaEntry.Format.NOVEL
-                                            genres.shouldContainAll("Action", "Adventure")
-                                            chapters shouldBe 23
-                                            volumes shouldBe 2
-                                        }
-                                    }
+                                with(entry.list) {
+                                    id shouldBe 100
+                                    score shouldBe 7.3
+                                    progress shouldBe 12
+                                    progressVolumes shouldBe 1
+                                    repeat shouldBe 2
+                                    private.shouldBeTrue()
+                                    notes shouldBe "My notes :)"
+                                    hiddenFromStatusLists.shouldBeTrue()
+                                    startedAt?.shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
+                                    completedAt?.shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
                                 }
+
+                                with(entry.entry) {
+                                    shouldBeTypeOf<MediaEntry.Manga>()
+                                    shouldNotBeTypeOf<MediaEntry>()
+                                    shouldNotBeTypeOf<MediaEntry.Anime>()
+
+                                    id shouldBe 100
+                                    title shouldBe "My manga entry"
+                                    coverImage shouldBe "https://www.fillmurray.com/128/256"
+                                    format shouldBe CommonMediaEntry.Format.NOVEL
+                                    chapters shouldBe 23
+                                    volumes shouldBe 2
+                                }
+                            }
                             awaitComplete()
                         }
                     }

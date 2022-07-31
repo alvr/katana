@@ -9,5 +9,15 @@ query MediaListCollection($user: Int, $type: MediaType!) {
             }
             name
         }
+        user {
+            mediaListOptions {
+                animeList {
+                    sectionOrder
+                }
+                mangaList {
+                    sectionOrder
+                }
+            }
+        }
     }
 }

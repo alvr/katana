@@ -25,6 +25,7 @@ val koverExcludes = listOf(
     "*.remote.*.fragment.*",
     "*.remote.*.selections.*",
     "*.remote.*.type.*",
+    "*.remote.*.*Mutation*",
     "*.remote.*.*Query*",
 
     // Common

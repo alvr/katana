@@ -4,14 +4,12 @@ fragment MediaEntry on Media {
         userPreferred
     }
     episodes
-    duration
     chapters
     volumes
     format
     coverImage {
         large
     }
-    genres
     nextAiringEpisode {
         airingAt
         episode

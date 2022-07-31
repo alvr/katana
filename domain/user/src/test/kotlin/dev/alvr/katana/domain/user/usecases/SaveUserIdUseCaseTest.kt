@@ -13,10 +13,11 @@ import io.kotest.core.spec.style.FunSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.spyk
 
 internal class SaveUserIdUseCaseTest : FunSpec({
     val repo = mockk<UserRemoteRepository>()
-    val useCase = SaveUserIdUseCase(repo)
+    val useCase = spyk(SaveUserIdUseCase(repo))
 
     context("successful userId") {
         coEvery { repo.saveUserId() } returns Unit.right()
@@ -74,5 +75,21 @@ internal class SaveUserIdUseCaseTest : FunSpec({
                 coVerify(exactly = 1) { repo.saveUserId() }
             }
         }
+    }
+
+    test("invoke the use case should call the invoke operator") {
+        coEvery { repo.saveUserId() } returns mockk()
+
+        useCase()
+
+        coVerify(exactly = 1) { useCase.invoke(Unit) }
+    }
+
+    test("sync the use case should call the invoke operator") {
+        coEvery { repo.saveUserId() } returns mockk()
+
+        useCase.sync()
+
+        coVerify(exactly = 1) { useCase.sync(Unit) }
     }
 },)

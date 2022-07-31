@@ -1,33 +1,33 @@
 package dev.alvr.katana.data.remote.lists.mappers.responses
 
+import dev.alvr.katana.common.core.orZero
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.lists.models.lists.MediaListEntry
+import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.data.remote.lists.fragment.MediaEntry as MediaEntryFragment
 
-internal inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data.mediaList(): List<MediaList<T>> =
+internal inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data.mediaList(): List<MediaListGroup<T>> =
     collection.lists.asSequence().map { list ->
         val entries = list?.entries.orEmpty().asSequence().mapNotNull { entry ->
             entry?.toModel<T>()
         }.toList()
 
-        MediaList(
+        MediaListGroup(
             name = list?.name.orEmpty(),
-            listType = MediaList.ListType.of(list?.name),
             entries = entries,
         )
-    }.sortedBy { it.listType }.toList()
+    }.sortedBy { sortLists<T>(it.name) }.toList()
 
 private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry.toModel() =
     mediaListEntry.let { entry ->
-        MediaListEntry(
+        val list = MediaList(
             id = entry.id,
-            score = entry.score ?: 0.0,
-            progress = entry.progress ?: 0,
+            score = entry.score.orZero(),
+            progress = entry.progress.orZero(),
             progressVolumes = entry.progressVolumes,
-            repeat = entry.repeat ?: 0,
-            priority = entry.priority ?: 0,
+            repeat = entry.repeat.orZero(),
             private = entry.private ?: false,
             notes = entry.notes.orEmpty(),
             hiddenFromStatusLists = entry.hiddenFromStatusLists ?: false,
@@ -38,12 +38,28 @@ private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry.toMod
                 dateMapper(date.day, date.month, date.year)
             },
             updatedAt = entry.updatedAt?.toLocalDateTime(),
-            media = media.mediaEntry.toMedia() as T,
+        )
+        MediaListEntry(
+            list = list,
+            entry = media.mediaEntry.toMedia<T>() as T,
         )
     }
 
-private inline fun <reified T : MediaEntry> MediaEntryFragment.toMedia(): T = when (T::class) {
-    MediaEntry.Anime::class -> animeEntry()
-    MediaEntry.Manga::class -> mangaEntry()
-    else -> error("only MediaEntry.Anime and MediaEntry.Manga are accepted")
-} as T
+private inline fun <reified T : MediaEntry> MediaEntryFragment.toMedia() = onMediaEntry<T, MediaEntry>(
+    anime = ::animeEntry,
+    manga = ::mangaEntry,
+)
+
+private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Data.sortLists(listName: String) =
+    with(collection.user?.mediaListOptions) {
+        onMediaEntry<T, Int>(
+            anime = { this?.animeList?.sectionOrder.orEmpty().listPosition(listName) },
+            manga = { this?.mangaList?.sectionOrder.orEmpty().listPosition(listName) },
+        )
+    }
+
+private fun List<String?>.listPosition(listName: String) = if (listName.isEmpty()) {
+    size
+} else {
+    indexOf(listName)
+}

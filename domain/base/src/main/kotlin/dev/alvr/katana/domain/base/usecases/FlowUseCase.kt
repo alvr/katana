@@ -15,9 +15,7 @@ abstract class FlowUseCase<in P, out R> {
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
 
-    val flow: Flow<R> = paramState
-        .flatMapLatest { createFlow(it) }
-        .distinctUntilChanged()
+    val flow: Flow<R> = paramState.flatMapLatest { createFlow(it).distinctUntilChanged() }
 
     operator fun invoke(params: P) {
         paramState.tryEmit(params)

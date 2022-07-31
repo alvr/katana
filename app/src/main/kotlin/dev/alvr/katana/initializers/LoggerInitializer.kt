@@ -33,7 +33,8 @@ private class SentryLogger(private val minSeverity: LogLevel) : Antilog() {
             LogLevel.ASSERT -> SentryLevel.FATAL
         }
 
-    override fun isEnable(priority: LogLevel, tag: String?) = priority >= minSeverity
+    override fun isEnable(priority: LogLevel, tag: String?) =
+        !BuildConfig.DEBUG && priority >= minSeverity
 
     override fun performLog(
         priority: LogLevel,

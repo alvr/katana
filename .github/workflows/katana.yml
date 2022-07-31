@@ -14,7 +14,7 @@ env:
 jobs:
   cancel-stale-jobs:
     name: Cancel stale jobs
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Cancel Stale Jobs
         uses: styfle/cancel-workflow-action@0.10.0
@@ -23,7 +23,7 @@ jobs:
 
   assemble:
     name: Assembling
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -32,11 +32,11 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Assemble Katana
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug --no-daemon
 
   static-analysis:
     name: Static analysis
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     permissions:
       contents: read
       security-events: write
@@ -48,7 +48,7 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Run detekt
-        run: ./gradlew detektAll lintDebug
+        run: ./gradlew detektAll lintDebug --no-daemon
       - name: Upload static reports artifact
         uses: actions/upload-artifact@v3
         with:
@@ -65,7 +65,7 @@ jobs:
 
   unit-tests:
     name: Unit testing
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -74,7 +74,7 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Run unit tests
-        run: ./gradlew unitTests koverXmlReport koverMergedReport koverMergedVerify
+        run: ./gradlew unitTests koverXmlReport koverMergedReport koverMergedVerify --no-daemon
       - name: Upload tests reports artifact
         uses: actions/upload-artifact@v3
         if: always()
@@ -100,7 +100,7 @@ jobs:
 
   sonar:
     name: SonarQube
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     continue-on-error: true
     needs: [ static-analysis, unit-tests ]
     steps:
@@ -125,17 +125,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube
+        run: ./gradlew sonarqube --no-daemon
       - name: Run SonarQube in PR
         if: github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
+        run: ./gradlew sonarqube -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} --no-daemon
 
   deploy-staging:
     name: Staging deployment
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     if: github.ref == 'refs/heads/develop'
     needs: [ assemble, static-analysis, unit-tests ]
     steps:
@@ -160,7 +160,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleRelease --no-daemon
       - name: Publish staging APK to AppCenter
         uses: wzieba/AppCenter-Github-Action@v1
         with:
@@ -173,7 +173,7 @@ jobs:
 
   deploy-production:
     name: Production deployment
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [ assemble, static-analysis, unit-tests ]
     steps:
@@ -198,7 +198,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew bundleRelease
+        run: ./gradlew bundleRelease --no-daemon
       - name: Publish production AAB to Google Play
         uses: r0adkll/upload-google-play@v1
         with:

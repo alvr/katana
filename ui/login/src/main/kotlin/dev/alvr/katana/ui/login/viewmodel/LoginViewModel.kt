@@ -20,7 +20,7 @@ internal class LoginViewModel @Inject constructor(
     private val saveSessionUseCase: SaveSessionUseCase,
     private val saveUserIdUseCase: SaveUserIdUseCase,
 ) : BaseViewModel<LoginState, Nothing>() {
-    override val container = container<LoginState, Nothing>(LoginState.initial()) {
+    override val container = container<LoginState, Nothing>(LoginState()) {
         saveAnilistToken(savedStateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN))
     }
 

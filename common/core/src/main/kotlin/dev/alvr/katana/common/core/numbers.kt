@@ -1,17 +1,19 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package dev.alvr.katana.common.core
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun Double?.or(default: Double = Double.zero) = this ?: default
 val Double.Companion.zero inline get() = 0.0
+inline fun Double?.orZero() = or(Double.zero)
+inline fun Double?.or(default: Double) = this ?: default
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun Float?.or(default: Float = Float.zero) = this ?: default
 val Float.Companion.zero inline get() = 0.0f
+inline fun Float?.orZero() = or(Float.zero)
+inline fun Float?.or(default: Float) = this ?: default
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun Int?.or(default: Int = Int.zero) = this ?: default
 val Int.Companion.zero inline get() = 0
+inline fun Int?.orZero() = or(Int.zero)
+inline fun Int?.or(default: Int) = this ?: default
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun Long?.or(default: Long = Long.zero) = this ?: default
 val Long.Companion.zero inline get() = 0L
+inline fun Long?.orZero() = or(Long.zero)
+inline fun Long?.or(default: Long) = this ?: default

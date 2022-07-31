@@ -13,10 +13,11 @@ import io.kotest.core.spec.style.FunSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.spyk
 
 internal class SaveAnilistTokenUseCaseTest : FunSpec({
     val repo = mockk<SessionPreferencesRepository>()
-    val useCase = SaveSessionUseCase(repo)
+    val useCase = spyk(SaveSessionUseCase(repo))
 
     val token = valueMockk<AnilistToken>()
 
@@ -62,5 +63,21 @@ internal class SaveAnilistTokenUseCaseTest : FunSpec({
                 coVerify(exactly = 1) { repo.saveSession(token) }
             }
         }
+    }
+
+    test("invoke the use case should call the invoke operator") {
+        coEvery { repo.saveSession(any()) } returns mockk()
+
+        useCase(token)
+
+        coVerify(exactly = 1) { useCase.invoke(token) }
+    }
+
+    test("sync the use case should call the invoke operator") {
+        coEvery { repo.saveSession(any()) } returns mockk()
+
+        useCase.sync(token)
+
+        coVerify(exactly = 1) { useCase.sync(token) }
     }
 },)

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="component_empty_state">No se han encontrado datos para el filtro aplicado.</string>
+</resources>

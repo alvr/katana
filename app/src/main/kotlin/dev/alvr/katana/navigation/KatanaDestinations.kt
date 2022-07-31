@@ -20,14 +20,15 @@ import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.scope.DestinationScope
 import dev.alvr.katana.navigation.bottombar.BottomNavigationBar
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
-import dev.alvr.katana.ui.main.MainViewModel
 import dev.alvr.katana.ui.main.components.SessionExpiredDialog
+import dev.alvr.katana.ui.main.viewmodel.MainViewModel
+import io.sentry.compose.withSentryObservableEffect
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
 internal fun KatanaDestinations() {
-    val navController = rememberAnimatedNavController()
+    val navController = rememberAnimatedNavController().withSentryObservableEffect()
     val vm = hiltViewModel<MainViewModel>()
 
     val state by vm.collectAsState()

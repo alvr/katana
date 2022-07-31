@@ -1,7 +1,7 @@
 # 刀 Katana
 
 <p align="center">
-  <img alt="Katana logo" src="https://github.com/alvr/katana/raw/develop/assets/katana_logo.svg"/>
+  <img alt="Katana logo" src="https://gist.githubusercontent.com/alvr/cfdd5e982769b6730ee5f6bc9d1594eb/raw/033da2fdd9a128518ba1f3b43827f16f545acebe/katana_logo.svg"/>
 </p>
 
 <p align="center">

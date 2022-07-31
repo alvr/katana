@@ -7,14 +7,12 @@ sealed class MediaEntry(
     val title: String,
     val coverImage: String,
     val format: CommonMediaEntry.Format,
-    val genres: List<String>,
 ) {
     constructor(entry: CommonMediaEntry) : this(
         id = entry.id,
         title = entry.title,
         coverImage = entry.coverImage,
         format = entry.format,
-        genres = entry.genres,
     )
 
     data class Anime(
