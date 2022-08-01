@@ -1,6 +1,6 @@
 [versions]
 accompanist = "0.25.0"
-apollo = "3.4.0"
+apollo = "3.5.0"
 coroutines = "1.6.4"
 destinations = "1.7.15-beta"
 hilt = "2.43.1"
