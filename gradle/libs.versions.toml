@@ -150,7 +150,7 @@ mockk = { module = "io.mockk:mockk", version = "1.12.5" }
 robolectric = { module = "org.robolectric:robolectric", version = "4.8.1" }
 
 ## Turbine
-turbine = { module = "app.cash.turbine:turbine", version = "0.8.0" }
+turbine = { module = "app.cash.turbine:turbine", version = "0.9.0" }
 
 [bundles]
 gradle = [
