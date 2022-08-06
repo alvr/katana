@@ -14,7 +14,7 @@ import dev.alvr.katana.ui.account.R
 internal fun Account() {
     Scaffold { paddingValues ->
         Text(
-            text = stringResource(id = R.string.title),
+            text = stringResource(R.string.title),
             modifier = Modifier.padding(paddingValues),
         )
     }

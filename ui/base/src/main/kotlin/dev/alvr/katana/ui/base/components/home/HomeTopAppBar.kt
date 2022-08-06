@@ -54,7 +54,7 @@ private fun TabSelector(
     val tabList = @Composable {
         tabs.forEachIndexed { index, tab ->
             Tab(
-                text = { Text(text = stringResource(id = tab.label)) },
+                text = { Text(text = stringResource(tab.label)) },
                 modifier = Modifier.fillMaxHeight(),
                 selected = index == pagerState.currentPage,
                 onClick = { onTabClicked(index) },

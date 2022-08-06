@@ -20,11 +20,11 @@ internal fun SessionExpiredDialog(
             },
             confirmButton = {
                 TextButton(onClick = onAccept) {
-                    Text(text = stringResource(id = R.string.session_expired_error_confirm_button))
+                    Text(text = stringResource(R.string.session_expired_error_confirm_button))
                 }
             },
-            title = { Text(text = stringResource(id = R.string.session_expired_error_title)) },
-            text = { Text(text = stringResource(id = R.string.session_expired_error_message)) },
+            title = { Text(text = stringResource(R.string.session_expired_error_title)) },
+            text = { Text(text = stringResource(R.string.session_expired_error_message)) },
             properties = DialogProperties(
                 dismissOnBackPress = false,
                 dismissOnClickOutside = false,

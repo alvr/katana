@@ -124,7 +124,7 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
         state.loading -> loading = true
         state.errorMessage != null -> {
             loading = false
-            val loginError = stringResource(id = state.errorMessage)
+            val loginError = stringResource(state.errorMessage)
             LaunchedEffect(state.errorMessage) {
                 scaffoldState.snackbarHostState.showSnackbar(loginError)
             }
@@ -146,7 +146,7 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
 private fun MainContent(@DrawableRes background: Int) {
     Image(
         painter = painterResource(background),
-        contentDescription = stringResource(id = R.string.content_description_background),
+        contentDescription = stringResource(R.string.content_description_background),
         contentScale = ContentScale.Crop,
         modifier = Modifier.alpha(BACKGROUND_ALPHA),
     )
@@ -189,7 +189,7 @@ private fun KatanaLogo() {
 
     Image(
         painter = painterResource(R.drawable.ic_katana_logo),
-        contentDescription = stringResource(id = R.string.content_description_katana_logo),
+        contentDescription = stringResource(R.string.content_description_katana_logo),
         modifier = Modifier
             .padding(top = 8.dp)
             .fillMaxWidth(fraction = sizeFraction),
@@ -199,7 +199,7 @@ private fun KatanaLogo() {
 @Composable
 private fun Description() {
     Text(
-        text = stringResource(id = R.string.header_katana_description),
+        text = stringResource(R.string.header_katana_description),
         style = MaterialTheme.typography.h5,
     )
 }
@@ -239,7 +239,7 @@ private fun GetStarted(onStartedClick: (State) -> Unit) {
 @Composable
 private fun GetStartedDescription() {
     Text(
-        text = stringResource(id = R.string.get_started_description),
+        text = stringResource(R.string.get_started_description),
         textAlign = TextAlign.Justify,
     )
 }
@@ -248,7 +248,7 @@ private fun GetStartedDescription() {
 private fun GetStartedButton(onStartedClick: (State) -> Unit) {
     val inlineArrow = "inlineArrowContent"
     val text = buildAnnotatedString {
-        append(stringResource(id = R.string.get_started_button))
+        append(stringResource(R.string.get_started_button))
         append(' ')
         appendInlineContent(inlineArrow)
     }
@@ -276,7 +276,7 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
         ) {
             Icon(
                 imageVector = Icons.Filled.ArrowForward,
-                contentDescription = stringResource(id = R.string.content_description_get_started_arrow),
+                contentDescription = stringResource(R.string.content_description_get_started_arrow),
                 modifier = Modifier.offset(x = translation),
                 tint = MaterialTheme.colors.onSurface,
             )
@@ -326,7 +326,7 @@ private fun Begin() {
 @Composable
 private fun BeginText() {
     Text(
-        text = stringResource(id = R.string.begin_description),
+        text = stringResource(R.string.begin_description),
         textAlign = TextAlign.Justify,
     )
 }
@@ -341,7 +341,7 @@ private fun BeginRegisterButton(modifier: Modifier = Modifier) {
         onClick = { uriHandler.openUri(ANILIST_REGISTER) },
     ) {
         Text(
-            text = stringResource(id = R.string.begin_register_button),
+            text = stringResource(R.string.begin_register_button),
             color = MaterialTheme.colors.onSurface,
         )
     }
@@ -356,7 +356,7 @@ private fun BeginLoginButton(modifier: Modifier = Modifier) {
         onClick = { uriHandler.openUri(ANILIST_LOGIN) },
     ) {
         Text(
-            text = stringResource(id = R.string.begin_login_button),
+            text = stringResource(R.string.begin_login_button),
             color = MaterialTheme.colors.onSurface,
         )
     }
@@ -391,7 +391,7 @@ private fun Animate(
                 delayMillis = delayMillis,
                 durationMillis = durationMillis,
             ),
-            initialAlpha = 0f,
+            initialAlpha = Float.zero,
         ),
     ) {
         content()

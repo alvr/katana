@@ -131,6 +131,7 @@ dependencies {
     debugImplementation(libs.leakcanary)
 
     testImplementation(projects.common.tests)
+    testImplementation(projects.common.testsAndroid)
     testImplementation(libs.bundles.test)
 }
 

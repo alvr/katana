@@ -7,5 +7,5 @@ import dev.alvr.katana.ui.explore.R
 
 @Composable
 internal fun Anime() {
-    Text(text = stringResource(id = R.string.tab_anime))
+    Text(text = stringResource(R.string.tab_anime))
 }

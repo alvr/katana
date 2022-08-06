@@ -7,5 +7,5 @@ import dev.alvr.katana.ui.social.R
 
 @Composable
 internal fun Following() {
-    Text(text = stringResource(id = R.string.tab_following))
+    Text(text = stringResource(R.string.tab_following))
 }

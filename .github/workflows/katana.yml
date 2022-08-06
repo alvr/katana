@@ -33,6 +33,15 @@ jobs:
         uses: ./.github/actions/common-steps
       - name: Assemble Katana
         run: ./gradlew assembleDebug --no-daemon
+      - name: Upload compose reports artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: compose-reports
+          path: |
+            **/build/compose-metrics
+            **/build/compose-reports
+          retention-days: 7
 
   static-analysis:
     name: Static analysis
