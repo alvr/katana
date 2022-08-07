@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="component_empty_state">No se han encontrado datos para el filtro aplicado.</string>
+    <string name="menu_search">Menú de búsqueda</string>
+    <string name="menu_filter">Menú de filtrado</string>
 </resources>

@@ -1,6 +1,7 @@
 package dev.alvr.katana.ui.lists.view
 
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -20,7 +21,7 @@ internal fun Lists(
 ) {
     HomeScaffold(
         tabs = enumValues<ListTabs>(),
-        backContent = { },
+        backContent = { _, _ -> Text(text = "TODO") },
         pageContent = { page ->
             when (page) {
                 ListTabs.Anime -> AnimeLists(navigator = navigator)

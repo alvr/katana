@@ -3,6 +3,8 @@ package dev.alvr.katana.ui.explore.view
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.filter
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
@@ -28,12 +30,14 @@ internal class ExploreScreenTest : ComposeTest() {
     fun `Anime tab should be selected by default`() {
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_anime))
+            .filter(hasClickAction())
             .onFirst()
             .assertIsSelected()
             .assertIsDisplayed()
 
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_manga))
+            .filter(hasClickAction())
             .onFirst()
             .assertIsNotSelected()
             .assertIsDisplayed()
@@ -47,12 +51,14 @@ internal class ExploreScreenTest : ComposeTest() {
 
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_anime))
+            .filter(hasClickAction())
             .onFirst()
             .assertIsNotSelected()
             .assertIsDisplayed()
 
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_manga))
+            .filter(hasClickAction())
             .onFirst()
             .assertIsSelected()
             .assertIsDisplayed()
@@ -62,6 +68,7 @@ internal class ExploreScreenTest : ComposeTest() {
     fun `Manga tab should be selected when clicking its tab`() {
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_manga))
+            .filter(hasClickAction())
             .onFirst()
             .performClick()
             .assertIsSelected()
@@ -69,6 +76,7 @@ internal class ExploreScreenTest : ComposeTest() {
 
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_anime))
+            .filter(hasClickAction())
             .onFirst()
             .assertIsNotSelected()
             .assertIsDisplayed()
@@ -83,12 +91,14 @@ internal class ExploreScreenTest : ComposeTest() {
 
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_anime))
+            .filter(hasClickAction())
             .onFirst()
             .assertIsSelected()
             .assertIsDisplayed()
 
         composeTestRule
             .onAllNodesWithText(text = context.getString(R.string.tab_manga))
+            .filter(hasClickAction())
             .onFirst()
             .assertIsNotSelected()
             .assertIsDisplayed()

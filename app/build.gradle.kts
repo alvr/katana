@@ -101,6 +101,10 @@ android {
     kotlinOptions.configureKotlin()
 }
 
+configurations {
+    debugImplementation.get().exclude(group = "junit", module = "junit")
+}
+
 dependencies {
     implementation(projects.common.core)
 

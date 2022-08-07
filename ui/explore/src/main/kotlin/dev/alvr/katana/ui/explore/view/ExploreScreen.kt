@@ -1,6 +1,7 @@
 package dev.alvr.katana.ui.explore.view
 
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -17,7 +18,7 @@ import dev.alvr.katana.ui.explore.view.pages.Manga
 internal fun Explore() {
     HomeScaffold(
         tabs = enumValues<ExploreTabs>(),
-        backContent = { },
+        backContent = { _, _ -> Text(text = "TODO") },
         pageContent = { page ->
             when (page) {
                 ExploreTabs.Anime -> Anime()
