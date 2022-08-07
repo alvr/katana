@@ -46,12 +46,14 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 internal class MediaListComponentTest : ComposeTest() {
-    private val mockedAnimeList = listOf(
+    private val mockedAnimeList = persistentListOf(
         MediaListItem.AnimeListItem(
             entryId = Arb.int().next(),
             mediaId = Arb.int().next(),
@@ -115,7 +117,7 @@ internal class MediaListComponentTest : ComposeTest() {
     fun `when the list is empty, the emptyStateRes should be displayed`() {
         composeTestRule.setContent {
             MediaList(
-                items = emptyList(),
+                items = persistentListOf(),
                 isEmpty = true,
                 isLoading = false,
                 emptyStateRes = R.string.empty_anime_list,
@@ -138,7 +140,7 @@ internal class MediaListComponentTest : ComposeTest() {
 
         composeTestRule.setContent {
             MediaList(
-                items = emptyList(),
+                items = persistentListOf(),
                 isEmpty = true,
                 isLoading = false,
                 emptyStateRes = R.string.empty_anime_list,
@@ -164,7 +166,7 @@ internal class MediaListComponentTest : ComposeTest() {
                 ),
             ),
             range = NUMBER_OF_ITEMS..NUMBER_OF_ITEMS,
-        ).next()
+        ).next().toImmutableList()
 
         composeTestRule.setContent {
             MediaList(
@@ -273,7 +275,7 @@ internal class MediaListComponentTest : ComposeTest() {
         val editEntry = mockk<(Int) -> Unit>()
         val mediaDetails = mockk<(Int) -> Unit>()
 
-        val list = listOf<MediaListItem.MangaListItem>()
+        val list = persistentListOf<MediaListItem.MangaListItem>()
 
         composeTestRule.setContent {
             MediaList(

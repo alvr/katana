@@ -59,6 +59,7 @@ import java.text.DecimalFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
+import kotlinx.collections.immutable.ImmutableList
 
 private val LocalMediaListItem =
     compositionLocalOf<MediaListItem> { error("No MediaListItem found!") }
@@ -66,7 +67,7 @@ private val LocalMediaListItem =
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun MediaList(
-    items: List<MediaListItem>,
+    items: ImmutableList<MediaListItem>,
     isEmpty: Boolean,
     isLoading: Boolean,
     @StringRes emptyStateRes: Int,
@@ -103,7 +104,7 @@ internal fun MediaList(
 @Composable
 @ExperimentalFoundationApi
 private fun MediaList(
-    items: List<MediaListItem>,
+    items: ImmutableList<MediaListItem>,
     addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
     mediaDetails: (Int) -> Unit,

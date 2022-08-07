@@ -14,7 +14,7 @@ env:
 jobs:
   cancel-stale-jobs:
     name: Cancel stale jobs
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Cancel Stale Jobs
         uses: styfle/cancel-workflow-action@0.10.0
@@ -23,7 +23,7 @@ jobs:
 
   assemble:
     name: Assembling
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -45,7 +45,7 @@ jobs:
 
   static-analysis:
     name: Static analysis
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       security-events: write
@@ -109,7 +109,7 @@ jobs:
 
   sonar:
     name: SonarQube
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     continue-on-error: true
     needs: [ static-analysis, unit-tests ]
     steps:
@@ -144,7 +144,7 @@ jobs:
 
   deploy-staging:
     name: Staging deployment
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     needs: [ assemble, static-analysis, unit-tests ]
     steps:
@@ -177,12 +177,10 @@ jobs:
           token: ${{ secrets.APPCENTER_TOKEN }}
           group: Testers
           path: app/build/outputs/apk/release/app-release.apk
-          silent: false
-          debug: false
 
   deploy-production:
     name: Production deployment
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [ assemble, static-analysis, unit-tests ]
     steps:
