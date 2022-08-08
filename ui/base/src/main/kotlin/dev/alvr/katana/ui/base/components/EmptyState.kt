@@ -27,7 +27,7 @@ fun EmptyState(
         Icon(
             imageVector = Icons.TwoTone.Inbox,
             modifier = Modifier.size(148.dp),
-            contentDescription = stringResource(id = R.string.component_empty_state),
+            contentDescription = stringResource(R.string.component_empty_state),
         )
         Text(text = text)
     }

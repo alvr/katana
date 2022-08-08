@@ -52,10 +52,10 @@ internal fun BottomNavigationBar(
                         icon = {
                             Icon(
                                 imageVector = destination.icon,
-                                contentDescription = stringResource(id = destination.label),
+                                contentDescription = stringResource(destination.label),
                             )
                         },
-                        label = { Text(text = stringResource(id = destination.label)) },
+                        label = { Text(text = stringResource(destination.label)) },
                         alwaysShowLabel = true,
                         selected = currentDestination?.route in destination.direction.destinationsByRoute.keys,
                         onClick = {

@@ -12,7 +12,7 @@ sentry = "6.3.1"
 
 # Compose
 compose = "1.2.0"
-compose-compiler = "1.3.0-rc01"
+compose-compiler = "1.3.0-rc02"
 
 # Coverage Engine
 intellij = "1.0.675"
@@ -107,6 +107,7 @@ hiltx-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.r
 
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.3.5" }
 
 # LeakCanary
 leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "2.9.1" }
@@ -177,6 +178,7 @@ common-android = [
     "coroutines-android",
     "hilt-android",
     "kotlin",
+    "kotlin-immutable",
     "napier",
 ]
 

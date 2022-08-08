@@ -101,6 +101,10 @@ android {
     kotlinOptions.configureKotlin()
 }
 
+configurations {
+    debugImplementation.get().exclude(group = "junit", module = "junit")
+}
+
 dependencies {
     implementation(projects.common.core)
 
@@ -131,6 +135,7 @@ dependencies {
     debugImplementation(libs.leakcanary)
 
     testImplementation(projects.common.tests)
+    testImplementation(projects.common.testsAndroid)
     testImplementation(libs.bundles.test)
 }
 

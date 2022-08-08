@@ -59,6 +59,7 @@ import java.text.DecimalFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
+import kotlinx.collections.immutable.ImmutableList
 
 private val LocalMediaListItem =
     compositionLocalOf<MediaListItem> { error("No MediaListItem found!") }
@@ -66,7 +67,7 @@ private val LocalMediaListItem =
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun MediaList(
-    items: List<MediaListItem>,
+    items: ImmutableList<MediaListItem>,
     isEmpty: Boolean,
     isLoading: Boolean,
     @StringRes emptyStateRes: Int,
@@ -83,7 +84,7 @@ internal fun MediaList(
     ) {
         if (isEmpty && !isLoading) {
             EmptyState(
-                text = stringResource(id = emptyStateRes),
+                text = stringResource(emptyStateRes),
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
@@ -103,7 +104,7 @@ internal fun MediaList(
 @Composable
 @ExperimentalFoundationApi
 private fun MediaList(
-    items: List<MediaListItem>,
+    items: ImmutableList<MediaListItem>,
     addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
     mediaDetails: (Int) -> Unit,
@@ -256,10 +257,10 @@ private fun Subtitle(
     val item = LocalMediaListItem.current
 
     val text = buildAnnotatedString {
-        append(stringResource(id = item.format.value))
+        append(stringResource(item.format.value))
 
         if (item is MediaListItem.AnimeListItem && item.nextEpisode != null) {
-            append(" ${stringResource(id = R.string.next_episode_separator)} ")
+            append(" ${stringResource(R.string.next_episode_separator)} ")
             append(
                 stringResource(
                     R.string.next_episode,
@@ -310,7 +311,7 @@ private fun PlusOne(
     // Episodes - Chapters (Anime & Manga)
     if (item.progress != item.total) {
         PlusOneButton(
-            progress = stringResource(id = R.string.progress, item.progress, item.total ?: String.unknown),
+            progress = stringResource(R.string.progress, item.progress, item.total ?: String.unknown),
             addPlusOne = addPlusOne,
             modifier = modifier,
         )
@@ -333,7 +334,7 @@ private fun PlusOneButton(
             contentColor = MaterialTheme.colors.onPrimary,
         ),
     ) {
-        Text(text = stringResource(id = R.string.plus_one, progress))
+        Text(text = stringResource(R.string.plus_one, progress))
     }
 }
 
@@ -368,7 +369,7 @@ private val episodeFormatter = @Composable {
 
     DateTimeFormatterBuilder()
         .append(datePattern)
-        .appendLiteral(" ${stringResource(id = R.string.next_episode_date_time_separator)} ")
+        .appendLiteral(" ${stringResource(R.string.next_episode_date_time_separator)} ")
         .append(timePattern)
         .toFormatter(locale)
 }

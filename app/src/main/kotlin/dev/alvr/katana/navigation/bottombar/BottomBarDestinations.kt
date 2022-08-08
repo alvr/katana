@@ -3,9 +3,9 @@ package dev.alvr.katana.navigation.bottombar
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.AccountCircle
+import androidx.compose.material.icons.twotone.CollectionsBookmark
 import androidx.compose.material.icons.twotone.Dashboard
 import androidx.compose.material.icons.twotone.Explore
-import androidx.compose.material.icons.twotone.FactCheck
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ramcosta.composedestinations.spec.NavGraphSpec
 import dev.alvr.katana.R
@@ -25,7 +25,7 @@ internal enum class HomeBottomBarDestinations(
     override val icon: ImageVector,
     override val label: Int,
 ) : BottomBarDestinations {
-    Lists(ListsNavGraph, Icons.TwoTone.FactCheck, R.string.navigation_bar_destination_lists),
+    Lists(ListsNavGraph, Icons.TwoTone.CollectionsBookmark, R.string.navigation_bar_destination_lists),
     Explore(ExploreNavGraph, Icons.TwoTone.Explore, R.string.navigation_bar_destination_explore),
     Social(SocialNavGraph, Icons.TwoTone.Dashboard, R.string.navigation_bar_destination_social),
     Account(AccountNavGraph, Icons.TwoTone.AccountCircle, R.string.navigation_bar_destination_account),

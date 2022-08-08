@@ -2,6 +2,7 @@ package dev.alvr.katana.ui.lists.entities
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import dev.alvr.katana.ui.lists.R
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -43,6 +44,7 @@ internal sealed interface MediaListItem {
         override val updatedAt: LocalDateTime?,
         val nextEpisode: NextEpisode?,
     ) : MediaListItem {
+        @Stable
         data class NextEpisode(
             val number: Int,
             val date: LocalDateTime,
