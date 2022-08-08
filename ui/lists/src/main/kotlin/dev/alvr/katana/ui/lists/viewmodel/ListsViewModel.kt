@@ -17,6 +17,8 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
+internal typealias Collection<T> = Map<String, List<T>>
+
 @HiltViewModel
 internal class ListsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -134,12 +136,12 @@ internal class ListsViewModel @Inject constructor(
         }
     }
 
-    private fun <T : MediaListItem> setCollection(key: String, items: Map<String, List<T>>) {
+    private fun <T : MediaListItem> setCollection(key: String, items: Collection<T>) {
         savedStateHandle[key] = items
     }
 
     private fun <T : MediaListItem> getCollection(key: String) =
-        savedStateHandle.get<Map<String, List<T>>>(key).orEmpty()
+        savedStateHandle.get<Collection<T>>(key).orEmpty()
 
     private fun setListNames(key: String, names: Array<String>) {
         savedStateHandle[key] = names
@@ -148,7 +150,7 @@ internal class ListsViewModel @Inject constructor(
     private fun getListNames(key: String): Array<String> =
         savedStateHandle.get<Array<String>>(key) ?: emptyArray()
 
-    private fun <T : MediaListItem> Map<String, List<T>>.getListByName(name: String?) =
+    private fun <T : MediaListItem> Collection<T>.getListByName(name: String?) =
         get(name)?.toImmutableList()
 
     private fun getAnimeList(listName: String?) =
