@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -24,7 +25,7 @@ import kotlinx.coroutines.launch
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 fun <T : HomeTopAppBar> HomeScaffold(
-    tabs: Array<out T>,
+    tabs: ImmutableList<T>,
     backContent: @Composable (T, BackLayerType) -> Unit,
     pageContent: @Composable (T) -> Unit,
     fab: (@Composable (T) -> Unit)? = null,
@@ -64,7 +65,7 @@ fun <T : HomeTopAppBar> HomeScaffold(
         },
         backLayerContent = {
             LayerContent(
-                tabs = tabs,
+                tabsCount = tabs.size,
                 pagerState = pagerState,
                 scrollEnabled = false,
                 content = { backContent(tabs[pagerState.currentPage], backLayerType) },
@@ -78,7 +79,7 @@ fun <T : HomeTopAppBar> HomeScaffold(
             ) {
                 LayerContent(
                     modifier = Modifier.fillMaxSize().padding(it),
-                    tabs = tabs,
+                    tabsCount = tabs.size,
                     pagerState = pagerState,
                     content = { page -> pageContent(tabs[page]) },
                 )

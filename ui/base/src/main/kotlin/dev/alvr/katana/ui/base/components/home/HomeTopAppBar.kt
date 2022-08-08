@@ -32,6 +32,7 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.R
+import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 interface HomeTopAppBar {
@@ -44,7 +45,7 @@ val LocalHomeTopBarSubtitle = compositionLocalOf<String?> { String.empty }
 @Composable
 @ExperimentalPagerApi
 internal fun HomeTopAppBar(
-    tabs: Array<out HomeTopAppBar>,
+    tabs: ImmutableList<HomeTopAppBar>,
     pagerState: PagerState,
     onTabClicked: (Int) -> Unit,
     onSearch: () -> Unit,
@@ -89,7 +90,7 @@ internal fun HomeTopAppBar(
 @Composable
 @ExperimentalPagerApi
 private fun TabSelector(
-    tabs: Array<out HomeTopAppBar>,
+    tabs: ImmutableList<HomeTopAppBar>,
     pagerState: PagerState,
     onTabClicked: (Int) -> Unit,
 ) {

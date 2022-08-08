@@ -1,5 +1,6 @@
 package dev.alvr.katana.ui.lists.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import arrow.core.right
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.zero
@@ -16,26 +17,27 @@ import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.entities.MediaListItem.Format.OneShot
 import io.kotest.core.spec.style.BehaviorSpec
+import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import java.time.LocalDate
 import java.time.LocalDateTime
-import kotlinx.collections.immutable.persistentHashMapOf
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.flowOf
 import org.orbitmvi.orbit.test
 
 internal class ListsViewModelTest : BehaviorSpec({
+    val stateHandle = mockk<SavedStateHandle>(relaxed = true)
     val observeAnime = mockk<ObserveAnimeListUseCase>()
     val observeManga = mockk<ObserveMangaListUseCase>()
     val updateList = mockk<UpdateListUseCase>()
 
     given("a ListsBaseViewModel") {
-        val viewModel = ListsViewModel(observeAnime, observeManga, updateList).test(ListsState())
+        val viewModel = ListsViewModel(stateHandle, observeAnime, observeManga, updateList).test(ListsState())
 
         `when`("initializing the viewModel") {
             and("the collections are empty") {
@@ -49,11 +51,11 @@ internal class ListsViewModelTest : BehaviorSpec({
                 then("it should update it's state") {
                     viewModel.assert(ListsState()) {
                         states(
-                            { copy(currentAnimeList = currentAnimeList.copy(isLoading = true)) },
-                            { copy(currentMangaList = currentMangaList.copy(isLoading = true)) },
+                            { copy(animeList = animeList.copy(isLoading = true)) },
+                            { copy(mangaList = mangaList.copy(isLoading = true)) },
                             {
                                 copy(
-                                    currentAnimeList = currentAnimeList.copy(
+                                    animeList = animeList.copy(
                                         isLoading = false,
                                         isEmpty = true,
                                         items = persistentListOf(),
@@ -62,7 +64,7 @@ internal class ListsViewModelTest : BehaviorSpec({
                             },
                             {
                                 copy(
-                                    currentMangaList = currentMangaList.copy(
+                                    mangaList = mangaList.copy(
                                         isLoading = false,
                                         isEmpty = true,
                                         items = persistentListOf(),
@@ -116,41 +118,18 @@ internal class ListsViewModelTest : BehaviorSpec({
                 coJustRun { observeManga() }
 
                 viewModel.runOnCreate()
-                viewModel.testIntent { fetchAnimeLists() }
 
                 then("it should update it's state with the mapped entry") {
                     viewModel.assert(ListsState()) {
                         states(
-                            { copy(currentAnimeList = currentAnimeList.copy(isLoading = true)) },
-                            { copy(currentMangaList = currentMangaList.copy(isLoading = true)) },
+                            { copy(animeList = animeList.copy(isLoading = true)) },
+                            { copy(mangaList = mangaList.copy(isLoading = true)) },
                             {
                                 copy(
-                                    animeCollection = persistentHashMapOf(
-                                        "MyCustomAnimeList" to persistentListOf(
-                                            MediaListItem.AnimeListItem(
-                                                entryId = Int.zero,
-                                                mediaId = Int.zero,
-                                                title = String.empty,
-                                                score = Double.zero,
-                                                format = OneShot,
-                                                cover = String.empty,
-                                                progress = 234,
-                                                total = null,
-                                                repeat = Int.zero,
-                                                private = false,
-                                                notes = String.empty,
-                                                hiddenFromStatusLists = false,
-                                                nextEpisode = null,
-                                                startedAt = LocalDate.MAX,
-                                                completedAt = LocalDate.MAX,
-                                                updatedAt = LocalDateTime.MAX,
-                                            ),
-                                        ),
-                                    ),
-                                    currentAnimeListName = "MyCustomAnimeList",
-                                    currentAnimeList = currentAnimeList.copy(
+                                    animeList = animeList.copy(
                                         isLoading = false,
                                         isEmpty = false,
+                                        name = "MyCustomAnimeList",
                                         items = persistentListOf(
                                             MediaListItem.AnimeListItem(
                                                 entryId = Int.zero,
@@ -172,24 +151,48 @@ internal class ListsViewModelTest : BehaviorSpec({
                                             ),
                                         ),
                                     ),
-                                    animeListNames = persistentListOf("MyCustomAnimeList"),
                                 )
                             },
                             {
                                 copy(
-                                    currentMangaList = currentMangaList.copy(
+                                    mangaList = mangaList.copy(
                                         isLoading = false,
                                         isEmpty = true,
                                         items = persistentListOf(),
                                     ),
                                 )
                             },
-                            { copy(currentAnimeList = currentAnimeList.copy(isLoading = true)) },
                         )
                     }
 
-                    coVerify(exactly = 2) { observeAnime() }
-                    coVerify(exactly = 1) { observeAnime.flow }
+                    coVerify(exactly = 1) { observeAnime() }
+                    verify(exactly = 1) { observeAnime.flow }
+                    verify(ordering = Ordering.ORDERED) {
+                        stateHandle["animeListNames"] = arrayOf("MyCustomAnimeList")
+
+                        stateHandle["animeCollection"] = mapOf(
+                            "MyCustomAnimeList" to listOf(
+                                MediaListItem.AnimeListItem(
+                                    entryId = Int.zero,
+                                    mediaId = Int.zero,
+                                    title = String.empty,
+                                    score = Double.zero,
+                                    format = OneShot,
+                                    cover = String.empty,
+                                    progress = 234,
+                                    total = null,
+                                    repeat = Int.zero,
+                                    private = false,
+                                    notes = String.empty,
+                                    hiddenFromStatusLists = false,
+                                    nextEpisode = null,
+                                    startedAt = LocalDate.MAX,
+                                    completedAt = LocalDate.MAX,
+                                    updatedAt = LocalDateTime.MAX,
+                                ),
+                            ),
+                        )
+                    }
                 }
             }
 
@@ -239,11 +242,11 @@ internal class ListsViewModelTest : BehaviorSpec({
                 then("it should update it's state with the mapped entry") {
                     viewModel.assert(ListsState()) {
                         states(
-                            { copy(currentAnimeList = currentAnimeList.copy(isLoading = true)) },
-                            { copy(currentMangaList = currentMangaList.copy(isLoading = true)) },
+                            { copy(animeList = animeList.copy(isLoading = true)) },
+                            { copy(mangaList = mangaList.copy(isLoading = true)) },
                             {
                                 copy(
-                                    currentAnimeList = currentAnimeList.copy(
+                                    animeList = animeList.copy(
                                         isLoading = false,
                                         isEmpty = true,
                                         items = persistentListOf(),
@@ -252,33 +255,10 @@ internal class ListsViewModelTest : BehaviorSpec({
                             },
                             {
                                 copy(
-                                    mangaCollection = persistentMapOf(
-                                        "MyCustomMangaList" to persistentListOf(
-                                            MediaListItem.MangaListItem(
-                                                entryId = Int.zero,
-                                                mediaId = Int.zero,
-                                                title = String.empty,
-                                                score = Double.zero,
-                                                format = OneShot,
-                                                cover = String.empty,
-                                                progress = 234,
-                                                volumesProgress = Int.zero,
-                                                total = null,
-                                                volumesTotal = null,
-                                                repeat = Int.zero,
-                                                private = false,
-                                                notes = String.empty,
-                                                hiddenFromStatusLists = false,
-                                                startedAt = LocalDate.MAX,
-                                                completedAt = LocalDate.MAX,
-                                                updatedAt = LocalDateTime.MAX,
-                                            ),
-                                        ),
-                                    ),
-                                    currentMangaListName = "MyCustomMangaList",
-                                    currentMangaList = currentMangaList.copy(
+                                    mangaList = mangaList.copy(
                                         isLoading = false,
                                         isEmpty = false,
+                                        name = "MyCustomMangaList",
                                         items = persistentListOf(
                                             MediaListItem.MangaListItem(
                                                 entryId = Int.zero,
@@ -301,15 +281,40 @@ internal class ListsViewModelTest : BehaviorSpec({
                                             ),
                                         ),
                                     ),
-                                    mangaListNames = persistentListOf("MyCustomMangaList"),
                                 )
                             },
-                            { copy(currentMangaList = currentMangaList.copy(isLoading = true)) },
                         )
                     }
 
-                    coVerify(exactly = 2) { observeManga() }
-                    coVerify(exactly = 1) { observeManga.flow }
+                    coVerify(exactly = 1) { observeManga() }
+                    verify(exactly = 1) { observeManga.flow }
+                    verify(ordering = Ordering.ORDERED) {
+                        stateHandle["mangaListNames"] = arrayOf("MyCustomMangaList")
+
+                        stateHandle["mangaCollection"] = mapOf(
+                            "MyCustomMangaList" to listOf(
+                                MediaListItem.MangaListItem(
+                                    entryId = Int.zero,
+                                    mediaId = Int.zero,
+                                    title = String.empty,
+                                    score = Double.zero,
+                                    format = OneShot,
+                                    cover = String.empty,
+                                    progress = 234,
+                                    volumesProgress = Int.zero,
+                                    total = null,
+                                    volumesTotal = null,
+                                    repeat = Int.zero,
+                                    private = false,
+                                    notes = String.empty,
+                                    hiddenFromStatusLists = false,
+                                    startedAt = LocalDate.MAX,
+                                    completedAt = LocalDate.MAX,
+                                    updatedAt = LocalDateTime.MAX,
+                                ),
+                            ),
+                        )
+                    }
                 }
             }
         }

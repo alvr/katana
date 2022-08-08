@@ -11,13 +11,14 @@ import dev.alvr.katana.ui.base.components.home.HomeTopAppBar
 import dev.alvr.katana.ui.explore.R
 import dev.alvr.katana.ui.explore.view.pages.Anime
 import dev.alvr.katana.ui.explore.view.pages.Manga
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 @Destination
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 internal fun Explore() {
     HomeScaffold(
-        tabs = enumValues<ExploreTabs>(),
+        tabs = ExploreTabs.values,
         backContent = { _, _ -> Text(text = "TODO") },
         pageContent = { page ->
             when (page) {
@@ -31,5 +32,10 @@ internal fun Explore() {
 @Immutable
 private enum class ExploreTabs(override val label: Int) : HomeTopAppBar {
     Anime(R.string.tab_anime),
-    Manga(R.string.tab_manga),
+    Manga(R.string.tab_manga);
+
+    companion object {
+        @JvmField
+        val values = persistentListOf(Anime, Manga)
+    }
 }

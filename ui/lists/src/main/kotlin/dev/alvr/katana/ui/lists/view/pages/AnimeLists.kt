@@ -8,16 +8,16 @@ import dev.alvr.katana.ui.lists.viewmodel.ListsState
 
 @Composable
 internal fun AnimeLists(
-    state: ListsState.ListState<MediaListItem.AnimeListItem>,
+    listState: ListsState.ListState<MediaListItem.AnimeListItem>,
     onRefresh: () -> Unit,
     addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
     mediaDetails: (Int) -> Unit,
 ) {
     MediaList(
-        items = state.items,
-        isEmpty = state.isEmpty,
-        isLoading = state.isLoading,
+        items = listState.items,
+        isEmpty = listState.isEmpty,
+        isLoading = listState.isLoading,
         emptyStateRes = R.string.empty_anime_list,
         onRefresh = onRefresh,
         addPlusOne = addPlusOne,

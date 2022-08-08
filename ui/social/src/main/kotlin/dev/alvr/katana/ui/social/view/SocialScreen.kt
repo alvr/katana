@@ -11,13 +11,14 @@ import dev.alvr.katana.ui.base.components.home.HomeTopAppBar
 import dev.alvr.katana.ui.social.R
 import dev.alvr.katana.ui.social.view.pages.Following
 import dev.alvr.katana.ui.social.view.pages.Global
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 @Destination
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 internal fun Social() {
     HomeScaffold(
-        tabs = enumValues<SocialTabs>(),
+        tabs = SocialTabs.values,
         backContent = { _, _ -> Text(text = "TODO") },
         pageContent = { page ->
             when (page) {
@@ -31,5 +32,10 @@ internal fun Social() {
 @Immutable
 private enum class SocialTabs(override val label: Int) : HomeTopAppBar {
     Following(R.string.tab_following),
-    Global(R.string.tab_global),
+    Global(R.string.tab_global);
+
+    companion object {
+        @JvmField
+        val values = persistentListOf(Following, Global)
+    }
 }

@@ -9,7 +9,7 @@ import com.google.accompanist.pager.PagerState
 @Composable
 @ExperimentalPagerApi
 internal fun LayerContent(
-    tabs: Array<out HomeTopAppBar>,
+    tabsCount: Int,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
     scrollEnabled: Boolean = true,
@@ -17,7 +17,7 @@ internal fun LayerContent(
 ) {
     HorizontalPager(
         modifier = modifier,
-        count = tabs.size,
+        count = tabsCount,
         state = pagerState,
         userScrollEnabled = scrollEnabled,
         content = { page -> content(page) },

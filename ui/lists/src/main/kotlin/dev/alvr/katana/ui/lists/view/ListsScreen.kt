@@ -15,13 +15,13 @@ import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.ui.base.components.home.HomeScaffold
 import dev.alvr.katana.ui.base.components.home.HomeTopAppBar
 import dev.alvr.katana.ui.base.components.home.LocalHomeTopBarSubtitle
-import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.pages.AnimeLists
 import dev.alvr.katana.ui.lists.view.pages.MangaLists
-import dev.alvr.katana.ui.lists.viewmodel.ListsState
 import dev.alvr.katana.ui.lists.viewmodel.ListsViewModel
+import kotlinx.collections.immutable.persistentListOf
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 @Destination
@@ -30,18 +30,14 @@ internal fun Lists(
     navigator: ListsNavigator,
     vm: ListsViewModel = hiltViewModel(),
 ) {
-    val tabs = enumValues<ListTabs>()
+    val tabs = ListTabs.values
     var selectedTab by remember { mutableStateOf(tabs.first()) }
 
-    val animeState by vm.collectAsState(ListsState::currentAnimeList)
-    val mangaState by vm.collectAsState(ListsState::currentMangaList)
-
-    val currentAnimeListName by vm.collectAsState(ListsState::currentAnimeListName)
-    val currentMangaListName by vm.collectAsState(ListsState::currentMangaListName)
+    val state by vm.collectAsState()
 
     val subtitle = when (selectedTab) {
-        ListTabs.Anime -> currentAnimeListName
-        ListTabs.Manga -> currentMangaListName
+        ListTabs.Anime -> state.animeList.name
+        ListTabs.Manga -> state.mangaList.name
     }
 
     CompositionLocalProvider(LocalHomeTopBarSubtitle provides subtitle) {
@@ -52,15 +48,15 @@ internal fun Lists(
             pageContent = { page ->
                 when (page) {
                     ListTabs.Anime -> AnimeLists(
-                        state = animeState,
-                        onRefresh = vm::fetchAnimeLists,
+                        listState = state.animeList,
+                        onRefresh = vm::refreshAnimeLists,
                         addPlusOne = vm::addPlusOne,
                         editEntry = navigator::openEditEntry,
                         mediaDetails = navigator::toMediaDetails,
                     )
                     ListTabs.Manga -> MangaLists(
-                        state = mangaState,
-                        onRefresh = vm::fetchMangaLists,
+                        listState = state.mangaList,
+                        onRefresh = vm::refreshMangaLists,
                         addPlusOne = vm::addPlusOne,
                         editEntry = navigator::openEditEntry,
                         mediaDetails = navigator::toMediaDetails,
@@ -74,5 +70,10 @@ internal fun Lists(
 @Immutable
 private enum class ListTabs(override val label: Int) : HomeTopAppBar {
     Anime(R.string.tab_anime),
-    Manga(R.string.tab_manga),
+    Manga(R.string.tab_manga);
+
+    companion object {
+        @JvmField
+        val values = persistentListOf(Anime, Manga)
+    }
 }
