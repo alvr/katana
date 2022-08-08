@@ -12,11 +12,15 @@ import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.result.NavResult
+import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.ui.base.components.home.HomeScaffold
 import dev.alvr.katana.ui.base.components.home.HomeTopAppBar
 import dev.alvr.katana.ui.base.components.home.LocalHomeTopBarSubtitle
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
+import dev.alvr.katana.ui.lists.view.components.ListSelectorButton
+import dev.alvr.katana.ui.lists.view.destinations.ListSelectorDestination
 import dev.alvr.katana.ui.lists.view.pages.AnimeLists
 import dev.alvr.katana.ui.lists.view.pages.MangaLists
 import dev.alvr.katana.ui.lists.viewmodel.ListsViewModel
@@ -26,8 +30,9 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 @Destination
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
-internal fun Lists(
+internal fun ListsScreen(
     navigator: ListsNavigator,
+    resultRecipient: ResultRecipient<ListSelectorDestination, String>,
     vm: ListsViewModel = hiltViewModel(),
 ) {
     val tabs = ListTabs.values
@@ -38,6 +43,16 @@ internal fun Lists(
     val subtitle = when (selectedTab) {
         ListTabs.Anime -> state.animeList.name
         ListTabs.Manga -> state.mangaList.name
+    }
+
+    resultRecipient.onNavResult { result ->
+        when (result) {
+            NavResult.Canceled -> Unit
+            is NavResult.Value -> when (selectedTab) {
+                ListTabs.Anime -> vm.selectAnimeList(result.value)
+                ListTabs.Manga -> vm.selectMangaList(result.value)
+            }
+        }
     }
 
     CompositionLocalProvider(LocalHomeTopBarSubtitle provides subtitle) {
@@ -61,6 +76,16 @@ internal fun Lists(
                         editEntry = navigator::openEditEntry,
                         mediaDetails = navigator::toMediaDetails,
                     )
+                }
+            },
+            fab = { page ->
+                val lists = when (page) {
+                    ListTabs.Anime -> vm.animeListNames
+                    ListTabs.Manga -> vm.mangaListNames
+                }
+
+                ListSelectorButton {
+                    navigator.openListSelector(lists)
                 }
             },
         )

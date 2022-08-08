@@ -1,8 +1,11 @@
 package dev.alvr.katana.navigation
 
+import com.ramcosta.composedestinations.dynamic.within
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
+import dev.alvr.katana.ui.lists.navigation.ListsNavGraph
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
+import dev.alvr.katana.ui.lists.view.destinations.ListSelectorDestination
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
 import io.github.aakira.napier.Napier
@@ -35,6 +38,10 @@ internal class Navigator(
 
     override fun toMediaDetails(id: Int) {
         Napier.d { "Navigate to media details of entry $id" }
+    }
+
+    override fun openListSelector(lists: Array<String>) {
+        navigator.navigate(ListSelectorDestination(lists) within ListsNavGraph)
     }
     //endregion [ListsNavigator]
 }

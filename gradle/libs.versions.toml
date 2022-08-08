@@ -172,6 +172,7 @@ common = [
     "coroutines",
     "hilt",
     "kotlin",
+    "kotlin-immutable",
 ]
 common-android = [
     "arrow",

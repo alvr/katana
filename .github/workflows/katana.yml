@@ -171,12 +171,13 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew assembleRelease --no-daemon
       - name: Publish staging APK to AppCenter
-        uses: akiojin/appcenter-distribute-github-action@v1
+        uses: wzieba/AppCenter-Github-Action@v1
         with:
-          app: KatanaApp/Katana
+          appName: KatanaApp/Katana
           token: ${{ secrets.APPCENTER_TOKEN }}
           group: Testers
-          path: app/build/outputs/apk/release/app-release.apk
+          file: app/build/outputs/apk/release/app-release.apk
+          notifyTesters: true
 
   deploy-production:
     name: Production deployment

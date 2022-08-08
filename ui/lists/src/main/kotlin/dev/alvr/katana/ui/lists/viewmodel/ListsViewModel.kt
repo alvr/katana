@@ -2,6 +2,7 @@ package dev.alvr.katana.ui.lists.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.alvr.katana.common.core.orEmpty
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.lists.usecases.ObserveAnimeListUseCase
 import dev.alvr.katana.domain.lists.usecases.ObserveMangaListUseCase
@@ -16,8 +17,6 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
-private typealias Collection<T> = Map<String, List<T>>
-
 @HiltViewModel
 internal class ListsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -28,6 +27,9 @@ internal class ListsViewModel @Inject constructor(
     override val container = container<ListsState, Nothing>(ListsState()) {
         observeLists()
     }
+
+    val animeListNames get() = getListNames(ANIME_LIST_NAMES)
+    val mangaListNames get() = getListNames(MANGA_LIST_NAMES)
 
     fun refreshAnimeLists() {
         updateState { copy(animeList = animeList.copy(isLoading = true)) }
@@ -42,6 +44,34 @@ internal class ListsViewModel @Inject constructor(
     fun addPlusOne(item: MediaListItem) {
         val entry = item.toMediaList().copy(progress = item.progress.inc())
         intent { updateListUseCase(entry) }
+    }
+
+    fun selectAnimeList(name: String) {
+        val list = getAnimeList(name) ?: return
+
+        updateState {
+            copy(
+                animeList = animeList.copy(
+                    items = list,
+                    name = name,
+                    isEmpty = list.isEmpty(),
+                ),
+            )
+        }
+    }
+
+    fun selectMangaList(name: String) {
+        val list = getMangaList(name) ?: return
+
+        updateState {
+            copy(
+                mangaList = mangaList.copy(
+                    items = list,
+                    name = name,
+                    isEmpty = list.isEmpty(),
+                ),
+            )
+        }
     }
 
     private fun observeLists() {
@@ -61,15 +91,15 @@ internal class ListsViewModel @Inject constructor(
                     .mapValues { it.value.toMediaItems() }
                     .also { setCollection(ANIME_COLLECTION, it) }
 
-                val defaultListName = items.keys.firstOrNull()
-                val defaultList = items.getListByName(defaultListName)
-
                 reduce {
+                    val selectedListName = state.animeList.name ?: items.keys.firstOrNull()
+                    val selectedList = getAnimeList(selectedListName).orEmpty()
+
                     state.copy(
                         animeList = state.animeList.copy(
-                            items = defaultList,
-                            name = defaultListName,
-                            isEmpty = defaultList.isEmpty(),
+                            items = selectedList,
+                            name = selectedListName,
+                            isEmpty = selectedList.isEmpty(),
                             isLoading = false,
                         ),
                     )
@@ -87,15 +117,15 @@ internal class ListsViewModel @Inject constructor(
                     .mapValues { it.value.toMediaItems() }
                     .also { setCollection(MANGA_COLLECTION, it) }
 
-                val defaultListName = items.keys.firstOrNull()
-                val defaultList = items.getListByName(defaultListName)
-
                 reduce {
+                    val selectedListName = state.mangaList.name ?: items.keys.firstOrNull()
+                    val selectedList = getMangaList(selectedListName).orEmpty()
+
                     state.copy(
                         mangaList = state.mangaList.copy(
-                            items = defaultList,
-                            name = defaultListName,
-                            isEmpty = defaultList.isEmpty(),
+                            items = selectedList,
+                            name = selectedListName,
+                            isEmpty = selectedList.isEmpty(),
                             isLoading = false,
                         ),
                     )
@@ -104,16 +134,28 @@ internal class ListsViewModel @Inject constructor(
         }
     }
 
-    private fun <T : MediaListItem> Map<String, List<T>>.getListByName(name: String?) =
-        getOrElse(name.orEmpty()) { emptyList() }.toImmutableList()
-
-    private fun <T : MediaListItem> setCollection(key: String, items: Collection<T>) {
+    private fun <T : MediaListItem> setCollection(key: String, items: Map<String, List<T>>) {
         savedStateHandle[key] = items
     }
+
+    private fun <T : MediaListItem> getCollection(key: String) =
+        savedStateHandle.get<Map<String, List<T>>>(key).orEmpty()
 
     private fun setListNames(key: String, names: Array<String>) {
         savedStateHandle[key] = names
     }
+
+    private fun getListNames(key: String): Array<String> =
+        savedStateHandle.get<Array<String>>(key) ?: emptyArray()
+
+    private fun <T : MediaListItem> Map<String, List<T>>.getListByName(name: String?) =
+        get(name)?.toImmutableList()
+
+    private fun getAnimeList(listName: String?) =
+        getCollection<MediaListItem.AnimeListItem>(ANIME_COLLECTION).getListByName(listName)
+
+    private fun getMangaList(listName: String?) =
+        getCollection<MediaListItem.MangaListItem>(MANGA_COLLECTION).getListByName(listName)
 
     companion object {
         private const val ANIME_COLLECTION = "animeCollection"
