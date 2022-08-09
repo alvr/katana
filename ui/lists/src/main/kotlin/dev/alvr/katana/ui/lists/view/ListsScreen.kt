@@ -20,9 +20,8 @@ import dev.alvr.katana.ui.base.components.home.LocalHomeTopBarSubtitle
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.components.ListSelectorButton
+import dev.alvr.katana.ui.lists.view.components.MediaList
 import dev.alvr.katana.ui.lists.view.destinations.ListSelectorDestination
-import dev.alvr.katana.ui.lists.view.pages.AnimeLists
-import dev.alvr.katana.ui.lists.view.pages.MangaLists
 import dev.alvr.katana.ui.lists.viewmodel.ListsViewModel
 import kotlinx.collections.immutable.persistentListOf
 import org.orbitmvi.orbit.compose.collectAsState
@@ -61,22 +60,27 @@ internal fun ListsScreen(
             onSelectedTab = { selectedTab = it },
             backContent = { _, _ -> Text(text = "TODO") },
             pageContent = { page ->
-                when (page) {
-                    ListTabs.Anime -> AnimeLists(
-                        listState = state.animeList,
-                        onRefresh = vm::refreshAnimeLists,
-                        addPlusOne = vm::addPlusOne,
-                        editEntry = navigator::openEditEntry,
-                        mediaDetails = navigator::toMediaDetails,
+                val (listState, emptyState, refresh) = when (page) {
+                    ListTabs.Anime -> Triple(
+                        state.animeList,
+                        R.string.empty_anime_list,
+                        vm::refreshAnimeLists,
                     )
-                    ListTabs.Manga -> MangaLists(
-                        listState = state.mangaList,
-                        onRefresh = vm::refreshMangaLists,
-                        addPlusOne = vm::addPlusOne,
-                        editEntry = navigator::openEditEntry,
-                        mediaDetails = navigator::toMediaDetails,
+                    ListTabs.Manga -> Triple(
+                        state.mangaList,
+                        R.string.empty_manga_list,
+                        vm::refreshMangaLists,
                     )
                 }
+
+                MediaList(
+                    listState = listState,
+                    onRefresh = refresh,
+                    emptyStateRes = emptyState,
+                    addPlusOne = vm::addPlusOne,
+                    editEntry = navigator::openEditEntry,
+                    mediaDetails = navigator::toMediaDetails,
+                )
             },
             fab = { page ->
                 val lists = when (page) {
