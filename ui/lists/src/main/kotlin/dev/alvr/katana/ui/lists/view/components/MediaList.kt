@@ -8,6 +8,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,6 +56,7 @@ import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.components.EmptyState
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
+import dev.alvr.katana.ui.lists.viewmodel.ListsState
 import java.text.DecimalFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
@@ -67,6 +69,28 @@ private val LocalMediaListItem =
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun MediaList(
+    listState: ListsState.ListState<out MediaListItem>,
+    @StringRes emptyStateRes: Int,
+    onRefresh: () -> Unit,
+    addPlusOne: (MediaListItem) -> Unit,
+    editEntry: (Int) -> Unit,
+    mediaDetails: (Int) -> Unit,
+) {
+    MediaList(
+        items = listState.items,
+        isEmpty = listState.isEmpty,
+        isLoading = listState.isLoading,
+        emptyStateRes = emptyStateRes,
+        onRefresh = onRefresh,
+        addPlusOne = addPlusOne,
+        editEntry = editEntry,
+        mediaDetails = mediaDetails,
+    )
+}
+
+@Composable
+@ExperimentalFoundationApi
+private fun MediaList(
     items: ImmutableList<MediaListItem>,
     isEmpty: Boolean,
     isLoading: Boolean,
@@ -114,8 +138,8 @@ private fun MediaList(
         modifier = modifier,
         columns = GridCells.Adaptive(CARD_WIDTH),
         contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(ARRANGEMENT_SPACING),
+        horizontalArrangement = Arrangement.spacedBy(ARRANGEMENT_SPACING),
     ) {
         items(
             items = items,
@@ -129,6 +153,10 @@ private fun MediaList(
                     mediaDetails = mediaDetails,
                 )
             }
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(72.dp)) // 56.dp FAB + 16.dp spacing bottom
         }
     }
 }
@@ -185,18 +213,18 @@ private fun CardContent(
         Title(
             modifier = modifier.constrainAs(title) {
                 width = Dimension.fillToConstraints
-                top.linkTo(anchor = parent.top, margin = 4.dp)
-                start.linkTo(anchor = image.end, margin = 8.dp)
-                end.linkTo(anchor = parent.end, margin = 8.dp)
+                top.linkTo(anchor = parent.top, margin = CONSTRAINT_VERTICAL_MARGIN)
+                start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
             }.testTag(ITEM_TITLE_TAG),
         )
 
         Subtitle(
             modifier = modifier.constrainAs(subtitle) {
                 width = Dimension.fillToConstraints
-                top.linkTo(anchor = title.bottom, margin = 4.dp)
-                start.linkTo(anchor = image.end, margin = 8.dp)
-                end.linkTo(anchor = parent.end, margin = 8.dp)
+                top.linkTo(anchor = title.bottom, margin = CONSTRAINT_VERTICAL_MARGIN)
+                start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
             }.testTag(ITEM_SUBTITLE_TAG),
         )
 
@@ -204,7 +232,7 @@ private fun CardContent(
             addPlusOne = addPlusOne,
             modifier = modifier.constrainAs(plusOne) {
                 width = Dimension.wrapContent
-                end.linkTo(anchor = parent.end, margin = 8.dp)
+                end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
                 bottom.linkTo(anchor = progress.top)
             }.testTag(ITEM_PLUSONE_TAG),
         )
@@ -380,6 +408,9 @@ private val scoreFormatter = { score: Double ->
 
 private val CARD_WIDTH = 384.dp
 private val COVER_MAX_WIDTH = CARD_WIDTH / 4f
+private val ARRANGEMENT_SPACING = 8.dp
+private val CONSTRAINT_VERTICAL_MARGIN = 4.dp
+private val CONSTRAINT_HORIZONTAL_MARGIN = 8.dp
 
 private const val PROGRESS_IF_UNKNOWN = .1f
 

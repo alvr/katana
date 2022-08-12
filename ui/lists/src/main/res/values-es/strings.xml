@@ -14,4 +14,6 @@
 
     <string name="empty_anime_list">Esta lista de Anime está vacía</string>
     <string name="empty_manga_list">Esta lista de Manga está vacía</string>
+
+    <string name="list_selector">Selector de lista</string>
 </resources>

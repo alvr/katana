@@ -32,6 +32,7 @@ import dev.alvr.katana.ui.lists.view.components.ITEM_SCORE_TAG
 import dev.alvr.katana.ui.lists.view.components.ITEM_SUBTITLE_TAG
 import dev.alvr.katana.ui.lists.view.components.ITEM_TITLE_TAG
 import dev.alvr.katana.ui.lists.view.components.MediaList
+import dev.alvr.katana.ui.lists.viewmodel.ListsState
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.bind
 import io.kotest.property.arbitrary.boolean
@@ -117,9 +118,10 @@ internal class MediaListComponentTest : ComposeTest() {
     fun `when the list is empty, the emptyStateRes should be displayed`() {
         composeTestRule.setContent {
             MediaList(
-                items = persistentListOf(),
-                isEmpty = true,
-                isLoading = false,
+                listState = ListsState.ListState(
+                    items = persistentListOf(),
+                    isEmpty = true,
+                ),
                 emptyStateRes = R.string.empty_anime_list,
                 onRefresh = { mockk() },
                 addPlusOne = { mockk() },
@@ -140,9 +142,10 @@ internal class MediaListComponentTest : ComposeTest() {
 
         composeTestRule.setContent {
             MediaList(
-                items = persistentListOf(),
-                isEmpty = true,
-                isLoading = false,
+                listState = ListsState.ListState(
+                    items = persistentListOf(),
+                    isEmpty = true,
+                ),
                 emptyStateRes = R.string.empty_anime_list,
                 onRefresh = refresh,
                 addPlusOne = { mockk() },
@@ -170,9 +173,10 @@ internal class MediaListComponentTest : ComposeTest() {
 
         composeTestRule.setContent {
             MediaList(
-                items = list,
-                isEmpty = list.isEmpty(),
-                isLoading = false,
+                listState = ListsState.ListState(
+                    items = list,
+                    isEmpty = list.isEmpty(),
+                ),
                 emptyStateRes = R.string.empty_anime_list,
                 onRefresh = { mockk() },
                 addPlusOne = { mockk() },
@@ -199,9 +203,10 @@ internal class MediaListComponentTest : ComposeTest() {
 
         composeTestRule.setContent {
             MediaList(
-                items = mockedAnimeList,
-                isEmpty = mockedAnimeList.isEmpty(),
-                isLoading = false,
+                listState = ListsState.ListState(
+                    items = mockedAnimeList,
+                    isEmpty = mockedAnimeList.isEmpty(),
+                ),
                 emptyStateRes = R.string.empty_anime_list,
                 onRefresh = { mockk() },
                 addPlusOne = addPlusOne,
@@ -279,9 +284,10 @@ internal class MediaListComponentTest : ComposeTest() {
 
         composeTestRule.setContent {
             MediaList(
-                items = list,
-                isEmpty = list.isEmpty(),
-                isLoading = false,
+                listState = ListsState.ListState(
+                    items = list,
+                    isEmpty = list.isEmpty(),
+                ),
                 emptyStateRes = R.string.empty_anime_list,
                 onRefresh = { mockk() },
                 addPlusOne = addPlusOne,

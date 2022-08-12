@@ -2,15 +2,20 @@ package dev.alvr.katana.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.plusAssign
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
@@ -29,8 +34,10 @@ import org.orbitmvi.orbit.compose.collectAsState
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
 internal fun KatanaDestinations() {
     val navController = rememberAnimatedNavController().withSentryObservableEffect()
-    val vm = hiltViewModel<MainViewModel>()
+    val bottomSheetNavigator = rememberBottomSheetNavigator()
+    navController.navigatorProvider += bottomSheetNavigator
 
+    val vm = hiltViewModel<MainViewModel>()
     val state by vm.collectAsState()
 
     SessionExpiredDialog(visible = !state.isSessionActive) {
@@ -38,23 +45,28 @@ internal fun KatanaDestinations() {
         navController.logout()
     }
 
-    Scaffold(
-        bottomBar = {
-            BottomNavigationBar(navController = navController)
-        },
-    ) { paddingValues ->
-        DestinationsNavHost(
-            modifier = Modifier.padding(paddingValues),
-            engine = rememberAnimatedNavHostEngine(
-                rootDefaultAnimations = RootNavGraphDefaultAnimations.ACCOMPANIST_FADING,
-            ),
-            navController = navController,
-            navGraph = NavGraphs.root,
-            startRoute = state.initialNavGraph,
-            dependenciesContainerBuilder = {
-                dependency(currentNavigator())
+    ModalBottomSheetLayout(
+        bottomSheetNavigator = bottomSheetNavigator,
+        sheetShape = RoundedCornerShape(16.dp),
+    ) {
+        Scaffold(
+            bottomBar = {
+                BottomNavigationBar(navController = navController)
             },
-        )
+        ) { paddingValues ->
+            DestinationsNavHost(
+                modifier = Modifier.padding(paddingValues),
+                engine = rememberAnimatedNavHostEngine(
+                    rootDefaultAnimations = RootNavGraphDefaultAnimations.ACCOMPANIST_FADING,
+                ),
+                navController = navController,
+                navGraph = NavGraphs.root,
+                startRoute = state.initialNavGraph,
+                dependenciesContainerBuilder = {
+                    dependency(currentNavigator())
+                },
+            )
+        }
     }
 }
 

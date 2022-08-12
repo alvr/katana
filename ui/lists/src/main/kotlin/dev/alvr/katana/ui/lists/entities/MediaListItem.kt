@@ -1,15 +1,17 @@
 package dev.alvr.katana.ui.lists.entities
 
+import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import dev.alvr.katana.ui.lists.R
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlinx.parcelize.Parcelize
 
 @Immutable
 @Suppress("ComplexInterface")
-internal sealed interface MediaListItem {
+internal sealed interface MediaListItem : Parcelable {
     val entryId: Int
     val mediaId: Int
     val title: String
@@ -26,6 +28,7 @@ internal sealed interface MediaListItem {
     val completedAt: LocalDate?
     val updatedAt: LocalDateTime?
 
+    @Parcelize
     data class AnimeListItem(
         override val entryId: Int,
         override val mediaId: Int,
@@ -45,12 +48,14 @@ internal sealed interface MediaListItem {
         val nextEpisode: NextEpisode?,
     ) : MediaListItem {
         @Stable
+        @Parcelize
         data class NextEpisode(
             val number: Int,
             val date: LocalDateTime,
-        )
+        ) : Parcelable
     }
 
+    @Parcelize
     data class MangaListItem(
         override val entryId: Int,
         override val mediaId: Int,

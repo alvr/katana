@@ -28,6 +28,7 @@ fun <T : HomeTopAppBar> HomeScaffold(
     tabs: ImmutableList<T>,
     backContent: @Composable (T, BackLayerType) -> Unit,
     pageContent: @Composable (T) -> Unit,
+    subtitle: String? = null,
     fab: (@Composable (T) -> Unit)? = null,
     onSelectedTab: (T) -> Unit = {},
 ) {
@@ -53,6 +54,7 @@ fun <T : HomeTopAppBar> HomeScaffold(
         appBar = {
             HomeTopAppBar(
                 tabs = tabs,
+                subtitle = subtitle,
                 pagerState = pagerState,
                 onSearch = { changeBackLayerType(BackLayerType.SEARCH) },
                 onFilter = { changeBackLayerType(BackLayerType.FILTER) },

@@ -3,7 +3,6 @@ package dev.alvr.katana.ui.lists.view
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,13 +11,15 @@ import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.result.NavResult
+import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.ui.base.components.home.HomeScaffold
 import dev.alvr.katana.ui.base.components.home.HomeTopAppBar
-import dev.alvr.katana.ui.base.components.home.LocalHomeTopBarSubtitle
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
-import dev.alvr.katana.ui.lists.view.pages.AnimeLists
-import dev.alvr.katana.ui.lists.view.pages.MangaLists
+import dev.alvr.katana.ui.lists.view.components.ListSelectorButton
+import dev.alvr.katana.ui.lists.view.components.MediaList
+import dev.alvr.katana.ui.lists.view.destinations.ListSelectorDestination
 import dev.alvr.katana.ui.lists.viewmodel.ListsViewModel
 import kotlinx.collections.immutable.persistentListOf
 import org.orbitmvi.orbit.compose.collectAsState
@@ -26,8 +27,9 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 @Destination
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
-internal fun Lists(
+internal fun ListsScreen(
     navigator: ListsNavigator,
+    resultRecipient: ResultRecipient<ListSelectorDestination, String>,
     vm: ListsViewModel = hiltViewModel(),
 ) {
     val tabs = ListTabs.values
@@ -40,31 +42,55 @@ internal fun Lists(
         ListTabs.Manga -> state.mangaList.name
     }
 
-    CompositionLocalProvider(LocalHomeTopBarSubtitle provides subtitle) {
-        HomeScaffold(
-            tabs = tabs,
-            onSelectedTab = { selectedTab = it },
-            backContent = { _, _ -> Text(text = "TODO") },
-            pageContent = { page ->
-                when (page) {
-                    ListTabs.Anime -> AnimeLists(
-                        listState = state.animeList,
-                        onRefresh = vm::refreshAnimeLists,
-                        addPlusOne = vm::addPlusOne,
-                        editEntry = navigator::openEditEntry,
-                        mediaDetails = navigator::toMediaDetails,
-                    )
-                    ListTabs.Manga -> MangaLists(
-                        listState = state.mangaList,
-                        onRefresh = vm::refreshMangaLists,
-                        addPlusOne = vm::addPlusOne,
-                        editEntry = navigator::openEditEntry,
-                        mediaDetails = navigator::toMediaDetails,
-                    )
-                }
-            },
-        )
+    resultRecipient.onNavResult { result ->
+        when (result) {
+            NavResult.Canceled -> Unit
+            is NavResult.Value -> when (selectedTab) {
+                ListTabs.Anime -> vm.selectAnimeList(result.value)
+                ListTabs.Manga -> vm.selectMangaList(result.value)
+            }
+        }
     }
+
+    HomeScaffold(
+        tabs = tabs,
+        subtitle = subtitle,
+        onSelectedTab = { selectedTab = it },
+        backContent = { _, _ -> Text(text = "TODO") },
+        pageContent = { page ->
+            val (listState, emptyStateRes, onRefresh) = when (page) {
+                ListTabs.Anime -> Triple(
+                    state.animeList,
+                    R.string.empty_anime_list,
+                    vm::refreshAnimeLists,
+                )
+                ListTabs.Manga -> Triple(
+                    state.mangaList,
+                    R.string.empty_manga_list,
+                    vm::refreshMangaLists,
+                )
+            }
+
+            MediaList(
+                listState = listState,
+                onRefresh = onRefresh,
+                emptyStateRes = emptyStateRes,
+                addPlusOne = vm::addPlusOne,
+                editEntry = navigator::openEditEntry,
+                mediaDetails = navigator::toMediaDetails,
+            )
+        },
+        fab = { page ->
+            val lists = when (page) {
+                ListTabs.Anime -> vm.animeListNames
+                ListTabs.Manga -> vm.mangaListNames
+            }
+
+            ListSelectorButton {
+                navigator.openListSelector(lists)
+            }
+        },
+    )
 }
 
 @Immutable
