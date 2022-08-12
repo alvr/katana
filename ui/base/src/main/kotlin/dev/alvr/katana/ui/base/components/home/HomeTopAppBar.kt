@@ -21,7 +21,6 @@ import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -29,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
-import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.R
 import kotlinx.collections.immutable.ImmutableList
@@ -40,12 +38,11 @@ interface HomeTopAppBar {
     val label: Int
 }
 
-val LocalHomeTopBarSubtitle = compositionLocalOf<String?> { String.empty }
-
 @Composable
 @ExperimentalPagerApi
 internal fun HomeTopAppBar(
     tabs: ImmutableList<HomeTopAppBar>,
+    subtitle: String?,
     pagerState: PagerState,
     onTabClicked: (Int) -> Unit,
     onSearch: () -> Unit,
@@ -56,10 +53,8 @@ internal fun HomeTopAppBar(
             title = {
                 Column {
                     Text(text = stringResource(tabs[pagerState.currentPage].label))
-                    with(LocalHomeTopBarSubtitle.current) {
-                        if (!isNullOrEmpty()) {
-                            Text(text = this, style = MaterialTheme.typography.caption)
-                        }
+                    if (!subtitle.isNullOrBlank()) {
+                        Text(text = subtitle, style = MaterialTheme.typography.caption)
                     }
                 }
             },

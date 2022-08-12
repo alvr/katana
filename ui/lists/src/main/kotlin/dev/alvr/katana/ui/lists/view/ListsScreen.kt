@@ -3,7 +3,6 @@ package dev.alvr.katana.ui.lists.view
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,7 +15,6 @@ import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.ui.base.components.home.HomeScaffold
 import dev.alvr.katana.ui.base.components.home.HomeTopAppBar
-import dev.alvr.katana.ui.base.components.home.LocalHomeTopBarSubtitle
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.components.ListSelectorButton
@@ -54,46 +52,45 @@ internal fun ListsScreen(
         }
     }
 
-    CompositionLocalProvider(LocalHomeTopBarSubtitle provides subtitle) {
-        HomeScaffold(
-            tabs = tabs,
-            onSelectedTab = { selectedTab = it },
-            backContent = { _, _ -> Text(text = "TODO") },
-            pageContent = { page ->
-                val (listState, emptyState, refresh) = when (page) {
-                    ListTabs.Anime -> Triple(
-                        state.animeList,
-                        R.string.empty_anime_list,
-                        vm::refreshAnimeLists,
-                    )
-                    ListTabs.Manga -> Triple(
-                        state.mangaList,
-                        R.string.empty_manga_list,
-                        vm::refreshMangaLists,
-                    )
-                }
-
-                MediaList(
-                    listState = listState,
-                    onRefresh = refresh,
-                    emptyStateRes = emptyState,
-                    addPlusOne = vm::addPlusOne,
-                    editEntry = navigator::openEditEntry,
-                    mediaDetails = navigator::toMediaDetails,
+    HomeScaffold(
+        tabs = tabs,
+        subtitle = subtitle,
+        onSelectedTab = { selectedTab = it },
+        backContent = { _, _ -> Text(text = "TODO") },
+        pageContent = { page ->
+            val (listState, emptyStateRes, onRefresh) = when (page) {
+                ListTabs.Anime -> Triple(
+                    state.animeList,
+                    R.string.empty_anime_list,
+                    vm::refreshAnimeLists,
                 )
-            },
-            fab = { page ->
-                val lists = when (page) {
-                    ListTabs.Anime -> vm.animeListNames
-                    ListTabs.Manga -> vm.mangaListNames
-                }
+                ListTabs.Manga -> Triple(
+                    state.mangaList,
+                    R.string.empty_manga_list,
+                    vm::refreshMangaLists,
+                )
+            }
 
-                ListSelectorButton {
-                    navigator.openListSelector(lists)
-                }
-            },
-        )
-    }
+            MediaList(
+                listState = listState,
+                onRefresh = onRefresh,
+                emptyStateRes = emptyStateRes,
+                addPlusOne = vm::addPlusOne,
+                editEntry = navigator::openEditEntry,
+                mediaDetails = navigator::toMediaDetails,
+            )
+        },
+        fab = { page ->
+            val lists = when (page) {
+                ListTabs.Anime -> vm.animeListNames
+                ListTabs.Manga -> vm.mangaListNames
+            }
+
+            ListSelectorButton {
+                navigator.openListSelector(lists)
+            }
+        },
+    )
 }
 
 @Immutable
