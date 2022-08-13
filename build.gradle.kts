@@ -39,4 +39,15 @@ tasks {
             }
         }
     }
+
+    register<TestReport>("testMergedReport") {
+        destinationDir = file("$buildDir/reports/allTests")
+        reportOn(
+            subprojects.map { p ->
+                p.tasks.withType<Test>().matching { t ->
+                    !t.name.contains("release", ignoreCase = true)
+                }
+            }
+        )
+    }
 }
