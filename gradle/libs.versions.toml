@@ -132,7 +132,7 @@ sentry = { module = "io.sentry:sentry-android-core", version.ref = "sentry" }
 sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry" }
 
 # Serialization
-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.3.3" }
+protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.4.0" }
 
 # Tests
 ## JUnit
