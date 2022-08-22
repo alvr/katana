@@ -4,14 +4,13 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.robolectric.annotation.Config
-import org.robolectric.annotation.Config.TARGET_SDK
 import org.robolectric.shadows.ShadowLog
 
 @ExperimentalCoroutinesApi
 @Config(
     instrumentedPackages = ["androidx.loader.content"],
     qualifiers = "xlarge-port",
-    sdk = [TARGET_SDK],
+    sdk = [32],
 )
 abstract class ComposeTest : RoboTest() {
     @get:Rule
