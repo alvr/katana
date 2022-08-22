@@ -83,27 +83,25 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Run unit tests
-        run: ./gradlew unitTests koverXmlReport koverMergedReport koverMergedVerify --no-daemon
+        run: ./gradlew unitTests testMergedReport koverXmlReport koverMergedReport koverMergedVerify --no-daemon
       - name: Upload tests reports artifact
         uses: actions/upload-artifact@v3
         if: always()
         with:
           name: tests-reports
-          path: |
-            **/build/reports/tests/test
-            **/build/reports/tests/testDebugUnitTest
+          path: build/reports/allTests
           retention-days: 7
       - name: Upload coverage reports artifact
         uses: actions/upload-artifact@v3
         with:
           name: coverage-reports
-          path: '**/build/reports/kover/project-xml/report.xml'
+          path: '**/build/reports/kover/xml/report.xml'
           retention-days: 1
       - name: Upload report to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/reports/kover/report.xml
+          files: build/reports/kover/merged/xml/report.xml
           flags: unittests
           verbose: true
 

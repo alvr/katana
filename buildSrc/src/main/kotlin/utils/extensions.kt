@@ -2,10 +2,10 @@ package utils
 
 import KatanaConfiguration
 import com.android.build.gradle.BaseExtension
-import kotlinx.kover.api.KoverTaskExtension
-import org.gradle.kotlin.dsl.configure
+import java.io.File
 import org.gradle.kotlin.dsl.systemProperties
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.sonarqube.gradle.SonarQubeProperties
 
 fun BaseExtension.baseAndroidConfig() {
     compileSdkVersion(KatanaConfiguration.CompileSdk)
@@ -39,9 +39,6 @@ fun BaseExtension.baseAndroidConfig() {
             isIncludeAndroidResources = true
             all { test ->
                 test.useJUnitPlatform()
-                test.extensions.configure<KoverTaskExtension> {
-                    isDisabled = test.name != "testDebugUnitTest"
-                }
                 test.jvmArgs = listOf("-noverify", "-Xmx8G")
                 test.systemProperties(
                     "robolectric.usePreinstrumentedJars" to "true",
@@ -57,4 +54,14 @@ fun KotlinJvmOptions.configureKotlin() {
     apiVersion = KatanaConfiguration.KotlinVersion
     languageVersion = KatanaConfiguration.KotlinVersion
     freeCompilerArgs = freeCompilerArgs + listOf("-opt-in=kotlin.RequiresOptIn")
+}
+
+fun SonarQubeProperties.addFilesIfExist(property: String, vararg paths: String) {
+    paths.filter { file ->
+        File(file).exists()
+    }.takeUnless { files ->
+        files.isEmpty()
+    }?.joinToString(separator = ",")?.let { files ->
+        property(property, files)
+    }
 }
