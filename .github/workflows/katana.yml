@@ -95,13 +95,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage-reports
-          path: '**/build/reports/kover/project-xml/report.xml'
+          path: '**/build/reports/kover/xml/report.xml'
           retention-days: 1
       - name: Upload report to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/reports/kover/report.xml
+          files: build/reports/kover/merged/xml/report.xml
           flags: unittests
           verbose: true
 

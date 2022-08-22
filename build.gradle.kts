@@ -1,10 +1,18 @@
+
+import kotlinx.kover.api.DefaultIntellijEngine
+import kotlinx.kover.api.KoverMergedConfig
+import kotlinx.kover.api.KoverProjectConfig
+import kotlinx.kover.api.KoverTaskExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import utils.KOVER_MIN_COVERED_PERCENTAGE
 import utils.configureKotlin
+import utils.koverExcludes
+import utils.koverIncludes
 
 plugins {
+    alias(libs.plugins.kover)
     plugins.dependencies
     plugins.detekt
-    plugins.kover
     plugins.sonarqube
 }
 
@@ -13,12 +21,31 @@ plugins {
 buildscript {
     extra.set("composeCompiler", libs.versions.compose.compiler.get())
     extra.set("detektFormatting", libs.detekt.formatting)
-    extra.set("intellijEngine", libs.versions.intellij.get())
 }
 
 allprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions.configureKotlin()
+    }
+}
+
+subprojects {
+    apply(plugin = "kover")
+
+    configure<KoverProjectConfig> {
+        engine.set(DefaultIntellijEngine)
+        filters {
+            classes {
+                excludes.addAll(koverExcludes)
+                includes.addAll(koverIncludes)
+            }
+        }
+    }
+
+    tasks.withType<Test> {
+        extensions.configure<KoverTaskExtension> {
+            isDisabled.set(name == "testReleaseUnitTest")
+        }
     }
 }
 
@@ -47,7 +74,28 @@ tasks {
                 p.tasks.withType<Test>().matching { t ->
                     !t.name.contains("release", ignoreCase = true)
                 }
-            }
+            },
         )
+    }
+}
+
+configure<KoverMergedConfig> {
+    enable()
+    filters {
+        classes {
+            excludes.addAll(koverExcludes)
+            includes.addAll(koverIncludes)
+        }
+        projects {
+            excludes.addAll(listOf(":common:core", ":common:tests", ":common:tests-android"))
+        }
+    }
+    verify {
+        rule {
+            name = "Minimal line coverage rate in percent"
+            bound {
+                minValue = KOVER_MIN_COVERED_PERCENTAGE
+            }
+        }
     }
 }
