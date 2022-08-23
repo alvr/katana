@@ -25,7 +25,7 @@ kotest = "5.4.2"
 
 [plugins]
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.6.0-Beta" }
+kover = { id = "org.jetbrains.kotlinx.kover", version = "0.6.0" }
 
 [libraries]
 # Accompanist
