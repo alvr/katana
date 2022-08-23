@@ -1,5 +1,5 @@
 
-import kotlinx.kover.api.DefaultIntellijEngine
+import kotlinx.kover.api.IntellijEngine
 import kotlinx.kover.api.KoverMergedConfig
 import kotlinx.kover.api.KoverProjectConfig
 import kotlinx.kover.api.KoverTaskExtension
@@ -24,16 +24,10 @@ buildscript {
 }
 
 allprojects {
-    tasks.withType<KotlinCompile> {
-        kotlinOptions.configureKotlin()
-    }
-}
-
-subprojects {
     apply(plugin = "kover")
 
     configure<KoverProjectConfig> {
-        engine.set(DefaultIntellijEngine)
+        engine.set(IntellijEngine(coverageEngineVersion))
         filters {
             classes {
                 excludes.addAll(koverExcludes)
@@ -42,9 +36,15 @@ subprojects {
         }
     }
 
-    tasks.withType<Test> {
-        extensions.configure<KoverTaskExtension> {
-            isDisabled.set(name == "testReleaseUnitTest")
+    tasks {
+        withType<KotlinCompile> {
+            kotlinOptions.configureKotlin()
+        }
+
+        withType<Test> {
+            extensions.configure<KoverTaskExtension> {
+                isDisabled.set(isRelease)
+            }
         }
     }
 }
@@ -54,28 +54,14 @@ tasks {
         delete(buildDir)
     }
 
-    register("unitTests") {
-        val androidUnitTest = "testDebugUnitTest"
-        val kotlinUnitTest = "test"
-
-        subprojects.forEach { p ->
-            if (p.tasks.findByName(androidUnitTest) != null) {
-                dependsOn("${p.path}:$androidUnitTest")
-            } else if (p.tasks.findByName(kotlinUnitTest) != null) {
-                dependsOn("${p.path}:$kotlinUnitTest")
-            }
+    register<TestReport>("unitTests") {
+        val testTasks = subprojects.map { p ->
+            p.tasks.withType<Test>().matching { t -> !t.isRelease }
         }
-    }
 
-    register<TestReport>("testMergedReport") {
-        destinationDir = file("$buildDir/reports/allTests")
-        reportOn(
-            subprojects.map { p ->
-                p.tasks.withType<Test>().matching { t ->
-                    !t.name.contains("release", ignoreCase = true)
-                }
-            },
-        )
+        mustRunAfter(testTasks)
+        destinationDirectory.set(file("$buildDir/reports/allTests"))
+        testResults.setFrom(testTasks)
     }
 }
 
@@ -87,7 +73,7 @@ configure<KoverMergedConfig> {
             includes.addAll(koverIncludes)
         }
         projects {
-            excludes.addAll(listOf(":common:core", ":common:tests", ":common:tests-android"))
+            excludes.addAll(listOf(":", ":common:core", ":common:tests", ":common:tests-android"))
         }
     }
     verify {
@@ -99,3 +85,6 @@ configure<KoverMergedConfig> {
         }
     }
 }
+
+val coverageEngineVersion: String get() = libs.versions.coverage.engine.get()
+val Test.isRelease get() = name.contains("release", ignoreCase = true)

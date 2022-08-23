@@ -29,5 +29,4 @@ listOf("common", "data/preferences", "data/remote", "domain", "ui").forEach { to
         }
 }
 
-enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

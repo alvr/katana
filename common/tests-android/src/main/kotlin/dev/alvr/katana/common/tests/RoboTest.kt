@@ -1,7 +1,6 @@
 package dev.alvr.katana.common.tests
 
 import android.content.Context
-import android.os.Build
 import androidx.annotation.CallSuper
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.Dispatchers
@@ -18,10 +17,9 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @ExperimentalCoroutinesApi
-@Config(minSdk = Build.VERSION_CODES.P, maxSdk = Build.VERSION_CODES.S_V2)
-@Suppress("UnnecessaryAbstractClass")
 @RunWith(RobolectricTestRunner::class)
-abstract class RoboTest {
+@Config(minSdk = SdkVersions.MIN, maxSdk = SdkVersions.TARGET)
+sealed class RoboTest {
     protected val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     private val dispatcher = UnconfinedTestDispatcher()
