@@ -9,8 +9,8 @@ import dev.alvr.katana.domain.session.models.AnilistToken
 import dev.alvr.katana.domain.session.usecases.ClearActiveSessionUseCase
 import dev.alvr.katana.domain.session.usecases.GetAnilistTokenUseCase
 import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
-import dev.alvr.katana.navigation.NavGraphs
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
+import dev.alvr.katana.ui.main.navigation.NavGraphs
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coEvery
 import io.mockk.coJustRun

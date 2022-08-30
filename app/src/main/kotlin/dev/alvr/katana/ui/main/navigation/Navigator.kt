@@ -1,4 +1,4 @@
-package dev.alvr.katana.navigation
+package dev.alvr.katana.ui.main.navigation
 
 import com.ramcosta.composedestinations.dynamic.within
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator

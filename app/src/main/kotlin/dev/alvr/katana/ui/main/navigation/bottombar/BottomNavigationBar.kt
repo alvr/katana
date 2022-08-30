@@ -1,4 +1,4 @@
-package dev.alvr.katana.navigation.bottombar
+package dev.alvr.katana.ui.main.navigation.bottombar
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -19,8 +19,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.spec.NavGraphSpec
 import com.ramcosta.composedestinations.utils.destination
-import dev.alvr.katana.navigation.NavGraphs
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
+import dev.alvr.katana.ui.main.navigation.NavGraphs
 
 @Composable
 internal fun BottomNavigationBar(

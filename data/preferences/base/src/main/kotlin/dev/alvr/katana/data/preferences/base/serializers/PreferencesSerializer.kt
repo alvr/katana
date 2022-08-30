@@ -11,13 +11,14 @@ import kotlinx.serialization.protobuf.ProtoBuf
 interface PreferencesSerializer<T> : Serializer<T> {
     val serializer: KSerializer<T>
 
-    override suspend fun readFrom(input: InputStream): T =
-        ProtoBuf.decodeFromByteArray(serializer, input.use { it.readBytes() })
+    override suspend fun readFrom(input: InputStream): T = input.use { stream ->
+        ProtoBuf.decodeFromByteArray(serializer, stream.readBytes())
+    }
 
     override suspend fun writeTo(t: T, output: OutputStream) {
-        output.use {
+        output.use { stream ->
             @Suppress("BlockingMethodInNonBlockingContext")
-            it.write(ProtoBuf.encodeToByteArray(serializer, t))
+            stream.write(ProtoBuf.encodeToByteArray(serializer, t))
         }
     }
 }

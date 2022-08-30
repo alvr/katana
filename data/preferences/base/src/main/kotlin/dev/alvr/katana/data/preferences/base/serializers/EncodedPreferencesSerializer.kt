@@ -8,17 +8,19 @@ import kotlinx.serialization.ExperimentalSerializationApi
 private class EncodedPreferencesSerializer<T>(
     delegate: PreferencesSerializer<T>,
 ) : SecuredPreferencesSerializer<T>(delegate) {
-    override fun ByteArray.toSecured() = convert()
-    override fun ByteArray.fromSecured() = convert()
+    override fun ByteArray.toSecured() = also { convert() }
+    override fun ByteArray.fromSecured() = also { convert() }
 
-    private fun ByteArray.convert(): ByteArray {
-        val list = ByteArray(size)
-
-        for ((i, n) in (size - 1 downTo 0).withIndex()) {
-            list[i] = this[n].inv()
+    private fun ByteArray.convert() {
+        val midPoint = size / 2 - 1
+        if (midPoint < 0) return
+        var reverseIndex = lastIndex
+        for (index in 0..midPoint) {
+            val tmp = this[index].inv()
+            this[index] = this[reverseIndex].inv()
+            this[reverseIndex] = tmp
+            reverseIndex--
         }
-
-        return list
     }
 }
 

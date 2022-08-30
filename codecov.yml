@@ -22,10 +22,10 @@ ignore:
   # Common Android
   - '**/*Activity'
   - '**/*Fragment'
-  - '**/base/**'
   - '**/di/**'
-  - '**/navigation/**'
 
   # Ui
   - '**/ui/**/components/**'
+  - '**/ui/**/design/**'
+  - '**/ui/**/navigation/**'
   - '**/ui/**/view/**'

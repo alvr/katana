@@ -1,15 +1,17 @@
-package dev.alvr.katana.ui.base
+package dev.alvr.katana.ui.base.design
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import dev.alvr.katana.ui.base.design.KatanaDarkTheme
-import dev.alvr.katana.ui.base.design.KatanaShapes
-import dev.alvr.katana.ui.base.design.KatanaTypography
 
 @Composable
-internal fun KatanaTheme(
+fun Katana(content: @Composable () -> Unit) {
+    KatanaTheme(content)
+}
+
+@Composable
+private fun KatanaTheme(
     content: @Composable () -> Unit,
 ) {
     val colors = KatanaDarkTheme

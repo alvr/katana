@@ -14,25 +14,29 @@ import kotlinx.serialization.SerializationException
 internal sealed class SecuredPreferencesSerializer<T>(
     private val prefsSerializer: PreferencesSerializer<T>,
 ) : Serializer<T> by prefsSerializer {
-    override suspend fun readFrom(input: InputStream): T = op("reading secured value failed") {
-        val securedInput = Base64.decode(input.readBytes(), Base64.NO_WRAP)
+    override suspend fun readFrom(input: InputStream): T = input.use { stream ->
+        op("reading secured value failed") {
+            val securedInput = Base64.decode(stream.readBytes(), Base64.NO_WRAP)
 
-        val normalInput = with(securedInput) {
-            fromSecured().takeIf { isNotEmpty() } ?: this
+            val normalInput = with(securedInput) {
+                fromSecured().takeIf { isNotEmpty() } ?: this
+            }
+
+            prefsSerializer.readFrom(normalInput.inputStream())
         }
-
-        prefsSerializer.readFrom(normalInput.inputStream())
     }
 
     override suspend fun writeTo(t: T, output: OutputStream) {
-        op("writing secured value failed") {
-            val securedOutput = ByteArrayOutputStream().use { stream ->
-                prefsSerializer.writeTo(t, stream)
-                stream.toByteArray()
-            }.toSecured()
+        output.use { stream ->
+            op("writing secured value failed") {
+                val securedOutput = ByteArrayOutputStream().use { stream ->
+                    prefsSerializer.writeTo(t, stream)
+                    stream.toByteArray()
+                }.toSecured()
 
-            @Suppress("BlockingMethodInNonBlockingContext")
-            output.write(Base64.encode(securedOutput, Base64.NO_WRAP))
+                @Suppress("BlockingMethodInNonBlockingContext")
+                stream.write(Base64.encode(securedOutput, Base64.NO_WRAP))
+            }
         }
     }
 

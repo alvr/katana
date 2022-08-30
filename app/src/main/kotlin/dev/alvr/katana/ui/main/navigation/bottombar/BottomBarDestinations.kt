@@ -1,4 +1,4 @@
-package dev.alvr.katana.navigation.bottombar
+package dev.alvr.katana.ui.main.navigation.bottombar
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
