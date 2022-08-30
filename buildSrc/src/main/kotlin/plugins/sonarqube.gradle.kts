@@ -23,14 +23,14 @@ val coverageExclusions = listOf(
     // Common Android
     "**Activity.kt",
     "**Fragment.kt",
-    "**/base/**",
-    "**/navigation/**",
 
     // Hilt
     "**/di/**",
 
     // Ui
     "**/ui/**/components/**",
+    "**/ui/**/design/**",
+    "**/ui/**/navigation/**",
     "**/ui/**/view/**",
 )
 
