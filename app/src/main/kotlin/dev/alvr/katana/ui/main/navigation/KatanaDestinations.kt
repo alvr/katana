@@ -1,4 +1,4 @@
-package dev.alvr.katana.navigation
+package dev.alvr.katana.ui.main.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.padding
@@ -23,9 +23,9 @@ import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.scope.DestinationScope
-import dev.alvr.katana.navigation.bottombar.BottomNavigationBar
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
 import dev.alvr.katana.ui.main.components.SessionExpiredDialog
+import dev.alvr.katana.ui.main.navigation.bottombar.BottomNavigationBar
 import dev.alvr.katana.ui.main.viewmodel.MainViewModel
 import io.sentry.compose.withSentryObservableEffect
 import org.orbitmvi.orbit.compose.collectAsState

@@ -24,8 +24,6 @@ val koverExcludes = listOf(
     "*.BuildConfig",
     "*.*Activity",
     "*.*Fragment",
-    "*.base.*",
-    "*.navigation.*",
 
     // Compose
     "*.*ComposableSingletons*",
@@ -38,6 +36,8 @@ val koverExcludes = listOf(
 
     // Ui
     "*.ui.*.components.*",
+    "*.ui.*.design.*",
+    "*.ui.*.navigation.*",
     "*.ui.*.view.*",
 )
 

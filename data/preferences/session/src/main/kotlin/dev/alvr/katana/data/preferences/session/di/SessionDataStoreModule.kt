@@ -5,12 +5,13 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.dataStoreFile
+import com.google.crypto.tink.Aead
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.alvr.katana.data.preferences.base.serializers.encoded
+import dev.alvr.katana.data.preferences.base.serializers.encrypted
 import dev.alvr.katana.data.preferences.session.models.Session
 import dev.alvr.katana.data.preferences.session.serializers.SessionSerializer
 import javax.inject.Singleton
@@ -25,9 +26,12 @@ internal object SessionDataStoreModule {
     @Provides
     @Singleton
     @ExperimentalSerializationApi
-    fun provideSessionDataStore(@ApplicationContext context: Context): DataStore<Session> =
+    fun provideSessionDataStore(
+        @ApplicationContext context: Context,
+        aead: Aead,
+    ): DataStore<Session> =
         DataStoreFactory.create(
-            serializer = SessionSerializer.encoded(),
+            serializer = SessionSerializer.encrypted(aead),
             corruptionHandler = ReplaceFileCorruptionHandler { Session() },
             produceFile = { context.dataStoreFile(DATASTORE_FILE) },
         )

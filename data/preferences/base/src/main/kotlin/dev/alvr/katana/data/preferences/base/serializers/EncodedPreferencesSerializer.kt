@@ -1,47 +1,26 @@
 package dev.alvr.katana.data.preferences.base.serializers
 
-import android.util.Base64
 import androidx.datastore.core.Serializer
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import java.io.OutputStream
 import kotlin.experimental.inv
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @ExperimentalSerializationApi
 private class EncodedPreferencesSerializer<T>(
-    private val delegate: PreferencesSerializer<T>,
-) : Serializer<T> by delegate {
-    override suspend fun readFrom(input: InputStream): T {
-        val encryptedInput = Base64.decode(input.readBytes(), Base64.NO_WRAP)
+    delegate: PreferencesSerializer<T>,
+) : SecuredPreferencesSerializer<T>(delegate) {
+    override fun ByteArray.toSecured() = also { convert() }
+    override fun ByteArray.fromSecured() = also { convert() }
 
-        val decryptedInput = if (encryptedInput.isNotEmpty()) {
-            encryptedInput.convert()
-        } else {
-            encryptedInput
+    private fun ByteArray.convert() {
+        val midPoint = size / 2 - 1
+        if (midPoint < 0) return
+        var reverseIndex = lastIndex
+        for (index in 0..midPoint) {
+            val tmp = this[index].inv()
+            this[index] = this[reverseIndex].inv()
+            this[reverseIndex] = tmp
+            reverseIndex--
         }
-
-        return delegate.readFrom(decryptedInput.inputStream())
-    }
-
-    override suspend fun writeTo(t: T, output: OutputStream) {
-        val encodedBytes = ByteArrayOutputStream().use { stream ->
-            delegate.writeTo(t, stream)
-            stream.toByteArray()
-        }.convert()
-
-        @Suppress("BlockingMethodInNonBlockingContext")
-        output.write(Base64.encode(encodedBytes, Base64.NO_WRAP))
-    }
-
-    private fun ByteArray.convert(): ByteArray {
-        val list = ByteArray(size)
-
-        for ((i, n) in (size - 1 downTo 0).withIndex()) {
-            list[i] = this[n].inv()
-        }
-
-        return list
     }
 }
 

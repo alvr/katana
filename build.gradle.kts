@@ -1,4 +1,4 @@
-
+import kotlinx.kover.api.CounterType
 import kotlinx.kover.api.IntellijEngine
 import kotlinx.kover.api.KoverMergedConfig
 import kotlinx.kover.api.KoverProjectConfig
@@ -73,13 +73,27 @@ configure<KoverMergedConfig> {
             includes.addAll(koverIncludes)
         }
         projects {
-            excludes.addAll(listOf(":", ":common:core", ":common:tests", ":common:tests-android"))
+            excludes.addAll(
+                listOf(
+                    ":",
+                    ":common",
+                    ":common:core",
+                    ":common:tests",
+                    ":common:tests-android",
+                    ":data",
+                    ":data:preferences",
+                    ":data:remote",
+                    ":domain",
+                    ":ui",
+                ),
+            )
         }
     }
     verify {
         rule {
             name = "Minimal line coverage rate in percent"
             bound {
+                counter = CounterType.LINE
                 minValue = KOVER_MIN_COVERED_PERCENTAGE
             }
         }

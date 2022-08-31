@@ -19,7 +19,7 @@ import org.robolectric.annotation.Config
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 @Config(minSdk = SdkVersions.MIN, maxSdk = SdkVersions.TARGET)
-sealed class RoboTest {
+open class RoboTest {
     protected val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     private val dispatcher = UnconfinedTestDispatcher()
