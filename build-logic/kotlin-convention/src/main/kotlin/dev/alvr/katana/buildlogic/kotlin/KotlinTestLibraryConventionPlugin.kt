@@ -5,7 +5,7 @@ import dev.alvr.katana.buildlogic.commonTasks
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 
-class KotlinTestLibraryConventionPlugin : ConventionPlugin {
+internal class KotlinTestLibraryConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.jetbrains.kotlin.jvm")
 

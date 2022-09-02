@@ -7,7 +7,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.withType
 
-class DependencyVersionsConventionPlugin : ConventionPlugin {
+internal class DependencyVersionsConventionPlugin : ConventionPlugin {
     private val stableKeywords = arrayOf("RELEASE", "FINAL", "GA")
     private val releaseRegex = "^[0-9,.v-]+(-r)?$".toRegex(RegexOption.IGNORE_CASE)
     private val rcRegex = regex("rc")

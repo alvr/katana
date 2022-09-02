@@ -18,7 +18,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
-class AndroidApplicationConventionPlugin : ConventionPlugin {
+internal class AndroidApplicationConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "com.android.application")
         apply(plugin = "org.jetbrains.kotlin.android")

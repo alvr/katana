@@ -16,7 +16,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
 
-class KoverConventionPlugin : ConventionPlugin {
+internal class KoverConventionPlugin : ConventionPlugin {
     private val koverIncludes = listOf("dev.alvr.katana.*")
     private val koverExcludes = listOf(
         // Anonymous

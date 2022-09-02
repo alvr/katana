@@ -6,7 +6,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 
-class SentryConventionPlugin : ConventionPlugin {
+internal class SentryConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "io.sentry.android.gradle")
 

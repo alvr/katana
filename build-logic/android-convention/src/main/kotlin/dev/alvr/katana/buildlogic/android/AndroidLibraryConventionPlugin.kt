@@ -12,8 +12,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
-@Suppress("UnstableApiUsage")
-class AndroidLibraryConventionPlugin : ConventionPlugin {
+internal class AndroidLibraryConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "com.android.library")
         apply(plugin = "org.jetbrains.kotlin.android")
