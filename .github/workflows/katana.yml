@@ -178,7 +178,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew assembleRelease --no-daemon --scan
+        run: ./gradlew assembleRelease --no-configuration-cache --no-daemon --scan
       - name: Publish staging APK to AppCenter
         uses: wzieba/AppCenter-Github-Action@v1
         with:
@@ -215,7 +215,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew bundleRelease --no-daemon --scan
+        run: ./gradlew bundleRelease --no-configuration-cache --no-daemon --scan
       - name: Publish production AAB to Google Play
         uses: r0adkll/upload-google-play@v1
         with:
