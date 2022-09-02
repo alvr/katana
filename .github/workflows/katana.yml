@@ -21,6 +21,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  validation:
+    name: Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
   assemble:
     name: Assembling
     runs-on: ubuntu-latest
@@ -32,7 +43,7 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Assemble Katana
-        run: ./gradlew assembleDebug --no-daemon
+        run: ./gradlew assembleDebug --no-daemon --scan
       - name: Upload compose reports artifact
         uses: actions/upload-artifact@v3
         if: always()
@@ -83,7 +94,7 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Run unit tests
-        run: ./gradlew unitTests koverXmlReport koverMergedReport koverMergedVerify --no-daemon
+        run: ./gradlew unitTests koverXmlReport koverMergedReport koverMergedVerify --no-daemon --scan
       - name: Upload tests reports artifact
         uses: actions/upload-artifact@v3
         if: always()
@@ -167,7 +178,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew assembleRelease --no-daemon
+        run: ./gradlew assembleRelease --no-daemon --scan
       - name: Publish staging APK to AppCenter
         uses: wzieba/AppCenter-Github-Action@v1
         with:
@@ -204,7 +215,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew bundleRelease --no-daemon
+        run: ./gradlew bundleRelease --no-daemon --scan
       - name: Publish production AAB to Google Play
         uses: r0adkll/upload-google-play@v1
         with:

@@ -1,15 +1,10 @@
 plugins {
-    modules.`kotlin-library`
+    id("katana.kotlin")
 }
 
 dependencies {
     implementation(projects.common.core)
     api(projects.domain.base)
 
-    implementation(libs.bundles.common)
-
-    kapt(libs.bundles.kapt)
-
     testImplementation(projects.common.tests)
-    testImplementation(libs.bundles.test)
 }

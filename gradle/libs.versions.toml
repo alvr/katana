@@ -2,7 +2,7 @@
 accompanist = "0.25.1"
 apollo = "3.5.0"
 coroutines = "1.6.4"
-destinations = "1.7.16-beta"
+destinations = "1.7.17-beta"
 hilt = "2.43.2"
 hiltx = "1.0.0"
 kotlin = "1.7.10"
@@ -25,7 +25,8 @@ kotest = "5.4.2"
 
 [plugins]
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.6.0" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
 # Accompanist
@@ -89,15 +90,16 @@ gradle-android = { module = "com.android.tools.build:gradle", version = "7.2.2" 
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+gradle-kover = { module = "org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kover.gradle.plugin", version = "0.6.0" }
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.7.10-1.0.6" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.1.5" }
-gradle-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "3.4.0.2513" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.42.0" }
 
 # Hilt
 hilt = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-test = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 
@@ -157,18 +159,6 @@ robolectric = { module = "org.robolectric:robolectric", version = "4.8.2" }
 turbine = { module = "app.cash.turbine:turbine", version = "0.9.0" }
 
 [bundles]
-gradle = [
-    "gradle-android",
-    "gradle-detekt",
-    "gradle-hilt",
-    "gradle-kotlin",
-    "gradle-ksp",
-    "gradle-sentry",
-    "gradle-serialization",
-    "gradle-sonarqube",
-    "gradle-updates",
-]
-
 common = [
     "arrow",
     "coroutines",
@@ -202,7 +192,7 @@ kapt = [
     "hilt-compiler",
 ]
 kapt-ui = [
-    "hilt-compiler",
+    "hilt-android-compiler",
     "hiltx-compiler",
 ]
 

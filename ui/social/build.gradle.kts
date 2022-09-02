@@ -1,5 +1,5 @@
 plugins {
-    modules.`compose-library`
+    id("katana.android.compose.library")
 }
 
 ksp {
@@ -11,15 +11,5 @@ dependencies {
     implementation(projects.common.core)
     implementation(projects.ui.base)
 
-    implementation(libs.bundles.common.android)
-    implementation(libs.bundles.ui.compose)
-
-    kapt(libs.bundles.kapt.ui)
-    ksp(libs.bundles.ksp.ui)
-
-    debugImplementation(libs.compose.ui.test.manifest)
-
     testImplementation(projects.common.testsAndroid)
-    testImplementation(libs.bundles.test)
-    testImplementation(libs.bundles.test.android)
 }
