@@ -1,6 +1,6 @@
 plugins {
+    id("katana.android.library")
     alias(libs.plugins.apollo)
-    modules.`android-library`
 }
 
 apollo {
@@ -24,12 +24,8 @@ dependencies {
 
     coreLibraryDesugaring(libs.desugaring)
 
-    implementation(libs.bundles.common.android)
     implementation(libs.bundles.data.remote)
 
-    kapt(libs.bundles.kapt)
-
     testImplementation(projects.common.tests)
-    testImplementation(libs.bundles.test)
     testImplementation(libs.bundles.test.data.remote)
 }

@@ -1,11 +1,7 @@
 plugins {
-    modules.`kotlin-library`
+    id("katana.kotlin.test")
 }
 
 dependencies {
-    implementation(libs.bundles.common)
-
-    kapt(libs.bundles.kapt)
-
     implementation(libs.bundles.test)
 }

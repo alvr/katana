@@ -1,5 +1,5 @@
 plugins {
-    modules.`kotlin-library`
+    id("katana.kotlin")
 }
 
 dependencies {
