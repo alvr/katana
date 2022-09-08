@@ -50,7 +50,7 @@ apollo-testing = { module = "com.apollographql.apollo3:apollo-testing-support", 
 arrow = { module = "io.arrow-kt:arrow-core", version = "1.1.2" }
 
 # Coil
-coil = { module = "io.coil-kt:coil-compose", version = "2.2.0" }
+coil = { module = "io.coil-kt:coil-compose", version = "2.2.1" }
 
 # Compose
 compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
