@@ -1,6 +1,5 @@
-package dev.alvr.katana.ui.main.navigation.bottombar
+package dev.alvr.katana.ui.main.navigation.items
 
-import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.AccountCircle
 import androidx.compose.material.icons.twotone.CollectionsBookmark
@@ -13,20 +12,20 @@ import dev.alvr.katana.ui.account.navigation.AccountNavGraph
 import dev.alvr.katana.ui.explore.navigation.ExploreNavGraph
 import dev.alvr.katana.ui.lists.navigation.ListsNavGraph
 import dev.alvr.katana.ui.social.navigation.SocialNavGraph
+import kotlinx.collections.immutable.persistentListOf
 
-internal sealed interface BottomBarDestinations {
-    val direction: NavGraphSpec
-    val icon: ImageVector
-    @get:StringRes val label: Int
-}
-
-internal enum class HomeBottomBarDestinations(
+internal enum class HomeNavigationBarItem(
     override val direction: NavGraphSpec,
     override val icon: ImageVector,
     override val label: Int,
-) : BottomBarDestinations {
+) : NavigationBarItem {
     Lists(ListsNavGraph, Icons.TwoTone.CollectionsBookmark, R.string.navigation_bar_destination_lists),
     Explore(ExploreNavGraph, Icons.TwoTone.Explore, R.string.navigation_bar_destination_explore),
     Social(SocialNavGraph, Icons.TwoTone.Dashboard, R.string.navigation_bar_destination_social),
-    Account(AccountNavGraph, Icons.TwoTone.AccountCircle, R.string.navigation_bar_destination_account),
+    Account(AccountNavGraph, Icons.TwoTone.AccountCircle, R.string.navigation_bar_destination_account);
+
+    companion object {
+        @JvmField
+        val values = persistentListOf(Lists, Explore, Social, Account)
+    }
 }
