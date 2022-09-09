@@ -8,6 +8,10 @@ on:
     tags:
       - v*
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   TZ: Europe/Madrid
 
@@ -119,7 +123,6 @@ jobs:
   sonar:
     name: SonarQube
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: [ static-analysis, unit-tests ]
     steps:
       - name: Checkout
@@ -215,7 +218,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew bundleRelease --no-configuration-cache --no-daemon --scan
+        run: ./gradlew assembleRelease bundleRelease --no-configuration-cache --no-daemon --scan
       - name: Publish production AAB to Google Play
         uses: r0adkll/upload-google-play@v1
         with:
@@ -225,3 +228,23 @@ jobs:
           track: internal
           status: completed
           mappingFile: app/build/outputs/mapping/release/mapping.txt
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        with:
+          environment: production
+          version: ${{ github.ref }}
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Katana ${{ github.ref_name }}
+          files: |
+            app/build/outputs/apk/release/app-release.apk
+          draft: true
+          prerelease: false

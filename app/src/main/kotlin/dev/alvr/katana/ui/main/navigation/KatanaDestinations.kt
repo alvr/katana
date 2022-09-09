@@ -1,7 +1,15 @@
 package dev.alvr.katana.ui.main.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -25,17 +33,17 @@ import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.scope.DestinationScope
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
 import dev.alvr.katana.ui.main.components.SessionExpiredDialog
-import dev.alvr.katana.ui.main.navigation.bottombar.BottomNavigationBar
 import dev.alvr.katana.ui.main.viewmodel.MainViewModel
 import io.sentry.compose.withSentryObservableEffect
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
-internal fun KatanaDestinations() {
-    val navController = rememberAnimatedNavController().withSentryObservableEffect()
+internal fun KatanaDestinations(useNavRail: Boolean) {
     val bottomSheetNavigator = rememberBottomSheetNavigator()
-    navController.navigatorProvider += bottomSheetNavigator
+    val navController = rememberAnimatedNavController().withSentryObservableEffect().also { nav ->
+        nav.navigatorProvider += bottomSheetNavigator
+    }
 
     val vm = hiltViewModel<MainViewModel>()
     val state by vm.collectAsState()
@@ -51,21 +59,46 @@ internal fun KatanaDestinations() {
     ) {
         Scaffold(
             bottomBar = {
-                BottomNavigationBar(navController = navController)
+                if (!useNavRail) {
+                    NavigationBar(
+                        modifier = Modifier.fillMaxWidth(),
+                        navController = navController,
+                        type = NavigationBarType.Bottom,
+                    )
+                } else {
+                    Spacer(
+                        Modifier
+                            .windowInsetsBottomHeight(WindowInsets.navigationBars)
+                            .fillMaxWidth(),
+                    )
+                }
             },
         ) { paddingValues ->
-            DestinationsNavHost(
-                modifier = Modifier.padding(paddingValues),
-                engine = rememberAnimatedNavHostEngine(
-                    rootDefaultAnimations = RootNavGraphDefaultAnimations.ACCOMPANIST_FADING,
-                ),
-                navController = navController,
-                navGraph = NavGraphs.root,
-                startRoute = state.initialNavGraph,
-                dependenciesContainerBuilder = {
-                    dependency(currentNavigator())
-                },
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+            ) {
+                if (useNavRail) {
+                    NavigationBar(
+                        modifier = Modifier.fillMaxHeight(),
+                        navController = navController,
+                        type = NavigationBarType.Rail,
+                    )
+                }
+
+                DestinationsNavHost(
+                    engine = rememberAnimatedNavHostEngine(
+                        rootDefaultAnimations = RootNavGraphDefaultAnimations.ACCOMPANIST_FADING,
+                    ),
+                    navController = navController,
+                    navGraph = NavGraphs.root,
+                    startRoute = state.initialNavGraph,
+                    dependenciesContainerBuilder = {
+                        dependency(currentNavigator())
+                    },
+                )
+            }
         }
     }
 }
