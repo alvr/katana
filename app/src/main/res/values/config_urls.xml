@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sentry_dsn" translatable="false">https://d792dd474aaf4579a654c1b6f3502805@o387687.ingest.sentry.io/6728194</string>
+    <string name="sentry_dsn" translatable="false">https://bf330c2872ba4bc9bf2b4d3f09ef96a1@o387687.ingest.sentry.io/6735007</string>
 </resources>
