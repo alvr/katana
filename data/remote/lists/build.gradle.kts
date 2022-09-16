@@ -1,18 +1,19 @@
+import dev.alvr.katana.buildlogic.KatanaConfiguration
+
 plugins {
     id("katana.android.library")
     alias(libs.plugins.apollo)
+}
+
+android {
+    namespace = "${KatanaConfiguration.PackageName}.data.remote.lists"
+    compileOptions.isCoreLibraryDesugaringEnabled = true
 }
 
 apollo {
     generateAsInternal.set(true)
     generateTestBuilders.set(true)
     packageName.set("dev.alvr.katana.data.remote.lists")
-}
-
-android {
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
 }
 
 dependencies {

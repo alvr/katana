@@ -1,6 +1,10 @@
+import dev.alvr.katana.buildlogic.KatanaConfiguration
+
 plugins {
     id("katana.android.compose.library")
 }
+
+android.namespace = "${KatanaConfiguration.PackageName}.ui.account"
 
 ksp {
     arg("compose-destinations.mode", "destinations")

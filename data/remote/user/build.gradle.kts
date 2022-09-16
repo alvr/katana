@@ -1,7 +1,11 @@
+import dev.alvr.katana.buildlogic.KatanaConfiguration
+
 plugins {
     id("katana.android.library")
     alias(libs.plugins.apollo)
 }
+
+android.namespace = "${KatanaConfiguration.PackageName}.data.remote.user"
 
 apollo {
     generateAsInternal.set(true)
