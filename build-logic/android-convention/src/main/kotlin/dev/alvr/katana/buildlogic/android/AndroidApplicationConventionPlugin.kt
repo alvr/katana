@@ -53,6 +53,8 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
         baseAndroidConfig()
         project.configureCompose(this)
 
+        namespace = KatanaConfiguration.PackageName
+
         defaultConfig {
             applicationId = KatanaConfiguration.PackageName
             versionCode = KatanaConfiguration.VersionCode

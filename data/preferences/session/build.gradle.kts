@@ -1,7 +1,11 @@
+import dev.alvr.katana.buildlogic.KatanaConfiguration
+
 plugins {
     id("katana.android.library")
     alias(libs.plugins.serialization)
 }
+
+android.namespace = "${KatanaConfiguration.PackageName}.data.preferences.session"
 
 dependencies {
     implementation(projects.common.core)

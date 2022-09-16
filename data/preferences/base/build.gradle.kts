@@ -1,6 +1,10 @@
+import dev.alvr.katana.buildlogic.KatanaConfiguration
+
 plugins {
     id("katana.android.library")
 }
+
+android.namespace = "${KatanaConfiguration.PackageName}.data.preferences.base"
 
 dependencies {
     implementation(projects.common.core)
