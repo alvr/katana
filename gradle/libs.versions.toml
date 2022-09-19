@@ -9,7 +9,7 @@ kotlin = "1.7.10"
 material3 = "1.0.0-beta02"
 okhttp = "4.10.0"
 orbit = "4.3.2"
-sentry = "6.4.1"
+sentry = "6.4.2"
 
 # Compose
 compose = "1.2.1"
