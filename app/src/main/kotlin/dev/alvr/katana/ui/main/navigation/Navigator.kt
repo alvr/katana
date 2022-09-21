@@ -3,8 +3,9 @@ package dev.alvr.katana.ui.main.navigation
 import com.ramcosta.composedestinations.dynamic.within
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
-import dev.alvr.katana.ui.lists.navigation.ListsNavGraph
+import dev.alvr.katana.ui.lists.navigation.AnimeNavGraph
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
+import dev.alvr.katana.ui.lists.navigation.MangaNavGraph
 import dev.alvr.katana.ui.lists.view.destinations.ListSelectorDestination
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
@@ -32,16 +33,20 @@ internal class Navigator(
     //endregion [LoginNavigator]
 
     //region [ListsNavigator]
-    override fun openEditEntry(id: Int) {
+    override fun openEditEntry(id: Int, from: ListsNavigator.From) {
         Napier.d { "Open bottom sheet to edit entry $id" }
     }
 
-    override fun toMediaDetails(id: Int) {
+    override fun toMediaDetails(id: Int, from: ListsNavigator.From) {
         Napier.d { "Navigate to media details of entry $id" }
     }
 
-    override fun openListSelector(lists: Array<String>) {
-        navigator.navigate(ListSelectorDestination(lists) within ListsNavGraph)
+    override fun openListSelector(lists: Array<String>, from: ListsNavigator.From) {
+        val graph = when (from) {
+            ListsNavigator.From.ANIME -> AnimeNavGraph
+            ListsNavigator.From.MANGA -> MangaNavGraph
+        }
+        navigator.navigate(ListSelectorDestination(lists) within graph)
     }
     //endregion [ListsNavigator]
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -25,9 +26,9 @@ import kotlinx.coroutines.launch
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 fun <T : HomeTopAppBar> HomeScaffold(
-    tabs: ImmutableList<T>,
     backContent: @Composable (T, BackLayerType) -> Unit,
     pageContent: @Composable (T) -> Unit,
+    tabs: ImmutableList<T> = persistentListOf(),
     subtitle: String? = null,
     fab: (@Composable (T) -> Unit)? = null,
     onSelectedTab: (T) -> Unit = {},

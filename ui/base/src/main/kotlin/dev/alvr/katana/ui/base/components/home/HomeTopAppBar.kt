@@ -74,11 +74,14 @@ internal fun HomeTopAppBar(
             },
             elevation = Int.zero.dp,
         )
-        TabSelector(
-            tabs = tabs,
-            pagerState = pagerState,
-            onTabClicked = onTabClicked,
-        )
+
+        if (tabs.isNotEmpty()) {
+            TabSelector(
+                tabs = tabs,
+                pagerState = pagerState,
+                onTabClicked = onTabClicked,
+            )
+        }
     }
 }
 

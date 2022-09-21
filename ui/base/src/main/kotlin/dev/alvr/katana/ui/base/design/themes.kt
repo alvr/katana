@@ -5,15 +5,15 @@ import androidx.compose.ui.graphics.Color
 
 internal val KatanaDarkTheme = darkColors(
     primary = Color(NavyBlue),
+    onPrimary = Color(LightBlue),
     primaryVariant = Color(DarkNavyBlue),
     secondary = Color(WinterBlue),
+    onSecondary = Color(LightBlue),
     secondaryVariant = Color(DarkWinterBlue),
     background = Color(DarkBlue),
-    surface = Color(DarkBlue),
-    error = Color(DarkPink),
-    onPrimary = Color(LightBlue),
-    onSecondary = Color(LightBlue),
     onBackground = Color(LightBlue),
+    surface = Color(DarkBlue),
     onSurface = Color(LightBlue),
-    onError = Color(LightBlue),
+    error = Color(DarkPink),
+    onError = Color(DarkerPink),
 )

@@ -107,6 +107,7 @@ private fun BottomNavigationBar(
                 label = { NavigationBarLabel(destination) },
                 selected = isItemSelected(destination),
                 onClick = { onClick(destination) },
+                alwaysShowLabel = false,
             )
         }
     }
@@ -133,6 +134,7 @@ private fun RailNavigationBar(
                 selected = isItemSelected(destination),
                 selectedContentColor = LocalContentColor.current,
                 onClick = { onClick(destination) },
+                alwaysShowLabel = false,
             )
         }
         Spacer(Modifier.weight(1f))

@@ -56,7 +56,7 @@ import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.components.EmptyState
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
-import dev.alvr.katana.ui.lists.viewmodel.ListsState
+import dev.alvr.katana.ui.lists.viewmodel.ListState
 import java.text.DecimalFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
@@ -69,7 +69,7 @@ private val LocalMediaListItem =
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun MediaList(
-    listState: ListsState.ListState<out MediaListItem>,
+    listState: ListState<out MediaListItem>,
     @StringRes emptyStateRes: Int,
     onRefresh: () -> Unit,
     addPlusOne: (MediaListItem) -> Unit,

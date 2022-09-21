@@ -6,5 +6,5 @@ internal const val DarkNavyBlue = 0xFF082A41
 internal const val WinterBlue = 0xFF3282B8
 internal const val DarkWinterBlue = 0xFF25618A
 internal const val LightBlue = 0xFFBBE1FA
-
 internal const val DarkPink = 0xFFFF2E63
+internal const val DarkerPink = 0xFFB22045
