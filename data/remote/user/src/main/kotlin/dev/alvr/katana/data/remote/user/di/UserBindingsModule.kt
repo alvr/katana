@@ -5,16 +5,16 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.alvr.katana.data.remote.user.managers.UserIdManagerImpl
-import dev.alvr.katana.data.remote.user.repositories.UserRemoteRepositoryImpl
+import dev.alvr.katana.data.remote.user.repositories.UserRepositoryImpl
 import dev.alvr.katana.domain.user.managers.UserIdManager
-import dev.alvr.katana.domain.user.repositories.UserRemoteRepository
+import dev.alvr.katana.domain.user.repositories.UserRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal sealed interface UserBindingsModule {
     @Binds
-    fun bindUserRemoteRepository(impl: UserRemoteRepositoryImpl): UserRemoteRepository
+    fun bindUserIdManager(impl: UserIdManagerImpl): UserIdManager
 
     @Binds
-    fun bindUserIdManager(impl: UserIdManagerImpl): UserIdManager
+    fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
 }

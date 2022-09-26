@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.remote.lists.repositories
+package dev.alvr.katana.data.remote.lists.sources
 
 import arrow.core.Either
 import com.apollographql.apollo3.ApolloClient
@@ -14,7 +14,6 @@ import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
-import dev.alvr.katana.domain.lists.repositories.ListsRepository
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import javax.inject.Inject
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -22,14 +21,14 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-internal class ListsRemoteRepositoryImpl @Inject constructor(
+internal class ListsRemoteSource @Inject constructor(
     private val client: ApolloClient,
     private val userId: UserIdManager,
-) : ListsRepository {
-    override val animeList = getMediaCollection<MediaEntry.Anime>(MediaType.ANIME)
-    override val mangaList = getMediaCollection<MediaEntry.Manga>(MediaType.MANGA)
+) {
+    val animeCollection = getMediaCollection<MediaEntry.Anime>(MediaType.ANIME)
+    val mangaCollection = getMediaCollection<MediaEntry.Manga>(MediaType.MANGA)
 
-    override suspend fun updateList(entry: MediaList) = Either.catch(
+    suspend fun updateList(entry: MediaList) = Either.catch(
         f = { client.mutation(entry.toMutation()).execute() },
         fe = { error ->
             when (CommonRemoteFailure(error)) {
