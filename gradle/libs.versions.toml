@@ -45,7 +45,7 @@ apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "a
 apollo-cache = { module = "com.apollographql.apollo3:apollo-normalized-cache", version.ref = "apollo" }
 apollo-cache-sql = { module = "com.apollographql.apollo3:apollo-normalized-cache-sqlite", version.ref = "apollo" }
 apollo-mockserver = { module = "com.apollographql.apollo3:apollo-mockserver", version.ref = "apollo" }
-apollo-testing = { module = "com.apollographql.apollo3:apollo-testing-support", version.ref = "apollo" }
+apollo-test = { module = "com.apollographql.apollo3:apollo-testing-support", version.ref = "apollo" }
 
 # Arrow
 arrow = { module = "io.arrow-kt:arrow-core", version = "1.1.3" }
@@ -239,11 +239,9 @@ test = [
     "kotest-assertions-core",
     "kotest-property",
     "mockk",
-    "orbit-test",
     "turbine",
 ]
 test-android = [
-    "compose-ui-test",
     "hilt-test",
     "junit5-vintage",
     "robolectric",
@@ -251,5 +249,9 @@ test-android = [
 
 test-data-remote = [
     "apollo-mockserver",
-    "apollo-testing",
+    "apollo-test",
+]
+test-ui = [
+    "compose-ui-test",
+    "orbit-test",
 ]

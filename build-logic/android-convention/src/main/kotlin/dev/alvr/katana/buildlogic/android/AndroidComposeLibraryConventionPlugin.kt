@@ -42,6 +42,7 @@ internal class AndroidComposeLibraryConventionPlugin : ConventionPlugin {
 
             testImplementation(catalogBundle("test"))
             testImplementation(catalogBundle("test-android"))
+            testImplementation(catalogBundle("test-ui"))
         }
     }
 }

@@ -43,6 +43,7 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
 
             testImplementation(catalogBundle("test"))
             testImplementation(catalogBundle("test-android"))
+            testImplementation(catalogBundle("test-ui"))
         }
     }
 
