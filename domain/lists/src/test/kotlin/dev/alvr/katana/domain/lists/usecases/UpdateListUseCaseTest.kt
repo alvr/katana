@@ -18,6 +18,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.spyk
+import io.mockk.verify
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -89,6 +90,6 @@ internal class UpdateListUseCaseTest : FunSpec({
 
         useCase.sync(mediaList)
 
-        coVerify(exactly = 1) { useCase.sync(mediaList) }
+        verify(exactly = 1) { useCase.sync(mediaList) }
     }
 },)

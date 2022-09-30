@@ -12,7 +12,6 @@ import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
 import dev.alvr.katana.ui.main.navigation.NavGraphs
 import io.kotest.core.spec.style.BehaviorSpec
-import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
@@ -31,7 +30,7 @@ internal class MainViewModelTest : BehaviorSpec({
         and("the user is logged in") {
             justRun { observeSession() }
 
-            coEvery { getAnilistToken.sync() } returns valueMockk<AnilistToken>().some()
+            every { getAnilistToken.sync() } returns valueMockk<AnilistToken>().some()
             val vm = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
 
             `when`("the user does have a saved token") {
@@ -81,7 +80,7 @@ internal class MainViewModelTest : BehaviorSpec({
             justRun { observeSession() }
             every { observeSession.flow } returns emptyFlow()
 
-            coEvery { getAnilistToken.sync() } returns none()
+            every { getAnilistToken.sync() } returns none()
             val vm = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
 
             `when`("the user does not have a saved token") {

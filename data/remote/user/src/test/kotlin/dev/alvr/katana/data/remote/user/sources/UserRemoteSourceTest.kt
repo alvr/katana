@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.remote.user.repositories
+package dev.alvr.katana.data.remote.user.sources
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
@@ -26,11 +26,11 @@ import io.mockk.mockk
 import io.mockk.spyk
 
 @OptIn(ApolloExperimental::class)
-internal class UserRemoteRepositoryTest : BehaviorSpec({
-    given("an userIdManager") {
+internal class UserRemoteSourceTest : BehaviorSpec({
+    given("an UserRemoteSource") {
         val apolloBuilder = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport())
         val client = spyk(apolloBuilder.build())
-        val repo = UserRemoteRepositoryImpl(client)
+        val repo = UserRemoteSource(client)
 
         `when`("getting the userId") {
             and("the server returns no data") {

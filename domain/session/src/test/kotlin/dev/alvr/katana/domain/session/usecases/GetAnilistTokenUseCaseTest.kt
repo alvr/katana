@@ -6,7 +6,7 @@ import dev.alvr.katana.common.tests.valueMockk
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.session.models.AnilistToken
-import dev.alvr.katana.domain.session.repositories.SessionPreferencesRepository
+import dev.alvr.katana.domain.session.repositories.SessionRepository
 import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.core.spec.style.FunSpec
@@ -14,9 +14,10 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.spyk
+import io.mockk.verify
 
 internal class GetAnilistTokenUseCaseTest : FunSpec({
-    val repo = mockk<SessionPreferencesRepository>()
+    val repo = mockk<SessionRepository>()
     val useCase = spyk(GetAnilistTokenUseCase(repo))
 
     val token = valueMockk<AnilistToken>()
@@ -55,6 +56,7 @@ internal class GetAnilistTokenUseCaseTest : FunSpec({
         useCase()
 
         coVerify(exactly = 1) { useCase.invoke(Unit) }
+        coVerify(exactly = 1) { repo.getAnilistToken() }
     }
 
     test("sync the use case should call the invoke operator") {
@@ -62,6 +64,7 @@ internal class GetAnilistTokenUseCaseTest : FunSpec({
 
         useCase.sync()
 
-        coVerify(exactly = 1) { useCase.sync(Unit) }
+        verify(exactly = 1) { useCase.sync(Unit) }
+        coVerify(exactly = 1) { repo.getAnilistToken() }
     }
 },)

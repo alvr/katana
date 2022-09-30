@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.remote.lists.repositories
+package dev.alvr.katana.data.remote.lists.sources
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
@@ -35,12 +35,12 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @OptIn(ApolloExperimental::class)
-internal class ListsRemoteRepositoryTest : BehaviorSpec({
-    given("a ListsRemoteRepositoryImpl") {
+internal class ListsRemoteSourceTest : BehaviorSpec({
+    given("a ListsRemoteSource") {
         val apolloBuilder = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport())
         val client = spyk(apolloBuilder.build())
         val userIdManager = mockk<UserIdManager>()
-        val repo = ListsRemoteRepositoryImpl(client, userIdManager)
+        val repo = ListsRemoteSource(client, userIdManager)
 
         val mediaList = Arb.bind<MediaList>(
             mapOf(

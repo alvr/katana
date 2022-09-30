@@ -1,13 +1,14 @@
 package dev.alvr.katana.domain.lists.usecases
 
-import app.cash.turbine.testIn
+import app.cash.turbine.test
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
 import io.kotest.core.spec.style.FunSpec
-import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.flowOf
 
 internal class ObserveMangaListUseCaseTest : FunSpec({
@@ -15,23 +16,31 @@ internal class ObserveMangaListUseCaseTest : FunSpec({
     val useCase = spyk(ObserveMangaListUseCase(repo))
 
     context("manga lists observer") {
-        coEvery { repo.mangaList } returns flowOf(mockk())
-        useCase()
-
         test("invoke should observe the manga lists") {
-            useCase.flow.testIn(this).run {
+            every { repo.mangaCollection } returns flowOf(mockk())
+
+            useCase()
+
+            useCase.flow.test(5.seconds) {
                 awaitItem()
                 cancelAndConsumeRemainingEvents()
             }
-            coVerify(exactly = 1) { repo.mangaList }
+
+            coVerify(exactly = 1) { useCase.invoke(Unit) }
+            coVerify(exactly = 1) { repo.mangaCollection }
         }
-    }
 
-    test("invoke the use case should call the invoke operator") {
-        coEvery { repo.mangaList } returns mockk()
+        test("invoke the use case should call the invoke operator") {
+            every { repo.mangaCollection } returns flowOf(mockk())
 
-        useCase(Unit)
+            useCase(Unit)
 
-        coVerify(exactly = 1) { useCase.invoke(Unit) }
+            useCase.flow.test(5.seconds) {
+                awaitItem()
+                cancelAndConsumeRemainingEvents()
+            }
+
+            coVerify(exactly = 1) { useCase.invoke(Unit) }
+        }
     }
 },)

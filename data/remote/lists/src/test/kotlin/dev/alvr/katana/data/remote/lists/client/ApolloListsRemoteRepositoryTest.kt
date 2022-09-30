@@ -12,7 +12,7 @@ import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.base.extensions.optional
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
-import dev.alvr.katana.data.remote.lists.repositories.ListsRemoteRepositoryImpl
+import dev.alvr.katana.data.remote.lists.sources.ListsRemoteSource
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
@@ -33,6 +33,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ApolloExperimental::class)
 internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
@@ -45,7 +46,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                 .networkTransport(MapTestNetworkTransport())
                 .build()
             val userIdManager = mockk<UserIdManager>()
-            val repo = ListsRemoteRepositoryImpl(client, userIdManager)
+            val repo = ListsRemoteSource(client, userIdManager)
 
             coEvery { userIdManager.getId() } returns userId
 
@@ -63,7 +64,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     )
 
                     then("the result list should be also empty") {
-                        repo.animeList.test {
+                        repo.animeCollection.test(5.seconds) {
                             awaitItem().lists.shouldBeEmpty()
                             awaitComplete()
                         }
@@ -107,7 +108,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     )
 
                     then("the result lists' entries should also be empty") {
-                        repo.animeList.test {
+                        repo.animeCollection.test(5.seconds) {
                             awaitItem().lists
                                 .shouldHaveSize(4)
                                 .also { lists ->
@@ -160,7 +161,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     )
 
                     then("the result entry should have the default values") {
-                        repo.animeList.test {
+                        repo.animeCollection.test(5.seconds) {
                             awaitItem().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -249,7 +250,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     )
 
                     then("the result entry should have the default values") {
-                        repo.animeList.test {
+                        repo.animeCollection.test(5.seconds) {
                             awaitItem().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -303,7 +304,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     )
 
                     then("the result list should be empty") {
-                        repo.animeList.test {
+                        repo.animeCollection.test(5.seconds) {
                             awaitItem().lists.shouldBeEmpty()
                             awaitComplete()
                         }
@@ -314,7 +315,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     client.registerTestNetworkError(MediaListCollectionQuery(userIdOpt, MediaType.ANIME))
 
                     then("the error should be propagated") {
-                        repo.animeList.test {
+                        repo.animeCollection.test(5.seconds) {
                             awaitError().shouldBeTypeOf<ApolloNetworkException>()
                         }
                     }
@@ -335,7 +336,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     )
 
                     then("the result list should be also empty") {
-                        repo.mangaList.test {
+                        repo.mangaCollection.test(5.seconds) {
                             awaitItem().lists.shouldBeEmpty()
                             awaitComplete()
                         }
@@ -379,7 +380,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     )
 
                     then("the result lists' entries should also be empty") {
-                        repo.mangaList.test {
+                        repo.mangaCollection.test(5.seconds) {
                             awaitItem().lists
                                 .shouldHaveSize(4)
                                 .also { lists ->
@@ -433,7 +434,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     )
 
                     then("the result entry should have the default values") {
-                        repo.mangaList.test {
+                        repo.mangaCollection.test(5.seconds) {
                             awaitItem().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -520,7 +521,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     )
 
                     then("the result entry should have the default values") {
-                        repo.mangaList.test {
+                        repo.mangaCollection.test(5.seconds) {
                             awaitItem().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -562,7 +563,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     )
 
                     then("the result list should be empty") {
-                        repo.mangaList.test {
+                        repo.mangaCollection.test(5.seconds) {
                             awaitItem().lists.shouldBeEmpty()
                             awaitComplete()
                         }
@@ -573,7 +574,7 @@ internal class ApolloListsRemoteRepositoryTest : BehaviorSpec() {
                     client.registerTestNetworkError(MediaListCollectionQuery(userIdOpt, MediaType.MANGA))
 
                     then("the error should be propagated") {
-                        repo.mangaList.test {
+                        repo.mangaCollection.test(5.seconds) {
                             awaitError().shouldBeTypeOf<ApolloNetworkException>()
                         }
                     }
