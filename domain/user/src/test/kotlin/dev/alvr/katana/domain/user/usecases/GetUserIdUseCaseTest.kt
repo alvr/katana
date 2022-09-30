@@ -17,55 +17,57 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 
-internal class GetUserIdUseCaseTest : FunSpec({
-    val repo = mockk<UserRepository>()
-    val useCase = spyk(GetUserIdUseCase(repo))
+internal class GetUserIdUseCaseTest : FunSpec() {
+    private val repo = mockk<UserRepository>()
+    private val useCase = spyk(GetUserIdUseCase(repo))
 
-    val user = valueMockk<UserId>()
+    private val user = valueMockk<UserId>()
 
-    context("successful userId") {
-        coEvery { repo.getUserId() } returns user.right()
+    init {
+        context("successful userId") {
+            coEvery { repo.getUserId() } returns user.right()
 
-        test("invoke should return user") {
-            useCase().shouldBeRight(user)
+            test("invoke should return user") {
+                useCase().shouldBeRight(user)
+                coVerify(exactly = 1) { repo.getUserId() }
+            }
+
+            test("sync should return user") {
+                useCase.sync().shouldBeRight(user)
+                coVerify(exactly = 1) { repo.getUserId() }
+            }
+        }
+
+        context("failure userId") {
+            coEvery { repo.getUserId() } returns UserFailure.UserIdFailure.left()
+
+            test("invoke should return failure") {
+                useCase().shouldBeLeft(UserFailure.UserIdFailure)
+                coVerify(exactly = 1) { repo.getUserId() }
+            }
+
+            test("sync should return failure") {
+                useCase.sync().shouldBeLeft(UserFailure.UserIdFailure)
+                coVerify(exactly = 1) { repo.getUserId() }
+            }
+        }
+
+        test("invoke the use case should call the invoke operator") {
+            coEvery { repo.getUserId() } returns mockk()
+
+            useCase()
+
+            coVerify(exactly = 1) { useCase.invoke(Unit) }
             coVerify(exactly = 1) { repo.getUserId() }
         }
 
-        test("sync should return user") {
-            useCase.sync().shouldBeRight(user)
+        test("sync the use case should call the invoke operator") {
+            coEvery { repo.getUserId() } returns mockk()
+
+            useCase.sync()
+
+            verify(exactly = 1) { useCase.sync(Unit) }
             coVerify(exactly = 1) { repo.getUserId() }
         }
     }
-
-    context("failure userId") {
-        coEvery { repo.getUserId() } returns UserFailure.UserIdFailure.left()
-
-        test("invoke should return failure") {
-            useCase().shouldBeLeft(UserFailure.UserIdFailure)
-            coVerify(exactly = 1) { repo.getUserId() }
-        }
-
-        test("sync should return failure") {
-            useCase.sync().shouldBeLeft(UserFailure.UserIdFailure)
-            coVerify(exactly = 1) { repo.getUserId() }
-        }
-    }
-
-    test("invoke the use case should call the invoke operator") {
-        coEvery { repo.getUserId() } returns mockk()
-
-        useCase()
-
-        coVerify(exactly = 1) { useCase.invoke(Unit) }
-        coVerify(exactly = 1) { repo.getUserId() }
-    }
-
-    test("sync the use case should call the invoke operator") {
-        coEvery { repo.getUserId() } returns mockk()
-
-        useCase.sync()
-
-        verify(exactly = 1) { useCase.sync(Unit) }
-        coVerify(exactly = 1) { repo.getUserId() }
-    }
-},)
+}

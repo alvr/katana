@@ -16,55 +16,57 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 
-internal class GetAnilistTokenUseCaseTest : FunSpec({
-    val repo = mockk<SessionRepository>()
-    val useCase = spyk(GetAnilistTokenUseCase(repo))
+internal class GetAnilistTokenUseCaseTest : FunSpec() {
+    private val repo = mockk<SessionRepository>()
+    private val useCase = spyk(GetAnilistTokenUseCase(repo))
 
-    val token = valueMockk<AnilistToken>()
+    private val token = valueMockk<AnilistToken>()
 
-    context("successful getting") {
-        coEvery { repo.getAnilistToken() } returns token.some()
+    init {
+        context("successful getting") {
+            coEvery { repo.getAnilistToken() } returns token.some()
 
-        test("invoke should be some token") {
-            useCase().shouldBeSome(token)
+            test("invoke should be some token") {
+                useCase().shouldBeSome(token)
+                coVerify(exactly = 1) { repo.getAnilistToken() }
+            }
+
+            test("sync should be some token") {
+                useCase.sync().shouldBeSome(token)
+                coVerify(exactly = 1) { repo.getAnilistToken() }
+            }
+        }
+
+        context("failure getting") {
+            coEvery { repo.getAnilistToken() } returns none()
+
+            test("invoke should return None") {
+                useCase().shouldBeNone()
+                coVerify(exactly = 1) { repo.getAnilistToken() }
+            }
+
+            test("sync should return None") {
+                useCase.sync().shouldBeNone()
+                coVerify(exactly = 1) { repo.getAnilistToken() }
+            }
+        }
+
+        test("invoke the use case should call the invoke operator") {
+            coEvery { repo.getAnilistToken() } returns mockk()
+
+            useCase()
+
+            coVerify(exactly = 1) { useCase.invoke(Unit) }
             coVerify(exactly = 1) { repo.getAnilistToken() }
         }
 
-        test("sync should be some token") {
-            useCase.sync().shouldBeSome(token)
+        test("sync the use case should call the invoke operator") {
+            coEvery { repo.getAnilistToken() } returns mockk()
+
+            useCase.sync()
+
+            verify(exactly = 1) { useCase.sync(Unit) }
             coVerify(exactly = 1) { repo.getAnilistToken() }
         }
     }
-
-    context("failure getting") {
-        coEvery { repo.getAnilistToken() } returns none()
-
-        test("invoke should return None") {
-            useCase().shouldBeNone()
-            coVerify(exactly = 1) { repo.getAnilistToken() }
-        }
-
-        test("sync should return None") {
-            useCase.sync().shouldBeNone()
-            coVerify(exactly = 1) { repo.getAnilistToken() }
-        }
-    }
-
-    test("invoke the use case should call the invoke operator") {
-        coEvery { repo.getAnilistToken() } returns mockk()
-
-        useCase()
-
-        coVerify(exactly = 1) { useCase.invoke(Unit) }
-        coVerify(exactly = 1) { repo.getAnilistToken() }
-    }
-
-    test("sync the use case should call the invoke operator") {
-        coEvery { repo.getAnilistToken() } returns mockk()
-
-        useCase.sync()
-
-        verify(exactly = 1) { useCase.sync(Unit) }
-        coVerify(exactly = 1) { repo.getAnilistToken() }
-    }
-},)
+}

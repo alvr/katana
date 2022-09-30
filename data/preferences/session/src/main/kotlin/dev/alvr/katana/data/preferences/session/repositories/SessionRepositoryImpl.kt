@@ -9,6 +9,7 @@ internal class SessionRepositoryImpl @Inject constructor(
     private val source: SessionLocalSource,
 ) : SessionRepository {
     override val sessionActive get() = source.sessionActive
+
     override suspend fun clearActiveSession() = source.clearActiveSession()
     override suspend fun deleteAnilistToken() = source.deleteAnilistToken()
     override suspend fun getAnilistToken() = source.getAnilistToken()

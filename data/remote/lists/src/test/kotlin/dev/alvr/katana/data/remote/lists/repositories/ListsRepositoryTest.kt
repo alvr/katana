@@ -22,64 +22,66 @@ import io.mockk.verify
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.flowOf
 
-internal class ListsRepositoryTest : BehaviorSpec({
-    given("a ListsRepository") {
-        val source = mockk<ListsRemoteSource>()
-        val repo: ListsRepository = ListsRepositoryImpl(source)
+internal class ListsRepositoryTest : BehaviorSpec() {
+    private val source = mockk<ListsRemoteSource>()
+    private val repo: ListsRepository = ListsRepositoryImpl(source)
 
-        `when`("observing the anime collection") {
-            val collection = valueMockk<MediaCollection<MediaEntry.Anime>>()
-            every { source.animeCollection } returns flowOf(collection)
+    init {
+        given("a ListsRepository") {
+            `when`("observing the anime collection") {
+                val collection = valueMockk<MediaCollection<MediaEntry.Anime>>()
+                every { source.animeCollection } returns flowOf(collection)
 
-            then("collecting the flow should get the same items") {
-                repo.animeCollection.test(5.seconds) {
-                    awaitItem() shouldBe collection
-                    awaitComplete()
+                then("collecting the flow should get the same items") {
+                    repo.animeCollection.test(5.seconds) {
+                        awaitItem() shouldBe collection
+                        awaitComplete()
+                    }
+                    verify(exactly = 1) { source.animeCollection }
                 }
-                verify(exactly = 1) { source.animeCollection }
             }
-        }
 
-        `when`("observing the manga collection") {
-            val collection = valueMockk<MediaCollection<MediaEntry.Manga>>()
-            every { source.mangaCollection } returns flowOf(collection)
+            `when`("observing the manga collection") {
+                val collection = valueMockk<MediaCollection<MediaEntry.Manga>>()
+                every { source.mangaCollection } returns flowOf(collection)
 
-            then("collecting the flow should get the same items") {
-                repo.mangaCollection.test(5.seconds) {
-                    awaitItem() shouldBe collection
-                    awaitComplete()
+                then("collecting the flow should get the same items") {
+                    repo.mangaCollection.test(5.seconds) {
+                        awaitItem() shouldBe collection
+                        awaitComplete()
+                    }
+                    verify(exactly = 1) { source.mangaCollection }
                 }
-                verify(exactly = 1) { source.mangaCollection }
             }
-        }
 
-        `when`("updating the list without error") {
-            coEvery { source.updateList(any()) } returns Unit.right()
+            `when`("updating the list without error") {
+                coEvery { source.updateList(any()) } returns Unit.right()
 
-            then("the result should be right") {
-                repo.updateList(mockk()).shouldBeRight()
-                coVerify(exactly = 1) { source.updateList(any()) }
-            }
-        }
-
-        `when`("updating the list with an error") {
-            and("the error is a ListsFailure") {
-                coEvery { source.updateList(any()) } returns ListsFailure.UpdatingList.left()
-
-                then("the result should be left") {
-                    repo.updateList(mockk()).shouldBeLeft(ListsFailure.UpdatingList)
+                then("the result should be right") {
+                    repo.updateList(mockk()).shouldBeRight()
                     coVerify(exactly = 1) { source.updateList(any()) }
                 }
             }
 
-            and("the error in unknown") {
-                coEvery { source.updateList(any()) } returns Failure.Unknown.left()
+            `when`("updating the list with an error") {
+                and("the error is a ListsFailure") {
+                    coEvery { source.updateList(any()) } returns ListsFailure.UpdatingList.left()
 
-                then("the result should be left") {
-                    repo.updateList(mockk()).shouldBeLeft(Failure.Unknown)
-                    coVerify(exactly = 1) { source.updateList(any()) }
+                    then("the result should be left") {
+                        repo.updateList(mockk()).shouldBeLeft(ListsFailure.UpdatingList)
+                        coVerify(exactly = 1) { source.updateList(any()) }
+                    }
+                }
+
+                and("the error in unknown") {
+                    coEvery { source.updateList(any()) } returns Failure.Unknown.left()
+
+                    then("the result should be left") {
+                        repo.updateList(mockk()).shouldBeLeft(Failure.Unknown)
+                        coVerify(exactly = 1) { source.updateList(any()) }
+                    }
                 }
             }
         }
     }
-},)
+}

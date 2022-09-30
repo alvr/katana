@@ -25,8 +25,8 @@ internal class ListsRemoteSource @Inject constructor(
     private val client: ApolloClient,
     private val userId: UserIdManager,
 ) {
-    val animeCollection = getMediaCollection<MediaEntry.Anime>(MediaType.ANIME)
-    val mangaCollection = getMediaCollection<MediaEntry.Manga>(MediaType.MANGA)
+    val animeCollection get() = getMediaCollection<MediaEntry.Anime>(MediaType.ANIME)
+    val mangaCollection get() = getMediaCollection<MediaEntry.Manga>(MediaType.MANGA)
 
     suspend fun updateList(entry: MediaList) = Either.catch(
         f = { client.mutation(entry.toMutation()).execute() },

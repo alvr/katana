@@ -11,36 +11,38 @@ import io.mockk.spyk
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.flowOf
 
-internal class ObserveMangaListUseCaseTest : FunSpec({
-    val repo = mockk<ListsRepository>()
-    val useCase = spyk(ObserveMangaListUseCase(repo))
+internal class ObserveMangaListUseCaseTest : FunSpec() {
+    private val repo = mockk<ListsRepository>()
+    private val useCase = spyk(ObserveMangaListUseCase(repo))
 
-    context("manga lists observer") {
-        test("invoke should observe the manga lists") {
-            every { repo.mangaCollection } returns flowOf(mockk())
+    init {
+        context("manga lists observer") {
+            test("invoke should observe the manga lists") {
+                every { repo.mangaCollection } returns flowOf(mockk())
 
-            useCase()
+                useCase()
 
-            useCase.flow.test(5.seconds) {
-                awaitItem()
-                cancelAndConsumeRemainingEvents()
+                useCase.flow.test(5.seconds) {
+                    awaitItem()
+                    cancelAndConsumeRemainingEvents()
+                }
+
+                coVerify(exactly = 1) { useCase.invoke(Unit) }
+                coVerify(exactly = 1) { repo.mangaCollection }
             }
 
-            coVerify(exactly = 1) { useCase.invoke(Unit) }
-            coVerify(exactly = 1) { repo.mangaCollection }
-        }
+            test("invoke the use case should call the invoke operator") {
+                every { repo.mangaCollection } returns flowOf(mockk())
 
-        test("invoke the use case should call the invoke operator") {
-            every { repo.mangaCollection } returns flowOf(mockk())
+                useCase(Unit)
 
-            useCase(Unit)
+                useCase.flow.test(5.seconds) {
+                    awaitItem()
+                    cancelAndConsumeRemainingEvents()
+                }
 
-            useCase.flow.test(5.seconds) {
-                awaitItem()
-                cancelAndConsumeRemainingEvents()
+                coVerify(exactly = 1) { useCase.invoke(Unit) }
             }
-
-            coVerify(exactly = 1) { useCase.invoke(Unit) }
         }
     }
-},)
+}

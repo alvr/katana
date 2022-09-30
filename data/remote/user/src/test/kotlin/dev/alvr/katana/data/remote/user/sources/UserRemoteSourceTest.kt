@@ -26,121 +26,123 @@ import io.mockk.mockk
 import io.mockk.spyk
 
 @OptIn(ApolloExperimental::class)
-internal class UserRemoteSourceTest : BehaviorSpec({
-    given("an UserRemoteSource") {
-        val apolloBuilder = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport())
-        val client = spyk(apolloBuilder.build())
-        val repo = UserRemoteSource(client)
+internal class UserRemoteSourceTest : BehaviorSpec() {
+    private val apolloBuilder = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport())
+    private val client = spyk(apolloBuilder.build())
+    private val source = UserRemoteSource(client)
 
-        `when`("getting the userId") {
-            and("the server returns no data") {
-                client.enqueueTestResponse(UserIdQuery())
+    init {
+        given("an UserRemoteSource") {
+            `when`("getting the userId") {
+                and("the server returns no data") {
+                    client.enqueueTestResponse(UserIdQuery())
 
-                then("it should be a UserFailure.UserIdFailure") {
-                    repo.getUserId().shouldBeLeft(UserFailure.UserIdFailure)
+                    then("it should be a UserFailure.UserIdFailure") {
+                        source.getUserId().shouldBeLeft(UserFailure.UserIdFailure)
+                    }
+                }
+
+                and("the server returns an empty userId") {
+                    val query = UserIdQuery.Data { viewer = null }
+                    client.enqueueTestResponse(UserIdQuery(), query)
+
+                    then("it should be a UserFailure.UserIdFailure") {
+                        source.getUserId().shouldBeLeft(UserFailure.UserIdFailure)
+                    }
+                }
+
+                and("the server returns a valid id") {
+                    val query = UserIdQuery.Data { viewer = viewer { id = 37_384 } }
+                    client.enqueueTestResponse(UserIdQuery(), query)
+
+                    then("it should be a userId with the same id") {
+                        source.getUserId().shouldBeRight(UserId(37_384))
+                    }
                 }
             }
 
-            and("the server returns an empty userId") {
-                val query = UserIdQuery.Data { viewer = null }
-                client.enqueueTestResponse(UserIdQuery(), query)
+            `when`("saving the userId") {
+                and("is successful") {
+                    coEvery { client.query(UserIdQuery()).execute() } returns mockk()
 
-                then("it should be a UserFailure.UserIdFailure") {
-                    repo.getUserId().shouldBeLeft(UserFailure.UserIdFailure)
+                    then("it just execute the UserIdQuery") {
+                        source.saveUserId().shouldBeRight()
+                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    }
                 }
-            }
 
-            and("the server returns a valid id") {
-                val query = UserIdQuery.Data { viewer = viewer { id = 37_384 } }
-                client.enqueueTestResponse(UserIdQuery(), query)
+                and("a HTTP error occurs") {
+                    coEvery { client.query(UserIdQuery()).execute() } throws mockk<ApolloHttpException>()
 
-                then("it should be a userId with the same id") {
-                    repo.getUserId().shouldBeRight(UserId(37_384))
+                    then("it returns a left of UserFailure.FetchingFailure") {
+                        source.saveUserId().shouldBeLeft(UserFailure.FetchingFailure)
+                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    }
                 }
-            }
-        }
 
-        `when`("saving the userId") {
-            and("is successful") {
-                coEvery { client.query(UserIdQuery()).execute() } returns mockk()
+                and("a network error occurs") {
+                    coEvery { client.query(UserIdQuery()).execute() } throws ApolloNetworkException()
 
-                then("it just execute the UserIdQuery") {
-                    repo.saveUserId().shouldBeRight()
-                    coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    then("it returns a left of UserFailure.FetchingFailure") {
+                        source.saveUserId().shouldBeLeft(UserFailure.FetchingFailure)
+                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    }
                 }
-            }
 
-            and("a HTTP error occurs") {
-                coEvery { client.query(UserIdQuery()).execute() } throws mockk<ApolloHttpException>()
+                and("a cache miss occurs") {
+                    coEvery { client.query(UserIdQuery()).execute() } throws mockk<CacheMissException>()
 
-                then("it returns a left of UserFailure.FetchingFailure") {
-                    repo.saveUserId().shouldBeLeft(UserFailure.FetchingFailure)
-                    coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    then("it returns a left of Failure.Unknown") {
+                        source.saveUserId().shouldBeLeft(Failure.Unknown)
+                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    }
                 }
-            }
 
-            and("a network error occurs") {
-                coEvery { client.query(UserIdQuery()).execute() } throws ApolloNetworkException()
+                and("a HTTP cache miss occurs") {
+                    coEvery { client.query(UserIdQuery()).execute() } throws mockk<HttpCacheMissException>()
 
-                then("it returns a left of UserFailure.FetchingFailure") {
-                    repo.saveUserId().shouldBeLeft(UserFailure.FetchingFailure)
-                    coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    then("it returns a left of Failure.Unknown") {
+                        source.saveUserId().shouldBeLeft(Failure.Unknown)
+                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    }
                 }
-            }
 
-            and("a cache miss occurs") {
-                coEvery { client.query(UserIdQuery()).execute() } throws mockk<CacheMissException>()
+                and("a json parser problem occurs") {
+                    coEvery { client.query(UserIdQuery()).execute() } throws ApolloParseException()
 
-                then("it returns a left of Failure.Unknown") {
-                    repo.saveUserId().shouldBeLeft(Failure.Unknown)
-                    coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    then("it returns a left of UserFailure.SavingFailure") {
+                        source.saveUserId().shouldBeLeft(UserFailure.SavingFailure)
+                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    }
                 }
-            }
 
-            and("a HTTP cache miss occurs") {
-                coEvery { client.query(UserIdQuery()).execute() } throws mockk<HttpCacheMissException>()
+                and("a json data problem occurs") {
+                    coEvery { client.query(UserIdQuery()).execute() } throws mockk<JsonDataException>()
 
-                then("it returns a left of Failure.Unknown") {
-                    repo.saveUserId().shouldBeLeft(Failure.Unknown)
-                    coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    then("it returns a left of UserFailure.SavingFailure") {
+                        source.saveUserId().shouldBeLeft(UserFailure.SavingFailure)
+                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    }
                 }
-            }
 
-            and("a json parser problem occurs") {
-                coEvery { client.query(UserIdQuery()).execute() } throws ApolloParseException()
+                and("a json encoding problem occurs") {
+                    coEvery { client.query(UserIdQuery()).execute() } throws mockk<JsonEncodingException>()
 
-                then("it returns a left of UserFailure.SavingFailure") {
-                    repo.saveUserId().shouldBeLeft(UserFailure.SavingFailure)
-                    coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    then("it returns a left of UserFailure.SavingFailure") {
+                        source.saveUserId().shouldBeLeft(UserFailure.SavingFailure)
+                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    }
                 }
-            }
 
-            and("a json data problem occurs") {
-                coEvery { client.query(UserIdQuery()).execute() } throws mockk<JsonDataException>()
+                and("another Apollo error occurs") {
+                    coEvery { client.query(UserIdQuery()).execute() } throws MissingValueException()
 
-                then("it returns a left of UserFailure.SavingFailure") {
-                    repo.saveUserId().shouldBeLeft(UserFailure.SavingFailure)
-                    coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
-                }
-            }
-
-            and("a json encoding problem occurs") {
-                coEvery { client.query(UserIdQuery()).execute() } throws mockk<JsonEncodingException>()
-
-                then("it returns a left of UserFailure.SavingFailure") {
-                    repo.saveUserId().shouldBeLeft(UserFailure.SavingFailure)
-                    coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
-                }
-            }
-
-            and("another Apollo error occurs") {
-                coEvery { client.query(UserIdQuery()).execute() } throws MissingValueException()
-
-                then("it returns a left of Failure.Unknown") {
-                    repo.saveUserId().shouldBeLeft(Failure.Unknown)
-                    coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    then("it returns a left of Failure.Unknown") {
+                        source.saveUserId().shouldBeLeft(Failure.Unknown)
+                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+                    }
                 }
             }
         }
     }
-},)
+}

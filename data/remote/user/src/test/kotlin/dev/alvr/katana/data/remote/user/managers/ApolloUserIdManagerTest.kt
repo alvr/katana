@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.remote.user.client
+package dev.alvr.katana.data.remote.user.managers
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
@@ -18,15 +18,12 @@ import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.nulls.shouldNotBeNull
 
 @OptIn(ApolloExperimental::class)
-internal class ApolloUserIdTest : BehaviorSpec() {
-    init {
-        given("an Apollo client") {
-            val store = ApolloStore(normalizedCacheFactory = MemoryCacheFactory())
-            val client = ApolloClient.Builder()
-                .networkTransport(QueueTestNetworkTransport())
-                .store(store)
-                .build()
+internal class ApolloUserIdManagerTest : BehaviorSpec() {
+    private val store = ApolloStore(normalizedCacheFactory = MemoryCacheFactory())
+    private val client = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport()).store(store).build()
 
+    init {
+        xgiven("an Apollo client") {
             `when`("retrieving the authenticated user") {
                 val query = UserIdQuery.Data {
                     viewer = viewer {

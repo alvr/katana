@@ -7,7 +7,7 @@ import arrow.core.toOption
 import dev.alvr.katana.data.preferences.base.extensions.handleDataStore
 import dev.alvr.katana.data.preferences.session.models.Session
 import dev.alvr.katana.domain.base.failures.Failure
-import dev.alvr.katana.domain.session.failures.SessionPreferencesFailure
+import dev.alvr.katana.domain.session.failures.SessionFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
 import io.github.aakira.napier.Napier
 import javax.inject.Inject
@@ -29,7 +29,7 @@ internal class SessionLocalSource @Inject constructor(
         },
         fe = { error ->
             error.handleDataStore(
-                rwException = { SessionPreferencesFailure.ClearingSessionFailure },
+                rwException = { SessionFailure.ClearingSessionFailure },
                 other = { Failure.Unknown },
             )
         },
@@ -42,7 +42,7 @@ internal class SessionLocalSource @Inject constructor(
         },
         fe = { error ->
             error.handleDataStore(
-                rwException = { SessionPreferencesFailure.DeletingTokenFailure },
+                rwException = { SessionFailure.DeletingTokenFailure },
                 other = { Failure.Unknown },
             )
         },
@@ -60,7 +60,7 @@ internal class SessionLocalSource @Inject constructor(
         },
         fe = { error ->
             error.handleDataStore(
-                rwException = { SessionPreferencesFailure.SavingFailure },
+                rwException = { SessionFailure.SavingFailure },
                 other = { Failure.Unknown },
             )
         },
