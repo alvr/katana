@@ -15,61 +15,63 @@ import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.next
 import java.time.LocalDate
 
-internal class FuzzyDateMapperTest : WordSpec({
-    "a null LocalDate" should {
-        val date: LocalDate? = null
+internal class FuzzyDateMapperTest : WordSpec() {
+    init {
+        "a null LocalDate" should {
+            val date: LocalDate? = null
 
-        "be mapped to a FuzzyDate with all values Absent" {
-            date.toFuzzyDate() shouldBeEqualToComparingFields FuzzyDateInput(
-                year = Optional.Absent,
-                month = Optional.Absent,
-                day = Optional.Absent,
-            )
+            "be mapped to a FuzzyDate with all values Absent" {
+                date.toFuzzyDate() shouldBeEqualToComparingFields FuzzyDateInput(
+                    year = Optional.Absent,
+                    month = Optional.Absent,
+                    day = Optional.Absent,
+                )
+            }
         }
-    }
 
-    "a nullable LocalDate with value" should {
-        val date: LocalDate? = LocalDate.of(2022, 7, 20)
+        "a nullable LocalDate with value" should {
+            val date: LocalDate? = LocalDate.of(2022, 7, 20)
 
-        "be mapped to a FuzzyDate with all values Present" {
-            date.toFuzzyDate() shouldBeEqualToComparingFields FuzzyDateInput(
-                year = Optional.Present(2022),
-                month = Optional.Present(7),
-                day = Optional.Present(20),
-            )
+            "be mapped to a FuzzyDate with all values Present" {
+                date.toFuzzyDate() shouldBeEqualToComparingFields FuzzyDateInput(
+                    year = Optional.Present(2022),
+                    month = Optional.Present(7),
+                    day = Optional.Present(20),
+                )
+            }
         }
-    }
 
-    "a LocalDate" should {
-        val date: LocalDate = LocalDate.of(2022, 7, 20)
+        "a LocalDate" should {
+            val date: LocalDate = LocalDate.of(2022, 7, 20)
 
-        "be mapped to a FuzzyDate with all values Present" {
-            date.toFuzzyDate() shouldBeEqualToComparingFields FuzzyDateInput(
-                year = Optional.Present(2022),
-                month = Optional.Present(7),
-                day = Optional.Present(20),
-            )
+            "be mapped to a FuzzyDate with all values Present" {
+                date.toFuzzyDate() shouldBeEqualToComparingFields FuzzyDateInput(
+                    year = Optional.Present(2022),
+                    month = Optional.Present(7),
+                    day = Optional.Present(20),
+                )
+            }
         }
-    }
 
-    "a FuzzyDate that may have null values" should {
-        val dates = Arb.bind<FuzzyDateInput>(
-            mapOf(
-                Optional::class to Arb.choice(
-                    Arb.constant(Optional.Present(Arb.int().next())),
-                    Arb.constant(Optional.Absent),
+        "a FuzzyDate that may have null values" should {
+            val dates = Arb.bind<FuzzyDateInput>(
+                mapOf(
+                    Optional::class to Arb.choice(
+                        Arb.constant(Optional.Present(Arb.int().next())),
+                        Arb.constant(Optional.Absent),
+                    ),
                 ),
-            ),
-        ).edgecases()
+            ).edgecases()
 
-        "be mapped to a FuzzyDate with all values Present" {
-            dates.forEach {
-                if (it.day is Optional.Present && it.month is Optional.Present && it.year is Optional.Present) {
-                    it.takeIfValid().shouldNotBeNull()
-                } else {
-                    it.takeIfValid().shouldBeNull()
+            "be mapped to a FuzzyDate with all values Present" {
+                dates.forEach {
+                    if (it.day is Optional.Present && it.month is Optional.Present && it.year is Optional.Present) {
+                        it.takeIfValid().shouldNotBeNull()
+                    } else {
+                        it.takeIfValid().shouldBeNull()
+                    }
                 }
             }
         }
     }
-},)
+}

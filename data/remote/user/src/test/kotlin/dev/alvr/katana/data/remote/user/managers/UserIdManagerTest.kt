@@ -13,25 +13,27 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coEvery
 import io.mockk.mockk
 
-internal class UserIdManagerTest : BehaviorSpec({
-    given("an userIdManager") {
-        val getUserId = mockk<GetUserIdUseCase>()
-        val manager: UserIdManager = UserIdManagerImpl(getUserId)
+internal class UserIdManagerTest : BehaviorSpec() {
+    private val getUserId = mockk<GetUserIdUseCase>()
+    private val manager: UserIdManager = UserIdManagerImpl(getUserId)
 
-        `when`("server fails to return something") {
-            coEvery { getUserId() } returns UserFailure.UserIdFailure.left()
+    init {
+        given("an userIdManager") {
+            `when`("server fails to return something") {
+                coEvery { getUserId() } returns UserFailure.UserIdFailure.left()
 
-            then("the mapper should throw an exception") {
-                manager.getId().shouldBeLeft(UserFailure.UserIdFailure)
+                then("the mapper should throw an exception") {
+                    manager.getId().shouldBeLeft(UserFailure.UserIdFailure)
+                }
             }
-        }
 
-        `when`("server return viewer is valid") {
-            coEvery { getUserId() } returns UserId(37_384).right()
+            `when`("server return viewer is valid") {
+                coEvery { getUserId() } returns UserId(37_384).right()
 
-            then("it should return the id of the user") {
-                manager.getId().shouldBeRight(37_384)
+                then("it should return the id of the user") {
+                    manager.getId().shouldBeRight(37_384)
+                }
             }
         }
     }
-},)
+}

@@ -9,5 +9,5 @@ import javax.inject.Inject
 class ObserveAnimeListUseCase @Inject constructor(
     private val repository: ListsRepository,
 ) : FlowUseCase<Unit, MediaCollection<MediaEntry.Anime>>() {
-    override fun createFlow(params: Unit) = repository.animeList
+    override fun createFlow(params: Unit) = repository.animeCollection
 }

@@ -43,6 +43,7 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
 
             testImplementation(catalogBundle("test"))
             testImplementation(catalogBundle("test-android"))
+            testImplementation(catalogBundle("test-ui"))
         }
     }
 
@@ -76,8 +77,9 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
 
                 keyAlias = props.getValue("signingAlias", "SIGNING_ALIAS")
                 keyPassword = props.getValue("signingAliasPass", "SIGNING_ALIAS_PASS")
-                storeFile =
-                    props.getValue("signingFile", "SIGNING_FILE")?.let { rootProject.file(it) }
+                storeFile = props.getValue("signingFile", "SIGNING_FILE")?.let {
+                    rootProject.file(it)
+                }
                 storePassword = props.getValue("signingFilePass", "SIGNING_FILE_PASS")
             }
         }
@@ -120,7 +122,7 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
         isDefault = isDebug
         isMinifyEnabled = !isDebug
         isShrinkResources = !isDebug
-        isTestCoverageEnabled = isDebug
+        enableUnitTestCoverage = isDebug
     }
 
     private fun Properties.getValue(key: String, env: String) =

@@ -12,7 +12,6 @@ import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
 import dev.alvr.katana.ui.main.navigation.NavGraphs
 import io.kotest.core.spec.style.BehaviorSpec
-import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
@@ -22,79 +21,81 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import org.orbitmvi.orbit.test
 
-internal class MainViewModelTest : BehaviorSpec({
-    given("the MainViewModel") {
-        val clearActiveSession = mockk<ClearActiveSessionUseCase>()
-        val getAnilistToken = mockk<GetAnilistTokenUseCase>()
-        val observeSession = mockk<ObserveActiveSessionUseCase>()
+internal class MainViewModelTest : BehaviorSpec() {
+    init {
+        given("the MainViewModel") {
+            val clearActiveSession = mockk<ClearActiveSessionUseCase>()
+            val getAnilistToken = mockk<GetAnilistTokenUseCase>()
+            val observeSession = mockk<ObserveActiveSessionUseCase>()
 
-        and("the user is logged in") {
-            justRun { observeSession() }
+            and("the user is logged in") {
+                justRun { observeSession() }
 
-            coEvery { getAnilistToken.sync() } returns valueMockk<AnilistToken>().some()
-            val vm = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
+                every { getAnilistToken.sync() } returns valueMockk<AnilistToken>().some()
+                val vm = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
 
-            `when`("the user does have a saved token") {
-                every { observeSession.flow } returns emptyFlow()
+                `when`("the user does have a saved token") {
+                    every { observeSession.flow } returns emptyFlow()
 
-                vm.runOnCreate()
-
-                then("the initial navGraph should be `NavGraphs.home`") {
-                    vm.assert(MainState(initialNavGraph = NavGraphs.home)) {
-                        states(
-                            { copy(initialNavGraph = NavGraphs.home) },
-                        )
-                    }
-                }
-            }
-
-            and("has an active session") {
-                every { observeSession.flow } returns flowOf(true, true, false)
-
-                `when`("the session expires") {
                     vm.runOnCreate()
 
                     then("the initial navGraph should be `NavGraphs.home`") {
                         vm.assert(MainState(initialNavGraph = NavGraphs.home)) {
                             states(
                                 { copy(initialNavGraph = NavGraphs.home) },
-                                { copy(isSessionActive = false) },
                             )
                         }
                     }
                 }
 
-                and("the session expires") {
-                    vm.runOnCreate()
+                and("has an active session") {
+                    every { observeSession.flow } returns flowOf(true, true, false)
 
-                    `when`("the user clear the active session") {
-                        coJustRun { clearActiveSession() }
-                        vm.testIntent { clearSession() }
+                    `when`("the session expires") {
+                        vm.runOnCreate()
 
-                        coVerify(exactly = 1) { clearActiveSession() }
+                        then("the initial navGraph should be `NavGraphs.home`") {
+                            vm.assert(MainState(initialNavGraph = NavGraphs.home)) {
+                                states(
+                                    { copy(initialNavGraph = NavGraphs.home) },
+                                    { copy(isSessionActive = false) },
+                                )
+                            }
+                        }
+                    }
+
+                    and("the session expires") {
+                        vm.runOnCreate()
+
+                        `when`("the user clear the active session") {
+                            coJustRun { clearActiveSession() }
+                            vm.testIntent { clearSession() }
+
+                            coVerify(exactly = 1) { clearActiveSession() }
+                        }
                     }
                 }
             }
-        }
 
-        and("the user is logged out") {
-            justRun { observeSession() }
-            every { observeSession.flow } returns emptyFlow()
+            and("the user is logged out") {
+                justRun { observeSession() }
+                every { observeSession.flow } returns emptyFlow()
 
-            coEvery { getAnilistToken.sync() } returns none()
-            val vm = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
+                every { getAnilistToken.sync() } returns none()
+                val vm = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
 
-            `when`("the user does not have a saved token") {
-                vm.runOnCreate()
+                `when`("the user does not have a saved token") {
+                    vm.runOnCreate()
 
-                then("the initial navGraph should be `LoginNavGraph`") {
-                    vm.assert(MainState(initialNavGraph = LoginNavGraph)) {
-                        states(
-                            { copy(initialNavGraph = LoginNavGraph) },
-                        )
+                    then("the initial navGraph should be `LoginNavGraph`") {
+                        vm.assert(MainState(initialNavGraph = LoginNavGraph)) {
+                            states(
+                                { copy(initialNavGraph = LoginNavGraph) },
+                            )
+                        }
                     }
                 }
             }
         }
     }
-},)
+}

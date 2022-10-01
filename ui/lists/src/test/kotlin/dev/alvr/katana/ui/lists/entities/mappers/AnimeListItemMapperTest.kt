@@ -18,40 +18,42 @@ import io.kotest.property.arbitrary.string
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-internal class AnimeListItemMapperTest : WordSpec({
-    "a random collection of anime" should {
-        val times = Arb.int(range = 5..10).next()
+internal class AnimeListItemMapperTest : WordSpec() {
+    init {
+        "a random collection of anime" should {
+            val times = Arb.int(range = 5..10).next()
 
-        val animeCollection = buildList {
-            repeat(times) {
-                add(
-                    MediaListGroup(
-                        name = Arb.string().next(),
-                        entries = buildList {
-                            repeat(times) {
-                                add(
-                                    MediaListEntry(
-                                        list = Arb.bind<MediaList>(
-                                            mapOf(
-                                                LocalDate::class to Arb.localDate(),
-                                                LocalDateTime::class to Arb.localDateTime(),
-                                            ),
-                                        ).next(),
-                                        entry = Arb.bind<MediaEntry.Anime>().next(),
-                                    ),
-                                )
-                            }
-                        },
-                    ),
-                )
+            val animeCollection = buildList {
+                repeat(times) {
+                    add(
+                        MediaListGroup(
+                            name = Arb.string().next(),
+                            entries = buildList {
+                                repeat(times) {
+                                    add(
+                                        MediaListEntry(
+                                            list = Arb.bind<MediaList>(
+                                                mapOf(
+                                                    LocalDate::class to Arb.localDate(),
+                                                    LocalDateTime::class to Arb.localDateTime(),
+                                                ),
+                                            ).next(),
+                                            entry = Arb.bind<MediaEntry.Anime>().next(),
+                                        ),
+                                    )
+                                }
+                            },
+                        ),
+                    )
+                }
             }
-        }
 
-        "have the same size after mapping" {
-            animeCollection.toMediaItems().run {
-                first().shouldBeTypeOf<MediaListItem.AnimeListItem>()
-                shouldHaveSize(times * times)
+            "have the same size after mapping" {
+                animeCollection.toMediaItems().run {
+                    first().shouldBeTypeOf<MediaListItem.AnimeListItem>()
+                    shouldHaveSize(times * times)
+                }
             }
         }
     }
-},)
+}

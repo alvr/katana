@@ -1,43 +1,55 @@
 package dev.alvr.katana.domain.session.usecases
 
-import app.cash.turbine.testIn
+import app.cash.turbine.test
 import dev.alvr.katana.domain.base.usecases.invoke
-import dev.alvr.katana.domain.session.repositories.SessionPreferencesRepository
+import dev.alvr.katana.domain.session.repositories.SessionRepository
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
-import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.flowOf
 
-internal class ObserveActiveSessionUseCaseTest : FunSpec({
-    val repo = mockk<SessionPreferencesRepository>()
-    val useCase = spyk(ObserveActiveSessionUseCase(repo))
+internal class ObserveActiveSessionUseCaseTest : FunSpec() {
+    private val repo = mockk<SessionRepository>()
+    private val useCase = spyk(ObserveActiveSessionUseCase(repo))
 
-    context("active session observer") {
-        coEvery { repo.isSessionActive() } returns flowOf(false, true, false, true, true, false)
-        useCase()
+    init {
+        context("active session observer") {
+            test("invoke should observe if the session is active") {
+                every { repo.sessionActive } returns flowOf(false, true, false, true, true, false)
 
-        test("invoke should observe if the session is active") {
-            useCase.flow.testIn(this).run {
-                awaitItem().shouldBeFalse()
-                awaitItem().shouldBeTrue()
-                awaitItem().shouldBeFalse()
-                awaitItem().shouldBeTrue()
-                awaitItem().shouldBeFalse()
-                cancelAndConsumeRemainingEvents()
+                useCase()
+
+                useCase.flow.test(5.seconds) {
+                    awaitItem().shouldBeFalse()
+                    awaitItem().shouldBeTrue()
+                    awaitItem().shouldBeFalse()
+                    awaitItem().shouldBeTrue()
+                    awaitItem().shouldBeFalse()
+                    cancelAndConsumeRemainingEvents()
+                }
+
+                coVerify(exactly = 1) { useCase.invoke(Unit) }
+                coVerify(exactly = 1) { repo.sessionActive }
             }
-            coVerify(exactly = 1) { repo.isSessionActive() }
+
+            test("invoke the use case should call the invoke operator") {
+                every { repo.sessionActive } returns flowOf(mockk())
+
+                useCase(Unit)
+
+                useCase.flow.test(5.seconds) {
+                    awaitItem()
+                    cancelAndConsumeRemainingEvents()
+                }
+
+                coVerify(exactly = 1) { useCase.invoke(Unit) }
+                coVerify(exactly = 1) { repo.sessionActive }
+            }
         }
     }
-
-    test("invoke the use case should call the invoke operator") {
-        coEvery { repo.isSessionActive() } returns mockk()
-
-        useCase(Unit)
-
-        coVerify(exactly = 1) { useCase.invoke(Unit) }
-    }
-},)
+}

@@ -99,12 +99,21 @@ jobs:
         uses: ./.github/actions/common-steps
       - name: Run unit tests
         run: ./gradlew unitTests koverXmlReport koverMergedReport koverMergedVerify --no-daemon --scan
-      - name: Upload tests reports artifact
+      - name: Upload tests reports artifact (success)
         uses: actions/upload-artifact@v3
-        if: always()
+        if: success()
         with:
           name: tests-reports
           path: build/reports/allTests
+          retention-days: 7
+      - name: Upload tests reports artifact (failure)
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: tests-reports
+          path: |
+            **/build/reports/tests/test
+            **/build/reports/tests/testDebugUnitTest
           retention-days: 7
       - name: Upload coverage reports artifact
         uses: actions/upload-artifact@v3

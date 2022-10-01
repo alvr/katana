@@ -10,23 +10,25 @@ import io.kotest.property.Arb
 import io.kotest.property.arbitrary.next
 import io.kotest.property.arbitrary.string
 
-internal class AnilistTokenTest : WordSpec({
-    "if the token is empty" should {
-        "throw an exception" {
-            shouldThrowExactly<IllegalArgumentException> {
-                AnilistToken(String.empty)
-            } shouldHaveMessage "Token should not be empty."
+internal class AnilistTokenTest : WordSpec() {
+    init {
+        "if the token is empty" should {
+            "throw an exception" {
+                shouldThrowExactly<IllegalArgumentException> {
+                    AnilistToken(String.empty)
+                } shouldHaveMessage "Token should not be empty."
+            }
         }
-    }
 
-    "if the token is not empty" should {
-        val token = Arb.string(minSize = 1).next()
+        "if the token is not empty" should {
+            val token = Arb.string(minSize = 1).next()
 
-        "not throw an exception" {
-            shouldNotThrowExactlyUnit<IllegalStateException> {
-                val anilistToken = AnilistToken(token)
-                anilistToken.token shouldBe token
+            "not throw an exception" {
+                shouldNotThrowExactlyUnit<IllegalStateException> {
+                    val anilistToken = AnilistToken(token)
+                    anilistToken.token shouldBe token
+                }
             }
         }
     }
-},)
+}
