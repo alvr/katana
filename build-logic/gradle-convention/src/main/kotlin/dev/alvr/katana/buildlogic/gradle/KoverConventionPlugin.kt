@@ -94,22 +94,6 @@ internal class KoverConventionPlugin : ConventionPlugin {
             excludes.addAll(koverExcludes)
             includes.addAll(koverIncludes)
         }
-        projects {
-            excludes.addAll(
-                listOf(
-                    ":",
-                    ":common",
-                    ":common:core",
-                    ":common:tests",
-                    ":common:tests-android",
-                    ":data",
-                    ":data:preferences",
-                    ":data:remote",
-                    ":domain",
-                    ":ui",
-                ),
-            )
-        }
     }
 
     private fun KoverVerifyConfig.rules() {
