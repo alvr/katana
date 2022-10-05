@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tab_anime" translatable="false">Anime</string>
-    <string name="tab_manga" translatable="false">Manga</string>
+    <string name="anime_toolbar_title" translatable="false">Anime</string>
+    <string name="manga_toolbar_title" translatable="false">Manga</string>
 
     <string name="progress" translatable="false">%d/%s</string>
 

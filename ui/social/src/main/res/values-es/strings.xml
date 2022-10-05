@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tab_following">Siguiendo</string>
-    <string name="tab_global">Global</string>
+    <string name="social_toolbar_title">Social</string>
 </resources>

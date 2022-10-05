@@ -67,7 +67,7 @@ private val LocalMediaListItem =
     compositionLocalOf<MediaListItem> { error("No MediaListItem found!") }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
+@ExperimentalFoundationApi
 internal fun MediaList(
     listState: ListState<out MediaListItem>,
     @StringRes emptyStateRes: Int,
@@ -75,6 +75,7 @@ internal fun MediaList(
     addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
     mediaDetails: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     MediaList(
         items = listState.items,
@@ -85,6 +86,7 @@ internal fun MediaList(
         addPlusOne = addPlusOne,
         editEntry = editEntry,
         mediaDetails = mediaDetails,
+        modifier = modifier,
     )
 }
 
@@ -147,7 +149,9 @@ private fun MediaList(
         ) { item ->
             CompositionLocalProvider(LocalMediaListItem provides item) {
                 MediaListItem(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItemPlacement(),
                     addPlusOne = addPlusOne,
                     editEntry = editEntry,
                     mediaDetails = mediaDetails,
