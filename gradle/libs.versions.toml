@@ -71,7 +71,7 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 # DataStore
-datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
+datastore = { module = "androidx.datastore:datastore", version = "1.1.0-dev01" }
 
 # Design
 design-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1"}
