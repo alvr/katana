@@ -1,5 +1,6 @@
 package dev.alvr.katana.ui.lists.view
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
@@ -14,7 +15,11 @@ import dev.alvr.katana.ui.lists.viewmodel.MangaListViewModel
 
 @Composable
 @Destination
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(
+    ExperimentalMaterialApi::class,
+    ExperimentalAnimationApi::class,
+    ExperimentalFoundationApi::class,
+)
 internal fun MangaScreen(
     navigator: ListsNavigator,
     resultRecipient: ResultRecipient<ListSelectorDestination, String>,

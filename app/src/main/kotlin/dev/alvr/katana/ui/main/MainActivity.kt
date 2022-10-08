@@ -17,7 +17,7 @@ internal class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this)
-            val useNavRail = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Compact
+            val useNavRail = windowSizeClass.widthSizeClass > WindowWidthSizeClass.Medium
 
             Katana {
                 KatanaDestinations(useNavRail = useNavRail)

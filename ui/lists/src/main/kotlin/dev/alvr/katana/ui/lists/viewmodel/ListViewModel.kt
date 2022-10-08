@@ -1,6 +1,7 @@
 package dev.alvr.katana.ui.lists.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
+import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.orEmpty
 import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
@@ -9,6 +10,8 @@ import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.entities.mappers.toMediaList
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -26,6 +29,8 @@ internal abstract class ListViewModel<E : MediaEntry, I : MediaListItem>(
     override val container = container<ListState<I>, Nothing>(ListState()) {
         observeLists()
     }
+
+    private var currentList: ImmutableList<I> = persistentListOf()
 
     val listNames get() = savedStateHandle.get<Array<String>>(LIST_NAMES) ?: emptyArray()
 
@@ -45,12 +50,28 @@ internal abstract class ListViewModel<E : MediaEntry, I : MediaListItem>(
 
     fun selectList(name: String) {
         val list = getListByName(name) ?: return
+        currentList = list
 
         updateState {
             copy(
+                search = String.empty,
                 items = list,
                 name = name,
                 isEmpty = list.isEmpty(),
+            )
+        }
+    }
+
+    fun search(search: String) {
+        updateState {
+            val filtered = currentList.filter { item ->
+                item.title.contains(search, ignoreCase = true)
+            }.toImmutableList()
+
+            copy(
+                search = search,
+                items = filtered,
+                isEmpty = filtered.isEmpty(),
             )
         }
     }
@@ -72,6 +93,7 @@ internal abstract class ListViewModel<E : MediaEntry, I : MediaListItem>(
                 reduce {
                     val selectedListName = state.name ?: items.keys.firstOrNull()
                     val selectedList = getListByName(selectedListName).orEmpty()
+                    currentList = selectedList
 
                     state.copy(
                         items = selectedList,

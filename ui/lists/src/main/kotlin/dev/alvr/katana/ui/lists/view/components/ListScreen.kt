@@ -1,6 +1,7 @@
 package dev.alvr.katana.ui.lists.view.components
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
@@ -18,6 +19,7 @@ import dev.alvr.katana.ui.lists.viewmodel.ListViewModel
 
 @Composable
 @ExperimentalMaterialApi
+@ExperimentalAnimationApi
 @ExperimentalFoundationApi
 internal inline fun <reified VM : ListViewModel<*, *>> ListScreen(
     navigator: ListsNavigator,
@@ -41,6 +43,8 @@ internal inline fun <reified VM : ListViewModel<*, *>> ListScreen(
     KatanaHomeScaffold(
         title = title,
         subtitle = state.name,
+        search = state.search,
+        onSearch = vm::search,
         backContent = backContent,
         fab = {
             ListSelectorButton {
