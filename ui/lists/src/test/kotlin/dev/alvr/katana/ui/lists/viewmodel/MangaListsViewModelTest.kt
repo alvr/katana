@@ -216,7 +216,6 @@ internal class MangaListViewModelTest : BehaviorSpec() {
                                     isLoading = false,
                                     isEmpty = true,
                                     items = persistentListOf(),
-                                    search = "non-existent entry",
                                 )
                             },
                         )
@@ -237,7 +236,6 @@ internal class MangaListViewModelTest : BehaviorSpec() {
                                     isLoading = false,
                                     isEmpty = false,
                                     items = persistentListOf(mangaListItem1),
-                                    search = "OnE PiEcE",
                                 )
                             },
                         )

@@ -20,9 +20,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberBackdropScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.RectangleShape
@@ -38,9 +40,9 @@ import kotlinx.coroutines.launch
 fun KatanaHomeScaffold(
     @StringRes title: Int,
     searchPlaceholder: String,
-    search: String,
     onSearch: (String) -> Unit,
     backContent: @Composable () -> Unit,
+    katanaScaffoldState: KatanaHomeScaffoldState = rememberKatanaHomeScaffoldState(),
     subtitle: String? = null,
     fab: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
@@ -53,11 +55,11 @@ fun KatanaHomeScaffold(
         gesturesEnabled = false,
         appBar = {
             TopAppBar(
+                katanaScaffoldState = katanaScaffoldState,
                 scaffoldState = scaffoldState,
                 coroutineScope = coroutineScope,
                 title = title,
                 subtitle = subtitle,
-                search = search,
                 onSearch = onSearch,
                 searchPlaceholder = searchPlaceholder,
             )
@@ -77,19 +79,17 @@ fun KatanaHomeScaffold(
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 private fun TopAppBar(
+    katanaScaffoldState: KatanaHomeScaffoldState,
     scaffoldState: BackdropScaffoldState,
     coroutineScope: CoroutineScope,
     @StringRes title: Int,
     searchPlaceholder: String,
-    search: String,
     subtitle: String? = null,
     onSearch: (String) -> Unit,
 ) {
-    var topAppBarStyle by rememberSaveable { mutableStateOf(TopAppBarStyle.Normal) }
-
     Surface {
         AnimatedContent(
-            targetState = topAppBarStyle,
+            targetState = katanaScaffoldState.topAppBarStyle,
             transitionSpec = {
                 fadeIn(tween(ANIMATION_MILLIS, easing = EaseIn)) with
                     fadeOut(tween(ANIMATION_MILLIS, easing = EaseOut)) using
@@ -105,15 +105,14 @@ private fun TopAppBar(
                 TopAppBarStyle.Normal -> KatanaHomeTopAppBar(
                     title = stringResource(title),
                     subtitle = subtitle,
-                    onSearch = { topAppBarStyle = TopAppBarStyle.Search },
+                    onSearch = { katanaScaffoldState.searchToolbar() },
                     onFilter = { scaffoldState.toggleBackdrop(coroutineScope) },
                 )
                 TopAppBarStyle.Search -> KatanaSearchTopAppBar(
-                    search = search,
                     onValueChange = onSearch,
                     searchPlaceholder = searchPlaceholder,
                     onBack = {
-                        topAppBarStyle = TopAppBarStyle.Normal
+                        katanaScaffoldState.resetToolbar()
                         onSearch(String.empty)
                     },
                     onClear = { onSearch(String.empty) },
@@ -136,7 +135,37 @@ private fun BackdropScaffoldState.toggleBackdrop(scope: CoroutineScope) {
     }
 }
 
-private enum class TopAppBarStyle {
+@Stable
+class KatanaHomeScaffoldState {
+    internal var topAppBarStyle by mutableStateOf(TopAppBarStyle.Normal)
+        private set
+
+    internal fun searchToolbar() {
+        topAppBarStyle = TopAppBarStyle.Search
+    }
+
+    fun resetToolbar() {
+        topAppBarStyle = TopAppBarStyle.Normal
+    }
+
+    companion object {
+        internal val saver: Saver<KatanaHomeScaffoldState, *> = Saver(
+            save = { it.topAppBarStyle },
+            restore = {
+                KatanaHomeScaffoldState().apply {
+                    topAppBarStyle = it
+                }
+            },
+        )
+    }
+}
+
+@Composable
+fun rememberKatanaHomeScaffoldState() = rememberSaveable(
+    saver = KatanaHomeScaffoldState.saver,
+) { KatanaHomeScaffoldState() }
+
+internal enum class TopAppBarStyle {
     Normal,
     Search
 }

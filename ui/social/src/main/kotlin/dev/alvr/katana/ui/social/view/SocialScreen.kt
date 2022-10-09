@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ramcosta.composedestinations.annotation.Destination
-import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
 import dev.alvr.katana.ui.social.R
 
@@ -19,7 +18,6 @@ internal fun SocialScreen() {
     KatanaHomeScaffold(
         title = R.string.social_toolbar_title,
         searchPlaceholder = stringResource(R.string.social_toolbar_search_placeholder),
-        search = String.empty,
         onSearch = {},
         backContent = { Filter() },
     ) { paddingValues ->

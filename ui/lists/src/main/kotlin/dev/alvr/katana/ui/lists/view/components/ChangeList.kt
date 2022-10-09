@@ -21,7 +21,7 @@ import dev.alvr.katana.ui.lists.R
 
 @Composable
 @Destination(style = DestinationStyle.BottomSheet::class)
-internal fun ListSelector(
+internal fun ChangeListSheet(
     lists: Array<String>,
     resultNavigator: ResultBackNavigator<String>,
 ) {
@@ -40,13 +40,13 @@ internal fun ListSelector(
 }
 
 @Composable
-internal fun ListSelectorButton(
+internal fun ChangeListButton(
     onClick: () -> Unit,
 ) {
     FloatingActionButton(onClick = onClick) {
         Icon(
             imageVector = Icons.TwoTone.List,
-            contentDescription = stringResource(R.string.list_selector),
+            contentDescription = stringResource(R.string.lists_change_list_button),
         )
     }
 }

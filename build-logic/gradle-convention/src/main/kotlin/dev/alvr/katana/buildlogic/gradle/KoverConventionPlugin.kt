@@ -19,9 +19,6 @@ import org.gradle.kotlin.dsl.withType
 internal class KoverConventionPlugin : ConventionPlugin {
     private val koverIncludes = listOf("dev.alvr.katana.*")
     private val koverExcludes = listOf(
-        // Anonymous
-        "*$$*",
-
         // App
         "*.KatanaApp",
         "*.initializers.*",
@@ -52,6 +49,9 @@ internal class KoverConventionPlugin : ConventionPlugin {
         "*.*Hilt_*",
         "*.*HiltModules*",
         "*.*_Factory",
+
+        // Serializers
+        "*$\$serializer",
 
         // Ui
         "*.ui.*.components.*",

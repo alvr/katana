@@ -1,7 +1,6 @@
 package dev.alvr.katana.ui.lists.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
-import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.orEmpty
 import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
@@ -54,7 +53,6 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
 
         updateState {
             copy(
-                search = String.empty,
                 items = list,
                 name = name,
                 isEmpty = list.isEmpty(),
@@ -69,7 +67,6 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
             }.toImmutableList()
 
             copy(
-                search = search,
                 items = filtered,
                 isEmpty = filtered.isEmpty(),
             )

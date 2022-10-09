@@ -6,7 +6,7 @@ import com.ramcosta.composedestinations.navigation.popUpTo
 import dev.alvr.katana.ui.lists.navigation.AnimeNavGraph
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.navigation.MangaNavGraph
-import dev.alvr.katana.ui.lists.view.destinations.ListSelectorDestination
+import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
 import io.github.aakira.napier.Napier
@@ -46,7 +46,7 @@ internal class Navigator(
             ListsNavigator.From.ANIME -> AnimeNavGraph
             ListsNavigator.From.MANGA -> MangaNavGraph
         }
-        navigator.navigate(ListSelectorDestination(lists) within graph)
+        navigator.navigate(ChangeListSheetDestination(lists) within graph)
     }
     //endregion [ListsNavigator]
 }

@@ -17,8 +17,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -76,8 +78,10 @@ internal fun MediaList(
     editEntry: (Int) -> Unit,
     mediaDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    lazyGridState: LazyGridState = rememberLazyGridState(),
 ) {
     MediaList(
+        lazyGridState = lazyGridState,
         items = listState.items,
         isEmpty = listState.isEmpty,
         isLoading = listState.isLoading,
@@ -93,6 +97,7 @@ internal fun MediaList(
 @Composable
 @ExperimentalFoundationApi
 private fun MediaList(
+    lazyGridState: LazyGridState,
     items: ImmutableList<MediaListItem>,
     isEmpty: Boolean,
     isLoading: Boolean,
@@ -117,6 +122,7 @@ private fun MediaList(
             )
         } else {
             MediaList(
+                lazyGridState = lazyGridState,
                 items = items,
                 modifier = Modifier.fillMaxSize(),
                 addPlusOne = addPlusOne,
@@ -130,6 +136,7 @@ private fun MediaList(
 @Composable
 @ExperimentalFoundationApi
 private fun MediaList(
+    lazyGridState: LazyGridState,
     items: ImmutableList<MediaListItem>,
     addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
@@ -137,6 +144,7 @@ private fun MediaList(
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
+        state = lazyGridState,
         modifier = modifier,
         columns = GridCells.Adaptive(CARD_WIDTH),
         contentPadding = PaddingValues(8.dp),
@@ -208,37 +216,45 @@ private fun CardContent(
         )
 
         Score(
-            modifier = modifier.constrainAs(score) {
-                start.linkTo(anchor = parent.start)
-                bottom.linkTo(anchor = parent.bottom)
-            }.testTag(ITEM_SCORE_TAG),
+            modifier = modifier
+                .constrainAs(score) {
+                    start.linkTo(anchor = parent.start)
+                    bottom.linkTo(anchor = parent.bottom)
+                }
+                .testTag(ITEM_SCORE_TAG),
         )
 
         Title(
-            modifier = modifier.constrainAs(title) {
-                width = Dimension.fillToConstraints
-                top.linkTo(anchor = parent.top, margin = CONSTRAINT_VERTICAL_MARGIN)
-                start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-                end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-            }.testTag(ITEM_TITLE_TAG),
+            modifier = modifier
+                .constrainAs(title) {
+                    width = Dimension.fillToConstraints
+                    top.linkTo(anchor = parent.top, margin = CONSTRAINT_VERTICAL_MARGIN)
+                    start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                    end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                }
+                .testTag(ITEM_TITLE_TAG),
         )
 
         Subtitle(
-            modifier = modifier.constrainAs(subtitle) {
-                width = Dimension.fillToConstraints
-                top.linkTo(anchor = title.bottom, margin = CONSTRAINT_VERTICAL_MARGIN)
-                start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-                end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-            }.testTag(ITEM_SUBTITLE_TAG),
+            modifier = modifier
+                .constrainAs(subtitle) {
+                    width = Dimension.fillToConstraints
+                    top.linkTo(anchor = title.bottom, margin = CONSTRAINT_VERTICAL_MARGIN)
+                    start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                    end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                }
+                .testTag(ITEM_SUBTITLE_TAG),
         )
 
         PlusOne(
             addPlusOne = addPlusOne,
-            modifier = modifier.constrainAs(plusOne) {
-                width = Dimension.wrapContent
-                end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-                bottom.linkTo(anchor = progress.top)
-            }.testTag(ITEM_PLUSONE_TAG),
+            modifier = modifier
+                .constrainAs(plusOne) {
+                    width = Dimension.wrapContent
+                    end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                    bottom.linkTo(anchor = progress.top)
+                }
+                .testTag(ITEM_PLUSONE_TAG),
         )
 
         Progress(

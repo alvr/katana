@@ -15,7 +15,11 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -24,21 +28,28 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.ui.base.R
 
 @Composable
 fun KatanaSearchTopAppBar(
-    search: String,
     searchPlaceholder: String,
     onValueChange: (String) -> Unit,
     onBack: () -> Unit,
     onClear: () -> Unit,
 ) {
-    val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
+    var focusRequested by rememberSaveable { mutableStateOf(false) }
+    var search by rememberSaveable { mutableStateOf(String.empty) }
 
-    LaunchedEffect(focusManager) {
-        focusRequester.requestFocus()
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+
+    // Request focus only the first time
+    if (!focusRequested) {
+        LaunchedEffect(Unit) {
+            focusRequested = true
+            focusRequester.requestFocus()
+        }
     }
 
     TextField(
@@ -46,7 +57,10 @@ fun KatanaSearchTopAppBar(
             .fillMaxWidth()
             .focusRequester(focusRequester),
         value = search,
-        onValueChange = onValueChange,
+        onValueChange = {
+            search = it
+            onValueChange(it)
+        },
         placeholder = { Text(text = searchPlaceholder) },
         leadingIcon = {
             IconButton(onClick = onBack) {

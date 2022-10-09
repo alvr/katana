@@ -10,7 +10,7 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.components.ListScreen
-import dev.alvr.katana.ui.lists.view.destinations.ListSelectorDestination
+import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.ui.lists.viewmodel.MangaListsViewModel
 
 @Composable
@@ -22,7 +22,7 @@ import dev.alvr.katana.ui.lists.viewmodel.MangaListsViewModel
 )
 internal fun MangaScreen(
     navigator: ListsNavigator,
-    resultRecipient: ResultRecipient<ListSelectorDestination, String>,
+    resultRecipient: ResultRecipient<ChangeListSheetDestination, String>,
 ) {
     ListScreen<MangaListsViewModel>(
         navigator = navigator,
