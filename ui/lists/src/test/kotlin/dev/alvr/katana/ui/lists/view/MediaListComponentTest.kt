@@ -1,5 +1,6 @@
 package dev.alvr.katana.ui.lists.view
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHeightIsEqualTo
@@ -32,7 +33,7 @@ import dev.alvr.katana.ui.lists.view.components.ITEM_SCORE_TAG
 import dev.alvr.katana.ui.lists.view.components.ITEM_SUBTITLE_TAG
 import dev.alvr.katana.ui.lists.view.components.ITEM_TITLE_TAG
 import dev.alvr.katana.ui.lists.view.components.MediaList
-import dev.alvr.katana.ui.lists.viewmodel.ListsState
+import dev.alvr.katana.ui.lists.viewmodel.ListState
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.bind
 import io.kotest.property.arbitrary.boolean
@@ -53,6 +54,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
+@ExperimentalFoundationApi
 internal class MediaListComponentTest : ComposeTest() {
     private val mockedAnimeList = persistentListOf(
         MediaListItem.AnimeListItem(
@@ -118,7 +120,7 @@ internal class MediaListComponentTest : ComposeTest() {
     fun `when the list is empty, the emptyStateRes should be displayed`() {
         composeTestRule.setContent {
             MediaList(
-                listState = ListsState.ListState(
+                listState = ListState(
                     items = persistentListOf(),
                     isEmpty = true,
                 ),
@@ -142,7 +144,7 @@ internal class MediaListComponentTest : ComposeTest() {
 
         composeTestRule.setContent {
             MediaList(
-                listState = ListsState.ListState(
+                listState = ListState(
                     items = persistentListOf(),
                     isEmpty = true,
                 ),
@@ -173,7 +175,7 @@ internal class MediaListComponentTest : ComposeTest() {
 
         composeTestRule.setContent {
             MediaList(
-                listState = ListsState.ListState(
+                listState = ListState(
                     items = list,
                     isEmpty = list.isEmpty(),
                 ),
@@ -203,7 +205,7 @@ internal class MediaListComponentTest : ComposeTest() {
 
         composeTestRule.setContent {
             MediaList(
-                listState = ListsState.ListState(
+                listState = ListState(
                     items = mockedAnimeList,
                     isEmpty = mockedAnimeList.isEmpty(),
                 ),
@@ -234,7 +236,7 @@ internal class MediaListComponentTest : ComposeTest() {
                                 assertTextContains(date.year.toString(), substring = true)
                             }
                         } else {
-                            assert(hasText(context.getString(R.string.next_episode_separator)).not())
+                            assert(hasText(context.getString(R.string.lists_entry_next_episode_separator)).not())
                         }
                     }
 
@@ -263,7 +265,7 @@ internal class MediaListComponentTest : ComposeTest() {
                             onChild().run {
                                 val total = item.total ?: String.unknown
                                 assertTextContains(
-                                    context.getString(R.string.progress, item.progress, total),
+                                    context.getString(R.string.lists_entry_progress, item.progress, total),
                                     substring = true,
                                 )
                             }
@@ -284,7 +286,7 @@ internal class MediaListComponentTest : ComposeTest() {
 
         composeTestRule.setContent {
             MediaList(
-                listState = ListsState.ListState(
+                listState = ListState(
                     items = list,
                     isEmpty = list.isEmpty(),
                 ),
