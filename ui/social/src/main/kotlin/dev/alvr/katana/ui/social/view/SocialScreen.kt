@@ -18,9 +18,10 @@ import dev.alvr.katana.ui.social.R
 internal fun SocialScreen() {
     KatanaHomeScaffold(
         title = R.string.social_toolbar_title,
-        backContent = { Filter() },
+        searchPlaceholder = stringResource(R.string.social_toolbar_search_placeholder),
         search = String.empty,
         onSearch = {},
+        backContent = { Filter() },
     ) { paddingValues ->
         Text(
             modifier = Modifier.padding(paddingValues),

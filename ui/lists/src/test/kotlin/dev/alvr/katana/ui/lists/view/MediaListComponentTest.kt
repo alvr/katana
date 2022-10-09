@@ -124,7 +124,7 @@ internal class MediaListComponentTest : ComposeTest() {
                     items = persistentListOf(),
                     isEmpty = true,
                 ),
-                emptyStateRes = R.string.empty_anime_list,
+                emptyStateRes = R.string.lists_empty_anime_list,
                 onRefresh = { mockk() },
                 addPlusOne = { mockk() },
                 editEntry = { mockk() },
@@ -133,7 +133,7 @@ internal class MediaListComponentTest : ComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = context.getString(R.string.empty_anime_list))
+            .onNodeWithText(text = context.getString(R.string.lists_empty_anime_list))
             .assertIsDisplayed()
     }
 
@@ -148,7 +148,7 @@ internal class MediaListComponentTest : ComposeTest() {
                     items = persistentListOf(),
                     isEmpty = true,
                 ),
-                emptyStateRes = R.string.empty_anime_list,
+                emptyStateRes = R.string.lists_empty_anime_list,
                 onRefresh = refresh,
                 addPlusOne = { mockk() },
                 editEntry = { mockk() },
@@ -179,7 +179,7 @@ internal class MediaListComponentTest : ComposeTest() {
                     items = list,
                     isEmpty = list.isEmpty(),
                 ),
-                emptyStateRes = R.string.empty_anime_list,
+                emptyStateRes = R.string.lists_empty_anime_list,
                 onRefresh = { mockk() },
                 addPlusOne = { mockk() },
                 editEntry = { mockk() },
@@ -209,7 +209,7 @@ internal class MediaListComponentTest : ComposeTest() {
                     items = mockedAnimeList,
                     isEmpty = mockedAnimeList.isEmpty(),
                 ),
-                emptyStateRes = R.string.empty_anime_list,
+                emptyStateRes = R.string.lists_empty_anime_list,
                 onRefresh = { mockk() },
                 addPlusOne = addPlusOne,
                 editEntry = editEntry,
@@ -290,7 +290,7 @@ internal class MediaListComponentTest : ComposeTest() {
                     items = list,
                     isEmpty = list.isEmpty(),
                 ),
-                emptyStateRes = R.string.empty_anime_list,
+                emptyStateRes = R.string.lists_empty_anime_list,
                 onRefresh = { mockk() },
                 addPlusOne = addPlusOne,
                 editEntry = editEntry,

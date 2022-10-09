@@ -28,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import dev.alvr.katana.common.core.empty
-import dev.alvr.katana.ui.base.R
 import dev.alvr.katana.ui.base.components.KatanaSearchTopAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,10 +37,11 @@ import kotlinx.coroutines.launch
 @ExperimentalAnimationApi
 fun KatanaHomeScaffold(
     @StringRes title: Int,
-    subtitle: String? = null,
+    searchPlaceholder: String,
     search: String,
     onSearch: (String) -> Unit,
     backContent: @Composable () -> Unit,
+    subtitle: String? = null,
     fab: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ) {
@@ -59,6 +59,7 @@ fun KatanaHomeScaffold(
                 subtitle = subtitle,
                 search = search,
                 onSearch = onSearch,
+                searchPlaceholder = searchPlaceholder,
             )
         },
         backLayerContent = backContent,
@@ -79,8 +80,9 @@ private fun TopAppBar(
     scaffoldState: BackdropScaffoldState,
     coroutineScope: CoroutineScope,
     @StringRes title: Int,
-    subtitle: String? = null,
+    searchPlaceholder: String,
     search: String,
+    subtitle: String? = null,
     onSearch: (String) -> Unit,
 ) {
     var topAppBarStyle by rememberSaveable { mutableStateOf(TopAppBarStyle.Normal) }
@@ -109,7 +111,7 @@ private fun TopAppBar(
                 TopAppBarStyle.Search -> KatanaSearchTopAppBar(
                     search = search,
                     onValueChange = onSearch,
-                    placeholder = R.string.toolbar_search_clear,
+                    searchPlaceholder = searchPlaceholder,
                     onBack = {
                         topAppBarStyle = TopAppBarStyle.Normal
                         onSearch(String.empty)

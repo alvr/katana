@@ -11,7 +11,7 @@ import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.components.ListScreen
 import dev.alvr.katana.ui.lists.view.destinations.ListSelectorDestination
-import dev.alvr.katana.ui.lists.viewmodel.AnimeListViewModel
+import dev.alvr.katana.ui.lists.viewmodel.AnimeListsViewModel
 
 @Composable
 @Destination
@@ -24,12 +24,12 @@ internal fun AnimeScreen(
     navigator: ListsNavigator,
     resultRecipient: ResultRecipient<ListSelectorDestination, String>,
 ) {
-    ListScreen<AnimeListViewModel>(
+    ListScreen<AnimeListsViewModel>(
         navigator = navigator,
         fromNavigator = ListsNavigator.From.ANIME,
         resultRecipient = resultRecipient,
-        title = R.string.anime_toolbar_title,
-        emptyStateRes = R.string.empty_anime_list,
+        title = R.string.lists_anime_toolbar_title,
+        emptyStateRes = R.string.lists_empty_anime_list,
         backContent = { Filter() },
     )
 }

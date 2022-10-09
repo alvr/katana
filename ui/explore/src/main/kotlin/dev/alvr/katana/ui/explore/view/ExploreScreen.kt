@@ -18,6 +18,7 @@ import dev.alvr.katana.ui.explore.R
 internal fun ExploreScreen() {
     KatanaHomeScaffold(
         title = R.string.explore_toolbar_title,
+        searchPlaceholder = stringResource(R.string.explore_toolbar_search_placeholder),
         search = String.empty,
         onSearch = {},
         backContent = { Filter() },

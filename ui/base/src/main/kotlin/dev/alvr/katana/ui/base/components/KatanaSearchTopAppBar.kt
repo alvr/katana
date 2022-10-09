@@ -1,6 +1,5 @@
 package dev.alvr.katana.ui.base.components
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,7 +29,7 @@ import dev.alvr.katana.ui.base.R
 @Composable
 fun KatanaSearchTopAppBar(
     search: String,
-    @StringRes placeholder: Int,
+    searchPlaceholder: String,
     onValueChange: (String) -> Unit,
     onBack: () -> Unit,
     onClear: () -> Unit,
@@ -48,7 +47,7 @@ fun KatanaSearchTopAppBar(
             .focusRequester(focusRequester),
         value = search,
         onValueChange = onValueChange,
-        placeholder = { Text(text = stringResource(placeholder)) },
+        placeholder = { Text(text = searchPlaceholder) },
         leadingIcon = {
             IconButton(onClick = onBack) {
                 Icon(

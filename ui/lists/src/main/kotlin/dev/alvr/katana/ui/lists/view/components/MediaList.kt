@@ -292,10 +292,10 @@ private fun Subtitle(
         append(stringResource(item.format.value))
 
         if (item is MediaListItem.AnimeListItem && item.nextEpisode != null) {
-            append(" ${stringResource(R.string.next_episode_separator)} ")
+            append(" ${stringResource(R.string.lists_entry_next_episode_separator)} ")
             append(
                 stringResource(
-                    R.string.next_episode,
+                    R.string.lists_entry_next_episode,
                     item.nextEpisode.number,
                     item.nextEpisode.date.format(episodeFormatter()).toString(),
                 ),
@@ -343,7 +343,7 @@ private fun PlusOne(
     // Episodes - Chapters (Anime & Manga)
     if (item.progress != item.total) {
         PlusOneButton(
-            progress = stringResource(R.string.progress, item.progress, item.total ?: String.unknown),
+            progress = stringResource(R.string.lists_entry_progress, item.progress, item.total ?: String.unknown),
             addPlusOne = addPlusOne,
             modifier = modifier,
         )
@@ -366,7 +366,7 @@ private fun PlusOneButton(
             contentColor = MaterialTheme.colors.onPrimary,
         ),
     ) {
-        Text(text = stringResource(R.string.plus_one, progress))
+        Text(text = stringResource(R.string.lists_entry_plus_one, progress))
     }
 }
 
@@ -401,7 +401,7 @@ private val episodeFormatter = @Composable {
 
     DateTimeFormatterBuilder()
         .append(datePattern)
-        .appendLiteral(" ${stringResource(R.string.next_episode_date_time_separator)} ")
+        .appendLiteral(" ${stringResource(R.string.lists_entry_next_episode_date_time_separator)} ")
         .append(timePattern)
         .toFormatter(locale)
 }

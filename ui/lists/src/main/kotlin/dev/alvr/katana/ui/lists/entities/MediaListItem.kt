@@ -78,16 +78,16 @@ internal sealed interface MediaListItem : Parcelable {
 
     @Immutable
     enum class Format(@StringRes val value: Int) {
-        Tv(R.string.entry_format_tv),
-        TvShort(R.string.entry_format_tv_short),
-        Movie(R.string.entry_format_movie),
-        Special(R.string.entry_format_special),
-        Ova(R.string.entry_format_ova),
-        Ona(R.string.entry_format_ona),
-        Music(R.string.entry_format_music),
-        Manga(R.string.entry_format_manga),
-        Novel(R.string.entry_format_novel),
-        OneShot(R.string.entry_format_one_shot),
-        Unknown(R.string.entry_format_unknown),
+        Tv(R.string.lists_entry_format_tv),
+        TvShort(R.string.lists_entry_format_tv_short),
+        Movie(R.string.lists_entry_format_movie),
+        Special(R.string.lists_entry_format_special),
+        Ova(R.string.lists_entry_format_ova),
+        Ona(R.string.lists_entry_format_ona),
+        Music(R.string.lists_entry_format_music),
+        Manga(R.string.lists_entry_format_manga),
+        Novel(R.string.lists_entry_format_novel),
+        OneShot(R.string.lists_entry_format_one_shot),
+        Unknown(R.string.lists_entry_format_unknown),
     }
 }

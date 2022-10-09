@@ -20,7 +20,7 @@ import org.orbitmvi.orbit.viewmodel.container
 
 internal typealias Collection<T> = Map<String, List<T>>
 
-internal abstract class ListViewModel<E : MediaEntry, I : MediaListItem>(
+internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     private val savedStateHandle: SavedStateHandle,
     private val updateListUseCase: UpdateListUseCase,
 ) : BaseViewModel<ListState<I>, Nothing>() {
