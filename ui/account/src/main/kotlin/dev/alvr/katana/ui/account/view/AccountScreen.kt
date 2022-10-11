@@ -11,7 +11,7 @@ import dev.alvr.katana.ui.account.R
 
 @Composable
 @Destination
-internal fun Account() {
+internal fun AccountScreen() {
     Scaffold { paddingValues ->
         Text(
             text = stringResource(R.string.title),

@@ -1,41 +1,34 @@
 package dev.alvr.katana.ui.explore.view
 
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import com.google.accompanist.pager.ExperimentalPagerApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.ramcosta.composedestinations.annotation.Destination
-import dev.alvr.katana.ui.base.components.home.HomeScaffold
-import dev.alvr.katana.ui.base.components.home.HomeTopAppBar
+import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
 import dev.alvr.katana.ui.explore.R
-import dev.alvr.katana.ui.explore.view.pages.Anime
-import dev.alvr.katana.ui.explore.view.pages.Manga
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 @Destination
-@OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
-internal fun Explore() {
-    HomeScaffold(
-        tabs = ExploreTabs.values,
-        backContent = { _, _ -> Text(text = "TODO") },
-        pageContent = { page ->
-            when (page) {
-                ExploreTabs.Anime -> Anime()
-                ExploreTabs.Manga -> Manga()
-            }
-        },
-    )
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+internal fun ExploreScreen() {
+    KatanaHomeScaffold(
+        title = R.string.explore_toolbar_title,
+        searchPlaceholder = stringResource(R.string.explore_toolbar_search_placeholder),
+        onSearch = {},
+        backContent = { Filter() },
+    ) { paddingValues ->
+        Text(
+            modifier = Modifier.padding(paddingValues),
+            text = stringResource(R.string.explore_toolbar_title),
+        )
+    }
 }
 
-@Immutable
-private enum class ExploreTabs(override val label: Int) : HomeTopAppBar {
-    Anime(R.string.tab_anime),
-    Manga(R.string.tab_manga);
-
-    companion object {
-        @JvmField
-        val values = persistentListOf(Anime, Manga)
-    }
+@Composable
+private fun Filter() {
+    Text(text = "Explore Filter")
 }

@@ -1,41 +1,34 @@
 package dev.alvr.katana.ui.social.view
 
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import com.google.accompanist.pager.ExperimentalPagerApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.ramcosta.composedestinations.annotation.Destination
-import dev.alvr.katana.ui.base.components.home.HomeScaffold
-import dev.alvr.katana.ui.base.components.home.HomeTopAppBar
+import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
 import dev.alvr.katana.ui.social.R
-import dev.alvr.katana.ui.social.view.pages.Following
-import dev.alvr.katana.ui.social.view.pages.Global
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 @Destination
-@OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
-internal fun Social() {
-    HomeScaffold(
-        tabs = SocialTabs.values,
-        backContent = { _, _ -> Text(text = "TODO") },
-        pageContent = { page ->
-            when (page) {
-                SocialTabs.Following -> Following()
-                SocialTabs.Global -> Global()
-            }
-        },
-    )
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+internal fun SocialScreen() {
+    KatanaHomeScaffold(
+        title = R.string.social_toolbar_title,
+        searchPlaceholder = stringResource(R.string.social_toolbar_search_placeholder),
+        onSearch = {},
+        backContent = { Filter() },
+    ) { paddingValues ->
+        Text(
+            modifier = Modifier.padding(paddingValues),
+            text = stringResource(R.string.social_toolbar_title),
+        )
+    }
 }
 
-@Immutable
-private enum class SocialTabs(override val label: Int) : HomeTopAppBar {
-    Following(R.string.tab_following),
-    Global(R.string.tab_global);
-
-    companion object {
-        @JvmField
-        val values = persistentListOf(Following, Global)
-    }
+@Composable
+private fun Filter() {
+    Text(text = "Social Filter")
 }

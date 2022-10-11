@@ -2,6 +2,9 @@
 <resources>
     <string name="component_empty_state">No data has been found for the applied filter.</string>
 
-    <string name="menu_search">Search menu</string>
-    <string name="menu_filter">Filter menu</string>
+    <string name="toolbar_menu_search">Search menu</string>
+    <string name="toolbar_menu_filter">Filter menu</string>
+
+    <string name="toolbar_search_close">Close search</string>
+    <string name="toolbar_search_clear">Clear search input</string>
 </resources>

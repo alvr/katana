@@ -10,8 +10,7 @@ import org.robolectric.annotation.Config
 @Config(application = HiltTestApplication::class)
 abstract class HiltTest : RoboTest() {
     @get:Rule
-    @Suppress("LeakingThis")
-    internal val hiltRule = HiltAndroidRule(this)
+    internal val hiltRule by lazy { HiltAndroidRule(this) }
 
     override fun setUp() {
         super.setUp()

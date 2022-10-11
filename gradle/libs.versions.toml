@@ -32,8 +32,6 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 [libraries]
 # Accompanist
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
-accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
-accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 
 # AndroidX
@@ -213,8 +211,6 @@ data-remote = [
 ]
 
 ui-compose = [
-    "accompanist-pager",
-    "accompanist-pager-indicators",
     "accompanist-swiperefresh",
     "coil",
     "compose-animation",

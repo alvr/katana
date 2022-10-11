@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tab_anime" translatable="false">Anime</string>
-    <string name="tab_manga" translatable="false">Manga</string>
+    <string name="lists_anime_toolbar_title" translatable="false">Anime</string>
+    <string name="lists_manga_toolbar_title" translatable="false">Manga</string>
 
-    <string name="progress" translatable="false">%d/%s</string>
-
-    <string name="next_episode" translatable="false">Ep. %d: %s</string>
-    <string name="next_episode_separator" translatable="false">›</string>
-    <string name="next_episode_date_time_separator" translatable="false">–</string>
-
-    <string name="plus_one" translatable="false">%s +</string>
+    <string name="lists_entry_progress" translatable="false">%d/%s</string>
+    <string name="lists_entry_next_episode" translatable="false">Ep. %d: %s</string>
+    <string name="lists_entry_next_episode_separator" translatable="false">›</string>
+    <string name="lists_entry_next_episode_date_time_separator" translatable="false">–</string>
+    <string name="lists_entry_plus_one" translatable="false">%s +</string>
 </resources>

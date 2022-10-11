@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="entry_format_tv">TV</string>
-    <string name="entry_format_tv_short">TV Short</string>
-    <string name="entry_format_movie">Movie</string>
-    <string name="entry_format_special">Special</string>
-    <string name="entry_format_ova">OVA</string>
-    <string name="entry_format_ona">ONA</string>
-    <string name="entry_format_music">Music</string>
-    <string name="entry_format_manga">Manga</string>
-    <string name="entry_format_novel">Light Novel</string>
-    <string name="entry_format_one_shot">One Shot</string>
-    <string name="entry_format_unknown">Unknown</string>
+    <string name="lists_toolbar_search_anime_placeholder">Search anime…</string>
+    <string name="lists_toolbar_search_manga_placeholder">Search manga…</string>
 
-    <string name="empty_anime_list">This Anime list is empty</string>
-    <string name="empty_manga_list">This Manga list is empty</string>
+    <string name="lists_entry_format_tv">TV</string>
+    <string name="lists_entry_format_tv_short">TV Short</string>
+    <string name="lists_entry_format_movie">Movie</string>
+    <string name="lists_entry_format_special">Special</string>
+    <string name="lists_entry_format_ova">OVA</string>
+    <string name="lists_entry_format_ona">ONA</string>
+    <string name="lists_entry_format_music">Music</string>
+    <string name="lists_entry_format_manga">Manga</string>
+    <string name="lists_entry_format_novel">Light Novel</string>
+    <string name="lists_entry_format_one_shot">One Shot</string>
+    <string name="lists_entry_format_unknown">Unknown</string>
 
-    <string name="list_selector">List selector</string>
+    <string name="lists_empty_anime_list">This Anime list is empty</string>
+    <string name="lists_empty_manga_list">This Manga list is empty</string>
+
+    <string name="lists_change_list_button">Change list</string>
 </resources>

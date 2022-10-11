@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 internal val animeListItem1 = MediaListItem.AnimeListItem(
     entryId = Int.zero,
     mediaId = Int.zero,
-    title = String.empty,
+    title = "One Piece",
     score = Double.zero,
     format = MediaListItem.Format.OneShot,
     cover = String.empty,
@@ -51,7 +51,7 @@ internal val animeListItem2 = MediaListItem.AnimeListItem(
 internal val mangaListItem1 = MediaListItem.MangaListItem(
     entryId = Int.zero,
     mediaId = Int.zero,
-    title = String.empty,
+    title = "One Piece",
     score = Double.zero,
     format = MediaListItem.Format.OneShot,
     cover = String.empty,
@@ -105,7 +105,7 @@ internal val animeMediaEntry1 = MediaListEntry(
     entry = MediaEntry.Anime(
         entry = CommonMediaEntry(
             id = Int.zero,
-            title = String.empty,
+            title = "One Piece",
             coverImage = String.empty,
             format = CommonMediaEntry.Format.ONE_SHOT,
         ),
@@ -157,7 +157,7 @@ internal val mangaMediaEntry1 = MediaListEntry(
     entry = MediaEntry.Manga(
         entry = CommonMediaEntry(
             id = Int.zero,
-            title = String.empty,
+            title = "One Piece",
             coverImage = String.empty,
             format = CommonMediaEntry.Format.ONE_SHOT,
         ),

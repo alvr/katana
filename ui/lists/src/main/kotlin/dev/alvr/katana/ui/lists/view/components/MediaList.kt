@@ -17,8 +17,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -56,7 +58,7 @@ import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.components.EmptyState
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
-import dev.alvr.katana.ui.lists.viewmodel.ListsState
+import dev.alvr.katana.ui.lists.viewmodel.ListState
 import java.text.DecimalFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
@@ -67,16 +69,19 @@ private val LocalMediaListItem =
     compositionLocalOf<MediaListItem> { error("No MediaListItem found!") }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
+@ExperimentalFoundationApi
 internal fun MediaList(
-    listState: ListsState.ListState<out MediaListItem>,
+    listState: ListState<out MediaListItem>,
     @StringRes emptyStateRes: Int,
     onRefresh: () -> Unit,
     addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
     mediaDetails: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    lazyGridState: LazyGridState = rememberLazyGridState(),
 ) {
     MediaList(
+        lazyGridState = lazyGridState,
         items = listState.items,
         isEmpty = listState.isEmpty,
         isLoading = listState.isLoading,
@@ -85,12 +90,14 @@ internal fun MediaList(
         addPlusOne = addPlusOne,
         editEntry = editEntry,
         mediaDetails = mediaDetails,
+        modifier = modifier,
     )
 }
 
 @Composable
 @ExperimentalFoundationApi
 private fun MediaList(
+    lazyGridState: LazyGridState,
     items: ImmutableList<MediaListItem>,
     isEmpty: Boolean,
     isLoading: Boolean,
@@ -115,6 +122,7 @@ private fun MediaList(
             )
         } else {
             MediaList(
+                lazyGridState = lazyGridState,
                 items = items,
                 modifier = Modifier.fillMaxSize(),
                 addPlusOne = addPlusOne,
@@ -128,6 +136,7 @@ private fun MediaList(
 @Composable
 @ExperimentalFoundationApi
 private fun MediaList(
+    lazyGridState: LazyGridState,
     items: ImmutableList<MediaListItem>,
     addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
@@ -135,6 +144,7 @@ private fun MediaList(
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
+        state = lazyGridState,
         modifier = modifier,
         columns = GridCells.Adaptive(CARD_WIDTH),
         contentPadding = PaddingValues(8.dp),
@@ -147,7 +157,9 @@ private fun MediaList(
         ) { item ->
             CompositionLocalProvider(LocalMediaListItem provides item) {
                 MediaListItem(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItemPlacement(),
                     addPlusOne = addPlusOne,
                     editEntry = editEntry,
                     mediaDetails = mediaDetails,
@@ -204,37 +216,45 @@ private fun CardContent(
         )
 
         Score(
-            modifier = modifier.constrainAs(score) {
-                start.linkTo(anchor = parent.start)
-                bottom.linkTo(anchor = parent.bottom)
-            }.testTag(ITEM_SCORE_TAG),
+            modifier = modifier
+                .constrainAs(score) {
+                    start.linkTo(anchor = parent.start)
+                    bottom.linkTo(anchor = parent.bottom)
+                }
+                .testTag(ITEM_SCORE_TAG),
         )
 
         Title(
-            modifier = modifier.constrainAs(title) {
-                width = Dimension.fillToConstraints
-                top.linkTo(anchor = parent.top, margin = CONSTRAINT_VERTICAL_MARGIN)
-                start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-                end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-            }.testTag(ITEM_TITLE_TAG),
+            modifier = modifier
+                .constrainAs(title) {
+                    width = Dimension.fillToConstraints
+                    top.linkTo(anchor = parent.top, margin = CONSTRAINT_VERTICAL_MARGIN)
+                    start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                    end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                }
+                .testTag(ITEM_TITLE_TAG),
         )
 
         Subtitle(
-            modifier = modifier.constrainAs(subtitle) {
-                width = Dimension.fillToConstraints
-                top.linkTo(anchor = title.bottom, margin = CONSTRAINT_VERTICAL_MARGIN)
-                start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-                end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-            }.testTag(ITEM_SUBTITLE_TAG),
+            modifier = modifier
+                .constrainAs(subtitle) {
+                    width = Dimension.fillToConstraints
+                    top.linkTo(anchor = title.bottom, margin = CONSTRAINT_VERTICAL_MARGIN)
+                    start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                    end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                }
+                .testTag(ITEM_SUBTITLE_TAG),
         )
 
         PlusOne(
             addPlusOne = addPlusOne,
-            modifier = modifier.constrainAs(plusOne) {
-                width = Dimension.wrapContent
-                end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-                bottom.linkTo(anchor = progress.top)
-            }.testTag(ITEM_PLUSONE_TAG),
+            modifier = modifier
+                .constrainAs(plusOne) {
+                    width = Dimension.wrapContent
+                    end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                    bottom.linkTo(anchor = progress.top)
+                }
+                .testTag(ITEM_PLUSONE_TAG),
         )
 
         Progress(
@@ -288,10 +308,10 @@ private fun Subtitle(
         append(stringResource(item.format.value))
 
         if (item is MediaListItem.AnimeListItem && item.nextEpisode != null) {
-            append(" ${stringResource(R.string.next_episode_separator)} ")
+            append(" ${stringResource(R.string.lists_entry_next_episode_separator)} ")
             append(
                 stringResource(
-                    R.string.next_episode,
+                    R.string.lists_entry_next_episode,
                     item.nextEpisode.number,
                     item.nextEpisode.date.format(episodeFormatter()).toString(),
                 ),
@@ -339,7 +359,7 @@ private fun PlusOne(
     // Episodes - Chapters (Anime & Manga)
     if (item.progress != item.total) {
         PlusOneButton(
-            progress = stringResource(R.string.progress, item.progress, item.total ?: String.unknown),
+            progress = stringResource(R.string.lists_entry_progress, item.progress, item.total ?: String.unknown),
             addPlusOne = addPlusOne,
             modifier = modifier,
         )
@@ -362,7 +382,7 @@ private fun PlusOneButton(
             contentColor = MaterialTheme.colors.onPrimary,
         ),
     ) {
-        Text(text = stringResource(R.string.plus_one, progress))
+        Text(text = stringResource(R.string.lists_entry_plus_one, progress))
     }
 }
 
@@ -397,7 +417,7 @@ private val episodeFormatter = @Composable {
 
     DateTimeFormatterBuilder()
         .append(datePattern)
-        .appendLiteral(" ${stringResource(R.string.next_episode_date_time_separator)} ")
+        .appendLiteral(" ${stringResource(R.string.lists_entry_next_episode_date_time_separator)} ")
         .append(timePattern)
         .toFormatter(locale)
 }

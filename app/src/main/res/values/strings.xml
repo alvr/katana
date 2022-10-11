@@ -2,7 +2,8 @@
 <resources>
     <string name="app_name" translatable="false">Katana</string>
 
-    <string name="navigation_bar_destination_lists">Lists</string>
+    <string name="navigation_bar_destination_anime_lists">Anime</string>
+    <string name="navigation_bar_destination_manga_lists">Manga</string>
     <string name="navigation_bar_destination_social">Social</string>
     <string name="navigation_bar_destination_explore">Explore</string>
     <string name="navigation_bar_destination_account">Account</string>
