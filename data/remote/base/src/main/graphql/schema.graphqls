@@ -4,7 +4,7 @@ type Query {
   """
   Media query
   """
-  Media("Filter by the media id" id: Int, "Filter by the media's MyAnimeList id" idMal: Int, "Filter by the start date of the media" startDate: FuzzyDateInt, "Filter by the end date of the media" endDate: FuzzyDateInt, "Filter by the season the media was released in" season: MediaSeason, "The year of the season (Winter 2017 would also include December 2016 releases). Requires season argument" seasonYear: Int, "Filter by the media's type" type: MediaType, "Filter by the media's format" format: MediaFormat, "Filter by the media's current release status" status: MediaStatus, "Filter by amount of episodes the media has" episodes: Int, "Filter by the media's episode length" duration: Int, "Filter by the media's chapter count" chapters: Int, "Filter by the media's volume count" volumes: Int, "Filter by if the media's intended for 18+ adult audiences" isAdult: Boolean, "Filter by the media's genres" genre: String, "Filter by the media's tags" tag: String, "Only apply the tags filter argument to tags above this rank. Default: 18" minimumTagRank: Int, "Filter by the media's tags with in a tag category" tagCategory: String, "Filter by the media on the authenticated user's lists" onList: Boolean, "Filter media by sites with a online streaming or reading license" licensedBy: String, "Filter by the media's average score" averageScore: Int, "Filter by the number of users with this media on their list" popularity: Int, "Filter by the source type of the media" source: MediaSource, "Filter by the media's country of origin" countryOfOrigin: CountryCode, "If the media is officially licensed or a self-published doujin release" isLicensed: Boolean, "Filter by search query" search: String, "Filter by the media id" id_not: Int, "Filter by the media id" id_in: [Int], "Filter by the media id" id_not_in: [Int], "Filter by the media's MyAnimeList id" idMal_not: Int, "Filter by the media's MyAnimeList id" idMal_in: [Int], "Filter by the media's MyAnimeList id" idMal_not_in: [Int], "Filter by the start date of the media" startDate_greater: FuzzyDateInt, "Filter by the start date of the media" startDate_lesser: FuzzyDateInt, "Filter by the start date of the media" startDate_like: String, "Filter by the end date of the media" endDate_greater: FuzzyDateInt, "Filter by the end date of the media" endDate_lesser: FuzzyDateInt, "Filter by the end date of the media" endDate_like: String, "Filter by the media's format" format_in: [MediaFormat], "Filter by the media's format" format_not: MediaFormat, "Filter by the media's format" format_not_in: [MediaFormat], "Filter by the media's current release status" status_in: [MediaStatus], "Filter by the media's current release status" status_not: MediaStatus, "Filter by the media's current release status" status_not_in: [MediaStatus], "Filter by amount of episodes the media has" episodes_greater: Int, "Filter by amount of episodes the media has" episodes_lesser: Int, "Filter by the media's episode length" duration_greater: Int, "Filter by the media's episode length" duration_lesser: Int, "Filter by the media's chapter count" chapters_greater: Int, "Filter by the media's chapter count" chapters_lesser: Int, "Filter by the media's volume count" volumes_greater: Int, "Filter by the media's volume count" volumes_lesser: Int, "Filter by the media's genres" genre_in: [String], "Filter by the media's genres" genre_not_in: [String], "Filter by the media's tags" tag_in: [String], "Filter by the media's tags" tag_not_in: [String], "Filter by the media's tags with in a tag category" tagCategory_in: [String], "Filter by the media's tags with in a tag category" tagCategory_not_in: [String], "Filter media by sites with a online streaming or reading license" licensedBy_in: [String], "Filter by the media's average score" averageScore_not: Int, "Filter by the media's average score" averageScore_greater: Int, "Filter by the media's average score" averageScore_lesser: Int, "Filter by the number of users with this media on their list" popularity_not: Int, "Filter by the number of users with this media on their list" popularity_greater: Int, "Filter by the number of users with this media on their list" popularity_lesser: Int, "Filter by the source type of the media" source_in: [MediaSource], "The order the results will be returned in" sort: [MediaSort]): Media
+  Media("Filter by the media id" id: Int, "Filter by the media's MyAnimeList id" idMal: Int, "Filter by the start date of the media" startDate: FuzzyDateInt, "Filter by the end date of the media" endDate: FuzzyDateInt, "Filter by the season the media was released in" season: MediaSeason, "The year of the season (Winter 2017 would also include December 2016 releases). Requires season argument" seasonYear: Int, "Filter by the media's type" type: MediaType, "Filter by the media's format" format: MediaFormat, "Filter by the media's current release status" status: MediaStatus, "Filter by amount of episodes the media has" episodes: Int, "Filter by the media's episode length" duration: Int, "Filter by the media's chapter count" chapters: Int, "Filter by the media's volume count" volumes: Int, "Filter by if the media's intended for 18+ adult audiences" isAdult: Boolean, "Filter by the media's genres" genre: String, "Filter by the media's tags" tag: String, "Only apply the tags filter argument to tags above this rank. Default: 18" minimumTagRank: Int, "Filter by the media's tags with in a tag category" tagCategory: String, "Filter by the media on the authenticated user's lists" onList: Boolean, "Filter media by sites name with a online streaming or reading license" licensedBy: String, "Filter media by sites id with a online streaming or reading license" licensedById: Int, "Filter by the media's average score" averageScore: Int, "Filter by the number of users with this media on their list" popularity: Int, "Filter by the source type of the media" source: MediaSource, "Filter by the media's country of origin" countryOfOrigin: CountryCode, "If the media is officially licensed or a self-published doujin release" isLicensed: Boolean, "Filter by search query" search: String, "Filter by the media id" id_not: Int, "Filter by the media id" id_in: [Int], "Filter by the media id" id_not_in: [Int], "Filter by the media's MyAnimeList id" idMal_not: Int, "Filter by the media's MyAnimeList id" idMal_in: [Int], "Filter by the media's MyAnimeList id" idMal_not_in: [Int], "Filter by the start date of the media" startDate_greater: FuzzyDateInt, "Filter by the start date of the media" startDate_lesser: FuzzyDateInt, "Filter by the start date of the media" startDate_like: String, "Filter by the end date of the media" endDate_greater: FuzzyDateInt, "Filter by the end date of the media" endDate_lesser: FuzzyDateInt, "Filter by the end date of the media" endDate_like: String, "Filter by the media's format" format_in: [MediaFormat], "Filter by the media's format" format_not: MediaFormat, "Filter by the media's format" format_not_in: [MediaFormat], "Filter by the media's current release status" status_in: [MediaStatus], "Filter by the media's current release status" status_not: MediaStatus, "Filter by the media's current release status" status_not_in: [MediaStatus], "Filter by amount of episodes the media has" episodes_greater: Int, "Filter by amount of episodes the media has" episodes_lesser: Int, "Filter by the media's episode length" duration_greater: Int, "Filter by the media's episode length" duration_lesser: Int, "Filter by the media's chapter count" chapters_greater: Int, "Filter by the media's chapter count" chapters_lesser: Int, "Filter by the media's volume count" volumes_greater: Int, "Filter by the media's volume count" volumes_lesser: Int, "Filter by the media's genres" genre_in: [String], "Filter by the media's genres" genre_not_in: [String], "Filter by the media's tags" tag_in: [String], "Filter by the media's tags" tag_not_in: [String], "Filter by the media's tags with in a tag category" tagCategory_in: [String], "Filter by the media's tags with in a tag category" tagCategory_not_in: [String], "Filter media by sites name with a online streaming or reading license" licensedBy_in: [String], "Filter media by sites id with a online streaming or reading license" licensedById_in: [Int], "Filter by the media's average score" averageScore_not: Int, "Filter by the media's average score" averageScore_greater: Int, "Filter by the media's average score" averageScore_lesser: Int, "Filter by the number of users with this media on their list" popularity_not: Int, "Filter by the number of users with this media on their list" popularity_greater: Int, "Filter by the number of users with this media on their list" popularity_lesser: Int, "Filter by the source type of the media" source_in: [MediaSource], "The order the results will be returned in" sort: [MediaSort]): Media
 
   """
   Media Trend query
@@ -122,6 +122,11 @@ type Query {
   Site statistics query
   """
   SiteStatistics: SiteStatistics
+
+  """
+  ExternalLinkSource collection query
+  """
+  ExternalLinkSourceCollection("Filter by the link id" id: Int, type: ExternalLinkType, mediaType: ExternalLinkMediaType): [MediaExternalLink]
 }
 
 """
@@ -135,7 +140,7 @@ type Page {
 
   users("Filter by the user id" id: Int, "Filter by the name of the user" name: String, "Filter to moderators only if true" isModerator: Boolean, "Filter by search query" search: String, "The order the results will be returned in" sort: [UserSort]): [User]
 
-  media("Filter by the media id" id: Int, "Filter by the media's MyAnimeList id" idMal: Int, "Filter by the start date of the media" startDate: FuzzyDateInt, "Filter by the end date of the media" endDate: FuzzyDateInt, "Filter by the season the media was released in" season: MediaSeason, "The year of the season (Winter 2017 would also include December 2016 releases). Requires season argument" seasonYear: Int, "Filter by the media's type" type: MediaType, "Filter by the media's format" format: MediaFormat, "Filter by the media's current release status" status: MediaStatus, "Filter by amount of episodes the media has" episodes: Int, "Filter by the media's episode length" duration: Int, "Filter by the media's chapter count" chapters: Int, "Filter by the media's volume count" volumes: Int, "Filter by if the media's intended for 18+ adult audiences" isAdult: Boolean, "Filter by the media's genres" genre: String, "Filter by the media's tags" tag: String, "Only apply the tags filter argument to tags above this rank. Default: 18" minimumTagRank: Int, "Filter by the media's tags with in a tag category" tagCategory: String, "Filter by the media on the authenticated user's lists" onList: Boolean, "Filter media by sites with a online streaming or reading license" licensedBy: String, "Filter by the media's average score" averageScore: Int, "Filter by the number of users with this media on their list" popularity: Int, "Filter by the source type of the media" source: MediaSource, "Filter by the media's country of origin" countryOfOrigin: CountryCode, "If the media is officially licensed or a self-published doujin release" isLicensed: Boolean, "Filter by search query" search: String, "Filter by the media id" id_not: Int, "Filter by the media id" id_in: [Int], "Filter by the media id" id_not_in: [Int], "Filter by the media's MyAnimeList id" idMal_not: Int, "Filter by the media's MyAnimeList id" idMal_in: [Int], "Filter by the media's MyAnimeList id" idMal_not_in: [Int], "Filter by the start date of the media" startDate_greater: FuzzyDateInt, "Filter by the start date of the media" startDate_lesser: FuzzyDateInt, "Filter by the start date of the media" startDate_like: String, "Filter by the end date of the media" endDate_greater: FuzzyDateInt, "Filter by the end date of the media" endDate_lesser: FuzzyDateInt, "Filter by the end date of the media" endDate_like: String, "Filter by the media's format" format_in: [MediaFormat], "Filter by the media's format" format_not: MediaFormat, "Filter by the media's format" format_not_in: [MediaFormat], "Filter by the media's current release status" status_in: [MediaStatus], "Filter by the media's current release status" status_not: MediaStatus, "Filter by the media's current release status" status_not_in: [MediaStatus], "Filter by amount of episodes the media has" episodes_greater: Int, "Filter by amount of episodes the media has" episodes_lesser: Int, "Filter by the media's episode length" duration_greater: Int, "Filter by the media's episode length" duration_lesser: Int, "Filter by the media's chapter count" chapters_greater: Int, "Filter by the media's chapter count" chapters_lesser: Int, "Filter by the media's volume count" volumes_greater: Int, "Filter by the media's volume count" volumes_lesser: Int, "Filter by the media's genres" genre_in: [String], "Filter by the media's genres" genre_not_in: [String], "Filter by the media's tags" tag_in: [String], "Filter by the media's tags" tag_not_in: [String], "Filter by the media's tags with in a tag category" tagCategory_in: [String], "Filter by the media's tags with in a tag category" tagCategory_not_in: [String], "Filter media by sites with a online streaming or reading license" licensedBy_in: [String], "Filter by the media's average score" averageScore_not: Int, "Filter by the media's average score" averageScore_greater: Int, "Filter by the media's average score" averageScore_lesser: Int, "Filter by the number of users with this media on their list" popularity_not: Int, "Filter by the number of users with this media on their list" popularity_greater: Int, "Filter by the number of users with this media on their list" popularity_lesser: Int, "Filter by the source type of the media" source_in: [MediaSource], "The order the results will be returned in" sort: [MediaSort]): [Media]
+  media("Filter by the media id" id: Int, "Filter by the media's MyAnimeList id" idMal: Int, "Filter by the start date of the media" startDate: FuzzyDateInt, "Filter by the end date of the media" endDate: FuzzyDateInt, "Filter by the season the media was released in" season: MediaSeason, "The year of the season (Winter 2017 would also include December 2016 releases). Requires season argument" seasonYear: Int, "Filter by the media's type" type: MediaType, "Filter by the media's format" format: MediaFormat, "Filter by the media's current release status" status: MediaStatus, "Filter by amount of episodes the media has" episodes: Int, "Filter by the media's episode length" duration: Int, "Filter by the media's chapter count" chapters: Int, "Filter by the media's volume count" volumes: Int, "Filter by if the media's intended for 18+ adult audiences" isAdult: Boolean, "Filter by the media's genres" genre: String, "Filter by the media's tags" tag: String, "Only apply the tags filter argument to tags above this rank. Default: 18" minimumTagRank: Int, "Filter by the media's tags with in a tag category" tagCategory: String, "Filter by the media on the authenticated user's lists" onList: Boolean, "Filter media by sites name with a online streaming or reading license" licensedBy: String, "Filter media by sites id with a online streaming or reading license" licensedById: Int, "Filter by the media's average score" averageScore: Int, "Filter by the number of users with this media on their list" popularity: Int, "Filter by the source type of the media" source: MediaSource, "Filter by the media's country of origin" countryOfOrigin: CountryCode, "If the media is officially licensed or a self-published doujin release" isLicensed: Boolean, "Filter by search query" search: String, "Filter by the media id" id_not: Int, "Filter by the media id" id_in: [Int], "Filter by the media id" id_not_in: [Int], "Filter by the media's MyAnimeList id" idMal_not: Int, "Filter by the media's MyAnimeList id" idMal_in: [Int], "Filter by the media's MyAnimeList id" idMal_not_in: [Int], "Filter by the start date of the media" startDate_greater: FuzzyDateInt, "Filter by the start date of the media" startDate_lesser: FuzzyDateInt, "Filter by the start date of the media" startDate_like: String, "Filter by the end date of the media" endDate_greater: FuzzyDateInt, "Filter by the end date of the media" endDate_lesser: FuzzyDateInt, "Filter by the end date of the media" endDate_like: String, "Filter by the media's format" format_in: [MediaFormat], "Filter by the media's format" format_not: MediaFormat, "Filter by the media's format" format_not_in: [MediaFormat], "Filter by the media's current release status" status_in: [MediaStatus], "Filter by the media's current release status" status_not: MediaStatus, "Filter by the media's current release status" status_not_in: [MediaStatus], "Filter by amount of episodes the media has" episodes_greater: Int, "Filter by amount of episodes the media has" episodes_lesser: Int, "Filter by the media's episode length" duration_greater: Int, "Filter by the media's episode length" duration_lesser: Int, "Filter by the media's chapter count" chapters_greater: Int, "Filter by the media's chapter count" chapters_lesser: Int, "Filter by the media's volume count" volumes_greater: Int, "Filter by the media's volume count" volumes_lesser: Int, "Filter by the media's genres" genre_in: [String], "Filter by the media's genres" genre_not_in: [String], "Filter by the media's tags" tag_in: [String], "Filter by the media's tags" tag_not_in: [String], "Filter by the media's tags with in a tag category" tagCategory_in: [String], "Filter by the media's tags with in a tag category" tagCategory_not_in: [String], "Filter media by sites name with a online streaming or reading license" licensedBy_in: [String], "Filter media by sites id with a online streaming or reading license" licensedById_in: [Int], "Filter by the media's average score" averageScore_not: Int, "Filter by the media's average score" averageScore_greater: Int, "Filter by the media's average score" averageScore_lesser: Int, "Filter by the number of users with this media on their list" popularity_not: Int, "Filter by the number of users with this media on their list" popularity_greater: Int, "Filter by the number of users with this media on their list" popularity_lesser: Int, "Filter by the source type of the media" source_in: [MediaSource], "The order the results will be returned in" sort: [MediaSort]): [Media]
 
   characters("Filter by character id" id: Int, "Filter by character by if its their birthday today" isBirthday: Boolean, "Filter by search query" search: String, "Filter by character id" id_not: Int, "Filter by character id" id_in: [Int], "Filter by character id" id_not_in: [Int], "The order the results will be returned in" sort: [CharacterSort]): [Character]
 
@@ -397,6 +402,16 @@ type UserOptions {
   The language the user wants to see staff and character names in
   """
   staffNameLanguage: UserStaffNameLanguage
+
+  """
+  Whether the user only allow messages from users they follow
+  """
+  restrictMessagesToFollowing: Boolean
+
+  """
+  The list activity types the user has disabled from being created from list updates
+  """
+  disabledListActivity: [ListActivityOption]
 }
 
 """
@@ -557,6 +572,47 @@ enum UserStaffNameLanguage {
   The staff or character's name in their native language
   """
   NATIVE
+}
+
+type ListActivityOption {
+  disabled: Boolean
+
+  type: MediaListStatus
+}
+
+"""
+Media list watching/reading status enum.
+"""
+enum MediaListStatus {
+  """
+  Currently watching/reading
+  """
+  CURRENT
+
+  """
+  Planning to watch/read
+  """
+  PLANNING
+
+  """
+  Finished watching/reading
+  """
+  COMPLETED
+
+  """
+  Stopped watching/reading before completing
+  """
+  DROPPED
+
+  """
+  Paused watching/reading
+  """
+  PAUSED
+
+  """
+  Re-watching/reading
+  """
+  REPEATING
 }
 
 """
@@ -1034,6 +1090,11 @@ type Media {
   If the media is blocked from being recommended to/from
   """
   isRecommendationBlocked: Boolean
+
+  """
+  If the media is blocked from being reviewed
+  """
+  isReviewBlocked: Boolean
 
   """
   Notes for site moderators
@@ -1798,7 +1859,7 @@ type Staff {
   language: StaffLanguage @deprecated(reason: "Replaced with languageV2")
 
   """
-  The primary language of the staff member. Current values: Japanese, English, Korean, Italian, Spanish, Portuguese, French, German, Hebrew, Hungarian, Chinese, Arabic, Filipino, Catalan
+  The primary language of the staff member. Current values: Japanese, English, Korean, Italian, Spanish, Portuguese, French, German, Hebrew, Hungarian, Chinese, Arabic, Filipino, Catalan, Finnish, Turkish, Dutch, Swedish, Thai, Tagalog, Malaysian, Indonesian, Vietnamese, Nepali, Hindi, Urdu
   """
   languageV2: String
 
@@ -2266,7 +2327,7 @@ type MediaTrend {
 }
 
 """
-An external link to another site related to the media
+An external link to another site related to the media or staff member
 """
 type MediaExternalLink {
   """
@@ -2275,14 +2336,45 @@ type MediaExternalLink {
   id: Int!
 
   """
-  The url of the external link
+  The url of the external link or base url of link source
   """
-  url: String!
+  url: String
 
   """
-  The site location of the external link
+  The links website site name
   """
   site: String!
+
+  """
+  The links website site id
+  """
+  siteId: Int
+
+  type: ExternalLinkType
+
+  """
+  Language the site content is in. See Staff language field for values.
+  """
+  language: String
+
+  color: String
+
+  """
+  The icon image url of the site. Not available for all links. Transparent PNG 64x64
+  """
+  icon: String
+
+  notes: String
+
+  isDisabled: Boolean
+}
+
+enum ExternalLinkType {
+  INFO
+
+  STREAMING
+
+  SOCIAL
 }
 
 """
@@ -2467,41 +2559,6 @@ type MediaList {
   media: Media
 
   user: User
-}
-
-"""
-Media list watching/reading status enum.
-"""
-enum MediaListStatus {
-  """
-  Currently watching/reading
-  """
-  CURRENT
-
-  """
-  Planning to watch/read
-  """
-  PLANNING
-
-  """
-  Finished watching/reading
-  """
-  COMPLETED
-
-  """
-  Stopped watching/reading before completing
-  """
-  DROPPED
-
-  """
-  Paused watching/reading
-  """
-  PAUSED
-
-  """
-  Re-watching/reading
-  """
-  REPEATING
 }
 
 """
@@ -3818,6 +3875,11 @@ type TextActivity {
   isLiked: Boolean
 
   """
+  If the activity is pinned to the top of the users activity feed
+  """
+  isPinned: Boolean
+
+  """
   The time the activity was created at
   """
   createdAt: Int!
@@ -3891,6 +3953,11 @@ type ListActivity {
   If the currently authenticated user liked the activity
   """
   isLiked: Boolean
+
+  """
+  If the activity is pinned to the top of the users activity feed
+  """
+  isPinned: Boolean
 
   """
   The url for the activity page on the AniList website
@@ -4720,6 +4787,8 @@ enum ActivitySort {
   ID
 
   ID_DESC
+
+  PINNED
 }
 
 """
@@ -4915,8 +4984,16 @@ type SiteTrend {
   change: Int!
 }
 
+enum ExternalLinkMediaType {
+  ANIME
+
+  MANGA
+
+  STAFF
+}
+
 type Mutation {
-  UpdateUser("User's about\/bio text" about: String, "User's title language" titleLanguage: UserTitleLanguage, "If the user should see media marked as adult-only" displayAdultContent: Boolean, "If the user should get notifications when a show they are watching aires" airingNotifications: Boolean, "The user's list scoring system" scoreFormat: ScoreFormat, "The user's default list order" rowOrder: String, "Profile highlight color" profileColor: String, "Profile highlight color" donatorBadge: String, "Notification options" notificationOptions: [NotificationOptionInput], "Timezone offset format: -?HH:MM" timezone: String, "Minutes between activity for them to be merged together. 0 is Never, Above 2 weeks (20160 mins) is Always." activityMergeTime: Int, "The user's anime list options" animeListOptions: MediaListOptionsInput, "The user's anime list options" mangaListOptions: MediaListOptionsInput, "The language the user wants to see staff and character names in" staffNameLanguage: UserStaffNameLanguage): User
+  UpdateUser("User's about\/bio text" about: String, "User's title language" titleLanguage: UserTitleLanguage, "If the user should see media marked as adult-only" displayAdultContent: Boolean, "If the user should get notifications when a show they are watching aires" airingNotifications: Boolean, "The user's list scoring system" scoreFormat: ScoreFormat, "The user's default list order" rowOrder: String, "Profile highlight color" profileColor: String, "Profile highlight color" donatorBadge: String, "Notification options" notificationOptions: [NotificationOptionInput], "Timezone offset format: -?HH:MM" timezone: String, "Minutes between activity for them to be merged together. 0 is Never, Above 2 weeks (20160 mins) is Always." activityMergeTime: Int, "The user's anime list options" animeListOptions: MediaListOptionsInput, "The user's anime list options" mangaListOptions: MediaListOptionsInput, "The language the user wants to see staff and character names in" staffNameLanguage: UserStaffNameLanguage, "Only allow messages from other users the user follows" restrictMessagesToFollowing: Boolean, disabledListActivity: [ListActivityOptionInput]): User
 
   """
   Create or update a media list entry
@@ -4957,6 +5034,11 @@ type Mutation {
   Delete an activity item of the authenticated users
   """
   DeleteActivity("The id of the activity to delete" id: Int): Deleted
+
+  """
+  Toggle activity to be pinned to the top of the user's activity feed
+  """
+  ToggleActivityPin("Toggle activity id to be pinned" id: Int, "If the activity should be pinned or unpinned" pinned: Boolean): ActivityUnion
 
   """
   Toggle the subscription of an activity item
@@ -5099,6 +5181,12 @@ input MediaListOptionsInput {
   theme: String
 }
 
+input ListActivityOptionInput {
+  disabled: Boolean
+
+  type: MediaListStatus
+}
+
 """
 Date object that allows for incomplete date values (fuzzy)
 """
@@ -5162,7 +5250,7 @@ type InternalPage {
 
   users("Filter by the user id" id: Int, "Filter by the name of the user" name: String, "Filter to moderators only if true" isModerator: Boolean, "Filter by search query" search: String, "The order the results will be returned in" sort: [UserSort]): [User]
 
-  media("Filter by the media id" id: Int, "Filter by the media's MyAnimeList id" idMal: Int, "Filter by the start date of the media" startDate: FuzzyDateInt, "Filter by the end date of the media" endDate: FuzzyDateInt, "Filter by the season the media was released in" season: MediaSeason, "The year of the season (Winter 2017 would also include December 2016 releases). Requires season argument" seasonYear: Int, "Filter by the media's type" type: MediaType, "Filter by the media's format" format: MediaFormat, "Filter by the media's current release status" status: MediaStatus, "Filter by amount of episodes the media has" episodes: Int, "Filter by the media's episode length" duration: Int, "Filter by the media's chapter count" chapters: Int, "Filter by the media's volume count" volumes: Int, "Filter by if the media's intended for 18+ adult audiences" isAdult: Boolean, "Filter by the media's genres" genre: String, "Filter by the media's tags" tag: String, "Only apply the tags filter argument to tags above this rank. Default: 18" minimumTagRank: Int, "Filter by the media's tags with in a tag category" tagCategory: String, "Filter by the media on the authenticated user's lists" onList: Boolean, "Filter media by sites with a online streaming or reading license" licensedBy: String, "Filter by the media's average score" averageScore: Int, "Filter by the number of users with this media on their list" popularity: Int, "Filter by the source type of the media" source: MediaSource, "Filter by the media's country of origin" countryOfOrigin: CountryCode, "If the media is officially licensed or a self-published doujin release" isLicensed: Boolean, "Filter by search query" search: String, "Filter by the media id" id_not: Int, "Filter by the media id" id_in: [Int], "Filter by the media id" id_not_in: [Int], "Filter by the media's MyAnimeList id" idMal_not: Int, "Filter by the media's MyAnimeList id" idMal_in: [Int], "Filter by the media's MyAnimeList id" idMal_not_in: [Int], "Filter by the start date of the media" startDate_greater: FuzzyDateInt, "Filter by the start date of the media" startDate_lesser: FuzzyDateInt, "Filter by the start date of the media" startDate_like: String, "Filter by the end date of the media" endDate_greater: FuzzyDateInt, "Filter by the end date of the media" endDate_lesser: FuzzyDateInt, "Filter by the end date of the media" endDate_like: String, "Filter by the media's format" format_in: [MediaFormat], "Filter by the media's format" format_not: MediaFormat, "Filter by the media's format" format_not_in: [MediaFormat], "Filter by the media's current release status" status_in: [MediaStatus], "Filter by the media's current release status" status_not: MediaStatus, "Filter by the media's current release status" status_not_in: [MediaStatus], "Filter by amount of episodes the media has" episodes_greater: Int, "Filter by amount of episodes the media has" episodes_lesser: Int, "Filter by the media's episode length" duration_greater: Int, "Filter by the media's episode length" duration_lesser: Int, "Filter by the media's chapter count" chapters_greater: Int, "Filter by the media's chapter count" chapters_lesser: Int, "Filter by the media's volume count" volumes_greater: Int, "Filter by the media's volume count" volumes_lesser: Int, "Filter by the media's genres" genre_in: [String], "Filter by the media's genres" genre_not_in: [String], "Filter by the media's tags" tag_in: [String], "Filter by the media's tags" tag_not_in: [String], "Filter by the media's tags with in a tag category" tagCategory_in: [String], "Filter by the media's tags with in a tag category" tagCategory_not_in: [String], "Filter media by sites with a online streaming or reading license" licensedBy_in: [String], "Filter by the media's average score" averageScore_not: Int, "Filter by the media's average score" averageScore_greater: Int, "Filter by the media's average score" averageScore_lesser: Int, "Filter by the number of users with this media on their list" popularity_not: Int, "Filter by the number of users with this media on their list" popularity_greater: Int, "Filter by the number of users with this media on their list" popularity_lesser: Int, "Filter by the source type of the media" source_in: [MediaSource], "The order the results will be returned in" sort: [MediaSort]): [Media]
+  media("Filter by the media id" id: Int, "Filter by the media's MyAnimeList id" idMal: Int, "Filter by the start date of the media" startDate: FuzzyDateInt, "Filter by the end date of the media" endDate: FuzzyDateInt, "Filter by the season the media was released in" season: MediaSeason, "The year of the season (Winter 2017 would also include December 2016 releases). Requires season argument" seasonYear: Int, "Filter by the media's type" type: MediaType, "Filter by the media's format" format: MediaFormat, "Filter by the media's current release status" status: MediaStatus, "Filter by amount of episodes the media has" episodes: Int, "Filter by the media's episode length" duration: Int, "Filter by the media's chapter count" chapters: Int, "Filter by the media's volume count" volumes: Int, "Filter by if the media's intended for 18+ adult audiences" isAdult: Boolean, "Filter by the media's genres" genre: String, "Filter by the media's tags" tag: String, "Only apply the tags filter argument to tags above this rank. Default: 18" minimumTagRank: Int, "Filter by the media's tags with in a tag category" tagCategory: String, "Filter by the media on the authenticated user's lists" onList: Boolean, "Filter media by sites name with a online streaming or reading license" licensedBy: String, "Filter media by sites id with a online streaming or reading license" licensedById: Int, "Filter by the media's average score" averageScore: Int, "Filter by the number of users with this media on their list" popularity: Int, "Filter by the source type of the media" source: MediaSource, "Filter by the media's country of origin" countryOfOrigin: CountryCode, "If the media is officially licensed or a self-published doujin release" isLicensed: Boolean, "Filter by search query" search: String, "Filter by the media id" id_not: Int, "Filter by the media id" id_in: [Int], "Filter by the media id" id_not_in: [Int], "Filter by the media's MyAnimeList id" idMal_not: Int, "Filter by the media's MyAnimeList id" idMal_in: [Int], "Filter by the media's MyAnimeList id" idMal_not_in: [Int], "Filter by the start date of the media" startDate_greater: FuzzyDateInt, "Filter by the start date of the media" startDate_lesser: FuzzyDateInt, "Filter by the start date of the media" startDate_like: String, "Filter by the end date of the media" endDate_greater: FuzzyDateInt, "Filter by the end date of the media" endDate_lesser: FuzzyDateInt, "Filter by the end date of the media" endDate_like: String, "Filter by the media's format" format_in: [MediaFormat], "Filter by the media's format" format_not: MediaFormat, "Filter by the media's format" format_not_in: [MediaFormat], "Filter by the media's current release status" status_in: [MediaStatus], "Filter by the media's current release status" status_not: MediaStatus, "Filter by the media's current release status" status_not_in: [MediaStatus], "Filter by amount of episodes the media has" episodes_greater: Int, "Filter by amount of episodes the media has" episodes_lesser: Int, "Filter by the media's episode length" duration_greater: Int, "Filter by the media's episode length" duration_lesser: Int, "Filter by the media's chapter count" chapters_greater: Int, "Filter by the media's chapter count" chapters_lesser: Int, "Filter by the media's volume count" volumes_greater: Int, "Filter by the media's volume count" volumes_lesser: Int, "Filter by the media's genres" genre_in: [String], "Filter by the media's genres" genre_not_in: [String], "Filter by the media's tags" tag_in: [String], "Filter by the media's tags" tag_not_in: [String], "Filter by the media's tags with in a tag category" tagCategory_in: [String], "Filter by the media's tags with in a tag category" tagCategory_not_in: [String], "Filter media by sites name with a online streaming or reading license" licensedBy_in: [String], "Filter media by sites id with a online streaming or reading license" licensedById_in: [Int], "Filter by the media's average score" averageScore_not: Int, "Filter by the media's average score" averageScore_greater: Int, "Filter by the media's average score" averageScore_lesser: Int, "Filter by the number of users with this media on their list" popularity_not: Int, "Filter by the number of users with this media on their list" popularity_greater: Int, "Filter by the number of users with this media on their list" popularity_lesser: Int, "Filter by the source type of the media" source_in: [MediaSource], "The order the results will be returned in" sort: [MediaSort]): [Media]
 
   characters("Filter by character id" id: Int, "Filter by character by if its their birthday today" isBirthday: Boolean, "Filter by search query" search: String, "Filter by character id" id_not: Int, "Filter by character id" id_in: [Int], "Filter by character id" id_not_in: [Int], "The order the results will be returned in" sort: [CharacterSort]): [Character]
 
@@ -5268,7 +5356,7 @@ type MediaSubmission {
 
   relations: [MediaEdge]
 
-  externalLinks: [MediaExternalLink]
+  externalLinks: [MediaSubmissionComparison]
 
   createdAt: Int
 }
@@ -5284,6 +5372,8 @@ type MediaSubmissionComparison {
   staff: StaffEdge
 
   studio: StudioEdge
+
+  externalLink: MediaExternalLink
 }
 
 type MediaSubmissionEdge {
@@ -5317,6 +5407,8 @@ type MediaSubmissionEdge {
   staffSubmission: Staff
 
   studio: Studio
+
+  externalLink: MediaExternalLink
 
   media: Media
 }
@@ -5498,6 +5590,11 @@ type RevisionHistory {
   studio: Studio
 
   """
+  The external link source the mod feed entry references
+  """
+  externalLink: MediaExternalLink
+
+  """
   When the mod feed entry was created
   """
   createdAt: Int
@@ -5588,6 +5685,14 @@ input MediaTitleInput {
   native: String
 }
 
+input AiringScheduleInput {
+  airingAt: Int
+
+  episode: Int
+
+  timeUntilAiring: Int
+}
+
 """
 An external link to another site related to the media
 """
@@ -5606,14 +5711,6 @@ input MediaExternalLinkInput {
   The site location of the external link
   """
   site: String!
-}
-
-input AiringScheduleInput {
-  airingAt: Int
-
-  episode: Int
-
-  timeUntilAiring: Int
 }
 
 """

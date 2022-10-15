@@ -5,27 +5,29 @@ plugins {
     alias(libs.plugins.apollo)
 }
 
+val pkg = "${KatanaConfiguration.PackageName}.data.remote.lists"
+
 android {
-    namespace = "${KatanaConfiguration.PackageName}.data.remote.lists"
+    namespace = pkg
     compileOptions.isCoreLibraryDesugaringEnabled = true
 }
 
 apollo {
     generateAsInternal.set(true)
     generateTestBuilders.set(true)
-    packageName.set("dev.alvr.katana.data.remote.lists")
+    packageName.set(pkg)
 }
 
 dependencies {
     apolloMetadata(projects.data.remote.base)
+
     implementation(projects.common.core)
     implementation(projects.data.remote.base)
     implementation(projects.domain.lists)
     implementation(projects.domain.user)
+    implementation(libs.bundles.data.remote)
 
     coreLibraryDesugaring(libs.desugaring)
-
-    implementation(libs.bundles.data.remote)
 
     testImplementation(projects.common.tests)
     testImplementation(libs.bundles.test.data.remote)

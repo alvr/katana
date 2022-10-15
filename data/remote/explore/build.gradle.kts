@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.apollo)
 }
 
-val pkg = "${KatanaConfiguration.PackageName}.data.remote.user"
+val pkg = "${KatanaConfiguration.PackageName}.data.remote.explore"
 
 android.namespace = pkg
 
@@ -17,10 +17,9 @@ apollo {
 
 dependencies {
     apolloMetadata(projects.data.remote.base)
-    implementation(projects.common.core)
-    implementation(projects.data.remote.base)
-    implementation(projects.domain.user)
 
+    implementation(projects.data.remote.base)
+    implementation(projects.domain.explore)
     implementation(libs.bundles.data.remote)
 
     testImplementation(projects.common.tests)

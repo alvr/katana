@@ -13,6 +13,7 @@ ksp {
 
 dependencies {
     implementation(projects.common.core)
+    implementation(projects.domain.social)
     implementation(projects.ui.base)
 
     testImplementation(projects.common.testsAndroid)
