@@ -16,6 +16,7 @@ internal class CommonConventionPlugin : ConventionPlugin {
                 delete(buildDir)
             }
 
+            @Suppress("UnstableApiUsage")
             register<TestReport>("unitTests") {
                 val testTasks = subprojects.map { p ->
                     p.tasks.withType<Test>().matching { t -> !t.isRelease }

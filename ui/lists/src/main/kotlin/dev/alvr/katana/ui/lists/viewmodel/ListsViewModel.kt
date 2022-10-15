@@ -2,7 +2,6 @@ package dev.alvr.katana.ui.lists.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import arrow.core.Either
-import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.orEmpty
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.models.MediaCollection
@@ -114,9 +113,8 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     }
 
     private fun onCollectCollectionError(failure: Failure) {
-        Napier.e(failure) { String.empty }
-
-        updateState { copy(isError = true, isLoading = false) }
+        Napier.e(failure) { "There was an error collecting the lists" }
+        updateState { copy(isError = true, isLoading = false, isEmpty = true) }
     }
 
     private fun <T : MediaListItem> setCollection(items: Collection<T>) {

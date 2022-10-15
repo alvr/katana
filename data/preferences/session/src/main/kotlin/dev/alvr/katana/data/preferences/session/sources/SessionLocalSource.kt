@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.map
 internal class SessionLocalSource @Inject constructor(
     private val dataStore: DataStore<Session>,
 ) {
+    @Suppress("USELESS_CAST")
     val sessionActive get() = dataStore.data.map { session ->
         (session.anilistToken == null && session.isSessionActive).not().right() as Either<Failure, Boolean>
     }.catch {

@@ -1,7 +1,10 @@
 package dev.alvr.katana.data.remote.lists.sources
 
+import app.cash.turbine.test
+import arrow.core.right
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
+import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloHttpException
 import com.apollographql.apollo3.exception.ApolloNetworkException
@@ -11,11 +14,16 @@ import com.apollographql.apollo3.exception.HttpCacheMissException
 import com.apollographql.apollo3.exception.JsonDataException
 import com.apollographql.apollo3.exception.JsonEncodingException
 import com.apollographql.apollo3.exception.MissingValueException
+import com.apollographql.apollo3.mockserver.MockResponse
+import com.apollographql.apollo3.mockserver.MockServer
 import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
+import com.benasher44.uuid.uuid4
+import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.MediaListEntriesMutation
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
+import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import io.kotest.assertions.arrow.core.shouldBeLeft
@@ -33,9 +41,11 @@ import io.mockk.mockk
 import io.mockk.spyk
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ApolloExperimental::class)
 internal class ListsRemoteSourceTest : BehaviorSpec() {
+    private val mockServer = MockServer()
     private val apolloBuilder = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport())
     private val client = spyk(apolloBuilder.build())
     private val userIdManager = mockk<UserIdManager>()
@@ -57,7 +67,13 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
     private val mutationData = Arb.bind<MediaListEntriesMutation.Data>().next()
 
     init {
+        afterSpec {
+            mockServer.stop()
+        }
+
         given("a ListsRemoteSource") {
+            coEvery { userIdManager.getId() } returns 37_384.right()
+
             `when`("executing the updateList mutation") {
                 and("the server returns no data") {
                     client.enqueueTestResponse(mutation)
@@ -78,11 +94,15 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
             `when`("updating the list") {
                 and("is successful") {
-                    coEvery { client.mutation(any<MediaListEntriesMutation>()).execute() } returns mockk()
+                    coEvery {
+                        client.mutation(any<MediaListEntriesMutation>()).execute()
+                    } returns mockk()
 
                     then("it just execute the MediaListEntriesMutation") {
                         source.updateList(mediaList).shouldBeRight()
-                        coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
+                        coVerify(exactly = 1) {
+                            client.mutation(any<MediaListEntriesMutation>()).execute()
+                        }
                     }
                 }
 
@@ -93,7 +113,9 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
                     then("it returns a left of ListsFailure.UpdatingList") {
                         source.updateList(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                        coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
+                        coVerify(exactly = 1) {
+                            client.mutation(any<MediaListEntriesMutation>()).execute()
+                        }
                     }
                 }
 
@@ -104,7 +126,9 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
                     then("it returns a left of ListsFailure.UpdatingList") {
                         source.updateList(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                        coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
+                        coVerify(exactly = 1) {
+                            client.mutation(any<MediaListEntriesMutation>()).execute()
+                        }
                     }
                 }
 
@@ -115,7 +139,9 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
                     then("it returns a left of Failure.Unknown") {
                         source.updateList(mediaList).shouldBeLeft(Failure.Unknown)
-                        coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
+                        coVerify(exactly = 1) {
+                            client.mutation(any<MediaListEntriesMutation>()).execute()
+                        }
                     }
                 }
 
@@ -126,7 +152,9 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
                     then("it returns a left of Failure.Unknown") {
                         source.updateList(mediaList).shouldBeLeft(Failure.Unknown)
-                        coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
+                        coVerify(exactly = 1) {
+                            client.mutation(any<MediaListEntriesMutation>()).execute()
+                        }
                     }
                 }
 
@@ -137,7 +165,9 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
                     then("it returns a left of ListsFailure.UpdatingList") {
                         source.updateList(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                        coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
+                        coVerify(exactly = 1) {
+                            client.mutation(any<MediaListEntriesMutation>()).execute()
+                        }
                     }
                 }
 
@@ -148,7 +178,9 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
                     then("it returns a left of ListsFailure.UpdatingList") {
                         source.updateList(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                        coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
+                        coVerify(exactly = 1) {
+                            client.mutation(any<MediaListEntriesMutation>()).execute()
+                        }
                     }
                 }
 
@@ -159,7 +191,9 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
                     then("it returns a left of ListsFailure.UpdatingList") {
                         source.updateList(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                        coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
+                        coVerify(exactly = 1) {
+                            client.mutation(any<MediaListEntriesMutation>()).execute()
+                        }
                     }
                 }
 
@@ -170,10 +204,121 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
                     then("it returns a left of Failure.Unknown") {
                         source.updateList(mediaList).shouldBeLeft(Failure.Unknown)
-                        coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
+                        coVerify(exactly = 1) {
+                            client.mutation(any<MediaListEntriesMutation>()).execute()
+                        }
                     }
                 }
             }
+
+            `when`("querying the list") {
+                and("the data is null") {
+                    val response = ApolloResponse.Builder(
+                        operation = mockk<MediaListCollectionQuery>(),
+                        requestUuid = uuid4(),
+                        data = null,
+                    ).build()
+                    client.enqueueTestResponse(response)
+
+                    then("the anime collection should be empty") {
+                        source.animeCollection.test(5.seconds) {
+                            awaitItem().shouldBeRight(MediaCollection(emptyList()))
+                            cancelAndIgnoreRemainingEvents()
+                        }
+                    }
+
+                    then("the manga collection should be empty") {
+                        source.mangaCollection.test(5.seconds) {
+                            awaitItem().shouldBeRight(MediaCollection(emptyList()))
+                            cancelAndIgnoreRemainingEvents()
+                        }
+                    }
+                }
+
+                and("the data has errors") {
+                    val response = ApolloResponse.Builder(
+                        operation = mockk<MediaListCollectionQuery>(),
+                        requestUuid = uuid4(),
+                        data = null,
+                    ).errors(listOf(mockk())).build()
+                    client.enqueueTestResponse(response)
+
+                    then("the anime collection should be empty") {
+                        source.animeCollection.test(5.seconds) {
+                            awaitItem().shouldBeRight(MediaCollection(emptyList()))
+                            cancelAndIgnoreRemainingEvents()
+                        }
+                    }
+
+                    then("the manga collection should be empty") {
+                        source.mangaCollection.test(5.seconds) {
+                            awaitItem().shouldBeRight(MediaCollection(emptyList()))
+                            cancelAndIgnoreRemainingEvents()
+                        }
+                    }
+                }
+            }
+
+            `when`("an error occurs") {
+                val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
+                val source = ListsRemoteSource(badClient, userIdManager)
+
+                and("mocking the response") {
+                    `when`("a 500 error occurs") {
+                        enqueueResponse { statusCode(500) }
+
+                        then("it returns a left of ListsFailure.GetMediaCollection") {
+                            source.animeCollection.test(5.seconds) {
+                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                                cancelAndIgnoreRemainingEvents()
+                            }
+
+                            source.mangaCollection.test(5.seconds) {
+                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                                cancelAndIgnoreRemainingEvents()
+                            }
+                        }
+                    }
+
+                    `when`("a malformed body is returned") {
+                        enqueueResponse { body("Malformed body") }
+
+                        then("it returns a left of ListsFailure.GetMediaCollection") {
+                            source.animeCollection.test(5.seconds) {
+                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                                cancelAndIgnoreRemainingEvents()
+                            }
+
+                            source.mangaCollection.test(5.seconds) {
+                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                                cancelAndIgnoreRemainingEvents()
+                            }
+                        }
+                    }
+
+                    `when`("a JSON that does not match the scheme") {
+                        enqueueResponse { body("""{"data": {"random": 42}}""") }
+
+                        then("it returns a left of ListsFailure.GetMediaCollection") {
+                            source.animeCollection.test(5.seconds) {
+                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                                cancelAndIgnoreRemainingEvents()
+                            }
+
+                            source.mangaCollection.test(5.seconds) {
+                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                                cancelAndIgnoreRemainingEvents()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun enqueueResponse(builder: MockResponse.Builder.() -> Unit) {
+        repeat(4) {
+            mockServer.enqueue(MockResponse.Builder().apply(builder).build())
         }
     }
 }

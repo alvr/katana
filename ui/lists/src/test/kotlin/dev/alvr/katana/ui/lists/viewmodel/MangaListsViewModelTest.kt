@@ -1,11 +1,13 @@
 package dev.alvr.katana.ui.lists.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
+import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.usecases.invoke
+import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
@@ -174,6 +176,22 @@ internal class MangaListViewModelTest : BehaviorSpec() {
                 }
             }
 
+            and("something went wrong collecting") {
+                every { observeManga.flow } returns flowOf(ListsFailure.GetMediaCollection.left())
+                coJustRun { observeManga() }
+
+                viewModel.runOnCreate()
+
+                then("update it state with isError = true") {
+                    viewModel.assert(MangaState()) {
+                        states(
+                            { copy(isLoading = true) },
+                            { copy(isError = true, isLoading = false, isEmpty = true) },
+                        )
+                    }
+                }
+            }
+
             `when`("adding a +1 to an entry") {
                 coEitherJustRun { updateList(any()) }
 
@@ -257,6 +275,7 @@ internal class MangaListViewModelTest : BehaviorSpec() {
                     isEmpty = false,
                     name = "MyCustomMangaList",
                     items = persistentListOf(mangaListItem1),
+                    isError = false,
                 )
             },
         )

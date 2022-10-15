@@ -39,7 +39,7 @@ internal class LoginViewModel @Inject constructor(
     private suspend fun saveToken(token: String) {
         saveSessionUseCase(AnilistToken(token)).fold(
             ifLeft = { failure ->
-                Napier.e(failure) { "" }
+                Napier.e(failure) { "Was not possible to save the token" }
                 updateState { copy(loading = false, errorMessage = R.string.save_token_error) }
             },
             ifRight = { saveUserId() },
@@ -49,6 +49,7 @@ internal class LoginViewModel @Inject constructor(
     private suspend fun saveUserId() {
         saveUserIdUseCase().fold(
             ifLeft = { failure ->
+                Napier.e(failure) { "Was not possible to save the userId" }
                 updateState { copy(loading = false, errorMessage = R.string.fetch_userid_error) }
             },
             ifRight = {

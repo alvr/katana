@@ -1,6 +1,7 @@
 package dev.alvr.katana.data.preferences.session.sources
 
 import androidx.datastore.core.DataStore
+import app.cash.turbine.test
 import dev.alvr.katana.common.tests.valueMockk
 import dev.alvr.katana.data.preferences.session.models.Session
 import dev.alvr.katana.domain.base.failures.Failure
@@ -11,13 +12,16 @@ import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.property.checkAll
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
 import java.io.IOException
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 
@@ -86,6 +90,20 @@ internal class SessionLocalSourceTest : BehaviorSpec() {
                 }
             }
 
+            `when`("checking all conditions for active session") {
+                checkAll<Int, Session>(16) { _, session ->
+                    every { store.data } returns flowOf(session)
+
+                    then("the token should be read from memory") {
+                        source.sessionActive.test(5.seconds) {
+                            awaitItem().shouldBeRight((session.anilistToken == null && session.isSessionActive).not())
+                            cancelAndIgnoreRemainingEvents()
+                        }
+                        verify(exactly = 1) { store.data }
+                    }
+                }
+            }
+
             `when`("something fails") {
                 and("it's the clearing the session") {
                     and("it's a common Exception") {
@@ -143,6 +161,31 @@ internal class SessionLocalSourceTest : BehaviorSpec() {
                         then("should be a left of PreferencesTokenFailure.SavingFailure") {
                             source.saveSession(token).shouldBeLeft(SessionFailure.SavingSession)
                         }
+                    }
+                }
+
+                and("it's getting if the session is active") {
+                    val session = spyk(Session())
+
+                    every { store.data } returns flowOf(session)
+                    every { session.anilistToken } throws mockk<Failure>()
+
+                    then("should be a left of SessionFailure.CheckingActiveSession") {
+                        source.sessionActive.test(5.seconds) {
+                            awaitItem().shouldBeLeft(SessionFailure.CheckingActiveSession)
+                            cancelAndIgnoreRemainingEvents()
+                        }
+                    }
+                }
+
+                and("it's getting the token") {
+                    val session = spyk(Session())
+
+                    every { store.data } returns flowOf(session)
+                    every { session.anilistToken } throws mockk<Failure>()
+
+                    then("the token should be none") {
+                        source.getAnilistToken().shouldBeNone()
                     }
                 }
             }

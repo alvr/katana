@@ -36,8 +36,8 @@ internal class MainViewModel @Inject constructor(
 
     fun clearSession() {
         intent {
-            clearActiveSessionUseCase().tapLeft {
-                Napier.e(it) { "Error clearing session" }
+            clearActiveSessionUseCase().tapLeft { failure ->
+                Napier.e(failure) { "Error clearing session" }
             }
         }
     }
