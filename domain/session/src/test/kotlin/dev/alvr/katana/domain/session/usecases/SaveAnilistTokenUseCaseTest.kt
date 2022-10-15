@@ -1,7 +1,7 @@
 package dev.alvr.katana.domain.session.usecases
 
 import arrow.core.left
-import arrow.core.right
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.common.tests.valueMockk
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.session.failures.SessionFailure
@@ -24,7 +24,7 @@ internal class SaveAnilistTokenUseCaseTest : FunSpec() {
 
     init {
         context("successful saving") {
-            coEvery { repo.saveSession(token) } returns Unit.right()
+            coEitherJustRun { repo.saveSession(token) }
 
             test("invoke should save the token") {
                 useCase(token).shouldBeRight()

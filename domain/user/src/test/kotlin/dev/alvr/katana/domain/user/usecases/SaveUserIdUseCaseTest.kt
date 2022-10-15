@@ -1,7 +1,7 @@
 package dev.alvr.katana.domain.user.usecases
 
 import arrow.core.left
-import arrow.core.right
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
@@ -22,7 +22,7 @@ internal class SaveUserIdUseCaseTest : FunSpec() {
 
     init {
         context("successful userId") {
-            coEvery { repo.saveUserId() } returns Unit.right()
+            coEitherJustRun { repo.saveUserId() }
 
             test("invoke should return user") {
                 useCase().shouldBeRight()

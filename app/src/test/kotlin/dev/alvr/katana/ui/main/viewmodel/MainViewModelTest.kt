@@ -1,7 +1,9 @@
 package dev.alvr.katana.ui.main.viewmodel
 
 import arrow.core.none
+import arrow.core.right
 import arrow.core.some
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.common.tests.valueMockk
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
@@ -12,7 +14,6 @@ import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
 import dev.alvr.katana.ui.main.navigation.NavGraphs
 import io.kotest.core.spec.style.BehaviorSpec
-import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.justRun
@@ -49,7 +50,7 @@ internal class MainViewModelTest : BehaviorSpec() {
                 }
 
                 and("has an active session") {
-                    every { observeSession.flow } returns flowOf(true, true, false)
+                    every { observeSession.flow } returns flowOf(true.right(), true.right(), false.right())
 
                     `when`("the session expires") {
                         vm.runOnCreate()
@@ -68,7 +69,7 @@ internal class MainViewModelTest : BehaviorSpec() {
                         vm.runOnCreate()
 
                         `when`("the user clear the active session") {
-                            coJustRun { clearActiveSession() }
+                            coEitherJustRun { clearActiveSession() }
                             vm.testIntent { clearSession() }
 
                             coVerify(exactly = 1) { clearActiveSession() }

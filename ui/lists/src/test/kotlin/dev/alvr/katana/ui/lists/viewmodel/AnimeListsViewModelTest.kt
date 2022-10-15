@@ -4,8 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import arrow.core.right
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.zero
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.lists.models.MediaCollection
+import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.domain.lists.usecases.ObserveAnimeListUseCase
@@ -16,7 +18,6 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.mockk.Ordering
-import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
@@ -53,7 +54,9 @@ internal class AnimeListsViewModelTest : BehaviorSpec() {
                         },
                     )
 
-                    every { observeAnime.flow } returns flowOf(MediaCollection(lists = emptyList()))
+                    every { observeAnime.flow } returns flowOf(
+                        MediaCollection<MediaEntry.Anime>(lists = emptyList()).right(),
+                    )
                     coJustRun { observeAnime() }
 
                     viewModel.runOnCreate()
@@ -172,7 +175,7 @@ internal class AnimeListsViewModelTest : BehaviorSpec() {
             }
 
             `when`("adding a +1 to an entry") {
-                coEvery { updateList(any()) } returns Unit.right()
+                coEitherJustRun { updateList(any()) }
 
                 and("is an AnimeListItem") {
                     then("it should call the updateList with the progress incremented by 1") {
@@ -271,7 +274,7 @@ internal class AnimeListsViewModelTest : BehaviorSpec() {
                         entries = listOf(animeMediaEntry2),
                     ),
                 ),
-            ),
+            ).right(),
         )
 
         coJustRun { observeAnime() }

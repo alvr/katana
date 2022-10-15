@@ -2,6 +2,7 @@ package dev.alvr.katana.data.remote.user.repositories
 
 import arrow.core.left
 import arrow.core.right
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.data.remote.user.sources.UserRemoteSource
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.user.failures.UserFailure
@@ -44,7 +45,7 @@ internal class UserRepositoryTest : BehaviorSpec() {
 
             `when`("saving the userId") {
                 and("is successful") {
-                    coEvery { source.saveUserId() } returns Unit.right()
+                    coEitherJustRun { source.saveUserId() }
 
                     then("it just execute the UserIdQuery") {
                         repo.saveUserId().shouldBeRight()

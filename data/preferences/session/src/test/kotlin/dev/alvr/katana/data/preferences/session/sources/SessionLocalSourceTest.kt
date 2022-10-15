@@ -11,8 +11,6 @@ import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.booleans.shouldBeFalse
-import io.kotest.matchers.booleans.shouldBeTrue
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -72,7 +70,7 @@ internal class SessionLocalSourceTest : BehaviorSpec() {
                 }
 
                 then("the session should not be valid") {
-                    source.sessionActive.first().shouldBeFalse()
+                    source.sessionActive.first().shouldBeRight(false)
                 }
             }
 
@@ -84,7 +82,7 @@ internal class SessionLocalSourceTest : BehaviorSpec() {
                 source.clearActiveSession().shouldBeRight()
 
                 then("the session should be valid") {
-                    source.sessionActive.first().shouldBeTrue()
+                    source.sessionActive.first().shouldBeRight(true)
                 }
             }
 

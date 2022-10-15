@@ -3,6 +3,7 @@ package dev.alvr.katana.data.remote.lists.repositories
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.common.tests.valueMockk
 import dev.alvr.katana.data.remote.lists.sources.ListsRemoteSource
 import dev.alvr.katana.domain.base.failures.Failure
@@ -13,7 +14,6 @@ import dev.alvr.katana.domain.lists.repositories.ListsRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -30,11 +30,11 @@ internal class ListsRepositoryTest : BehaviorSpec() {
         given("a ListsRepository") {
             `when`("observing the anime collection") {
                 val collection = valueMockk<MediaCollection<MediaEntry.Anime>>()
-                every { source.animeCollection } returns flowOf(collection)
+                every { source.animeCollection } returns flowOf(collection.right())
 
                 then("collecting the flow should get the same items") {
                     repo.animeCollection.test(5.seconds) {
-                        awaitItem() shouldBe collection
+                        awaitItem().shouldBeRight(collection)
                         awaitComplete()
                     }
                     verify(exactly = 1) { source.animeCollection }
@@ -43,11 +43,11 @@ internal class ListsRepositoryTest : BehaviorSpec() {
 
             `when`("observing the manga collection") {
                 val collection = valueMockk<MediaCollection<MediaEntry.Manga>>()
-                every { source.mangaCollection } returns flowOf(collection)
+                every { source.mangaCollection } returns flowOf(collection.right())
 
                 then("collecting the flow should get the same items") {
                     repo.mangaCollection.test(5.seconds) {
-                        awaitItem() shouldBe collection
+                        awaitItem().shouldBeRight(collection)
                         awaitComplete()
                     }
                     verify(exactly = 1) { source.mangaCollection }
@@ -55,7 +55,7 @@ internal class ListsRepositoryTest : BehaviorSpec() {
             }
 
             `when`("updating the list without error") {
-                coEvery { source.updateList(any()) } returns Unit.right()
+                coEitherJustRun { source.updateList(any()) }
 
                 then("the result should be right") {
                     repo.updateList(mockk()).shouldBeRight()

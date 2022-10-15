@@ -3,5 +3,6 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.arrow)
     implementation(libs.bundles.test)
 }
