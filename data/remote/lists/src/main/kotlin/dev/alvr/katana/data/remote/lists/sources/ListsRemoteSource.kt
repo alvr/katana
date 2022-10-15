@@ -1,6 +1,8 @@
 package dev.alvr.katana.data.remote.lists.sources
 
 import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.watch
 import dev.alvr.katana.data.remote.base.extensions.optional
@@ -16,6 +18,7 @@ import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import javax.inject.Inject
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -32,10 +35,10 @@ internal class ListsRemoteSource @Inject constructor(
         f = { client.mutation(entry.toMutation()).execute() },
         fe = { error ->
             when (CommonRemoteFailure(error)) {
-                CommonRemoteFailure.NetworkFailure -> ListsFailure.UpdatingList
-                CommonRemoteFailure.ResponseFailure -> ListsFailure.UpdatingList
-                CommonRemoteFailure.CacheFailure -> Failure.Unknown
-                CommonRemoteFailure.UnknownFailure -> Failure.Unknown
+                CommonRemoteFailure.Network -> ListsFailure.UpdatingList
+                CommonRemoteFailure.Response -> ListsFailure.UpdatingList
+                CommonRemoteFailure.Cache -> Failure.Unknown
+                CommonRemoteFailure.Unknown -> Failure.Unknown
             }
         },
     ).void()
@@ -45,8 +48,19 @@ internal class ListsRemoteSource @Inject constructor(
             .query(MediaListCollectionQuery(userId.getId().optional(), type))
             .watch()
             .distinctUntilChanged()
-            .map { res -> MediaCollection(res.data?.mediaList<T>().orEmpty()) }
+            .map { res -> MediaCollection(res.data?.mediaList<T>().orEmpty()).right() }
             .distinctUntilChanged()
+            .catch { error ->
+                emit(
+                    when (CommonRemoteFailure(error)) {
+                        CommonRemoteFailure.Network -> ListsFailure.GetMediaCollection
+                        CommonRemoteFailure.Response -> ListsFailure.GetMediaCollection
+                        CommonRemoteFailure.Cache -> Failure.Unknown
+                        CommonRemoteFailure.Unknown -> Failure.Unknown
+                    }.left(),
+                )
+            }
+
         emitAll(response)
     }
 }

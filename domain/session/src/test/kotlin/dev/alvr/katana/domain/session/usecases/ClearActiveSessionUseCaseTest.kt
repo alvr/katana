@@ -37,15 +37,15 @@ internal class ClearActiveSessionUseCaseTest : FunSpec() {
 
         context("failure clearing") {
             context("is a SessionPreferencesFailure.ClearingSessionFailure") {
-                coEvery { repo.clearActiveSession() } returns SessionFailure.ClearingSessionFailure.left()
+                coEvery { repo.clearActiveSession() } returns SessionFailure.ClearingSession.left()
 
                 test("invoke should return failure") {
-                    useCase().shouldBeLeft(SessionFailure.ClearingSessionFailure)
+                    useCase().shouldBeLeft(SessionFailure.ClearingSession)
                     coVerify(exactly = 1) { repo.clearActiveSession() }
                 }
 
                 test("sync should return failure") {
-                    useCase.sync().shouldBeLeft(SessionFailure.ClearingSessionFailure)
+                    useCase.sync().shouldBeLeft(SessionFailure.ClearingSession)
                     coVerify(exactly = 1) { repo.clearActiveSession() }
                 }
             }

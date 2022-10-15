@@ -39,15 +39,15 @@ internal class SaveAnilistTokenUseCaseTest : FunSpec() {
 
         context("failure saving") {
             context("is a TokenPreferencesFailure.DeletingFailure") {
-                coEvery { repo.saveSession(token) } returns SessionFailure.SavingFailure.left()
+                coEvery { repo.saveSession(token) } returns SessionFailure.SavingSession.left()
 
                 test("invoke should return failure") {
-                    useCase(token).shouldBeLeft(SessionFailure.SavingFailure)
+                    useCase(token).shouldBeLeft(SessionFailure.SavingSession)
                     coVerify(exactly = 1) { repo.saveSession(token) }
                 }
 
                 test("sync should return failure") {
-                    useCase.sync(token).shouldBeLeft(SessionFailure.SavingFailure)
+                    useCase.sync(token).shouldBeLeft(SessionFailure.SavingSession)
                     coVerify(exactly = 1) { repo.saveSession(token) }
                 }
             }

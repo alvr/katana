@@ -38,7 +38,7 @@ internal class UserRemoteSourceTest : BehaviorSpec() {
                     client.enqueueTestResponse(UserIdQuery())
 
                     then("it should be a UserFailure.UserIdFailure") {
-                        source.getUserId().shouldBeLeft(UserFailure.UserIdFailure)
+                        source.getUserId().shouldBeLeft(UserFailure.GettingUserId)
                     }
                 }
 
@@ -47,7 +47,7 @@ internal class UserRemoteSourceTest : BehaviorSpec() {
                     client.enqueueTestResponse(UserIdQuery(), query)
 
                     then("it should be a UserFailure.UserIdFailure") {
-                        source.getUserId().shouldBeLeft(UserFailure.UserIdFailure)
+                        source.getUserId().shouldBeLeft(UserFailure.GettingUserId)
                     }
                 }
 
@@ -75,7 +75,7 @@ internal class UserRemoteSourceTest : BehaviorSpec() {
                     coEvery { client.query(UserIdQuery()).execute() } throws mockk<ApolloHttpException>()
 
                     then("it returns a left of UserFailure.FetchingFailure") {
-                        source.saveUserId().shouldBeLeft(UserFailure.FetchingFailure)
+                        source.saveUserId().shouldBeLeft(UserFailure.FetchingUser)
                         coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
                     }
                 }
@@ -84,7 +84,7 @@ internal class UserRemoteSourceTest : BehaviorSpec() {
                     coEvery { client.query(UserIdQuery()).execute() } throws ApolloNetworkException()
 
                     then("it returns a left of UserFailure.FetchingFailure") {
-                        source.saveUserId().shouldBeLeft(UserFailure.FetchingFailure)
+                        source.saveUserId().shouldBeLeft(UserFailure.FetchingUser)
                         coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
                     }
                 }
@@ -111,7 +111,7 @@ internal class UserRemoteSourceTest : BehaviorSpec() {
                     coEvery { client.query(UserIdQuery()).execute() } throws ApolloParseException()
 
                     then("it returns a left of UserFailure.SavingFailure") {
-                        source.saveUserId().shouldBeLeft(UserFailure.SavingFailure)
+                        source.saveUserId().shouldBeLeft(UserFailure.SavingUser)
                         coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
                     }
                 }
@@ -120,7 +120,7 @@ internal class UserRemoteSourceTest : BehaviorSpec() {
                     coEvery { client.query(UserIdQuery()).execute() } throws mockk<JsonDataException>()
 
                     then("it returns a left of UserFailure.SavingFailure") {
-                        source.saveUserId().shouldBeLeft(UserFailure.SavingFailure)
+                        source.saveUserId().shouldBeLeft(UserFailure.SavingUser)
                         coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
                     }
                 }
@@ -129,7 +129,7 @@ internal class UserRemoteSourceTest : BehaviorSpec() {
                     coEvery { client.query(UserIdQuery()).execute() } throws mockk<JsonEncodingException>()
 
                     then("it returns a left of UserFailure.SavingFailure") {
-                        source.saveUserId().shouldBeLeft(UserFailure.SavingFailure)
+                        source.saveUserId().shouldBeLeft(UserFailure.SavingUser)
                         coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
                     }
                 }

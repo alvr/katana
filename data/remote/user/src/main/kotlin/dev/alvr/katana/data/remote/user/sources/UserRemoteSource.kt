@@ -16,17 +16,17 @@ internal class UserRemoteSource @Inject constructor(
 ) {
     suspend fun getUserId() = Either.catch(
         f = { client.query(UserIdQuery()).fetchPolicy(FetchPolicy.CacheOnly).execute().data() },
-        fe = { UserFailure.UserIdFailure },
+        fe = { UserFailure.GettingUserId },
     )
 
     suspend fun saveUserId() = Either.catch(
         f = { client.query(UserIdQuery()).execute() },
         fe = { error ->
             when (CommonRemoteFailure(error)) {
-                CommonRemoteFailure.NetworkFailure -> UserFailure.FetchingFailure
-                CommonRemoteFailure.ResponseFailure -> UserFailure.SavingFailure
-                CommonRemoteFailure.CacheFailure -> Failure.Unknown
-                CommonRemoteFailure.UnknownFailure -> Failure.Unknown
+                CommonRemoteFailure.Network -> UserFailure.FetchingUser
+                CommonRemoteFailure.Response -> UserFailure.SavingUser
+                CommonRemoteFailure.Cache -> Failure.Unknown
+                CommonRemoteFailure.Unknown -> Failure.Unknown
             }
         },
     ).void()

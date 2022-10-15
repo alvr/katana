@@ -39,15 +39,15 @@ internal class GetUserIdUseCaseTest : FunSpec() {
         }
 
         context("failure userId") {
-            coEvery { repo.getUserId() } returns UserFailure.UserIdFailure.left()
+            coEvery { repo.getUserId() } returns UserFailure.GettingUserId.left()
 
             test("invoke should return failure") {
-                useCase().shouldBeLeft(UserFailure.UserIdFailure)
+                useCase().shouldBeLeft(UserFailure.GettingUserId)
                 coVerify(exactly = 1) { repo.getUserId() }
             }
 
             test("sync should return failure") {
-                useCase.sync().shouldBeLeft(UserFailure.UserIdFailure)
+                useCase.sync().shouldBeLeft(UserFailure.GettingUserId)
                 coVerify(exactly = 1) { repo.getUserId() }
             }
         }

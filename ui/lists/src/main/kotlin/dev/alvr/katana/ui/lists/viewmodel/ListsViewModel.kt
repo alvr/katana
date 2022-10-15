@@ -1,7 +1,10 @@
 package dev.alvr.katana.ui.lists.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
+import arrow.core.Either
+import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.orEmpty
+import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
@@ -9,6 +12,7 @@ import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.entities.mappers.toMediaList
+import io.github.aakira.napier.Napier
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -23,7 +27,7 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     private val savedStateHandle: SavedStateHandle,
     private val updateListUseCase: UpdateListUseCase,
 ) : BaseViewModel<ListState<I>, Nothing>() {
-    protected abstract val collectionFlow: Flow<MediaCollection<E>>
+    protected abstract val collectionFlow: Flow<Either<Failure, MediaCollection<E>>>
 
     override val container = container<ListState<I>, Nothing>(ListState()) {
         observeLists()
@@ -81,26 +85,38 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     private fun collectCollectionFlow() {
         intent {
             collectionFlow.collect { collection ->
-                val items = collection.lists
-                    .groupBy { it.name }
-                    .also { setListNames(it.keys.toTypedArray()) }
-                    .mapValues { it.value.entryMap() }
-                    .also { setCollection(it) }
+                collection.fold(
+                    ifLeft = ::onCollectCollectionError,
+                    ifRight = { media ->
+                        val items = media.lists
+                            .groupBy { it.name }
+                            .also { setListNames(it.keys.toTypedArray()) }
+                            .mapValues { it.value.entryMap() }
+                            .also { setCollection(it) }
 
-                reduce {
-                    val selectedListName = state.name ?: items.keys.firstOrNull()
-                    val selectedList = getListByName(selectedListName).orEmpty()
-                    currentList = selectedList
+                        val selectedListName = state.name ?: items.keys.firstOrNull()
+                        val selectedList = getListByName(selectedListName).orEmpty()
+                        currentList = selectedList
 
-                    state.copy(
-                        items = selectedList,
-                        name = selectedListName,
-                        isEmpty = selectedList.isEmpty(),
-                        isLoading = false,
-                    )
-                }
+                        reduce {
+                            state.copy(
+                                items = selectedList,
+                                name = selectedListName,
+                                isEmpty = selectedList.isEmpty(),
+                                isLoading = false,
+                                isError = false,
+                            )
+                        }
+                    },
+                )
             }
         }
+    }
+
+    private fun onCollectCollectionError(failure: Failure) {
+        Napier.e(failure) { String.empty }
+
+        updateState { copy(isError = true, isLoading = false) }
     }
 
     private fun <T : MediaListItem> setCollection(items: Collection<T>) {

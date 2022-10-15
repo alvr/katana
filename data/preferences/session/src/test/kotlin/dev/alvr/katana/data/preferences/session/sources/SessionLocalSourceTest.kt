@@ -103,7 +103,7 @@ internal class SessionLocalSourceTest : BehaviorSpec() {
                         coEvery { store.updateData(any()) } throws IOException()
 
                         then("should be a left of PreferencesTokenFailure.ClearingSessionFailure") {
-                            source.clearActiveSession().shouldBeLeft(SessionFailure.ClearingSessionFailure)
+                            source.clearActiveSession().shouldBeLeft(SessionFailure.ClearingSession)
                         }
                     }
                 }
@@ -122,7 +122,7 @@ internal class SessionLocalSourceTest : BehaviorSpec() {
                         coEvery { store.updateData(any()) } throws IOException()
 
                         then("should be a left of PreferencesTokenFailure.DeletingFailure") {
-                            source.deleteAnilistToken().shouldBeLeft(SessionFailure.DeletingTokenFailure)
+                            source.deleteAnilistToken().shouldBeLeft(SessionFailure.DeletingToken)
                         }
                     }
                 }
@@ -143,7 +143,7 @@ internal class SessionLocalSourceTest : BehaviorSpec() {
                         coEvery { store.updateData(any()) } throws IOException()
 
                         then("should be a left of PreferencesTokenFailure.SavingFailure") {
-                            source.saveSession(token).shouldBeLeft(SessionFailure.SavingFailure)
+                            source.saveSession(token).shouldBeLeft(SessionFailure.SavingSession)
                         }
                     }
                 }

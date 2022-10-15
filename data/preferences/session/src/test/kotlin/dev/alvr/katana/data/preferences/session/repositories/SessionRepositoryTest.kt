@@ -75,11 +75,11 @@ internal class SessionRepositoryTest : BehaviorSpec() {
             }
 
             `when`("saving a session with an error") {
-                coEvery { source.saveSession(any()) } returns SessionFailure.SavingFailure.left()
+                coEvery { source.saveSession(any()) } returns SessionFailure.SavingSession.left()
                 val result = repo.saveSession(AnilistToken(SAVED_TOKEN))
 
                 then("the result should be left") {
-                    result.shouldBeLeft(SessionFailure.SavingFailure)
+                    result.shouldBeLeft(SessionFailure.SavingSession)
                     coVerify(exactly = 1) { source.saveSession(AnilistToken(SAVED_TOKEN)) }
                 }
             }
@@ -95,11 +95,11 @@ internal class SessionRepositoryTest : BehaviorSpec() {
             }
 
             `when`("deleting a session with an error") {
-                coEvery { source.deleteAnilistToken() } returns SessionFailure.DeletingTokenFailure.left()
+                coEvery { source.deleteAnilistToken() } returns SessionFailure.DeletingToken.left()
                 val result = repo.deleteAnilistToken()
 
                 then("the result should be left") {
-                    result.shouldBeLeft(SessionFailure.DeletingTokenFailure)
+                    result.shouldBeLeft(SessionFailure.DeletingToken)
                     coVerify(exactly = 1) { source.deleteAnilistToken() }
                 }
             }
@@ -115,11 +115,11 @@ internal class SessionRepositoryTest : BehaviorSpec() {
             }
 
             `when`("clearing a session with an error") {
-                coEvery { source.clearActiveSession() } returns SessionFailure.ClearingSessionFailure.left()
+                coEvery { source.clearActiveSession() } returns SessionFailure.ClearingSession.left()
                 val result = repo.clearActiveSession()
 
                 then("the result should be left") {
-                    result.shouldBeLeft(SessionFailure.ClearingSessionFailure)
+                    result.shouldBeLeft(SessionFailure.ClearingSession)
                     coVerify(exactly = 1) { source.clearActiveSession() }
                 }
             }

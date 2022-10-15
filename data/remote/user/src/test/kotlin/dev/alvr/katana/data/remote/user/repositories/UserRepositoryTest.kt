@@ -33,10 +33,10 @@ internal class UserRepositoryTest : BehaviorSpec() {
                 }
 
                 and("the server returns an empty userId") {
-                    coEvery { source.getUserId() } returns UserFailure.UserIdFailure.left()
+                    coEvery { source.getUserId() } returns UserFailure.GettingUserId.left()
 
                     then("it should be a UserFailure.UserIdFailure") {
-                        repo.getUserId().shouldBeLeft(UserFailure.UserIdFailure)
+                        repo.getUserId().shouldBeLeft(UserFailure.GettingUserId)
                         coVerify(exactly = 1) { source.getUserId() }
                     }
                 }
@@ -53,19 +53,19 @@ internal class UserRepositoryTest : BehaviorSpec() {
                 }
 
                 and("a HTTP error occurs") {
-                    coEvery { source.saveUserId() } returns UserFailure.FetchingFailure.left()
+                    coEvery { source.saveUserId() } returns UserFailure.FetchingUser.left()
 
                     then("it returns a left of UserFailure.FetchingFailure") {
-                        repo.saveUserId().shouldBeLeft(UserFailure.FetchingFailure)
+                        repo.saveUserId().shouldBeLeft(UserFailure.FetchingUser)
                         coVerify(exactly = 1) { source.saveUserId() }
                     }
                 }
 
                 and("a HTTP error occurs") {
-                    coEvery { source.saveUserId() } returns UserFailure.SavingFailure.left()
+                    coEvery { source.saveUserId() } returns UserFailure.SavingUser.left()
 
                     then("it returns a left of UserFailure.SavingFailure") {
-                        repo.saveUserId().shouldBeLeft(UserFailure.SavingFailure)
+                        repo.saveUserId().shouldBeLeft(UserFailure.SavingUser)
                         coVerify(exactly = 1) { source.saveUserId() }
                     }
                 }

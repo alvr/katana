@@ -68,7 +68,7 @@ internal class LoginViewModelTest : BehaviorSpec() {
                 }
 
                 `when`("saving the token, it returns a left") {
-                    coEvery { saveAnilistToken(AnilistToken(any())) } returns SessionFailure.SavingFailure.left()
+                    coEvery { saveAnilistToken(AnilistToken(any())) } returns SessionFailure.SavingSession.left()
                     coEvery { saveUserId() } returns Unit.right()
 
                     then("it should not be saved without params") {
@@ -87,7 +87,7 @@ internal class LoginViewModelTest : BehaviorSpec() {
 
                 `when`("saving the userId, it returns a left") {
                     coEvery { saveAnilistToken(AnilistToken(any())) } returns Unit.right()
-                    coEvery { saveUserId() } returns UserFailure.SavingFailure.left()
+                    coEvery { saveUserId() } returns UserFailure.SavingUser.left()
 
                     then("it should not be saved without params") {
                         viewModel.runOnCreate()
