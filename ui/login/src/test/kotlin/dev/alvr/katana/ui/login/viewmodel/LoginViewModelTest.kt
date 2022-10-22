@@ -2,8 +2,8 @@ package dev.alvr.katana.ui.login.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import arrow.core.left
-import arrow.core.right
 import dev.alvr.katana.common.core.empty
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.session.failures.SessionFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
@@ -27,8 +27,8 @@ internal class LoginViewModelTest : BehaviorSpec() {
     init {
         given("a deeplink without token") {
             every { stateHandle.get<String>(any()) } returns null
-            coEvery { saveAnilistToken(AnilistToken(any())) } returns Unit.right()
-            coEvery { saveUserId() } returns Unit.right()
+            coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
+            coEitherJustRun { saveUserId() }
 
             and("a lazily created viewModel") {
                 `when`("saving the token") {
@@ -50,8 +50,8 @@ internal class LoginViewModelTest : BehaviorSpec() {
 
             and("a lazily created viewModel") {
                 `when`("saving the token successfully") {
-                    coEvery { saveAnilistToken(AnilistToken(any())) } returns Unit.right()
-                    coEvery { saveUserId() } returns Unit.right()
+                    coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
+                    coEitherJustRun { saveUserId() }
 
                     then("it should not be saved without params") {
                         viewModel.runOnCreate()
@@ -68,8 +68,8 @@ internal class LoginViewModelTest : BehaviorSpec() {
                 }
 
                 `when`("saving the token, it returns a left") {
-                    coEvery { saveAnilistToken(AnilistToken(any())) } returns SessionFailure.SavingFailure.left()
-                    coEvery { saveUserId() } returns Unit.right()
+                    coEvery { saveAnilistToken(AnilistToken(any())) } returns SessionFailure.SavingSession.left()
+                    coEitherJustRun { saveUserId() }
 
                     then("it should not be saved without params") {
                         viewModel.runOnCreate()
@@ -86,8 +86,8 @@ internal class LoginViewModelTest : BehaviorSpec() {
                 }
 
                 `when`("saving the userId, it returns a left") {
-                    coEvery { saveAnilistToken(AnilistToken(any())) } returns Unit.right()
-                    coEvery { saveUserId() } returns UserFailure.SavingFailure.left()
+                    coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
+                    coEvery { saveUserId() } returns UserFailure.SavingUser.left()
 
                     then("it should not be saved without params") {
                         viewModel.runOnCreate()
@@ -107,8 +107,8 @@ internal class LoginViewModelTest : BehaviorSpec() {
 
         given("a deeplink with token without params") {
             every { stateHandle.get<String>(any()) } returns CLEAR_TOKEN
-            coEvery { saveAnilistToken(AnilistToken(any())) } returns Unit.right()
-            coEvery { saveUserId() } returns Unit.right()
+            coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
+            coEitherJustRun { saveUserId() }
 
             and("a lazily created viewModel") {
                 `when`("saving the token") {
@@ -130,8 +130,8 @@ internal class LoginViewModelTest : BehaviorSpec() {
 
         given("a deeplink that is empty") {
             every { stateHandle.get<String>(any()) } returns String.empty
-            coEvery { saveAnilistToken(AnilistToken(any())) } returns Unit.right()
-            coEvery { saveUserId() } returns Unit.right()
+            coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
+            coEitherJustRun { saveUserId() }
 
             and("a lazily created viewModel") {
                 `when`("saving the token") {

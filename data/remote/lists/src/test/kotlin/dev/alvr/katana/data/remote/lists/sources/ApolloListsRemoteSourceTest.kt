@@ -16,6 +16,7 @@ import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuild
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.user.managers.UserIdManager
+import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -62,7 +63,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the result list should be also empty") {
                         source.animeCollection.test(5.seconds) {
-                            awaitItem().lists.shouldBeEmpty()
+                            awaitItem().shouldBeRight().lists.shouldBeEmpty()
                             awaitComplete()
                         }
                     }
@@ -106,7 +107,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the result lists' entries should also be empty") {
                         source.animeCollection.test(5.seconds) {
-                            awaitItem().lists
+                            awaitItem().shouldBeRight().lists
                                 .shouldHaveSize(4)
                                 .also { lists ->
                                     with(lists.first()) {
@@ -159,7 +160,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the result entry should have the default values") {
                         source.animeCollection.test(5.seconds) {
-                            awaitItem().lists.also { lists ->
+                            awaitItem().shouldBeRight().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
                                 with(entry.list) {
@@ -248,7 +249,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the result entry should have the default values") {
                         source.animeCollection.test(5.seconds) {
-                            awaitItem().lists.also { lists ->
+                            awaitItem().shouldBeRight().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
                                 with(entry.list) {
@@ -293,7 +294,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the result list should be empty") {
                         source.animeCollection.test(5.seconds) {
-                            awaitItem().lists.shouldBeEmpty()
+                            awaitItem().shouldBeRight().lists.shouldBeEmpty()
                             awaitComplete()
                         }
                     }
@@ -325,7 +326,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the result list should be also empty") {
                         source.mangaCollection.test(5.seconds) {
-                            awaitItem().lists.shouldBeEmpty()
+                            awaitItem().shouldBeRight().lists.shouldBeEmpty()
                             awaitComplete()
                         }
                     }
@@ -369,7 +370,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the result lists' entries should also be empty") {
                         source.mangaCollection.test(5.seconds) {
-                            awaitItem().lists
+                            awaitItem().shouldBeRight().lists
                                 .shouldHaveSize(4)
                                 .also { lists ->
                                     with(lists.first()) {
@@ -423,7 +424,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the result entry should have the default values") {
                         source.mangaCollection.test(5.seconds) {
-                            awaitItem().lists.also { lists ->
+                            awaitItem().shouldBeRight().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
                                 with(entry.list) {
@@ -510,7 +511,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the result entry should have the default values") {
                         source.mangaCollection.test(5.seconds) {
-                            awaitItem().lists.also { lists ->
+                            awaitItem().shouldBeRight().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
                                 with(entry.list) {
@@ -552,7 +553,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the result list should be empty") {
                         source.mangaCollection.test(5.seconds) {
-                            awaitItem().lists.shouldBeEmpty()
+                            awaitItem().shouldBeRight().lists.shouldBeEmpty()
                             awaitComplete()
                         }
                     }

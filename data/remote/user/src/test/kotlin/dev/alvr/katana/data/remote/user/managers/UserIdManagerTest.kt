@@ -20,10 +20,10 @@ internal class UserIdManagerTest : BehaviorSpec() {
     init {
         given("an userIdManager") {
             `when`("server fails to return something") {
-                coEvery { getUserId() } returns UserFailure.UserIdFailure.left()
+                coEvery { getUserId() } returns UserFailure.GettingUserId.left()
 
                 then("the mapper should throw an exception") {
-                    manager.getId().shouldBeLeft(UserFailure.UserIdFailure)
+                    manager.getId().shouldBeLeft(UserFailure.GettingUserId)
                 }
             }
 

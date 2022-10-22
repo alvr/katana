@@ -1,7 +1,7 @@
 package dev.alvr.katana.domain.session.usecases
 
 import arrow.core.left
-import arrow.core.right
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
@@ -22,7 +22,7 @@ internal class DeleteAnilistTokenUseCaseTest : FunSpec() {
 
     init {
         context("successful deletion") {
-            coEvery { repo.deleteAnilistToken() } returns Unit.right()
+            coEitherJustRun { repo.deleteAnilistToken() }
 
             test("invoke should delete the token") {
                 useCase().shouldBeRight()
@@ -37,15 +37,15 @@ internal class DeleteAnilistTokenUseCaseTest : FunSpec() {
 
         context("failure deletion") {
             context("is a SessionPreferencesFailure.DeletingTokenFailure") {
-                coEvery { repo.deleteAnilistToken() } returns SessionFailure.DeletingTokenFailure.left()
+                coEvery { repo.deleteAnilistToken() } returns SessionFailure.DeletingToken.left()
 
                 test("invoke should return failure") {
-                    useCase().shouldBeLeft(SessionFailure.DeletingTokenFailure)
+                    useCase().shouldBeLeft(SessionFailure.DeletingToken)
                     coVerify(exactly = 1) { repo.deleteAnilistToken() }
                 }
 
                 test("sync should return failure") {
-                    useCase.sync().shouldBeLeft(SessionFailure.DeletingTokenFailure)
+                    useCase.sync().shouldBeLeft(SessionFailure.DeletingToken)
                     coVerify(exactly = 1) { repo.deleteAnilistToken() }
                 }
             }

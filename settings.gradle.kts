@@ -31,6 +31,7 @@ gradleEnterprise {
 include(":app")
 
 // Include all modules in these directories
+// TODO https://kotlinlang.org/docs/whatsnew1720.html#standard-library
 listOf("common", "data/preferences", "data/remote", "domain", "ui").forEach { topDir ->
     rootDir.resolve(topDir)
         .walkTopDown()
@@ -42,4 +43,5 @@ listOf("common", "data/preferences", "data/remote", "domain", "ui").forEach { to
         }
 }
 
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

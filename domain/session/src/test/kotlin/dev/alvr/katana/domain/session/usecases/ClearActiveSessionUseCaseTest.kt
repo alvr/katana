@@ -1,7 +1,7 @@
 package dev.alvr.katana.domain.session.usecases
 
 import arrow.core.left
-import arrow.core.right
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
@@ -22,7 +22,7 @@ internal class ClearActiveSessionUseCaseTest : FunSpec() {
 
     init {
         context("successful clearing") {
-            coEvery { repo.clearActiveSession() } returns Unit.right()
+            coEitherJustRun { repo.clearActiveSession() }
 
             test("invoke should clear the session") {
                 useCase().shouldBeRight()
@@ -37,15 +37,15 @@ internal class ClearActiveSessionUseCaseTest : FunSpec() {
 
         context("failure clearing") {
             context("is a SessionPreferencesFailure.ClearingSessionFailure") {
-                coEvery { repo.clearActiveSession() } returns SessionFailure.ClearingSessionFailure.left()
+                coEvery { repo.clearActiveSession() } returns SessionFailure.ClearingSession.left()
 
                 test("invoke should return failure") {
-                    useCase().shouldBeLeft(SessionFailure.ClearingSessionFailure)
+                    useCase().shouldBeLeft(SessionFailure.ClearingSession)
                     coVerify(exactly = 1) { repo.clearActiveSession() }
                 }
 
                 test("sync should return failure") {
-                    useCase.sync().shouldBeLeft(SessionFailure.ClearingSessionFailure)
+                    useCase.sync().shouldBeLeft(SessionFailure.ClearingSession)
                     coVerify(exactly = 1) { repo.clearActiveSession() }
                 }
             }

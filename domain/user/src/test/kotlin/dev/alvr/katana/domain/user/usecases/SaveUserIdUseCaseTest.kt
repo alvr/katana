@@ -1,7 +1,7 @@
 package dev.alvr.katana.domain.user.usecases
 
 import arrow.core.left
-import arrow.core.right
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
@@ -22,7 +22,7 @@ internal class SaveUserIdUseCaseTest : FunSpec() {
 
     init {
         context("successful userId") {
-            coEvery { repo.saveUserId() } returns Unit.right()
+            coEitherJustRun { repo.saveUserId() }
 
             test("invoke should return user") {
                 useCase().shouldBeRight()
@@ -37,29 +37,29 @@ internal class SaveUserIdUseCaseTest : FunSpec() {
 
         context("failure userId") {
             context("is a UserFailure.FetchingFailure") {
-                coEvery { repo.saveUserId() } returns UserFailure.FetchingFailure.left()
+                coEvery { repo.saveUserId() } returns UserFailure.FetchingUser.left()
 
                 test("invoke should return failure") {
-                    useCase().shouldBeLeft(UserFailure.FetchingFailure)
+                    useCase().shouldBeLeft(UserFailure.FetchingUser)
                     coVerify(exactly = 1) { repo.saveUserId() }
                 }
 
                 test("sync should return failure") {
-                    useCase.sync().shouldBeLeft(UserFailure.FetchingFailure)
+                    useCase.sync().shouldBeLeft(UserFailure.FetchingUser)
                     coVerify(exactly = 1) { repo.saveUserId() }
                 }
             }
 
             context("is a UserFailure.SavingFailure") {
-                coEvery { repo.saveUserId() } returns UserFailure.SavingFailure.left()
+                coEvery { repo.saveUserId() } returns UserFailure.SavingUser.left()
 
                 test("invoke should return failure") {
-                    useCase().shouldBeLeft(UserFailure.SavingFailure)
+                    useCase().shouldBeLeft(UserFailure.SavingUser)
                     coVerify(exactly = 1) { repo.saveUserId() }
                 }
 
                 test("sync should return failure") {
-                    useCase.sync().shouldBeLeft(UserFailure.SavingFailure)
+                    useCase.sync().shouldBeLeft(UserFailure.SavingUser)
                     coVerify(exactly = 1) { repo.saveUserId() }
                 }
             }

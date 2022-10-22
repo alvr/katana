@@ -1,7 +1,7 @@
 package dev.alvr.katana.domain.lists.usecases
 
 import arrow.core.left
-import arrow.core.right
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.lists.MediaList
@@ -35,7 +35,7 @@ internal class UpdateListUseCaseTest : FunSpec() {
 
     init {
         context("successful updating") {
-            coEvery { repo.updateList(any()) } returns Unit.right()
+            coEitherJustRun { repo.updateList(any()) }
 
             test("invoke should update the list") {
                 useCase(mediaList).shouldBeRight()

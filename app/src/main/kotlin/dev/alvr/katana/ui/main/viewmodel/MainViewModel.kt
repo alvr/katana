@@ -9,6 +9,7 @@ import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
 import dev.alvr.katana.ui.main.navigation.NavGraphs
+import io.github.aakira.napier.Napier
 import javax.inject.Inject
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -21,9 +22,7 @@ internal class MainViewModel @Inject constructor(
     private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,
 ) : BaseViewModel<MainState, Nothing>() {
     override val container = container<MainState, Nothing>(
-        MainState(
-            initialNavGraph = initialNavGraph,
-        ),
+        MainState(initialNavGraph = initialNavGraph),
     ) {
         observeSession()
     }
@@ -36,7 +35,11 @@ internal class MainViewModel @Inject constructor(
         }
 
     fun clearSession() {
-        intent { clearActiveSessionUseCase() }
+        intent {
+            clearActiveSessionUseCase().tapLeft { failure ->
+                Napier.e(failure) { "Error clearing session" }
+            }
+        }
     }
 
     private fun observeSession() {
@@ -44,7 +47,15 @@ internal class MainViewModel @Inject constructor(
 
         intent {
             observeActiveSessionUseCase.flow.collect { active ->
-                reduce { state.copy(isSessionActive = active) }
+                active.fold(
+                    ifLeft = { failure ->
+                        Napier.e(failure) { "Error observing the session, setting the as inactive" }
+                        reduce { state.copy(isSessionActive = false) }
+                    },
+                    ifRight = { isActive ->
+                        reduce { state.copy(isSessionActive = isActive) }
+                    },
+                )
             }
         }
     }

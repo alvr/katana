@@ -17,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.plusAssign
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -39,13 +38,15 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
-internal fun KatanaDestinations(useNavRail: Boolean) {
+internal fun KatanaDestinations(
+    useNavRail: Boolean,
+    vm: MainViewModel,
+) {
     val bottomSheetNavigator = rememberBottomSheetNavigator()
     val navController = rememberAnimatedNavController().withSentryObservableEffect().also { nav ->
         nav.navigatorProvider += bottomSheetNavigator
     }
 
-    val vm = hiltViewModel<MainViewModel>()
     val state by vm.collectAsState()
 
     SessionExpiredDialog(visible = !state.isSessionActive) {

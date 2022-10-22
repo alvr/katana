@@ -8,8 +8,8 @@ import dev.alvr.katana.domain.lists.models.lists.MediaList
 import kotlinx.coroutines.flow.Flow
 
 interface ListsRepository {
-    val animeCollection: Flow<MediaCollection<MediaEntry.Anime>>
-    val mangaCollection: Flow<MediaCollection<MediaEntry.Manga>>
+    val animeCollection: Flow<Either<Failure, MediaCollection<MediaEntry.Anime>>>
+    val mangaCollection: Flow<Either<Failure, MediaCollection<MediaEntry.Manga>>>
 
     suspend fun updateList(entry: MediaList): Either<Failure, Unit>
 }

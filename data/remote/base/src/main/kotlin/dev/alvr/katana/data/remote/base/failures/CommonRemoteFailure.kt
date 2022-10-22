@@ -9,22 +9,22 @@ import com.apollographql.apollo3.exception.JsonDataException
 import com.apollographql.apollo3.exception.JsonEncodingException
 import dev.alvr.katana.domain.base.failures.Failure
 
-sealed interface CommonRemoteFailure : Failure {
-    object CacheFailure : CommonRemoteFailure
-    object NetworkFailure : CommonRemoteFailure
-    object ResponseFailure : CommonRemoteFailure
-    object UnknownFailure : CommonRemoteFailure
+sealed class CommonRemoteFailure : Failure() {
+    object Cache : CommonRemoteFailure()
+    object Network : CommonRemoteFailure()
+    object Response : CommonRemoteFailure()
+    object Unknown : CommonRemoteFailure()
 
     companion object {
         operator fun invoke(ex: Throwable) = when (ex) {
-            is ApolloHttpException -> NetworkFailure
-            is ApolloNetworkException -> NetworkFailure
-            is CacheMissException -> CacheFailure
-            is HttpCacheMissException -> CacheFailure
-            is ApolloParseException -> ResponseFailure
-            is JsonDataException -> ResponseFailure
-            is JsonEncodingException -> ResponseFailure
-            else -> UnknownFailure
+            is ApolloHttpException -> Network
+            is ApolloNetworkException -> Network
+            is CacheMissException -> Cache
+            is HttpCacheMissException -> Cache
+            is ApolloParseException -> Response
+            is JsonDataException -> Response
+            is JsonEncodingException -> Response
+            else -> Unknown
         }
     }
 }

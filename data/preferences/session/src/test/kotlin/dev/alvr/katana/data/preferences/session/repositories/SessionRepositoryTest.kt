@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.none
 import arrow.core.right
 import arrow.core.some
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.data.preferences.session.sources.SessionLocalSource
 import dev.alvr.katana.domain.session.failures.SessionFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
@@ -14,8 +15,6 @@ import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.booleans.shouldBeFalse
-import io.kotest.matchers.booleans.shouldBeTrue
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -31,13 +30,17 @@ internal class SessionRepositoryTest : BehaviorSpec() {
             val repo: SessionRepository = SessionRepositoryImpl(source)
 
             `when`("observing if the session is active") {
-                every { source.sessionActive } returns flowOf(true, true, false)
+                every { source.sessionActive } returns flowOf(
+                    true.right(),
+                    true.right(),
+                    false.right(),
+                )
 
                 then("collecting the flow should get the same items in the same order") {
                     repo.sessionActive.test(5.seconds) {
-                        awaitItem().shouldBeTrue()
-                        awaitItem().shouldBeTrue()
-                        awaitItem().shouldBeFalse()
+                        awaitItem().shouldBeRight(true)
+                        awaitItem().shouldBeRight(true)
+                        awaitItem().shouldBeRight(false)
                         awaitComplete()
                     }
                     verify(exactly = 1) { source.sessionActive }
@@ -65,7 +68,7 @@ internal class SessionRepositoryTest : BehaviorSpec() {
             }
 
             `when`("saving a session without error") {
-                coEvery { source.saveSession(any()) } returns Unit.right()
+                coEitherJustRun { source.saveSession(any()) }
                 val result = repo.saveSession(AnilistToken(SAVED_TOKEN))
 
                 then("the result should be right") {
@@ -75,17 +78,17 @@ internal class SessionRepositoryTest : BehaviorSpec() {
             }
 
             `when`("saving a session with an error") {
-                coEvery { source.saveSession(any()) } returns SessionFailure.SavingFailure.left()
+                coEvery { source.saveSession(any()) } returns SessionFailure.SavingSession.left()
                 val result = repo.saveSession(AnilistToken(SAVED_TOKEN))
 
                 then("the result should be left") {
-                    result.shouldBeLeft(SessionFailure.SavingFailure)
+                    result.shouldBeLeft(SessionFailure.SavingSession)
                     coVerify(exactly = 1) { source.saveSession(AnilistToken(SAVED_TOKEN)) }
                 }
             }
 
             `when`("deleting a session without error") {
-                coEvery { source.deleteAnilistToken() } returns Unit.right()
+                coEitherJustRun { source.deleteAnilistToken() }
                 val result = repo.deleteAnilistToken()
 
                 then("the result should be right") {
@@ -95,17 +98,17 @@ internal class SessionRepositoryTest : BehaviorSpec() {
             }
 
             `when`("deleting a session with an error") {
-                coEvery { source.deleteAnilistToken() } returns SessionFailure.DeletingTokenFailure.left()
+                coEvery { source.deleteAnilistToken() } returns SessionFailure.DeletingToken.left()
                 val result = repo.deleteAnilistToken()
 
                 then("the result should be left") {
-                    result.shouldBeLeft(SessionFailure.DeletingTokenFailure)
+                    result.shouldBeLeft(SessionFailure.DeletingToken)
                     coVerify(exactly = 1) { source.deleteAnilistToken() }
                 }
             }
 
             `when`("clearing a session without error") {
-                coEvery { source.clearActiveSession() } returns Unit.right()
+                coEitherJustRun { source.clearActiveSession() }
                 val result = repo.clearActiveSession()
 
                 then("the result should be right") {
@@ -115,11 +118,11 @@ internal class SessionRepositoryTest : BehaviorSpec() {
             }
 
             `when`("clearing a session with an error") {
-                coEvery { source.clearActiveSession() } returns SessionFailure.ClearingSessionFailure.left()
+                coEvery { source.clearActiveSession() } returns SessionFailure.ClearingSession.left()
                 val result = repo.clearActiveSession()
 
                 then("the result should be left") {
-                    result.shouldBeLeft(SessionFailure.ClearingSessionFailure)
+                    result.shouldBeLeft(SessionFailure.ClearingSession)
                     coVerify(exactly = 1) { source.clearActiveSession() }
                 }
             }

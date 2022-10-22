@@ -9,4 +9,5 @@ internal data class ListState<T : MediaListItem>(
     val name: String? = null,
     val isEmpty: Boolean = false,
     val isLoading: Boolean = false,
+    val isError: Boolean = false,
 )

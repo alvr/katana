@@ -3,6 +3,8 @@ package dev.alvr.katana.data.preferences.session.sources
 import androidx.datastore.core.DataStore
 import arrow.core.Either
 import arrow.core.None
+import arrow.core.left
+import arrow.core.right
 import arrow.core.toOption
 import dev.alvr.katana.data.preferences.base.extensions.handleDataStore
 import dev.alvr.katana.data.preferences.session.models.Session
@@ -18,8 +20,11 @@ import kotlinx.coroutines.flow.map
 internal class SessionLocalSource @Inject constructor(
     private val dataStore: DataStore<Session>,
 ) {
+    @Suppress("USELESS_CAST")
     val sessionActive get() = dataStore.data.map { session ->
-        (session.anilistToken == null && session.isSessionActive).not()
+        (session.anilistToken == null && session.isSessionActive).not().right() as Either<Failure, Boolean>
+    }.catch {
+        emit(SessionFailure.CheckingActiveSession.left())
     }
 
     suspend fun clearActiveSession() = Either.catch(
@@ -29,7 +34,7 @@ internal class SessionLocalSource @Inject constructor(
         },
         fe = { error ->
             error.handleDataStore(
-                rwException = { SessionFailure.ClearingSessionFailure },
+                rwException = { SessionFailure.ClearingSession },
                 other = { Failure.Unknown },
             )
         },
@@ -42,7 +47,7 @@ internal class SessionLocalSource @Inject constructor(
         },
         fe = { error ->
             error.handleDataStore(
-                rwException = { SessionFailure.DeletingTokenFailure },
+                rwException = { SessionFailure.DeletingToken },
                 other = { Failure.Unknown },
             )
         },
@@ -60,7 +65,7 @@ internal class SessionLocalSource @Inject constructor(
         },
         fe = { error ->
             error.handleDataStore(
-                rwException = { SessionFailure.SavingFailure },
+                rwException = { SessionFailure.SavingSession },
                 other = { Failure.Unknown },
             )
         },

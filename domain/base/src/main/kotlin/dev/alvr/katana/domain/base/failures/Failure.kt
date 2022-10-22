@@ -1,5 +1,6 @@
 package dev.alvr.katana.domain.base.failures
 
-interface Failure {
-    object Unknown : Failure
+@Suppress("UnnecessaryAbstractClass")
+abstract class Failure : Throwable() {
+    object Unknown : Failure()
 }

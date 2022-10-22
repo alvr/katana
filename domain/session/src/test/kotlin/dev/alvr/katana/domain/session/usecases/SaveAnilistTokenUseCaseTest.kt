@@ -1,7 +1,7 @@
 package dev.alvr.katana.domain.session.usecases
 
 import arrow.core.left
-import arrow.core.right
+import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.common.tests.valueMockk
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.session.failures.SessionFailure
@@ -24,7 +24,7 @@ internal class SaveAnilistTokenUseCaseTest : FunSpec() {
 
     init {
         context("successful saving") {
-            coEvery { repo.saveSession(token) } returns Unit.right()
+            coEitherJustRun { repo.saveSession(token) }
 
             test("invoke should save the token") {
                 useCase(token).shouldBeRight()
@@ -39,15 +39,15 @@ internal class SaveAnilistTokenUseCaseTest : FunSpec() {
 
         context("failure saving") {
             context("is a TokenPreferencesFailure.DeletingFailure") {
-                coEvery { repo.saveSession(token) } returns SessionFailure.SavingFailure.left()
+                coEvery { repo.saveSession(token) } returns SessionFailure.SavingSession.left()
 
                 test("invoke should return failure") {
-                    useCase(token).shouldBeLeft(SessionFailure.SavingFailure)
+                    useCase(token).shouldBeLeft(SessionFailure.SavingSession)
                     coVerify(exactly = 1) { repo.saveSession(token) }
                 }
 
                 test("sync should return failure") {
-                    useCase.sync(token).shouldBeLeft(SessionFailure.SavingFailure)
+                    useCase.sync(token).shouldBeLeft(SessionFailure.SavingSession)
                     coVerify(exactly = 1) { repo.saveSession(token) }
                 }
             }
