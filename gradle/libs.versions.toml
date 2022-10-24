@@ -35,7 +35,7 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 
 # AndroidX
-androidx-activity = { module = "androidx.activity:activity-compose", version = "1.6.0" }
+androidx-activity = { module = "androidx.activity:activity-compose", version = "1.6.1" }
 androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.1.1" }
 
 # Apollo
