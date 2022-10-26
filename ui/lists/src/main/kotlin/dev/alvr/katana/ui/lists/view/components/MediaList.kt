@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -51,11 +52,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import dev.alvr.katana.common.core.unknown
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.components.EmptyState
+import dev.alvr.katana.ui.base.components.KatanaPullRefresh
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.viewmodel.ListState
@@ -69,6 +69,7 @@ private val LocalMediaListItem =
     compositionLocalOf<MediaListItem> { error("No MediaListItem found!") }
 
 @Composable
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 internal fun MediaList(
     listState: ListState<out MediaListItem>,
@@ -95,6 +96,7 @@ internal fun MediaList(
 }
 
 @Composable
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 private fun MediaList(
     lazyGridState: LazyGridState,
@@ -108,8 +110,8 @@ private fun MediaList(
     mediaDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(isLoading),
+    KatanaPullRefresh(
+        loading = isLoading,
         onRefresh = onRefresh,
         modifier = modifier,
     ) {
