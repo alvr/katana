@@ -33,6 +33,7 @@ internal class AndroidComposeLibraryConventionPlugin : ConventionPlugin {
         }
 
         dependencies {
+            implementation(platform(catalogLib("compose-bom")))
             implementation(catalogBundle("ui-compose"))
 
             debugImplementation(catalogLib("compose-ui-test-manifest"))
@@ -40,6 +41,7 @@ internal class AndroidComposeLibraryConventionPlugin : ConventionPlugin {
             kapt(catalogBundle("kapt-ui"))
             ksp(catalogBundle("ksp-ui"))
 
+            testImplementation(platform(catalogLib("compose-bom")))
             testImplementation(catalogBundle("test"))
             testImplementation(catalogBundle("test-android"))
             testImplementation(catalogBundle("test-ui"))
