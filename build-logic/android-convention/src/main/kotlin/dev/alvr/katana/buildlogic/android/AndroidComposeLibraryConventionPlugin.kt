@@ -1,6 +1,7 @@
 package dev.alvr.katana.buildlogic.android
 
 import com.android.build.gradle.LibraryExtension
+import com.google.devtools.ksp.gradle.KspExtension
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
@@ -20,13 +21,19 @@ internal class AndroidComposeLibraryConventionPlugin : ConventionPlugin {
         apply(plugin = "katana.android.library")
         apply(plugin = "com.google.devtools.ksp")
 
-        extensions.configure<LibraryExtension> {
-            configureCompose(this)
+        with(extensions) {
+            configure<KspExtension> {
+                arg("compose-destinations.useComposableVisibility", "false")
+            }
 
-            libraryVariants.all {
-                sourceSets {
-                    getByName(name) {
-                        kotlin.srcDir("build/generated/ksp/$name/kotlin")
+            configure<LibraryExtension> {
+                configureCompose(this)
+
+                libraryVariants.all {
+                    sourceSets {
+                        getByName(name) {
+                            kotlin.srcDir("build/generated/ksp/$name/kotlin")
+                        }
                     }
                 }
             }
