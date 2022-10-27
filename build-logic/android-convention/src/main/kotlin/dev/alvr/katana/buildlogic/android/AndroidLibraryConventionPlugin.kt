@@ -18,7 +18,7 @@ internal class AndroidLibraryConventionPlugin : ConventionPlugin {
         apply(plugin = "org.jetbrains.kotlin.android")
         apply(plugin = "org.jetbrains.kotlin.kapt")
         apply(plugin = "com.google.dagger.hilt.android")
-        apply(plugin = "katana.sonarqube.android")
+        apply(plugin = "katana.sonar.android")
 
         with(extensions) {
             commonAndroidExtensions()

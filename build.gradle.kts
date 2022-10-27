@@ -3,6 +3,6 @@ plugins {
     id("katana.dependency-versions")
     id("katana.detekt")
     id("katana.kover")
-    id("katana.sonarqube")
+    id("katana.sonar")
     alias(libs.plugins.hilt) apply false
 }

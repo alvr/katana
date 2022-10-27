@@ -17,7 +17,7 @@ internal class KotlinLibraryConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.jetbrains.kotlin.jvm")
         apply(plugin = "org.jetbrains.kotlin.kapt")
-        apply(plugin = "katana.sonarqube.kotlin")
+        apply(plugin = "katana.sonar.kotlin")
 
         extensions.commonExtensions()
 
