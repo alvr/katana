@@ -34,6 +34,7 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
         tasks.commonTasks()
 
         dependencies {
+            implementation(platform(catalogLib("compose-bom")))
             implementation(catalogBundle("common-android"))
             implementation(catalogBundle("app"))
 
@@ -41,6 +42,7 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
 
             kapt(catalogBundle("kapt-ui"))
 
+            testImplementation(platform(catalogLib("compose-bom")))
             testImplementation(catalogBundle("test"))
             testImplementation(catalogBundle("test-android"))
             testImplementation(catalogBundle("test-ui"))

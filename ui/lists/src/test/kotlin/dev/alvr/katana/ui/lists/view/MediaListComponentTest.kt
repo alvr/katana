@@ -1,6 +1,7 @@
 package dev.alvr.katana.ui.lists.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHeightIsEqualTo
@@ -53,6 +54,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
 
+@ExperimentalMaterialApi
 @ExperimentalCoroutinesApi
 @ExperimentalFoundationApi
 internal class MediaListComponentTest : ComposeTest() {
