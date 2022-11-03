@@ -1,7 +1,6 @@
 package dev.alvr.katana.ui.lists.view.components
 
 import android.os.Build
-import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -21,10 +20,8 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -54,7 +51,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.alvr.katana.common.core.unknown
 import dev.alvr.katana.common.core.zero
-import dev.alvr.katana.ui.base.components.EmptyState
 import dev.alvr.katana.ui.base.components.KatanaPullRefresh
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
@@ -73,7 +69,6 @@ private val LocalMediaListItem =
 @ExperimentalFoundationApi
 internal fun MediaList(
     listState: ListState<out MediaListItem>,
-    @StringRes emptyStateRes: Int,
     onRefresh: () -> Unit,
     addPlusOne: (MediaListItem) -> Unit,
     editEntry: (Int) -> Unit,
@@ -81,57 +76,19 @@ internal fun MediaList(
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState = rememberLazyGridState(),
 ) {
-    MediaList(
-        lazyGridState = lazyGridState,
-        items = listState.items,
-        isEmpty = listState.isEmpty,
-        isLoading = listState.isLoading,
-        emptyStateRes = emptyStateRes,
-        onRefresh = onRefresh,
-        addPlusOne = addPlusOne,
-        editEntry = editEntry,
-        mediaDetails = mediaDetails,
-        modifier = modifier,
-    )
-}
-
-@Composable
-@ExperimentalMaterialApi
-@ExperimentalFoundationApi
-private fun MediaList(
-    lazyGridState: LazyGridState,
-    items: ImmutableList<MediaListItem>,
-    isEmpty: Boolean,
-    isLoading: Boolean,
-    @StringRes emptyStateRes: Int,
-    onRefresh: () -> Unit,
-    addPlusOne: (MediaListItem) -> Unit,
-    editEntry: (Int) -> Unit,
-    mediaDetails: (Int) -> Unit,
-    modifier: Modifier = Modifier,
-) {
     KatanaPullRefresh(
-        loading = isLoading,
-        onRefresh = onRefresh,
         modifier = modifier,
+        loading = listState.isLoading,
+        onRefresh = onRefresh,
     ) {
-        if (isEmpty && !isLoading) {
-            EmptyState(
-                text = stringResource(emptyStateRes),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-            )
-        } else {
-            MediaList(
-                lazyGridState = lazyGridState,
-                items = items,
-                modifier = Modifier.fillMaxSize(),
-                addPlusOne = addPlusOne,
-                editEntry = editEntry,
-                mediaDetails = mediaDetails,
-            )
-        }
+        MediaList(
+            lazyGridState = lazyGridState,
+            items = listState.items,
+            modifier = Modifier.fillMaxSize(),
+            addPlusOne = addPlusOne,
+            editEntry = editEntry,
+            mediaDetails = mediaDetails,
+        )
     }
 }
 

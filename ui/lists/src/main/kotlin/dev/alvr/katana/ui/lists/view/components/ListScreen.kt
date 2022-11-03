@@ -76,7 +76,6 @@ internal inline fun <reified VM : ListsViewModel<*, *>> ListScreen(
             modifier = modifier.padding(paddingValues),
             listState = state,
             onRefresh = vm::refreshList,
-            emptyStateRes = emptyStateRes,
             addPlusOne = vm::addPlusOne,
             editEntry = { navigator.openEditEntry(it, fromNavigator) },
             mediaDetails = { navigator.toMediaDetails(it, fromNavigator) },
