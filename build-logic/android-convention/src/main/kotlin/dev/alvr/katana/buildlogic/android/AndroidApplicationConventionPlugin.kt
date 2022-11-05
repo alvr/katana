@@ -15,6 +15,7 @@ import java.util.Properties
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.getByType
 
 internal class AndroidApplicationConventionPlugin : ConventionPlugin {
@@ -31,6 +32,8 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
         }
 
         tasks.commonTasks()
+
+        configurations.getByName("debugImplementation").exclude(group = "junit", module = "junit")
 
         dependencies {
             implementation(platform(catalogLib("compose-bom")))

@@ -19,6 +19,7 @@ import com.apollographql.apollo3.mockserver.MockServer
 import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
 import com.benasher44.uuid.uuid4
+import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.MediaListEntriesMutation
 import dev.alvr.katana.domain.base.failures.Failure
@@ -49,7 +50,9 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
     private val apolloBuilder = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport())
     private val client = spyk(apolloBuilder.build())
     private val userIdManager = mockk<UserIdManager>()
-    private val source = ListsRemoteSource(client, userIdManager)
+    private val reloadInterceptor = mockk<ReloadInterceptor>()
+
+    private val source = ListsRemoteSource(client, userIdManager, reloadInterceptor)
 
     private val mediaList = Arb.bind<MediaList>(
         mapOf(
@@ -261,7 +264,7 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
             `when`("an error occurs") {
                 val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
-                val source = ListsRemoteSource(badClient, userIdManager)
+                val source = ListsRemoteSource(badClient, userIdManager, reloadInterceptor)
 
                 and("mocking the response") {
                     `when`("a 500 error occurs") {

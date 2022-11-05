@@ -4,18 +4,20 @@ import app.cash.turbine.test
 import arrow.core.right
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
-import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.apollographql.apollo3.testing.MapTestNetworkTransport
 import com.apollographql.apollo3.testing.registerTestNetworkError
 import com.apollographql.apollo3.testing.registerTestResponse
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.data.remote.base.extensions.optional
+import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
+import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.user.managers.UserIdManager
+import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.booleans.shouldBeFalse
@@ -42,7 +44,9 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
     private val client = ApolloClient.Builder().networkTransport(MapTestNetworkTransport()).build()
     private val userIdManager = mockk<UserIdManager>()
-    private val source = ListsRemoteSource(client, userIdManager)
+    private val reloadInterceptor = mockk<ReloadInterceptor>()
+
+    private val source = ListsRemoteSource(client, userIdManager, reloadInterceptor)
 
     init {
         xgiven("an Apollo client with responses") {
@@ -305,7 +309,8 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the error should be propagated") {
                         source.animeCollection.test(5.seconds) {
-                            awaitError().shouldBeTypeOf<ApolloNetworkException>()
+                            awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                            cancelAndIgnoreRemainingEvents()
                         }
                     }
                 }
@@ -564,7 +569,8 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
 
                     then("the error should be propagated") {
                         source.mangaCollection.test(5.seconds) {
-                            awaitError().shouldBeTypeOf<ApolloNetworkException>()
+                            awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                            cancelAndIgnoreRemainingEvents()
                         }
                     }
                 }
