@@ -30,6 +30,7 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 
 [libraries]
 # Accompanist
+accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 # AndroidX
@@ -210,6 +211,7 @@ data-remote = [
 ]
 
 ui-compose = [
+    "accompanist-placeholder",
     "coil",
     "compose-animation",
     "compose-foundation",

@@ -32,9 +32,11 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -52,6 +54,7 @@ import coil.request.ImageRequest
 import dev.alvr.katana.common.core.unknown
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.components.KatanaPullRefresh
+import dev.alvr.katana.ui.base.modifiers.katanaPlaceholder
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.viewmodel.ListState
@@ -84,6 +87,7 @@ internal fun MediaList(
         MediaList(
             lazyGridState = lazyGridState,
             items = listState.items,
+            itemLoading = listState.isLoading,
             modifier = Modifier.fillMaxSize(),
             onAddPlusOne = onAddPlusOne,
             onEditEntry = onEditEntry,
@@ -97,6 +101,7 @@ internal fun MediaList(
 private fun MediaList(
     lazyGridState: LazyGridState,
     items: ImmutableList<MediaListItem>,
+    itemLoading: Boolean,
     onAddPlusOne: (MediaListItem) -> Unit,
     onEditEntry: (Int) -> Unit,
     onEntryDetails: (Int) -> Unit,
@@ -117,6 +122,7 @@ private fun MediaList(
             CompositionLocalProvider(LocalMediaListItem provides item) {
                 MediaListItem(
                     modifier = Modifier.fillMaxWidth(),
+                    itemLoading = itemLoading,
                     onAddPlusOne = onAddPlusOne,
                     onEditEntry = onEditEntry,
                     onEntryDetails = onEntryDetails,
@@ -133,6 +139,7 @@ private fun MediaList(
 @Composable
 @ExperimentalFoundationApi
 private fun MediaListItem(
+    itemLoading: Boolean,
     onAddPlusOne: (MediaListItem) -> Unit,
     onEditEntry: (Int) -> Unit,
     onEntryDetails: (Int) -> Unit,
@@ -149,36 +156,33 @@ private fun MediaListItem(
                 onLongClick = { onEditEntry(entry.entryId) },
             ),
     ) {
-        CardContent(onAddPlusOne = onAddPlusOne)
+        CardContent(
+            itemLoading = itemLoading,
+            onAddPlusOne = onAddPlusOne,
+        )
     }
 }
 
 @Composable
 private fun CardContent(
+    itemLoading: Boolean,
     onAddPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConstraintLayout {
-        val (image, score, title, subtitle, plusOne, progress) = createRefs()
+        val (coverAndScore, title, subtitle, plusOne, progress) = createRefs()
 
-        Cover(
+        CoverAndScore(
             modifier = modifier
-                .widthIn(max = COVER_MAX_WIDTH)
-                .fillMaxHeight()
-                .constrainAs(image) {
+                .constrainAs(coverAndScore) {
                     top.linkTo(anchor = parent.top)
                     start.linkTo(anchor = parent.start)
                     bottom.linkTo(anchor = parent.bottom)
-                },
-        )
-
-        Score(
-            modifier = modifier
-                .constrainAs(score) {
-                    start.linkTo(anchor = parent.start)
-                    bottom.linkTo(anchor = parent.bottom)
                 }
-                .testTag(ITEM_SCORE_TAG),
+                .katanaPlaceholder(
+                    visible = itemLoading,
+                    shape = RectangleShape,
+                ),
         )
 
         Title(
@@ -186,10 +190,11 @@ private fun CardContent(
                 .constrainAs(title) {
                     width = Dimension.fillToConstraints
                     top.linkTo(anchor = parent.top, margin = CONSTRAINT_VERTICAL_MARGIN)
-                    start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                    start.linkTo(anchor = coverAndScore.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
                     end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
                 }
-                .testTag(ITEM_TITLE_TAG),
+                .testTag(ITEM_TITLE_TAG)
+                .katanaPlaceholder(visible = itemLoading),
         )
 
         Subtitle(
@@ -197,13 +202,15 @@ private fun CardContent(
                 .constrainAs(subtitle) {
                     width = Dimension.fillToConstraints
                     top.linkTo(anchor = title.bottom, margin = CONSTRAINT_VERTICAL_MARGIN)
-                    start.linkTo(anchor = image.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
+                    start.linkTo(anchor = coverAndScore.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
                     end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
                 }
-                .testTag(ITEM_SUBTITLE_TAG),
+                .testTag(ITEM_SUBTITLE_TAG)
+                .katanaPlaceholder(visible = itemLoading),
         )
 
         PlusOne(
+            itemLoading = itemLoading,
             onAddPlusOne = onAddPlusOne,
             modifier = modifier
                 .constrainAs(plusOne) {
@@ -215,12 +222,36 @@ private fun CardContent(
         )
 
         Progress(
-            modifier = modifier.constrainAs(progress) {
-                width = Dimension.fillToConstraints
-                start.linkTo(anchor = image.end)
-                end.linkTo(anchor = parent.end)
-                bottom.linkTo(anchor = parent.bottom)
-            },
+            modifier = modifier
+                .constrainAs(progress) {
+                    width = Dimension.fillToConstraints
+                    start.linkTo(anchor = coverAndScore.end)
+                    end.linkTo(anchor = parent.end)
+                    bottom.linkTo(anchor = parent.bottom)
+                }
+                .katanaPlaceholder(
+                    visible = itemLoading,
+                    shape = RectangleShape,
+                ),
+        )
+    }
+}
+
+@Composable
+private fun CoverAndScore(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier.widthIn(max = COVER_MAX_WIDTH),
+    ) {
+        Cover(
+            modifier = Modifier.fillMaxHeight(),
+        )
+
+        Score(
+            modifier = Modifier
+                .align(AbsoluteAlignment.BottomLeft)
+                .testTag(ITEM_SCORE_TAG),
         )
     }
 }
@@ -308,6 +339,7 @@ private fun Score(
 
 @Composable
 private fun PlusOne(
+    itemLoading: Boolean,
     onAddPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -316,7 +348,12 @@ private fun PlusOne(
     // Episodes - Chapters (Anime & Manga)
     if (item.progress != item.total) {
         PlusOneButton(
-            progress = stringResource(R.string.lists_entry_progress, item.progress, item.total ?: String.unknown),
+            progress = stringResource(
+                R.string.lists_entry_progress,
+                item.progress,
+                item.total ?: String.unknown,
+            ),
+            itemLoading = itemLoading,
             onAddPlusOne = onAddPlusOne,
             modifier = modifier,
         )
@@ -326,6 +363,7 @@ private fun PlusOne(
 @Composable
 private fun PlusOneButton(
     progress: String,
+    itemLoading: Boolean,
     onAddPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -339,7 +377,10 @@ private fun PlusOneButton(
             contentColor = MaterialTheme.colors.onPrimary,
         ),
     ) {
-        Text(text = stringResource(R.string.lists_entry_plus_one, progress))
+        Text(
+            modifier = Modifier.katanaPlaceholder(visible = itemLoading),
+            text = stringResource(R.string.lists_entry_plus_one, progress),
+        )
     }
 }
 
@@ -352,8 +393,12 @@ private fun Progress(
 
     // For those entries where the total number of episodes/chapters is not known,
     // the progress bar is incomplete and is filled with about 90% of the current progress.
-    val totalProgress = total ?: progress.plus(progress.times(PROGRESS_IF_UNKNOWN))
-    val currentProgress = progress / totalProgress.toFloat()
+    val totalProgress = (total ?: progress.plus(progress.times(PROGRESS_IF_UNKNOWN))).toFloat()
+    val currentProgress = if (progress == Int.zero && totalProgress == Float.zero) {
+        Float.zero
+    } else {
+        progress / totalProgress
+    }
 
     LinearProgressIndicator(
         progress = currentProgress,
