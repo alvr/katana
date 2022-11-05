@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.RectangleShape
@@ -43,21 +44,18 @@ fun KatanaHomeScaffold(
     onSearch: (String) -> Unit,
     backContent: @Composable () -> Unit,
     katanaScaffoldState: KatanaHomeScaffoldState = rememberKatanaHomeScaffoldState(),
+    scaffoldState: BackdropScaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed),
     subtitle: String? = null,
-    fab: @Composable () -> Unit = {},
+    fab: @Composable (() -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit,
 ) {
-    val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed)
-    val coroutineScope = rememberCoroutineScope()
-
     BackdropScaffold(
         scaffoldState = scaffoldState,
         gesturesEnabled = false,
         appBar = {
-            TopAppBar(
+            KatanaTopAppBar(
                 katanaScaffoldState = katanaScaffoldState,
                 scaffoldState = scaffoldState,
-                coroutineScope = coroutineScope,
                 title = title,
                 subtitle = subtitle,
                 onSearch = onSearch,
@@ -68,7 +66,7 @@ fun KatanaHomeScaffold(
         frontLayerShape = RectangleShape,
         frontLayerContent = {
             Scaffold(
-                floatingActionButton = fab,
+                floatingActionButton = { fab?.invoke() },
                 content = content,
             )
         },
@@ -78,15 +76,16 @@ fun KatanaHomeScaffold(
 @Composable
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
-private fun TopAppBar(
+private fun KatanaTopAppBar(
     katanaScaffoldState: KatanaHomeScaffoldState,
     scaffoldState: BackdropScaffoldState,
-    coroutineScope: CoroutineScope,
     @StringRes title: Int,
     searchPlaceholder: String,
     subtitle: String? = null,
     onSearch: (String) -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Surface {
         AnimatedContent(
             targetState = katanaScaffoldState.topAppBarStyle,
@@ -105,8 +104,12 @@ private fun TopAppBar(
                 TopAppBarStyle.Normal -> KatanaHomeTopAppBar(
                     title = stringResource(title),
                     subtitle = subtitle,
-                    onSearch = { katanaScaffoldState.searchToolbar() },
-                    onFilter = { scaffoldState.toggleBackdrop(coroutineScope) },
+                    onSearch = { katanaScaffoldState.searchToolbar() }.takeIf {
+                        katanaScaffoldState.showTopAppBarActions
+                    },
+                    onFilter = { scaffoldState.toggleBackdrop(coroutineScope) }.takeIf {
+                        katanaScaffoldState.showTopAppBarActions
+                    },
                 )
                 TopAppBarStyle.Search -> KatanaSearchTopAppBar(
                     onValueChange = onSearch,
@@ -140,6 +143,8 @@ class KatanaHomeScaffoldState {
     internal var topAppBarStyle by mutableStateOf(TopAppBarStyle.Normal)
         private set
 
+    var showTopAppBarActions by mutableStateOf(true)
+
     internal fun searchToolbar() {
         topAppBarStyle = TopAppBarStyle.Search
     }
@@ -149,11 +154,12 @@ class KatanaHomeScaffoldState {
     }
 
     companion object {
-        internal val saver: Saver<KatanaHomeScaffoldState, *> = Saver(
-            save = { it.topAppBarStyle },
+        internal val saver: Saver<KatanaHomeScaffoldState, *> = listSaver(
+            save = { listOf<Any>(it.topAppBarStyle, it.showTopAppBarActions) },
             restore = {
                 KatanaHomeScaffoldState().apply {
-                    topAppBarStyle = it
+                    topAppBarStyle = it.first() as TopAppBarStyle
+                    showTopAppBarActions = it.last() as Boolean
                 }
             },
         )

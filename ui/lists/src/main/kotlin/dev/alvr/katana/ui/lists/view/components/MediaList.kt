@@ -70,9 +70,9 @@ private val LocalMediaListItem =
 internal fun MediaList(
     listState: ListState<out MediaListItem>,
     onRefresh: () -> Unit,
-    addPlusOne: (MediaListItem) -> Unit,
-    editEntry: (Int) -> Unit,
-    mediaDetails: (Int) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
+    onEditEntry: (Int) -> Unit,
+    onEntryDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState = rememberLazyGridState(),
 ) {
@@ -85,9 +85,9 @@ internal fun MediaList(
             lazyGridState = lazyGridState,
             items = listState.items,
             modifier = Modifier.fillMaxSize(),
-            addPlusOne = addPlusOne,
-            editEntry = editEntry,
-            mediaDetails = mediaDetails,
+            onAddPlusOne = onAddPlusOne,
+            onEditEntry = onEditEntry,
+            onEntryDetails = onEntryDetails,
         )
     }
 }
@@ -97,9 +97,9 @@ internal fun MediaList(
 private fun MediaList(
     lazyGridState: LazyGridState,
     items: ImmutableList<MediaListItem>,
-    addPlusOne: (MediaListItem) -> Unit,
-    editEntry: (Int) -> Unit,
-    mediaDetails: (Int) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
+    onEditEntry: (Int) -> Unit,
+    onEntryDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -116,12 +116,10 @@ private fun MediaList(
         ) { item ->
             CompositionLocalProvider(LocalMediaListItem provides item) {
                 MediaListItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItemPlacement(),
-                    addPlusOne = addPlusOne,
-                    editEntry = editEntry,
-                    mediaDetails = mediaDetails,
+                    modifier = Modifier.fillMaxWidth(),
+                    onAddPlusOne = onAddPlusOne,
+                    onEditEntry = onEditEntry,
+                    onEntryDetails = onEntryDetails,
                 )
             }
         }
@@ -135,9 +133,9 @@ private fun MediaList(
 @Composable
 @ExperimentalFoundationApi
 private fun MediaListItem(
-    addPlusOne: (MediaListItem) -> Unit,
-    editEntry: (Int) -> Unit,
-    mediaDetails: (Int) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
+    onEditEntry: (Int) -> Unit,
+    onEntryDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val entry = LocalMediaListItem.current
@@ -146,18 +144,18 @@ private fun MediaListItem(
         modifier = modifier
             .height(144.dp)
             .combinedClickable(
-                onClick = { mediaDetails(entry.entryId) },
-                onDoubleClick = { addPlusOne(entry) },
-                onLongClick = { editEntry(entry.entryId) },
+                onClick = { onEntryDetails(entry.entryId) },
+                onDoubleClick = { onAddPlusOne(entry) },
+                onLongClick = { onEditEntry(entry.entryId) },
             ),
     ) {
-        CardContent(addPlusOne = addPlusOne)
+        CardContent(onAddPlusOne = onAddPlusOne)
     }
 }
 
 @Composable
 private fun CardContent(
-    addPlusOne: (MediaListItem) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConstraintLayout {
@@ -206,7 +204,7 @@ private fun CardContent(
         )
 
         PlusOne(
-            addPlusOne = addPlusOne,
+            onAddPlusOne = onAddPlusOne,
             modifier = modifier
                 .constrainAs(plusOne) {
                     width = Dimension.wrapContent
@@ -310,7 +308,7 @@ private fun Score(
 
 @Composable
 private fun PlusOne(
-    addPlusOne: (MediaListItem) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val item = LocalMediaListItem.current
@@ -319,7 +317,7 @@ private fun PlusOne(
     if (item.progress != item.total) {
         PlusOneButton(
             progress = stringResource(R.string.lists_entry_progress, item.progress, item.total ?: String.unknown),
-            addPlusOne = addPlusOne,
+            onAddPlusOne = onAddPlusOne,
             modifier = modifier,
         )
     }
@@ -328,13 +326,13 @@ private fun PlusOne(
 @Composable
 private fun PlusOneButton(
     progress: String,
-    addPlusOne: (MediaListItem) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val entry = LocalMediaListItem.current
 
     TextButton(
-        onClick = { addPlusOne(entry) },
+        onClick = { onAddPlusOne(entry) },
         modifier = modifier,
         shape = CircleShape,
         colors = ButtonDefaults.outlinedButtonColors(

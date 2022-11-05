@@ -18,5 +18,7 @@
     <string name="lists_empty_anime_list">Esta lista de Anime está vacía</string>
     <string name="lists_empty_manga_list">Esta lista de Manga está vacía</string>
 
+    <string name="lists_error_message">Algo ha ocurrido al obtener la información de la lista seleccionada</string>
+
     <string name="lists_change_list_button">Cambiar lista</string>
 </resources>

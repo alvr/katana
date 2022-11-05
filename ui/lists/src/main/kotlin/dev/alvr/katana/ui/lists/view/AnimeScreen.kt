@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.ui.lists.R
@@ -24,7 +25,8 @@ internal fun AnimeScreen(
     navigator: ListsNavigator,
     resultRecipient: ResultRecipient<ChangeListSheetDestination, String>,
 ) {
-    ListScreen<AnimeListsViewModel>(
+    ListScreen(
+        vm = hiltViewModel<AnimeListsViewModel>(),
         navigator = navigator,
         fromNavigator = ListsNavigator.From.ANIME,
         resultRecipient = resultRecipient,
