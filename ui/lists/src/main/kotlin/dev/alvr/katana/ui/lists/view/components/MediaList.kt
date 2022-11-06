@@ -1,7 +1,6 @@
 package dev.alvr.katana.ui.lists.view.components
 
 import android.os.Build
-import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -21,10 +20,8 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -54,7 +51,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.alvr.katana.common.core.unknown
 import dev.alvr.katana.common.core.zero
-import dev.alvr.katana.ui.base.components.EmptyState
 import dev.alvr.katana.ui.base.components.KatanaPullRefresh
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
@@ -73,65 +69,26 @@ private val LocalMediaListItem =
 @ExperimentalFoundationApi
 internal fun MediaList(
     listState: ListState<out MediaListItem>,
-    @StringRes emptyStateRes: Int,
     onRefresh: () -> Unit,
-    addPlusOne: (MediaListItem) -> Unit,
-    editEntry: (Int) -> Unit,
-    mediaDetails: (Int) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
+    onEditEntry: (Int) -> Unit,
+    onEntryDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState = rememberLazyGridState(),
 ) {
-    MediaList(
-        lazyGridState = lazyGridState,
-        items = listState.items,
-        isEmpty = listState.isEmpty,
-        isLoading = listState.isLoading,
-        emptyStateRes = emptyStateRes,
-        onRefresh = onRefresh,
-        addPlusOne = addPlusOne,
-        editEntry = editEntry,
-        mediaDetails = mediaDetails,
-        modifier = modifier,
-    )
-}
-
-@Composable
-@ExperimentalMaterialApi
-@ExperimentalFoundationApi
-private fun MediaList(
-    lazyGridState: LazyGridState,
-    items: ImmutableList<MediaListItem>,
-    isEmpty: Boolean,
-    isLoading: Boolean,
-    @StringRes emptyStateRes: Int,
-    onRefresh: () -> Unit,
-    addPlusOne: (MediaListItem) -> Unit,
-    editEntry: (Int) -> Unit,
-    mediaDetails: (Int) -> Unit,
-    modifier: Modifier = Modifier,
-) {
     KatanaPullRefresh(
-        loading = isLoading,
-        onRefresh = onRefresh,
         modifier = modifier,
+        loading = listState.isLoading,
+        onRefresh = onRefresh,
     ) {
-        if (isEmpty && !isLoading) {
-            EmptyState(
-                text = stringResource(emptyStateRes),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-            )
-        } else {
-            MediaList(
-                lazyGridState = lazyGridState,
-                items = items,
-                modifier = Modifier.fillMaxSize(),
-                addPlusOne = addPlusOne,
-                editEntry = editEntry,
-                mediaDetails = mediaDetails,
-            )
-        }
+        MediaList(
+            lazyGridState = lazyGridState,
+            items = listState.items,
+            modifier = Modifier.fillMaxSize(),
+            onAddPlusOne = onAddPlusOne,
+            onEditEntry = onEditEntry,
+            onEntryDetails = onEntryDetails,
+        )
     }
 }
 
@@ -140,9 +97,9 @@ private fun MediaList(
 private fun MediaList(
     lazyGridState: LazyGridState,
     items: ImmutableList<MediaListItem>,
-    addPlusOne: (MediaListItem) -> Unit,
-    editEntry: (Int) -> Unit,
-    mediaDetails: (Int) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
+    onEditEntry: (Int) -> Unit,
+    onEntryDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -159,12 +116,10 @@ private fun MediaList(
         ) { item ->
             CompositionLocalProvider(LocalMediaListItem provides item) {
                 MediaListItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItemPlacement(),
-                    addPlusOne = addPlusOne,
-                    editEntry = editEntry,
-                    mediaDetails = mediaDetails,
+                    modifier = Modifier.fillMaxWidth(),
+                    onAddPlusOne = onAddPlusOne,
+                    onEditEntry = onEditEntry,
+                    onEntryDetails = onEntryDetails,
                 )
             }
         }
@@ -178,9 +133,9 @@ private fun MediaList(
 @Composable
 @ExperimentalFoundationApi
 private fun MediaListItem(
-    addPlusOne: (MediaListItem) -> Unit,
-    editEntry: (Int) -> Unit,
-    mediaDetails: (Int) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
+    onEditEntry: (Int) -> Unit,
+    onEntryDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val entry = LocalMediaListItem.current
@@ -189,18 +144,18 @@ private fun MediaListItem(
         modifier = modifier
             .height(144.dp)
             .combinedClickable(
-                onClick = { mediaDetails(entry.entryId) },
-                onDoubleClick = { addPlusOne(entry) },
-                onLongClick = { editEntry(entry.entryId) },
+                onClick = { onEntryDetails(entry.entryId) },
+                onDoubleClick = { onAddPlusOne(entry) },
+                onLongClick = { onEditEntry(entry.entryId) },
             ),
     ) {
-        CardContent(addPlusOne = addPlusOne)
+        CardContent(onAddPlusOne = onAddPlusOne)
     }
 }
 
 @Composable
 private fun CardContent(
-    addPlusOne: (MediaListItem) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConstraintLayout {
@@ -249,7 +204,7 @@ private fun CardContent(
         )
 
         PlusOne(
-            addPlusOne = addPlusOne,
+            onAddPlusOne = onAddPlusOne,
             modifier = modifier
                 .constrainAs(plusOne) {
                     width = Dimension.wrapContent
@@ -353,7 +308,7 @@ private fun Score(
 
 @Composable
 private fun PlusOne(
-    addPlusOne: (MediaListItem) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val item = LocalMediaListItem.current
@@ -362,7 +317,7 @@ private fun PlusOne(
     if (item.progress != item.total) {
         PlusOneButton(
             progress = stringResource(R.string.lists_entry_progress, item.progress, item.total ?: String.unknown),
-            addPlusOne = addPlusOne,
+            onAddPlusOne = onAddPlusOne,
             modifier = modifier,
         )
     }
@@ -371,13 +326,13 @@ private fun PlusOne(
 @Composable
 private fun PlusOneButton(
     progress: String,
-    addPlusOne: (MediaListItem) -> Unit,
+    onAddPlusOne: (MediaListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val entry = LocalMediaListItem.current
 
     TextButton(
-        onClick = { addPlusOne(entry) },
+        onClick = { onAddPlusOne(entry) },
         modifier = modifier,
         shape = CircleShape,
         colors = ButtonDefaults.outlinedButtonColors(

@@ -33,15 +33,15 @@ internal class Navigator(
     //endregion [LoginNavigator]
 
     //region [ListsNavigator]
-    override fun openEditEntry(id: Int, from: ListsNavigator.From) {
+    override fun editEntry(id: Int, from: ListsNavigator.From) {
         Napier.d { "Open bottom sheet to edit entry $id" }
     }
 
-    override fun toMediaDetails(id: Int, from: ListsNavigator.From) {
+    override fun entryDetails(id: Int, from: ListsNavigator.From) {
         Napier.d { "Navigate to media details of entry $id" }
     }
 
-    override fun openListSelector(lists: Array<String>, from: ListsNavigator.From) {
+    override fun listSelector(lists: Array<String>, from: ListsNavigator.From) {
         val graph = when (from) {
             ListsNavigator.From.ANIME -> AnimeNavGraph
             ListsNavigator.From.MANGA -> MangaNavGraph

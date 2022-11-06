@@ -16,7 +16,6 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onChild
 import androidx.compose.ui.test.onChildAt
 import androidx.compose.ui.test.onChildren
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
@@ -119,27 +118,6 @@ internal class MediaListComponentTest : ComposeTest() {
     )
 
     @Test
-    fun `when the list is empty, the emptyStateRes should be displayed`() {
-        composeTestRule.setContent {
-            MediaList(
-                listState = ListState(
-                    items = persistentListOf(),
-                    isEmpty = true,
-                ),
-                emptyStateRes = R.string.lists_empty_anime_list,
-                onRefresh = { mockk() },
-                addPlusOne = { mockk() },
-                editEntry = { mockk() },
-                mediaDetails = { mockk() },
-            )
-        }
-
-        composeTestRule
-            .onNodeWithText(text = context.getString(R.string.lists_empty_anime_list))
-            .assertIsDisplayed()
-    }
-
-    @Test
     fun `swipe down the list should trigger the refresh`() {
         val refresh = mockk<() -> Unit>()
         coJustRun { refresh() }
@@ -150,11 +128,10 @@ internal class MediaListComponentTest : ComposeTest() {
                     items = persistentListOf(),
                     isEmpty = true,
                 ),
-                emptyStateRes = R.string.lists_empty_anime_list,
                 onRefresh = refresh,
-                addPlusOne = { mockk() },
-                editEntry = { mockk() },
-                mediaDetails = { mockk() },
+                onAddPlusOne = { mockk() },
+                onEditEntry = { mockk() },
+                onEntryDetails = { mockk() },
             )
         }
 
@@ -181,11 +158,10 @@ internal class MediaListComponentTest : ComposeTest() {
                     items = list,
                     isEmpty = list.isEmpty(),
                 ),
-                emptyStateRes = R.string.lists_empty_anime_list,
                 onRefresh = { mockk() },
-                addPlusOne = { mockk() },
-                editEntry = { mockk() },
-                mediaDetails = { mockk() },
+                onAddPlusOne = { mockk() },
+                onEditEntry = { mockk() },
+                onEntryDetails = { mockk() },
             )
         }
 
@@ -211,11 +187,10 @@ internal class MediaListComponentTest : ComposeTest() {
                     items = mockedAnimeList,
                     isEmpty = mockedAnimeList.isEmpty(),
                 ),
-                emptyStateRes = R.string.lists_empty_anime_list,
                 onRefresh = { mockk() },
-                addPlusOne = addPlusOne,
-                editEntry = editEntry,
-                mediaDetails = mediaDetails,
+                onAddPlusOne = addPlusOne,
+                onEditEntry = editEntry,
+                onEntryDetails = mediaDetails,
             )
         }
 
@@ -292,11 +267,10 @@ internal class MediaListComponentTest : ComposeTest() {
                     items = list,
                     isEmpty = list.isEmpty(),
                 ),
-                emptyStateRes = R.string.lists_empty_anime_list,
                 onRefresh = { mockk() },
-                addPlusOne = addPlusOne,
-                editEntry = editEntry,
-                mediaDetails = mediaDetails,
+                onAddPlusOne = addPlusOne,
+                onEditEntry = editEntry,
+                onEntryDetails = mediaDetails,
             )
         }
     }

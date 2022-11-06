@@ -7,14 +7,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.common.core.zero
+import dev.alvr.katana.ui.base.components.KatanaEmptyState
+import dev.alvr.katana.ui.base.components.KatanaErrorState
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
 import dev.alvr.katana.ui.base.components.home.rememberKatanaHomeScaffoldState
 import dev.alvr.katana.ui.lists.R
@@ -28,15 +32,15 @@ import org.orbitmvi.orbit.compose.collectAsState
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
-internal inline fun <reified VM : ListsViewModel<*, *>> ListScreen(
+internal fun ListScreen(
+    vm: ListsViewModel<*, *>,
     navigator: ListsNavigator,
     fromNavigator: ListsNavigator.From,
     resultRecipient: ResultRecipient<ChangeListSheetDestination, String>,
     @StringRes title: Int,
     @StringRes emptyStateRes: Int,
-    noinline backContent: @Composable () -> Unit,
+    backContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    vm: ListsViewModel<*, *> = hiltViewModel<VM>(),
 ) {
     val state by vm.collectAsState()
     val katanaScaffoldState = rememberKatanaHomeScaffoldState()
@@ -58,6 +62,11 @@ internal inline fun <reified VM : ListsViewModel<*, *>> ListScreen(
         ListsNavigator.From.MANGA -> R.string.lists_toolbar_search_manga_placeholder
     }.let { stringResource(it) }
 
+    val buttonsVisible by remember(state.isError) {
+        derivedStateOf(structuralEqualityPolicy()) { !state.isError }
+    }
+    katanaScaffoldState.showTopAppBarActions = buttonsVisible
+
     KatanaHomeScaffold(
         katanaScaffoldState = katanaScaffoldState,
         title = title,
@@ -66,20 +75,36 @@ internal inline fun <reified VM : ListsViewModel<*, *>> ListScreen(
         onSearch = vm::search,
         backContent = backContent,
         fab = {
-            ChangeListButton {
-                navigator.openListSelector(vm.listNames, fromNavigator)
+            ChangeListButton(visible = buttonsVisible && vm.listNames.isNotEmpty()) {
+                navigator.listSelector(vm.listNames, fromNavigator)
             }
         },
     ) { paddingValues ->
-        MediaList(
-            lazyGridState = lazyGridState,
-            modifier = modifier.padding(paddingValues),
-            listState = state,
-            onRefresh = vm::refreshList,
-            emptyStateRes = emptyStateRes,
-            addPlusOne = vm::addPlusOne,
-            editEntry = { navigator.openEditEntry(it, fromNavigator) },
-            mediaDetails = { navigator.toMediaDetails(it, fromNavigator) },
-        )
+        with(state) {
+            when {
+                isError -> KatanaErrorState(
+                    modifier = modifier.padding(paddingValues),
+                    text = stringResource(R.string.lists_error_message),
+                    onRetry = {
+                        vm.refreshList()
+                        katanaScaffoldState.resetToolbar()
+                    },
+                    loading = state.isLoading,
+                )
+                isEmpty && !isLoading -> KatanaEmptyState(
+                    modifier = modifier.padding(paddingValues),
+                    text = stringResource(emptyStateRes),
+                )
+                else -> MediaList(
+                    lazyGridState = lazyGridState,
+                    modifier = modifier.padding(paddingValues),
+                    listState = state,
+                    onRefresh = vm::refreshList,
+                    onAddPlusOne = vm::addPlusOne,
+                    onEditEntry = { navigator.editEntry(it, fromNavigator) },
+                    onEntryDetails = { navigator.entryDetails(it, fromNavigator) },
+                )
+            }
+        }
     }
 }

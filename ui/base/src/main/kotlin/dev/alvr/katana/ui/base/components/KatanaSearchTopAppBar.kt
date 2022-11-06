@@ -71,7 +71,12 @@ fun KatanaSearchTopAppBar(
             }
         },
         trailingIcon = {
-            IconButton(onClick = onClear) {
+            IconButton(
+                onClick = {
+                    search = String.empty
+                    onClear()
+                },
+            ) {
                 Icon(
                     imageVector = Icons.Outlined.Clear,
                     contentDescription = stringResource(R.string.toolbar_search_clear),

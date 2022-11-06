@@ -41,12 +41,15 @@ internal fun ChangeListSheet(
 
 @Composable
 internal fun ChangeListButton(
+    visible: Boolean,
     onClick: () -> Unit,
 ) {
-    FloatingActionButton(onClick = onClick) {
-        Icon(
-            imageVector = Icons.TwoTone.List,
-            contentDescription = stringResource(R.string.lists_change_list_button),
-        )
+    if (visible) {
+        FloatingActionButton(onClick = onClick) {
+            Icon(
+                imageVector = Icons.TwoTone.List,
+                contentDescription = stringResource(R.string.lists_change_list_button),
+            )
+        }
     }
 }

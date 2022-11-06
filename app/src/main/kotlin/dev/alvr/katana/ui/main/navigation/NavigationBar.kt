@@ -23,7 +23,10 @@ import androidx.compose.material.NavigationRail
 import androidx.compose.material.NavigationRailItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.referentialEqualityPolicy
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -48,9 +51,14 @@ internal fun NavigationBar(
     modifier: Modifier = Modifier,
 ) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentNavGraph = currentBackStackEntry?.destination?.navGraph()
 
-    val isVisible = currentNavGraph != null && currentNavGraph !is LoginNavGraph
+    val currentNavGraph by remember(currentBackStackEntry) {
+        derivedStateOf(referentialEqualityPolicy()) { currentBackStackEntry?.destination?.navGraph() }
+    }
+
+    val isVisible by remember(currentNavGraph) {
+        derivedStateOf { currentNavGraph != null && currentNavGraph !is LoginNavGraph }
+    }
 
     @Suppress("UseIfInsteadOfWhen") // Remove when adding another NavGraph
     val destinations = when (currentNavGraph) {
