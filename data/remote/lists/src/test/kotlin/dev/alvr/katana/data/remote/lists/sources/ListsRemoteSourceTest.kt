@@ -22,6 +22,8 @@ import com.benasher44.uuid.uuid4
 import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.MediaListEntriesMutation
+import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSource
+import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSource
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
@@ -52,7 +54,9 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
     private val userIdManager = mockk<UserIdManager>()
     private val reloadInterceptor = mockk<ReloadInterceptor>()
 
-    private val source = ListsRemoteSource(client, userIdManager, reloadInterceptor)
+    private val source = CommonListsRemoteSource(client, userIdManager, reloadInterceptor)
+    private val animeSource = AnimeListsRemoteSource(source)
+    private val mangaSource = MangaListsRemoteSource(source)
 
     private val mediaList = Arb.bind<MediaList>(
         mapOf(
@@ -224,14 +228,14 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
                     client.enqueueTestResponse(response)
 
                     then("the anime collection should be empty") {
-                        source.animeCollection.test(5.seconds) {
+                        animeSource.animeCollection.test(5.seconds) {
                             awaitItem().shouldBeRight(MediaCollection(emptyList()))
                             cancelAndIgnoreRemainingEvents()
                         }
                     }
 
                     then("the manga collection should be empty") {
-                        source.mangaCollection.test(5.seconds) {
+                        mangaSource.mangaCollection.test(5.seconds) {
                             awaitItem().shouldBeRight(MediaCollection(emptyList()))
                             cancelAndIgnoreRemainingEvents()
                         }
@@ -247,14 +251,14 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
                     client.enqueueTestResponse(response)
 
                     then("the anime collection should be empty") {
-                        source.animeCollection.test(5.seconds) {
+                        animeSource.animeCollection.test(5.seconds) {
                             awaitItem().shouldBeRight(MediaCollection(emptyList()))
                             cancelAndIgnoreRemainingEvents()
                         }
                     }
 
                     then("the manga collection should be empty") {
-                        source.mangaCollection.test(5.seconds) {
+                        mangaSource.mangaCollection.test(5.seconds) {
                             awaitItem().shouldBeRight(MediaCollection(emptyList()))
                             cancelAndIgnoreRemainingEvents()
                         }
@@ -264,19 +268,21 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
             `when`("an error occurs") {
                 val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
-                val source = ListsRemoteSource(badClient, userIdManager, reloadInterceptor)
+                val source = CommonListsRemoteSource(badClient, userIdManager, reloadInterceptor)
+                val animeSource = AnimeListsRemoteSource(source)
+                val mangaSource = MangaListsRemoteSource(source)
 
                 and("mocking the response") {
                     `when`("a 500 error occurs") {
                         enqueueResponse { statusCode(500) }
 
                         then("it returns a left of ListsFailure.GetMediaCollection") {
-                            source.animeCollection.test(5.seconds) {
+                            animeSource.animeCollection.test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }
 
-                            source.mangaCollection.test(5.seconds) {
+                            mangaSource.mangaCollection.test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }
@@ -287,12 +293,12 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
                         enqueueResponse { body("Malformed body") }
 
                         then("it returns a left of ListsFailure.GetMediaCollection") {
-                            source.animeCollection.test(5.seconds) {
+                            animeSource.animeCollection.test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }
 
-                            source.mangaCollection.test(5.seconds) {
+                            mangaSource.mangaCollection.test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }
@@ -303,12 +309,12 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
                         enqueueResponse { body("""{"data": {"random": 42}}""") }
 
                         then("it returns a left of ListsFailure.GetMediaCollection") {
-                            source.animeCollection.test(5.seconds) {
+                            animeSource.animeCollection.test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }
 
-                            source.mangaCollection.test(5.seconds) {
+                            mangaSource.mangaCollection.test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }

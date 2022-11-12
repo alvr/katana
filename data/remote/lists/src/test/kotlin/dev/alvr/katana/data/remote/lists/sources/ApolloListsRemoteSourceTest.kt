@@ -12,6 +12,8 @@ import dev.alvr.katana.data.remote.base.extensions.optional
 import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
+import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSource
+import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSource
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
@@ -46,7 +48,9 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
     private val userIdManager = mockk<UserIdManager>()
     private val reloadInterceptor = mockk<ReloadInterceptor>()
 
-    private val source = ListsRemoteSource(client, userIdManager, reloadInterceptor)
+    private val source = CommonListsRemoteSource(client, userIdManager, reloadInterceptor)
+    private val animeSource = AnimeListsRemoteSource(source)
+    private val mangaSource = MangaListsRemoteSource(source)
 
     init {
         xgiven("an Apollo client with responses") {
@@ -66,7 +70,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     )
 
                     then("the result list should be also empty") {
-                        source.animeCollection.test(5.seconds) {
+                        animeSource.animeCollection.test(5.seconds) {
                             awaitItem().shouldBeRight().lists.shouldBeEmpty()
                             awaitComplete()
                         }
@@ -110,7 +114,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     )
 
                     then("the result lists' entries should also be empty") {
-                        source.animeCollection.test(5.seconds) {
+                        animeSource.animeCollection.test(5.seconds) {
                             awaitItem().shouldBeRight().lists
                                 .shouldHaveSize(4)
                                 .also { lists ->
@@ -163,7 +167,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     )
 
                     then("the result entry should have the default values") {
-                        source.animeCollection.test(5.seconds) {
+                        animeSource.animeCollection.test(5.seconds) {
                             awaitItem().shouldBeRight().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -252,7 +256,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     )
 
                     then("the result entry should have the default values") {
-                        source.animeCollection.test(5.seconds) {
+                        animeSource.animeCollection.test(5.seconds) {
                             awaitItem().shouldBeRight().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -297,7 +301,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     )
 
                     then("the result list should be empty") {
-                        source.animeCollection.test(5.seconds) {
+                        animeSource.animeCollection.test(5.seconds) {
                             awaitItem().shouldBeRight().lists.shouldBeEmpty()
                             awaitComplete()
                         }
@@ -308,7 +312,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     client.registerTestNetworkError(MediaListCollectionQuery(userIdOpt, MediaType.ANIME))
 
                     then("the error should be propagated") {
-                        source.animeCollection.test(5.seconds) {
+                        animeSource.animeCollection.test(5.seconds) {
                             awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                             cancelAndIgnoreRemainingEvents()
                         }
@@ -330,7 +334,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     )
 
                     then("the result list should be also empty") {
-                        source.mangaCollection.test(5.seconds) {
+                        mangaSource.mangaCollection.test(5.seconds) {
                             awaitItem().shouldBeRight().lists.shouldBeEmpty()
                             awaitComplete()
                         }
@@ -374,7 +378,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     )
 
                     then("the result lists' entries should also be empty") {
-                        source.mangaCollection.test(5.seconds) {
+                        mangaSource.mangaCollection.test(5.seconds) {
                             awaitItem().shouldBeRight().lists
                                 .shouldHaveSize(4)
                                 .also { lists ->
@@ -428,7 +432,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     )
 
                     then("the result entry should have the default values") {
-                        source.mangaCollection.test(5.seconds) {
+                        mangaSource.mangaCollection.test(5.seconds) {
                             awaitItem().shouldBeRight().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -515,7 +519,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     )
 
                     then("the result entry should have the default values") {
-                        source.mangaCollection.test(5.seconds) {
+                        mangaSource.mangaCollection.test(5.seconds) {
                             awaitItem().shouldBeRight().lists.also { lists ->
                                 val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -557,7 +561,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     )
 
                     then("the result list should be empty") {
-                        source.mangaCollection.test(5.seconds) {
+                        mangaSource.mangaCollection.test(5.seconds) {
                             awaitItem().shouldBeRight().lists.shouldBeEmpty()
                             awaitComplete()
                         }
@@ -568,7 +572,7 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
                     client.registerTestNetworkError(MediaListCollectionQuery(userIdOpt, MediaType.MANGA))
 
                     then("the error should be propagated") {
-                        source.mangaCollection.test(5.seconds) {
+                        mangaSource.mangaCollection.test(5.seconds) {
                             awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                             cancelAndIgnoreRemainingEvents()
                         }
