@@ -93,7 +93,7 @@ gradle-kover = { module = "org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kov
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.7.21-1.0.8" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.3.0" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "3.4.0.2513" }
-gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.43.0" }
+gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.44.0" }
 
 # Hilt
 hilt = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
