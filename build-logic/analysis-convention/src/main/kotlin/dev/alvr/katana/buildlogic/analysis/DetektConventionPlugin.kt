@@ -3,6 +3,7 @@ package dev.alvr.katana.buildlogic.analysis
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogLib
+import dev.alvr.katana.buildlogic.detekt
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -35,7 +36,9 @@ internal class DetektConventionPlugin : ConventionPlugin {
         }
 
         dependencies {
-            add("detektPlugins", catalogLib("detekt-formatting"))
+            detekt(catalogLib("detekt-compose"))
+            detekt(catalogLib("detekt-compose2"))
+            detekt(catalogLib("detekt-formatting"))
         }
     }
 }

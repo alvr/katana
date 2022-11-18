@@ -2,7 +2,7 @@
 accompanist = "0.27.1"
 apollo = "3.7.1"
 coroutines = "1.6.4"
-destinations = "1.7.26-beta"
+destinations = "1.7.27-beta"
 hilt = "2.44.2"
 hiltx = "1.0.0"
 kotlin = "1.7.21"
@@ -15,7 +15,7 @@ compose = "2022.11.00"
 compose-compiler = "1.4.0-alpha02"
 
 # Coverage Engine
-coverage-engine = "1.0.684"
+coverage-engine = "1.0.686"
 
 # Plugins
 detekt = "1.21.0"
@@ -82,6 +82,8 @@ destinations-compiler = { module = "io.github.raamcosta.compose-destinations:ksp
 desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "1.2.2" }
 
 # Detekt
+detekt-compose = { module = "com.twitter.compose.rules:detekt", version = "0.0.24" }
+detekt-compose2 = { module = "ru.kode:detekt-rules-compose", version = "1.2.2" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 # Gradle
@@ -109,9 +111,6 @@ hiltx-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.r
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.3.5" }
-
-# LeakCanary
-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "2.10" }
 
 # Lifecycle
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.5.1" }
