@@ -15,6 +15,7 @@ import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.domain.lists.usecases.ObserveAnimeListUseCase
 import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
 import dev.alvr.katana.ui.lists.entities.MediaListItem
+import io.kotest.assertions.throwables.shouldThrowUnit
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainInOrder
@@ -193,14 +194,17 @@ internal class AnimeListsViewModelTest : BehaviorSpec() {
             }
 
             `when`("adding a +1 to an entry") {
+                mockAnimeFlow()
                 coEitherJustRun { updateList(any()) }
 
-                and("is an AnimeListItem") {
-                    then("it should call the updateList with the progress incremented by 1") {
-                        viewModel.testIntent {
-                            addPlusOne(animeListItem1)
-                        }
+                viewModel.runOnCreate()
 
+                and("is an AnimeListItem") {
+                    viewModel.testIntent {
+                        addPlusOne(animeListItem1.entryId)
+                    }
+
+                    then("it should call the updateList with the progress incremented by 1") {
                         coVerify(exactly = 1) {
                             updateList(
                                 MediaList(
@@ -217,6 +221,14 @@ internal class AnimeListsViewModelTest : BehaviorSpec() {
                                     updatedAt = LocalDateTime.MAX,
                                 ),
                             )
+                        }
+                    }
+                }
+
+                and("the element is not found") {
+                    then("it should throw `NoSuchElementException`") {
+                        viewModel.testIntent {
+                            shouldThrowUnit<NoSuchElementException> { addPlusOne(234) }
                         }
                     }
                 }
