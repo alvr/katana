@@ -28,6 +28,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import dev.alvr.katana.common.core.empty
@@ -43,6 +44,7 @@ fun KatanaHomeScaffold(
     searchPlaceholder: String,
     onSearch: (String) -> Unit,
     backContent: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     katanaScaffoldState: KatanaHomeScaffoldState = rememberKatanaHomeScaffoldState(),
     scaffoldState: BackdropScaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed),
     subtitle: String? = null,
@@ -50,6 +52,7 @@ fun KatanaHomeScaffold(
     content: @Composable (PaddingValues) -> Unit,
 ) {
     BackdropScaffold(
+        modifier = modifier,
         scaffoldState = scaffoldState,
         gesturesEnabled = false,
         appBar = {
@@ -81,8 +84,8 @@ private fun KatanaTopAppBar(
     scaffoldState: BackdropScaffoldState,
     @StringRes title: Int,
     searchPlaceholder: String,
-    subtitle: String? = null,
     onSearch: (String) -> Unit,
+    subtitle: String? = null,
 ) {
     val coroutineScope = rememberCoroutineScope()
 

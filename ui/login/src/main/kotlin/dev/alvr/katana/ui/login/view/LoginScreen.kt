@@ -1,7 +1,6 @@
 package dev.alvr.katana.ui.login.view
 
 import android.content.res.Configuration
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearEasing
@@ -136,24 +135,19 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
             if (loading) {
                 Loading()
             } else {
-                MainContent(background = background)
+                Image(
+                    painter = painterResource(background),
+                    contentDescription = stringResource(R.string.content_description_background),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.alpha(BACKGROUND_ALPHA),
+                )
+
+                Box(modifier = Modifier.padding(24.dp)) {
+                    Header(modifier = Modifier.align(Alignment.TopCenter))
+                    Bottom(modifier = Modifier.align(Alignment.BottomCenter))
+                }
             }
         }
-    }
-}
-
-@Composable
-private fun MainContent(@DrawableRes background: Int) {
-    Image(
-        painter = painterResource(background),
-        contentDescription = stringResource(R.string.content_description_background),
-        contentScale = ContentScale.Crop,
-        modifier = Modifier.alpha(BACKGROUND_ALPHA),
-    )
-
-    Box(modifier = Modifier.padding(24.dp)) {
-        Header(modifier = Modifier.align(Alignment.TopCenter))
-        Bottom(modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 

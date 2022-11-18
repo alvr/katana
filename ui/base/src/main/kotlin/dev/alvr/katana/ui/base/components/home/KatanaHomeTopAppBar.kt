@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.alvr.katana.common.core.zero
@@ -19,10 +20,12 @@ import dev.alvr.katana.ui.base.R
 fun KatanaHomeTopAppBar(
     title: String,
     subtitle: String?,
+    modifier: Modifier = Modifier,
     onSearch: (() -> Unit)? = null,
     onFilter: (() -> Unit)? = null,
 ) {
     TopAppBar(
+        modifier = modifier,
         title = {
             Column {
                 Text(text = title)

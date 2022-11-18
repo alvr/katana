@@ -30,8 +30,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,16 +62,13 @@ import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
 import kotlinx.collections.immutable.ImmutableList
 
-private val LocalMediaListItem =
-    compositionLocalOf<MediaListItem> { error("No MediaListItem found!") }
-
 @Composable
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 internal fun MediaList(
     listState: ListState<out MediaListItem>,
     onRefresh: () -> Unit,
-    onAddPlusOne: (MediaListItem) -> Unit,
+    onAddPlusOne: (Int) -> Unit,
     onEditEntry: (Int) -> Unit,
     onEntryDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -102,7 +97,7 @@ private fun MediaList(
     lazyGridState: LazyGridState,
     items: ImmutableList<MediaListItem>,
     itemLoading: Boolean,
-    onAddPlusOne: (MediaListItem) -> Unit,
+    onAddPlusOne: (Int) -> Unit,
     onEditEntry: (Int) -> Unit,
     onEntryDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -119,15 +114,14 @@ private fun MediaList(
             items = items,
             key = { it.mediaId },
         ) { item ->
-            CompositionLocalProvider(LocalMediaListItem provides item) {
-                MediaListItem(
-                    modifier = Modifier.fillMaxWidth(),
-                    itemLoading = itemLoading,
-                    onAddPlusOne = onAddPlusOne,
-                    onEditEntry = onEditEntry,
-                    onEntryDetails = onEntryDetails,
-                )
-            }
+            MediaListItem(
+                item = item,
+                modifier = Modifier.fillMaxWidth(),
+                itemLoading = itemLoading,
+                onAddPlusOne = { onAddPlusOne(item.entryId) },
+                onEditEntry = { onEditEntry(item.entryId) },
+                onEntryDetails = { onEntryDetails(item.entryId) },
+            )
         }
 
         item {
@@ -139,24 +133,24 @@ private fun MediaList(
 @Composable
 @ExperimentalFoundationApi
 private fun MediaListItem(
+    item: MediaListItem,
     itemLoading: Boolean,
-    onAddPlusOne: (MediaListItem) -> Unit,
-    onEditEntry: (Int) -> Unit,
-    onEntryDetails: (Int) -> Unit,
+    onAddPlusOne: () -> Unit,
+    onEditEntry: () -> Unit,
+    onEntryDetails: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val entry = LocalMediaListItem.current
-
     Card(
         modifier = modifier
             .height(144.dp)
             .combinedClickable(
-                onClick = { onEntryDetails(entry.entryId) },
-                onDoubleClick = { onAddPlusOne(entry) },
-                onLongClick = { onEditEntry(entry.entryId) },
+                onClick = onEntryDetails,
+                onDoubleClick = onAddPlusOne,
+                onLongClick = onEditEntry,
             ),
     ) {
         CardContent(
+            item = item,
             itemLoading = itemLoading,
             onAddPlusOne = onAddPlusOne,
         )
@@ -165,15 +159,19 @@ private fun MediaListItem(
 
 @Composable
 private fun CardContent(
+    item: MediaListItem,
     itemLoading: Boolean,
-    onAddPlusOne: (MediaListItem) -> Unit,
+    onAddPlusOne: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ConstraintLayout {
+    ConstraintLayout(modifier = modifier) {
         val (coverAndScore, title, subtitle, plusOne, progress) = createRefs()
 
         CoverAndScore(
-            modifier = modifier
+            cover = item.cover,
+            score = item.score,
+            title = item.title,
+            modifier = Modifier
                 .constrainAs(coverAndScore) {
                     top.linkTo(anchor = parent.top)
                     start.linkTo(anchor = parent.start)
@@ -186,7 +184,8 @@ private fun CardContent(
         )
 
         Title(
-            modifier = modifier
+            title = item.title,
+            modifier = Modifier
                 .constrainAs(title) {
                     width = Dimension.fillToConstraints
                     top.linkTo(anchor = parent.top, margin = CONSTRAINT_VERTICAL_MARGIN)
@@ -198,7 +197,9 @@ private fun CardContent(
         )
 
         Subtitle(
-            modifier = modifier
+            format = item.format,
+            nextEpisode = (item as? MediaListItem.AnimeListItem)?.nextEpisode,
+            modifier = Modifier
                 .constrainAs(subtitle) {
                     width = Dimension.fillToConstraints
                     top.linkTo(anchor = title.bottom, margin = CONSTRAINT_VERTICAL_MARGIN)
@@ -210,9 +211,11 @@ private fun CardContent(
         )
 
         PlusOne(
+            progress = item.progress,
+            total = item.total,
             itemLoading = itemLoading,
             onAddPlusOne = onAddPlusOne,
-            modifier = modifier
+            modifier = Modifier
                 .constrainAs(plusOne) {
                     width = Dimension.wrapContent
                     end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
@@ -222,7 +225,9 @@ private fun CardContent(
         )
 
         Progress(
-            modifier = modifier
+            progress = item.progress,
+            total = item.total,
+            modifier = Modifier
                 .constrainAs(progress) {
                     width = Dimension.fillToConstraints
                     start.linkTo(anchor = coverAndScore.end)
@@ -239,16 +244,22 @@ private fun CardContent(
 
 @Composable
 private fun CoverAndScore(
+    cover: String,
+    score: Double,
+    title: String,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier.widthIn(max = COVER_MAX_WIDTH),
     ) {
         Cover(
+            cover = cover,
+            title = title,
             modifier = Modifier.fillMaxHeight(),
         )
 
         Score(
+            score = score,
             modifier = Modifier
                 .align(AbsoluteAlignment.BottomLeft)
                 .testTag(ITEM_SCORE_TAG),
@@ -258,26 +269,29 @@ private fun CoverAndScore(
 
 @Composable
 private fun Cover(
+    cover: String,
+    title: String,
     modifier: Modifier = Modifier,
 ) {
     AsyncImage(
         modifier = modifier,
         model = ImageRequest.Builder(LocalContext.current)
-            .data(LocalMediaListItem.current.cover)
+            .data(cover)
             .error(R.drawable.default_cover)
             .crossfade(true)
             .build(),
-        contentDescription = LocalMediaListItem.current.title,
+        contentDescription = title,
         contentScale = ContentScale.Crop,
     )
 }
 
 @Composable
 private fun Title(
+    title: String,
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = LocalMediaListItem.current.title,
+        text = title,
         modifier = modifier,
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
@@ -288,20 +302,20 @@ private fun Title(
 
 @Composable
 private fun Subtitle(
+    format: MediaListItem.Format,
     modifier: Modifier = Modifier,
+    nextEpisode: MediaListItem.AnimeListItem.NextEpisode? = null,
 ) {
-    val item = LocalMediaListItem.current
-
     val text = buildAnnotatedString {
-        append(stringResource(item.format.value))
+        append(stringResource(format.value))
 
-        if (item is MediaListItem.AnimeListItem && item.nextEpisode != null) {
+        if (nextEpisode != null) {
             append(" ${stringResource(R.string.lists_entry_next_episode_separator)} ")
             append(
                 stringResource(
                     R.string.lists_entry_next_episode,
-                    item.nextEpisode.number,
-                    item.nextEpisode.date.format(episodeFormatter()).toString(),
+                    nextEpisode.number,
+                    nextEpisode.date.format(episodeFormatter()).toString(),
                 ),
             )
         }
@@ -316,10 +330,9 @@ private fun Subtitle(
 
 @Composable
 private fun Score(
+    score: Double,
     modifier: Modifier = Modifier,
 ) {
-    val score = LocalMediaListItem.current.score
-
     if (score != Double.zero) {
         Box(
             modifier = modifier
@@ -339,19 +352,19 @@ private fun Score(
 
 @Composable
 private fun PlusOne(
+    progress: Int,
+    total: Int?,
     itemLoading: Boolean,
-    onAddPlusOne: (MediaListItem) -> Unit,
+    onAddPlusOne: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val item = LocalMediaListItem.current
-
     // Episodes - Chapters (Anime & Manga)
-    if (item.progress != item.total) {
+    if (progress != total) {
         PlusOneButton(
             progress = stringResource(
                 R.string.lists_entry_progress,
-                item.progress,
-                item.total ?: String.unknown,
+                progress,
+                total ?: String.unknown,
             ),
             itemLoading = itemLoading,
             onAddPlusOne = onAddPlusOne,
@@ -364,13 +377,11 @@ private fun PlusOne(
 private fun PlusOneButton(
     progress: String,
     itemLoading: Boolean,
-    onAddPlusOne: (MediaListItem) -> Unit,
+    onAddPlusOne: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val entry = LocalMediaListItem.current
-
     TextButton(
-        onClick = { onAddPlusOne(entry) },
+        onClick = onAddPlusOne,
         modifier = modifier,
         shape = CircleShape,
         colors = ButtonDefaults.outlinedButtonColors(
@@ -386,11 +397,10 @@ private fun PlusOneButton(
 
 @Composable
 private fun Progress(
+    progress: Int,
+    total: Int?,
     modifier: Modifier = Modifier,
 ) {
-    val progress = LocalMediaListItem.current.progress
-    val total = LocalMediaListItem.current.total
-
     // For those entries where the total number of episodes/chapters is not known,
     // the progress bar is incomplete and is filled with about 90% of the current progress.
     val totalProgress = (total ?: progress.plus(progress.times(PROGRESS_IF_UNKNOWN))).toFloat()

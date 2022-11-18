@@ -45,8 +45,10 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
         observeListUseCase()
     }
 
-    fun addPlusOne(item: MediaListItem) {
-        val entry = item.toMediaList().copy(progress = item.progress.inc())
+    fun addPlusOne(id: Int) {
+        val entry = with(currentList.first { it.entryId == id }.toMediaList()) {
+            copy(progress = progress.inc())
+        }
         intent { updateListUseCase(entry) }
     }
 
