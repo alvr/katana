@@ -45,6 +45,10 @@ fun DependencyHandlerScope.ksp(provider: Provider<*>) {
     addProvider("ksp", provider)
 }
 
+fun DependencyHandlerScope.detekt(provider: Provider<*>) {
+    addProvider("detektPlugins", provider)
+}
+
 fun ExtensionContainer.commonExtensions() {
     configure<JavaPluginExtension> {
         toolchain {

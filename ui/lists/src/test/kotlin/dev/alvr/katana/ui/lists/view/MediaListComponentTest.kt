@@ -173,7 +173,7 @@ internal class MediaListComponentTest : ComposeTest() {
     @Test
     @Suppress("LongMethod")
     fun `an anime item should paint the correct data`() {
-        val addPlusOne = mockk<(MediaListItem) -> Unit>()
+        val addPlusOne = mockk<(Int) -> Unit>()
         val editEntry = mockk<(Int) -> Unit>()
         val mediaDetails = mockk<(Int) -> Unit>()
 
@@ -235,9 +235,9 @@ internal class MediaListComponentTest : ComposeTest() {
                         filterToOne(hasTestTag(ITEM_PLUSONE_TAG)).run {
                             assertIsDisplayed()
 
-                            verify(exactly = 0) { addPlusOne(item) }
+                            verify(exactly = 0) { addPlusOne(item.entryId) }
                             performClick()
-                            verify(exactly = 1) { addPlusOne(item) }
+                            verify(exactly = 1) { addPlusOne(item.entryId) }
 
                             onChild().run {
                                 val total = item.total ?: String.unknown
@@ -255,7 +255,7 @@ internal class MediaListComponentTest : ComposeTest() {
 
     @Test
     fun `a manga item should paint the correct data`() {
-        val addPlusOne = mockk<(MediaListItem) -> Unit>()
+        val addPlusOne = mockk<(Int) -> Unit>()
         val editEntry = mockk<(Int) -> Unit>()
         val mediaDetails = mockk<(Int) -> Unit>()
 

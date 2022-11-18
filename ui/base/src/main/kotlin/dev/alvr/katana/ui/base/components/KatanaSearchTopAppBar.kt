@@ -37,6 +37,7 @@ fun KatanaSearchTopAppBar(
     onValueChange: (String) -> Unit,
     onBack: () -> Unit,
     onClear: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var focusRequested by rememberSaveable { mutableStateOf(false) }
     var search by rememberSaveable { mutableStateOf(String.empty) }
@@ -53,7 +54,7 @@ fun KatanaSearchTopAppBar(
     }
 
     TextField(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
         value = search,
