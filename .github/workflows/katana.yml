@@ -191,14 +191,15 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew assembleRelease --no-daemon --scan
-      - name: Publish staging APK to AppCenter
-        uses: wzieba/AppCenter-Github-Action@v1
+      - name: Publish staging APK to TestApp.io
+        uses: testappio/github-action@v5
         with:
-          appName: KatanaApp/Katana
-          token: ${{ secrets.APPCENTER_TOKEN }}
-          group: Testers
+          app_id: ${{ secrets.TESTAPPIO_APP_ID }}
+          api_token: ${{ secrets.TESTAPPIO_API_TOKEN }}
           file: app/build/outputs/apk/release/app-release.apk
-          notifyTesters: true
+          git_release_notes: true
+          include_git_commit_id: true
+          notify: true
 
   deploy-production:
     name: Production deployment
