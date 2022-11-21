@@ -392,4 +392,7 @@ private fun Animate(
     }
 }
 
-private enum class State { GetStarted, Buttons }
+private enum class State {
+    GetStarted,
+    Buttons,
+}

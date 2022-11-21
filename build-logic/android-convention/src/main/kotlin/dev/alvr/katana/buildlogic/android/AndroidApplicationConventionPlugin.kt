@@ -87,8 +87,8 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
 
         buildTypes {
             debug {
-                applicationIdSuffix = ".debug"
-                versionNameSuffix = "-debug"
+                applicationIdSuffix = ".dev"
+                versionNameSuffix = "-dev"
 
                 configure(isDebug = true)
             }
