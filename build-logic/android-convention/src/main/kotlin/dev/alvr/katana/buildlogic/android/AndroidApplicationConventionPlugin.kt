@@ -46,7 +46,7 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
         }
     }
 
-    @Suppress("UnstableApiUsage")
+    @Suppress("StringLiteralDuplication", "UnstableApiUsage")
     private fun BaseAppModuleExtension.configureApp(project: Project) {
         val rootProject = project.rootProject
 
@@ -87,7 +87,8 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
 
         buildTypes {
             debug {
-                applicationIdSuffix = ".beta"
+                applicationIdSuffix = ".debug"
+                versionNameSuffix = "-debug"
 
                 configure(isDebug = true)
             }
@@ -101,6 +102,14 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
                 )
 
                 signingConfig = signingConfigs.getByName("release")
+            }
+
+            create("beta") {
+                initWith(getByName("release"))
+                matchingFallbacks.add("release")
+
+                applicationIdSuffix = ".beta"
+                versionNameSuffix = "-beta"
             }
         }
 

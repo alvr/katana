@@ -163,8 +163,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonarqube -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} --no-daemon
 
-  deploy-staging:
-    name: Staging deployment
+  deploy-beta:
+    name: Beta deployment
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     needs: [ assemble, static-analysis, unit-tests ]
@@ -181,24 +181,39 @@ jobs:
           fileDir: .
           fileName: ${{ secrets.SIGNING_FILE }}
           encodedString: ${{ secrets.SIGNING_FILE_BASE64 }}
+      - name: Bump versionCode
+        uses: chkfung/android-version-actions@v1.1
+        with:
+          gradlePath: build-logic/android-convention/src/main/kotlin/dev/alvr/katana/buildlogic/android/AndroidApplicationConventionPlugin.kt
+          versionCode: ${{ github.run_number }}
       - name: Build staging APK
         env:
           SIGNING_ALIAS: ${{ secrets.SIGNING_ALIAS }}
           SIGNING_ALIAS_PASS: ${{ secrets.SIGNING_ALIAS_PASS }}
           SIGNING_FILE: ${{ secrets.SIGNING_FILE }}
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_BETA_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew assembleRelease --no-daemon --scan
-      - name: Publish staging APK to AppCenter
-        uses: wzieba/AppCenter-Github-Action@v1
+        run: ./gradlew assembleBeta --no-daemon --scan
+      - name: Publish beta APK to TestApp.io
+        uses: testappio/github-action@v5
         with:
-          appName: KatanaApp/Katana
-          token: ${{ secrets.APPCENTER_TOKEN }}
-          group: Testers
-          file: app/build/outputs/apk/release/app-release.apk
-          notifyTesters: true
+          api_token: ${{ secrets.TESTAPPIO_API_TOKEN }}
+          app_id: ${{ secrets.TESTAPPIO_APP_ID }}
+          file: app/build/outputs/apk/beta/app-beta.apk
+          git_release_notes: true
+          include_git_commit_id: true
+          notify: true
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_PROJECT: ${{ secrets.SENTRY_BETA_PROJECT }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        with:
+          environment: beta
+          version: ${{ github.run_number }}
 
   deploy-production:
     name: Production deployment
@@ -224,7 +239,7 @@ jobs:
           SIGNING_ALIAS_PASS: ${{ secrets.SIGNING_ALIAS_PASS }}
           SIGNING_FILE: ${{ secrets.SIGNING_FILE }}
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROD_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew assembleRelease bundleRelease --no-daemon --scan
@@ -240,7 +255,7 @@ jobs:
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         env:
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROD_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
