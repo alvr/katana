@@ -82,7 +82,7 @@ destinations-compiler = { module = "io.github.raamcosta.compose-destinations:ksp
 desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "1.2.2" }
 
 # Detekt
-detekt-compose = { module = "com.twitter.compose.rules:detekt", version = "0.0.24" }
+detekt-compose = { module = "com.twitter.compose.rules:detekt", version = "0.0.26" }
 detekt-compose2 = { module = "ru.kode:detekt-rules-compose", version = "1.2.2" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
