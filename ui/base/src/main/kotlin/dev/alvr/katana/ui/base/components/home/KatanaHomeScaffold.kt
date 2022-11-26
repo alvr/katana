@@ -176,7 +176,7 @@ fun rememberKatanaHomeScaffoldState() = rememberSaveable(
 
 internal enum class TopAppBarStyle {
     Normal,
-    Search
+    Search,
 }
 
 private const val ANIMATION_MILLIS = 250

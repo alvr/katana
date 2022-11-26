@@ -171,7 +171,7 @@ internal class MediaListComponentTest : ComposeTest() {
     }
 
     @Test
-    @Suppress("LongMethod")
+    @Suppress("CognitiveComplexMethod", "LongMethod")
     fun `an anime item should paint the correct data`() {
         val addPlusOne = mockk<(Int) -> Unit>()
         val editEntry = mockk<(Int) -> Unit>()

@@ -71,7 +71,7 @@ internal object TestSessionDataStoreModule {
             createTempFile()
                 .toFile()
                 .absoluteFile
-                .also { it.writeText(Base64.encodeToString(Random.nextBytes(64), Base64.NO_WRAP)) }
+                .apply { writeText(Base64.encodeToString(Random.nextBytes(64), Base64.NO_WRAP)) }
                 .copyTo(context.dataStoreFile("${CORRUPTED_DATASTORE_FILE}_$index"))
         }
 
