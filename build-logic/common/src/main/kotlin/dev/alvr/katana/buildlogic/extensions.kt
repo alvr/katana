@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private val Project.libs get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-val Test.isRelease get() = name.contains("release", ignoreCase = true)
+val Test.isDev get() = name.contains("debug", ignoreCase = true)
 
 fun Project.catalogVersion(alias: String) = libs.findVersion(alias).get().toString()
 fun Project.catalogLib(alias: String) = libs.findLibrary(alias).get()
