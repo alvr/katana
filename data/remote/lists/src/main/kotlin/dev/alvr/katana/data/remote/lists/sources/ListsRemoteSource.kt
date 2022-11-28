@@ -17,6 +17,7 @@ import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.user.managers.UserIdManager
+import io.github.aakira.napier.Napier
 import javax.inject.Inject
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -34,6 +35,8 @@ internal class ListsRemoteSource @Inject constructor(
     suspend fun updateList(entry: MediaList) = Either.catch(
         f = { client.mutation(entry.toMutation()).execute() },
         fe = { error ->
+            Napier.e(error) { "There was an error updating the entry" }
+
             when (CommonRemoteFailure(error)) {
                 CommonRemoteFailure.Network -> ListsFailure.UpdatingList
                 CommonRemoteFailure.Response -> ListsFailure.UpdatingList
@@ -51,6 +54,8 @@ internal class ListsRemoteSource @Inject constructor(
             .map { res -> MediaCollection(res.data?.mediaList<T>().orEmpty()).right() }
             .distinctUntilChanged()
             .catch { error ->
+                Napier.e(error) { "There was an error collecting the lists" }
+
                 emit(
                     when (CommonRemoteFailure(error)) {
                         CommonRemoteFailure.Network -> ListsFailure.GetMediaCollection

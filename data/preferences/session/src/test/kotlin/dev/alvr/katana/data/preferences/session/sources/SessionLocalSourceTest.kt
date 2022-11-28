@@ -168,7 +168,7 @@ internal class SessionLocalSourceTest : BehaviorSpec() {
                     val session = spyk(Session())
 
                     every { store.data } returns flowOf(session)
-                    every { session.anilistToken } throws mockk<Failure>()
+                    every { session.anilistToken } throws mockk<Exception>()
 
                     then("should be a left of SessionFailure.CheckingActiveSession") {
                         source.sessionActive.test(5.seconds) {
@@ -182,7 +182,7 @@ internal class SessionLocalSourceTest : BehaviorSpec() {
                     val session = spyk(Session())
 
                     every { store.data } returns flowOf(session)
-                    every { session.anilistToken } throws mockk<Failure>()
+                    every { session.anilistToken } throws mockk<Exception>()
 
                     then("the token should be none") {
                         source.getAnilistToken().shouldBeNone()
