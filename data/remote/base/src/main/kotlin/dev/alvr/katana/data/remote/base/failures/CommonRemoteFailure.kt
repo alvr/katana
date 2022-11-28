@@ -9,11 +9,11 @@ import com.apollographql.apollo3.exception.JsonDataException
 import com.apollographql.apollo3.exception.JsonEncodingException
 import dev.alvr.katana.domain.base.failures.Failure
 
-sealed class CommonRemoteFailure : Failure() {
-    object Cache : CommonRemoteFailure()
-    object Network : CommonRemoteFailure()
-    object Response : CommonRemoteFailure()
-    object Unknown : CommonRemoteFailure()
+sealed interface CommonRemoteFailure : Failure {
+    object Cache : CommonRemoteFailure
+    object Network : CommonRemoteFailure
+    object Response : CommonRemoteFailure
+    object Unknown : CommonRemoteFailure
 
     companion object {
         operator fun invoke(ex: Throwable) = when (ex) {

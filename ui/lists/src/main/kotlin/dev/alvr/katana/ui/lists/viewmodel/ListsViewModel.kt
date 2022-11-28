@@ -11,7 +11,6 @@ import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.entities.mappers.toMediaList
-import io.github.aakira.napier.Napier
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -87,7 +86,7 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
         intent {
             collectionFlow.collect { collection ->
                 collection.fold(
-                    ifLeft = ::onCollectCollectionError,
+                    ifLeft = { onCollectCollectionError() },
                     ifRight = { media ->
                         val items = media.lists
                             .groupBy { it.name }
@@ -114,8 +113,7 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
         }
     }
 
-    private fun onCollectCollectionError(failure: Failure) {
-        Napier.e(failure) { "There was an error collecting the lists" }
+    private fun onCollectCollectionError() {
         updateState { copy(isError = true, isLoading = false, isEmpty = true) }
     }
 

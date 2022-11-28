@@ -23,7 +23,9 @@ internal class SessionLocalSource @Inject constructor(
     @Suppress("USELESS_CAST")
     val sessionActive get() = dataStore.data.map { session ->
         (session.anilistToken == null && session.isSessionActive).not().right() as Either<Failure, Boolean>
-    }.catch {
+    }.catch { error ->
+        Napier.e(error) { "Error observing the session, setting the as inactive" }
+
         emit(SessionFailure.CheckingActiveSession.left())
     }
 
@@ -33,6 +35,8 @@ internal class SessionLocalSource @Inject constructor(
             Napier.d { "Session cleared" }
         },
         fe = { error ->
+            Napier.e(error) { "Error clearing session" }
+
             error.handleDataStore(
                 rwException = { SessionFailure.ClearingSession },
                 other = { Failure.Unknown },
@@ -46,6 +50,8 @@ internal class SessionLocalSource @Inject constructor(
             Napier.d { "Anilist token deleted" }
         },
         fe = { error ->
+            Napier.e(error) { "Was not possible to delete the token" }
+
             error.handleDataStore(
                 rwException = { SessionFailure.DeletingToken },
                 other = { Failure.Unknown },
@@ -55,7 +61,11 @@ internal class SessionLocalSource @Inject constructor(
 
     suspend fun getAnilistToken() = dataStore.data
         .map { token -> token.anilistToken?.let { AnilistToken(it) }.toOption() }
-        .catch { emit(None) }
+        .catch { error ->
+            Napier.e(error) { "There was an error reading the token from the preferences" }
+
+            emit(None)
+        }
         .first()
 
     suspend fun saveSession(anilistToken: AnilistToken) = Either.catch(
@@ -64,6 +74,8 @@ internal class SessionLocalSource @Inject constructor(
             Napier.d { "Token saved: ${anilistToken.token}" }
         },
         fe = { error ->
+            Napier.e(error) { "Was not possible to save the token" }
+
             error.handleDataStore(
                 rwException = { SessionFailure.SavingSession },
                 other = { Failure.Unknown },

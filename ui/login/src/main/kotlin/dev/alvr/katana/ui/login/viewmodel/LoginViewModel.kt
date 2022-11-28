@@ -9,7 +9,6 @@ import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK_TOKEN
 import dev.alvr.katana.ui.login.R
-import io.github.aakira.napier.Napier
 import javax.inject.Inject
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
@@ -38,8 +37,7 @@ internal class LoginViewModel @Inject constructor(
 
     private suspend fun saveToken(token: String) {
         saveSessionUseCase(AnilistToken(token)).fold(
-            ifLeft = { failure ->
-                Napier.e(failure) { "Was not possible to save the token" }
+            ifLeft = {
                 updateState { copy(loading = false, errorMessage = R.string.save_token_error) }
             },
             ifRight = { saveUserId() },
@@ -48,8 +46,7 @@ internal class LoginViewModel @Inject constructor(
 
     private suspend fun saveUserId() {
         saveUserIdUseCase().fold(
-            ifLeft = { failure ->
-                Napier.e(failure) { "Was not possible to save the userId" }
+            ifLeft = {
                 updateState { copy(loading = false, errorMessage = R.string.fetch_userid_error) }
             },
             ifRight = {
