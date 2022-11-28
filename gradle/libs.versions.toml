@@ -15,7 +15,7 @@ compose = "2022.11.00"
 compose-compiler = "1.4.0-alpha02"
 
 # Coverage Engine
-coverage-engine = "1.0.686"
+coverage-engine = "1.0.689"
 
 # Plugins
 detekt = "1.22.0"

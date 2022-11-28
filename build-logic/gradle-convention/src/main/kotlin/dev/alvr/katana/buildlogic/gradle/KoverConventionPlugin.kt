@@ -2,7 +2,7 @@ package dev.alvr.katana.buildlogic.gradle
 
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogVersion
-import dev.alvr.katana.buildlogic.isDev
+import dev.alvr.katana.buildlogic.isRelease
 import kotlinx.kover.api.CounterType
 import kotlinx.kover.api.IntellijEngine
 import kotlinx.kover.api.KoverMergedConfig
@@ -77,7 +77,7 @@ internal class KoverConventionPlugin : ConventionPlugin {
 
             tasks.withType<Test> {
                 extensions.configure<KoverTaskExtension> {
-                    isDisabled.set(!isDev)
+                    isDisabled.set(isRelease)
                 }
             }
         }
