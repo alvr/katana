@@ -1,5 +1,5 @@
 [versions]
-accompanist = "0.27.1"
+accompanist = "0.28.0"
 apollo = "3.7.1"
 coroutines = "1.6.4"
 destinations = "1.7.27-beta"
