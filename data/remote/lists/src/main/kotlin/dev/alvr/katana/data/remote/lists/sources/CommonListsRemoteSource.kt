@@ -46,13 +46,13 @@ internal class CommonListsRemoteSource @Inject constructor(
         },
     ).void()
 
-    inline fun <reified T : MediaEntry> getMediaCollection(type: MediaType) = flow {
+    fun <T : MediaEntry> getMediaCollection(type: MediaType) = flow {
         val response = client
             .query(MediaListCollectionQuery(userId.getId().optional(), type))
             .fetchPolicyInterceptor(reloadInterceptor)
             .watch()
             .distinctUntilChanged()
-            .map { res -> MediaCollection(res.data?.mediaList<T>().orEmpty()).right() }
+            .map { res -> MediaCollection(res.data?.mediaList<T>(type).orEmpty()).right() }
             .distinctUntilChanged()
             .catch { error ->
                 Napier.e(error) { "There was an error collecting the lists" }

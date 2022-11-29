@@ -7,6 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+@Suppress("UseDataClass")
 internal class AnimeListsRemoteSource @Inject constructor(
     private val delegate: CommonListsRemoteSource,
 ) {
