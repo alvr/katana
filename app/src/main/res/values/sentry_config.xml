@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="sentry_dsn" translatable="false">https://a6546827e74f47b499b4f818f01dd49d@o387687.ingest.sentry.io/4504198475284480</string>
+    <item name="sentry_sample_rate" format="float" type="integer">1.0</item>
 </resources>

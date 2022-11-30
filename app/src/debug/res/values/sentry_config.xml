@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="sentry_dsn" translatable="false" />
+    <item name="sentry_sample_rate" format="float" type="integer">0.0</item>
 </resources>

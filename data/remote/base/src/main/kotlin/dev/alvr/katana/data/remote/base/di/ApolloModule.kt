@@ -22,6 +22,7 @@ import dagger.hilt.components.SingletonComponent
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.session.usecases.DeleteAnilistTokenUseCase
 import dev.alvr.katana.domain.session.usecases.GetAnilistTokenUseCase
+import io.sentry.apollo3.sentryTracing
 import java.net.HttpURLConnection
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
@@ -101,6 +102,7 @@ internal object ApolloModule {
             .addHttpInterceptor(sessionInterceptor)
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .okHttpClient(client)
+            .sentryTracing()
             .normalizedCache(
                 normalizedCacheFactory = cache,
                 cacheKeyGenerator = cacheKeyGenerator,
