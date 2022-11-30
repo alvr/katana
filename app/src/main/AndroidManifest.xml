@@ -37,7 +37,17 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="io.sentry.dsn" android:value="@string/sentry_dsn" />
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="@string/sentry_dsn" />
+
+        <meta-data
+            android:name="io.sentry.traces.sample-rate"
+            android:value="@integer/sentry_sample_rate" />
+
+        <meta-data
+            android:name="io.sentry.traces.profiling.sample-rate"
+            android:value="@integer/sentry_sample_rate" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

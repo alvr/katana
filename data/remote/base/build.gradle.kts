@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.apollo.cache.sql)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logger)
+    implementation(libs.sentry.apollo)
 
     testImplementation(projects.common.tests)
 }
