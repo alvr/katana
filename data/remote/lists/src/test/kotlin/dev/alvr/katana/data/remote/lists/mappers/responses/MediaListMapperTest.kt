@@ -3,6 +3,7 @@ package dev.alvr.katana.data.remote.lists.mappers.responses
 import com.apollographql.apollo3.annotations.ApolloExperimental
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.zero
+import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
@@ -33,11 +34,11 @@ internal class MediaListMapperTest : WordSpec() {
             val data: MediaListCollectionQuery.Data? = null
 
             "return a null anime medialist" {
-                data?.mediaList<MediaEntry.Anime>().shouldBeNull()
+                data?.mediaList<MediaEntry.Anime>(MediaType.ANIME).shouldBeNull()
             }
 
             "return a null manga medialist" {
-                data?.mediaList<MediaEntry.Manga>().shouldBeNull()
+                data?.mediaList<MediaEntry.Manga>(MediaType.MANGA).shouldBeNull()
             }
         }
 
@@ -50,11 +51,11 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return an empty list of animes" {
-                data.mediaList<MediaEntry.Anime>().shouldBeEmpty()
+                data.mediaList<MediaEntry.Anime>(MediaType.ANIME).shouldBeEmpty()
             }
 
             "return an empty list of mangas" {
-                data.mediaList<MediaEntry.Manga>().shouldBeEmpty()
+                data.mediaList<MediaEntry.Manga>(MediaType.MANGA).shouldBeEmpty()
             }
         }
 
@@ -83,7 +84,7 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return a CUSTOM list without name" {
-                data.mediaList<MediaEntry.Anime>().forAll { list ->
+                data.mediaList<MediaEntry.Anime>(MediaType.ANIME).forAll { list ->
                     list.name.shouldBeEmpty()
                 }
             }
@@ -121,7 +122,7 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return a sorted media list" {
-                data.mediaList<MediaEntry.Anime>()
+                data.mediaList<MediaEntry.Anime>(MediaType.ANIME)
                     .also { list ->
                         list[0].name shouldBe "Watching"
                         list[1].name shouldBe "Rewatching"
@@ -164,7 +165,7 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return a sorted media list" {
-                data.mediaList<MediaEntry.Anime>()
+                data.mediaList<MediaEntry.Anime>(MediaType.ANIME)
                     .also { list ->
                         list[0].name shouldBe "Rewatching"
                         list[1].name shouldBe "Watching"
@@ -203,7 +204,7 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return a sorted media list" {
-                data.mediaList<MediaEntry.Anime>()
+                data.mediaList<MediaEntry.Anime>(MediaType.ANIME)
                     .also { list ->
                         list[0].name shouldBe "Rewatching"
                         list[1].name shouldBe "Watching"
@@ -244,7 +245,7 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return a sorted media list" {
-                data.mediaList<MediaEntry.Anime>()
+                data.mediaList<MediaEntry.Anime>(MediaType.ANIME)
                     .also { list ->
                         list[0].name shouldBe "Rewatching"
                         list[1].name shouldBe "Watching"
@@ -287,7 +288,7 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return a sorted media list" {
-                data.mediaList<MediaEntry.Manga>()
+                data.mediaList<MediaEntry.Manga>(MediaType.MANGA)
                     .also { list ->
                         list[0].name shouldBe "Reading"
                         list[1].name shouldBe "Rereading"
@@ -330,7 +331,7 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return a sorted media list" {
-                data.mediaList<MediaEntry.Manga>()
+                data.mediaList<MediaEntry.Manga>(MediaType.MANGA)
                     .also { list ->
                         list[0].name shouldBe "Rereading"
                         list[1].name shouldBe "Reading"
@@ -369,7 +370,7 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return a sorted media list" {
-                data.mediaList<MediaEntry.Manga>()
+                data.mediaList<MediaEntry.Manga>(MediaType.MANGA)
                     .also { list ->
                         list[0].name shouldBe "Rereading"
                         list[1].name shouldBe "Reading"
@@ -410,7 +411,7 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return a sorted media list" {
-                data.mediaList<MediaEntry.Manga>()
+                data.mediaList<MediaEntry.Manga>(MediaType.MANGA)
                     .also { list ->
                         list[0].name shouldBe "Rereading"
                         list[1].name shouldBe "Reading"
@@ -471,7 +472,7 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "the media should be type of MediaEntry.Anime" {
-                data.mediaList<MediaEntry.Anime>().forAll { list ->
+                data.mediaList<MediaEntry.Anime>(MediaType.ANIME).forAll { list ->
                     list.entries.forAll { entry ->
                         with(entry.list) {
                             id shouldBe 100
@@ -508,7 +509,7 @@ internal class MediaListMapperTest : WordSpec() {
 
             "throw an exception when using wrong MediaEntry" {
                 shouldThrowExactly<IllegalStateException> {
-                    data.mediaList<MediaEntry>()
+                    data.mediaList<MediaEntry>(MediaType.UNKNOWN__)
                 }
             }
         }
@@ -561,7 +562,7 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "the media should be type of MediaEntry.Manga" {
-                data.mediaList<MediaEntry.Manga>().forAll { list ->
+                data.mediaList<MediaEntry.Manga>(MediaType.MANGA).forAll { list ->
                     list.entries.forAll { entry ->
                         with(entry.list) {
                             id shouldBe 100
@@ -595,7 +596,7 @@ internal class MediaListMapperTest : WordSpec() {
 
             "throw an exception when using wrong MediaEntry" {
                 shouldThrowExactly<IllegalStateException> {
-                    data.mediaList<MediaEntry>()
+                    data.mediaList<MediaEntry>(MediaType.UNKNOWN__)
                 }
             }
         }
@@ -635,11 +636,11 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return a sorted media list" {
-                data.mediaList<MediaEntry.Anime>().shouldExist { it.name == "Watching" }
+                data.mediaList<MediaEntry.Anime>(MediaType.ANIME).shouldExist { it.name == "Watching" }
             }
 
             "the media should be type of MediaEntry.Anime" {
-                data.mediaList<MediaEntry.Anime>().forAll { list ->
+                data.mediaList<MediaEntry.Anime>(MediaType.ANIME).forAll { list ->
                     list.entries.forAll { entry ->
                         with(entry.list) {
                             id shouldBe Int.zero
@@ -673,7 +674,7 @@ internal class MediaListMapperTest : WordSpec() {
 
             "throw an exception when using wrong MediaEntry" {
                 shouldThrowExactly<IllegalStateException> {
-                    data.mediaList<MediaEntry>()
+                    data.mediaList<MediaEntry>(MediaType.UNKNOWN__)
                 }
             }
         }
@@ -714,11 +715,11 @@ internal class MediaListMapperTest : WordSpec() {
             }
 
             "return a sorted media list" {
-                data.mediaList<MediaEntry.Manga>().shouldExist { it.name == "Reading" }
+                data.mediaList<MediaEntry.Manga>(MediaType.MANGA).shouldExist { it.name == "Reading" }
             }
 
             "the media should be type of MediaEntry.Manga" {
-                data.mediaList<MediaEntry.Manga>().forAll { list ->
+                data.mediaList<MediaEntry.Manga>(MediaType.MANGA).forAll { list ->
                     list.entries.forAll { entry ->
                         with(entry.list) {
                             id shouldBe Int.zero
@@ -752,7 +753,7 @@ internal class MediaListMapperTest : WordSpec() {
 
             "throw an exception when using wrong MediaEntry" {
                 shouldThrowExactly<IllegalStateException> {
-                    data.mediaList<MediaEntry>()
+                    data.mediaList<MediaEntry>(MediaType.UNKNOWN__)
                 }
             }
         }

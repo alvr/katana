@@ -20,15 +20,13 @@ import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
 import com.benasher44.uuid.uuid4
 import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
+import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.MediaListEntriesMutation
-import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSource
-import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSourceImpl
-import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSource
-import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSourceImpl
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
+import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import io.kotest.assertions.arrow.core.shouldBeLeft
@@ -49,7 +47,7 @@ import java.time.LocalDateTime
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ApolloExperimental::class)
-internal class ListsRemoteSourceTest : BehaviorSpec() {
+internal class CommonListsRemoteSourceTest : BehaviorSpec() {
     private val mockServer = MockServer()
     private val apolloBuilder = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport())
     private val client = spyk(apolloBuilder.build())
@@ -57,8 +55,6 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
     private val reloadInterceptor = mockk<ReloadInterceptor>()
 
     private val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
-    private val animeSource: AnimeListsRemoteSource = AnimeListsRemoteSourceImpl(source)
-    private val mangaSource: MangaListsRemoteSource = MangaListsRemoteSourceImpl(source)
 
     private val mediaList = Arb.bind<MediaList>(
         mapOf(
@@ -230,14 +226,14 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
                     client.enqueueTestResponse(response)
 
                     then("the anime collection should be empty") {
-                        animeSource.animeCollection.test(5.seconds) {
+                        source.getMediaCollection<MediaEntry.Anime>(MediaType.ANIME).test(5.seconds) {
                             awaitItem().shouldBeRight(MediaCollection(emptyList()))
                             cancelAndIgnoreRemainingEvents()
                         }
                     }
 
                     then("the manga collection should be empty") {
-                        mangaSource.mangaCollection.test(5.seconds) {
+                        source.getMediaCollection<MediaEntry.Manga>(MediaType.MANGA).test(5.seconds) {
                             awaitItem().shouldBeRight(MediaCollection(emptyList()))
                             cancelAndIgnoreRemainingEvents()
                         }
@@ -253,14 +249,14 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
                     client.enqueueTestResponse(response)
 
                     then("the anime collection should be empty") {
-                        animeSource.animeCollection.test(5.seconds) {
+                        source.getMediaCollection<MediaEntry.Anime>(MediaType.ANIME).test(5.seconds) {
                             awaitItem().shouldBeRight(MediaCollection(emptyList()))
                             cancelAndIgnoreRemainingEvents()
                         }
                     }
 
                     then("the manga collection should be empty") {
-                        mangaSource.mangaCollection.test(5.seconds) {
+                        source.getMediaCollection<MediaEntry.Manga>(MediaType.MANGA).test(5.seconds) {
                             awaitItem().shouldBeRight(MediaCollection(emptyList()))
                             cancelAndIgnoreRemainingEvents()
                         }
@@ -275,20 +271,18 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
                     userIdManager,
                     reloadInterceptor,
                 )
-                val animeSource: AnimeListsRemoteSource = AnimeListsRemoteSourceImpl(source)
-                val mangaSource: MangaListsRemoteSource = MangaListsRemoteSourceImpl(source)
 
                 and("mocking the response") {
                     `when`("a 500 error occurs") {
                         enqueueResponse { statusCode(500) }
 
                         then("it returns a left of ListsFailure.GetMediaCollection") {
-                            animeSource.animeCollection.test(5.seconds) {
+                            source.getMediaCollection<MediaEntry.Anime>(MediaType.ANIME).test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }
 
-                            mangaSource.mangaCollection.test(5.seconds) {
+                            source.getMediaCollection<MediaEntry.Manga>(MediaType.MANGA).test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }
@@ -299,12 +293,12 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
                         enqueueResponse { body("Malformed body") }
 
                         then("it returns a left of ListsFailure.GetMediaCollection") {
-                            animeSource.animeCollection.test(5.seconds) {
+                            source.getMediaCollection<MediaEntry.Anime>(MediaType.ANIME).test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }
 
-                            mangaSource.mangaCollection.test(5.seconds) {
+                            source.getMediaCollection<MediaEntry.Manga>(MediaType.MANGA).test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }
@@ -315,12 +309,12 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
                         enqueueResponse { body("""{"data": {"random": 42}}""") }
 
                         then("it returns a left of ListsFailure.GetMediaCollection") {
-                            animeSource.animeCollection.test(5.seconds) {
+                            source.getMediaCollection<MediaEntry.Anime>(MediaType.ANIME).test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }
 
-                            mangaSource.mangaCollection.test(5.seconds) {
+                            source.getMediaCollection<MediaEntry.Manga>(MediaType.MANGA).test(5.seconds) {
                                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                 cancelAndIgnoreRemainingEvents()
                             }

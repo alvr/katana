@@ -5,7 +5,9 @@ import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.common.tests.valueMockk
-import dev.alvr.katana.data.remote.lists.sources.ListsRemoteSource
+import dev.alvr.katana.data.remote.lists.sources.CommonListsRemoteSource
+import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSource
+import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSource
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
@@ -23,62 +25,65 @@ import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.flowOf
 
 internal class ListsRepositoryTest : BehaviorSpec() {
-    private val source = mockk<ListsRemoteSource>()
-    private val repo: ListsRepository = ListsRepositoryImpl(source)
+    private val commonSource = mockk<CommonListsRemoteSource>()
+    private val animeSource = mockk<AnimeListsRemoteSource>()
+    private val mangaSource = mockk<MangaListsRemoteSource>()
+
+    private val repo: ListsRepository = ListsRepositoryImpl(commonSource, animeSource, mangaSource)
 
     init {
         given("a ListsRepository") {
             `when`("observing the anime collection") {
                 val collection = valueMockk<MediaCollection<MediaEntry.Anime>>()
-                every { source.animeCollection } returns flowOf(collection.right())
+                every { animeSource.animeCollection } returns flowOf(collection.right())
 
                 then("collecting the flow should get the same items") {
                     repo.animeCollection.test(5.seconds) {
                         awaitItem().shouldBeRight(collection)
                         awaitComplete()
                     }
-                    verify(exactly = 1) { source.animeCollection }
+                    verify(exactly = 1) { animeSource.animeCollection }
                 }
             }
 
             `when`("observing the manga collection") {
                 val collection = valueMockk<MediaCollection<MediaEntry.Manga>>()
-                every { source.mangaCollection } returns flowOf(collection.right())
+                every { mangaSource.mangaCollection } returns flowOf(collection.right())
 
                 then("collecting the flow should get the same items") {
                     repo.mangaCollection.test(5.seconds) {
                         awaitItem().shouldBeRight(collection)
                         awaitComplete()
                     }
-                    verify(exactly = 1) { source.mangaCollection }
+                    verify(exactly = 1) { mangaSource.mangaCollection }
                 }
             }
 
             `when`("updating the list without error") {
-                coEitherJustRun { source.updateList(any()) }
+                coEitherJustRun { commonSource.updateList(any()) }
 
                 then("the result should be right") {
                     repo.updateList(mockk()).shouldBeRight()
-                    coVerify(exactly = 1) { source.updateList(any()) }
+                    coVerify(exactly = 1) { commonSource.updateList(any()) }
                 }
             }
 
             `when`("updating the list with an error") {
                 and("the error is a ListsFailure") {
-                    coEvery { source.updateList(any()) } returns ListsFailure.UpdatingList.left()
+                    coEvery { commonSource.updateList(any()) } returns ListsFailure.UpdatingList.left()
 
                     then("the result should be left") {
                         repo.updateList(mockk()).shouldBeLeft(ListsFailure.UpdatingList)
-                        coVerify(exactly = 1) { source.updateList(any()) }
+                        coVerify(exactly = 1) { commonSource.updateList(any()) }
                     }
                 }
 
                 and("the error in unknown") {
-                    coEvery { source.updateList(any()) } returns Failure.Unknown.left()
+                    coEvery { commonSource.updateList(any()) } returns Failure.Unknown.left()
 
                     then("the result should be left") {
                         repo.updateList(mockk()).shouldBeLeft(Failure.Unknown)
-                        coVerify(exactly = 1) { source.updateList(any()) }
+                        coVerify(exactly = 1) { commonSource.updateList(any()) }
                     }
                 }
             }

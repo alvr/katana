@@ -1,6 +1,6 @@
 package dev.alvr.katana.data.remote.lists.mappers.responses
 
-import dev.alvr.katana.domain.lists.models.entries.MediaEntry
+import dev.alvr.katana.data.remote.base.type.MediaType
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -10,11 +10,11 @@ internal fun Number.toLocalDateTime() = LocalDateTime.ofInstant(
     ZoneId.systemDefault(),
 )
 
-internal inline fun <reified T : MediaEntry, R> onMediaEntry(
+internal fun <R> MediaType.onMediaEntry(
     anime: () -> R,
     manga: () -> R,
-): R = when (T::class) {
-    MediaEntry.Anime::class -> anime()
-    MediaEntry.Manga::class -> manga()
+): R = when (this) {
+    MediaType.ANIME -> anime()
+    MediaType.MANGA -> manga()
     else -> error("only MediaEntry.Anime and MediaEntry.Manga are accepted")
 }

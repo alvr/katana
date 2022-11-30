@@ -4,9 +4,11 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.cache.normalized.fetchPolicyInterceptor
 import com.apollographql.apollo3.cache.normalized.watch
 import dev.alvr.katana.data.remote.base.extensions.optional
 import dev.alvr.katana.data.remote.base.failures.CommonRemoteFailure
+import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.mappers.requests.toMutation
@@ -25,14 +27,12 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-internal class ListsRemoteSource @Inject constructor(
+internal class CommonListsRemoteSourceImpl @Inject constructor(
     private val client: ApolloClient,
     private val userId: UserIdManager,
-) {
-    val animeCollection get() = getMediaCollection<MediaEntry.Anime>(MediaType.ANIME)
-    val mangaCollection get() = getMediaCollection<MediaEntry.Manga>(MediaType.MANGA)
-
-    suspend fun updateList(entry: MediaList) = Either.catch(
+    private val reloadInterceptor: ReloadInterceptor,
+) : CommonListsRemoteSource {
+    override suspend fun updateList(entry: MediaList) = Either.catch(
         f = { client.mutation(entry.toMutation()).execute() },
         fe = { error ->
             Napier.e(error) { "There was an error updating the entry" }
@@ -46,12 +46,13 @@ internal class ListsRemoteSource @Inject constructor(
         },
     ).void()
 
-    private inline fun <reified T : MediaEntry> getMediaCollection(type: MediaType) = flow {
+    override fun <T : MediaEntry> getMediaCollection(type: MediaType) = flow {
         val response = client
             .query(MediaListCollectionQuery(userId.getId().optional(), type))
+            .fetchPolicyInterceptor(reloadInterceptor)
             .watch()
             .distinctUntilChanged()
-            .map { res -> MediaCollection(res.data?.mediaList<T>().orEmpty()).right() }
+            .map { res -> MediaCollection(res.data?.mediaList<T>(type).orEmpty()).right() }
             .distinctUntilChanged()
             .catch { error ->
                 Napier.e(error) { "There was an error collecting the lists" }
