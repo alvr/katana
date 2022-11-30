@@ -54,7 +54,7 @@ internal class CommonListsRemoteSourceTest : BehaviorSpec() {
     private val userIdManager = mockk<UserIdManager>()
     private val reloadInterceptor = mockk<ReloadInterceptor>()
 
-    private val source = CommonListsRemoteSource(client, userIdManager, reloadInterceptor)
+    private val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
 
     private val mediaList = Arb.bind<MediaList>(
         mapOf(
@@ -266,7 +266,11 @@ internal class CommonListsRemoteSourceTest : BehaviorSpec() {
 
             `when`("an error occurs") {
                 val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
-                val source = CommonListsRemoteSource(badClient, userIdManager, reloadInterceptor)
+                val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(
+                    badClient,
+                    userIdManager,
+                    reloadInterceptor,
+                )
 
                 and("mocking the response") {
                     `when`("a 500 error occurs") {

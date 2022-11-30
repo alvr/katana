@@ -1,15 +1,11 @@
 package dev.alvr.katana.data.remote.lists.sources.manga
 
-import dev.alvr.katana.data.remote.base.type.MediaType
-import dev.alvr.katana.data.remote.lists.sources.CommonListsRemoteSource
+import arrow.core.Either
+import dev.alvr.katana.domain.base.failures.Failure
+import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
-import javax.inject.Inject
-import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
 
-@Singleton
-@Suppress("UseDataClass")
-internal class MangaListsRemoteSource @Inject constructor(
-    private val delegate: CommonListsRemoteSource,
-) {
-    val mangaCollection get() = delegate.getMediaCollection<MediaEntry.Manga>(MediaType.MANGA)
+internal interface MangaListsRemoteSource {
+    val mangaCollection: Flow<Either<Failure, MediaCollection<MediaEntry.Manga>>>
 }

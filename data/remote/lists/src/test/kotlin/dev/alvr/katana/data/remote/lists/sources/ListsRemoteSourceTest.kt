@@ -23,7 +23,9 @@ import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.MediaListEntriesMutation
 import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSource
+import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSourceImpl
 import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSource
+import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSourceImpl
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
@@ -54,9 +56,9 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
     private val userIdManager = mockk<UserIdManager>()
     private val reloadInterceptor = mockk<ReloadInterceptor>()
 
-    private val source = CommonListsRemoteSource(client, userIdManager, reloadInterceptor)
-    private val animeSource = AnimeListsRemoteSource(source)
-    private val mangaSource = MangaListsRemoteSource(source)
+    private val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
+    private val animeSource: AnimeListsRemoteSource = AnimeListsRemoteSourceImpl(source)
+    private val mangaSource: MangaListsRemoteSource = MangaListsRemoteSourceImpl(source)
 
     private val mediaList = Arb.bind<MediaList>(
         mapOf(
@@ -268,9 +270,13 @@ internal class ListsRemoteSourceTest : BehaviorSpec() {
 
             `when`("an error occurs") {
                 val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
-                val source = CommonListsRemoteSource(badClient, userIdManager, reloadInterceptor)
-                val animeSource = AnimeListsRemoteSource(source)
-                val mangaSource = MangaListsRemoteSource(source)
+                val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(
+                    badClient,
+                    userIdManager,
+                    reloadInterceptor,
+                )
+                val animeSource: AnimeListsRemoteSource = AnimeListsRemoteSourceImpl(source)
+                val mangaSource: MangaListsRemoteSource = MangaListsRemoteSourceImpl(source)
 
                 and("mocking the response") {
                     `when`("a 500 error occurs") {

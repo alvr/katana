@@ -29,7 +29,7 @@ import io.mockk.spyk
 internal class UserRemoteSourceTest : BehaviorSpec() {
     private val apolloBuilder = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport())
     private val client = spyk(apolloBuilder.build())
-    private val source = UserRemoteSource(client)
+    private val source: UserRemoteSource = UserRemoteSourceImpl(client)
 
     init {
         given("an UserRemoteSource") {

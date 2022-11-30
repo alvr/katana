@@ -29,7 +29,7 @@ internal class SessionLocalSourceTest : BehaviorSpec() {
     init {
         given("a SessionLocalSource") {
             val store = mockk<DataStore<Session>>()
-            val source = SessionLocalSource(store)
+            val source: SessionLocalSource = SessionLocalSourceImpl(store)
 
             `when`("getting a token from datastore for the first time") {
                 every { store.data } returns flowOf(Session(anilistToken = null))

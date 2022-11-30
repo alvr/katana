@@ -13,7 +13,9 @@ import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSource
+import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSourceImpl
 import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSource
+import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSourceImpl
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
@@ -48,9 +50,9 @@ internal class ApolloListsRemoteSourceTest : BehaviorSpec() {
     private val userIdManager = mockk<UserIdManager>()
     private val reloadInterceptor = mockk<ReloadInterceptor>()
 
-    private val source = CommonListsRemoteSource(client, userIdManager, reloadInterceptor)
-    private val animeSource = AnimeListsRemoteSource(source)
-    private val mangaSource = MangaListsRemoteSource(source)
+    private val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
+    private val animeSource: AnimeListsRemoteSource = AnimeListsRemoteSourceImpl(source)
+    private val mangaSource: MangaListsRemoteSource = MangaListsRemoteSourceImpl(source)
 
     init {
         xgiven("an Apollo client with responses") {
