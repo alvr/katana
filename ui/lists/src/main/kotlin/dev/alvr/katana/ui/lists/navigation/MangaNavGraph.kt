@@ -3,6 +3,7 @@ package dev.alvr.katana.ui.lists.navigation
 import com.ramcosta.composedestinations.dynamic.routedIn
 import com.ramcosta.composedestinations.spec.NavGraphSpec
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
+import dev.alvr.katana.ui.lists.view.destinations.EditEntrySheetDestination
 import dev.alvr.katana.ui.lists.view.destinations.MangaScreenDestination
 
 object MangaNavGraph : NavGraphSpec {
@@ -11,5 +12,6 @@ object MangaNavGraph : NavGraphSpec {
     override val destinationsByRoute = listOf(
         MangaScreenDestination,
         ChangeListSheetDestination,
+        EditEntrySheetDestination,
     ).routedIn(this).associateBy { it.route }
 }

@@ -24,7 +24,9 @@ import dev.alvr.katana.ui.base.components.home.rememberKatanaHomeScaffoldState
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
+import dev.alvr.katana.ui.lists.viewmodel.AnimeListsViewModel
 import dev.alvr.katana.ui.lists.viewmodel.ListsViewModel
+import dev.alvr.katana.ui.lists.viewmodel.MangaListsViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -35,7 +37,6 @@ import org.orbitmvi.orbit.compose.collectAsState
 internal fun ListScreen(
     vm: ListsViewModel<*, *>,
     navigator: ListsNavigator,
-    fromNavigator: ListsNavigator.From,
     resultRecipient: ResultRecipient<ChangeListSheetDestination, String>,
     @StringRes title: Int,
     @StringRes emptyStateRes: Int,
@@ -57,9 +58,9 @@ internal fun ListScreen(
         }
     }
 
-    val searchPlaceholder = when (fromNavigator) {
-        ListsNavigator.From.ANIME -> R.string.lists_toolbar_search_anime_placeholder
-        ListsNavigator.From.MANGA -> R.string.lists_toolbar_search_manga_placeholder
+    val searchPlaceholder = when (vm) {
+        is AnimeListsViewModel -> R.string.lists_toolbar_search_anime_placeholder
+        is MangaListsViewModel -> R.string.lists_toolbar_search_manga_placeholder
     }.let { stringResource(it) }
 
     val buttonsVisible by remember(state.isError) {
@@ -76,7 +77,7 @@ internal fun ListScreen(
         backContent = backContent,
         fab = {
             ChangeListButton(visible = buttonsVisible && vm.userLists.isNotEmpty()) {
-                navigator.listSelector(vm.userLists, state.name.orEmpty(), fromNavigator)
+                navigator.listSelector(vm.userLists, state.name.orEmpty())
             }
         },
     ) { paddingValues ->
@@ -101,8 +102,8 @@ internal fun ListScreen(
                     listState = state,
                     onRefresh = vm::refreshList,
                     onAddPlusOne = vm::addPlusOne,
-                    onEditEntry = { navigator.editEntry(it, fromNavigator) },
-                    onEntryDetails = { navigator.entryDetails(it, fromNavigator) },
+                    onEditEntry = navigator::listsEditEntry,
+                    onEntryDetails = navigator::listsEntryDetails,
                 )
             }
         }

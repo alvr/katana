@@ -4,15 +4,16 @@ import com.ramcosta.composedestinations.dynamic.within
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import dev.alvr.katana.ui.lists.entities.UserList
-import dev.alvr.katana.ui.lists.navigation.AnimeNavGraph
+import com.ramcosta.composedestinations.spec.NavGraphSpec
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
-import dev.alvr.katana.ui.lists.navigation.MangaNavGraph
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
+import dev.alvr.katana.ui.lists.view.destinations.EditEntrySheetDestination
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
 import io.github.aakira.napier.Napier
 
 internal class Navigator(
+    private val navGraph: NavGraphSpec,
     private val navigator: DestinationsNavigator,
 ) : LoginNavigator,
     ListsNavigator {
@@ -25,7 +26,7 @@ internal class Navigator(
 
     //region [LoginNavigator]
     override fun toHome() {
-        navigator.navigate(NavGraphs.home, onlyIfResumed = true) {
+        navigator.navigate(NavGraphs.home) {
             popUpTo(LoginDestination) {
                 inclusive = true
             }
@@ -34,20 +35,16 @@ internal class Navigator(
     //endregion [LoginNavigator]
 
     //region [ListsNavigator]
-    override fun editEntry(id: Int, from: ListsNavigator.From) {
-        Napier.d { "Open bottom sheet to edit entry $id" }
+    override fun listsEditEntry(id: Int) {
+        navigator.navigate(EditEntrySheetDestination within navGraph)
     }
 
-    override fun entryDetails(id: Int, from: ListsNavigator.From) {
+    override fun listsEntryDetails(id: Int) {
         Napier.d { "Navigate to media details of entry $id" }
     }
 
-    override fun listSelector(lists: Array<UserList>, selectedList: String, from: ListsNavigator.From) {
-        val graph = when (from) {
-            ListsNavigator.From.ANIME -> AnimeNavGraph
-            ListsNavigator.From.MANGA -> MangaNavGraph
-        }
-        navigator.navigate(ChangeListSheetDestination(lists, selectedList) within graph)
+    override fun listSelector(lists: Array<UserList>, selectedList: String) {
+        navigator.navigate(ChangeListSheetDestination(lists, selectedList) within navGraph)
     }
     //endregion [ListsNavigator]
 }

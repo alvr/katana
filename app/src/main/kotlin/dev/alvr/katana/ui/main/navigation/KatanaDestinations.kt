@@ -18,6 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.plusAssign
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -30,6 +32,7 @@ import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.scope.DestinationScope
+import com.ramcosta.composedestinations.spec.NavGraphSpec
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
 import dev.alvr.katana.ui.main.components.SessionExpiredDialog
 import dev.alvr.katana.ui.main.viewmodel.MainViewModel
@@ -43,8 +46,8 @@ internal fun KatanaDestinations(
     vm: MainViewModel,
 ) {
     val bottomSheetNavigator = rememberBottomSheetNavigator()
-    val navController = rememberAnimatedNavController().withSentryObservableEffect().also { nav ->
-        nav.navigatorProvider += bottomSheetNavigator
+    val navController = rememberAnimatedNavController().withSentryObservableEffect().apply {
+        navigatorProvider += bottomSheetNavigator
     }
 
     val state by vm.collectAsState()
@@ -96,7 +99,7 @@ internal fun KatanaDestinations(
                     navGraph = NavGraphs.root,
                     startRoute = state.initialNavGraph,
                     dependenciesContainerBuilder = {
-                        dependency(currentNavigator())
+                        dependency(navigator())
                     },
                 )
             }
@@ -105,8 +108,11 @@ internal fun KatanaDestinations(
 }
 
 @Composable
-private fun DestinationScope<*>.currentNavigator(): Navigator = remember {
-    Navigator(navigator = destinationsNavigator)
+private fun DestinationScope<*>.navigator() = remember {
+    Navigator(
+        navGraph = navBackStackEntry.destination.navGraph(),
+        navigator = destinationsNavigator,
+    )
 }
 
 private fun NavController.logout() {
@@ -115,4 +121,36 @@ private fun NavController.logout() {
             inclusive = true
         }
     }
+}
+
+internal fun NavDestination.navGraph(
+    graphs: Iterable<NavGraphSpec> = allNavGraphs
+): NavGraphSpec {
+    hierarchy.forEach { destination ->
+        graphs.forEach { graph ->
+            if (destination.route == graph.route) {
+                return graph
+            }
+        }
+    }
+
+    error("Unknown navGraph for destination $route")
+}
+
+private val allNavGraphs by lazy { NavGraphs.root.children() }
+
+private fun NavGraphSpec.children(): Set<NavGraphSpec> {
+    val graphs = mutableSetOf<NavGraphSpec>()
+    graphs.addAll(nestedNavGraphs)
+
+    fun List<NavGraphSpec>.nested() {
+        forEach { graph ->
+            graphs.addAll(graph.nestedNavGraphs)
+            graph.nestedNavGraphs.nested()
+        }
+    }
+
+    nestedNavGraphs.nested()
+
+    return graphs
 }

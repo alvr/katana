@@ -28,11 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.ramcosta.composedestinations.navigation.navigate
-import com.ramcosta.composedestinations.spec.NavGraphSpec
 import com.ramcosta.composedestinations.utils.destination
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
 import dev.alvr.katana.ui.main.navigation.items.HomeNavigationBarItem
@@ -49,7 +47,9 @@ internal fun NavigationBar(
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
     val currentNavGraph by remember(currentBackStackEntry) {
-        derivedStateOf(referentialEqualityPolicy()) { currentBackStackEntry?.destination?.navGraph() }
+        derivedStateOf(referentialEqualityPolicy()) {
+            currentBackStackEntry?.destination?.navGraph(NavGraphs.root.nestedNavGraphs)
+        }
     }
 
     val isVisible by remember(currentNavGraph) {
@@ -169,18 +169,6 @@ private fun NavController.navigate(destination: NavigationBarItem) {
             }
         }
     }
-}
-
-private fun NavDestination.navGraph(): NavGraphSpec {
-    hierarchy.forEach { destination ->
-        NavGraphs.root.nestedNavGraphs.forEach { navGraph ->
-            if (destination.route == navGraph.route) {
-                return navGraph
-            }
-        }
-    }
-
-    error("Unknown nav graph for destination $route")
 }
 
 private tailrec fun findStartDestination(graph: NavDestination?): NavDestination? =
