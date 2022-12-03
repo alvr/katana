@@ -2,7 +2,7 @@ package dev.alvr.katana.ui.base.viewmodel
 
 import androidx.lifecycle.ViewModel
 import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.syntax.OrbitDsl
+import org.orbitmvi.orbit.annotation.OrbitDsl
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 
