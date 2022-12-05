@@ -182,7 +182,7 @@ jobs:
           fileName: ${{ secrets.SIGNING_FILE }}
           encodedString: ${{ secrets.SIGNING_FILE_BASE64 }}
       - name: Bump versionCode
-        uses: chkfung/android-version-actions@v1.1
+        uses: chkfung/android-version-actions@v1.2
         with:
           gradlePath: build-logic/android-convention/src/main/kotlin/dev/alvr/katana/buildlogic/android/AndroidApplicationConventionPlugin.kt
           versionCode: ${{ github.run_number }}
