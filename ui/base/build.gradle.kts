@@ -4,12 +4,18 @@ plugins {
     id("katana.android.compose.library")
 }
 
-android.namespace = "${KatanaConfiguration.PackageName}.ui.base"
+android {
+    namespace = "${KatanaConfiguration.PackageName}.ui.base"
+    compileOptions.isCoreLibraryDesugaringEnabled = true
+}
 
 dependencies {
     implementation(projects.common.core)
 
     implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.design.calendar)
+
+    coreLibraryDesugaring(libs.desugaring)
 
     testImplementation(projects.common.tests)
 }

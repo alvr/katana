@@ -5,7 +5,10 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import dev.alvr.katana.ui.lists.entities.UserList
 import com.ramcosta.composedestinations.spec.NavGraphSpec
+import dev.alvr.katana.ui.base.components.datepicker.KatanaDatePickerParams
+import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
+import dev.alvr.katana.ui.lists.view.destinations.CalendarDestination
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.ui.lists.view.destinations.EditEntrySheetDestination
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
@@ -35,8 +38,8 @@ internal class Navigator(
     //endregion [LoginNavigator]
 
     //region [ListsNavigator]
-    override fun listsEditEntry(id: Int) {
-        navigator.navigate(EditEntrySheetDestination within navGraph)
+    override fun listsEditEntry(entry: MediaListItem) {
+        navigator.navigate(EditEntrySheetDestination(entry) within navGraph)
     }
 
     override fun listsEntryDetails(id: Int) {
@@ -45,6 +48,10 @@ internal class Navigator(
 
     override fun listSelector(lists: Array<UserList>, selectedList: String) {
         navigator.navigate(ChangeListSheetDestination(lists, selectedList) within navGraph)
+    }
+
+    override fun listsOpenDatePicker(params: KatanaDatePickerParams) {
+        navigator.navigate(CalendarDestination(params) within navGraph)
     }
     //endregion [ListsNavigator]
 }

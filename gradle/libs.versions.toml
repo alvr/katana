@@ -72,6 +72,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
 
 # Design
+design-calendar = { module = "com.kizitonwose.calendar:compose", version = "2.0.4" }
 design-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1" }
 
 # Destiantions
