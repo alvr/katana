@@ -8,7 +8,7 @@ hiltx = "1.0.0"
 kotlin = "1.7.21"
 okhttp = "4.10.0"
 orbit = "4.5.0"
-sentry = "6.9.1"
+sentry = "6.9.2"
 
 # Compose
 compose = "2022.11.00"
