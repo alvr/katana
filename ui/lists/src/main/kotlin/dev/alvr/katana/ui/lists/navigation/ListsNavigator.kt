@@ -9,5 +9,5 @@ interface ListsNavigator : BaseNavigator {
     fun listsEditEntry(entry: MediaListItem)
     fun listsEntryDetails(id: Int)
     fun listSelector(lists: Array<UserList>, selectedList: String)
-    fun listsOpenDatePicker(params: KatanaDatePickerParams)
+    fun listsOpenDatePicker(code: Int, params: KatanaDatePickerParams)
 }

@@ -4,5 +4,5 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 interface BaseNavigator {
-    fun goBack()
+    fun navigateUp()
 }

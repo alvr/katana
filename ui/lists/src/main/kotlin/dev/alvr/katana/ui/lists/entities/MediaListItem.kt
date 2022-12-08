@@ -11,7 +11,7 @@ import kotlinx.parcelize.Parcelize
 
 @Immutable
 @Suppress("ComplexInterface")
-internal sealed interface MediaListItem : Parcelable {
+sealed interface MediaListItem : Parcelable {
     val entryId: Int
     val mediaId: Int
     val title: String

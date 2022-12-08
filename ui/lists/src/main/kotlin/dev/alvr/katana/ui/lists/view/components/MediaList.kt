@@ -1,6 +1,5 @@
 package dev.alvr.katana.ui.lists.view.components
 
-import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -36,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -52,6 +50,7 @@ import coil.request.ImageRequest
 import dev.alvr.katana.common.core.unknown
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.components.KatanaPullRefresh
+import dev.alvr.katana.ui.base.currentLocale
 import dev.alvr.katana.ui.base.modifiers.katanaPlaceholder
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
@@ -69,7 +68,7 @@ internal fun MediaList(
     listState: ListState<out MediaListItem>,
     onRefresh: () -> Unit,
     onAddPlusOne: (Int) -> Unit,
-    onEditEntry: (Int) -> Unit,
+    onEditEntry: (MediaListItem) -> Unit,
     onEntryDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState = rememberLazyGridState(),
@@ -98,7 +97,7 @@ private fun MediaList(
     items: ImmutableList<MediaListItem>,
     itemLoading: Boolean,
     onAddPlusOne: (Int) -> Unit,
-    onEditEntry: (Int) -> Unit,
+    onEditEntry: (MediaListItem) -> Unit,
     onEntryDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -119,7 +118,7 @@ private fun MediaList(
                 modifier = Modifier.fillMaxWidth(),
                 itemLoading = itemLoading,
                 onAddPlusOne = { onAddPlusOne(item.entryId) },
-                onEditEntry = { onEditEntry(item.entryId) },
+                onEditEntry = { onEditEntry(item) },
                 onEntryDetails = { onEntryDetails(item.entryId) },
             )
         }
@@ -417,13 +416,6 @@ private fun Progress(
 }
 
 private val episodeFormatter = @Composable {
-    val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        LocalConfiguration.current.locales[0]
-    } else {
-        @Suppress("DEPRECATION")
-        LocalConfiguration.current.locale
-    }
-
     val datePattern = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
     val timePattern = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
 
@@ -431,7 +423,7 @@ private val episodeFormatter = @Composable {
         .append(datePattern)
         .appendLiteral(" ${stringResource(R.string.lists_entry_next_episode_date_time_separator)} ")
         .append(timePattern)
-        .toFormatter(locale)
+        .toFormatter(currentLocale())
 }
 
 private val scoreFormatter = { score: Double ->

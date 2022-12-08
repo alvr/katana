@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -42,6 +41,7 @@ import dev.alvr.katana.ui.base.currentLocale
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.time.format.TextStyle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -86,13 +86,13 @@ fun KatanaDatePicker(
             }
 
             Text(
-                text = date.format(DateTimeFormatter.ofPattern("MMM d, yyyy")),
+                text = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)),
                 style = MaterialTheme.typography.h4,
                 color = MaterialTheme.colors.onPrimary,
             )
         }
 
-        KatanaCalendar(params = params, onSelectDate = selectDate)
+        KatanaCalendar(params = params.copy(selectedDay = date), onSelectDate = selectDate)
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -138,7 +138,6 @@ private fun KatanaCalendar(
 
     HorizontalCalendar(
         state = state,
-        contentPadding = PaddingValues(4.dp),
         monthHeader = { calendarMonth ->
             val (currentMonth, currentYear) = with(calendarMonth.yearMonth) {
                 month.getDisplayName(TextStyle.FULL, currentLocale()) to year
@@ -157,7 +156,7 @@ private fun KatanaCalendar(
             CalendarDaysOfWeekTitle(daysOfWeek = daysOfWeek)
         },
         dayContent = { day ->
-            CalendarDay(day, selected = selectedDate == day.date) {
+            CalendarDay(day = day, selected = selectedDate == day.date) {
                 selectedDate = day.date
                 selectedDate?.let { date -> onSelectDate(date) }
             }
@@ -201,6 +200,7 @@ private fun CalendarDay(
     Box(
         modifier = Modifier
             .aspectRatio(1f)
+            .padding(2.dp)
             .clip(CircleShape)
             .background(color = dayBackground)
             .clickable(
