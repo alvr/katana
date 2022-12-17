@@ -15,7 +15,7 @@ compose = "2022.12.00"
 compose-compiler = "1.4.0-alpha02"
 
 # Coverage Engine
-coverage-engine = "1.0.689"
+coverage-engine = "1.0.691"
 
 # Plugins
 detekt = "1.22.0"
@@ -72,7 +72,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
 
 # Design
-design-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1"}
+design-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1" }
 
 # Destiantions
 destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "destinations" }
@@ -92,7 +92,7 @@ gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", v
 gradle-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kover.gradle.plugin", version = "0.6.1" }
-gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.7.22-1.0.8" }
+gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.7.21-1.0.8" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.3.0" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "3.4.0.2513" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.44.0" }

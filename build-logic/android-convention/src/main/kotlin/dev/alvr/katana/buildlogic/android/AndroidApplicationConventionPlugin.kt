@@ -7,6 +7,7 @@ import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.commonTasks
+import dev.alvr.katana.buildlogic.desugaring
 import dev.alvr.katana.buildlogic.implementation
 import dev.alvr.katana.buildlogic.kapt
 import dev.alvr.katana.buildlogic.testImplementation
@@ -39,6 +40,8 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
             implementation(platform(catalogLib("compose-bom")))
             implementation(catalogBundle("common-android"))
             implementation(catalogBundle("app"))
+
+            desugaring(catalogLib("desugaring"))
 
             kapt(catalogBundle("kapt-ui"))
 

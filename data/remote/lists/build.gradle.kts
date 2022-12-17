@@ -9,7 +9,6 @@ val pkg = "${KatanaConfiguration.PackageName}.data.remote.lists"
 
 android {
     namespace = pkg
-    compileOptions.isCoreLibraryDesugaringEnabled = true
 }
 
 apollo {
@@ -26,8 +25,6 @@ dependencies {
     implementation(projects.domain.lists)
     implementation(projects.domain.user)
     implementation(libs.bundles.data.remote)
-
-    coreLibraryDesugaring(libs.desugaring)
 
     testImplementation(projects.common.tests)
     testImplementation(libs.bundles.test.data.remote)
