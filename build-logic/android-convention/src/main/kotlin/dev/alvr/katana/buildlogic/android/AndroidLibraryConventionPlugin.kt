@@ -3,7 +3,9 @@ package dev.alvr.katana.buildlogic.android
 import com.android.build.gradle.LibraryExtension
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
+import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.commonTasks
+import dev.alvr.katana.buildlogic.desugaring
 import dev.alvr.katana.buildlogic.implementation
 import dev.alvr.katana.buildlogic.kapt
 import dev.alvr.katana.buildlogic.testImplementation
@@ -29,6 +31,8 @@ internal class AndroidLibraryConventionPlugin : ConventionPlugin {
 
         dependencies {
             implementation(catalogBundle("common-android"))
+
+            desugaring(catalogLib("desugaring"))
 
             kapt(catalogBundle("kapt"))
 

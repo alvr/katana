@@ -7,7 +7,6 @@ plugins {
 
 android {
     namespace = "${KatanaConfiguration.PackageName}.ui.lists"
-    compileOptions.isCoreLibraryDesugaringEnabled = true
 }
 
 ksp {
@@ -19,8 +18,6 @@ dependencies {
     implementation(projects.common.core)
     implementation(projects.domain.lists)
     implementation(projects.ui.base)
-
-    coreLibraryDesugaring(libs.desugaring)
 
     testImplementation(projects.common.testsAndroid)
 }

@@ -49,6 +49,10 @@ fun DependencyHandlerScope.detekt(provider: Provider<*>) {
     addProvider("detektPlugins", provider)
 }
 
+fun DependencyHandlerScope.desugaring(provider: Provider<*>) {
+    addProvider("coreLibraryDesugaring", provider)
+}
+
 fun ExtensionContainer.commonExtensions() {
     configure<JavaPluginExtension> {
         toolchain {
