@@ -152,7 +152,7 @@ kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest"
 mockk = { module = "io.mockk:mockk", version = "1.13.3" }
 
 ## Robolectric
-robolectric = { module = "org.robolectric:robolectric", version = "4.9" }
+robolectric = { module = "org.robolectric:robolectric", version = "4.9.1" }
 
 ## Turbine
 turbine = { module = "app.cash.turbine:turbine", version = "0.12.1" }
