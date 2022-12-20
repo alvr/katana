@@ -22,6 +22,13 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.3.0"
 }
 
+// Keep in sync with build-logic/settings.gradle.kts
+buildCache {
+    local {
+        directory = rootDir.resolve(".gradle/build-cache")
+    }
+}
+
 gradleEnterprise {
     buildScan {
         termsOfServiceUrl = "https://gradle.com/terms-of-service"

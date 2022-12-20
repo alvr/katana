@@ -13,6 +13,13 @@ dependencyResolutionManagement {
     }
 }
 
+// Keep in sync with ../settings.gradle.kts
+buildCache {
+    local {
+        directory = rootDir.parentFile.resolve(".gradle/build-cache")
+    }
+}
+
 include(":common")
 include(":analysis-convention")
 include(":android-convention")

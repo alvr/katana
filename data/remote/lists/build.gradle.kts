@@ -12,9 +12,11 @@ android {
 }
 
 apollo {
-    generateAsInternal.set(true)
-    generateTestBuilders.set(true)
-    packageName.set(pkg)
+    service("anilist") {
+        generateAsInternal.set(true)
+        generateTestBuilders.set(true)
+        packageName.set(pkg)
+    }
 }
 
 dependencies {
