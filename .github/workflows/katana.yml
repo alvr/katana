@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TZ: Europe/Madrid
+  TZ: UTC
 
 jobs:
   cancel-stale-jobs:

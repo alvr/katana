@@ -1,7 +1,9 @@
 package dev.alvr.katana.data.remote.user.repositories
 
+import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.data.remote.user.sources.UserRemoteSource
 import dev.alvr.katana.domain.base.failures.Failure
@@ -10,76 +12,103 @@ import dev.alvr.katana.domain.user.models.UserId
 import dev.alvr.katana.domain.user.repositories.UserRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
-import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.mockk
+import io.mockk.impl.annotations.MockK
+import java.util.stream.Stream
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.ArgumentsProvider
+import org.junit.jupiter.params.provider.ArgumentsSource
 
-internal class UserRepositoryTest : BehaviorSpec() {
+@ExperimentalCoroutinesApi
+internal class UserRepositoryTest : TestBase() {
+    @MockK
+    private lateinit var source: UserRemoteSource
+
+    private lateinit var repo: UserRepository
+
     private val userId = UserId(37_384)
 
-    private val source = mockk<UserRemoteSource>()
-    private val repo: UserRepository = UserRepositoryImpl(source)
+    override suspend fun beforeEach() {
+        repo = UserRepositoryImpl(source)
+    }
 
-    init {
-        given("an UserRepository") {
-            `when`("getting the userId") {
-                and("the server returns no data") {
-                    coEvery { source.getUserId() } returns userId.right()
+    @Nested
+    @DisplayName("WHEN getting the userId")
+    inner class Getting {
+        @Test
+        @DisplayName("AND the server returns no data THEN it should be a right")
+        fun `the server returns no data`() = runTest {
+            // GIVEN
+            coEvery { source.getUserId() } returns userId.right()
 
-                    then("it should be a right") {
-                        repo.getUserId().shouldBeRight(userId)
-                        coVerify(exactly = 1) { source.getUserId() }
-                    }
-                }
+            // WHEN
+            val result = repo.getUserId()
 
-                and("the server returns an empty userId") {
-                    coEvery { source.getUserId() } returns UserFailure.GettingUserId.left()
-
-                    then("it should be a UserFailure.UserIdFailure") {
-                        repo.getUserId().shouldBeLeft(UserFailure.GettingUserId)
-                        coVerify(exactly = 1) { source.getUserId() }
-                    }
-                }
-            }
-
-            `when`("saving the userId") {
-                and("is successful") {
-                    coEitherJustRun { source.saveUserId() }
-
-                    then("it just execute the UserIdQuery") {
-                        repo.saveUserId().shouldBeRight()
-                        coVerify(exactly = 1) { source.saveUserId() }
-                    }
-                }
-
-                and("a HTTP error occurs") {
-                    coEvery { source.saveUserId() } returns UserFailure.FetchingUser.left()
-
-                    then("it returns a left of UserFailure.FetchingFailure") {
-                        repo.saveUserId().shouldBeLeft(UserFailure.FetchingUser)
-                        coVerify(exactly = 1) { source.saveUserId() }
-                    }
-                }
-
-                and("a HTTP error occurs") {
-                    coEvery { source.saveUserId() } returns UserFailure.SavingUser.left()
-
-                    then("it returns a left of UserFailure.SavingFailure") {
-                        repo.saveUserId().shouldBeLeft(UserFailure.SavingUser)
-                        coVerify(exactly = 1) { source.saveUserId() }
-                    }
-                }
-
-                and("a HTTP error occurs") {
-                    coEvery { source.saveUserId() } returns Failure.Unknown.left()
-
-                    then("it returns a left of Failure.Unknown") {
-                        repo.saveUserId().shouldBeLeft(Failure.Unknown)
-                        coVerify(exactly = 1) { source.saveUserId() }
-                    }
-                }
-            }
+            // THEN
+            result.shouldBeRight(userId)
+            coVerify(exactly = 1) { source.getUserId() }
         }
+
+        @Test
+        @DisplayName("AND the server returns an empty userId THEN it should be a UserFailure.UserIdFailure")
+        fun `the server returns an empty userId`() = runTest {
+            // GIVEN
+            coEvery { source.getUserId() } returns UserFailure.GettingUserId.left()
+
+            // WHEN
+            val result = repo.getUserId()
+
+            // THEN
+            result.shouldBeLeft(UserFailure.GettingUserId)
+            coVerify(exactly = 1) { source.getUserId() }
+        }
+    }
+
+    @Nested
+    @DisplayName("WHEN saving the userId")
+    inner class Saving {
+        @Test
+        @DisplayName("AND is successful THEN it should just execute the UserIdQuery")
+        fun `is successful`() = runTest {
+            // GIVEN
+            coEitherJustRun { source.saveUserId() }
+
+            // WHEN
+            val result = repo.saveUserId()
+
+            // THEN
+            result.shouldBeRight()
+            coVerify(exactly = 1) { source.saveUserId() }
+        }
+
+        @ArgumentsSource(FailuresProvider::class)
+        @ParameterizedTest(name = "AND a HTTP error occurs THEN it should return a left of {0}")
+        fun `a HTTP error occurs`(input: Failure, expected: Either<Failure, Unit>) = runTest {
+            // GIVEN
+            coEvery { source.saveUserId() } returns expected
+
+            // WHEN
+            val result = repo.saveUserId()
+
+            // THEN
+            result.shouldBeLeft(input)
+            coVerify(exactly = 1) { source.saveUserId() }
+        }
+    }
+
+    private class FailuresProvider : ArgumentsProvider {
+        override fun provideArguments(context: ExtensionContext): Stream<Arguments> =
+            Stream.of(
+                Arguments.of(UserFailure.FetchingUser, UserFailure.FetchingUser.left()),
+                Arguments.of(UserFailure.SavingUser, UserFailure.SavingUser.left()),
+                Arguments.of(Failure.Unknown, Failure.Unknown.left()),
+            )
     }
 }

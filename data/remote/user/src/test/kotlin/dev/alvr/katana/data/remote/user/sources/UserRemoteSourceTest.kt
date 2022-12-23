@@ -12,6 +12,7 @@ import com.apollographql.apollo3.exception.JsonEncodingException
 import com.apollographql.apollo3.exception.MissingValueException
 import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
+import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.data.remote.user.UserIdQuery
 import dev.alvr.katana.data.remote.user.test.UserIdQuery_TestBuilder.Data
 import dev.alvr.katana.domain.base.failures.Failure
@@ -19,130 +20,123 @@ import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.models.UserId
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
-import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.impl.annotations.SpyK
 import io.mockk.mockk
-import io.mockk.spyk
+import java.util.stream.Stream
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.ArgumentsProvider
+import org.junit.jupiter.params.provider.ArgumentsSource
 
-@OptIn(ApolloExperimental::class)
-internal class UserRemoteSourceTest : BehaviorSpec() {
+@ApolloExperimental
+@ExperimentalCoroutinesApi
+internal class UserRemoteSourceTest : TestBase() {
     private val apolloBuilder = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport())
-    private val client = spyk(apolloBuilder.build())
-    private val source: UserRemoteSource = UserRemoteSourceImpl(client)
 
-    init {
-        given("an UserRemoteSource") {
-            `when`("getting the userId") {
-                and("the server returns no data") {
-                    client.enqueueTestResponse(UserIdQuery())
+    @SpyK
+    private var client = apolloBuilder.build()
 
-                    then("it should be a UserFailure.UserIdFailure") {
-                        source.getUserId().shouldBeLeft(UserFailure.GettingUserId)
-                    }
-                }
+    private lateinit var source: UserRemoteSource
 
-                and("the server returns an empty userId") {
-                    val query = UserIdQuery.Data { viewer = null }
-                    client.enqueueTestResponse(UserIdQuery(), query)
+    override suspend fun beforeEach() {
+        source = UserRemoteSourceImpl(client)
+    }
 
-                    then("it should be a UserFailure.UserIdFailure") {
-                        source.getUserId().shouldBeLeft(UserFailure.GettingUserId)
-                    }
-                }
+    @Nested
+    @DisplayName("WHEN getting the userId")
+    inner class Getting {
+        @Test
+        @DisplayName("AND the server returns no data THEN it should be a UserFailure.UserIdFailure")
+        fun `the server returns no data`() = runTest {
+            // GIVEN
+            client.enqueueTestResponse(UserIdQuery())
 
-                and("the server returns a valid id") {
-                    val query = UserIdQuery.Data { viewer = viewer { id = 37_384 } }
-                    client.enqueueTestResponse(UserIdQuery(), query)
+            // WHEN
+            val result = source.getUserId()
 
-                    then("it should be a userId with the same id") {
-                        source.getUserId().shouldBeRight(UserId(37_384))
-                    }
-                }
-            }
-
-            `when`("saving the userId") {
-                and("is successful") {
-                    coEvery { client.query(UserIdQuery()).execute() } returns mockk()
-
-                    then("it just execute the UserIdQuery") {
-                        source.saveUserId().shouldBeRight()
-                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
-                    }
-                }
-
-                and("a HTTP error occurs") {
-                    coEvery { client.query(UserIdQuery()).execute() } throws mockk<ApolloHttpException>()
-
-                    then("it returns a left of UserFailure.FetchingFailure") {
-                        source.saveUserId().shouldBeLeft(UserFailure.FetchingUser)
-                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
-                    }
-                }
-
-                and("a network error occurs") {
-                    coEvery { client.query(UserIdQuery()).execute() } throws ApolloNetworkException()
-
-                    then("it returns a left of UserFailure.FetchingFailure") {
-                        source.saveUserId().shouldBeLeft(UserFailure.FetchingUser)
-                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
-                    }
-                }
-
-                and("a cache miss occurs") {
-                    coEvery { client.query(UserIdQuery()).execute() } throws mockk<CacheMissException>()
-
-                    then("it returns a left of Failure.Unknown") {
-                        source.saveUserId().shouldBeLeft(Failure.Unknown)
-                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
-                    }
-                }
-
-                and("a HTTP cache miss occurs") {
-                    coEvery { client.query(UserIdQuery()).execute() } throws mockk<HttpCacheMissException>()
-
-                    then("it returns a left of Failure.Unknown") {
-                        source.saveUserId().shouldBeLeft(Failure.Unknown)
-                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
-                    }
-                }
-
-                and("a json parser problem occurs") {
-                    coEvery { client.query(UserIdQuery()).execute() } throws ApolloParseException()
-
-                    then("it returns a left of UserFailure.SavingFailure") {
-                        source.saveUserId().shouldBeLeft(UserFailure.SavingUser)
-                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
-                    }
-                }
-
-                and("a json data problem occurs") {
-                    coEvery { client.query(UserIdQuery()).execute() } throws mockk<JsonDataException>()
-
-                    then("it returns a left of UserFailure.SavingFailure") {
-                        source.saveUserId().shouldBeLeft(UserFailure.SavingUser)
-                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
-                    }
-                }
-
-                and("a json encoding problem occurs") {
-                    coEvery { client.query(UserIdQuery()).execute() } throws mockk<JsonEncodingException>()
-
-                    then("it returns a left of UserFailure.SavingFailure") {
-                        source.saveUserId().shouldBeLeft(UserFailure.SavingUser)
-                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
-                    }
-                }
-
-                and("another Apollo error occurs") {
-                    coEvery { client.query(UserIdQuery()).execute() } throws MissingValueException()
-
-                    then("it returns a left of Failure.Unknown") {
-                        source.saveUserId().shouldBeLeft(Failure.Unknown)
-                        coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
-                    }
-                }
-            }
+            // THEN
+            result.shouldBeLeft(UserFailure.GettingUserId)
         }
+
+        @Test
+        @DisplayName("AND the server returns an empty userId THEN it should be a UserFailure.UserIdFailure")
+        fun `the server returns an empty userId`() = runTest {
+            // GIVEN
+            val query = UserIdQuery.Data { viewer = null }
+            client.enqueueTestResponse(UserIdQuery(), query)
+
+            // WHEN
+            val result = source.getUserId()
+
+            // THEN
+            result.shouldBeLeft(UserFailure.GettingUserId)
+        }
+
+        @Test
+        @DisplayName("AND the server returns a valid id THEN it should be a userId with the same id")
+        fun `the server returns a valid id`() = runTest {
+            // GIVEN
+            val query = UserIdQuery.Data { viewer = viewer { id = 37_384 } }
+            client.enqueueTestResponse(UserIdQuery(), query)
+
+            // WHEN
+            val result = source.getUserId()
+
+            // THEN
+            result.shouldBeRight(UserId(37_384))
+        }
+    }
+
+    @Nested
+    @DisplayName("WHEN saving the userId")
+    inner class Saving {
+        @Test
+        @DisplayName("AND is successful THEN it should just execute the UserIdQuery")
+        fun `is successful`() = runTest {
+            // GIVEN
+            coEvery { client.query(UserIdQuery()).execute() } returns mockk()
+
+            // WHEN
+            val result = source.saveUserId()
+
+            // THEN
+            result.shouldBeRight()
+            coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+        }
+
+        @ArgumentsSource(FailuresProvider::class)
+        @ParameterizedTest(name = "AND a HTTP error occurs THEN it should return a left of {0}")
+        fun `a HTTP error occurs`(input: Failure, exception: Exception) = runTest {
+            // GIVEN
+            coEvery { client.query(UserIdQuery()).execute() } throws exception
+
+            // WHEN
+            val result = source.saveUserId()
+
+            // THEN
+            result.shouldBeLeft(input)
+            coVerify(exactly = 1) { client.query(UserIdQuery()).execute() }
+        }
+    }
+
+    private class FailuresProvider : ArgumentsProvider {
+        override fun provideArguments(context: ExtensionContext): Stream<Arguments> =
+            Stream.of(
+                Arguments.of(UserFailure.FetchingUser, mockk<ApolloHttpException>()),
+                Arguments.of(UserFailure.FetchingUser, mockk<ApolloNetworkException>()),
+                Arguments.of(UserFailure.SavingUser, mockk<ApolloParseException>()),
+                Arguments.of(UserFailure.SavingUser, mockk<JsonDataException>()),
+                Arguments.of(UserFailure.SavingUser, mockk<JsonEncodingException>()),
+                Arguments.of(Failure.Unknown, mockk<CacheMissException>()),
+                Arguments.of(Failure.Unknown, mockk<HttpCacheMissException>()),
+                Arguments.of(Failure.Unknown, mockk<MissingValueException>()),
+            )
     }
 }

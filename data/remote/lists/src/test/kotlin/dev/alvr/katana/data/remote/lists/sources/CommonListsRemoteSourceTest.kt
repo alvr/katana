@@ -5,7 +5,6 @@ import arrow.core.right
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.apollographql.apollo3.api.ApolloResponse
-import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloHttpException
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.apollographql.apollo3.exception.ApolloParseException
@@ -19,10 +18,13 @@ import com.apollographql.apollo3.mockserver.MockServer
 import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
 import com.benasher44.uuid.uuid4
+import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.MediaListEntriesMutation
+import dev.alvr.katana.data.remote.lists.enqueueResponse
+import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
@@ -31,30 +33,37 @@ import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
-import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.bind
-import io.kotest.property.arbitrary.constant
 import io.kotest.property.arbitrary.localDate
 import io.kotest.property.arbitrary.localDateTime
 import io.kotest.property.arbitrary.next
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.SpyK
 import io.mockk.mockk
-import io.mockk.spyk
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.stream.Stream
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.ArgumentsProvider
+import org.junit.jupiter.params.provider.ArgumentsSource
 
-@OptIn(ApolloExperimental::class)
-internal class CommonListsRemoteSourceTest : BehaviorSpec() {
-    private val mockServer = MockServer()
+@ApolloExperimental
+@ExperimentalCoroutinesApi
+internal class CommonListsRemoteSourceTest : TestBase() {
     private val apolloBuilder = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport())
-    private val client = spyk(apolloBuilder.build())
-    private val userIdManager = mockk<UserIdManager>()
-    private val reloadInterceptor = mockk<ReloadInterceptor>()
-
-    private val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
 
     private val mediaList = Arb.bind<MediaList>(
         mapOf(
@@ -63,271 +72,218 @@ internal class CommonListsRemoteSourceTest : BehaviorSpec() {
         ),
     ).next()
 
-    private val mutation = Arb.bind<MediaListEntriesMutation>(
-        mapOf(
-            Optional::class to Arb.constant(Optional.Absent),
-        ),
-    ).next()
+    @MockK
+    private lateinit var userIdManager: UserIdManager
+    @MockK
+    private lateinit var reloadInterceptor: ReloadInterceptor
+    @SpyK
+    private var client = apolloBuilder.build()
 
-    private val mutationData = Arb.bind<MediaListEntriesMutation.Data>().next()
+    private lateinit var source: CommonListsRemoteSource
 
-    init {
-        afterSpec {
-            mockServer.stop()
+    override suspend fun beforeEach() {
+        source = CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
+
+        coEvery { userIdManager.getId() } returns 37_384.right()
+    }
+
+    @Nested
+    @DisplayName("WHEN querying the list")
+    inner class Querying {
+        @ArgumentsSource(QueryProvider::class)
+        @ParameterizedTest(name = "AND the data is {0} THEN the collection should be empty for {1}")
+        fun `the data is null`(data: MediaListCollectionQuery.Data?, type: MediaType) = runTest {
+            // GIVEN
+            val response = ApolloResponse.Builder(
+                operation = mockk<MediaListCollectionQuery>(),
+                requestUuid = uuid4(),
+                data = data,
+            ).build()
+            client.enqueueTestResponse(response)
+
+            // WHEN
+            val result = source.getMediaCollection<MediaEntry>(type)
+
+            // THEN
+            result.test(5.seconds) {
+                awaitItem().shouldBeRight(MediaCollection(emptyList()))
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 
-        given("a ListsRemoteSource") {
-            coEvery { userIdManager.getId() } returns 37_384.right()
+        @ArgumentsSource(QueryProvider::class)
+        @ParameterizedTest(name = "AND a error occurs THEN the collection should be empty for {1}")
+        fun `a HTTP error occurs`(data: MediaListCollectionQuery.Data?, type: MediaType) = runTest {
+            // GIVEN
+            val response = ApolloResponse.Builder(
+                operation = mockk<MediaListCollectionQuery>(),
+                requestUuid = uuid4(),
+                data = data,
+            ).errors(listOf(mockk())).build()
+            client.enqueueTestResponse(response)
 
-            `when`("executing the updateList mutation") {
-                and("the server returns no data") {
-                    client.enqueueTestResponse(mutation)
+            // WHEN
+            val result = source.getMediaCollection<MediaEntry>(type)
 
-                    then("it should be a right") {
-                        source.updateList(mediaList).shouldBeRight()
-                    }
-                }
-
-                and("the server returns some data") {
-                    client.enqueueTestResponse(mutation, mutationData)
-
-                    then("it should be a right") {
-                        source.updateList(mediaList).shouldBeRight()
-                    }
-                }
-            }
-
-            `when`("updating the list") {
-                and("is successful") {
-                    coEvery {
-                        client.mutation(any<MediaListEntriesMutation>()).execute()
-                    } returns mockk()
-
-                    then("it just execute the MediaListEntriesMutation") {
-                        source.updateList(mediaList).shouldBeRight()
-                        coVerify(exactly = 1) {
-                            client.mutation(any<MediaListEntriesMutation>()).execute()
-                        }
-                    }
-                }
-
-                and("a HTTP error occurs") {
-                    coEvery {
-                        client.mutation(any<MediaListEntriesMutation>()).execute()
-                    } throws mockk<ApolloHttpException>()
-
-                    then("it returns a left of ListsFailure.UpdatingList") {
-                        source.updateList(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                        coVerify(exactly = 1) {
-                            client.mutation(any<MediaListEntriesMutation>()).execute()
-                        }
-                    }
-                }
-
-                and("a network error occurs") {
-                    coEvery {
-                        client.mutation(any<MediaListEntriesMutation>()).execute()
-                    } throws ApolloNetworkException()
-
-                    then("it returns a left of ListsFailure.UpdatingList") {
-                        source.updateList(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                        coVerify(exactly = 1) {
-                            client.mutation(any<MediaListEntriesMutation>()).execute()
-                        }
-                    }
-                }
-
-                and("a cache miss occurs") {
-                    coEvery {
-                        client.mutation(any<MediaListEntriesMutation>()).execute()
-                    } throws mockk<CacheMissException>()
-
-                    then("it returns a left of Failure.Unknown") {
-                        source.updateList(mediaList).shouldBeLeft(Failure.Unknown)
-                        coVerify(exactly = 1) {
-                            client.mutation(any<MediaListEntriesMutation>()).execute()
-                        }
-                    }
-                }
-
-                and("a HTTP cache miss occurs") {
-                    coEvery {
-                        client.mutation(any<MediaListEntriesMutation>()).execute()
-                    } throws mockk<HttpCacheMissException>()
-
-                    then("it returns a left of Failure.Unknown") {
-                        source.updateList(mediaList).shouldBeLeft(Failure.Unknown)
-                        coVerify(exactly = 1) {
-                            client.mutation(any<MediaListEntriesMutation>()).execute()
-                        }
-                    }
-                }
-
-                and("a json parser problem occurs") {
-                    coEvery {
-                        client.mutation(any<MediaListEntriesMutation>()).execute()
-                    } throws ApolloParseException()
-
-                    then("it returns a left of ListsFailure.UpdatingList") {
-                        source.updateList(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                        coVerify(exactly = 1) {
-                            client.mutation(any<MediaListEntriesMutation>()).execute()
-                        }
-                    }
-                }
-
-                and("a json data problem occurs") {
-                    coEvery {
-                        client.mutation(any<MediaListEntriesMutation>()).execute()
-                    } throws mockk<JsonDataException>()
-
-                    then("it returns a left of ListsFailure.UpdatingList") {
-                        source.updateList(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                        coVerify(exactly = 1) {
-                            client.mutation(any<MediaListEntriesMutation>()).execute()
-                        }
-                    }
-                }
-
-                and("a json encoding problem occurs") {
-                    coEvery {
-                        client.mutation(any<MediaListEntriesMutation>()).execute()
-                    } throws mockk<JsonEncodingException>()
-
-                    then("it returns a left of ListsFailure.UpdatingList") {
-                        source.updateList(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                        coVerify(exactly = 1) {
-                            client.mutation(any<MediaListEntriesMutation>()).execute()
-                        }
-                    }
-                }
-
-                and("another Apollo error occurs") {
-                    coEvery {
-                        client.mutation(any<MediaListEntriesMutation>()).execute()
-                    } throws MissingValueException()
-
-                    then("it returns a left of Failure.Unknown") {
-                        source.updateList(mediaList).shouldBeLeft(Failure.Unknown)
-                        coVerify(exactly = 1) {
-                            client.mutation(any<MediaListEntriesMutation>()).execute()
-                        }
-                    }
-                }
-            }
-
-            `when`("querying the list") {
-                and("the data is null") {
-                    val response = ApolloResponse.Builder(
-                        operation = mockk<MediaListCollectionQuery>(),
-                        requestUuid = uuid4(),
-                        data = null,
-                    ).build()
-                    client.enqueueTestResponse(response)
-
-                    then("the anime collection should be empty") {
-                        source.getMediaCollection<MediaEntry.Anime>(MediaType.ANIME).test(5.seconds) {
-                            awaitItem().shouldBeRight(MediaCollection(emptyList()))
-                            cancelAndIgnoreRemainingEvents()
-                        }
-                    }
-
-                    then("the manga collection should be empty") {
-                        source.getMediaCollection<MediaEntry.Manga>(MediaType.MANGA).test(5.seconds) {
-                            awaitItem().shouldBeRight(MediaCollection(emptyList()))
-                            cancelAndIgnoreRemainingEvents()
-                        }
-                    }
-                }
-
-                and("the data has errors") {
-                    val response = ApolloResponse.Builder(
-                        operation = mockk<MediaListCollectionQuery>(),
-                        requestUuid = uuid4(),
-                        data = null,
-                    ).errors(listOf(mockk())).build()
-                    client.enqueueTestResponse(response)
-
-                    then("the anime collection should be empty") {
-                        source.getMediaCollection<MediaEntry.Anime>(MediaType.ANIME).test(5.seconds) {
-                            awaitItem().shouldBeRight(MediaCollection(emptyList()))
-                            cancelAndIgnoreRemainingEvents()
-                        }
-                    }
-
-                    then("the manga collection should be empty") {
-                        source.getMediaCollection<MediaEntry.Manga>(MediaType.MANGA).test(5.seconds) {
-                            awaitItem().shouldBeRight(MediaCollection(emptyList()))
-                            cancelAndIgnoreRemainingEvents()
-                        }
-                    }
-                }
-            }
-
-            `when`("an error occurs") {
-                val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
-                val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(
-                    badClient,
-                    userIdManager,
-                    reloadInterceptor,
-                )
-
-                and("mocking the response") {
-                    `when`("a 500 error occurs") {
-                        enqueueResponse { statusCode(500) }
-
-                        then("it returns a left of ListsFailure.GetMediaCollection") {
-                            source.getMediaCollection<MediaEntry.Anime>(MediaType.ANIME).test(5.seconds) {
-                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                                cancelAndIgnoreRemainingEvents()
-                            }
-
-                            source.getMediaCollection<MediaEntry.Manga>(MediaType.MANGA).test(5.seconds) {
-                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                                cancelAndIgnoreRemainingEvents()
-                            }
-                        }
-                    }
-
-                    `when`("a malformed body is returned") {
-                        enqueueResponse { body("Malformed body") }
-
-                        then("it returns a left of ListsFailure.GetMediaCollection") {
-                            source.getMediaCollection<MediaEntry.Anime>(MediaType.ANIME).test(5.seconds) {
-                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                                cancelAndIgnoreRemainingEvents()
-                            }
-
-                            source.getMediaCollection<MediaEntry.Manga>(MediaType.MANGA).test(5.seconds) {
-                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                                cancelAndIgnoreRemainingEvents()
-                            }
-                        }
-                    }
-
-                    `when`("a JSON that does not match the scheme") {
-                        enqueueResponse { body("""{"data": {"random": 42}}""") }
-
-                        then("it returns a left of ListsFailure.GetMediaCollection") {
-                            source.getMediaCollection<MediaEntry.Anime>(MediaType.ANIME).test(5.seconds) {
-                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                                cancelAndIgnoreRemainingEvents()
-                            }
-
-                            source.getMediaCollection<MediaEntry.Manga>(MediaType.MANGA).test(5.seconds) {
-                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                                cancelAndIgnoreRemainingEvents()
-                            }
-                        }
-                    }
-                }
+            // THEN
+            result.test(5.seconds) {
+                awaitItem().shouldBeRight(MediaCollection(emptyList()))
+                cancelAndIgnoreRemainingEvents()
             }
         }
     }
 
-    private fun enqueueResponse(builder: MockResponse.Builder.() -> Unit) {
-        repeat(4) {
-            mockServer.enqueue(MockResponse.Builder().apply(builder).build())
+    @Nested
+    @DisplayName("WHEN updating the list")
+    inner class Updating {
+        @Test
+        @DisplayName("AND is successful THEN it just execute the MediaListEntriesMutation")
+        fun `is successful`() = runTest {
+            // GIVEN
+            coEvery { client.mutation(any<MediaListEntriesMutation>()).execute() } returns mockk()
+
+            // WHEN
+            val result = source.updateList(mediaList)
+
+            // THEN
+            result.shouldBeRight()
+            coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
         }
+
+        @Test
+        @DisplayName("AND the server returns no data THEN it should be a right")
+        fun `the server returns no data`() = runTest {
+            // GIVEN
+            client.enqueueTestResponse(mockk<MediaListEntriesMutation>())
+
+            // WHEN
+            val result = source.updateList(mediaList)
+
+            // THEN
+            result.shouldBeRight()
+        }
+
+        @Test
+        @DisplayName("AND the server returns some data THEN it should be a right")
+        fun `the server returns some data`() = runTest {
+            // GIVEN
+            client.enqueueTestResponse(mockk<MediaListEntriesMutation>(), mockk())
+
+            // WHEN
+            val result = source.updateList(mediaList)
+
+            // THEN
+            result.shouldBeRight()
+        }
+
+        @ArgumentsSource(FailuresProvider::class)
+        @ParameterizedTest(name = "AND a HTTP error occurs THEN it should return a left of {0}")
+        fun `a HTTP error occurs`(input: Failure, exception: Exception) = runTest {
+            // GIVEN
+            coEvery { client.mutation(any<MediaListEntriesMutation>()).execute() } throws exception
+
+            // WHEN
+            val result = source.updateList(mediaList)
+
+            // THEN
+            result.shouldBeLeft(input)
+            coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
+        }
+    }
+
+    @Nested
+    @DisplayName("WHEN an error occurs")
+    inner class WithErrors {
+        private val mockServer = MockServer()
+
+        private lateinit var badClient: ApolloClient
+        private lateinit var source: CommonListsRemoteSource
+
+        @BeforeEach
+        fun setUp() {
+            runBlocking {
+                badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
+                source = CommonListsRemoteSourceImpl(
+                    badClient,
+                    userIdManager,
+                    reloadInterceptor,
+                )
+            }
+        }
+
+        @AfterEach
+        fun tearDown() {
+            runBlocking { mockServer.stop() }
+        }
+
+        @ArgumentsSource(BadClient::class)
+        @ParameterizedTest(name = "AND a HTTP error occurs THEN it should return a left of {0}")
+        fun `a HTTP error occurs`(type: MediaType, action: MockResponse.Builder.() -> Unit) = runTest {
+            // GIVEN
+            mockServer.enqueueResponse(action)
+
+            // WHEN
+            val result = source.getMediaCollection<MediaEntry>(type)
+
+            // THEN
+            result.test(5.seconds) {
+                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+    }
+
+    private class QueryProvider : ArgumentsProvider {
+        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> {
+            val empty = MediaListCollectionQuery.Data {
+                collection = collection {
+                    lists = emptyList()
+                    user = null
+                }
+            }
+
+            val values = buildList {
+                add(null)
+                add(empty)
+            }
+            val types = MediaType.knownValues()
+
+            return buildList {
+                values.forEach { v -> types.forEach { t -> add(Arguments.of(v, t)) } }
+            }.stream()
+        }
+    }
+
+    private class BadClient : ArgumentsProvider {
+        private fun apolloCommand(
+            block: MockResponse.Builder.() -> Unit,
+        ): MockResponse.Builder.() -> Unit = { MockResponse.Builder().apply(block) }
+
+        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> {
+            val commands = buildList {
+                add(apolloCommand { statusCode(500) })
+                add(apolloCommand { body("Malformed body") })
+                add(apolloCommand { body("""{"data": {"random": 42}}""") })
+            }
+            val types = MediaType.knownValues()
+
+            return buildList {
+                commands.forEach { c -> types.forEach { t -> add(Arguments.of(t, c)) } }
+            }.stream()
+        }
+    }
+
+    private class FailuresProvider : ArgumentsProvider {
+        override fun provideArguments(context: ExtensionContext): Stream<Arguments> =
+            Stream.of(
+                Arguments.of(ListsFailure.UpdatingList, mockk<ApolloHttpException>()),
+                Arguments.of(ListsFailure.UpdatingList, mockk<ApolloNetworkException>()),
+                Arguments.of(ListsFailure.UpdatingList, mockk<ApolloParseException>()),
+                Arguments.of(ListsFailure.UpdatingList, mockk<JsonDataException>()),
+                Arguments.of(ListsFailure.UpdatingList, mockk<JsonEncodingException>()),
+                Arguments.of(Failure.Unknown, mockk<CacheMissException>()),
+                Arguments.of(Failure.Unknown, mockk<HttpCacheMissException>()),
+                Arguments.of(Failure.Unknown, mockk<MissingValueException>()),
+            )
     }
 }
