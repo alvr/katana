@@ -16,7 +16,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 
 @HiltAndroidTest
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 internal class SessionDataStoreTest : HiltTest() {
     @Inject
     @Named(DATASTORE)
@@ -27,36 +27,30 @@ internal class SessionDataStoreTest : HiltTest() {
     internal lateinit var corruptedDataStores: Array<DataStore<Session>>
 
     @Test
-    fun `initial session should equal to the Session class`() {
-        runTest {
-            dataStores.forEach { dataStore ->
-                dataStore.data.first() shouldBeEqualToComparingFields Session()
+    fun `initial session should equal to the Session class`() = runTest {
+        dataStores.forEach { dataStore ->
+            dataStore.data.first() shouldBeEqualToComparingFields Session()
+        }
+    }
+
+    @Test
+    fun `saving a session should return the same values`() = runTest {
+        dataStores.forEach { dataStore ->
+            with(dataStore) {
+                updateData { p -> p.copy(anilistToken = "token", isSessionActive = true) }
+
+                data.first() shouldBeEqualToComparingFields Session(
+                    anilistToken = "token",
+                    isSessionActive = true,
+                )
             }
         }
     }
 
     @Test
-    fun `saving a session should return the same values`() {
-        runTest {
-            dataStores.forEach { dataStore ->
-                with(dataStore) {
-                    updateData { p -> p.copy(anilistToken = "token", isSessionActive = true) }
-
-                    data.first() shouldBeEqualToComparingFields Session(
-                        anilistToken = "token",
-                        isSessionActive = true,
-                    )
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `corrupted dataStore should recreate again the file with initial values`() {
-        runTest {
-            corruptedDataStores.forEach { corruptedDataStore ->
-                corruptedDataStore.data.first() shouldBeEqualToComparingFields Session(anilistToken = "recreated")
-            }
+    fun `corrupted dataStore should recreate again the file with initial values`() = runTest {
+        corruptedDataStores.forEach { corruptedDataStore ->
+            corruptedDataStore.data.first() shouldBeEqualToComparingFields Session(anilistToken = "recreated")
         }
     }
 

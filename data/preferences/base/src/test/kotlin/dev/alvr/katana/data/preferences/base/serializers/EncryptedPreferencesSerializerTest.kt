@@ -18,38 +18,35 @@ import org.junit.BeforeClass
 import org.junit.Test
 
 @HiltAndroidTest
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalSerializationApi::class)
+@ExperimentalCoroutinesApi
+@ExperimentalSerializationApi
 internal class EncryptedPreferencesSerializerTest : HiltTest() {
 
     @Inject
     internal lateinit var aead: Aead
 
     @Test
-    fun `when reading the initial value it should fail`() {
-        runTest {
-            val colorSerializer = ColorSerializer.encrypted(aead)
+    fun `when reading the initial value it should fail`() = runTest {
+        val colorSerializer = ColorSerializer.encrypted(aead)
 
-            shouldThrowExactlyUnit<CorruptionException> {
-                colorSerializer.readFrom(ByteArrayInputStream(byteArrayOf()))
-            }.message shouldBe "reading secured value failed"
-        }
+        shouldThrowExactlyUnit<CorruptionException> {
+            colorSerializer.readFrom(ByteArrayInputStream(byteArrayOf()))
+        }.message shouldBe "reading secured value failed"
     }
 
     @Test
-    fun `when writing a value then after reading it should be the new value`() {
-        runTest {
-            val output = ByteArrayOutputStream()
-            val colorSerializer = ColorSerializer.encrypted(aead)
-            colorSerializer.writeTo(
-                Color(rgb = 0x123_456),
-                output,
-            )
+    fun `when writing a value then after reading it should be the new value`() = runTest {
+        val output = ByteArrayOutputStream()
+        val colorSerializer = ColorSerializer.encrypted(aead)
+        colorSerializer.writeTo(
+            Color(rgb = 0x123_456),
+            output,
+        )
 
-            val input = ByteArrayInputStream(output.toByteArray())
-            val color = colorSerializer.readFrom(input)
+        val input = ByteArrayInputStream(output.toByteArray())
+        val color = colorSerializer.readFrom(input)
 
-            color.rgb shouldBe 0x123_456
-        }
+        color.rgb shouldBe 0x123_456
     }
 
     companion object {
