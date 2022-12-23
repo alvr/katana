@@ -5,6 +5,7 @@ coroutines = "1.6.4"
 destinations = "1.7.30-beta"
 hilt = "2.44.2"
 hiltx = "1.0.0"
+junit5 = "5.9.1"
 kotlin = "1.8.0"
 okhttp = "4.10.0"
 orbit = "4.5.0"
@@ -140,7 +141,8 @@ tink = { module = "com.google.crypto.tink:tink-android", version = "1.7.0" }
 
 # Tests
 ## JUnit
-junit5-vintage = { module = "org.junit.vintage:junit-vintage-engine", version = "5.9.2" }
+junit5 = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
+junit5-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
 
 ## Kotest
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
@@ -230,6 +232,7 @@ ui-compose = [
 
 test = [
     "coroutines-test",
+    "junit5",
     "kotest",
     "kotest-assertions-arrow",
     "kotest-assertions-core",

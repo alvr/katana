@@ -37,7 +37,7 @@ open class RoboTest {
         Dispatchers.resetMain()
     }
 
-    fun runTest(test: suspend TestScope.() -> Unit) {
+    protected fun runTest(test: suspend TestScope.() -> Unit) {
         testScope.runTest(testBody = test)
     }
 }
