@@ -3,104 +3,80 @@ package dev.alvr.katana.domain.session.usecases
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.session.failures.SessionFailure
 import dev.alvr.katana.domain.session.repositories.SessionRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
-import io.kotest.core.spec.style.FunSpec
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.spyk
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-internal class ObserveActiveSessionUseCaseTest : FunSpec() {
-    private val repo = mockk<SessionRepository>()
-    private val useCase = spyk(ObserveActiveSessionUseCase(repo))
+@ExperimentalCoroutinesApi
+internal class ObserveActiveSessionUseCaseTest : TestBase() {
+    @MockK
+    private lateinit var repo: SessionRepository
 
-    init {
-        context("right active session observer") {
-            test("invoke should observe if the session is active") {
-                every { repo.sessionActive } returns flowOf(
-                    false.right(),
-                    true.right(),
-                    false.right(),
-                    true.right(),
-                    true.right(),
-                    false.right(),
-                )
+    private lateinit var useCase: ObserveActiveSessionUseCase
 
-                useCase()
+    override suspend fun beforeEach() {
+        useCase = spyk(ObserveActiveSessionUseCase(repo))
+    }
 
-                useCase.flow.test(5.seconds) {
-                    awaitItem().shouldBeRight(false)
-                    awaitItem().shouldBeRight(true)
-                    awaitItem().shouldBeRight(false)
-                    awaitItem().shouldBeRight(true)
-                    awaitItem().shouldBeRight(false)
-                    cancelAndConsumeRemainingEvents()
-                }
+    @Test
+    @DisplayName("WHEN invoking THEN observe if the session is active")
+    fun `invoking the useCase (success)`() = runTest {
+        // GIVEN
+        every { repo.sessionActive } returns flowOf(
+            false.right(),
+            true.right(),
+            false.right(),
+            true.right(),
+            true.right(),
+            false.right(),
+        )
 
-                coVerify(exactly = 1) { useCase.invoke(Unit) }
-                coVerify(exactly = 1) { repo.sessionActive }
-            }
+        // WHEN
+        useCase()
 
-            test("invoke the use case should call the invoke operator") {
-                every { repo.sessionActive } returns flowOf(
-                    false.right(),
-                    true.right(),
-                    false.right(),
-                    true.right(),
-                    true.right(),
-                    false.right(),
-                )
-
-                useCase(Unit)
-
-                useCase.flow.test(5.seconds) {
-                    awaitItem().shouldBeRight(false)
-                    awaitItem().shouldBeRight(true)
-                    awaitItem().shouldBeRight(false)
-                    awaitItem().shouldBeRight(true)
-                    awaitItem().shouldBeRight(false)
-                    cancelAndConsumeRemainingEvents()
-                }
-
-                coVerify(exactly = 1) { useCase.invoke(Unit) }
-                coVerify(exactly = 1) { repo.sessionActive }
-            }
+        // THEN
+        useCase.flow.test(5.seconds) {
+            awaitItem().shouldBeRight(false)
+            awaitItem().shouldBeRight(true)
+            awaitItem().shouldBeRight(false)
+            awaitItem().shouldBeRight(true)
+            awaitItem().shouldBeRight(false)
+            cancelAndConsumeRemainingEvents()
         }
 
-        context("left active session observer") {
-            test("invoke should observe if the session is active") {
-                every { repo.sessionActive } returns flowOf(mockk<SessionFailure>().left())
+        coVerify(exactly = 1) { useCase.invoke(Unit) }
+        coVerify(exactly = 1) { repo.sessionActive }
+    }
 
-                useCase()
+    @Test
+    @DisplayName("WHEN invoking THEN observe if the session is active")
+    fun `invoking the useCase (failure)`() = runTest {
+        // GIVEN
+        every { repo.sessionActive } returns flowOf(mockk<SessionFailure>().left())
 
-                useCase.flow.test(5.seconds) {
-                    awaitItem().shouldBeLeft()
-                    cancelAndConsumeRemainingEvents()
-                }
+        // WHEN
+        useCase()
 
-                coVerify(exactly = 1) { useCase.invoke(Unit) }
-                coVerify(exactly = 1) { repo.sessionActive }
-            }
-
-            test("invoke the use case should call the invoke operator") {
-                every { repo.sessionActive } returns flowOf(mockk<SessionFailure>().left())
-
-                useCase(Unit)
-
-                useCase.flow.test(5.seconds) {
-                    awaitItem().shouldBeLeft()
-                    cancelAndConsumeRemainingEvents()
-                }
-
-                coVerify(exactly = 1) { useCase.invoke(Unit) }
-                coVerify(exactly = 1) { repo.sessionActive }
-            }
+        // THEN
+        useCase.flow.test(5.seconds) {
+            awaitItem().shouldBeLeft()
+            cancelAndConsumeRemainingEvents()
         }
+
+        coVerify(exactly = 1) { useCase.invoke(Unit) }
+        coVerify(exactly = 1) { repo.sessionActive }
     }
 }

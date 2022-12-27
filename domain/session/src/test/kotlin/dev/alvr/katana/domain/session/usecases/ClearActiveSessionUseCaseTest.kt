@@ -1,6 +1,8 @@
 package dev.alvr.katana.domain.session.usecases
 
+import arrow.core.Either
 import arrow.core.left
+import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.base.usecases.invoke
@@ -9,78 +11,110 @@ import dev.alvr.katana.domain.session.failures.SessionFailure
 import dev.alvr.katana.domain.session.repositories.SessionRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
-import io.kotest.core.spec.style.FunSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.mockk
+import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
 import io.mockk.verify
+import java.util.stream.Stream
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.ArgumentsProvider
+import org.junit.jupiter.params.provider.ArgumentsSource
 
-internal class ClearActiveSessionUseCaseTest : FunSpec() {
-    private val repo = mockk<SessionRepository>()
-    private val useCase = spyk(ClearActiveSessionUseCase(repo))
+@ExperimentalCoroutinesApi
+internal class ClearActiveSessionUseCaseTest : TestBase() {
+    @MockK
+    private lateinit var repo: SessionRepository
 
-    init {
-        context("successful clearing") {
+    private lateinit var useCase: ClearActiveSessionUseCase
+
+    override suspend fun beforeEach() {
+        useCase = spyk(ClearActiveSessionUseCase(repo))
+    }
+
+    @Nested
+    @DisplayName("GIVEN a successful repo call")
+    inner class SuccessfulExecution {
+        @Test
+        @DisplayName("WHEN successful clearActiveSession THEN invoke should be right")
+        fun `successful clearActiveSession (invoke)`() = runTest {
+            // GIVEN
             coEitherJustRun { repo.clearActiveSession() }
 
-            test("invoke should clear the session") {
-                useCase().shouldBeRight()
-                coVerify(exactly = 1) { repo.clearActiveSession() }
-            }
+            // WHEN
+            val result = useCase()
 
-            test("sync should clear the session") {
-                useCase.sync().shouldBeRight()
-                coVerify(exactly = 1) { repo.clearActiveSession() }
-            }
-        }
-
-        context("failure clearing") {
-            context("is a SessionPreferencesFailure.ClearingSessionFailure") {
-                coEvery { repo.clearActiveSession() } returns SessionFailure.ClearingSession.left()
-
-                test("invoke should return failure") {
-                    useCase().shouldBeLeft(SessionFailure.ClearingSession)
-                    coVerify(exactly = 1) { repo.clearActiveSession() }
-                }
-
-                test("sync should return failure") {
-                    useCase.sync().shouldBeLeft(SessionFailure.ClearingSession)
-                    coVerify(exactly = 1) { repo.clearActiveSession() }
-                }
-            }
-
-            context("is a Failure.Unknown") {
-                coEvery { repo.clearActiveSession() } returns Failure.Unknown.left()
-
-                test("invoke should return failure") {
-                    useCase().shouldBeLeft(Failure.Unknown)
-                    coVerify(exactly = 1) { repo.clearActiveSession() }
-                }
-
-                test("sync should return failure") {
-                    useCase.sync().shouldBeLeft(Failure.Unknown)
-                    coVerify(exactly = 1) { repo.clearActiveSession() }
-                }
-            }
-        }
-
-        test("invoke the use case should call the invoke operator") {
-            coEvery { repo.clearActiveSession() } returns mockk()
-
-            useCase(Unit)
-
+            // THEN
+            result.shouldBeRight()
+            coVerify(exactly = 1) { repo.clearActiveSession() }
             coVerify(exactly = 1) { useCase.invoke(Unit) }
-            coVerify(exactly = 1) { repo.clearActiveSession() }
+            verify(exactly = 0) { useCase.sync(Unit) }
         }
 
-        test("sync the use case should call the invoke operator") {
-            coEvery { repo.clearActiveSession() } returns mockk()
+        @Test
+        @DisplayName("WHEN successful clearActiveSession THEN sync should be right")
+        fun `successful clearActiveSession (sync)`() = runTest {
+            // GIVEN
+            coEitherJustRun { repo.clearActiveSession() }
 
-            useCase.sync()
+            // WHEN
+            val resultSync = useCase.sync()
 
+            // THEN
+            resultSync.shouldBeRight()
+            coVerify(exactly = 1) { repo.clearActiveSession() }
+            coVerify(exactly = 1) { useCase.invoke(Unit) }
             verify(exactly = 1) { useCase.sync(Unit) }
-            coVerify(exactly = 1) { repo.clearActiveSession() }
         }
+    }
+
+    @Nested
+    @DisplayName("GIVEN a failure repo call")
+    inner class FailureExecution {
+        @ArgumentsSource(FailuresProvider::class)
+        @ParameterizedTest(name = "WHEN failure is {0} THEN the result should be {1}")
+        fun `failure clearActiveSession (invoke)`(failure: Failure, expected: Either<Failure, Unit>) = runTest {
+            // GIVEN
+            coEvery { repo.clearActiveSession() } returns expected
+
+            // WHEN
+            val result = useCase()
+
+            // THEN
+            result.shouldBeLeft(failure)
+            coVerify(exactly = 1) { repo.clearActiveSession() }
+            coVerify(exactly = 1) { useCase.invoke(Unit) }
+            verify(exactly = 0) { useCase.sync(Unit) }
+        }
+
+        @ArgumentsSource(FailuresProvider::class)
+        @ParameterizedTest(name = "WHEN failure is {0} THEN the result should be {1}")
+        fun `failure clearActiveSession (sync)`(failure: Failure, expected: Either<Failure, Unit>) = runTest {
+            // GIVEN
+            coEvery { repo.clearActiveSession() } returns expected
+
+            // WHEN
+            val result = useCase.sync()
+
+            // THEN
+            result.shouldBeLeft(failure)
+            coVerify(exactly = 1) { repo.clearActiveSession() }
+            coVerify(exactly = 1) { useCase.invoke(Unit) }
+            verify(exactly = 1) { useCase.sync(Unit) }
+        }
+    }
+
+    private class FailuresProvider : ArgumentsProvider {
+        override fun provideArguments(context: ExtensionContext): Stream<Arguments> =
+            Stream.of(
+                Arguments.of(SessionFailure.ClearingSession, SessionFailure.ClearingSession.left()),
+                Arguments.of(Failure.Unknown, Failure.Unknown.left()),
+            )
     }
 }

@@ -46,7 +46,7 @@ internal class SessionLocalSourceTest : TestBase() {
 
     @Nested
     @DisplayName("GIVEN a SessionLocalSource that succeed")
-    inner class SuccessExecution {
+    inner class SuccessfulExecution {
         @Test
         @DisplayName("WHEN getting a token from datastore for the first time THEN the token should be none")
         fun `getting a token from datastore for the first time`() = runTest {

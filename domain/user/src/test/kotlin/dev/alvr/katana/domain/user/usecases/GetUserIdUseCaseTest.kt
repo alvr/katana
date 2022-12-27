@@ -1,8 +1,10 @@
 package dev.alvr.katana.domain.user.usecases
 
+import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import dev.alvr.katana.common.tests.valueMockk
+import dev.alvr.katana.common.tests.TestBase
+import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.user.failures.UserFailure
@@ -10,64 +12,111 @@ import dev.alvr.katana.domain.user.models.UserId
 import dev.alvr.katana.domain.user.repositories.UserRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
-import io.kotest.core.spec.style.FunSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.mockk
+import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
 import io.mockk.verify
+import java.util.stream.Stream
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.ArgumentsProvider
+import org.junit.jupiter.params.provider.ArgumentsSource
 
-internal class GetUserIdUseCaseTest : FunSpec() {
-    private val repo = mockk<UserRepository>()
-    private val useCase = spyk(GetUserIdUseCase(repo))
+@ExperimentalCoroutinesApi
+internal class GetUserIdUseCaseTest : TestBase() {
+    @MockK
+    private lateinit var repo: UserRepository
 
-    private val user = valueMockk<UserId>()
+    private lateinit var useCase: GetUserIdUseCase
 
-    init {
-        context("successful userId") {
-            coEvery { repo.getUserId() } returns user.right()
+    private val userId = UserId(37_384)
 
-            test("invoke should return user") {
-                useCase().shouldBeRight(user)
-                coVerify(exactly = 1) { repo.getUserId() }
-            }
+    override suspend fun beforeEach() {
+        useCase = spyk(GetUserIdUseCase(repo))
+    }
 
-            test("sync should return user") {
-                useCase.sync().shouldBeRight(user)
-                coVerify(exactly = 1) { repo.getUserId() }
-            }
-        }
+    @Nested
+    @DisplayName("GIVEN a successful repo call")
+    inner class SuccessfulExecution {
+        @Test
+        @DisplayName("WHEN successful getUserId THEN invoke should be right")
+        fun `successful getUserId (invoke)`() = runTest {
+            // GIVEN
+            coEvery { repo.getUserId() } returns userId.right()
 
-        context("failure userId") {
-            coEvery { repo.getUserId() } returns UserFailure.GettingUserId.left()
+            // WHEN
+            val result = useCase()
 
-            test("invoke should return failure") {
-                useCase().shouldBeLeft(UserFailure.GettingUserId)
-                coVerify(exactly = 1) { repo.getUserId() }
-            }
-
-            test("sync should return failure") {
-                useCase.sync().shouldBeLeft(UserFailure.GettingUserId)
-                coVerify(exactly = 1) { repo.getUserId() }
-            }
-        }
-
-        test("invoke the use case should call the invoke operator") {
-            coEvery { repo.getUserId() } returns mockk()
-
-            useCase()
-
+            // THEN
+            result.shouldBeRight(userId)
+            coVerify(exactly = 1) { repo.getUserId() }
             coVerify(exactly = 1) { useCase.invoke(Unit) }
-            coVerify(exactly = 1) { repo.getUserId() }
+            verify(exactly = 0) { useCase.sync(Unit) }
         }
 
-        test("sync the use case should call the invoke operator") {
-            coEvery { repo.getUserId() } returns mockk()
+        @Test
+        @DisplayName("WHEN successful getUserId THEN sync should be right")
+        fun `successful getUserId (sync)`() = runTest {
+            // GIVEN
+            coEvery { repo.getUserId() } returns userId.right()
 
-            useCase.sync()
+            // WHEN
+            val resultSync = useCase.sync()
 
+            // THEN
+            resultSync.shouldBeRight(userId)
+            coVerify(exactly = 1) { repo.getUserId() }
+            coVerify(exactly = 1) { useCase.invoke(Unit) }
             verify(exactly = 1) { useCase.sync(Unit) }
-            coVerify(exactly = 1) { repo.getUserId() }
         }
+    }
+
+    @Nested
+    @DisplayName("GIVEN a failure repo call")
+    inner class FailureExecution {
+        @ArgumentsSource(FailuresProvider::class)
+        @ParameterizedTest(name = "WHEN failure is {0} THEN the result should be {1}")
+        fun `failure getUserId (invoke)`(failure: Failure, expected: Either<Failure, UserId>) = runTest {
+            // GIVEN
+            coEvery { repo.getUserId() } returns expected
+
+            // WHEN
+            val result = useCase()
+
+            // THEN
+            result.shouldBeLeft(failure)
+            coVerify(exactly = 1) { repo.getUserId() }
+            coVerify(exactly = 1) { useCase.invoke(Unit) }
+            verify(exactly = 0) { useCase.sync(Unit) }
+        }
+
+        @ArgumentsSource(FailuresProvider::class)
+        @ParameterizedTest(name = "WHEN failure is {0} THEN the result should be {1}")
+        fun `failure getUserId (sync)`(failure: Failure, expected: Either<Failure, UserId>) = runTest {
+            // GIVEN
+            coEvery { repo.getUserId() } returns expected
+
+            // WHEN
+            val result = useCase.sync()
+
+            // THEN
+            result.shouldBeLeft(failure)
+            coVerify(exactly = 1) { repo.getUserId() }
+            coVerify(exactly = 1) { useCase.invoke(Unit) }
+            verify(exactly = 1) { useCase.sync(Unit) }
+        }
+    }
+
+    private class FailuresProvider : ArgumentsProvider {
+        override fun provideArguments(context: ExtensionContext): Stream<Arguments> =
+            Stream.of(
+                Arguments.of(UserFailure.GettingUserId, UserFailure.GettingUserId.left()),
+            )
     }
 }
