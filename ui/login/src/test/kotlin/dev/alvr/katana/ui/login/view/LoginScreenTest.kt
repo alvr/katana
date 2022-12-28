@@ -14,7 +14,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 internal class LoginScreenTest : ComposeTest() {
     @Test
-    fun `Logo and Description should be displayed`() {
+    fun `Logo and Description should be displayed`() = runTest {
         composeTestRule.setContent {
             Header()
             Bottom()
@@ -30,7 +30,7 @@ internal class LoginScreenTest : ComposeTest() {
     }
 
     @Test
-    fun `GetStarted should be displayed`() {
+    fun `GetStarted should be displayed`() = runTest {
         composeTestRule.setContent {
             Header()
             Bottom()
@@ -58,7 +58,7 @@ internal class LoginScreenTest : ComposeTest() {
     }
 
     @Test
-    fun `Begin block should be displayed after clicking`() {
+    fun `Begin block should be displayed after clicking`() = runTest {
         composeTestRule.setContent {
             Header()
             Bottom()
