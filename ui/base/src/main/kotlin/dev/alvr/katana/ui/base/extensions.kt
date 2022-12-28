@@ -3,7 +3,10 @@ package dev.alvr.katana.ui.base
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
+import dev.alvr.katana.common.core.noData
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.YearMonth
 
 val currentLocale = @Composable {
@@ -15,5 +18,17 @@ val currentLocale = @Composable {
     }
 }
 
-val LocalDate.yearMonth: YearMonth
-    get() = YearMonth.of(year, month)
+val LocalDate?.yearMonth: YearMonth
+    get() = if (this?.year != null && month != null) YearMonth.of(year, month) else YearMonth.now()
+
+@Composable
+fun LocalDate?.format(formatter: KatanaDateFormatter) =
+    formatter().let { this?.format(it) ?: String.noData }
+
+@Composable
+fun LocalTime?.format(formatter: KatanaDateFormatter) =
+    formatter().let { this?.format(it) ?: String.noData }
+
+@Composable
+fun LocalDateTime?.format(formatter: KatanaDateFormatter) =
+    formatter().let { this?.format(it) ?: String.noData }

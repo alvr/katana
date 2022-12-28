@@ -79,6 +79,12 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
         }
     }
 
+    fun updateEntry(value: MediaListItem) {
+        intent {
+            updateListUseCase(value.toMediaList())
+        }
+    }
+
     private fun observeLists() {
         refreshList()
         collectCollectionFlow()

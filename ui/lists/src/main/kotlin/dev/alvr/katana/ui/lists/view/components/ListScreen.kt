@@ -22,8 +22,10 @@ import dev.alvr.katana.ui.base.components.KatanaErrorState
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
 import dev.alvr.katana.ui.base.components.home.rememberKatanaHomeScaffoldState
 import dev.alvr.katana.ui.lists.R
+import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
+import dev.alvr.katana.ui.lists.view.destinations.EditEntrySheetDestination
 import dev.alvr.katana.ui.lists.viewmodel.AnimeListsViewModel
 import dev.alvr.katana.ui.lists.viewmodel.ListsViewModel
 import dev.alvr.katana.ui.lists.viewmodel.MangaListsViewModel
@@ -37,10 +39,11 @@ import org.orbitmvi.orbit.compose.collectAsState
 internal fun ListScreen(
     vm: ListsViewModel<*, *>,
     navigator: ListsNavigator,
-    resultRecipient: ResultRecipient<ChangeListSheetDestination, String>,
     @StringRes title: Int,
     @StringRes emptyStateRes: Int,
     backContent: @Composable () -> Unit,
+    changeListResult: ResultRecipient<ChangeListSheetDestination, String>,
+    editEntryResult: ResultRecipient<EditEntrySheetDestination, MediaListItem>,
     modifier: Modifier = Modifier,
 ) {
     val state by vm.collectAsState()
@@ -48,13 +51,20 @@ internal fun ListScreen(
     val lazyGridState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
 
-    resultRecipient.onNavResult { result ->
+    changeListResult.onNavResult { result ->
         when (result) {
             NavResult.Canceled -> Unit
             is NavResult.Value -> vm.selectList(result.value).also {
                 coroutineScope.launch { lazyGridState.scrollToItem(Int.zero) }
                 katanaScaffoldState.resetToolbar()
             }
+        }
+    }
+
+    editEntryResult.onNavResult { result ->
+        when (result) {
+            NavResult.Canceled -> Unit
+            is NavResult.Value -> vm.updateEntry(result.value)
         }
     }
 

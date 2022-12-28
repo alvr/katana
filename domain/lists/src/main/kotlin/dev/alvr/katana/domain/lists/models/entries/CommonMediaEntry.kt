@@ -1,10 +1,14 @@
 package dev.alvr.katana.domain.lists.models.entries
 
+import java.time.LocalDate
+
 data class CommonMediaEntry(
     val id: Int,
     val title: String,
     val coverImage: String,
     val format: Format,
+    val startDate: LocalDate,
+    val endDate: LocalDate?,
 ) {
     enum class Format {
         TV,

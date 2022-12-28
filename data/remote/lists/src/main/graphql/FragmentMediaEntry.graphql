@@ -7,6 +7,16 @@ fragment MediaEntry on Media {
     chapters
     volumes
     format
+    startDate {
+        year
+        month
+        day
+    }
+    endDate {
+        year
+        month
+        day
+    }
     coverImage {
         large
     }

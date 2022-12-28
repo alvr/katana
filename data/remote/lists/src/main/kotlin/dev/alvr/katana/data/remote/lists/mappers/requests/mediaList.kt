@@ -13,6 +13,6 @@ internal fun MediaList.toMutation() = MediaListEntriesMutation(
     private = Optional.presentIfNotNull(private),
     notes = Optional.presentIfNotNull(notes),
     hiddenFromStatusLists = Optional.presentIfNotNull(hiddenFromStatusLists),
-    startedAt = Optional.presentIfNotNull(startedAt.toFuzzyDate().takeIfValid()),
-    completedAt = Optional.presentIfNotNull(completedAt.toFuzzyDate().takeIfValid()),
+    startedAt = Optional.present(startedAt.toFuzzyDate().takeIfValid()),
+    completedAt = Optional.present(completedAt.toFuzzyDate().takeIfValid()),
 )

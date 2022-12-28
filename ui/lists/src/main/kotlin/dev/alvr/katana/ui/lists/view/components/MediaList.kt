@@ -49,16 +49,14 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.alvr.katana.common.core.unknown
 import dev.alvr.katana.common.core.zero
+import dev.alvr.katana.ui.base.KatanaDateFormatter
 import dev.alvr.katana.ui.base.components.KatanaPullRefresh
-import dev.alvr.katana.ui.base.currentLocale
+import dev.alvr.katana.ui.base.format
 import dev.alvr.katana.ui.base.modifiers.katanaPlaceholder
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.viewmodel.ListState
 import java.text.DecimalFormat
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
-import java.time.format.FormatStyle
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -314,7 +312,7 @@ private fun Subtitle(
                 stringResource(
                     R.string.lists_entry_next_episode,
                     nextEpisode.number,
-                    nextEpisode.date.format(episodeFormatter()).toString(),
+                    nextEpisode.date.format(KatanaDateFormatter.DATE_WITH_TIME),
                 ),
             )
         }
@@ -413,17 +411,6 @@ private fun Progress(
         progress = currentProgress,
         modifier = modifier,
     )
-}
-
-private val episodeFormatter = @Composable {
-    val datePattern = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-    val timePattern = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
-
-    DateTimeFormatterBuilder()
-        .append(datePattern)
-        .appendLiteral(" ${stringResource(R.string.lists_entry_next_episode_date_time_separator)} ")
-        .append(timePattern)
-        .toFormatter(currentLocale())
 }
 
 private val scoreFormatter = { score: Double ->

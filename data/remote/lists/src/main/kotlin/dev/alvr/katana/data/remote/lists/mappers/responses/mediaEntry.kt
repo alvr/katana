@@ -1,5 +1,6 @@
 package dev.alvr.katana.data.remote.lists.mappers.responses
 
+import dev.alvr.katana.common.core.orNow
 import dev.alvr.katana.common.core.orZero
 import dev.alvr.katana.data.remote.base.type.MediaFormat
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
@@ -11,6 +12,8 @@ internal fun MediaEntryFragment?.mediaEntry() = let { entry ->
         title = entry?.title?.userPreferred.orEmpty(),
         coverImage = entry?.coverImage?.large.orEmpty(),
         format = entry?.format.toFormat(),
+        startDate = entry?.startDate?.let { dateMapper(it.day, it.month, it.year) }.orNow(),
+        endDate = entry?.endDate?.let { dateMapper(it.day, it.month, it.year) }.orNow()
     )
 }
 

@@ -21,4 +21,10 @@
     <string name="lists_error_message">Algo ha ocurrido al obtener la información de la lista seleccionada</string>
 
     <string name="lists_change_list_button">Cambiar lista</string>
+
+    <string name="lists_edit_entry_started_date">Fecha de inicio</string>
+    <string name="lists_edit_entry_completed_date">Fecha de fin</string>
+
+    <string name="lists_edit_entry_cancel_button">Cancelar</string>
+    <string name="lists_edit_entry_save_button">Guardar</string>
 </resources>

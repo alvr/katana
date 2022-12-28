@@ -7,5 +7,5 @@ import androidx.compose.ui.unit.dp
 internal val KatanaShapes = Shapes(
     small = RoundedCornerShape(4.dp),
     medium = RoundedCornerShape(4.dp),
-    large = RoundedCornerShape(0.dp),
+    large = RoundedCornerShape(1.dp),
 )

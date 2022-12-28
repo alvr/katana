@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import dev.alvr.katana.common.core.orZero
 import dev.alvr.katana.ui.lists.R
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -24,9 +25,45 @@ sealed interface MediaListItem : Parcelable {
     val private: Boolean
     val notes: String
     val hiddenFromStatusLists: Boolean
+    val startDate: LocalDate
+    val endDate: LocalDate?
     val startedAt: LocalDate?
     val completedAt: LocalDate?
     val updatedAt: LocalDateTime?
+
+    fun edit(
+        score: Double = this.score,
+        progress: Int = this.progress,
+        repeat: Int = this.repeat,
+        private: Boolean = this.private,
+        notes: String = this.notes,
+        hiddenFromStatusLists: Boolean = this.hiddenFromStatusLists,
+        startedAt: LocalDate? = this.startedAt,
+        completedAt: LocalDate? = this.completedAt,
+        volumesProgress: Int = (this as? MangaListItem)?.volumesProgress.orZero()
+    ) = when (this) {
+        is AnimeListItem -> copy(
+            score = score,
+            progress = progress,
+            repeat = repeat,
+            private = private,
+            notes = notes,
+            hiddenFromStatusLists = hiddenFromStatusLists,
+            startedAt = startedAt,
+            completedAt = completedAt,
+        )
+        is MangaListItem -> copy(
+            score = score,
+            progress = progress,
+            repeat = repeat,
+            private = private,
+            notes = notes,
+            hiddenFromStatusLists = hiddenFromStatusLists,
+            startedAt = startedAt,
+            completedAt = completedAt,
+            volumesProgress = volumesProgress,
+        )
+    }
 
     @Parcelize
     data class AnimeListItem(
@@ -42,6 +79,8 @@ sealed interface MediaListItem : Parcelable {
         override val private: Boolean,
         override val notes: String,
         override val hiddenFromStatusLists: Boolean,
+        override val startDate: LocalDate,
+        override val endDate: LocalDate?,
         override val startedAt: LocalDate?,
         override val completedAt: LocalDate?,
         override val updatedAt: LocalDateTime?,
@@ -69,6 +108,8 @@ sealed interface MediaListItem : Parcelable {
         override val private: Boolean,
         override val notes: String,
         override val hiddenFromStatusLists: Boolean,
+        override val startDate: LocalDate,
+        override val endDate: LocalDate?,
         override val startedAt: LocalDate?,
         override val completedAt: LocalDate?,
         override val updatedAt: LocalDateTime?,

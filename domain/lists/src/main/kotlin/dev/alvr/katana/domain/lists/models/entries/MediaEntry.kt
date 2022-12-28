@@ -1,11 +1,14 @@
 package dev.alvr.katana.domain.lists.models.entries
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 sealed class MediaEntry(
     val id: Int,
     val title: String,
     val coverImage: String,
+    val startDate: LocalDate,
+    val endDate: LocalDate?,
     val format: CommonMediaEntry.Format,
 ) {
     constructor(entry: CommonMediaEntry) : this(
@@ -13,6 +16,8 @@ sealed class MediaEntry(
         title = entry.title,
         coverImage = entry.coverImage,
         format = entry.format,
+        startDate = entry.startDate,
+        endDate = entry.endDate,
     )
 
     data class Anime(
