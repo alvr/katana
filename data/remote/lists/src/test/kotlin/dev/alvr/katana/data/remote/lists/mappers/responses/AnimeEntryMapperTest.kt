@@ -4,9 +4,12 @@ import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.data.remote.base.type.MediaFormat
+import dev.alvr.katana.data.remote.lists.fragment.MediaEntry.EndDate
+import dev.alvr.katana.data.remote.lists.fragment.MediaEntry.StartDate
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.DisplayName
@@ -31,6 +34,8 @@ internal class AnimeEntryMapperTest : TestBase() {
                 title = String.empty,
                 coverImage = String.empty,
                 format = CommonMediaEntry.Format.UNKNOWN,
+                startDate = LocalDate.now(),
+                endDate = null,
             ),
             episodes = null,
             nextEpisode = null,
@@ -55,6 +60,8 @@ internal class AnimeEntryMapperTest : TestBase() {
             format = null,
             coverImage = null,
             nextAiringEpisode = null,
+            startDate = null,
+            endDate = null,
         )
 
         // WHEN
@@ -67,6 +74,8 @@ internal class AnimeEntryMapperTest : TestBase() {
                 title = String.empty,
                 coverImage = String.empty,
                 format = CommonMediaEntry.Format.UNKNOWN,
+                startDate = LocalDate.now(),
+                endDate = null,
             ),
             episodes = null,
             nextEpisode = null,
@@ -97,6 +106,8 @@ internal class AnimeEntryMapperTest : TestBase() {
             format = null,
             coverImage = MediaEntryFragment.CoverImage(null),
             nextAiringEpisode = null,
+            startDate = StartDate(null, null, null),
+            endDate = EndDate(null, null, null),
         )
 
         // WHEN
@@ -109,6 +120,8 @@ internal class AnimeEntryMapperTest : TestBase() {
                 title = String.empty,
                 coverImage = String.empty,
                 format = CommonMediaEntry.Format.UNKNOWN,
+                startDate = LocalDate.now(),
+                endDate = null,
             ),
             episodes = null,
             nextEpisode = null,
@@ -132,6 +145,8 @@ internal class AnimeEntryMapperTest : TestBase() {
             chapters = null,
             volumes = null,
             format = MediaFormat.ONA,
+            startDate = StartDate(2022, 1, 1),
+            endDate = EndDate(2022, 12, 31),
             coverImage = MediaEntryFragment.CoverImage("https://placehold.co/128x256"),
             nextAiringEpisode = MediaEntryFragment.NextAiringEpisode(1_241_517_600, 1001),
         )
@@ -146,6 +161,8 @@ internal class AnimeEntryMapperTest : TestBase() {
                 title = "One Piece",
                 coverImage = "https://placehold.co/128x256",
                 format = CommonMediaEntry.Format.ONA,
+                startDate = LocalDate.of(2022, 1, 1),
+                endDate = LocalDate.of(2022, 12, 31),
             ),
             episodes = 1000,
             nextEpisode = MediaEntry.Anime.NextEpisode(

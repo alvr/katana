@@ -71,6 +71,8 @@ internal class MediaListComponentTest : ComposeTest() {
             private = Arb.boolean().next(),
             notes = Arb.string().next(),
             hiddenFromStatusLists = Arb.boolean().next(),
+            startDate = Arb.localDate().next(),
+            endDate = Arb.localDate().next(),
             startedAt = Arb.localDate().next(),
             completedAt = Arb.localDate().next(),
             updatedAt = Arb.localDateTime().next(),
@@ -92,6 +94,8 @@ internal class MediaListComponentTest : ComposeTest() {
             private = Arb.boolean().next(),
             notes = Arb.string().next(),
             hiddenFromStatusLists = Arb.boolean().next(),
+            startDate = Arb.localDate().next(),
+            endDate = Arb.localDate().next(),
             startedAt = Arb.localDate().next(),
             completedAt = Arb.localDate().next(),
             updatedAt = Arb.localDateTime().next(),
@@ -110,6 +114,8 @@ internal class MediaListComponentTest : ComposeTest() {
             private = Arb.boolean().next(),
             notes = Arb.string().next(),
             hiddenFromStatusLists = Arb.boolean().next(),
+            startDate = Arb.localDate().next(),
+            endDate = Arb.localDate().next(),
             startedAt = Arb.localDate().next(),
             completedAt = Arb.localDate().next(),
             updatedAt = Arb.localDateTime().next(),
@@ -174,7 +180,7 @@ internal class MediaListComponentTest : ComposeTest() {
     @Suppress("CognitiveComplexMethod", "LongMethod")
     fun `an anime item should paint the correct data`() = runTest {
         val addPlusOne = mockk<(Int) -> Unit>()
-        val editEntry = mockk<(Int) -> Unit>()
+        val editEntry = mockk<(MediaListItem) -> Unit>()
         val mediaDetails = mockk<(Int) -> Unit>()
 
         coJustRun { addPlusOne(any()) }
@@ -207,12 +213,10 @@ internal class MediaListComponentTest : ComposeTest() {
                         assertIsDisplayed()
                         assertTextContains(context.getString(item.format.value), substring = true)
 
-                        if (item.nextEpisode != null) {
-                            with(item.nextEpisode) {
-                                assertTextContains(number.toString(), substring = true)
-                                assertTextContains(date.year.toString(), substring = true)
-                            }
-                        } else {
+                        item.nextEpisode?.let { episode ->
+                            assertTextContains(episode.number.toString(), substring = true)
+                            assertTextContains(episode.date.year.toString(), substring = true)
+                        } ?: run {
                             assert(hasText(context.getString(R.string.lists_entry_next_episode_separator)).not())
                         }
                     }
@@ -256,7 +260,7 @@ internal class MediaListComponentTest : ComposeTest() {
     @Test
     fun `a manga item should paint the correct data`() = runTest {
         val addPlusOne = mockk<(Int) -> Unit>()
-        val editEntry = mockk<(Int) -> Unit>()
+        val editEntry = mockk<(MediaListItem) -> Unit>()
         val mediaDetails = mockk<(Int) -> Unit>()
 
         val list = persistentListOf<MediaListItem.MangaListItem>()

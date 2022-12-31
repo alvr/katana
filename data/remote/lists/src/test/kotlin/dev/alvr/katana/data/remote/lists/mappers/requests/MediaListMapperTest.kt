@@ -97,8 +97,8 @@ internal class MediaListMapperTest : TestBase() {
             private = Optional.Present(false),
             notes = Optional.Present(String.empty),
             hiddenFromStatusLists = Optional.Present(false),
-            startedAt = Optional.Absent,
-            completedAt = Optional.Absent,
+            startedAt = Optional.Present(null),
+            completedAt = Optional.Present(null),
         )
     }
 }

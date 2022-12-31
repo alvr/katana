@@ -14,9 +14,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.common.core.zero
+import dev.alvr.katana.ui.base.OnNavValue
 import dev.alvr.katana.ui.base.components.KatanaEmptyState
 import dev.alvr.katana.ui.base.components.KatanaErrorState
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
@@ -51,22 +51,14 @@ internal fun ListScreen(
     val lazyGridState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
 
-    changeListResult.onNavResult { result ->
-        when (result) {
-            NavResult.Canceled -> Unit
-            is NavResult.Value -> vm.selectList(result.value).also {
-                coroutineScope.launch { lazyGridState.scrollToItem(Int.zero) }
-                katanaScaffoldState.resetToolbar()
-            }
+    changeListResult.OnNavValue { list ->
+        vm.selectList(list).also {
+            coroutineScope.launch { lazyGridState.scrollToItem(Int.zero) }
+            katanaScaffoldState.resetToolbar()
         }
     }
 
-    editEntryResult.onNavResult { result ->
-        when (result) {
-            NavResult.Canceled -> Unit
-            is NavResult.Value -> vm.updateEntry(result.value)
-        }
-    }
+    editEntryResult.OnNavValue { item -> vm.updateEntry(item) }
 
     val searchPlaceholder = when (vm) {
         is AnimeListsViewModel -> R.string.lists_toolbar_search_anime_placeholder

@@ -3,6 +3,8 @@ package dev.alvr.katana.ui.base
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
+import com.ramcosta.composedestinations.result.NavResult
+import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.common.core.noData
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -32,3 +34,13 @@ fun LocalTime?.format(formatter: KatanaDateFormatter) =
 @Composable
 fun LocalDateTime?.format(formatter: KatanaDateFormatter) =
     formatter().let { this?.format(it) ?: String.noData }
+
+@Composable
+fun <R> ResultRecipient<*, R>.OnNavValue(onResult: (R) -> Unit) {
+    onNavResult { result ->
+        when (result) {
+            NavResult.Canceled -> Unit
+            is NavResult.Value -> onResult(result.value)
+        }
+    }
+}

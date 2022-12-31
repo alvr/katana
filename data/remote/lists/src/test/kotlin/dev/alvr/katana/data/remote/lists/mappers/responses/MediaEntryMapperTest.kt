@@ -30,6 +30,8 @@ internal class MediaEntryMapperTest : TestBase() {
                 format = format,
                 coverImage = null,
                 nextAiringEpisode = null,
+                startDate = null,
+                endDate = null,
             ).mediaEntry().format
         }
 
@@ -50,6 +52,8 @@ internal class MediaEntryMapperTest : TestBase() {
             format = format,
             coverImage = null,
             nextAiringEpisode = null,
+            startDate = null,
+            endDate = null,
         ).mediaEntry().format
 
         // THEN

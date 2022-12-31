@@ -13,7 +13,7 @@ internal fun MediaEntryFragment?.mediaEntry() = let { entry ->
         coverImage = entry?.coverImage?.large.orEmpty(),
         format = entry?.format.toFormat(),
         startDate = entry?.startDate?.let { dateMapper(it.day, it.month, it.year) }.orNow(),
-        endDate = entry?.endDate?.let { dateMapper(it.day, it.month, it.year) }.orNow()
+        endDate = entry?.endDate?.let { dateMapper(it.day, it.month, it.year) },
     )
 }
 

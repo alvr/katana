@@ -28,7 +28,7 @@ internal inline fun <reified T : MediaEntry> randomCollection() = buildList {
                                         LocalDateTime::class to Arb.localDateTime(),
                                     ),
                                 ).next(),
-                                entry = Arb.bind<T>().next(),
+                                entry = Arb.bind<T>(mapOf(LocalDate::class to Arb.localDate())).next(),
                             ),
                         )
                     }
