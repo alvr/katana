@@ -13,5 +13,5 @@ object KatanaConfiguration {
 
     val UseJavaVersion = JavaVersion.VERSION_11
     const val JvmTarget = "11"
-    const val KotlinVersion = "1.7"
+    const val KotlinVersion = "1.8"
 }
