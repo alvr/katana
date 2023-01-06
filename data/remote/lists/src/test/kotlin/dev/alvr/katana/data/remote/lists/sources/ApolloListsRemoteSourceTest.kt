@@ -36,6 +36,7 @@ import io.kotest.matchers.string.shouldBeEmpty
 import io.kotest.matchers.types.shouldBeTypeOf
 import io.kotest.matchers.types.shouldNotBeTypeOf
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -93,6 +94,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                 awaitItem().shouldBeRight().lists.shouldBeEmpty()
                 awaitComplete()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
 
         @Test
@@ -147,6 +149,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                     }
                 awaitComplete()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
 
         @Test
@@ -224,6 +227,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                 }
                 awaitComplete()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
 
         @Test
@@ -320,6 +324,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                 }
                 awaitComplete()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
 
         @Test
@@ -336,6 +341,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                 awaitItem().shouldBeRight().lists.shouldBeEmpty()
                 awaitComplete()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
 
         @Test
@@ -349,6 +355,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                 cancelAndIgnoreRemainingEvents()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
     }
 
@@ -376,6 +383,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                 awaitItem().shouldBeRight().lists.shouldBeEmpty()
                 awaitComplete()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
 
         @Test
@@ -430,6 +438,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                     }
                 awaitComplete()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
 
         @Test
@@ -508,10 +517,12 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                 }
                 awaitComplete()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
 
         @Test
         @DisplayName("WHEN the entry has values THEN the result entry should have the default values")
+        @Suppress("LongMethod")
         fun `the entry has values`() = runTest {
             // GIVEN
             val query = MediaListCollectionQuery.Data {
@@ -598,6 +609,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                 }
                 awaitComplete()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
 
         @Test
@@ -614,6 +626,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                 awaitItem().shouldBeRight().lists.shouldBeEmpty()
                 awaitComplete()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
 
         @Test
@@ -627,6 +640,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                 cancelAndIgnoreRemainingEvents()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
     }
 }

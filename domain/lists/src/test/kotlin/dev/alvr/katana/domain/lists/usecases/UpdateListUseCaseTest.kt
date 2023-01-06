@@ -103,6 +103,7 @@ internal class UpdateListUseCaseTest : TestBase() {
             result.shouldBeLeft(failure)
             coVerify(exactly = 1) { repo.updateList(mediaList) }
             coVerify(exactly = 1) { useCase.invoke(mediaList) }
+            verify(exactly = 0) { useCase.sync(mediaList) }
         }
 
         @ArgumentsSource(FailuresArguments::class)
@@ -117,6 +118,7 @@ internal class UpdateListUseCaseTest : TestBase() {
             // THEN
             result.shouldBeLeft(failure)
             coVerify(exactly = 1) { repo.updateList(mediaList) }
+            coVerify(exactly = 1) { useCase.invoke(mediaList) }
             verify(exactly = 1) { useCase.sync(mediaList) }
         }
     }

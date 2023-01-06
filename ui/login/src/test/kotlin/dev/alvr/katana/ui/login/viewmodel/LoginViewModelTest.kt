@@ -10,12 +10,14 @@ import dev.alvr.katana.domain.session.models.AnilistToken
 import dev.alvr.katana.domain.session.usecases.SaveSessionUseCase
 import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
+import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK_TOKEN
 import dev.alvr.katana.ui.login.R
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EmptySource
@@ -50,9 +52,7 @@ internal class LoginViewModelTest : TestBase() {
     @EmptySource
     fun `saving a token that is invalid`(token: String?) = runTest {
         // GIVEN
-        every { stateHandle.get<String>(any()) } returns token
-        coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
-        coEitherJustRun { saveUserId() }
+        every { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) } returns token
 
         // WHEN
         viewModel.runOnCreate()
@@ -61,6 +61,7 @@ internal class LoginViewModelTest : TestBase() {
         }
 
         // THEN
+        verify(exactly = 1) { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) }
         coVerify(exactly = 0) { saveAnilistToken(AnilistToken(any())) }
         coVerify(exactly = 0) { saveUserId() }
     }
@@ -75,7 +76,7 @@ internal class LoginViewModelTest : TestBase() {
     @ValueSource(strings = [TOKEN_WITH_PARAMS, CLEAR_TOKEN])
     fun `saving a token that is valid`(token: String) = runTest {
         // GIVEN
-        every { stateHandle.get<String>(any()) } returns token
+        every { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) } returns token
         coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
         coEitherJustRun { saveUserId() }
 
@@ -89,6 +90,7 @@ internal class LoginViewModelTest : TestBase() {
         }
 
         // THEN
+        verify(exactly = 1) { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) }
         coVerify(exactly = 1) { saveAnilistToken(AnilistToken(CLEAR_TOKEN)) }
         coVerify(exactly = 1) { saveUserId() }
     }
@@ -103,9 +105,8 @@ internal class LoginViewModelTest : TestBase() {
     @ValueSource(strings = [TOKEN_WITH_PARAMS, CLEAR_TOKEN])
     fun `saving a token that is valid AND an error occurs when saving the token`(token: String) = runTest {
         // GIVEN
-        every { stateHandle.get<String>(any()) } returns token
+        every { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) } returns token
         coEvery { saveAnilistToken(AnilistToken(any())) } returns SessionFailure.SavingSession.left()
-        coEitherJustRun { saveUserId() }
 
         // WHEN
         viewModel.runOnCreate()
@@ -117,6 +118,7 @@ internal class LoginViewModelTest : TestBase() {
         }
 
         // THEN
+        verify(exactly = 1) { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) }
         coVerify(exactly = 1) { saveAnilistToken(AnilistToken(CLEAR_TOKEN)) }
         coVerify(exactly = 0) { saveUserId() }
     }
@@ -131,7 +133,7 @@ internal class LoginViewModelTest : TestBase() {
     @ValueSource(strings = [TOKEN_WITH_PARAMS, CLEAR_TOKEN])
     fun `saving a token that is valid AND an error occurs when saving the userId`(token: String) = runTest {
         // GIVEN
-        every { stateHandle.get<String>(any()) } returns token
+        every { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) } returns token
         coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
         coEvery { saveUserId() } returns UserFailure.SavingUser.left()
 
@@ -145,6 +147,7 @@ internal class LoginViewModelTest : TestBase() {
         }
 
         // THEN
+        verify(exactly = 1) { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) }
         coVerify(exactly = 1) { saveAnilistToken(AnilistToken(CLEAR_TOKEN)) }
         coVerify(exactly = 1) { saveUserId() }
     }

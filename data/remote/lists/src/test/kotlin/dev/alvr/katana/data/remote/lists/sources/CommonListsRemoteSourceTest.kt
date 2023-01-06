@@ -24,6 +24,7 @@ import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.MediaListEntriesMutation
 import dev.alvr.katana.data.remote.lists.enqueueResponse
+import dev.alvr.katana.data.remote.lists.mappers.requests.toMutation
 import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
@@ -40,9 +41,10 @@ import io.kotest.property.arbitrary.localDateTime
 import io.kotest.property.arbitrary.next
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.stream.Stream
@@ -63,7 +65,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource
 @ApolloExperimental
 @ExperimentalCoroutinesApi
 internal class CommonListsRemoteSourceTest : TestBase() {
-    private val apolloBuilder = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport())
+    private val client = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport()).build()
 
     private val mediaList = Arb.bind<MediaList>(
         mapOf(
@@ -76,15 +78,11 @@ internal class CommonListsRemoteSourceTest : TestBase() {
     private lateinit var userIdManager: UserIdManager
     @MockK
     private lateinit var reloadInterceptor: ReloadInterceptor
-    @SpyK
-    private var client = apolloBuilder.build()
 
     private lateinit var source: CommonListsRemoteSource
 
     override suspend fun beforeEach() {
         source = CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
-
-        coEvery { userIdManager.getId() } returns 37_384.right()
     }
 
     @Nested
@@ -92,8 +90,9 @@ internal class CommonListsRemoteSourceTest : TestBase() {
     inner class Querying {
         @ArgumentsSource(QueryProvider::class)
         @ParameterizedTest(name = "AND the data is {0} THEN the collection should be empty for {1}")
-        fun `the data is null`(data: MediaListCollectionQuery.Data?, type: MediaType) = runTest {
+        fun `the server responded with data or not`(data: MediaListCollectionQuery.Data?, type: MediaType) = runTest {
             // GIVEN
+            coEvery { userIdManager.getId() } returns 37_384.right()
             val response = ApolloResponse.Builder(
                 operation = mockk<MediaListCollectionQuery>(),
                 requestUuid = uuid4(),
@@ -109,12 +108,14 @@ internal class CommonListsRemoteSourceTest : TestBase() {
                 awaitItem().shouldBeRight(MediaCollection(emptyList()))
                 cancelAndIgnoreRemainingEvents()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
 
         @ArgumentsSource(QueryProvider::class)
         @ParameterizedTest(name = "AND a error occurs THEN the collection should be empty for {1}")
         fun `a HTTP error occurs`(data: MediaListCollectionQuery.Data?, type: MediaType) = runTest {
             // GIVEN
+            coEvery { userIdManager.getId() } returns 37_384.right()
             val response = ApolloResponse.Builder(
                 operation = mockk<MediaListCollectionQuery>(),
                 requestUuid = uuid4(),
@@ -130,39 +131,13 @@ internal class CommonListsRemoteSourceTest : TestBase() {
                 awaitItem().shouldBeRight(MediaCollection(emptyList()))
                 cancelAndIgnoreRemainingEvents()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
     }
 
     @Nested
     @DisplayName("WHEN updating the list")
     inner class Updating {
-        @Test
-        @DisplayName("AND is successful THEN it just execute the MediaListEntriesMutation")
-        fun `is successful`() = runTest {
-            // GIVEN
-            coEvery { client.mutation(any<MediaListEntriesMutation>()).execute() } returns mockk()
-
-            // WHEN
-            val result = source.updateList(mediaList)
-
-            // THEN
-            result.shouldBeRight()
-            coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
-        }
-
-        @Test
-        @DisplayName("AND the server returns no data THEN it should be a right")
-        fun `the server returns no data`() = runTest {
-            // GIVEN
-            client.enqueueTestResponse(mockk<MediaListEntriesMutation>())
-
-            // WHEN
-            val result = source.updateList(mediaList)
-
-            // THEN
-            result.shouldBeRight()
-        }
-
         @Test
         @DisplayName("AND the server returns some data THEN it should be a right")
         fun `the server returns some data`() = runTest {
@@ -180,14 +155,15 @@ internal class CommonListsRemoteSourceTest : TestBase() {
         @ParameterizedTest(name = "AND a HTTP error occurs THEN it should return a left of {0}")
         fun `a HTTP error occurs`(input: Failure, exception: Exception) = runTest {
             // GIVEN
-            coEvery { client.mutation(any<MediaListEntriesMutation>()).execute() } throws exception
+            mockkStatic(MediaList::toMutation)
+            every { any<MediaList>().toMutation() } throws exception
+            client.enqueueTestResponse(mockk<MediaListEntriesMutation>(), mockk())
 
             // WHEN
             val result = source.updateList(mediaList)
 
             // THEN
             result.shouldBeLeft(input)
-            coVerify(exactly = 1) { client.mutation(any<MediaListEntriesMutation>()).execute() }
         }
     }
 
@@ -220,6 +196,7 @@ internal class CommonListsRemoteSourceTest : TestBase() {
         @ParameterizedTest(name = "AND a HTTP error occurs THEN it should return a left of {0}")
         fun `a HTTP error occurs`(type: MediaType, action: MockResponse.Builder.() -> Unit) = runTest {
             // GIVEN
+            coEvery { userIdManager.getId() } returns 37_384.right()
             mockServer.enqueueResponse(action)
 
             // WHEN
@@ -230,6 +207,7 @@ internal class CommonListsRemoteSourceTest : TestBase() {
                 awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                 cancelAndIgnoreRemainingEvents()
             }
+            coVerify(exactly = 1) { userIdManager.getId() }
         }
     }
 

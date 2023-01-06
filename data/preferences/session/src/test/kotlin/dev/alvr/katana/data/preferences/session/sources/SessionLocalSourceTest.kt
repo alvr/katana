@@ -3,7 +3,7 @@ package dev.alvr.katana.data.preferences.session.sources
 import androidx.datastore.core.DataStore
 import app.cash.turbine.test
 import dev.alvr.katana.common.tests.TestBase
-import dev.alvr.katana.common.tests.valueMockk
+import dev.alvr.katana.data.preferences.session.anilistToken
 import dev.alvr.katana.data.preferences.session.models.Session
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.session.failures.SessionFailure
@@ -25,7 +25,6 @@ import io.mockk.verify
 import java.io.IOException
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -94,9 +93,6 @@ internal class SessionLocalSourceTest : TestBase() {
         @DisplayName("WHEN deleting the saved token THEN the token should be none")
         fun `deleting the saved token`() = runTest {
             // GIVEN
-            every { store.data } returns flowOf(
-                Session(anilistToken = null, isSessionActive = true),
-            )
             coJustRun { store.updateData(any()) }
 
             // WHEN
@@ -104,17 +100,14 @@ internal class SessionLocalSourceTest : TestBase() {
 
             // THEN
             result.shouldBeRight()
-            source.getAnilistToken().shouldBeNone()
-            source.sessionActive.first().shouldBeRight(false)
+            verify(exactly = 0) { store.data }
+            coVerify(exactly = 1) { store.updateData(any()) }
         }
 
         @Test
         @DisplayName("WHEN clearing the session THEN the session should be valid")
         fun `clearing the session`() = runTest {
             // GIVEN
-            every { store.data } returns flowOf(
-                Session(anilistToken = null, isSessionActive = false),
-            )
             coJustRun { store.updateData(any()) }
 
             // WHEN
@@ -122,7 +115,8 @@ internal class SessionLocalSourceTest : TestBase() {
 
             // THEN
             result.shouldBeRight()
-            source.sessionActive.first().shouldBeRight(true)
+            verify(exactly = 0) { store.data }
+            coVerify(exactly = 1) { store.updateData(any()) }
         }
 
         @Test
@@ -159,15 +153,14 @@ internal class SessionLocalSourceTest : TestBase() {
         )
         fun `the clearing the session fails AND it's a common Exception`() = runTest {
             // GIVEN
-            val update = mockk<(Session) -> Session>()
-            every { update(any()) } throws Exception()
-            coJustRun { store.updateData(update) }
+            coEvery { store.updateData(any()) } throws Exception()
 
             // WHEN
             val result = source.clearActiveSession()
 
             // THEN
             result.shouldBeLeft(Failure.Unknown)
+            coVerify(exactly = 1) { store.updateData(any()) }
         }
 
         @Test
@@ -187,6 +180,7 @@ internal class SessionLocalSourceTest : TestBase() {
 
             // THEN
             result.shouldBeLeft(SessionFailure.ClearingSession)
+            coVerify(exactly = 1) { store.updateData(any()) }
         }
 
         @Test
@@ -199,15 +193,14 @@ internal class SessionLocalSourceTest : TestBase() {
         )
         fun `it's the deleting token AND it's a common Exception`() = runTest {
             // GIVEN
-            val update = mockk<(Session) -> Session>()
-            every { update(any()) } throws Exception()
-            coJustRun { store.updateData(update) }
+            coEvery { store.updateData(any()) } throws Exception()
 
             // WHEN
             val result = source.deleteAnilistToken()
 
             // THEN
             result.shouldBeLeft(Failure.Unknown)
+            coVerify(exactly = 1) { store.updateData(any()) }
         }
 
         @Test
@@ -227,21 +220,21 @@ internal class SessionLocalSourceTest : TestBase() {
 
             // THEN
             result.shouldBeLeft(SessionFailure.DeletingToken)
+            coVerify(exactly = 1) { store.updateData(any()) }
         }
 
         @Test
         @DisplayName("WHEN it's the saving token AND it's a common Exception THEN should be a left of Failure.Unknown")
         fun `it's the saving token AND it's a common Exception`() = runTest {
             // GIVEN
-            val update = mockk<(Session) -> Session>()
-            every { update(any()) } throws Exception()
-            coJustRun { store.updateData(update) }
+            coEvery { store.updateData(any()) } throws Exception()
 
             // WHEN
-            val result = source.saveSession(valueMockk())
+            val result = source.saveSession(anilistToken)
 
             // THEN
             result.shouldBeLeft(Failure.Unknown)
+            coVerify(exactly = 1) { store.updateData(any()) }
         }
 
         @Test
@@ -257,10 +250,11 @@ internal class SessionLocalSourceTest : TestBase() {
             coEvery { store.updateData(any()) } throws IOException()
 
             // WHEN
-            val result = source.saveSession(valueMockk())
+            val result = source.saveSession(anilistToken)
 
             // THEN
             result.shouldBeLeft(SessionFailure.SavingSession)
+            coVerify(exactly = 1) { store.updateData(any()) }
         }
 
         @Test
@@ -272,10 +266,13 @@ internal class SessionLocalSourceTest : TestBase() {
 
             // WHEN
             source.sessionActive.test(5.seconds) {
-                // THEN
                 awaitItem().shouldBeLeft(SessionFailure.CheckingActiveSession)
                 cancelAndIgnoreRemainingEvents()
             }
+
+            // THEN
+            verify(exactly = 1) { session.anilistToken }
+            verify(exactly = 1) { store.data }
         }
 
         @Test
@@ -290,6 +287,8 @@ internal class SessionLocalSourceTest : TestBase() {
 
             // THEN
             result.shouldBeNone()
+            verify(exactly = 1) { session.anilistToken }
+            verify(exactly = 1) { store.data }
         }
     }
 

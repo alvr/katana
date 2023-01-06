@@ -3,10 +3,9 @@ package dev.alvr.katana.domain.session.usecases
 import arrow.core.none
 import arrow.core.some
 import dev.alvr.katana.common.tests.TestBase
-import dev.alvr.katana.common.tests.valueMockk
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
-import dev.alvr.katana.domain.session.models.AnilistToken
+import dev.alvr.katana.domain.session.anilistToken
 import dev.alvr.katana.domain.session.repositories.SessionRepository
 import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.assertions.arrow.core.shouldBeSome
@@ -27,8 +26,6 @@ internal class GetAnilistTokenUseCaseTest : TestBase() {
 
     private lateinit var useCase: GetAnilistTokenUseCase
 
-    private val token = valueMockk<AnilistToken>()
-
     override suspend fun beforeEach() {
         useCase = spyk(GetAnilistTokenUseCase(repo))
     }
@@ -40,13 +37,13 @@ internal class GetAnilistTokenUseCaseTest : TestBase() {
         @DisplayName("WHEN successful getAnilistToken THEN invoke should be some")
         fun `successful getAnilistToken (invoke)`() = runTest {
             // GIVEN
-            coEvery { repo.getAnilistToken() } returns token.some()
+            coEvery { repo.getAnilistToken() } returns anilistToken.some()
 
             // WHEN
             val result = useCase()
 
             // THEN
-            result.shouldBeSome(token)
+            result.shouldBeSome(anilistToken)
             coVerify(exactly = 1) { repo.getAnilistToken() }
             coVerify(exactly = 1) { useCase.invoke(Unit) }
             verify(exactly = 0) { useCase.sync(Unit) }
@@ -56,13 +53,13 @@ internal class GetAnilistTokenUseCaseTest : TestBase() {
         @DisplayName("WHEN successful deleteAnilistToken THEN sync should be some")
         fun `successful deleteAnilistToken (sync)`() = runTest {
             // GIVEN
-            coEvery { repo.getAnilistToken() } returns token.some()
+            coEvery { repo.getAnilistToken() } returns anilistToken.some()
 
             // WHEN
             val result = useCase.sync()
 
             // THEN
-            result.shouldBeSome(token)
+            result.shouldBeSome(anilistToken)
             coVerify(exactly = 1) { repo.getAnilistToken() }
             coVerify(exactly = 1) { useCase.invoke(Unit) }
             verify(exactly = 1) { useCase.sync(Unit) }

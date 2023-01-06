@@ -81,8 +81,8 @@ internal fun Project.configureCompose(commonExtension: CommonExtension<*, *, *, 
     }
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + buildComposeParameters()
+        compilerOptions {
+            freeCompilerArgs.set(freeCompilerArgs.get() + buildComposeParameters())
         }
     }
 }

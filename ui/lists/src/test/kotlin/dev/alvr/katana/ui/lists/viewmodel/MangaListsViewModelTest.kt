@@ -17,6 +17,7 @@ import dev.alvr.katana.domain.lists.usecases.ObserveMangaListUseCase
 import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import io.kotest.assertions.throwables.shouldThrowExactlyUnit
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.mockk.Ordering
@@ -25,7 +26,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.SpyK
-import io.mockk.spyk
 import io.mockk.verify
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -53,9 +53,8 @@ internal class MangaListsViewModelTest : TestBase() {
     private lateinit var observeManga: ObserveMangaListUseCase
     @MockK
     private lateinit var updateList: UpdateListUseCase
-
     @SpyK
-    private var stateHandle = spyk(SavedStateHandle())
+    private var stateHandle = SavedStateHandle()
 
     private lateinit var viewModel:
         SuspendingTestContainerHost<ListState<MediaListItem.MangaListItem>, Nothing, MangaListsViewModel>
@@ -111,6 +110,15 @@ internal class MangaListsViewModelTest : TestBase() {
                 viewModel.assert(MangaState()) {
                     states(*initialState)
                 }
+
+                verify(exactly = 1) { observeManga() }
+                verify(exactly = 1) { observeManga.flow }
+                verify(ordering = Ordering.ORDERED) {
+                    stateHandle["listNames"] = emptyArray<String>()
+                    stateHandle["collection"] = emptyMap<String, List<MediaListItem>>()
+
+                    stateHandle.get<String>("collection")
+                }
             }
         }
 
@@ -128,18 +136,168 @@ internal class MangaListsViewModelTest : TestBase() {
                 states(*initialStateWithLists)
             }
 
-            coVerify(exactly = 1) { observeManga() }
+            verify(exactly = 1) { observeManga() }
             verify(exactly = 1) { observeManga.flow }
             verify(ordering = Ordering.ORDERED) {
                 stateHandle["listNames"] = arrayOf("MyCustomMangaList", "MyCustomMangaList2")
-
                 stateHandle["collection"] = mapOf(
                     "MyCustomMangaList" to listOf(mangaListItem1),
                     "MyCustomMangaList2" to listOf(mangaListItem2),
                 )
+
+                stateHandle.get<String>("collection")
             }
         }
 
+        @Test
+        @DisplayName(
+            """
+            AND the manga collection has entries
+            AND getting the listNames
+            THEN the list should contain one element
+            """,
+        )
+        fun `the manga collection has entries AND getting the listNames`() = runTest {
+            // GIVEN
+            mockMangaFlow()
+
+            // WHEN
+            viewModel.runOnCreate()
+            viewModel.testIntent {
+                listNames
+                    .shouldHaveSize(2)
+                    .shouldContainInOrder("MyCustomMangaList", "MyCustomMangaList2")
+            }
+
+            // THEN
+            viewModel.assert(MangaState()) { states(*initialStateWithLists) }
+            verify(exactly = 1) { observeManga() }
+            verify(exactly = 1) { observeManga.flow }
+            verify(ordering = Ordering.ORDERED) {
+                stateHandle["listNames"] = arrayOf("MyCustomMangaList", "MyCustomMangaList2")
+                stateHandle["collection"] = mapOf(
+                    "MyCustomMangaList" to listOf(mangaListItem1),
+                    "MyCustomMangaList2" to listOf(mangaListItem2),
+                )
+
+                stateHandle.get<String>("collection")
+                stateHandle.get<Array<String>>("listNames")
+            }
+        }
+
+        @Test
+        @DisplayName("AND something went wrong collecting THEN update it state with isError = true")
+        fun `something went wrong collecting`() = runTest {
+            // GIVEN
+            every { observeManga.flow } returns flowOf(ListsFailure.GetMediaCollection.left())
+            coJustRun { observeManga() }
+
+            // WHEN
+            viewModel.runOnCreate()
+
+            // THEN
+            viewModel.assert(MangaState()) {
+                states(
+                    { copy(isLoading = true) },
+                    { copy(isError = true, isLoading = false, isEmpty = true) },
+                )
+            }
+
+            verify(exactly = 1) { observeManga() }
+            verify(exactly = 1) { observeManga.flow }
+        }
+
+        @Test
+        @DisplayName("AND the array of manga list names is non-existent THEN the array should be empty")
+        fun `the array of manga list names is non-existent`() = runTest {
+            // GIVEN
+            every { stateHandle.get<Array<String>>("listNames") } returns null
+
+            // WHEN
+            viewModel.testIntent { listNames.shouldBeEmpty() }
+
+            // THEN
+            verify(exactly = 1) { stateHandle.get<Array<String>>("listNames") }
+        }
+    }
+
+    @Nested
+    @DisplayName("WHEN adding a +1 to an entry")
+    inner class PlusOne {
+        @Test
+        @DisplayName("AND is successful THEN it should call the updateList with the progress incremented by 1")
+        fun `is successful`() = runTest {
+            // GIVEN
+            mockMangaFlow()
+            coEitherJustRun { updateList(any()) }
+
+            // WHEN
+            viewModel.runOnCreate()
+            viewModel.testIntent { addPlusOne(mangaListItem1.entryId) }
+
+            // THEN
+            verify(exactly = 1) { observeManga() }
+            verify(exactly = 1) { observeManga.flow }
+            verify(ordering = Ordering.ORDERED) {
+                stateHandle["listNames"] = arrayOf("MyCustomMangaList", "MyCustomMangaList2")
+                stateHandle["collection"] = mapOf(
+                    "MyCustomMangaList" to listOf(mangaListItem1),
+                    "MyCustomMangaList2" to listOf(mangaListItem2),
+                )
+
+                stateHandle.get<String>("collection")
+            }
+
+            coVerify(exactly = 1) {
+                updateList(
+                    MediaList(
+                        id = Int.zero,
+                        score = Double.zero,
+                        progress = 234,
+                        progressVolumes = Int.zero,
+                        repeat = Int.zero,
+                        private = false,
+                        notes = String.empty,
+                        hiddenFromStatusLists = false,
+                        startedAt = LocalDate.MAX,
+                        completedAt = LocalDate.MAX,
+                        updatedAt = LocalDateTime.MAX,
+                    ),
+                )
+            }
+        }
+
+        @Test
+        @DisplayName("AND the element is not found THEN it should throw `NoSuchElementException`")
+        fun `the element is not found`() = runTest {
+            // GIVEN
+            mockMangaFlow()
+
+            // WHEN
+            viewModel.runOnCreate()
+            viewModel.testIntent {
+                // THEN
+                shouldThrowExactlyUnit<NoSuchElementException> { addPlusOne(234) }
+            }
+
+            // THEN
+            verify(exactly = 1) { observeManga() }
+            verify(exactly = 1) { observeManga.flow }
+            verify(ordering = Ordering.ORDERED) {
+                stateHandle["listNames"] = arrayOf("MyCustomMangaList", "MyCustomMangaList2")
+                stateHandle["collection"] = mapOf(
+                    "MyCustomMangaList" to listOf(mangaListItem1),
+                    "MyCustomMangaList2" to listOf(mangaListItem2),
+                )
+
+                stateHandle.get<String>("collection")
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("WHEN searching")
+    inner class Searching {
         @Test
         @DisplayName(
             """
@@ -169,11 +327,10 @@ internal class MangaListsViewModelTest : TestBase() {
                 )
             }
 
-            coVerify(exactly = 1) { observeManga() }
+            verify(exactly = 1) { observeManga() }
             verify(exactly = 1) { observeManga.flow }
             verify(ordering = Ordering.ORDERED) {
                 stateHandle["listNames"] = arrayOf("MyCustomMangaList", "MyCustomMangaList2")
-
                 stateHandle["collection"] = mapOf(
                     "MyCustomMangaList" to listOf(mangaListItem1),
                     "MyCustomMangaList2" to listOf(mangaListItem2),
@@ -185,138 +342,92 @@ internal class MangaListsViewModelTest : TestBase() {
         }
 
         @Test
-        @DisplayName(
-            """
-            AND the manga collection has entries
-            AND getting the listNames
-            THEN the list should contain one element
-            """,
-        )
-        fun `the manga collection has entries AND getting the listNames`() = runTest {
+        @DisplayName("AND try to select a non-existent manga list THEN the state should be the same")
+        fun `try to select a non-existent manga list`() = runTest {
             // GIVEN
             mockMangaFlow()
 
             // WHEN
             viewModel.runOnCreate()
-            viewModel.testIntent {
-                listNames
-                    .shouldHaveSize(2)
-                    .shouldContainInOrder("MyCustomMangaList", "MyCustomMangaList2")
-            }
+            viewModel.testIntent { selectList("NonExistent Manga List") }
 
             // THEN
-            viewModel.assert(MangaState()) { states(*initialStateWithLists) }
-            coVerify(exactly = 1) { observeManga() }
+            viewModel.assert(MangaState()) {
+                states(
+                    *initialStateWithLists + emptyArray(), // No more state updates
+                )
+            }
+
+            verify(exactly = 1) { observeManga() }
             verify(exactly = 1) { observeManga.flow }
             verify(ordering = Ordering.ORDERED) {
                 stateHandle["listNames"] = arrayOf("MyCustomMangaList", "MyCustomMangaList2")
-
                 stateHandle["collection"] = mapOf(
                     "MyCustomMangaList" to listOf(mangaListItem1),
                     "MyCustomMangaList2" to listOf(mangaListItem2),
                 )
             }
-            verify(exactly = 1) {
-                stateHandle.get<Array<String>>("listNames")
+            verify(exactly = 2) {
+                stateHandle.get<Collection<MediaListItem.MangaListItem>>("collection")
             }
         }
 
         @Test
-        @DisplayName("AND something went wrong collecting THEN update it state with isError = true")
-        fun `something went wrong collecting`() = runTest {
+        @DisplayName("AND the collection of manga is non-existent THEN the state should be the same")
+        fun `the collection of manga is non-existent`() = runTest {
             // GIVEN
-            every { observeManga.flow } returns flowOf(ListsFailure.GetMediaCollection.left())
-            coJustRun { observeManga() }
+            every { stateHandle.get<Collection<MediaListItem.MangaListItem>>(any()) } returns null
+
+            // WHEN
+            viewModel.testIntent { selectList("MyCustomMangaList") }
+
+            // THEN
+            viewModel.assert(MangaState())
+
+            verify(exactly = 1) {
+                stateHandle.get<Collection<MediaListItem.MangaListItem>>("collection")
+            }
+        }
+
+        @ArgumentsSource(SearchArguments::class)
+        @ParameterizedTest(name = "AND searching for {0} THEN the result should be {2}")
+        fun `searching an entry`(
+            text: String,
+            empty: Boolean,
+            result: ImmutableList<MediaListItem.MangaListItem>,
+        ) = runTest {
+            // GIVEN
+            mockMangaFlow()
 
             // WHEN
             viewModel.runOnCreate()
+            viewModel.testIntent { search(text) }
 
             // THEN
             viewModel.assert(MangaState()) {
                 states(
-                    { copy(isLoading = true) },
-                    { copy(isError = true, isLoading = false, isEmpty = true) },
+                    *initialStateWithLists,
+                    {
+                        copy(
+                            isLoading = false,
+                            isEmpty = empty,
+                            items = result,
+                        )
+                    },
                 )
             }
-        }
-    }
 
-    @Nested
-    @DisplayName("WHEN adding a +1 to an entry")
-    inner class PlusOne {
-        @Test
-        @DisplayName("AND is successful THEN it should call the updateList with the progress incremented by 1")
-        fun `is successful`() = runTest {
-            // GIVEN
-            mockMangaFlow()
-            coEitherJustRun { updateList(any()) }
-
-            // WHEN
-            viewModel.runOnCreate()
-            viewModel.testIntent { addPlusOne(mangaListItem1.entryId) }
-
-            // THEN
-            coVerify(exactly = 1) {
-                updateList(
-                    MediaList(
-                        id = Int.zero,
-                        score = Double.zero,
-                        progress = 234,
-                        progressVolumes = Int.zero,
-                        repeat = Int.zero,
-                        private = false,
-                        notes = String.empty,
-                        hiddenFromStatusLists = false,
-                        startedAt = LocalDate.MAX,
-                        completedAt = LocalDate.MAX,
-                        updatedAt = LocalDateTime.MAX,
-                    ),
+            verify(exactly = 1) { observeManga() }
+            verify(exactly = 1) { observeManga.flow }
+            verify(ordering = Ordering.ORDERED) {
+                stateHandle["listNames"] = arrayOf("MyCustomMangaList", "MyCustomMangaList2")
+                stateHandle["collection"] = mapOf(
+                    "MyCustomMangaList" to listOf(mangaListItem1),
+                    "MyCustomMangaList2" to listOf(mangaListItem2),
                 )
+
+                stateHandle.get<String>("collection")
             }
-        }
-
-        @Test
-        @DisplayName("AND the element is not found THEN it should throw `NoSuchElementException`")
-        fun `the element is not found`() = runTest {
-            // GIVEN
-            mockMangaFlow()
-            coEitherJustRun { updateList(any()) }
-
-            // WHEN
-            viewModel.runOnCreate()
-            viewModel.testIntent {
-                // THEN
-                shouldThrowExactlyUnit<NoSuchElementException> { addPlusOne(234) }
-            }
-        }
-    }
-
-    @ArgumentsSource(SearchArguments::class)
-    @ParameterizedTest(name = "WHEN searching for {0} THEN the result should be {2}")
-    fun `searching an entry`(
-        text: String,
-        empty: Boolean,
-        result: ImmutableList<MediaListItem.MangaListItem>,
-    ) = runTest {
-        // GIVEN
-        mockMangaFlow()
-
-        // WHEN
-        viewModel.runOnCreate()
-        viewModel.testIntent { search(text) }
-
-        // THEN
-        viewModel.assert(MangaState()) {
-            states(
-                *initialStateWithLists,
-                {
-                    copy(
-                        isLoading = false,
-                        isEmpty = empty,
-                        items = result,
-                    )
-                },
-            )
         }
     }
 

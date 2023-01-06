@@ -54,6 +54,7 @@ internal class SaveUserIdUseCaseTest : TestBase() {
             result.shouldBeRight()
             coVerify(exactly = 1) { repo.saveUserId() }
             coVerify(exactly = 1) { useCase.invoke() }
+            verify(exactly = 0) { useCase.sync() }
         }
 
         @Test
@@ -68,6 +69,7 @@ internal class SaveUserIdUseCaseTest : TestBase() {
             // THEN
             result.shouldBeRight()
             coVerify(exactly = 1) { repo.saveUserId() }
+            coVerify(exactly = 1) { useCase.invoke() }
             verify(exactly = 1) { useCase.sync() }
         }
     }
@@ -88,6 +90,7 @@ internal class SaveUserIdUseCaseTest : TestBase() {
             result.shouldBeLeft(failure)
             coVerify(exactly = 1) { repo.saveUserId() }
             coVerify(exactly = 1) { useCase.invoke() }
+            verify(exactly = 0) { useCase.sync() }
         }
 
         @ArgumentsSource(FailuresArguments::class)
@@ -102,6 +105,7 @@ internal class SaveUserIdUseCaseTest : TestBase() {
             // THEN
             result.shouldBeLeft(failure)
             coVerify(exactly = 1) { repo.saveUserId() }
+            coVerify(exactly = 1) { useCase.invoke() }
             verify(exactly = 1) { useCase.sync() }
         }
     }

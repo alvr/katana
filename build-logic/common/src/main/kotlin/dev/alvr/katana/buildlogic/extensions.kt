@@ -6,6 +6,7 @@ import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.TaskContainer
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JvmVendorSpec
@@ -13,7 +14,8 @@ import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -56,7 +58,14 @@ fun DependencyHandlerScope.desugaring(provider: Provider<*>) {
 fun ExtensionContainer.commonExtensions() {
     configure<JavaPluginExtension> {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(KatanaConfiguration.JvmTarget))
+            languageVersion.set(JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr))
+            vendor.set(JvmVendorSpec.AZUL)
+        }
+    }
+
+    configure<KotlinProjectExtension> {
+        jvmToolchain {
+            languageVersion.set(JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr))
             vendor.set(JvmVendorSpec.AZUL)
         }
     }
@@ -67,14 +76,17 @@ fun ExtensionContainer.commonExtensions() {
 }
 
 fun TaskContainer.commonTasks() {
+    withType<JavaCompile>().configureEach {
+        options.release.set(KatanaConfiguration.JvmTargetInt)
+    }
     withType<KotlinCompile>().configureEach {
-        kotlinOptions.configureKotlin()
+        compilerOptions.configureKotlin()
     }
 }
 
-private fun KotlinJvmOptions.configureKotlin() {
-    jvmTarget = KatanaConfiguration.JvmTarget
-    apiVersion = KatanaConfiguration.KotlinVersion
-    languageVersion = KatanaConfiguration.KotlinVersion
-    freeCompilerArgs = freeCompilerArgs + listOf("-opt-in=kotlin.RequiresOptIn")
+private fun KotlinJvmCompilerOptions.configureKotlin() {
+    jvmTarget.set(KatanaConfiguration.JvmTarget)
+    apiVersion.set(KatanaConfiguration.KotlinVersion)
+    languageVersion.set(KatanaConfiguration.KotlinVersion)
+    freeCompilerArgs.set(freeCompilerArgs.get() + listOf("-opt-in=kotlin.RequiresOptIn"))
 }

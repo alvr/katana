@@ -4,12 +4,9 @@ import arrow.core.Either
 import arrow.core.left
 import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.common.tests.coEitherJustRun
-import dev.alvr.katana.common.tests.valueMockk
 import dev.alvr.katana.domain.base.failures.Failure
-import dev.alvr.katana.domain.base.usecases.invoke
-import dev.alvr.katana.domain.base.usecases.sync
+import dev.alvr.katana.domain.session.anilistToken
 import dev.alvr.katana.domain.session.failures.SessionFailure
-import dev.alvr.katana.domain.session.models.AnilistToken
 import dev.alvr.katana.domain.session.repositories.SessionRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
@@ -36,8 +33,6 @@ internal class SaveAnilistTokenUseCaseTest : TestBase() {
 
     private lateinit var useCase: SaveSessionUseCase
 
-    private val token = valueMockk<AnilistToken>()
-
     override suspend fun beforeEach() {
         useCase = spyk(SaveSessionUseCase(repo))
     }
@@ -52,13 +47,13 @@ internal class SaveAnilistTokenUseCaseTest : TestBase() {
             coEitherJustRun { repo.saveSession(any()) }
 
             // WHEN
-            val result = useCase(token)
+            val result = useCase(anilistToken)
 
             // THEN
             result.shouldBeRight()
             coVerify(exactly = 1) { repo.saveSession(any()) }
-            coVerify(exactly = 1) { useCase.invoke(token) }
-            verify(exactly = 0) { useCase.sync(token) }
+            coVerify(exactly = 1) { useCase.invoke(anilistToken) }
+            verify(exactly = 0) { useCase.sync(anilistToken) }
         }
 
         @Test
@@ -68,13 +63,13 @@ internal class SaveAnilistTokenUseCaseTest : TestBase() {
             coEitherJustRun { repo.saveSession(any()) }
 
             // WHEN
-            val resultSync = useCase.sync(token)
+            val resultSync = useCase.sync(anilistToken)
 
             // THEN
             resultSync.shouldBeRight()
             coVerify(exactly = 1) { repo.saveSession(any()) }
-            coVerify(exactly = 1) { useCase.invoke(token) }
-            verify(exactly = 1) { useCase.sync(token) }
+            coVerify(exactly = 1) { useCase.invoke(anilistToken) }
+            verify(exactly = 1) { useCase.sync(anilistToken) }
         }
     }
 
@@ -88,13 +83,13 @@ internal class SaveAnilistTokenUseCaseTest : TestBase() {
             coEvery { repo.saveSession(any()) } returns expected
 
             // WHEN
-            val result = useCase(token)
+            val result = useCase(anilistToken)
 
             // THEN
             result.shouldBeLeft(failure)
             coVerify(exactly = 1) { repo.saveSession(any()) }
-            coVerify(exactly = 1) { useCase.invoke(token) }
-            verify(exactly = 0) { useCase.sync(token) }
+            coVerify(exactly = 1) { useCase.invoke(anilistToken) }
+            verify(exactly = 0) { useCase.sync(anilistToken) }
         }
 
         @ArgumentsSource(FailuresProvider::class)
@@ -104,13 +99,13 @@ internal class SaveAnilistTokenUseCaseTest : TestBase() {
             coEvery { repo.saveSession(any()) } returns expected
 
             // WHEN
-            val result = useCase.sync(token)
+            val result = useCase.sync(anilistToken)
 
             // THEN
             result.shouldBeLeft(failure)
             coVerify(exactly = 1) { repo.saveSession(any()) }
-            coVerify(exactly = 1) { useCase.invoke(token) }
-            verify(exactly = 1) { useCase.sync(token) }
+            coVerify(exactly = 1) { useCase.invoke(anilistToken) }
+            verify(exactly = 1) { useCase.sync(anilistToken) }
         }
     }
 

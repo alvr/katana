@@ -14,6 +14,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.spyk
+import io.mockk.verify
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -59,6 +60,7 @@ internal class ObserveActiveSessionUseCaseTest : TestBase() {
 
         coVerify(exactly = 1) { useCase.invoke(Unit) }
         coVerify(exactly = 1) { repo.sessionActive }
+        verify(exactly = 1) { useCase.flow }
     }
 
     @Test
@@ -78,5 +80,6 @@ internal class ObserveActiveSessionUseCaseTest : TestBase() {
 
         coVerify(exactly = 1) { useCase.invoke(Unit) }
         coVerify(exactly = 1) { repo.sessionActive }
+        verify(exactly = 1) { useCase.flow }
     }
 }

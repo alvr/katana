@@ -47,7 +47,7 @@ internal class MainViewModelTest : TestBase() {
     private lateinit var viewModel: SuspendingTestContainerHost<MainState, Nothing, MainViewModel>
 
     @Nested
-    @DisplayName("the user is logged in")
+    @DisplayName("GIVEN a logged in user")
     inner class LoggedIn {
         @Test
         @DisplayName(
@@ -167,7 +167,7 @@ internal class MainViewModelTest : TestBase() {
     }
 
     @Nested
-    @DisplayName("the user is logged out")
+    @DisplayName("GIVEN a logged out user")
     inner class LoggedOut {
         @Test
         @DisplayName("WHEN the user does not have a saved token THEN the initial navGraph should be `LoginNavGraph`")

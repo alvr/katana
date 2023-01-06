@@ -16,6 +16,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.spyk
+import io.mockk.verify
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -51,7 +52,8 @@ internal class ObserveAnimeListUseCaseTest : TestBase() {
         }
 
         coVerify(exactly = 1) { useCase.invoke(Unit) }
-        coVerify(exactly = 1) { repo.animeCollection }
+        verify(exactly = 1) { useCase.flow }
+        verify(exactly = 1) { repo.animeCollection }
     }
 
     @Test
@@ -70,6 +72,7 @@ internal class ObserveAnimeListUseCaseTest : TestBase() {
         }
 
         coVerify(exactly = 1) { useCase.invoke(Unit) }
-        coVerify(exactly = 1) { repo.animeCollection }
+        verify(exactly = 1) { useCase.flow }
+        verify(exactly = 1) { repo.animeCollection }
     }
 }
