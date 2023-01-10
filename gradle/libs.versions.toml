@@ -140,7 +140,7 @@ tink = { module = "com.google.crypto.tink:tink-android", version = "1.7.0" }
 
 # Tests
 ## JUnit
-junit5-vintage = { module = "org.junit.vintage:junit-vintage-engine", version = "5.9.1" }
+junit5-vintage = { module = "org.junit.vintage:junit-vintage-engine", version = "5.9.2" }
 
 ## Kotest
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
