@@ -7,13 +7,12 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.fetchPolicyInterceptor
 import com.apollographql.apollo3.cache.normalized.watch
 import dev.alvr.katana.data.remote.base.extensions.optional
-import dev.alvr.katana.data.remote.base.failures.CommonRemoteFailure
 import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
+import dev.alvr.katana.data.remote.base.toFailure
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.mappers.requests.toMutation
 import dev.alvr.katana.data.remote.lists.mappers.responses.mediaList
-import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
@@ -37,12 +36,10 @@ internal class CommonListsRemoteSourceImpl @Inject constructor(
         fe = { error ->
             Napier.e(error) { "There was an error updating the entry" }
 
-            when (CommonRemoteFailure(error)) {
-                CommonRemoteFailure.Network -> ListsFailure.UpdatingList
-                CommonRemoteFailure.Response -> ListsFailure.UpdatingList
-                CommonRemoteFailure.Cache -> Failure.Unknown
-                CommonRemoteFailure.Unknown -> Failure.Unknown
-            }
+            error.toFailure(
+                network = ListsFailure.UpdatingList,
+                response = ListsFailure.UpdatingList,
+            )
         },
     ).void()
 
@@ -58,12 +55,10 @@ internal class CommonListsRemoteSourceImpl @Inject constructor(
                 Napier.e(error) { "There was an error collecting the lists" }
 
                 emit(
-                    when (CommonRemoteFailure(error)) {
-                        CommonRemoteFailure.Network -> ListsFailure.GetMediaCollection
-                        CommonRemoteFailure.Response -> ListsFailure.GetMediaCollection
-                        CommonRemoteFailure.Cache -> Failure.Unknown
-                        CommonRemoteFailure.Unknown -> Failure.Unknown
-                    }.left(),
+                    error.toFailure(
+                        network = ListsFailure.GetMediaCollection,
+                        response = ListsFailure.GetMediaCollection,
+                    ).left(),
                 )
             }
 

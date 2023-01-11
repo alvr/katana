@@ -1,6 +1,8 @@
 package dev.alvr.katana.buildlogic
 
 import org.gradle.api.JavaVersion
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget as KtJvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion as KtVersion
 
 object KatanaConfiguration {
     const val CompileSdk = 33
@@ -12,6 +14,8 @@ object KatanaConfiguration {
     const val VersionCode = 1
 
     val UseJavaVersion = JavaVersion.VERSION_11
-    const val JvmTarget = "11"
-    const val KotlinVersion = "1.8"
+    val JvmTarget = KtJvmTarget.fromTarget(UseJavaVersion.toString())
+    val JvmTargetStr = JvmTarget.target
+    val JvmTargetInt = JvmTargetStr.toInt()
+    val KotlinVersion = KtVersion.KOTLIN_1_8
 }

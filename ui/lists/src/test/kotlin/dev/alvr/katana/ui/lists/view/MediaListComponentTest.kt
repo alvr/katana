@@ -118,7 +118,7 @@ internal class MediaListComponentTest : ComposeTest() {
     )
 
     @Test
-    fun `swipe down the list should trigger the refresh`() {
+    fun `swipe down the list should trigger the refresh`() = runTest {
         val refresh = mockk<() -> Unit>()
         coJustRun { refresh() }
 
@@ -141,7 +141,7 @@ internal class MediaListComponentTest : ComposeTest() {
     }
 
     @Test
-    fun `list with three items, both are displayed on the screen`() {
+    fun `list with three items, both are displayed on the screen`() = runTest {
         val list = Arb.list(
             Arb.bind<MediaListItem.AnimeListItem>(
                 mapOf(
@@ -172,7 +172,7 @@ internal class MediaListComponentTest : ComposeTest() {
 
     @Test
     @Suppress("CognitiveComplexMethod", "LongMethod")
-    fun `an anime item should paint the correct data`() {
+    fun `an anime item should paint the correct data`() = runTest {
         val addPlusOne = mockk<(Int) -> Unit>()
         val editEntry = mockk<(Int) -> Unit>()
         val mediaDetails = mockk<(Int) -> Unit>()
@@ -254,7 +254,7 @@ internal class MediaListComponentTest : ComposeTest() {
     }
 
     @Test
-    fun `a manga item should paint the correct data`() {
+    fun `a manga item should paint the correct data`() = runTest {
         val addPlusOne = mockk<(Int) -> Unit>()
         val editEntry = mockk<(Int) -> Unit>()
         val mediaDetails = mockk<(Int) -> Unit>()

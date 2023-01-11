@@ -2,7 +2,7 @@ package dev.alvr.katana.ui.login.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import arrow.core.left
-import dev.alvr.katana.common.core.empty
+import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.session.failures.SessionFailure
@@ -10,143 +10,146 @@ import dev.alvr.katana.domain.session.models.AnilistToken
 import dev.alvr.katana.domain.session.usecases.SaveSessionUseCase
 import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
+import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK_TOKEN
 import dev.alvr.katana.ui.login.R
-import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EmptySource
+import org.junit.jupiter.params.provider.NullSource
+import org.junit.jupiter.params.provider.ValueSource
+import org.orbitmvi.orbit.SuspendingTestContainerHost
 import org.orbitmvi.orbit.test
 
-internal class LoginViewModelTest : BehaviorSpec() {
-    private val stateHandle = mockk<SavedStateHandle>(relaxed = true)
-    private val saveAnilistToken = mockk<SaveSessionUseCase>()
-    private val saveUserId = mockk<SaveUserIdUseCase>()
-    private val viewModel = LoginViewModel(stateHandle, saveAnilistToken, saveUserId).test(LoginState())
+@ExperimentalCoroutinesApi
+internal class LoginViewModelTest : TestBase() {
+    @RelaxedMockK
+    private lateinit var stateHandle: SavedStateHandle
+    @MockK
+    private lateinit var saveAnilistToken: SaveSessionUseCase
+    @MockK
+    private lateinit var saveUserId: SaveUserIdUseCase
 
-    init {
-        given("a deeplink without token") {
-            every { stateHandle.get<String>(any()) } returns null
-            coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
-            coEitherJustRun { saveUserId() }
+    private lateinit var viewModel: SuspendingTestContainerHost<LoginState, Nothing, LoginViewModel>
 
-            and("a lazily created viewModel") {
-                `when`("saving the token") {
-                    then("it should not be saved because is null") {
-                        viewModel.runOnCreate()
-                        viewModel.assert(LoginState()) {
-                            states()
-                        }
+    override suspend fun beforeEach() {
+        viewModel = LoginViewModel(stateHandle, saveAnilistToken, saveUserId).test(LoginState())
+    }
 
-                        coVerify(exactly = 0) { saveAnilistToken(AnilistToken(any())) }
-                        coVerify(exactly = 0) { saveUserId() }
-                    }
-                }
-            }
+    @ParameterizedTest(
+        name = """
+        GIVEN a deeplink without a valid token AND a lazily created viewModel
+        WHEN saving the token
+        THEN it should not be saved because is `{0}`
+        """,
+    )
+    @NullSource
+    @EmptySource
+    fun `saving a token that is invalid`(token: String?) = runTest {
+        // GIVEN
+        every { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) } returns token
+
+        // WHEN
+        viewModel.runOnCreate()
+        viewModel.assert(LoginState()) {
+            states()
         }
 
-        given("a deeplink with token with params") {
-            every { stateHandle.get<String>(any()) } returns TOKEN_WITH_PARAMS
+        // THEN
+        verify(exactly = 1) { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) }
+        coVerify(exactly = 0) { saveAnilistToken(AnilistToken(any())) }
+        coVerify(exactly = 0) { saveUserId() }
+    }
 
-            and("a lazily created viewModel") {
-                `when`("saving the token successfully") {
-                    coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
-                    coEitherJustRun { saveUserId() }
+    @ParameterizedTest(
+        name = """
+        GIVEN a deeplink with a valid token {0} AND a lazily created viewModel
+        WHEN saving the token
+        THEN it should be saved
+        """,
+    )
+    @ValueSource(strings = [TOKEN_WITH_PARAMS, CLEAR_TOKEN])
+    fun `saving a token that is valid`(token: String) = runTest {
+        // GIVEN
+        every { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) } returns token
+        coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
+        coEitherJustRun { saveUserId() }
 
-                    then("it should not be saved without params") {
-                        viewModel.runOnCreate()
-                        viewModel.assert(LoginState()) {
-                            states(
-                                { copy(loading = true) },
-                                { copy(loading = false, saved = true) },
-                            )
-                        }
-
-                        coVerify(exactly = 1) { saveAnilistToken(AnilistToken(CLEAR_TOKEN)) }
-                        coVerify(exactly = 1) { saveUserId() }
-                    }
-                }
-
-                `when`("saving the token, it returns a left") {
-                    coEvery { saveAnilistToken(AnilistToken(any())) } returns SessionFailure.SavingSession.left()
-                    coEitherJustRun { saveUserId() }
-
-                    then("it should not be saved without params") {
-                        viewModel.runOnCreate()
-                        viewModel.assert(LoginState()) {
-                            states(
-                                { copy(loading = true) },
-                                { copy(loading = false, errorMessage = R.string.save_token_error) },
-                            )
-                        }
-
-                        coVerify(exactly = 1) { saveAnilistToken(AnilistToken(CLEAR_TOKEN)) }
-                        coVerify(exactly = 0) { saveUserId() }
-                    }
-                }
-
-                `when`("saving the userId, it returns a left") {
-                    coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
-                    coEvery { saveUserId() } returns UserFailure.SavingUser.left()
-
-                    then("it should not be saved without params") {
-                        viewModel.runOnCreate()
-                        viewModel.assert(LoginState()) {
-                            states(
-                                { copy(loading = true) },
-                                { copy(loading = false, errorMessage = R.string.fetch_userid_error) },
-                            )
-                        }
-
-                        coVerify(exactly = 1) { saveAnilistToken(AnilistToken(CLEAR_TOKEN)) }
-                        coVerify(exactly = 1) { saveUserId() }
-                    }
-                }
-            }
+        // WHEN
+        viewModel.runOnCreate()
+        viewModel.assert(LoginState()) {
+            states(
+                { copy(loading = true) },
+                { copy(loading = false, saved = true) },
+            )
         }
 
-        given("a deeplink with token without params") {
-            every { stateHandle.get<String>(any()) } returns CLEAR_TOKEN
-            coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
-            coEitherJustRun { saveUserId() }
+        // THEN
+        verify(exactly = 1) { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) }
+        coVerify(exactly = 1) { saveAnilistToken(AnilistToken(CLEAR_TOKEN)) }
+        coVerify(exactly = 1) { saveUserId() }
+    }
 
-            and("a lazily created viewModel") {
-                `when`("saving the token") {
-                    then("it should not be saved without params") {
-                        viewModel.runOnCreate()
-                        viewModel.assert(LoginState()) {
-                            states(
-                                { copy(loading = true) },
-                                { copy(loading = false, saved = true) },
-                            )
-                        }
+    @ParameterizedTest(
+        name = """
+        GIVEN a deeplink with a valid token {0} AND a lazily created viewModel
+        WHEN saving the token AND an errors occurs when saving the token
+        THEN it should not be saved
+        """,
+    )
+    @ValueSource(strings = [TOKEN_WITH_PARAMS, CLEAR_TOKEN])
+    fun `saving a token that is valid AND an error occurs when saving the token`(token: String) = runTest {
+        // GIVEN
+        every { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) } returns token
+        coEvery { saveAnilistToken(AnilistToken(any())) } returns SessionFailure.SavingSession.left()
 
-                        coVerify(exactly = 1) { saveAnilistToken(AnilistToken(CLEAR_TOKEN)) }
-                        coVerify(exactly = 1) { saveUserId() }
-                    }
-                }
-            }
+        // WHEN
+        viewModel.runOnCreate()
+        viewModel.assert(LoginState()) {
+            states(
+                { copy(loading = true) },
+                { copy(loading = false, errorMessage = R.string.save_token_error) },
+            )
         }
 
-        given("a deeplink that is empty") {
-            every { stateHandle.get<String>(any()) } returns String.empty
-            coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
-            coEitherJustRun { saveUserId() }
+        // THEN
+        verify(exactly = 1) { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) }
+        coVerify(exactly = 1) { saveAnilistToken(AnilistToken(CLEAR_TOKEN)) }
+        coVerify(exactly = 0) { saveUserId() }
+    }
 
-            and("a lazily created viewModel") {
-                `when`("saving the token") {
-                    viewModel.runOnCreate()
-                    viewModel.assert(LoginState()) {
-                        states()
-                    }
+    @ParameterizedTest(
+        name = """
+        GIVEN a deeplink with a valid token {0} AND a lazily created viewModel
+        WHEN saving the token AND an errors occurs when saving the userId
+        THEN it should not be saved
+        """,
+    )
+    @ValueSource(strings = [TOKEN_WITH_PARAMS, CLEAR_TOKEN])
+    fun `saving a token that is valid AND an error occurs when saving the userId`(token: String) = runTest {
+        // GIVEN
+        every { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) } returns token
+        coEitherJustRun { saveAnilistToken(AnilistToken(any())) }
+        coEvery { saveUserId() } returns UserFailure.SavingUser.left()
 
-                    then("it should not be saved because is empty") {
-                        coVerify(exactly = 0) { saveAnilistToken(AnilistToken(any())) }
-                        coVerify(exactly = 0) { saveUserId() }
-                    }
-                }
-            }
+        // WHEN
+        viewModel.runOnCreate()
+        viewModel.assert(LoginState()) {
+            states(
+                { copy(loading = true) },
+                { copy(loading = false, errorMessage = R.string.fetch_userid_error) },
+            )
         }
+
+        // THEN
+        verify(exactly = 1) { stateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN) }
+        coVerify(exactly = 1) { saveAnilistToken(AnilistToken(CLEAR_TOKEN)) }
+        coVerify(exactly = 1) { saveUserId() }
     }
 
     private companion object {

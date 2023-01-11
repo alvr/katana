@@ -2,7 +2,8 @@ package dev.alvr.katana.data.preferences.session.sources
 
 import androidx.datastore.core.DataStore
 import app.cash.turbine.test
-import dev.alvr.katana.common.tests.valueMockk
+import dev.alvr.katana.common.tests.TestBase
+import dev.alvr.katana.data.preferences.session.anilistToken
 import dev.alvr.katana.data.preferences.session.models.Session
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.session.failures.SessionFailure
@@ -11,184 +12,283 @@ import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome
-import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.property.checkAll
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.SpyK
 import io.mockk.mockk
-import io.mockk.spyk
 import io.mockk.verify
 import java.io.IOException
 import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-internal class SessionLocalSourceTest : BehaviorSpec() {
-    init {
-        given("a SessionLocalSource") {
-            val store = mockk<DataStore<Session>>()
-            val source: SessionLocalSource = SessionLocalSourceImpl(store)
+@ExperimentalCoroutinesApi
+internal class SessionLocalSourceTest : TestBase() {
+    @MockK
+    private lateinit var store: DataStore<Session>
+    @SpyK
+    private var session = Session()
 
-            `when`("getting a token from datastore for the first time") {
-                every { store.data } returns flowOf(Session(anilistToken = null))
-                val token = source.getAnilistToken()
+    private lateinit var source: SessionLocalSource
 
-                then("the token should be none") {
-                    token.shouldBeNone()
-                    verify(exactly = 1) { store.data }
+    override suspend fun beforeEach() {
+        source = SessionLocalSourceImpl(store)
+    }
+
+    @Nested
+    @DisplayName("GIVEN a SessionLocalSource that succeed")
+    inner class SuccessfulExecution {
+        @Test
+        @DisplayName("WHEN getting a token from datastore for the first time THEN the token should be none")
+        fun `getting a token from datastore for the first time`() = runTest {
+            // GIVEN
+            every { store.data } returns flowOf(Session(anilistToken = null))
+
+            // WHEN
+            val token = source.getAnilistToken()
+
+            // THEN
+            token.shouldBeNone()
+            verify(exactly = 1) { store.data }
+        }
+
+        @Test
+        @DisplayName("WHEN saving a session THEN the token should updated in the store")
+        fun `saving a session`() = runTest {
+            // GIVEN
+            coJustRun { store.updateData(any()) }
+
+            // WHEN
+            source.saveSession(AnilistToken(SAVED_TOKEN))
+
+            // THEN
+            coVerify(exactly = 1) { store.updateData(any()) }
+        }
+
+        @Test
+        @DisplayName("WHEN getting the saved token THEN the token should be read from memory")
+        fun `getting the saved token`() = runTest {
+            // GIVEN
+            every { store.data } returns flowOf(
+                Session(anilistToken = SAVED_TOKEN, isSessionActive = true),
+            )
+
+            // WHEN
+            val token = source.getAnilistToken()
+
+            // THEN
+            token.shouldBeSome(AnilistToken(SAVED_TOKEN))
+            verify(exactly = 1) { store.data }
+        }
+
+        @Test
+        @DisplayName("WHEN deleting the saved token THEN the token should be none")
+        fun `deleting the saved token`() = runTest {
+            // GIVEN
+            coJustRun { store.updateData(any()) }
+
+            // WHEN
+            val result = source.deleteAnilistToken()
+
+            // THEN
+            result.shouldBeRight()
+            verify(exactly = 0) { store.data }
+            coVerify(exactly = 1) { store.updateData(any()) }
+        }
+
+        @Test
+        @DisplayName("WHEN clearing the session THEN the session should be valid")
+        fun `clearing the session`() = runTest {
+            // GIVEN
+            coJustRun { store.updateData(any()) }
+
+            // WHEN
+            val result = source.clearActiveSession()
+
+            // THEN
+            result.shouldBeRight()
+            verify(exactly = 0) { store.data }
+            coVerify(exactly = 1) { store.updateData(any()) }
+        }
+
+        @Test
+        @DisplayName("WHEN checking all conditions for active session THEN the token should be read from memory")
+        fun `checking all conditions for active session`() = runTest {
+            checkAll<Int, Session>(16) { _, session ->
+                // GIVEN
+                every { store.data } returns flowOf(session)
+
+                // WHEN
+                source.sessionActive.test(5.seconds) {
+                    awaitItem().shouldBeRight((session.anilistToken == null && session.isSessionActive).not())
+                    cancelAndIgnoreRemainingEvents()
                 }
+
+                // THEN
+                verify(exactly = 1) { store.data }
+
+                clearAllMocks()
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("GIVEN a SessionLocalSource that fails")
+    inner class FailureExecution {
+        @Test
+        @DisplayName(
+            """
+            WHEN the clearing the session fails
+                AND it's a common Exception
+            THEN should be a left of Failure.Unknown
+            """,
+        )
+        fun `the clearing the session fails AND it's a common Exception`() = runTest {
+            // GIVEN
+            coEvery { store.updateData(any()) } throws Exception()
+
+            // WHEN
+            val result = source.clearActiveSession()
+
+            // THEN
+            result.shouldBeLeft(Failure.Unknown)
+            coVerify(exactly = 1) { store.updateData(any()) }
+        }
+
+        @Test
+        @DisplayName(
+            """
+            WHEN the clearing the session fails
+                AND it's a writing Exception
+            THEN should be a left of PreferencesTokenFailure.ClearingSessionFailure
+            """,
+        )
+        fun `the clearing the session fails AND it's a writing Exception`() = runTest {
+            // GIVEN
+            coEvery { store.updateData(any()) } throws IOException()
+
+            // WHEN
+            val result = source.clearActiveSession()
+
+            // THEN
+            result.shouldBeLeft(SessionFailure.ClearingSession)
+            coVerify(exactly = 1) { store.updateData(any()) }
+        }
+
+        @Test
+        @DisplayName(
+            """
+            WHEN it's the deleting token
+                AND it's a common Exception
+            THEN should be a left of Failure.Unknown
+            """,
+        )
+        fun `it's the deleting token AND it's a common Exception`() = runTest {
+            // GIVEN
+            coEvery { store.updateData(any()) } throws Exception()
+
+            // WHEN
+            val result = source.deleteAnilistToken()
+
+            // THEN
+            result.shouldBeLeft(Failure.Unknown)
+            coVerify(exactly = 1) { store.updateData(any()) }
+        }
+
+        @Test
+        @DisplayName(
+            """
+            WHEN it's the deleting token
+                AND it's a writing Exception
+            THEN should be a left of PreferencesTokenFailure.DeletingFailure
+            """,
+        )
+        fun `it's the deleting token AND it's a writing Exception`() = runTest {
+            // GIVEN
+            coEvery { store.updateData(any()) } throws IOException()
+
+            // WHEN
+            val result = source.deleteAnilistToken()
+
+            // THEN
+            result.shouldBeLeft(SessionFailure.DeletingToken)
+            coVerify(exactly = 1) { store.updateData(any()) }
+        }
+
+        @Test
+        @DisplayName("WHEN it's the saving token AND it's a common Exception THEN should be a left of Failure.Unknown")
+        fun `it's the saving token AND it's a common Exception`() = runTest {
+            // GIVEN
+            coEvery { store.updateData(any()) } throws Exception()
+
+            // WHEN
+            val result = source.saveSession(anilistToken)
+
+            // THEN
+            result.shouldBeLeft(Failure.Unknown)
+            coVerify(exactly = 1) { store.updateData(any()) }
+        }
+
+        @Test
+        @DisplayName(
+            """
+            WHEN it's the saving token
+                AND it's a writing Exception
+            THEN should be a left of PreferencesTokenFailure.SavingSession
+            """,
+        )
+        fun `it's the saving token AND it's a writing Exception`() = runTest {
+            // GIVEN
+            coEvery { store.updateData(any()) } throws IOException()
+
+            // WHEN
+            val result = source.saveSession(anilistToken)
+
+            // THEN
+            result.shouldBeLeft(SessionFailure.SavingSession)
+            coVerify(exactly = 1) { store.updateData(any()) }
+        }
+
+        @Test
+        @DisplayName("WHEN it's getting if the session is active THEN should be a left of Failure.Unknown")
+        fun `it's getting if the session is active`() = runTest {
+            // GIVEN
+            every { store.data } returns flowOf(session)
+            every { session.anilistToken } throws mockk<Exception>()
+
+            // WHEN
+            source.sessionActive.test(5.seconds) {
+                awaitItem().shouldBeLeft(SessionFailure.CheckingActiveSession)
+                cancelAndIgnoreRemainingEvents()
             }
 
-            `when`("saving a session") {
-                coJustRun { store.updateData(any()) }
-                source.saveSession(AnilistToken(SAVED_TOKEN))
+            // THEN
+            verify(exactly = 1) { session.anilistToken }
+            verify(exactly = 1) { store.data }
+        }
 
-                then("the token should updated in the store") {
-                    coVerify(exactly = 1) { store.updateData(any()) }
-                }
-            }
+        @Test
+        @DisplayName("WHEN it's getting the token THEN should be a left of PreferencesTokenFailure.SavingSession")
+        fun `it's getting the token`() = runTest {
+            // GIVEN
+            every { store.data } returns flowOf(session)
+            every { session.anilistToken } throws mockk<Exception>()
 
-            `when`("getting the saved token") {
-                every { store.data } returns flowOf(
-                    Session(anilistToken = SAVED_TOKEN, isSessionActive = true),
-                )
-                val token = source.getAnilistToken()
+            // WHEN
+            val result = source.getAnilistToken()
 
-                then("the token should be read from memory") {
-                    token.shouldBeSome(AnilistToken(SAVED_TOKEN))
-                    verify(exactly = 1) { store.data }
-                }
-            }
-
-            `when`("deleting the saved token") {
-                every { store.data } returns flowOf(
-                    Session(anilistToken = null, isSessionActive = true),
-                )
-                coJustRun { store.updateData(any()) }
-                source.deleteAnilistToken().shouldBeRight()
-
-                then("the token should be none") {
-                    source.getAnilistToken().shouldBeNone()
-                }
-
-                then("the session should not be valid") {
-                    source.sessionActive.first().shouldBeRight(false)
-                }
-            }
-
-            `when`("clearing the session") {
-                every { store.data } returns flowOf(
-                    Session(anilistToken = null, isSessionActive = false),
-                )
-                coJustRun { store.updateData(any()) }
-                source.clearActiveSession().shouldBeRight()
-
-                then("the session should be valid") {
-                    source.sessionActive.first().shouldBeRight(true)
-                }
-            }
-
-            `when`("checking all conditions for active session") {
-                checkAll<Int, Session>(16) { _, session ->
-                    every { store.data } returns flowOf(session)
-
-                    then("the token should be read from memory") {
-                        source.sessionActive.test(5.seconds) {
-                            awaitItem().shouldBeRight((session.anilistToken == null && session.isSessionActive).not())
-                            cancelAndIgnoreRemainingEvents()
-                        }
-                        verify(exactly = 1) { store.data }
-                    }
-                }
-            }
-
-            `when`("something fails") {
-                and("it's the clearing the session") {
-                    and("it's a common Exception") {
-                        val update = mockk<(Session) -> Session>()
-                        every { update(any()) } throws Exception()
-                        coJustRun { store.updateData(update) }
-
-                        then("should be a left of Failure.Unknown") {
-                            source.clearActiveSession().shouldBeLeft(Failure.Unknown)
-                        }
-                    }
-                    and("it's a writing Exception") {
-                        coEvery { store.updateData(any()) } throws IOException()
-
-                        then("should be a left of PreferencesTokenFailure.ClearingSessionFailure") {
-                            source.clearActiveSession().shouldBeLeft(SessionFailure.ClearingSession)
-                        }
-                    }
-                }
-
-                and("it's the deleting token") {
-                    and("it's a common Exception") {
-                        val update = mockk<(Session) -> Session>()
-                        every { update(any()) } throws Exception()
-                        coJustRun { store.updateData(update) }
-
-                        then("should be a left of Failure.Unknown") {
-                            source.deleteAnilistToken().shouldBeLeft(Failure.Unknown)
-                        }
-                    }
-                    and("it's a writing Exception") {
-                        coEvery { store.updateData(any()) } throws IOException()
-
-                        then("should be a left of PreferencesTokenFailure.DeletingFailure") {
-                            source.deleteAnilistToken().shouldBeLeft(SessionFailure.DeletingToken)
-                        }
-                    }
-                }
-
-                and("it's the saving token") {
-                    val token = valueMockk<AnilistToken>()
-
-                    and("it's a common Exception") {
-                        val update = mockk<(Session) -> Session>()
-                        every { update(any()) } throws Exception()
-                        coJustRun { store.updateData(update) }
-
-                        then("should be a left of Failure.Unknown") {
-                            source.saveSession(token).shouldBeLeft(Failure.Unknown)
-                        }
-                    }
-                    and("it's a writing Exception") {
-                        coEvery { store.updateData(any()) } throws IOException()
-
-                        then("should be a left of PreferencesTokenFailure.SavingFailure") {
-                            source.saveSession(token).shouldBeLeft(SessionFailure.SavingSession)
-                        }
-                    }
-                }
-
-                and("it's getting if the session is active") {
-                    val session = spyk(Session())
-
-                    every { store.data } returns flowOf(session)
-                    every { session.anilistToken } throws mockk<Exception>()
-
-                    then("should be a left of SessionFailure.CheckingActiveSession") {
-                        source.sessionActive.test(5.seconds) {
-                            awaitItem().shouldBeLeft(SessionFailure.CheckingActiveSession)
-                            cancelAndIgnoreRemainingEvents()
-                        }
-                    }
-                }
-
-                and("it's getting the token") {
-                    val session = spyk(Session())
-
-                    every { store.data } returns flowOf(session)
-                    every { session.anilistToken } throws mockk<Exception>()
-
-                    then("the token should be none") {
-                        source.getAnilistToken().shouldBeNone()
-                    }
-                }
-            }
+            // THEN
+            result.shouldBeNone()
+            verify(exactly = 1) { session.anilistToken }
+            verify(exactly = 1) { store.data }
         }
     }
 

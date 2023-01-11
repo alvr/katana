@@ -1,7 +1,6 @@
 package dev.alvr.katana.data.remote.user.sources
 
 import arrow.core.Either
-import dev.alvr.katana.data.remote.user.mappers.responses.invoke
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.user.models.UserId
 

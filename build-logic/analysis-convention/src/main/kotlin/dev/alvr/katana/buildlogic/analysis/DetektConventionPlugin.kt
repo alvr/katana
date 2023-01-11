@@ -21,7 +21,7 @@ internal class DetektConventionPlugin : ConventionPlugin {
             ignoreFailures = false
             autoCorrect = true
             buildUponDefaultConfig = true
-            jvmTarget = KatanaConfiguration.JvmTarget
+            jvmTarget = KatanaConfiguration.JvmTargetStr
             setSource(files(projectDir))
             config.setFrom(files("$rootDir/config/detekt.yml"))
             include("**/*.kt", "**/*.kts")

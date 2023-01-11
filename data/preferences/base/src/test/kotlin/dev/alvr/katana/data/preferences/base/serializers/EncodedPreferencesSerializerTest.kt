@@ -12,33 +12,30 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalSerializationApi::class)
+@ExperimentalCoroutinesApi
+@ExperimentalSerializationApi
 internal class EncodedPreferencesSerializerTest : RoboTest() {
     @Test
-    fun `when reading the initial value it should fail`() {
-        runTest {
-            val colorSerializer = ColorSerializer.encoded()
+    fun `when reading the initial value it should fail`() = runTest {
+        val colorSerializer = ColorSerializer.encoded()
 
-            shouldThrowExactlyUnit<CorruptionException> {
-                colorSerializer.readFrom(ByteArrayInputStream(byteArrayOf()))
-            }.message shouldBe "reading secured value failed"
-        }
+        shouldThrowExactlyUnit<CorruptionException> {
+            colorSerializer.readFrom(ByteArrayInputStream(byteArrayOf()))
+        }.message shouldBe "reading secured value failed"
     }
 
     @Test
-    fun `when writing a value then after reading it should be the new value`() {
-        runTest {
-            val outputStream = ByteArrayOutputStream()
+    fun `when writing a value then after reading it should be the new value`() = runTest {
+        val outputStream = ByteArrayOutputStream()
 
-            val colorSerializer = ColorSerializer.encoded()
-            colorSerializer.writeTo(
-                Color(rgb = 0x123_456),
-                outputStream,
-            )
+        val colorSerializer = ColorSerializer.encoded()
+        colorSerializer.writeTo(
+            Color(rgb = 0x123_456),
+            outputStream,
+        )
 
-            val inputStream = ByteArrayInputStream(outputStream.toByteArray())
-            val color = colorSerializer.readFrom(inputStream)
-            color.rgb shouldBe 0x123_456
-        }
+        val inputStream = ByteArrayInputStream(outputStream.toByteArray())
+        val color = colorSerializer.readFrom(inputStream)
+        color.rgb shouldBe 0x123_456
     }
 }

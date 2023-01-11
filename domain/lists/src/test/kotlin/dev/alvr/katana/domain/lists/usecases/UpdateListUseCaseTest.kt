@@ -1,6 +1,8 @@
 package dev.alvr.katana.domain.lists.usecases
 
+import arrow.core.Either
 import arrow.core.left
+import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
@@ -8,7 +10,6 @@ import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
-import io.kotest.core.spec.style.FunSpec
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.bind
 import io.kotest.property.arbitrary.localDate
@@ -16,15 +17,28 @@ import io.kotest.property.arbitrary.localDateTime
 import io.kotest.property.arbitrary.next
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.mockk
+import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
 import io.mockk.verify
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.stream.Stream
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.ArgumentsProvider
+import org.junit.jupiter.params.provider.ArgumentsSource
 
-internal class UpdateListUseCaseTest : FunSpec() {
-    private val repo = mockk<ListsRepository>()
-    private val useCase = spyk(UpdateListUseCase(repo))
+@ExperimentalCoroutinesApi
+internal class UpdateListUseCaseTest : TestBase() {
+    @MockK
+    private lateinit var repo: ListsRepository
+
+    private lateinit var useCase: UpdateListUseCase
 
     private val mediaList = Arb.bind<MediaList>(
         mapOf(
@@ -33,65 +47,87 @@ internal class UpdateListUseCaseTest : FunSpec() {
         ),
     ).next()
 
-    init {
-        context("successful updating") {
+    override suspend fun beforeEach() {
+        useCase = spyk(UpdateListUseCase(repo))
+    }
+
+    @Nested
+    @DisplayName("GIVEN a successful execution")
+    inner class SuccessfulExecution {
+        @Test
+        @DisplayName("WHEN successful updateList THEN invoke should be right")
+        fun `successful updateList (invoke)`() = runTest {
+            // GIVEN
             coEitherJustRun { repo.updateList(any()) }
 
-            test("invoke should update the list") {
-                useCase(mediaList).shouldBeRight()
-                coVerify(exactly = 1) { repo.updateList(mediaList) }
-            }
+            // WHEN
+            val result = useCase(mediaList)
 
-            test("sync should update the list") {
-                useCase.sync(mediaList).shouldBeRight()
-                coVerify(exactly = 1) { repo.updateList(mediaList) }
-            }
-        }
-
-        context("failure updating") {
-            context("is a ListsFailure.UpdatingList") {
-                coEvery { repo.updateList(any()) } returns ListsFailure.UpdatingList.left()
-
-                test("invoke should return failure") {
-                    useCase(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                    coVerify(exactly = 1) { repo.updateList(mediaList) }
-                }
-
-                test("sync should return failure") {
-                    useCase.sync(mediaList).shouldBeLeft(ListsFailure.UpdatingList)
-                    coVerify(exactly = 1) { repo.updateList(mediaList) }
-                }
-            }
-
-            context("is a Failure.Unknown") {
-                coEvery { repo.updateList(any()) } returns Failure.Unknown.left()
-
-                test("invoke should return failure") {
-                    useCase(mediaList).shouldBeLeft(Failure.Unknown)
-                    coVerify(exactly = 1) { repo.updateList(mediaList) }
-                }
-
-                test("sync should return failure") {
-                    useCase.sync(mediaList).shouldBeLeft(Failure.Unknown)
-                    coVerify(exactly = 1) { repo.updateList(mediaList) }
-                }
-            }
-        }
-
-        test("invoke the use case should call the invoke operator") {
-            coEvery { repo.updateList(any()) } returns mockk()
-
-            useCase(mediaList)
-
+            // THEN
+            result.shouldBeRight()
+            coVerify(exactly = 1) { repo.updateList(mediaList) }
             coVerify(exactly = 1) { useCase.invoke(mediaList) }
+            verify(exactly = 0) { useCase.sync(mediaList) }
         }
 
-        test("sync the use case should call the invoke operator") {
-            coEvery { repo.updateList(any()) } returns mockk()
+        @Test
+        @DisplayName("WHEN successful updateList THEN invoke should be right")
+        fun `successful updateList (sync)`() = runTest {
+            // GIVEN
+            coEitherJustRun { repo.updateList(any()) }
 
-            useCase.sync(mediaList)
+            // WHEN
+            val result = useCase.sync(mediaList)
 
+            // THEN
+            result.shouldBeRight()
+            coVerify(exactly = 1) { repo.updateList(mediaList) }
+            coVerify(exactly = 1) { useCase.invoke(mediaList) }
             verify(exactly = 1) { useCase.sync(mediaList) }
         }
+    }
+
+    @Nested
+    @DisplayName("GIVEN a failure execution")
+    inner class FailureExecution {
+        @ArgumentsSource(FailuresArguments::class)
+        @ParameterizedTest(name = "WHEN failure is {0} THEN the result should be {1}")
+        fun `failure updateList (invoke)`(failure: Failure, expected: Either<Failure, Unit>) = runTest {
+            // GIVEN
+            coEvery { repo.updateList(any()) } returns expected
+
+            // WHEN
+            val result = useCase(mediaList)
+
+            // THEN
+            result.shouldBeLeft(failure)
+            coVerify(exactly = 1) { repo.updateList(mediaList) }
+            coVerify(exactly = 1) { useCase.invoke(mediaList) }
+            verify(exactly = 0) { useCase.sync(mediaList) }
+        }
+
+        @ArgumentsSource(FailuresArguments::class)
+        @ParameterizedTest(name = "WHEN failure is {0} THEN the result should be {1}")
+        fun `failure updateList (sync)`(failure: Failure, expected: Either<Failure, Unit>) = runTest {
+            // GIVEN
+            coEvery { repo.updateList(any()) } returns expected
+
+            // WHEN
+            val result = useCase.sync(mediaList)
+
+            // THEN
+            result.shouldBeLeft(failure)
+            coVerify(exactly = 1) { repo.updateList(mediaList) }
+            coVerify(exactly = 1) { useCase.invoke(mediaList) }
+            verify(exactly = 1) { useCase.sync(mediaList) }
+        }
+    }
+
+    private class FailuresArguments : ArgumentsProvider {
+        override fun provideArguments(context: ExtensionContext?): Stream<Arguments> =
+            Stream.of(
+                Arguments.of(ListsFailure.UpdatingList, ListsFailure.UpdatingList.left()),
+                Arguments.of(Failure.Unknown, Failure.Unknown.left()),
+            )
     }
 }

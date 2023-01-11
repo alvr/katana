@@ -1,6 +1,8 @@
 package dev.alvr.katana.domain.user.usecases
 
+import arrow.core.Either
 import arrow.core.left
+import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.common.tests.coEitherJustRun
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.base.usecases.invoke
@@ -9,92 +11,111 @@ import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.repositories.UserRepository
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
-import io.kotest.core.spec.style.FunSpec
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.mockk
+import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
 import io.mockk.verify
+import java.util.stream.Stream
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.ArgumentsProvider
+import org.junit.jupiter.params.provider.ArgumentsSource
 
-internal class SaveUserIdUseCaseTest : FunSpec() {
-    private val repo = mockk<UserRepository>()
-    private val useCase = spyk(SaveUserIdUseCase(repo))
+@ExperimentalCoroutinesApi
+internal class SaveUserIdUseCaseTest : TestBase() {
+    @MockK
+    private lateinit var repo: UserRepository
 
-    init {
-        context("successful userId") {
+    private lateinit var useCase: SaveUserIdUseCase
+
+    override suspend fun beforeEach() {
+        useCase = spyk(SaveUserIdUseCase(repo))
+    }
+
+    @Nested
+    @DisplayName("GIVEN a successful execution")
+    inner class SuccessfulExecution {
+        @Test
+        @DisplayName("WHEN successful saveUserId THEN invoke should be right")
+        fun `successful saveUserId (invoke)`() = runTest {
+            // GIVEN
             coEitherJustRun { repo.saveUserId() }
 
-            test("invoke should return user") {
-                useCase().shouldBeRight()
-                coVerify(exactly = 1) { repo.saveUserId() }
-            }
+            // WHEN
+            val result = useCase()
 
-            test("sync should return user") {
-                useCase.sync().shouldBeRight()
-                coVerify(exactly = 1) { repo.saveUserId() }
-            }
-        }
-
-        context("failure userId") {
-            context("is a UserFailure.FetchingFailure") {
-                coEvery { repo.saveUserId() } returns UserFailure.FetchingUser.left()
-
-                test("invoke should return failure") {
-                    useCase().shouldBeLeft(UserFailure.FetchingUser)
-                    coVerify(exactly = 1) { repo.saveUserId() }
-                }
-
-                test("sync should return failure") {
-                    useCase.sync().shouldBeLeft(UserFailure.FetchingUser)
-                    coVerify(exactly = 1) { repo.saveUserId() }
-                }
-            }
-
-            context("is a UserFailure.SavingFailure") {
-                coEvery { repo.saveUserId() } returns UserFailure.SavingUser.left()
-
-                test("invoke should return failure") {
-                    useCase().shouldBeLeft(UserFailure.SavingUser)
-                    coVerify(exactly = 1) { repo.saveUserId() }
-                }
-
-                test("sync should return failure") {
-                    useCase.sync().shouldBeLeft(UserFailure.SavingUser)
-                    coVerify(exactly = 1) { repo.saveUserId() }
-                }
-            }
-
-            context("is a Failure.Unknown") {
-                coEvery { repo.saveUserId() } returns Failure.Unknown.left()
-
-                test("invoke should return failure") {
-                    useCase().shouldBeLeft(Failure.Unknown)
-                    coVerify(exactly = 1) { repo.saveUserId() }
-                }
-
-                test("sync should return failure") {
-                    useCase.sync().shouldBeLeft(Failure.Unknown)
-                    coVerify(exactly = 1) { repo.saveUserId() }
-                }
-            }
-        }
-
-        test("invoke the use case should call the invoke operator") {
-            coEvery { repo.saveUserId() } returns mockk()
-
-            useCase()
-
-            coVerify(exactly = 1) { useCase.invoke(Unit) }
+            // THEN
+            result.shouldBeRight()
             coVerify(exactly = 1) { repo.saveUserId() }
+            coVerify(exactly = 1) { useCase.invoke() }
+            verify(exactly = 0) { useCase.sync() }
         }
 
-        test("sync the use case should call the invoke operator") {
-            coEvery { repo.saveUserId() } returns mockk()
+        @Test
+        @DisplayName("WHEN successful saveUserId THEN invoke should be right")
+        fun `successful saveUserId (sync)`() = runTest {
+            // GIVEN
+            coEitherJustRun { repo.saveUserId() }
 
-            useCase.sync()
+            // WHEN
+            val result = useCase.sync()
 
-            verify(exactly = 1) { useCase.sync(Unit) }
+            // THEN
+            result.shouldBeRight()
             coVerify(exactly = 1) { repo.saveUserId() }
+            coVerify(exactly = 1) { useCase.invoke() }
+            verify(exactly = 1) { useCase.sync() }
         }
+    }
+
+    @Nested
+    @DisplayName("GIVEN a failure execution")
+    inner class FailureExecution {
+        @ArgumentsSource(FailuresArguments::class)
+        @ParameterizedTest(name = "WHEN failure is {0} THEN the result should be {1}")
+        fun `failure saveUserId (invoke)`(failure: Failure, expected: Either<Failure, Unit>) = runTest {
+            // GIVEN
+            coEvery { repo.saveUserId() } returns expected
+
+            // WHEN
+            val result = useCase()
+
+            // THEN
+            result.shouldBeLeft(failure)
+            coVerify(exactly = 1) { repo.saveUserId() }
+            coVerify(exactly = 1) { useCase.invoke() }
+            verify(exactly = 0) { useCase.sync() }
+        }
+
+        @ArgumentsSource(FailuresArguments::class)
+        @ParameterizedTest(name = "WHEN failure is {0} THEN the result should be {1}")
+        fun `failure saveUserId (sync)`(failure: Failure, expected: Either<Failure, Unit>) = runTest {
+            // GIVEN
+            coEvery { repo.saveUserId() } returns expected
+
+            // WHEN
+            val result = useCase.sync()
+
+            // THEN
+            result.shouldBeLeft(failure)
+            coVerify(exactly = 1) { repo.saveUserId() }
+            coVerify(exactly = 1) { useCase.invoke() }
+            verify(exactly = 1) { useCase.sync() }
+        }
+    }
+
+    private class FailuresArguments : ArgumentsProvider {
+        override fun provideArguments(context: ExtensionContext?): Stream<Arguments> =
+            Stream.of(
+                Arguments.of(UserFailure.FetchingUser, UserFailure.FetchingUser.left()),
+                Arguments.of(UserFailure.SavingUser, UserFailure.SavingUser.left()),
+                Arguments.of(Failure.Unknown, Failure.Unknown.left()),
+            )
     }
 }
