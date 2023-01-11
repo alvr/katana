@@ -3,11 +3,11 @@ package dev.alvr.katana.buildlogic.analysis
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import org.sonarqube.gradle.SonarQubeExtension
+import org.sonarqube.gradle.SonarExtension
 
 internal class SonarQubeAndroidConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
-        extensions.configure<SonarQubeExtension> {
+        extensions.configure<SonarExtension> {
             properties {
                 addFilesIfExist("sonar.android.lint.report", "$buildDir/reports/lint-results-debug.xml")
                 addFilesIfExist("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/kover/xml/report.xml")

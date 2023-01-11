@@ -46,7 +46,7 @@ internal class DependencyVersionsConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "com.github.ben-manes.versions")
 
-        tasks.withType<DependencyUpdatesTask> {
+        tasks.withType<DependencyUpdatesTask>().configureEach {
             rejectVersionIf {
                 @Suppress("UseIfInsteadOfWhen")
                 when (val current = checkDependencyVersion(currentVersion)) {

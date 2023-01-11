@@ -5,7 +5,7 @@ import dev.alvr.katana.buildlogic.KatanaConfiguration
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.sonarqube.gradle.SonarQubeExtension
+import org.sonarqube.gradle.SonarExtension
 
 internal class SonarQubeConventionPlugin : ConventionPlugin {
     private val codeExclusions = listOf(
@@ -39,7 +39,7 @@ internal class SonarQubeConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.sonarqube")
 
-        extensions.configure<SonarQubeExtension> {
+        extensions.configure<SonarExtension> {
             properties {
                 property("sonar.host.url", "https://sonarcloud.io")
                 property("sonar.organization", "alvr")

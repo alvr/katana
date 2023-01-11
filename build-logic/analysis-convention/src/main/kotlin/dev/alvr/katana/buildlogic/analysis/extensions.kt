@@ -1,9 +1,9 @@
 package dev.alvr.katana.buildlogic.analysis
 
 import java.io.File
-import org.sonarqube.gradle.SonarQubeProperties
+import org.sonarqube.gradle.SonarProperties
 
-internal fun SonarQubeProperties.addFilesIfExist(property: String, vararg paths: String) {
+internal fun SonarProperties.addFilesIfExist(property: String, vararg paths: String) {
     paths.filter { file ->
         File(file).exists()
     }.takeUnless { files ->

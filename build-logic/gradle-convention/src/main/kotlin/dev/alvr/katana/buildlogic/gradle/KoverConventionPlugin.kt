@@ -72,7 +72,7 @@ internal class KoverConventionPlugin : ConventionPlugin {
                 }
             }
 
-            tasks.withType<Test> {
+            tasks.withType<Test>().configureEach {
                 extensions.configure<KoverTaskExtension> {
                     isDisabled.set(isRelease)
                 }
