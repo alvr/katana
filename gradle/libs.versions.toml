@@ -12,7 +12,7 @@ orbit = "4.5.0"
 sentry = "6.11.0"
 
 # Compose
-compose = "2022.12.00"
+compose = "2023.01.00"
 compose-compiler = "1.4.0-dev-k1.8.0-33c0ad36f83"
 
 # Coverage Engine
