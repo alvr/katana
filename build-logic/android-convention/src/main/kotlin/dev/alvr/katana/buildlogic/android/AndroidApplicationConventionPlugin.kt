@@ -9,7 +9,6 @@ import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.desugaring
 import dev.alvr.katana.buildlogic.implementation
-import dev.alvr.katana.buildlogic.kapt
 import dev.alvr.katana.buildlogic.testImplementation
 import java.io.FileInputStream
 import java.util.Properties
@@ -23,8 +22,6 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "com.android.application")
         apply(plugin = "org.jetbrains.kotlin.android")
-        apply(plugin = "org.jetbrains.kotlin.kapt")
-        apply(plugin = "com.google.dagger.hilt.android")
         apply(plugin = "katana.sonarqube.android")
 
         with(extensions) {
@@ -44,8 +41,6 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
             implementation(catalogLib("koin-compose")) { isTransitive = false }
 
             desugaring(catalogLib("desugaring"))
-
-            kapt(catalogBundle("kapt-ui"))
 
             testImplementation(platform(catalogLib("compose-bom")))
             testImplementation(catalogBundle("test"))

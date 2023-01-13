@@ -19,14 +19,13 @@ import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import io.github.aakira.napier.Napier
-import javax.inject.Inject
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-internal class CommonListsRemoteSourceImpl @Inject constructor(
+internal class CommonListsRemoteSourceImpl(
     private val client: ApolloClient,
     private val userId: UserIdManager,
     private val reloadInterceptor: ReloadInterceptor,

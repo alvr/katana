@@ -7,7 +7,6 @@ import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.debugImplementation
 import dev.alvr.katana.buildlogic.implementation
-import dev.alvr.katana.buildlogic.kapt
 import dev.alvr.katana.buildlogic.ksp
 import dev.alvr.katana.buildlogic.testImplementation
 import org.gradle.api.Project
@@ -46,7 +45,6 @@ internal class AndroidComposeLibraryConventionPlugin : ConventionPlugin {
 
             debugImplementation(catalogLib("compose-ui-test-manifest"))
 
-            kapt(catalogBundle("kapt-ui"))
             ksp(catalogBundle("ksp-ui"))
 
             testImplementation(platform(catalogLib("compose-bom")))

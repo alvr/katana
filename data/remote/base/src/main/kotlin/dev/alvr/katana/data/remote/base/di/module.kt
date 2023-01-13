@@ -33,7 +33,7 @@ private val apolloModule = module {
     single<NormalizedCacheFactory> {
         SqlNormalizedCacheFactory(
             androidApplication(),
-            CACHE_DATABASE
+            CACHE_DATABASE,
         )
     }
 

@@ -1,6 +1,5 @@
 package dev.alvr.katana.ui.main.viewmodel
 
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.session.usecases.ClearActiveSessionUseCase
@@ -9,13 +8,11 @@ import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
 import dev.alvr.katana.ui.main.navigation.NavGraphs
-import javax.inject.Inject
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
-@HiltViewModel
-internal class MainViewModel @Inject constructor(
+internal class MainViewModel(
     private val clearActiveSessionUseCase: ClearActiveSessionUseCase,
     private val getAnilistTokenUseCase: GetAnilistTokenUseCase,
     private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,

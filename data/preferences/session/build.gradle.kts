@@ -15,5 +15,4 @@ dependencies {
     implementation(libs.bundles.data.preferences)
 
     testImplementation(projects.common.testsAndroid)
-    kaptTest(libs.bundles.kapt)
 }

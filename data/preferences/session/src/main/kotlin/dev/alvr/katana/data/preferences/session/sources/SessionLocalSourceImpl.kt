@@ -12,12 +12,11 @@ import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.session.failures.SessionFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
 import io.github.aakira.napier.Napier
-import javax.inject.Inject
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-internal class SessionLocalSourceImpl @Inject constructor(
+internal class SessionLocalSourceImpl(
     private val dataStore: DataStore<Session>,
 ) : SessionLocalSource {
     @Suppress("USELESS_CAST")

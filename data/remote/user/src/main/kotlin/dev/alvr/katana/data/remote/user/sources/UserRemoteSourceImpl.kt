@@ -9,9 +9,8 @@ import dev.alvr.katana.data.remote.user.UserIdQuery
 import dev.alvr.katana.data.remote.user.mappers.responses.invoke
 import dev.alvr.katana.domain.user.failures.UserFailure
 import io.github.aakira.napier.Napier
-import javax.inject.Inject
 
-internal class UserRemoteSourceImpl @Inject constructor(
+internal class UserRemoteSourceImpl(
     private val client: ApolloClient,
 ) : UserRemoteSource {
     override suspend fun getUserId() = Either.catch(

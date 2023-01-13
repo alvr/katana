@@ -17,7 +17,6 @@ import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
-import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private val Project.libs get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
@@ -41,10 +40,6 @@ fun DependencyHandlerScope.debugImplementation(provider: Provider<*>) {
 
 fun DependencyHandlerScope.testImplementation(provider: Provider<*>) {
     addProvider("testImplementation", provider)
-}
-
-fun DependencyHandlerScope.kapt(provider: Provider<*>) {
-    addProvider("kapt", provider)
 }
 
 fun DependencyHandlerScope.ksp(provider: Provider<*>) {
@@ -72,10 +67,6 @@ fun ExtensionContainer.commonExtensions() {
             languageVersion.set(JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr))
             vendor.set(JvmVendorSpec.AZUL)
         }
-    }
-
-    configure<KaptExtension> {
-        correctErrorTypes = true
     }
 }
 

@@ -62,7 +62,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.common.core.zero
@@ -83,6 +82,7 @@ import dev.alvr.katana.ui.login.R
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
 import dev.alvr.katana.ui.login.viewmodel.LoginState
 import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -93,7 +93,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 )
 internal fun Login(
     navigator: LoginNavigator,
-    vm: LoginViewModel = hiltViewModel(),
+    vm: LoginViewModel = koinViewModel(),
 ) {
     val state by vm.collectAsState()
 

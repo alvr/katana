@@ -3,9 +3,9 @@ accompanist = "0.28.0"
 apollo = "3.7.4"
 coroutines = "1.6.4"
 destinations = "1.7.30-beta"
-hilt = "2.44.2"
-hiltx = "1.0.0"
 junit5 = "5.9.2"
+koin = "3.3.2"
+koin-compose = "3.4.1"
 kotlin = "1.8.0"
 okhttp = "4.10.0"
 orbit = "4.5.0"
@@ -26,7 +26,6 @@ kotest = "5.5.4"
 
 [plugins]
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
@@ -90,7 +89,6 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version = "7.3.1" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
-gradle-hilt = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kover.gradle.plugin", version = "0.6.1" }
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.8.0-1.0.8" }
@@ -98,22 +96,12 @@ gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "3.4.0.2513" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.44.0" }
 
-# Hilt
-hilt = { module = "com.google.dagger:hilt-core", version.ref = "hilt" }
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
-hilt-test = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
-
-# HiltX
-hiltx-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltx" }
-hiltx-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltx" }
-
 # Koin
-koin = { module = "io.insert-koin:koin-core", version = "3.3.2" }
-koin-android = { module = "io.insert-koin:koin-android", version = "3.3.2" }
-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version = "3.4.1" }
-koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version = "3.3.2" }
+koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-compose" }
+koin-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
+koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin" }
 
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -168,7 +156,6 @@ turbine = { module = "app.cash.turbine:turbine", version = "0.12.1" }
 common = [
     "arrow",
     "coroutines",
-    "hilt",
     "koin",
     "kotlin",
     "kotlin-immutable",
@@ -176,7 +163,6 @@ common = [
 common-android = [
     "arrow",
     "coroutines-android",
-    "hilt-android",
     "koin",
     "kotlin",
     "kotlin-immutable",
@@ -190,20 +176,11 @@ app = [
     "compose-material3-windowsize",
     "compose-material-icons",
     "destinations",
-    "hiltx-navigation",
     "koin",
     "orbit",
     "orbit-compose",
     "sentry",
     "sentry-compose",
-]
-
-kapt = [
-    "hilt-compiler",
-]
-kapt-ui = [
-    "hilt-android-compiler",
-    "hiltx-compiler",
 ]
 
 ksp-ui = [
@@ -232,7 +209,6 @@ ui-compose = [
     "compose-ui-tooling",
     "design-constraintlayout",
     "destinations",
-    "hiltx-navigation",
     "lifecycle-viewmodel",
     "orbit",
     "orbit-compose",
@@ -249,8 +225,8 @@ test = [
     "turbine",
 ]
 test-android = [
-    "hilt-test",
     "junit5-vintage",
+    "koin-junit5",
     "robolectric",
 ]
 
@@ -260,5 +236,6 @@ test-data-remote = [
 ]
 test-ui = [
     "compose-ui-test",
+    "koin-junit4",
     "orbit-test",
 ]

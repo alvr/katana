@@ -5,7 +5,6 @@ import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.implementation
-import dev.alvr.katana.buildlogic.kapt
 import dev.alvr.katana.buildlogic.testImplementation
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
@@ -16,7 +15,6 @@ import org.gradle.kotlin.dsl.getByName
 internal class KotlinLibraryConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.jetbrains.kotlin.jvm")
-        apply(plugin = "org.jetbrains.kotlin.kapt")
         apply(plugin = "katana.sonarqube.kotlin")
 
         extensions.commonExtensions()
@@ -31,8 +29,6 @@ internal class KotlinLibraryConventionPlugin : ConventionPlugin {
 
         dependencies {
             implementation(catalogBundle("common"))
-
-            kapt(catalogBundle("kapt"))
 
             testImplementation(catalogBundle("test"))
         }
