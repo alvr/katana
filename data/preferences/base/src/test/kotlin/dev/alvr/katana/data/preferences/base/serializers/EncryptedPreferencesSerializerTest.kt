@@ -2,28 +2,28 @@ package dev.alvr.katana.data.preferences.base.serializers
 
 import androidx.datastore.core.CorruptionException
 import com.google.crypto.tink.Aead
-import dagger.hilt.android.testing.HiltAndroidTest
-import dev.alvr.katana.common.tests.HiltTest
-import dev.alvr.katana.common.tests.RobolectricKeyStore
+import dev.alvr.katana.common.tests.KoinTest4
 import dev.alvr.katana.data.preferences.base.Color
 import dev.alvr.katana.data.preferences.base.ColorSerializer
+import dev.alvr.katana.data.preferences.base.di.baseDataPreferencesModule
 import io.kotest.assertions.throwables.shouldThrowExactlyUnit
 import io.kotest.matchers.shouldBe
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
-import org.junit.BeforeClass
 import org.junit.Test
+import org.koin.core.KoinApplication
+import org.koin.test.inject
 
-@HiltAndroidTest
 @ExperimentalCoroutinesApi
 @ExperimentalSerializationApi
-internal class EncryptedPreferencesSerializerTest : HiltTest() {
+internal class EncryptedPreferencesSerializerTest : KoinTest4() {
+    private val aead by inject<Aead>()
 
-    @Inject
-    internal lateinit var aead: Aead
+    override fun KoinApplication.initKoin() {
+        modules(baseDataPreferencesModule)
+    }
 
     @Test
     fun `when reading the initial value it should fail`() = runTest {
@@ -47,13 +47,5 @@ internal class EncryptedPreferencesSerializerTest : HiltTest() {
         val color = colorSerializer.readFrom(input)
 
         color.rgb shouldBe 0x123_456
-    }
-
-    companion object {
-        @JvmStatic
-        @BeforeClass
-        fun setUpClass() {
-            RobolectricKeyStore.setup
-        }
     }
 }

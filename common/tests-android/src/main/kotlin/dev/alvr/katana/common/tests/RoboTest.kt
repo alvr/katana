@@ -12,6 +12,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -39,5 +40,13 @@ open class RoboTest {
 
     protected fun runTest(test: suspend TestScope.() -> Unit) {
         testScope.runTest(testBody = test)
+    }
+
+    companion object {
+        @JvmStatic
+        @BeforeClass
+        fun setUpClass() {
+            RobolectricKeyStore.setup
+        }
     }
 }

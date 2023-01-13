@@ -28,7 +28,7 @@ internal class SonarQubeConventionPlugin : ConventionPlugin {
         "**/base/**",
         "**/navigation/**",
 
-        // Hilt
+        // Koin
         "**/di/**",
 
         // Ui

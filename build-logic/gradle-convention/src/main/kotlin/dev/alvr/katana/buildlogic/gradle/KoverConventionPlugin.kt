@@ -44,11 +44,8 @@ internal class KoverConventionPlugin : ConventionPlugin {
         // Compose
         "*.*ComposableSingletons*",
 
-        // Hilt
+        // Koin
         "*.di.*",
-        "*.*Hilt_*",
-        "*.*HiltModules*",
-        "*.*_Factory",
 
         // Serializers
         "*$\$serializer",
