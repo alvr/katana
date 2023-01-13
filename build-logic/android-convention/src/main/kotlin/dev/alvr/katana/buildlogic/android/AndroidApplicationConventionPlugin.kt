@@ -40,6 +40,8 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
             implementation(platform(catalogLib("compose-bom")))
             implementation(catalogBundle("common-android"))
             implementation(catalogBundle("app"))
+            implementation(catalogLib("koin-android")) { isTransitive = false }
+            implementation(catalogLib("koin-compose")) { isTransitive = false }
 
             desugaring(catalogLib("desugaring"))
 

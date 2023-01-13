@@ -1,6 +1,7 @@
 package dev.alvr.katana.buildlogic
 
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.plugins.JavaPluginExtension
@@ -27,8 +28,11 @@ fun Project.catalogVersion(alias: String) = libs.findVersion(alias).get().toStri
 fun Project.catalogLib(alias: String) = libs.findLibrary(alias).get()
 fun Project.catalogBundle(alias: String) = libs.findBundle(alias).get()
 
-fun DependencyHandlerScope.implementation(provider: Provider<*>) {
-    addProvider("implementation", provider)
+fun DependencyHandlerScope.implementation(
+    provider: Provider<*>,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
+) {
+    addProvider("implementation", provider, dependencyConfiguration)
 }
 
 fun DependencyHandlerScope.debugImplementation(provider: Provider<*>) {
