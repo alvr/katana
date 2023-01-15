@@ -1,5 +1,6 @@
 package dev.alvr.katana.data.preferences.session.di
 
+import android.annotation.SuppressLint
 import android.util.Base64
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
@@ -31,6 +32,7 @@ internal val corruptedDataStoreNamed = named(CORRUPTED_DATASTORE)
     ExperimentalCoroutinesApi::class,
     ExperimentalSerializationApi::class,
 )
+@SuppressLint("NewApi")
 internal val dataStoreModule = module {
     includes(baseDataPreferencesModule)
 

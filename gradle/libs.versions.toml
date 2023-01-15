@@ -79,7 +79,7 @@ destinations = { module = "io.github.raamcosta.compose-destinations:animations-c
 destinations-compiler = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "destinations" }
 
 # Desugaring
-desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "1.2.2" }
+desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "2.0.0" }
 
 # Detekt
 detekt-compose = { module = "com.twitter.compose.rules:detekt", version = "0.0.26" }

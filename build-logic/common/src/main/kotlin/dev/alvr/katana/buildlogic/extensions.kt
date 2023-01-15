@@ -83,5 +83,10 @@ private fun KotlinJvmCompilerOptions.configureKotlin() {
     jvmTarget.set(KatanaConfiguration.JvmTarget)
     apiVersion.set(KatanaConfiguration.KotlinVersion)
     languageVersion.set(KatanaConfiguration.KotlinVersion)
-    freeCompilerArgs.set(freeCompilerArgs.get() + listOf("-opt-in=kotlin.RequiresOptIn"))
+    freeCompilerArgs.set(
+        freeCompilerArgs.get() + listOf(
+            "-opt-in=kotlin.RequiresOptIn",
+            "-Xlambdas=indy",
+        ),
+    )
 }
