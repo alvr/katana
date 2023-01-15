@@ -1,7 +1,7 @@
 package dev.alvr.katana
 
 import android.app.Application
-import dev.alvr.katana.ui.main.di.appModule
+import dev.alvr.katana.ui.main.di.katanaModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -17,7 +17,7 @@ internal class KatanaApp : Application() {
                 androidLogger(Level.DEBUG)
             }
 
-            modules(appModule)
+            modules(katanaModule)
         }
     }
 }

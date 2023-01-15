@@ -9,7 +9,7 @@ import com.apollographql.apollo3.interceptor.ApolloInterceptor
 import com.apollographql.apollo3.interceptor.ApolloInterceptorChain
 import kotlinx.coroutines.flow.Flow
 
-class ReloadInterceptor : ApolloInterceptor {
+internal class ReloadInterceptor : ApolloInterceptor {
     private var firstQuery = true
 
     override fun <D : Operation.Data> intercept(

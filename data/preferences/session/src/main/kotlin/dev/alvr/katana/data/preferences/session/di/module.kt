@@ -12,7 +12,7 @@ import dev.alvr.katana.data.preferences.session.sources.SessionLocalSourceImpl
 import dev.alvr.katana.domain.session.repositories.SessionRepository
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.koin.android.ext.koin.androidApplication
-import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -28,11 +28,11 @@ private val dataStoreModule = module {
 }
 
 private val repositoriesModule = module {
-    factoryOf(::SessionRepositoryImpl) bind SessionRepository::class
+    singleOf(::SessionRepositoryImpl).bind<SessionRepository>()
 }
 
 private val sourcesModule = module {
-    factoryOf(::SessionLocalSourceImpl) bind SessionLocalSource::class
+    singleOf(::SessionLocalSourceImpl).bind<SessionLocalSource>()
 }
 
 val sessionDataPreferencesModule = module {

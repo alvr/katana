@@ -8,19 +8,18 @@ import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSourceImp
 import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSource
 import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSourceImpl
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 private val repositoriesModule = module {
-    factoryOf(::ListsRepositoryImpl) bind ListsRepository::class
+    singleOf(::ListsRepositoryImpl).bind<ListsRepository>()
 }
 
 private val sourcesModule = module {
-    factoryOf(::CommonListsRemoteSourceImpl) bind CommonListsRemoteSource::class
-    singleOf(::AnimeListsRemoteSourceImpl) bind AnimeListsRemoteSource::class
-    singleOf(::MangaListsRemoteSourceImpl) bind MangaListsRemoteSource::class
+    singleOf(::CommonListsRemoteSourceImpl).bind<CommonListsRemoteSource>()
+    singleOf(::AnimeListsRemoteSourceImpl).bind<AnimeListsRemoteSource>()
+    singleOf(::MangaListsRemoteSourceImpl).bind<MangaListsRemoteSource>()
 }
 
 val listsDataRemoteModule = module {

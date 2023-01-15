@@ -26,16 +26,15 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.factoryOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
+private val getAnilistTokenInterceptor = named("getAnilistTokenInterceptor")
+private val deleteAnilistTokenInterceptor = named("deleteAnilistTokenInterceptor")
+
 private val apolloModule = module {
-    single<NormalizedCacheFactory> {
-        SqlNormalizedCacheFactory(
-            androidApplication(),
-            CACHE_DATABASE,
-        )
-    }
+    single<NormalizedCacheFactory> { SqlNormalizedCacheFactory(androidApplication(), CACHE_DATABASE) }
 
     single {
         val cacheKeyGenerator = object : CacheKeyGenerator {
@@ -52,35 +51,10 @@ private val apolloModule = module {
             }
         }
 
-        val getAnilistTokenInterceptor = object : HttpInterceptor {
-            val useCase = get<GetAnilistTokenUseCase>()
-
-            override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain) =
-                request.newBuilder()
-                    .addHeader("Authorization", "Bearer ${useCase().orNull()?.token}")
-                    .addHeader("Accept", "application/json")
-                    .addHeader("Content-Type", "application/json")
-                    .build().let { chain.proceed(it) }
-        }
-
-        val deleteAnilistTokenInterceptor = object : HttpInterceptor {
-            val useCase = get<DeleteAnilistTokenUseCase>()
-
-            override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain) =
-                chain.proceed(request).also { response ->
-                    if (
-                        response.statusCode == HttpURLConnection.HTTP_BAD_REQUEST ||
-                        response.statusCode == HttpURLConnection.HTTP_UNAUTHORIZED
-                    ) {
-                        useCase()
-                    }
-                }
-        }
-
         ApolloClient.Builder()
             .serverUrl(ANILIST_BASE_URL)
-            .addHttpInterceptor(getAnilistTokenInterceptor)
-            .addHttpInterceptor(deleteAnilistTokenInterceptor)
+            .addHttpInterceptor(get(getAnilistTokenInterceptor))
+            .addHttpInterceptor(get(deleteAnilistTokenInterceptor))
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .okHttpClient(get())
             .sentryTracing()
@@ -93,7 +67,36 @@ private val apolloModule = module {
     }
 }
 
-private val interceptorsModule = module {
+private val apolloInterceptorsModule = module {
+    single<HttpInterceptor>(getAnilistTokenInterceptor) {
+        object : HttpInterceptor {
+            val useCase = get<GetAnilistTokenUseCase>()
+
+            override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain) =
+                request.newBuilder()
+                    .addHeader("Authorization", "Bearer ${useCase().orNull()?.token}")
+                    .addHeader("Accept", "application/json")
+                    .addHeader("Content-Type", "application/json")
+                    .build().let { chain.proceed(it) }
+        }
+    }
+
+    single<HttpInterceptor>(deleteAnilistTokenInterceptor) {
+        object : HttpInterceptor {
+            val useCase = get<DeleteAnilistTokenUseCase>()
+
+            override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain) =
+                chain.proceed(request).also { response ->
+                    if (
+                        response.statusCode == HttpURLConnection.HTTP_BAD_REQUEST ||
+                        response.statusCode == HttpURLConnection.HTTP_UNAUTHORIZED
+                    ) {
+                        useCase()
+                    }
+                }
+        }
+    }
+
     factoryOf(::ReloadInterceptor) bind ApolloInterceptor::class
 }
 
@@ -117,7 +120,7 @@ private val okhttpModule = module {
 }
 
 val baseDataRemoteModule = module {
-    includes(apolloModule, interceptorsModule, okhttpModule)
+    includes(apolloModule, apolloInterceptorsModule, okhttpModule)
 }
 
 private const val ANILIST_BASE_URL = "https://graphql.anilist.co"

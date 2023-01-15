@@ -6,21 +6,20 @@ import dev.alvr.katana.data.remote.user.sources.UserRemoteSource
 import dev.alvr.katana.data.remote.user.sources.UserRemoteSourceImpl
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import dev.alvr.katana.domain.user.repositories.UserRepository
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 private val managersModule = module {
-    singleOf(::UserIdManagerImpl) bind UserIdManager::class
+    singleOf(::UserIdManagerImpl).bind<UserIdManager>()
 }
 
 private val repositoriesModule = module {
-    factoryOf(::UserRepositoryImpl) bind UserRepository::class
+    singleOf(::UserRepositoryImpl).bind<UserRepository>()
 }
 
 private val sourcesModule = module {
-    factoryOf(::UserRemoteSourceImpl) bind UserRemoteSource::class
+    singleOf(::UserRemoteSourceImpl).bind<UserRemoteSource>()
 }
 
 val userDataRemoteModule = module {

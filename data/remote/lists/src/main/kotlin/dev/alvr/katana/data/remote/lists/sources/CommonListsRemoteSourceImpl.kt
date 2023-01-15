@@ -6,8 +6,8 @@ import arrow.core.right
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.fetchPolicyInterceptor
 import com.apollographql.apollo3.cache.normalized.watch
+import com.apollographql.apollo3.interceptor.ApolloInterceptor
 import dev.alvr.katana.data.remote.base.extensions.optional
-import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.data.remote.base.toFailure
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.map
 internal class CommonListsRemoteSourceImpl(
     private val client: ApolloClient,
     private val userId: UserIdManager,
-    private val reloadInterceptor: ReloadInterceptor,
+    private val reloadInterceptor: ApolloInterceptor,
 ) : CommonListsRemoteSource {
     override suspend fun updateList(entry: MediaList) = Either.catch(
         f = { client.mutation(entry.toMutation()).execute() },
