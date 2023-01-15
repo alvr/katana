@@ -1,9 +1,5 @@
 package dev.alvr.katana.data.remote.lists.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import dev.alvr.katana.data.remote.lists.repositories.ListsRepositoryImpl
 import dev.alvr.katana.data.remote.lists.sources.CommonListsRemoteSource
 import dev.alvr.katana.data.remote.lists.sources.CommonListsRemoteSourceImpl
@@ -12,19 +8,20 @@ import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSourceImp
 import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSource
 import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSourceImpl
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal sealed interface ListsBindingsModule {
-    @Binds
-    fun bindListsRepository(impl: ListsRepositoryImpl): ListsRepository
+private val repositoriesModule = module {
+    singleOf(::ListsRepositoryImpl).bind<ListsRepository>()
+}
 
-    @Binds
-    fun bindAnimeListsRemoteSource(impl: AnimeListsRemoteSourceImpl): AnimeListsRemoteSource
+private val sourcesModule = module {
+    singleOf(::CommonListsRemoteSourceImpl).bind<CommonListsRemoteSource>()
+    singleOf(::AnimeListsRemoteSourceImpl).bind<AnimeListsRemoteSource>()
+    singleOf(::MangaListsRemoteSourceImpl).bind<MangaListsRemoteSource>()
+}
 
-    @Binds
-    fun bindMangaListsRemoteSource(impl: MangaListsRemoteSourceImpl): MangaListsRemoteSource
-
-    @Binds
-    fun bindCommonListsRemoteSource(impl: CommonListsRemoteSourceImpl): CommonListsRemoteSource
+val listsDataRemoteModule = module {
+    includes(repositoriesModule, sourcesModule)
 }

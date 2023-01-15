@@ -13,13 +13,13 @@ import com.apollographql.apollo3.exception.HttpCacheMissException
 import com.apollographql.apollo3.exception.JsonDataException
 import com.apollographql.apollo3.exception.JsonEncodingException
 import com.apollographql.apollo3.exception.MissingValueException
+import com.apollographql.apollo3.interceptor.ApolloInterceptor
 import com.apollographql.apollo3.mockserver.MockResponse
 import com.apollographql.apollo3.mockserver.MockServer
 import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
 import com.benasher44.uuid.uuid4
 import dev.alvr.katana.common.tests.TestBase
-import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.MediaListEntriesMutation
@@ -77,7 +77,7 @@ internal class CommonListsRemoteSourceTest : TestBase() {
     @MockK
     private lateinit var userIdManager: UserIdManager
     @MockK
-    private lateinit var reloadInterceptor: ReloadInterceptor
+    private lateinit var reloadInterceptor: ApolloInterceptor
 
     private lateinit var source: CommonListsRemoteSource
 

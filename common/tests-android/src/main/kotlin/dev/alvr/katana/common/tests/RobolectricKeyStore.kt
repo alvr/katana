@@ -17,7 +17,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.KeyGeneratorSpi
 import javax.crypto.SecretKey
 
-object RobolectricKeyStore {
+internal object RobolectricKeyStore {
     private const val AES = "AES"
     private const val AKS = "AndroidKeyStore"
     private const val BC = "BC"

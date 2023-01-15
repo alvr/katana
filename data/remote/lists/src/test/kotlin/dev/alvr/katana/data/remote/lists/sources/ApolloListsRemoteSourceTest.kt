@@ -4,13 +4,13 @@ import app.cash.turbine.test
 import arrow.core.right
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
+import com.apollographql.apollo3.interceptor.ApolloInterceptor
 import com.apollographql.apollo3.testing.MapTestNetworkTransport
 import com.apollographql.apollo3.testing.registerTestNetworkError
 import com.apollographql.apollo3.testing.registerTestResponse
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.data.remote.base.extensions.optional
-import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSource
@@ -52,7 +52,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
     @MockK
     private lateinit var userIdManager: UserIdManager
     @MockK
-    private lateinit var reloadInterceptor: ReloadInterceptor
+    private lateinit var reloadInterceptor: ApolloInterceptor
 
     private lateinit var source: CommonListsRemoteSource
     private lateinit var animeSource: AnimeListsRemoteSource

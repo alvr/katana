@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.ui.lists.R
@@ -13,6 +12,7 @@ import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.components.ListScreen
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.ui.lists.viewmodel.MangaListsViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 @Destination
@@ -26,7 +26,7 @@ internal fun MangaScreen(
     resultRecipient: ResultRecipient<ChangeListSheetDestination, String>,
 ) {
     ListScreen(
-        vm = hiltViewModel<MangaListsViewModel>(),
+        vm = koinViewModel<MangaListsViewModel>(),
         navigator = navigator,
         fromNavigator = ListsNavigator.From.MANGA,
         resultRecipient = resultRecipient,

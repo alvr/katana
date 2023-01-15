@@ -2,24 +2,18 @@ package dev.alvr.katana.buildlogic.android
 
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.gradle.BaseExtension
-import dagger.hilt.android.plugin.HiltExtension
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogVersion
 import dev.alvr.katana.buildlogic.commonExtensions
 import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionContainer
-import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.systemProperties
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun ExtensionContainer.commonAndroidExtensions() {
     commonExtensions()
-
-    configure<HiltExtension> {
-        enableAggregatingTask = true
-    }
 }
 
 @Suppress("UnstableApiUsage")

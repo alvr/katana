@@ -1,6 +1,7 @@
 package dev.alvr.katana.buildlogic
 
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.plugins.JavaPluginExtension
@@ -16,7 +17,6 @@ import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
-import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private val Project.libs get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
@@ -27,8 +27,11 @@ fun Project.catalogVersion(alias: String) = libs.findVersion(alias).get().toStri
 fun Project.catalogLib(alias: String) = libs.findLibrary(alias).get()
 fun Project.catalogBundle(alias: String) = libs.findBundle(alias).get()
 
-fun DependencyHandlerScope.implementation(provider: Provider<*>) {
-    addProvider("implementation", provider)
+fun DependencyHandlerScope.implementation(
+    provider: Provider<*>,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
+) {
+    addProvider("implementation", provider, dependencyConfiguration)
 }
 
 fun DependencyHandlerScope.debugImplementation(provider: Provider<*>) {
@@ -37,10 +40,6 @@ fun DependencyHandlerScope.debugImplementation(provider: Provider<*>) {
 
 fun DependencyHandlerScope.testImplementation(provider: Provider<*>) {
     addProvider("testImplementation", provider)
-}
-
-fun DependencyHandlerScope.kapt(provider: Provider<*>) {
-    addProvider("kapt", provider)
 }
 
 fun DependencyHandlerScope.ksp(provider: Provider<*>) {
@@ -68,10 +67,6 @@ fun ExtensionContainer.commonExtensions() {
             languageVersion.set(JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr))
             vendor.set(JvmVendorSpec.AZUL)
         }
-    }
-
-    configure<KaptExtension> {
-        correctErrorTypes = true
     }
 }
 
