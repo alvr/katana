@@ -45,7 +45,7 @@ apollo-mockserver = { module = "com.apollographql.apollo3:apollo-mockserver", ve
 apollo-test = { module = "com.apollographql.apollo3:apollo-testing-support", version.ref = "apollo" }
 
 # Arrow
-arrow = { module = "io.arrow-kt:arrow-core", version = "1.1.3" }
+arrow = { module = "io.arrow-kt:arrow-core", version = "1.1.5" }
 
 # Coil
 coil = { module = "io.coil-kt:coil-compose", version = "2.2.2" }
