@@ -63,12 +63,7 @@ internal class SessionLocalSourceImpl(
         .first()
 
     override suspend fun saveSession(anilistToken: AnilistToken) = Either.catch {
-        dataStore.updateData { p ->
-            p.copy(
-                anilistToken = anilistToken.token,
-                isSessionActive = true,
-            )
-        }
+        dataStore.updateData { p -> p.copy(anilistToken = anilistToken.token, isSessionActive = true) }
         Napier.d { "Token saved: ${anilistToken.token}" }
     }.mapLeft { error ->
         Napier.e(error) { "Was not possible to save the token" }

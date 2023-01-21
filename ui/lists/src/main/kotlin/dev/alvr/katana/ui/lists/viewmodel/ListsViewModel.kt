@@ -12,6 +12,7 @@ import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.entities.UserList
 import dev.alvr.katana.ui.lists.entities.mappers.toMediaList
+import dev.alvr.katana.ui.lists.entities.mappers.toUserList
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -20,7 +21,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
-internal typealias Collection<T> = Map<String, List<T>>
+internal typealias ListsCollection<T> = Map<String, List<T>>
 
 internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     private val savedStateHandle: SavedStateHandle,
@@ -92,12 +93,7 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
                         val items = media.lists
                             .groupBy { it.name }
                             .mapValues { it.value.entryMap() }
-                            .also { lists ->
-                                lists.map { entry ->
-                                    UserList(entry.key to entry.value.size)
-                                }.also { setUserLists(it) }
-                            }
-                            .also { setCollection(it) }
+                            .also { collection -> setCollection(collection) }
 
                         val selectedListName = state.name ?: items.keys.firstOrNull()
                         val selectedList = getListByName(selectedListName).orEmpty()
@@ -122,18 +118,15 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
         updateState { copy(isError = true, isLoading = false, isEmpty = true) }
     }
 
-    private fun <T : MediaListItem> setCollection(items: Collection<T>) {
+    private fun <T : MediaListItem> setCollection(items: ListsCollection<T>) {
         savedStateHandle[COLLECTION] = items
+        savedStateHandle[USER_LISTS] = items.toUserList()
     }
 
     private fun <T : MediaListItem> getCollection() =
-        savedStateHandle.get<Collection<T>>(COLLECTION).orEmpty()
+        savedStateHandle.get<ListsCollection<T>>(COLLECTION).orEmpty()
 
-    private fun setUserLists(names: List<UserList>) {
-        savedStateHandle[USER_LISTS] = names.toTypedArray()
-    }
-
-    private fun <T : MediaListItem> Collection<T>.getListByName(name: String?) =
+    private fun <T : MediaListItem> ListsCollection<T>.getListByName(name: String?) =
         get(name)?.toImmutableList()
 
     private fun getListByName(listName: String?) = getCollection<I>().getListByName(listName)
