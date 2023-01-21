@@ -75,8 +75,8 @@ internal fun ListScreen(
         onSearch = vm::search,
         backContent = backContent,
         fab = {
-            ChangeListButton(visible = buttonsVisible && vm.listNames.isNotEmpty()) {
-                navigator.listSelector(vm.listNames, fromNavigator)
+            ChangeListButton(visible = buttonsVisible && vm.userLists.isNotEmpty()) {
+                navigator.listSelector(vm.userLists, state.name.orEmpty(), fromNavigator)
             }
         },
     ) { paddingValues ->

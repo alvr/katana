@@ -10,6 +10,7 @@ import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.lists.entities.MediaListItem
+import dev.alvr.katana.ui.lists.entities.UserList
 import dev.alvr.katana.ui.lists.entities.mappers.toMediaList
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -33,7 +34,7 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
 
     private var currentList: ImmutableList<I> = persistentListOf()
 
-    val listNames get() = savedStateHandle.get<Array<String>>(LIST_NAMES) ?: emptyArray()
+    val userLists get() = savedStateHandle.get<Array<UserList>>(USER_LISTS) ?: emptyArray()
 
     protected abstract fun List<MediaListGroup<E>>.entryMap(): List<I>
 
@@ -90,8 +91,12 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
                     ifRight = { media ->
                         val items = media.lists
                             .groupBy { it.name }
-                            .also { setListNames(it.keys.toTypedArray()) }
                             .mapValues { it.value.entryMap() }
+                            .also { lists ->
+                                lists.map { entry ->
+                                    UserList(entry.key to entry.value.size)
+                                }.also { setUserLists(it) }
+                            }
                             .also { setCollection(it) }
 
                         val selectedListName = state.name ?: items.keys.firstOrNull()
@@ -124,8 +129,8 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     private fun <T : MediaListItem> getCollection() =
         savedStateHandle.get<Collection<T>>(COLLECTION).orEmpty()
 
-    private fun setListNames(names: Array<String>) {
-        savedStateHandle[LIST_NAMES] = names
+    private fun setUserLists(names: List<UserList>) {
+        savedStateHandle[USER_LISTS] = names.toTypedArray()
     }
 
     private fun <T : MediaListItem> Collection<T>.getListByName(name: String?) =
@@ -135,6 +140,6 @@ internal abstract class ListsViewModel<E : MediaEntry, I : MediaListItem>(
 
     companion object {
         private const val COLLECTION = "collection"
-        private const val LIST_NAMES = "listNames"
+        private const val USER_LISTS = "userLists"
     }
 }

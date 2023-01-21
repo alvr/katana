@@ -16,6 +16,7 @@ import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.domain.lists.usecases.ObserveAnimeListUseCase
 import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
 import dev.alvr.katana.ui.lists.entities.MediaListItem
+import dev.alvr.katana.ui.lists.entities.UserList
 import io.kotest.assertions.throwables.shouldThrowExactlyUnit
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainInOrder
@@ -114,7 +115,7 @@ internal class AnimeListsViewModelTest : TestBase() {
                 verify(exactly = 1) { observeAnime() }
                 verify(exactly = 1) { observeAnime.flow }
                 verify(ordering = Ordering.ORDERED) {
-                    stateHandle["listNames"] = emptyArray<String>()
+                    stateHandle["userLists"] = emptyArray<String>()
                     stateHandle["collection"] = emptyMap<String, List<MediaListItem>>()
 
                     stateHandle.get<String>("collection")
@@ -139,7 +140,7 @@ internal class AnimeListsViewModelTest : TestBase() {
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
             verify(ordering = Ordering.ORDERED) {
-                stateHandle["listNames"] = arrayOf("MyCustomAnimeList", "MyCustomAnimeList2")
+                stateHandle["userLists"] = arrayOf(UserList("MyCustomAnimeList", 1), UserList("MyCustomAnimeList2", 1))
                 stateHandle["collection"] = mapOf(
                     "MyCustomAnimeList" to listOf(animeListItem1),
                     "MyCustomAnimeList2" to listOf(animeListItem2),
@@ -153,20 +154,20 @@ internal class AnimeListsViewModelTest : TestBase() {
         @DisplayName(
             """
             AND the anime collection has entries
-            AND getting the listNames
+            AND getting the userLists
             THEN the list should contain one element
             """,
         )
-        fun `the anime collection has entries AND getting the listNames`() = runTest {
+        fun `the anime collection has entries AND getting the userLists`() = runTest {
             // GIVEN
             mockAnimeFlow()
 
             // WHEN
             viewModel.runOnCreate()
             viewModel.testIntent {
-                listNames
+                userLists
                     .shouldHaveSize(2)
-                    .shouldContainInOrder("MyCustomAnimeList", "MyCustomAnimeList2")
+                    .shouldContainInOrder(UserList("MyCustomAnimeList", 1), UserList("MyCustomAnimeList2", 1))
             }
 
             // THEN
@@ -174,14 +175,14 @@ internal class AnimeListsViewModelTest : TestBase() {
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
             verify(ordering = Ordering.ORDERED) {
-                stateHandle["listNames"] = arrayOf("MyCustomAnimeList", "MyCustomAnimeList2")
+                stateHandle["userLists"] = arrayOf(UserList("MyCustomAnimeList", 1), UserList("MyCustomAnimeList2", 1))
                 stateHandle["collection"] = mapOf(
                     "MyCustomAnimeList" to listOf(animeListItem1),
                     "MyCustomAnimeList2" to listOf(animeListItem2),
                 )
 
                 stateHandle.get<String>("collection")
-                stateHandle.get<Array<String>>("listNames")
+                stateHandle.get<Array<String>>("userLists")
             }
         }
 
@@ -211,13 +212,13 @@ internal class AnimeListsViewModelTest : TestBase() {
         @DisplayName("AND the array of anime list names is non-existent THEN the array should be empty")
         fun `the array of anime list names is non-existent`() = runTest {
             // GIVEN
-            every { stateHandle.get<Array<String>>("listNames") } returns null
+            every { stateHandle.get<Array<String>>("userLists") } returns null
 
             // WHEN
-            viewModel.testIntent { listNames.shouldBeEmpty() }
+            viewModel.testIntent { userLists.shouldBeEmpty() }
 
             // THEN
-            verify(exactly = 1) { stateHandle.get<Array<String>>("listNames") }
+            verify(exactly = 1) { stateHandle.get<Array<String>>("userLists") }
         }
     }
 
@@ -239,7 +240,7 @@ internal class AnimeListsViewModelTest : TestBase() {
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
             verify(ordering = Ordering.ORDERED) {
-                stateHandle["listNames"] = arrayOf("MyCustomAnimeList", "MyCustomAnimeList2")
+                stateHandle["userLists"] = arrayOf(UserList("MyCustomAnimeList", 1), UserList("MyCustomAnimeList2", 1))
                 stateHandle["collection"] = mapOf(
                     "MyCustomAnimeList" to listOf(animeListItem1),
                     "MyCustomAnimeList2" to listOf(animeListItem2),
@@ -284,7 +285,7 @@ internal class AnimeListsViewModelTest : TestBase() {
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
             verify(ordering = Ordering.ORDERED) {
-                stateHandle["listNames"] = arrayOf("MyCustomAnimeList", "MyCustomAnimeList2")
+                stateHandle["userLists"] = arrayOf(UserList("MyCustomAnimeList", 1), UserList("MyCustomAnimeList2", 1))
                 stateHandle["collection"] = mapOf(
                     "MyCustomAnimeList" to listOf(animeListItem1),
                     "MyCustomAnimeList2" to listOf(animeListItem2),
@@ -330,7 +331,7 @@ internal class AnimeListsViewModelTest : TestBase() {
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
             verify(ordering = Ordering.ORDERED) {
-                stateHandle["listNames"] = arrayOf("MyCustomAnimeList", "MyCustomAnimeList2")
+                stateHandle["userLists"] = arrayOf(UserList("MyCustomAnimeList", 1), UserList("MyCustomAnimeList2", 1))
                 stateHandle["collection"] = mapOf(
                     "MyCustomAnimeList" to listOf(animeListItem1),
                     "MyCustomAnimeList2" to listOf(animeListItem2),
@@ -361,7 +362,7 @@ internal class AnimeListsViewModelTest : TestBase() {
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
             verify(ordering = Ordering.ORDERED) {
-                stateHandle["listNames"] = arrayOf("MyCustomAnimeList", "MyCustomAnimeList2")
+                stateHandle["userLists"] = arrayOf(UserList("MyCustomAnimeList", 1), UserList("MyCustomAnimeList2", 1))
                 stateHandle["collection"] = mapOf(
                     "MyCustomAnimeList" to listOf(animeListItem1),
                     "MyCustomAnimeList2" to listOf(animeListItem2),
@@ -420,7 +421,7 @@ internal class AnimeListsViewModelTest : TestBase() {
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
             verify(ordering = Ordering.ORDERED) {
-                stateHandle["listNames"] = arrayOf("MyCustomAnimeList", "MyCustomAnimeList2")
+                stateHandle["userLists"] = arrayOf(UserList("MyCustomAnimeList", 1), UserList("MyCustomAnimeList2", 1))
                 stateHandle["collection"] = mapOf(
                     "MyCustomAnimeList" to listOf(animeListItem1),
                     "MyCustomAnimeList2" to listOf(animeListItem2),
