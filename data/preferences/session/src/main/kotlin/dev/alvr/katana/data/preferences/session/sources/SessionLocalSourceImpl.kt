@@ -29,35 +29,29 @@ internal class SessionLocalSourceImpl(
             emit(SessionFailure.CheckingActiveSession.left())
         }
 
-    override suspend fun clearActiveSession() = Either.catch(
-        f = {
-            dataStore.updateData { p -> p.copy(isSessionActive = false) }
-            Napier.d { "Session cleared" }
-        },
-        fe = { error ->
-            Napier.e(error) { "Error clearing session" }
+    override suspend fun clearActiveSession() = Either.catch {
+        dataStore.updateData { p -> p.copy(isSessionActive = false) }
+        Napier.d { "Session cleared" }
+    }.mapLeft { error ->
+        Napier.e(error) { "Error clearing session" }
 
-            error.handleDataStore(
-                rwException = { SessionFailure.ClearingSession },
-                other = { Failure.Unknown },
-            )
-        },
-    )
+        error.handleDataStore(
+            rwException = { SessionFailure.ClearingSession },
+            other = { Failure.Unknown },
+        )
+    }
 
-    override suspend fun deleteAnilistToken() = Either.catch(
-        f = {
-            dataStore.updateData { p -> p.copy(anilistToken = null) }
-            Napier.d { "Anilist token deleted" }
-        },
-        fe = { error ->
-            Napier.e(error) { "Was not possible to delete the token" }
+    override suspend fun deleteAnilistToken() = Either.catch {
+        dataStore.updateData { p -> p.copy(anilistToken = null) }
+        Napier.d { "Anilist token deleted" }
+    }.mapLeft { error ->
+        Napier.e(error) { "Was not possible to delete the token" }
 
-            error.handleDataStore(
-                rwException = { SessionFailure.DeletingToken },
-                other = { Failure.Unknown },
-            )
-        },
-    )
+        error.handleDataStore(
+            rwException = { SessionFailure.DeletingToken },
+            other = { Failure.Unknown },
+        )
+    }
 
     override suspend fun getAnilistToken() = dataStore.data
         .map { token -> token.anilistToken?.let { AnilistToken(it) }.toOption() }
@@ -68,18 +62,15 @@ internal class SessionLocalSourceImpl(
         }
         .first()
 
-    override suspend fun saveSession(anilistToken: AnilistToken) = Either.catch(
-        f = {
-            dataStore.updateData { p -> p.copy(anilistToken = anilistToken.token, isSessionActive = true) }
-            Napier.d { "Token saved: ${anilistToken.token}" }
-        },
-        fe = { error ->
-            Napier.e(error) { "Was not possible to save the token" }
+    override suspend fun saveSession(anilistToken: AnilistToken) = Either.catch {
+        dataStore.updateData { p -> p.copy(anilistToken = anilistToken.token, isSessionActive = true) }
+        Napier.d { "Token saved: ${anilistToken.token}" }
+    }.mapLeft { error ->
+        Napier.e(error) { "Was not possible to save the token" }
 
-            error.handleDataStore(
-                rwException = { SessionFailure.SavingSession },
-                other = { Failure.Unknown },
-            )
-        },
-    )
+        error.handleDataStore(
+            rwException = { SessionFailure.SavingSession },
+            other = { Failure.Unknown },
+        )
+    }
 }

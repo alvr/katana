@@ -67,9 +67,10 @@ internal class SessionLocalSourceTest : TestBase() {
             coJustRun { store.updateData(any()) }
 
             // WHEN
-            source.saveSession(AnilistToken(SAVED_TOKEN))
+            val result = source.saveSession(AnilistToken(SAVED_TOKEN))
 
             // THEN
+            result.shouldBeRight()
             coVerify(exactly = 1) { store.updateData(any()) }
         }
 

@@ -3,6 +3,7 @@ package dev.alvr.katana.ui.main.navigation
 import com.ramcosta.composedestinations.dynamic.within
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
+import dev.alvr.katana.ui.lists.entities.UserList
 import dev.alvr.katana.ui.lists.navigation.AnimeNavGraph
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.navigation.MangaNavGraph
@@ -41,12 +42,12 @@ internal class Navigator(
         Napier.d { "Navigate to media details of entry $id" }
     }
 
-    override fun listSelector(lists: Array<String>, from: ListsNavigator.From) {
+    override fun listSelector(lists: Array<UserList>, selectedList: String, from: ListsNavigator.From) {
         val graph = when (from) {
             ListsNavigator.From.ANIME -> AnimeNavGraph
             ListsNavigator.From.MANGA -> MangaNavGraph
         }
-        navigator.navigate(ChangeListSheetDestination(lists) within graph)
+        navigator.navigate(ChangeListSheetDestination(lists, selectedList) within graph)
     }
     //endregion [ListsNavigator]
 }

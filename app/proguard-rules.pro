@@ -11,3 +11,10 @@
 -dontwarn org.openjsse.javax.net.ssl.SSLParameters
 -dontwarn org.openjsse.javax.net.ssl.SSLSocket
 -dontwarn org.openjsse.net.ssl.OpenJSSE
+
+# Logger
+-assumenosideeffects class io.github.aakira.napier.Napier {
+    public void v(...);
+    public void d(...);
+    public void i(...);
+}

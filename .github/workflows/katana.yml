@@ -47,7 +47,7 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Assemble Katana
-        run: ./gradlew assembleDebug --no-daemon --scan --stacktrace
+        run: ./gradlew buildDebug --no-daemon --scan --stacktrace
       - name: Upload compose reports artifact
         uses: actions/upload-artifact@v3
         if: always()
