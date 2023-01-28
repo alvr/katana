@@ -144,7 +144,7 @@ kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 
 ## MockK
-mockk = { module = "io.mockk:mockk", version = "1.13.3" }
+mockk = { module = "io.mockk:mockk", version = "1.13.4" }
 
 ## Robolectric
 robolectric = { module = "org.robolectric:robolectric", version = "4.9.2" }
