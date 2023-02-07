@@ -26,10 +26,10 @@ import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
+import com.ramcosta.composedestinations.navigation.DependenciesContainerBuilder
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
-import com.ramcosta.composedestinations.scope.DestinationScope
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
 import dev.alvr.katana.ui.main.components.SessionExpiredDialog
 import dev.alvr.katana.ui.main.viewmodel.MainViewModel
@@ -105,7 +105,7 @@ internal fun KatanaDestinations(
 }
 
 @Composable
-private fun DestinationScope<*>.currentNavigator(): Navigator = remember {
+private fun DependenciesContainerBuilder<*>.currentNavigator(): Navigator = remember {
     Navigator(navigator = destinationsNavigator)
 }
 
