@@ -6,14 +6,14 @@ destinations = "1.7.33-beta"
 junit5 = "5.9.2"
 koin = "3.3.2"
 koin-compose = "3.4.1"
-kotlin = "1.8.0"
+kotlin = "1.8.10"
 okhttp = "4.10.0"
 orbit = "4.5.0"
 sentry = "6.13.1"
 
 # Compose
 compose = "2023.01.00"
-compose-compiler = "1.4.0"
+compose-compiler = "1.4.1-dev-k1.8.10-c312d77f4cb"
 
 # Coverage Engine
 coverage-engine = "1.0.706"
