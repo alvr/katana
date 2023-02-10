@@ -13,7 +13,7 @@ sentry = "6.13.1"
 
 # Compose
 compose = "2023.01.00"
-compose-compiler = "1.4.1-dev-k1.8.10-c312d77f4cb"
+compose-compiler = "1.4.2"
 
 # Coverage Engine
 coverage-engine = "1.0.706"
