@@ -1,4 +1,5 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "assignees": ["alvr"],
   "baseBranches": ["develop"],
   "extends": ["config:base", ":disableDependencyDashboard"],
@@ -6,8 +7,17 @@
   "reviewers": ["alvr"],
   "packageRules": [
     {
-      "groupName": "compose",
-      "matchPackagePrefixes": ["androidx.compose"]
+      "matchPackagePatterns": [
+        "^org.jetbrains.kotlin",
+        "^com.google.devtools.ksp",
+        "^androidx.compose.compiler"
+      ]
+    },
+    {
+      "matchPackagePatterns": [
+        "^io.insert-koin"
+      ],
+      "groupName": "koin"
     },
     {
       "automerge": true,
