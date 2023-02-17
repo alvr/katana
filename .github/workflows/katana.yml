@@ -130,7 +130,7 @@ jobs:
           verbose: true
 
   sonar:
-    name: SonarQube
+    name: Sonar
     runs-on: ubuntu-latest
     needs: [ static-analysis, unit-tests ]
     steps:
@@ -150,18 +150,18 @@ jobs:
         with:
           name: coverage-reports
           path: .
-      - name: Run SonarQube
+      - name: Run Sonar
         if: github.event_name != 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube --no-daemon --stacktrace
-      - name: Run SonarQube in PR
+        run: ./gradlew sonar --no-daemon --stacktrace
+      - name: Run Sonar in PR
         if: github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} --no-daemon --stacktrace
+        run: ./gradlew sonar -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} --no-daemon --stacktrace
 
   deploy-beta:
     name: Beta deployment

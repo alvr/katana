@@ -22,7 +22,7 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "com.android.application")
         apply(plugin = "org.jetbrains.kotlin.android")
-        apply(plugin = "katana.sonarqube.android")
+        apply(plugin = "katana.sonar.android")
 
         with(extensions) {
             commonAndroidExtensions()

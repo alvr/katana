@@ -3,5 +3,5 @@ plugins {
     id("katana.dependency-versions")
     id("katana.detekt")
     id("katana.kover")
-    id("katana.sonarqube")
+    id("katana.sonar")
 }
