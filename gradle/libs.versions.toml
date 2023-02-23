@@ -94,7 +94,7 @@ gradle-kover = { module = "org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kov
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.8.10-1.0.9" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.4.2" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "3.4.0.2513" }
-gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.45.0" }
+gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.46.0" }
 
 # Koin
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
