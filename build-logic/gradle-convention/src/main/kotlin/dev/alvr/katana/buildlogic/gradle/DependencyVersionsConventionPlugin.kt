@@ -2,21 +2,20 @@ package dev.alvr.katana.buildlogic.gradle
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import dev.alvr.katana.buildlogic.ConventionPlugin
-import java.util.Locale
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.withType
 
 internal class DependencyVersionsConventionPlugin : ConventionPlugin {
     private val stableKeywords = arrayOf("RELEASE", "FINAL", "GA")
-    private val releaseRegex = "^[0-9,.v-]+(-r)?$".toRegex(RegexOption.IGNORE_CASE)
+    private val releaseRegex = "^[\\d,.v-]+(-r)?$".toRegex(RegexOption.IGNORE_CASE)
     private val rcRegex = regex("rc")
     private val betaRegex = regex("beta")
     private val alphaRegex = regex("alpha")
     private val devRegex = regex("dev")
 
     private fun regex(keyword: String) =
-        "^[0-9,.v-]+(-$keyword[0-9]*)$".toRegex(RegexOption.IGNORE_CASE)
+        "^[\\d,.v-]+(-$keyword\\d*)$".toRegex(RegexOption.IGNORE_CASE)
 
     private enum class ReleaseType {
         SNAPSHOT,
@@ -30,7 +29,7 @@ internal class DependencyVersionsConventionPlugin : ConventionPlugin {
     }
 
     private fun checkDependencyVersion(version: String) =
-        if (stableKeywords.any { version.toUpperCase(Locale.ROOT).contains(it) }) {
+        if (stableKeywords.any { version.uppercase().contains(it) }) {
             ReleaseType.RELEASE
         } else {
             when {
