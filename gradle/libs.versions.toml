@@ -2,7 +2,7 @@
 accompanist = "0.28.0"
 apollo = "3.7.4"
 coroutines = "1.6.4"
-destinations = "1.7.33-beta"
+destinations = "1.7.35-beta"
 junit5 = "5.9.2"
 koin = "3.3.3"
 koin-compose = "3.4.2"
@@ -13,7 +13,7 @@ sentry = "6.15.0"
 
 # Compose
 compose = "2023.01.00"
-compose-compiler = "1.4.2"
+compose-compiler = "1.4.3"
 
 # Coverage Engine
 coverage-engine = "1.0.706"
