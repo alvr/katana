@@ -71,9 +71,6 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 # DataStore
 datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
 
-# Design
-design-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1" }
-
 # Destiantions
 destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "destinations" }
 destinations-compiler = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "destinations" }
@@ -207,7 +204,6 @@ ui-compose = [
     "compose-material-icons",
     "compose-ui",
     "compose-ui-tooling",
-    "design-constraintlayout",
     "destinations",
     "lifecycle-viewmodel",
     "orbit",
