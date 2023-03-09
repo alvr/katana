@@ -21,12 +21,12 @@ import dev.alvr.katana.ui.base.components.KatanaEmptyState
 import dev.alvr.katana.ui.base.components.KatanaErrorState
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
 import dev.alvr.katana.ui.base.components.home.rememberKatanaHomeScaffoldState
+import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.ui.lists.viewmodel.ListsViewModel
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 @ExperimentalMaterialApi
