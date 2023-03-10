@@ -2,6 +2,8 @@ package dev.alvr.katana.ui.lists.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHeightIsEqualTo
@@ -13,6 +15,7 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onChild
 import androidx.compose.ui.test.onChildAt
 import androidx.compose.ui.test.onChildren
@@ -199,53 +202,54 @@ internal class MediaListComponentTest : ComposeTest() {
                 assertHeightIsEqualTo(144.dp)
             }
 
-            composeTestRule.mediaItems()[index].onChildAt(0).run {
-                onChildren().run {
-                    filterToOne(hasTestTag(ITEM_TITLE_TAG)).assertTextEquals(item.title)
+            composeTestRule.run {
+                onCardContent(ITEM_TITLE_TAG, index) { assertTextEquals(item.title) }
+                onCardContent(ITEM_SUBTITLE_TAG, index) {
+                    assertIsDisplayed()
+                    assertTextContains(context.getString(item.format.value), substring = true)
 
-                    filterToOne(hasTestTag(ITEM_SUBTITLE_TAG)).run {
+                    if (item.nextEpisode != null) {
+                        with(item.nextEpisode) {
+                            assertTextContains(number.toString(), substring = true)
+                            assertTextContains(date.year.toString(), substring = true)
+                        }
+                    } else {
+                        assert(hasText(context.getString(R.string.lists_entry_next_episode_separator)).not())
+                    }
+                }
+
+                if (item.score == Double.zero) {
+                    mediaItems()[index].onChildren().filter(hasTestTag(ITEM_SCORE_TAG)).assertCountEquals(0)
+                } else {
+                    mediaItems()[index].onChildren().filterToOne(hasTestTag(ITEM_SCORE_TAG)).onChild().run {
                         assertIsDisplayed()
-                        assertTextContains(context.getString(item.format.value), substring = true)
-
-                        if (item.nextEpisode != null) {
-                            with(item.nextEpisode) {
-                                assertTextContains(number.toString(), substring = true)
-                                assertTextContains(date.year.toString(), substring = true)
-                            }
-                        } else {
-                            assert(hasText(context.getString(R.string.lists_entry_next_episode_separator)).not())
-                        }
+                        assertTextContains(
+                            item.score.toString()
+                                .replace("${String.dot}${Int.zero}", String.empty),
+                        )
                     }
+                }
 
-                    if (item.score == Double.zero) {
-                        filter(hasTestTag(ITEM_SCORE_TAG)).assertCountEquals(0)
-                    } else {
-                        filterToOne(hasTestTag(ITEM_SCORE_TAG)).onChild().run {
-                            assertIsDisplayed()
+                if (item.progress == item.total) {
+                    mediaItems()[index].onChildren().filter(hasTestTag(ITEM_PLUSONE_TAG)).assertCountEquals(0)
+                } else {
+                    mediaItems()[index].onChildren().filterToOne(hasTestTag(ITEM_PLUSONE_TAG)).run {
+                        assertIsDisplayed()
+
+                        verify(exactly = 0) { addPlusOne(item.entryId) }
+                        performClick()
+                        verify(exactly = 1) { addPlusOne(item.entryId) }
+
+                        onChild().run {
+                            val total = item.total ?: String.unknown
                             assertTextContains(
-                                item.score.toString()
-                                    .replace("${String.dot}${Int.zero}", String.empty),
+                                context.getString(
+                                    R.string.lists_entry_progress,
+                                    item.progress,
+                                    total,
+                                ),
+                                substring = true,
                             )
-                        }
-                    }
-
-                    if (item.progress == item.total) {
-                        filter(hasTestTag(ITEM_PLUSONE_TAG)).assertCountEquals(0)
-                    } else {
-                        filterToOne(hasTestTag(ITEM_PLUSONE_TAG)).run {
-                            assertIsDisplayed()
-
-                            verify(exactly = 0) { addPlusOne(item.entryId) }
-                            performClick()
-                            verify(exactly = 1) { addPlusOne(item.entryId) }
-
-                            onChild().run {
-                                val total = item.total ?: String.unknown
-                                assertTextContains(
-                                    context.getString(R.string.lists_entry_progress, item.progress, total),
-                                    substring = true,
-                                )
-                            }
                         }
                     }
                 }
@@ -277,6 +281,11 @@ internal class MediaListComponentTest : ComposeTest() {
 
     private fun ComposeContentTestRule.mediaList() = onRoot(useUnmergedTree = true).onChildAt(0)
     private fun ComposeContentTestRule.mediaItems() = mediaList().onChildren()
+    private fun SemanticsNodeInteractionsProvider.onCardContent(
+        tag: String,
+        index: Int,
+        action: SemanticsNodeInteraction.() -> Unit,
+    ) = onAllNodesWithTag(tag, useUnmergedTree = true)[index].run(action)
 
     private companion object {
         const val NUMBER_OF_ITEMS = 3

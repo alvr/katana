@@ -30,11 +30,11 @@ import com.ramcosta.composedestinations.navigation.DependenciesContainerBuilder
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
+import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
 import dev.alvr.katana.ui.main.components.SessionExpiredDialog
 import dev.alvr.katana.ui.main.viewmodel.MainViewModel
 import io.sentry.compose.withSentryObservableEffect
-import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)

@@ -6,7 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -45,8 +47,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.alvr.katana.common.core.unknown
@@ -164,81 +164,69 @@ private fun CardContent(
     onAddPlusOne: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ConstraintLayout(modifier = modifier) {
-        val (coverAndScore, title, subtitle, plusOne, progress) = createRefs()
-
+    Row(modifier = modifier) {
         CoverAndScore(
             cover = item.cover,
             score = item.score,
             title = item.title,
             modifier = Modifier
-                .constrainAs(coverAndScore) {
-                    top.linkTo(anchor = parent.top)
-                    start.linkTo(anchor = parent.start)
-                    bottom.linkTo(anchor = parent.bottom)
-                }
+                .align(Alignment.CenterVertically)
+                .fillMaxHeight()
                 .katanaPlaceholder(
                     visible = itemLoading,
                     shape = RectangleShape,
                 ),
         )
 
-        Title(
-            title = item.title,
+        Column(
             modifier = Modifier
-                .constrainAs(title) {
-                    width = Dimension.fillToConstraints
-                    top.linkTo(anchor = parent.top, margin = CONSTRAINT_VERTICAL_MARGIN)
-                    start.linkTo(anchor = coverAndScore.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-                    end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-                }
-                .testTag(ITEM_TITLE_TAG)
-                .katanaPlaceholder(visible = itemLoading),
-        )
+                .padding(top = CONTENT_TOP_PADDING)
+                .fillMaxHeight(),
+        ) {
+            Title(
+                title = item.title,
+                modifier = Modifier
+                    .padding(start = CONTENT_HORIZONTAL_PADDING)
+                    .testTag(ITEM_TITLE_TAG)
+                    .katanaPlaceholder(visible = itemLoading),
+            )
 
-        Subtitle(
-            format = item.format,
-            nextEpisode = (item as? MediaListItem.AnimeListItem)?.nextEpisode,
-            modifier = Modifier
-                .constrainAs(subtitle) {
-                    width = Dimension.fillToConstraints
-                    top.linkTo(anchor = title.bottom, margin = CONSTRAINT_VERTICAL_MARGIN)
-                    start.linkTo(anchor = coverAndScore.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-                    end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-                }
-                .testTag(ITEM_SUBTITLE_TAG)
-                .katanaPlaceholder(visible = itemLoading),
-        )
+            Subtitle(
+                format = item.format,
+                nextEpisode = (item as? MediaListItem.AnimeListItem)?.nextEpisode,
+                modifier = Modifier
+                    .padding(
+                        start = CONTENT_HORIZONTAL_PADDING,
+                        top = CONTENT_TOP_PADDING,
+                    )
+                    .testTag(ITEM_SUBTITLE_TAG)
+                    .katanaPlaceholder(visible = itemLoading),
+            )
 
-        PlusOne(
-            progress = item.progress,
-            total = item.total,
-            itemLoading = itemLoading,
-            onAddPlusOne = onAddPlusOne,
-            modifier = Modifier
-                .constrainAs(plusOne) {
-                    width = Dimension.wrapContent
-                    end.linkTo(anchor = parent.end, margin = CONSTRAINT_HORIZONTAL_MARGIN)
-                    bottom.linkTo(anchor = progress.top)
-                }
-                .testTag(ITEM_PLUSONE_TAG),
-        )
+            Spacer(modifier = Modifier.weight(1f))
 
-        Progress(
-            progress = item.progress,
-            total = item.total,
-            modifier = Modifier
-                .constrainAs(progress) {
-                    width = Dimension.fillToConstraints
-                    start.linkTo(anchor = coverAndScore.end)
-                    end.linkTo(anchor = parent.end)
-                    bottom.linkTo(anchor = parent.bottom)
-                }
-                .katanaPlaceholder(
-                    visible = itemLoading,
-                    shape = RectangleShape,
-                ),
-        )
+            PlusOne(
+                progress = item.progress,
+                total = item.total,
+                itemLoading = itemLoading,
+                onAddPlusOne = onAddPlusOne,
+                modifier = Modifier
+                    .padding(end = CONTENT_HORIZONTAL_PADDING)
+                    .align(Alignment.End)
+                    .testTag(ITEM_PLUSONE_TAG),
+            )
+
+            Progress(
+                progress = item.progress,
+                total = item.total,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .katanaPlaceholder(
+                        visible = itemLoading,
+                        shape = RectangleShape,
+                    ),
+            )
+        }
     }
 }
 
@@ -441,8 +429,8 @@ private val scoreFormatter = { score: Double ->
 private val CARD_WIDTH = 384.dp
 private val COVER_MAX_WIDTH = CARD_WIDTH / 4f
 private val ARRANGEMENT_SPACING = 8.dp
-private val CONSTRAINT_VERTICAL_MARGIN = 4.dp
-private val CONSTRAINT_HORIZONTAL_MARGIN = 8.dp
+private val CONTENT_TOP_PADDING = 4.dp
+private val CONTENT_HORIZONTAL_PADDING = 8.dp
 
 private const val PROGRESS_IF_UNKNOWN = .1f
 

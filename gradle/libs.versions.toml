@@ -7,6 +7,7 @@ junit5 = "5.9.2"
 koin = "3.3.3"
 koin-compose = "3.4.2"
 kotlin = "1.8.10"
+lifecycle = "2.6.0"
 okhttp = "4.10.0"
 orbit = "4.6.1"
 sentry = "6.15.0"
@@ -71,9 +72,6 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 # DataStore
 datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
 
-# Design
-design-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1" }
-
 # Destiantions
 destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "destinations" }
 destinations-compiler = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "destinations" }
@@ -108,7 +106,8 @@ kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin"
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.3.5" }
 
 # Lifecycle
-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.6.0" }
+lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 
 # Napier
 napier = { module = "io.github.aakira:napier", version = "2.6.1" }
@@ -119,7 +118,6 @@ okhttp-logger = { module = "com.squareup.okhttp3:logging-interceptor", version.r
 
 # Orbit
 orbit = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
-orbit-compose = { module = "org.orbit-mvi:orbit-compose", version.ref = "orbit" }
 orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
 
 # Sentry
@@ -178,7 +176,6 @@ app = [
     "destinations",
     "koin",
     "orbit",
-    "orbit-compose",
     "sentry",
     "sentry-compose",
 ]
@@ -207,11 +204,10 @@ ui-compose = [
     "compose-material-icons",
     "compose-ui",
     "compose-ui-tooling",
-    "design-constraintlayout",
     "destinations",
+    "lifecycle-runtime",
     "lifecycle-viewmodel",
     "orbit",
-    "orbit-compose",
 ]
 
 test = [

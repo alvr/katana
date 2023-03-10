@@ -65,6 +65,7 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.common.core.zero
+import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.login.ANILIST_LOGIN
 import dev.alvr.katana.ui.login.ANILIST_REGISTER
 import dev.alvr.katana.ui.login.BACKGROUND_ALPHA
@@ -83,7 +84,6 @@ import dev.alvr.katana.ui.login.navigation.LoginNavigator
 import dev.alvr.katana.ui.login.viewmodel.LoginState
 import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
 import org.koin.androidx.compose.koinViewModel
-import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 @Destination(
