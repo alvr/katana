@@ -2,7 +2,7 @@
 accompanist = "0.30.0"
 apollo = "3.7.5"
 coroutines = "1.6.4"
-destinations = "1.7.35-beta"
+destinations = "1.7.36-beta"
 junit5 = "5.9.2"
 koin = "3.3.3"
 koin-compose = "3.4.2"
@@ -17,7 +17,7 @@ compose = "2023.03.00"
 compose-compiler = "1.4.3"
 
 # Coverage Engine
-coverage-engine = "1.0.706"
+coverage-engine = "1.0.712"
 
 # Plugins
 detekt = "1.22.0"

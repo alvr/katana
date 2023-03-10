@@ -18,6 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.plusAssign
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -30,6 +32,7 @@ import com.ramcosta.composedestinations.navigation.DependenciesContainerBuilder
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
+import com.ramcosta.composedestinations.spec.NavGraphSpec
 import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.login.view.destinations.LoginDestination
 import dev.alvr.katana.ui.main.components.SessionExpiredDialog
@@ -43,8 +46,8 @@ internal fun KatanaDestinations(
     vm: MainViewModel,
 ) {
     val bottomSheetNavigator = rememberBottomSheetNavigator()
-    val navController = rememberAnimatedNavController().withSentryObservableEffect().also { nav ->
-        nav.navigatorProvider += bottomSheetNavigator
+    val navController = rememberAnimatedNavController().withSentryObservableEffect().apply {
+        navigatorProvider += bottomSheetNavigator
     }
 
     val state by vm.collectAsState()
@@ -106,7 +109,10 @@ internal fun KatanaDestinations(
 
 @Composable
 private fun DependenciesContainerBuilder<*>.currentNavigator(): Navigator = remember {
-    Navigator(navigator = destinationsNavigator)
+    Navigator(
+        navGraph = navBackStackEntry.destination.navGraph(),
+        navigator = destinationsNavigator,
+    )
 }
 
 private fun NavController.logout() {
@@ -116,3 +122,32 @@ private fun NavController.logout() {
         }
     }
 }
+
+internal fun NavDestination.navGraph(
+    graphs: Iterable<NavGraphSpec> = allNavGraphs
+): NavGraphSpec {
+    hierarchy.forEach { destination ->
+        graphs.forEach { graph ->
+            if (destination.route == graph.route) {
+                return graph
+            }
+        }
+    }
+
+    error("Unknown navGraph for destination $route")
+}
+
+private fun NavGraphSpec.children() = buildSet {
+    addAll(nestedNavGraphs)
+    nestedNavGraphs.nested()
+}
+
+context(MutableSet<NavGraphSpec>)
+private fun List<NavGraphSpec>.nested() {
+    forEach { graph ->
+        addAll(graph.nestedNavGraphs)
+        graph.nestedNavGraphs.nested()
+    }
+}
+
+private val allNavGraphs by lazy { NavGraphs.root.children() }

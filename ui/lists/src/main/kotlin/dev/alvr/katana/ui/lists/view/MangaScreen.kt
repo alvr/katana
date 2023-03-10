@@ -28,7 +28,6 @@ internal fun MangaScreen(
     ListScreen(
         vm = koinViewModel<MangaListsViewModel>(),
         navigator = navigator,
-        fromNavigator = ListsNavigator.From.MANGA,
         resultRecipient = resultRecipient,
         title = R.string.lists_manga_toolbar_title,
         emptyStateRes = R.string.lists_empty_manga_list,

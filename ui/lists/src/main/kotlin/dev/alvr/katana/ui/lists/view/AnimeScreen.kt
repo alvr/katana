@@ -28,7 +28,6 @@ internal fun AnimeScreen(
     ListScreen(
         vm = koinViewModel<AnimeListsViewModel>(),
         navigator = navigator,
-        fromNavigator = ListsNavigator.From.ANIME,
         resultRecipient = resultRecipient,
         title = R.string.lists_anime_toolbar_title,
         emptyStateRes = R.string.lists_empty_anime_list,

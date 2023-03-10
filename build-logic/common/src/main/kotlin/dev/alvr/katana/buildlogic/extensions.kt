@@ -86,6 +86,7 @@ private fun KotlinJvmCompilerOptions.configureKotlin() {
     freeCompilerArgs.set(
         freeCompilerArgs.get() + listOf(
             "-opt-in=kotlin.RequiresOptIn",
+            "-Xcontext-receivers",
             "-Xlambdas=indy",
         ),
     )

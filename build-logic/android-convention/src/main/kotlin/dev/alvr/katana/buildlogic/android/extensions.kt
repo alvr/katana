@@ -52,7 +52,7 @@ internal fun BaseExtension.baseAndroidConfig() {
             isIncludeAndroidResources = true
             all { test ->
                 test.useJUnitPlatform()
-                test.jvmArgs = listOf("-noverify", "-Xmx8G")
+                test.jvmArgs = listOf("-Xmx8G")
                 test.systemProperties(
                     "robolectric.usePreinstrumentedJars" to "true",
                     "robolectric.logging.enabled" to "true",
