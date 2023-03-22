@@ -9,14 +9,13 @@ import org.gradle.kotlin.dsl.withType
 
 internal class DependencyVersionsConventionPlugin : ConventionPlugin {
     private val stableKeywords = arrayOf("RELEASE", "FINAL", "GA")
-    private val releaseRegex = "^[0-9,.v-]+(-r)?$".toRegex(RegexOption.IGNORE_CASE)
+    private val releaseRegex = "^[\\d,.v-]+(-r)?$".toRegex(RegexOption.IGNORE_CASE)
     private val rcRegex = regex("rc")
     private val betaRegex = regex("beta")
     private val alphaRegex = regex("alpha")
     private val devRegex = regex("dev")
 
-    private fun regex(keyword: String) =
-        "^[0-9,.v-]+(-$keyword[0-9]*)$".toRegex(RegexOption.IGNORE_CASE)
+    private fun regex(keyword: String) = "^[\\d,.v-]+(-$keyword\\d*)$".toRegex(RegexOption.IGNORE_CASE)
 
     private enum class ReleaseType {
         SNAPSHOT,
@@ -46,7 +45,7 @@ internal class DependencyVersionsConventionPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "com.github.ben-manes.versions")
 
-        tasks.withType<DependencyUpdatesTask> {
+        tasks.withType<DependencyUpdatesTask>().configureEach {
             rejectVersionIf {
                 @Suppress("UseIfInsteadOfWhen")
                 when (val current = checkDependencyVersion(currentVersion)) {
