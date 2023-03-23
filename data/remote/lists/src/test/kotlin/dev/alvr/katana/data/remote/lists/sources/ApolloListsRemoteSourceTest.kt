@@ -11,13 +11,24 @@ import com.apollographql.apollo3.testing.registerTestResponse
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.data.remote.base.extensions.optional
+import dev.alvr.katana.data.remote.base.type.MediaFormat
 import dev.alvr.katana.data.remote.base.type.MediaType
+import dev.alvr.katana.data.remote.base.type.buildAiringSchedule
+import dev.alvr.katana.data.remote.base.type.buildFuzzyDate
+import dev.alvr.katana.data.remote.base.type.buildMedia
+import dev.alvr.katana.data.remote.base.type.buildMediaCoverImage
+import dev.alvr.katana.data.remote.base.type.buildMediaList
+import dev.alvr.katana.data.remote.base.type.buildMediaListCollection
+import dev.alvr.katana.data.remote.base.type.buildMediaListGroup
+import dev.alvr.katana.data.remote.base.type.buildMediaListOptions
+import dev.alvr.katana.data.remote.base.type.buildMediaListTypeOptions
+import dev.alvr.katana.data.remote.base.type.buildMediaTitle
+import dev.alvr.katana.data.remote.base.type.buildUser
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSource
 import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSourceImpl
 import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSource
 import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSourceImpl
-import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
@@ -78,7 +89,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
         fun `the collection has no lists`() = runTest {
             // GIVEN
             val query = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = emptyList()
                 }
             }
@@ -102,28 +113,28 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
         fun `the entries are empty`() = runTest {
             // GIVEN
             val query = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Watching"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Completed TV"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Custom List"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = null
                             entries = emptyList()
                         },
                     )
-                    user = user {
-                        mediaListOptions = mediaListOptions {
-                            animeList = animeList {
+                    user = buildUser {
+                        this["mediaListOptions"] = buildMediaListOptions {
+                            animeList = buildMediaListTypeOptions {
                                 sectionOrder = listOf("Watching", "Completed TV", "Custom List")
                             }
                         }
@@ -157,12 +168,12 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
         fun `the entry has null values`() = runTest {
             // GIVEN
             val query = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Watching"
                             entries = listOf(
-                                entry {
+                                buildMediaList {
                                     id = Int.zero
                                     score = null
                                     progress = null
@@ -173,7 +184,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                                     hiddenFromStatusLists = null
                                     startedAt = null
                                     completedAt = null
-                                    media = media {
+                                    media = buildMedia {
                                         id = Int.zero
                                         title = null
                                         episodes = null
@@ -236,12 +247,12 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
         fun `the entry has values`() = runTest {
             // GIVEN
             val query = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Watching"
                             entries = listOf(
-                                entry {
+                                buildMediaList {
                                     id = 100
                                     score = 7.3
                                     progress = 12
@@ -250,27 +261,27 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                                     private = true
                                     notes = "My notes :)"
                                     hiddenFromStatusLists = true
-                                    startedAt = startedAt {
+                                    startedAt = buildFuzzyDate {
                                         day = 23
                                         month = 12
                                         year = 1999
                                     }
-                                    completedAt = completedAt {
+                                    completedAt = buildFuzzyDate {
                                         day = 5
                                         month = 5
                                         year = 2009
                                     }
-                                    media = media {
+                                    media = buildMedia {
                                         id = 100
-                                        title = title {
+                                        title = buildMediaTitle {
                                             userPreferred = "My anime entry"
                                         }
                                         episodes = 23
-                                        format = "TV"
-                                        coverImage = coverImage {
+                                        format = MediaFormat.TV
+                                        coverImage = buildMediaCoverImage {
                                             large = "https://placehold.co/128x256"
                                         }
-                                        nextAiringEpisode = nextAiringEpisode {
+                                        nextAiringEpisode = buildAiringSchedule {
                                             airingAt = 1_649_790_000
                                             episode = 13
                                         }
@@ -367,7 +378,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
         fun `the collection has no lists`() = runTest {
             // GIVEN
             val query = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = emptyList()
                 }
             }
@@ -391,28 +402,28 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
         fun `the entries are empty`() = runTest {
             // GIVEN
             val query = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Rereading"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Reading"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Custom List"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = null
                             entries = emptyList()
                         },
                     )
-                    user = user {
-                        mediaListOptions = mediaListOptions {
-                            mangaList = mangaList {
+                    user = buildUser {
+                        this["mediaListOptions"] = buildMediaListOptions {
+                            mangaList = buildMediaListTypeOptions {
                                 sectionOrder = listOf("Custom List", "Reading", "Rereading")
                             }
                         }
@@ -446,12 +457,12 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
         fun `the entry has null values`() = runTest {
             // GIVEN
             val query = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Reading"
                             entries = listOf(
-                                entry {
+                                buildMediaList {
                                     id = Int.zero
                                     score = null
                                     progress = null
@@ -462,7 +473,7 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                                     hiddenFromStatusLists = null
                                     startedAt = null
                                     completedAt = null
-                                    media = media {
+                                    media = buildMedia {
                                         id = Int.zero
                                         title = null
                                         chapters = null
@@ -526,12 +537,12 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
         fun `the entry has values`() = runTest {
             // GIVEN
             val query = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Reading"
                             entries = listOf(
-                                entry {
+                                buildMediaList {
                                     id = 100
                                     score = 7.3
                                     progress = 12
@@ -540,25 +551,25 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                                     private = true
                                     notes = "My notes :)"
                                     hiddenFromStatusLists = true
-                                    startedAt = startedAt {
+                                    startedAt = buildFuzzyDate {
                                         day = 23
                                         month = 12
                                         year = 1999
                                     }
-                                    completedAt = completedAt {
+                                    completedAt = buildFuzzyDate {
                                         day = 5
                                         month = 5
                                         year = 2009
                                     }
-                                    media = media {
+                                    media = buildMedia {
                                         id = 100
-                                        title = title {
+                                        title = buildMediaTitle {
                                             userPreferred = "My manga entry"
                                         }
                                         chapters = 23
                                         volumes = 2
-                                        format = "NOVEL"
-                                        coverImage = coverImage {
+                                        format = MediaFormat.NOVEL
+                                        coverImage = buildMediaCoverImage {
                                             large = "https://placehold.co/128x256"
                                         }
                                         nextAiringEpisode = null

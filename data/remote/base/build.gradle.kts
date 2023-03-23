@@ -16,6 +16,7 @@ apollo {
     service("anilist") {
         alwaysGenerateTypesMatching.set(listOf("Query", "User"))
         generateApolloMetadata.set(true)
+        generateDataBuilders.set(true)
         packageName.set(pkg)
 
         introspection {

@@ -9,8 +9,8 @@ import com.apollographql.apollo3.cache.normalized.store
 import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
 import dev.alvr.katana.common.tests.TestBase
+import dev.alvr.katana.data.remote.base.type.buildUser
 import dev.alvr.katana.data.remote.user.UserIdQuery
-import dev.alvr.katana.data.remote.user.test.UserIdQuery_TestBuilder.Data
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
@@ -30,8 +30,8 @@ internal class ApolloUserIdManagerTest : TestBase() {
     fun `retrieving the authenticated user (HTTP)`() = runTest {
         // GIVEN
         val query = UserIdQuery.Data {
-            viewer = viewer {
-                id = 12345
+            this["viewer"] = buildUser {
+                this["id"] = 12345
             }
         }
 
@@ -49,8 +49,8 @@ internal class ApolloUserIdManagerTest : TestBase() {
     fun `retrieving the authenticated user (cache)`() = runTest {
         // GIVEN
         val query = UserIdQuery.Data {
-            viewer = viewer {
-                id = 12345
+            this["viewer"] = buildUser {
+                this["id"] = 12345
             }
         }
 
@@ -69,8 +69,8 @@ internal class ApolloUserIdManagerTest : TestBase() {
     fun `clearing the database`() = runTest {
         // GIVEN
         val query = UserIdQuery.Data {
-            viewer = viewer {
-                id = 12345
+            this["viewer"] = buildUser {
+                this["id"] = 12345
             }
         }
 
