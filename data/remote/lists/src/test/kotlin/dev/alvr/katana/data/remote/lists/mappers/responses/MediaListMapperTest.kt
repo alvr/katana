@@ -4,9 +4,20 @@ import com.apollographql.apollo3.annotations.ApolloExperimental
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.common.tests.TestBase
+import dev.alvr.katana.data.remote.base.type.MediaFormat
 import dev.alvr.katana.data.remote.base.type.MediaType
+import dev.alvr.katana.data.remote.base.type.buildAiringSchedule
+import dev.alvr.katana.data.remote.base.type.buildFuzzyDate
+import dev.alvr.katana.data.remote.base.type.buildMedia
+import dev.alvr.katana.data.remote.base.type.buildMediaCoverImage
+import dev.alvr.katana.data.remote.base.type.buildMediaList
+import dev.alvr.katana.data.remote.base.type.buildMediaListCollection
+import dev.alvr.katana.data.remote.base.type.buildMediaListGroup
+import dev.alvr.katana.data.remote.base.type.buildMediaListOptions
+import dev.alvr.katana.data.remote.base.type.buildMediaListTypeOptions
+import dev.alvr.katana.data.remote.base.type.buildMediaTitle
+import dev.alvr.katana.data.remote.base.type.buildUser
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
-import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import io.kotest.assertions.throwables.shouldThrowExactlyUnit
@@ -53,7 +64,7 @@ internal class MediaListMapperTest : TestBase() {
     fun `a collection without lists`() = runTest {
         // GIVEN
         val data = MediaListCollectionQuery.Data {
-            collection = collection {
+            this["collection"] = buildMediaListCollection {
                 lists = emptyList()
                 user = null
             }
@@ -73,24 +84,24 @@ internal class MediaListMapperTest : TestBase() {
     fun `a list without name`() = runTest {
         // GIVEN
         val data = MediaListCollectionQuery.Data {
-            collection = collection {
+            this["collection"] = buildMediaListCollection {
                 lists = listOf(
-                    list {
+                    buildMediaListGroup {
                         name = null
                         entries = emptyList()
                     },
-                    list {
+                    buildMediaListGroup {
                         name = String.empty
                         entries = emptyList()
                     },
                     null,
                 )
-                user = user {
-                    mediaListOptions = mediaListOptions {
-                        animeList = animeList {
+                user = buildUser {
+                    this["mediaListOptions"] = buildMediaListOptions {
+                        animeList = buildMediaListTypeOptions {
                             sectionOrder = emptyList()
                         }
-                        mangaList = animeList {
+                        mangaList = buildMediaListTypeOptions {
                             sectionOrder = emptyList()
                         }
                     }
@@ -120,28 +131,28 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of animes without entries`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Rewatching"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Watching"
                             entries = listOf(null)
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Paused"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Completed TV"
                             entries = emptyList()
                         },
                     )
-                    user = user {
-                        mediaListOptions = mediaListOptions {
-                            animeList = animeList {
+                    user = buildUser {
+                        this["mediaListOptions"] = buildMediaListOptions {
+                            animeList = buildMediaListTypeOptions {
                                 sectionOrder = listOf("Watching", "Rewatching", "Completed TV", "Paused")
                             }
                         }
@@ -171,28 +182,28 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of animes without entries and sectionOrder`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Rewatching"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Watching"
                             entries = listOf(null)
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Paused"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Completed TV"
                             entries = emptyList()
                         },
                     )
-                    user = user {
-                        mediaListOptions = mediaListOptions {
-                            animeList = animeList {
+                    user = buildUser {
+                        this["mediaListOptions"] = buildMediaListOptions {
+                            animeList = buildMediaListTypeOptions {
                                 sectionOrder = null
                             }
                         }
@@ -222,27 +233,27 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of animes without entries and mediaListOptions`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Rewatching"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Watching"
                             entries = listOf(null)
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Paused"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Completed TV"
                             entries = emptyList()
                         },
                     )
-                    user = user {
-                        mediaListOptions = null
+                    user = buildUser {
+                        this["mediaListOptions"] = null
                     }
                 }
             }
@@ -269,27 +280,27 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of animes without entries and animeListSorting`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Rewatching"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Watching"
                             entries = listOf(null)
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Paused"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Completed TV"
                             entries = emptyList()
                         },
                     )
-                    user = user {
-                        mediaListOptions = mediaListOptions {
+                    user = buildUser {
+                        this["mediaListOptions"] = buildMediaListOptions {
                             animeList = null
                         }
                     }
@@ -319,12 +330,12 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of animes with valid entries`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Watching"
                             entries = listOf(
-                                entry {
+                                buildMediaList {
                                     id = 100
                                     score = 7.3
                                     progress = 12
@@ -334,27 +345,27 @@ internal class MediaListMapperTest : TestBase() {
                                     notes = "My notes :)"
                                     hiddenFromStatusLists = true
                                     updatedAt = 1_649_790_000
-                                    startedAt = startedAt {
+                                    startedAt = buildFuzzyDate {
                                         day = 23
                                         month = 12
                                         year = 1999
                                     }
-                                    completedAt = completedAt {
+                                    completedAt = buildFuzzyDate {
                                         day = 5
                                         month = 5
                                         year = 2009
                                     }
-                                    media = media {
+                                    media = buildMedia {
                                         id = 100
-                                        title = title {
+                                        title = buildMediaTitle {
                                             userPreferred = "My anime entry"
                                         }
                                         episodes = 23
-                                        format = "TV"
-                                        coverImage = coverImage {
+                                        format = MediaFormat.TV
+                                        coverImage = buildMediaCoverImage {
                                             large = "https://placehold.co/128x256"
                                         }
-                                        nextAiringEpisode = nextAiringEpisode {
+                                        nextAiringEpisode = buildAiringSchedule {
                                             airingAt = 1_649_790_000
                                             episode = 13
                                         }
@@ -419,12 +430,12 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of animes with invalid entries`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Watching"
                             entries = listOf(
-                                entry {
+                                buildMediaList {
                                     id = Int.zero
                                     score = null
                                     progress = null
@@ -436,7 +447,7 @@ internal class MediaListMapperTest : TestBase() {
                                     startedAt = null
                                     completedAt = null
                                     updatedAt = null
-                                    media = media {
+                                    media = buildMedia {
                                         id = Int.zero
                                         title = null
                                         episodes = null
@@ -506,28 +517,28 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of mangas without entries`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Rereading"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Reading"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Paused"
                             entries = listOf(null)
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Completed Novel"
                             entries = emptyList()
                         },
                     )
-                    user = user {
-                        mediaListOptions = mediaListOptions {
-                            mangaList = mangaList {
+                    user = buildUser {
+                        this["mediaListOptions"] = buildMediaListOptions {
+                            mangaList = buildMediaListTypeOptions {
                                 sectionOrder = listOf("Reading", "Rereading", "Completed Novel", "Paused")
                             }
                         }
@@ -557,28 +568,28 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of mangas without entries and sectionOrder`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Rereading"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Reading"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Paused"
                             entries = listOf(null)
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Completed Novel"
                             entries = emptyList()
                         },
                     )
-                    user = user {
-                        mediaListOptions = mediaListOptions {
-                            mangaList = mangaList {
+                    user = buildUser {
+                        this["mediaListOptions"] = buildMediaListOptions {
+                            mangaList = buildMediaListTypeOptions {
                                 sectionOrder = null
                             }
                         }
@@ -608,27 +619,27 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of mangas without entries and mediaListOptions`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Rereading"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Reading"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Paused"
                             entries = listOf(null)
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Completed Novel"
                             entries = emptyList()
                         },
                     )
-                    user = user {
-                        mediaListOptions = null
+                    user = buildUser {
+                        this["mediaListOptions"] = null
                     }
                 }
             }
@@ -655,27 +666,27 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of mangas without entries and mangaListSorting`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Rereading"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Reading"
                             entries = emptyList()
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Paused"
                             entries = listOf(null)
                         },
-                        list {
+                        buildMediaListGroup {
                             name = "Completed Novel"
                             entries = emptyList()
                         },
                     )
-                    user = user {
-                        mediaListOptions = mediaListOptions {
+                    user = buildUser {
+                        this["mediaListOptions"] = buildMediaListOptions {
                             mangaList = null
                         }
                     }
@@ -704,12 +715,12 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of mangas with valid entries`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Reading"
                             entries = listOf(
-                                entry {
+                                buildMediaList {
                                     id = 100
                                     score = 7.3
                                     progress = 12
@@ -719,25 +730,25 @@ internal class MediaListMapperTest : TestBase() {
                                     notes = "My notes :)"
                                     hiddenFromStatusLists = true
                                     updatedAt = 1_649_790_000
-                                    startedAt = startedAt {
+                                    startedAt = buildFuzzyDate {
                                         day = 23
                                         month = 12
                                         year = 1999
                                     }
-                                    completedAt = completedAt {
+                                    completedAt = buildFuzzyDate {
                                         day = 5
                                         month = 5
                                         year = 2009
                                     }
-                                    media = media {
+                                    media = buildMedia {
                                         id = 100
-                                        title = title {
+                                        title = buildMediaTitle {
                                             userPreferred = "My manga entry"
                                         }
                                         chapters = 23
                                         volumes = 2
-                                        format = "NOVEL"
-                                        coverImage = coverImage {
+                                        format = MediaFormat.NOVEL
+                                        coverImage = buildMediaCoverImage {
                                             large = "https://placehold.co/128x256"
                                         }
                                         nextAiringEpisode = null
@@ -798,12 +809,12 @@ internal class MediaListMapperTest : TestBase() {
         fun `a collection of mangas with invalid entries`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = listOf(
-                        list {
+                        buildMediaListGroup {
                             name = "Reading"
                             entries = listOf(
-                                entry {
+                                buildMediaList {
                                     id = Int.zero
                                     score = null
                                     progress = null
@@ -815,7 +826,7 @@ internal class MediaListMapperTest : TestBase() {
                                     startedAt = null
                                     completedAt = null
                                     updatedAt = null
-                                    media = media {
+                                    media = buildMedia {
                                         id = Int.zero
                                         title = null
                                         chapters = null

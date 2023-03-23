@@ -14,7 +14,7 @@ android {
 apollo {
     service("anilist") {
         generateAsInternal.set(true)
-        generateTestBuilders.set(true)
+        generateDataBuilders.set(true)
         packageName.set(pkg)
     }
 }

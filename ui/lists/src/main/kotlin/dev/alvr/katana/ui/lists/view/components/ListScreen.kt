@@ -14,9 +14,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.common.core.zero
+import dev.alvr.katana.ui.base.OnNavValue
 import dev.alvr.katana.ui.base.components.KatanaEmptyState
 import dev.alvr.katana.ui.base.components.KatanaErrorState
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
@@ -25,7 +25,9 @@ import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
+import dev.alvr.katana.ui.lists.viewmodel.AnimeListsViewModel
 import dev.alvr.katana.ui.lists.viewmodel.ListsViewModel
+import dev.alvr.katana.ui.lists.viewmodel.MangaListsViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -35,7 +37,6 @@ import kotlinx.coroutines.launch
 internal fun ListScreen(
     vm: ListsViewModel<*, *>,
     navigator: ListsNavigator,
-    fromNavigator: ListsNavigator.From,
     resultRecipient: ResultRecipient<ChangeListSheetDestination, String>,
     @StringRes title: Int,
     @StringRes emptyStateRes: Int,
@@ -47,19 +48,16 @@ internal fun ListScreen(
     val lazyGridState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
 
-    resultRecipient.onNavResult { result ->
-        when (result) {
-            NavResult.Canceled -> Unit
-            is NavResult.Value -> vm.selectList(result.value).also {
-                coroutineScope.launch { lazyGridState.scrollToItem(Int.zero) }
-                katanaScaffoldState.resetToolbar()
-            }
+    resultRecipient.OnNavValue { result ->
+        vm.selectList(result).also {
+            coroutineScope.launch { lazyGridState.scrollToItem(Int.zero) }
+            katanaScaffoldState.resetToolbar()
         }
     }
 
-    val searchPlaceholder = when (fromNavigator) {
-        ListsNavigator.From.ANIME -> R.string.lists_toolbar_search_anime_placeholder
-        ListsNavigator.From.MANGA -> R.string.lists_toolbar_search_manga_placeholder
+    val searchPlaceholder = when (vm) {
+        is AnimeListsViewModel -> R.string.lists_toolbar_search_anime_placeholder
+        is MangaListsViewModel -> R.string.lists_toolbar_search_manga_placeholder
     }.let { stringResource(it) }
 
     val buttonsVisible by remember(state.isError) {
@@ -76,7 +74,7 @@ internal fun ListScreen(
         backContent = backContent,
         fab = {
             ChangeListButton(visible = buttonsVisible && vm.userLists.isNotEmpty()) {
-                navigator.listSelector(vm.userLists, state.name.orEmpty(), fromNavigator)
+                navigator.listSelector(vm.userLists, state.name.orEmpty())
             }
         },
     ) { paddingValues ->
@@ -101,8 +99,8 @@ internal fun ListScreen(
                     listState = state,
                     onRefresh = vm::refreshList,
                     onAddPlusOne = vm::addPlusOne,
-                    onEditEntry = { navigator.editEntry(it, fromNavigator) },
-                    onEntryDetails = { navigator.entryDetails(it, fromNavigator) },
+                    onEditEntry = navigator::editEntry,
+                    onEntryDetails = navigator::entryDetails,
                 )
             }
         }

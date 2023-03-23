@@ -52,7 +52,7 @@ internal fun BaseExtension.baseAndroidConfig() {
             isIncludeAndroidResources = true
             all { test ->
                 test.useJUnitPlatform()
-                test.jvmArgs = listOf("-noverify", "-Xmx8G")
+                test.jvmArgs = listOf("-Xmx8G")
                 test.systemProperties(
                     "robolectric.usePreinstrumentedJars" to "true",
                     "robolectric.logging.enabled" to "true",
@@ -65,13 +65,8 @@ internal fun BaseExtension.baseAndroidConfig() {
 @Suppress("UnstableApiUsage")
 internal fun Project.configureCompose(commonExtension: CommonExtension<*, *, *, *>) {
     with(commonExtension) {
-        buildFeatures {
-            compose = true
-        }
-
-        composeOptions {
-            kotlinCompilerExtensionVersion = catalogVersion("compose-compiler")
-        }
+        buildFeatures.compose = true
+        composeOptions.kotlinCompilerExtensionVersion = catalogVersion("compose-compiler")
     }
 
     tasks.withType<KotlinCompile>().configureEach {
@@ -82,24 +77,21 @@ internal fun Project.configureCompose(commonExtension: CommonExtension<*, *, *, 
 }
 
 private fun Project.buildComposeParameters(): List<String> {
+    val prefix = "plugin:androidx.compose.compiler.plugins.kotlin"
     val parameters = mutableListOf<String>()
 
     val enableMetricsProvider = project.providers.gradleProperty("enableComposeCompilerMetrics")
     if (enableMetricsProvider.orNull == "true") {
         val metricsFolder = File(project.buildDir, "compose-metrics")
         parameters.add("-P")
-        parameters.add(
-            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" + metricsFolder.absolutePath,
-        )
+        parameters.add("$prefix:metricsDestination=${metricsFolder.absolutePath}")
     }
 
     val enableReportsProvider = project.providers.gradleProperty("enableComposeCompilerReports")
     if (enableReportsProvider.orNull == "true") {
         val reportsFolder = File(project.buildDir, "compose-reports")
         parameters.add("-P")
-        parameters.add(
-            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" + reportsFolder.absolutePath,
-        )
+        parameters.add("$prefix:reportsDestination=${reportsFolder.absolutePath}")
     }
     return parameters
 }

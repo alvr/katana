@@ -21,11 +21,11 @@ import com.apollographql.apollo3.testing.enqueueTestResponse
 import com.benasher44.uuid.uuid4
 import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.data.remote.base.type.MediaType
+import dev.alvr.katana.data.remote.base.type.buildMediaListCollection
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
 import dev.alvr.katana.data.remote.lists.MediaListEntriesMutation
 import dev.alvr.katana.data.remote.lists.enqueueResponse
 import dev.alvr.katana.data.remote.lists.mappers.requests.toMutation
-import dev.alvr.katana.data.remote.lists.test.MediaListCollectionQuery_TestBuilder.Data
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
@@ -214,7 +214,7 @@ internal class CommonListsRemoteSourceTest : TestBase() {
     private class QueryProvider : ArgumentsProvider {
         override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> {
             val empty = MediaListCollectionQuery.Data {
-                collection = collection {
+                this["collection"] = buildMediaListCollection {
                     lists = emptyList()
                     user = null
                 }

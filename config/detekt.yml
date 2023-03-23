@@ -909,10 +909,9 @@ style:
     active: true
     excludeImports: [ ]
 
-TwitterCompose:
+Compose:
+  # mrmans0n
   CompositionLocalAllowlist:
-    active: true
-  CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:
     active: true
@@ -920,6 +919,7 @@ TwitterCompose:
     active: true
   ModifierMissing:
     active: true
+    checkModifiersForVisibility: all
   ModifierReused:
     active: true
   ModifierWithoutDefault:
@@ -945,7 +945,7 @@ TwitterCompose:
   ViewModelInjection:
     active: true
 
-compose:
+  # appKode
   ReusedModifierInstance:
     active: true
   UnnecessaryEventHandlerParameter:

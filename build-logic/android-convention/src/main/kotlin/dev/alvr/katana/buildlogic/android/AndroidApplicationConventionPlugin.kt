@@ -58,6 +58,10 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
 
         namespace = KatanaConfiguration.PackageName
 
+        buildFeatures.buildConfig = true
+        lint.abortOnError = false
+        packagingOptions.resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+
         defaultConfig {
             applicationId = KatanaConfiguration.PackageName
             versionCode = KatanaConfiguration.VersionCode
@@ -86,8 +90,6 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
             }
         }
 
-        buildFeatures.buildConfig = true
-
         buildTypes {
             debug {
                 applicationIdSuffix = ".dev"
@@ -113,16 +115,6 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
 
                 applicationIdSuffix = ".beta"
                 versionNameSuffix = "-beta"
-            }
-        }
-
-        lint {
-            abortOnError = false
-        }
-
-        packagingOptions {
-            resources {
-                excludes.add("/META-INF/{AL2.0,LGPL2.1}")
             }
         }
     }

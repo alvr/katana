@@ -13,9 +13,9 @@ import com.apollographql.apollo3.exception.MissingValueException
 import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
 import dev.alvr.katana.common.tests.TestBase
+import dev.alvr.katana.data.remote.base.type.buildUser
 import dev.alvr.katana.data.remote.user.UserIdQuery
 import dev.alvr.katana.data.remote.user.mappers.responses.invoke
-import dev.alvr.katana.data.remote.user.test.UserIdQuery_TestBuilder.Data
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.models.UserId
@@ -66,7 +66,7 @@ internal class UserRemoteSourceTest : TestBase() {
         @DisplayName("AND the server returns an empty userId THEN it should be a Failure.Unknown")
         fun `the server returns an empty userId`() = runTest {
             // GIVEN
-            val query = UserIdQuery.Data { viewer = null }
+            val query = UserIdQuery.Data { this["viewer"] = null }
             client.enqueueTestResponse(UserIdQuery(), query)
 
             // WHEN
@@ -80,7 +80,7 @@ internal class UserRemoteSourceTest : TestBase() {
         @DisplayName("AND the server returns a valid id THEN it should be a userId with the same id")
         fun `the server returns a valid id`() = runTest {
             // GIVEN
-            val query = UserIdQuery.Data { viewer = viewer { id = 37_384 } }
+            val query = UserIdQuery.Data { this["viewer"] = buildUser { this["id"] = 37_384 } }
             client.enqueueTestResponse(UserIdQuery(), query)
 
             // WHEN
@@ -113,7 +113,7 @@ internal class UserRemoteSourceTest : TestBase() {
         @DisplayName("AND is successful THEN it should just execute the UserIdQuery")
         fun `is successful`() = runTest {
             // GIVEN
-            val query = UserIdQuery.Data { viewer = viewer { id = 37_384 } }
+            val query = UserIdQuery.Data { this["viewer"] = buildUser { this["id"] = 37_384 } }
             client.enqueueTestResponse(UserIdQuery(), query)
 
             // WHEN

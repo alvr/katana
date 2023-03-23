@@ -1,6 +1,5 @@
 package dev.alvr.katana.ui.lists.view.components
 
-import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -38,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -51,15 +49,13 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import dev.alvr.katana.common.core.unknown
 import dev.alvr.katana.common.core.zero
+import dev.alvr.katana.domain.base.formatters.KatanaDateFormatter
+import dev.alvr.katana.domain.base.formatters.KatanaNumberFormatter
 import dev.alvr.katana.ui.base.components.KatanaPullRefresh
 import dev.alvr.katana.ui.base.modifiers.katanaPlaceholder
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.viewmodel.ListState
-import java.text.DecimalFormat
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
-import java.time.format.FormatStyle
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -303,7 +299,7 @@ private fun Subtitle(
                 stringResource(
                     R.string.lists_entry_next_episode,
                     nextEpisode.number,
-                    nextEpisode.date.format(episodeFormatter()).toString(),
+                    KatanaDateFormatter.DateWithTime(nextEpisode.date),
                 ),
             )
         }
@@ -330,7 +326,7 @@ private fun Score(
                 .defaultMinSize(minWidth = 18.dp),
         ) {
             Text(
-                text = scoreFormatter(score),
+                text = KatanaNumberFormatter.Score(score),
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.align(Alignment.Center),
             )
@@ -402,28 +398,6 @@ private fun Progress(
         progress = currentProgress,
         modifier = modifier,
     )
-}
-
-private val episodeFormatter = @Composable {
-    val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        LocalConfiguration.current.locales[0]
-    } else {
-        @Suppress("DEPRECATION")
-        LocalConfiguration.current.locale
-    }
-
-    val datePattern = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-    val timePattern = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
-
-    DateTimeFormatterBuilder()
-        .append(datePattern)
-        .appendLiteral(" ${stringResource(R.string.lists_entry_next_episode_date_time_separator)} ")
-        .append(timePattern)
-        .toFormatter(locale)
-}
-
-private val scoreFormatter = { score: Double ->
-    DecimalFormat("0.#").format(score)
 }
 
 private val CARD_WIDTH = 384.dp

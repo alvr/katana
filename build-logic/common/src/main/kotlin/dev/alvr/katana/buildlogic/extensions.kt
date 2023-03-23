@@ -72,7 +72,8 @@ fun ExtensionContainer.commonExtensions() {
 
 fun TaskContainer.commonTasks() {
     withType<JavaCompile>().configureEach {
-        options.release.set(KatanaConfiguration.JvmTargetInt)
+        sourceCompatibility = KatanaConfiguration.JvmTargetStr
+        targetCompatibility = KatanaConfiguration.JvmTargetStr
     }
     withType<KotlinCompile>().configureEach {
         compilerOptions.configureKotlin()
@@ -86,6 +87,7 @@ private fun KotlinJvmCompilerOptions.configureKotlin() {
     freeCompilerArgs.set(
         freeCompilerArgs.get() + listOf(
             "-opt-in=kotlin.RequiresOptIn",
+            "-Xcontext-receivers",
             "-Xlambdas=indy",
         ),
     )
