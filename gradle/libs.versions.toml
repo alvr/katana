@@ -35,7 +35,7 @@ accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeho
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 # AndroidX
-androidx-activity = { module = "androidx.activity:activity-compose", version = "1.6.1" }
+androidx-activity = { module = "androidx.activity:activity-compose", version = "1.7.0" }
 androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.1.1" }
 
 # Apollo
