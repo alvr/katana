@@ -37,8 +37,13 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
             implementation(platform(catalogLib("compose-bom")))
             implementation(catalogBundle("common-android"))
             implementation(catalogBundle("app"))
-            implementation(catalogLib("koin-android")) { isTransitive = false }
-            implementation(catalogLib("koin-compose")) { isTransitive = false }
+            implementation(catalogLib("koin-android"))
+            implementation(catalogLib("koin-compose")) {
+                exclude(group = "androidx.appcompat", module = "appcompat")
+                exclude(group = "androidx.activity", module = "activity-ktx")
+                exclude(group = "androidx.fragment", module = "fragment-ktx")
+                exclude(group = "androidx.lifecycle", module = "lifecycle-common-java8")
+            }
 
             desugaring(catalogLib("desugaring"))
 

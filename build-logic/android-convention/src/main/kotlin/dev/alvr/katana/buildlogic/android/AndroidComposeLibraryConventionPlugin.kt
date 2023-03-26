@@ -13,6 +13,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.exclude
 
 @Suppress("UnstableApiUsage")
 internal class AndroidComposeLibraryConventionPlugin : ConventionPlugin {
@@ -41,7 +42,12 @@ internal class AndroidComposeLibraryConventionPlugin : ConventionPlugin {
         dependencies {
             implementation(platform(catalogLib("compose-bom")))
             implementation(catalogBundle("ui-compose"))
-            implementation(catalogLib("koin-compose")) { isTransitive = false }
+            implementation(catalogLib("koin-compose")) {
+                exclude(group = "androidx.appcompat", module = "appcompat")
+                exclude(group = "androidx.activity", module = "activity-ktx")
+                exclude(group = "androidx.fragment", module = "fragment-ktx")
+                exclude(group = "androidx.lifecycle", module = "lifecycle-common-java8")
+            }
 
             debugImplementation(catalogLib("compose-ui-test-manifest"))
 
