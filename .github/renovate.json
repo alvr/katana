@@ -7,22 +7,15 @@
   "reviewers": ["alvr"],
   "packageRules": [
     {
-      "matchPackagePatterns": [
-        "androidx.compose.compiler:compiler"
-      ],
-      "groupName": "kotlin"
-    },
-    {
-      "matchPackagePatterns": [
-        "org.jetbrains.kotlin.*"
-      ],
-      "groupName": "kotlin"
-    },
-    {
-      "matchPackagePatterns": [
+      "groupName": "Kotlin, KSP and Compose Compiler",
+      "groupSlug": "kotlin",
+      "matchPackagePrefixes": [
+        "androidx.compose.compiler",
         "com.google.devtools.ksp"
       ],
-      "groupName": "kotlin"
+      "matchPackagePatterns": [
+        "org.jetbrains.kotlin.*"
+      ]
     },
     {
       "matchPackagePatterns": [

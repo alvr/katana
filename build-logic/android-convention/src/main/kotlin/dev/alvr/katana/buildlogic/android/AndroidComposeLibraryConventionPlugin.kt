@@ -41,7 +41,7 @@ internal class AndroidComposeLibraryConventionPlugin : ConventionPlugin {
         dependencies {
             implementation(platform(catalogLib("compose-bom")))
             implementation(catalogBundle("ui-compose"))
-            implementation(catalogLib("koin-compose")) { isTransitive = false }
+            implementation(catalogLib("koin-compose")) { excludeKoinDeps() }
 
             debugImplementation(catalogLib("compose-ui-test-manifest"))
 
