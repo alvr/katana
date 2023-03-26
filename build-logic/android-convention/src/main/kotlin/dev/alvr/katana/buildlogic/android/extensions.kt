@@ -7,7 +7,9 @@ import dev.alvr.katana.buildlogic.catalogVersion
 import dev.alvr.katana.buildlogic.commonExtensions
 import java.io.File
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.plugins.ExtensionContainer
+import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.systemProperties
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -74,6 +76,13 @@ internal fun Project.configureCompose(commonExtension: CommonExtension<*, *, *, 
             freeCompilerArgs.set(freeCompilerArgs.get() + buildComposeParameters())
         }
     }
+}
+
+internal fun ExternalModuleDependency.excludeKoinDeps() {
+    exclude(group = "androidx.appcompat", module = "appcompat")
+    exclude(group = "androidx.activity", module = "activity-ktx")
+    exclude(group = "androidx.fragment", module = "fragment-ktx")
+    exclude(group = "androidx.lifecycle", module = "lifecycle-common-java8")
 }
 
 private fun Project.buildComposeParameters(): List<String> {

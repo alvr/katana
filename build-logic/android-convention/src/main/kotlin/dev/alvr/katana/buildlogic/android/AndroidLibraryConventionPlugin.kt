@@ -28,7 +28,7 @@ internal class AndroidLibraryConventionPlugin : ConventionPlugin {
 
         dependencies {
             implementation(catalogBundle("common-android"))
-            implementation(catalogLib("koin-android")) { isTransitive = false }
+            implementation(catalogLib("koin-android")) { excludeKoinDeps() }
 
             desugaring(catalogLib("desugaring"))
 
