@@ -148,7 +148,7 @@ mockk = { module = "io.mockk:mockk", version = "1.13.4" }
 robolectric = { module = "org.robolectric:robolectric", version = "4.9.2" }
 
 ## Turbine
-turbine = { module = "app.cash.turbine:turbine", version = "0.12.1" }
+turbine = { module = "app.cash.turbine:turbine", version = "0.12.3" }
 
 [bundles]
 common = [
