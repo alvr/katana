@@ -137,7 +137,7 @@ junit5 = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
 junit5-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
 
 ## Kotest
-kotest-assertions-arrow = { module = "io.kotest.extensions:kotest-assertions-arrow", version = "1.3.0" }
+kotest-assertions-arrow = { module = "io.kotest.extensions:kotest-assertions-arrow", version = "1.3.1" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 
