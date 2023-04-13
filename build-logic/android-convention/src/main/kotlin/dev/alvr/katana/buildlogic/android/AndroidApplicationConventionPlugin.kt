@@ -119,7 +119,6 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
         }
     }
 
-    @Suppress("UnstableApiUsage")
     private fun ApplicationBuildType.configure(isDebug: Boolean) {
         isDebuggable = isDebug
         isDefault = isDebug

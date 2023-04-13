@@ -34,7 +34,7 @@ import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.spec.NavGraphSpec
 import dev.alvr.katana.ui.base.viewmodel.collectAsState
-import dev.alvr.katana.ui.login.view.destinations.LoginDestination
+import dev.alvr.katana.ui.login.view.destinations.LoginScreenDestination
 import dev.alvr.katana.ui.main.components.SessionExpiredDialog
 import dev.alvr.katana.ui.main.viewmodel.MainViewModel
 import io.sentry.compose.withSentryObservableEffect
@@ -116,7 +116,7 @@ private fun DependenciesContainerBuilder<*>.currentNavigator(): Navigator = reme
 }
 
 private fun NavController.logout() {
-    navigate(LoginDestination) {
+    navigate(LoginScreenDestination) {
         popUpTo(NavGraphs.home) {
             inclusive = true
         }

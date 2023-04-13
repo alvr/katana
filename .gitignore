@@ -10,6 +10,7 @@
 /captures
 *.iml
 .DS_Store
+coverage-error.log
 katana.jks
 local.properties
 sentry.properties

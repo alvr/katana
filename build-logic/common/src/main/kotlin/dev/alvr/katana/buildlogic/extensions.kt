@@ -31,27 +31,27 @@ fun DependencyHandlerScope.implementation(
     provider: Provider<*>,
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
 ) {
-    addProvider("implementation", provider, dependencyConfiguration)
+    "implementation"(provider, dependencyConfiguration)
 }
 
 fun DependencyHandlerScope.debugImplementation(provider: Provider<*>) {
-    addProvider("debugImplementation", provider)
+    "debugImplementation"(provider)
 }
 
 fun DependencyHandlerScope.testImplementation(provider: Provider<*>) {
-    addProvider("testImplementation", provider)
+    "testImplementation"(provider)
 }
 
 fun DependencyHandlerScope.ksp(provider: Provider<*>) {
-    addProvider("ksp", provider)
+    "ksp"(provider)
 }
 
 fun DependencyHandlerScope.detekt(provider: Provider<*>) {
-    addProvider("detektPlugins", provider)
+    "detektPlugins"(provider)
 }
 
 fun DependencyHandlerScope.desugaring(provider: Provider<*>) {
-    addProvider("coreLibraryDesugaring", provider)
+    "coreLibraryDesugaring"(provider)
 }
 
 fun ExtensionContainer.commonExtensions() {

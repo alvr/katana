@@ -18,7 +18,6 @@ internal fun ExtensionContainer.commonAndroidExtensions() {
     commonExtensions()
 }
 
-@Suppress("UnstableApiUsage")
 internal fun BaseExtension.baseAndroidConfig() {
     compileSdkVersion(KatanaConfiguration.CompileSdk)
     buildToolsVersion(KatanaConfiguration.BuildTools)
@@ -85,22 +84,20 @@ internal fun ExternalModuleDependency.excludeKoinDeps() {
     exclude(group = "androidx.lifecycle", module = "lifecycle-common-java8")
 }
 
-private fun Project.buildComposeParameters(): List<String> {
-    val prefix = "plugin:androidx.compose.compiler.plugins.kotlin"
-    val parameters = mutableListOf<String>()
+private fun Project.buildComposeParameters() = buildList {
+    val pluginPrefix = "plugin:androidx.compose.compiler.plugins.kotlin"
 
-    val enableMetricsProvider = project.providers.gradleProperty("enableComposeCompilerMetrics")
+    val enableMetricsProvider = providers.gradleProperty("enableComposeCompilerMetrics")
     if (enableMetricsProvider.orNull == "true") {
-        val metricsFolder = File(project.buildDir, "compose-metrics")
-        parameters.add("-P")
-        parameters.add("$prefix:metricsDestination=${metricsFolder.absolutePath}")
+        val metricsFolder = File(buildDir, "compose-metrics")
+        add("-P")
+        add("$pluginPrefix:metricsDestination=" + metricsFolder.absolutePath)
     }
 
-    val enableReportsProvider = project.providers.gradleProperty("enableComposeCompilerReports")
+    val enableReportsProvider = providers.gradleProperty("enableComposeCompilerReports")
     if (enableReportsProvider.orNull == "true") {
-        val reportsFolder = File(project.buildDir, "compose-reports")
-        parameters.add("-P")
-        parameters.add("$prefix:reportsDestination=${reportsFolder.absolutePath}")
+        val reportsFolder = File(buildDir, "compose-reports")
+        add("-P")
+        add("$pluginPrefix:reportsDestination=" + reportsFolder.absolutePath)
     }
-    return parameters
 }
