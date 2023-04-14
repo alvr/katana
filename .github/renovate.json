@@ -18,10 +18,17 @@
       ]
     },
     {
-      "matchPackagePatterns": [
-        "^io.insert-koin"
+      "matchPackagePrefixes": [
+        "io.insert-koin"
       ],
       "groupName": "koin"
+    },
+    {
+      "matchPackagePrefixes": [
+        "io.github.raamcosta.compose-destinations"
+      ],
+      "groupName": "destinations",
+      "ignoreUnstable": false
     },
     {
       "automerge": true,

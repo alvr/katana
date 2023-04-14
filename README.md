@@ -16,19 +16,3 @@
 Katana is a work-in-progress Android client for Anilist written 100% in Kotlin & Jetpack Compose.
 
 ---
-
-## ✅ MVP features
-- [x] Initial Setup
-- [x] Login
-- [ ] Lists (Anime & Manga)
-  - [x] Display entries
-  - [x] Change selected list
-  - [x] Search in current list
-  - [x] Add +1 to entry (button & double-tap)
-  - [ ] Edit entry (long-tap) 👨‍💻
-  - [ ] Filter in current list (sort, order, status, etc.)
-- [ ] Entry information
-- [ ] Explore
-- [ ] Social
-- [ ] Account
-- [ ] Settings

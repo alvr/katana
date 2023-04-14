@@ -145,11 +145,11 @@ jobs:
         with:
           name: static-report
           path: .
-      - name: Download coverage artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: coverage-reports
-          path: .
+#      - name: Download coverage artifact
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: coverage-reports
+#          path: .
       - name: Run SonarQube
         if: github.event_name != 'pull_request'
         env:

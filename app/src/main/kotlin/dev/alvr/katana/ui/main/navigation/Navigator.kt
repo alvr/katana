@@ -8,7 +8,7 @@ import dev.alvr.katana.ui.lists.entities.UserList
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
-import dev.alvr.katana.ui.login.view.destinations.LoginDestination
+import dev.alvr.katana.ui.login.view.destinations.LoginScreenDestination
 import io.github.aakira.napier.Napier
 
 internal class Navigator(
@@ -26,7 +26,7 @@ internal class Navigator(
     //region [LoginNavigator]
     override fun toHome() {
         navigator.navigate(NavGraphs.home, onlyIfResumed = true) {
-            popUpTo(LoginDestination) {
+            popUpTo(LoginScreenDestination) {
                 inclusive = true
             }
         }

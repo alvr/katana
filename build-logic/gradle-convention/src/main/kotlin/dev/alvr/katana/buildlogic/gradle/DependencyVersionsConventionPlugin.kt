@@ -2,7 +2,6 @@ package dev.alvr.katana.buildlogic.gradle
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import dev.alvr.katana.buildlogic.ConventionPlugin
-import java.util.Locale
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.withType
@@ -29,7 +28,7 @@ internal class DependencyVersionsConventionPlugin : ConventionPlugin {
     }
 
     private fun checkDependencyVersion(version: String) =
-        if (stableKeywords.any { version.toUpperCase(Locale.ROOT).contains(it) }) {
+        if (stableKeywords.any { version.uppercase().contains(it) }) {
             ReleaseType.RELEASE
         } else {
             when {

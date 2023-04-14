@@ -91,7 +91,7 @@ import org.koin.androidx.compose.koinViewModel
         DeepLink(uriPattern = LOGIN_DEEP_LINK),
     ],
 )
-internal fun Login(
+internal fun LoginScreen(
     navigator: LoginNavigator,
     vm: LoginViewModel = koinViewModel(),
 ) {
