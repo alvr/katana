@@ -1,7 +1,7 @@
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 
 plugins {
-    id("katana.android.compose.library")
+    id("katana.multiplatform.compose")
 }
 
 android.namespace = "${KatanaConfiguration.PackageName}.ui.explore"

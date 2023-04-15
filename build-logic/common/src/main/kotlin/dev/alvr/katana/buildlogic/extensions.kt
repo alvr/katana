@@ -17,6 +17,7 @@ import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private val Project.libs get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
@@ -26,6 +27,10 @@ val Test.isRelease get() = name.contains("""beta|release""".toRegex(RegexOption.
 fun Project.catalogVersion(alias: String) = libs.findVersion(alias).get().toString()
 fun Project.catalogLib(alias: String) = libs.findLibrary(alias).get()
 fun Project.catalogBundle(alias: String) = libs.findBundle(alias).get()
+
+fun KotlinDependencyHandler.catalogVersion(alias: String) = project.catalogVersion(alias)
+fun KotlinDependencyHandler.catalogLib(alias: String) = project.catalogLib(alias)
+fun KotlinDependencyHandler.catalogBundle(alias: String) = project.catalogBundle(alias)
 
 fun DependencyHandlerScope.implementation(
     provider: Provider<*>,

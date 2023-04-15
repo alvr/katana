@@ -69,7 +69,7 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
         }
 
         signingConfigs {
-            create("release") {
+            register("release") {
                 val props = Properties().also { p ->
                     runCatching {
                         FileInputStream(rootProject.file("local.properties")).use { f ->
@@ -109,7 +109,7 @@ internal class AndroidApplicationConventionPlugin : ConventionPlugin {
                 signingConfig = signingConfigs.getByName("release")
             }
 
-            create("beta") {
+            register("beta") {
                 initWith(getByName("release"))
                 matchingFallbacks.add("release")
 

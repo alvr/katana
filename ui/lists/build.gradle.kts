@@ -1,7 +1,7 @@
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 
 plugins {
-    id("katana.android.compose.library")
+    id("katana.multiplatform.compose")
     id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
