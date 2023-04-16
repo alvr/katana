@@ -1,7 +1,3 @@
 plugins {
-    id("katana.kotlin")
-}
-
-dependencies {
-    implementation(libs.bundles.common)
+    id("katana.multiplatform.core")
 }

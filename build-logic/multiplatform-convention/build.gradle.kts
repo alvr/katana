@@ -14,17 +14,17 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("multiplatform") {
-            id = "katana.multiplatform"
-            implementationClass = "dev.alvr.katana.buildlogic.multiplatform.MultiplatformConventionPlugin"
+        register("multiplatform-core") {
+            id = "katana.multiplatform.core"
+            implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformCorePlugin"
         }
-        register("multiplatform-android") {
-            id = "katana.multiplatform.android"
-            implementationClass = "dev.alvr.katana.buildlogic.multiplatform.MultiplatformAndroidConventionPlugin"
+        register("multiplatform-mobile") {
+            id = "katana.multiplatform.mobile"
+            implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformMobilePlugin"
         }
         register("multiplatform-compose") {
             id = "katana.multiplatform.compose"
-            implementationClass = "dev.alvr.katana.buildlogic.multiplatform.MultiplatformComposeConventionPlugin"
+            implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformComposePlugin"
         }
     }
 }
