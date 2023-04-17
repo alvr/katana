@@ -11,6 +11,7 @@ dependencies {
 
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.test)
+    implementation(libs.bundles.test.jvm)
     implementation(libs.bundles.test.android)
     implementation(libs.bundles.test.ui)
 }

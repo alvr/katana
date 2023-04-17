@@ -8,5 +8,5 @@ katanaMultiplatform {
         implementation(libs.bundles.test)
     }
 
-    jvmMainDependencies { implementation(libs.koin.junit5) }
+    jvmMainDependencies { implementation(libs.bundles.test.jvm) }
 }

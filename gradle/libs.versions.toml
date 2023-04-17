@@ -210,12 +210,15 @@ ui-compose = [
 
 test = [
     "coroutines-test",
-    "junit5",
-    "koin-junit5",
+    "kotest-assertions-arrow",
     "kotest-assertions-core",
     "kotest-property",
-    "mockk",
     "turbine",
+]
+test-jvm = [
+    "junit5",
+    "koin-junit5",
+    "mockk",
 ]
 test-android = [
     "junit5-vintage",

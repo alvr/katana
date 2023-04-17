@@ -56,7 +56,12 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
                     implementation(catalogBundle("test"))
                 }
             }
-            val jvmTest by getting { dependsOn(commonTest) }
+            val jvmTest by getting {
+                dependsOn(commonTest)
+                dependencies {
+                    implementation(catalogBundle("test-jvm"))
+                }
+            }
             val iosTest by getting { dependsOn(commonTest) }
             val iosSimulatorArm64Test by getting { dependsOn(iosTest) }
         }
