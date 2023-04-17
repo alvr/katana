@@ -9,7 +9,7 @@ import org.gradle.api.tasks.testing.TestReport
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 
-internal class CommonConventionPlugin : ConventionPlugin {
+internal class KatanaCommonPlugin : ConventionPlugin {
     override fun Project.configure() {
         with(tasks) {
             register<Delete>("clean") {

@@ -14,7 +14,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
 @Suppress("UnstableApiUsage")
-internal class AndroidComposeLibraryConventionPlugin : ConventionPlugin {
+internal class KatanaAndroidComposeLibraryPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "katana.android.library")
         apply(plugin = "com.google.devtools.ksp")

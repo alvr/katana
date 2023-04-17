@@ -14,7 +14,6 @@ import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-// TODO Add ios platform when migrating tests
 internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
@@ -34,8 +33,8 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
 
     private fun KotlinMultiplatformExtension.configure() {
         jvm()
-//        ios()
-//        iosSimulatorArm64()
+        ios()
+        iosSimulatorArm64()
 
         configureSourceSets()
     }
@@ -49,8 +48,8 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
                 }
             }
             val jvmMain by getting { dependsOn(commonMain) }
-//            val iosMain by getting { dependsOn(commonMain) }
-//            val iosSimulatorArm64Main by getting { dependsOn(commonMain) }
+            val iosMain by getting { dependsOn(commonMain) }
+            val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
             val commonTest by getting {
                 dependencies {
@@ -58,8 +57,8 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
                 }
             }
             val jvmTest by getting { dependsOn(commonTest) }
-//            val iosTest by getting { dependsOn(commonTest) }
-//            val iosSimulatorArm64Test by getting { dependsOn(commonTest) }
+            val iosTest by getting { dependsOn(commonTest) }
+            val iosSimulatorArm64Test by getting { dependsOn(iosTest) }
         }
     }
 }

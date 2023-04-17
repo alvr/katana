@@ -13,11 +13,11 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
-internal class AndroidLibraryConventionPlugin : ConventionPlugin {
+internal class KatanaAndroidLibraryPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "com.android.library")
         apply(plugin = "org.jetbrains.kotlin.android")
-        apply(plugin = "katana.sonarqube.android")
+        apply(plugin = "katana.sonar.android")
 
         with(extensions) {
             commonAndroidExtensions()

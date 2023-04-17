@@ -19,35 +19,24 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
         apply(plugin = "katana.multiplatform.mobile")
         apply(plugin = "org.jetbrains.compose")
 
-        with(extensions) {
-            configure<KotlinMultiplatformExtension> { configureComposeSourceSets() }
-        }
+        extensions.configure<KotlinMultiplatformExtension> { configureSourceSets() }
     }
 
     @Suppress("UNUSED_VARIABLE")
-    private fun KotlinMultiplatformExtension.configureComposeSourceSets() {
+    private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
-            getByName("commonMain") {
+            val commonMain by getting {
                 dependencies {
                     implementation(compose.runtime)
                     implementation(compose.material)
                     implementation(compose.foundation)
                 }
             }
-            val commonTest by getting
-
             val androidMain by getting {
                 dependencies {
                     implementation(catalogBundle("ui-compose"))
                 }
             }
-            val androidUnitTest by getting
-
-            val iosMain by getting
-            val iosTest by getting { dependsOn(commonTest) }
-
-            getByName("iosSimulatorArm64Main") { dependsOn(iosMain) }
-            getByName("iosSimulatorArm64Test") { dependsOn(iosTest) }
         }
     }
 }

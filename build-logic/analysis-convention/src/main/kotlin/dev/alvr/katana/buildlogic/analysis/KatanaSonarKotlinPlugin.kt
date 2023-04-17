@@ -5,7 +5,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.sonarqube.gradle.SonarQubeExtension
 
-internal class SonarQubeKotlinConventionPlugin : ConventionPlugin {
+internal class KatanaSonarKotlinPlugin : ConventionPlugin {
     override fun Project.configure() {
         extensions.configure<SonarQubeExtension> {
             properties {

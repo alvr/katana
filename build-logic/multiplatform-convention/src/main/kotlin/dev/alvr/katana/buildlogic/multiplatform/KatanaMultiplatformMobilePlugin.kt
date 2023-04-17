@@ -27,7 +27,7 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
             create<KatanaMultiplatformMobileExtension>(KATANA_MULTIPLATFORM_EXTENSION)
 
             configure<KotlinMultiplatformExtension> { configure(project) }
-            getByType<LibraryExtension>().base()
+            getByType<LibraryExtension>().configureAndroid()
         }
     }
 
@@ -36,8 +36,38 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
         ios()
         iosSimulatorArm64()
 
+        configureSourceSets()
         configureCocoapods(project)
-        configureComposeSourceSets()
+    }
+
+    @Suppress("UNUSED_VARIABLE")
+    private fun KotlinMultiplatformExtension.configureSourceSets() {
+        configureSourceSets {
+            val commonMain by getting
+            val androidMain by getting { dependsOn(commonMain) }
+            val iosMain by getting { dependsOn(commonMain) }
+            val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
+
+            val commonTest by getting
+            val androidUnitTest by getting { dependsOn(commonTest) }
+            val iosTest by getting { dependsOn(commonTest) }
+            val iosSimulatorArm64Test by getting { dependsOn(iosTest) }
+        }
+    }
+
+    private fun BaseExtension.configureAndroid() {
+        with(sourceSets["main"]) {
+            res.srcDirs("src/androidMain/res")
+            resources.srcDir("src/commonMain/resources")
+        }
+        defaultConfig {
+            minSdk = KatanaConfiguration.MinSdk
+            targetSdk = KatanaConfiguration.TargetSdk
+        }
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        }
     }
 
     // TODO context(KotlinMultiplatformExtension)
@@ -52,42 +82,6 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
                 isStatic = true
             }
             extraSpecAttributes["resources"] = "[$COMMON_RESOURCES_DIR, $IOS_RESOURCES_DIR]"
-        }
-    }
-
-    @Suppress("UNUSED_VARIABLE")
-    private fun KotlinMultiplatformExtension.configureComposeSourceSets() {
-        configureSourceSets {
-            val commonMain by getting
-            val commonTest by getting
-
-            val androidMain by getting
-            val androidUnitTest by getting
-
-            val iosMain by getting
-            val iosTest by getting
-
-            val iosSimulatorArm64Main by getting {
-                dependsOn(iosMain)
-            }
-            val iosSimulatorArm64Test by getting {
-                dependsOn(iosTest)
-            }
-        }
-    }
-
-    private fun BaseExtension.base() {
-        with(sourceSets["main"]) {
-            res.srcDirs("src/androidMain/res")
-            resources.srcDir("src/commonMain/resources")
-        }
-        defaultConfig {
-            minSdk = KatanaConfiguration.MinSdk
-            targetSdk = KatanaConfiguration.TargetSdk
-        }
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
         }
     }
 }

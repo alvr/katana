@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.register
 
-internal class DetektConventionPlugin : ConventionPlugin {
+internal class KatanaDetektPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "io.gitlab.arturbosch.detekt")
 

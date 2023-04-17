@@ -3,6 +3,7 @@ plugins {
 }
 
 group = "dev.alvr.katana.buildlogic.multiplatform"
+version = extra["katana.plugins.version"].toString()
 
 dependencies {
     implementation(libs.gradle.android)

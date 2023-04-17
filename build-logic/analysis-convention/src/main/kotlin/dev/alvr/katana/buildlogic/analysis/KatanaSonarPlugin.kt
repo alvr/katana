@@ -7,7 +7,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.sonarqube.gradle.SonarQubeExtension
 
-internal class SonarQubeConventionPlugin : ConventionPlugin {
+internal class KatanaSonarPlugin : ConventionPlugin {
     private val codeExclusions = listOf(
         "**/R.*",
         "**/R$*.*",

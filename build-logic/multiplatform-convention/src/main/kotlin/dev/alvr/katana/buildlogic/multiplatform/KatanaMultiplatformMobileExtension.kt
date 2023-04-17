@@ -2,8 +2,6 @@ package dev.alvr.katana.buildlogic.multiplatform
 
 import javax.inject.Inject
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getByType
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
 open class KatanaMultiplatformMobileExtension @Inject constructor(
