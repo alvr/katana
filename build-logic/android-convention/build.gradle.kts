@@ -26,9 +26,5 @@ gradlePlugin {
             id = "katana.android.compose.library"
             implementationClass = "dev.alvr.katana.buildlogic.android.KatanaAndroidComposeLibraryPlugin"
         }
-        register("android-test-library") {
-            id = "katana.android.test.library"
-            implementationClass = "dev.alvr.katana.buildlogic.android.KatanaAndroidTestLibraryPlugin"
-        }
     }
 }

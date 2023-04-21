@@ -1,5 +1,6 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
+import com.android.build.gradle.LibraryExtension
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import org.gradle.api.Project
@@ -12,27 +13,32 @@ import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
-    private val KotlinMultiplatformExtension.compose get() =
-        (this as ExtensionAware).extensions.getByName("compose") as ComposePlugin.Dependencies
-
     override fun Project.configure() {
         apply(plugin = "katana.multiplatform.mobile")
+        apply(plugin = "com.google.devtools.ksp")
         apply(plugin = "org.jetbrains.compose")
 
-        extensions.configure<KotlinMultiplatformExtension> { configureSourceSets() }
+        with(extensions) {
+            configure<KotlinMultiplatformExtension> { configureSourceSets() }
+            configure<LibraryExtension> { configureCompose(this) }
+        }
     }
 
     @Suppress("UNUSED_VARIABLE")
     private fun KotlinMultiplatformExtension.configureSourceSets() {
+        val compose = (this as ExtensionAware).extensions.getByName("compose") as ComposePlugin.Dependencies
+
         configureSourceSets {
             val commonMain by getting {
                 dependencies {
-                    implementation(compose.runtime)
-                    implementation(compose.material)
                     implementation(compose.foundation)
+                    implementation(compose.material)
+                    implementation(compose.runtime)
+                    implementation(compose.ui)
                 }
             }
             val androidMain by getting {
+                dependsOn(commonMain)
                 dependencies {
                     implementation(catalogBundle("ui-compose"))
                 }

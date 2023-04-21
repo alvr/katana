@@ -35,7 +35,7 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
 
         dependencies {
             implementation(platform(catalogLib("compose-bom")))
-            implementation(catalogBundle("common-android"))
+            implementation(catalogBundle("common-mobile"))
             implementation(catalogBundle("app"))
             implementation(catalogLib("koin-android")) { excludeKoinDeps() }
             implementation(catalogLib("koin-compose")) { excludeKoinDeps() }
@@ -43,8 +43,8 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
             desugaring(catalogLib("desugaring"))
 
             testImplementation(platform(catalogLib("compose-bom")))
-            testImplementation(catalogBundle("test"))
-            testImplementation(catalogBundle("test-android"))
+            testImplementation(catalogBundle("common-test"))
+            testImplementation(catalogBundle("common-test-android"))
             testImplementation(catalogBundle("test-ui"))
         }
     }
@@ -60,7 +60,10 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
 
         buildFeatures.buildConfig = true
         lint.abortOnError = false
-        packagingOptions.resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+        with(packagingOptions.resources.excludes) {
+            add("/META-INF/{AL2.0,LGPL2.1}")
+            add("DebugProbesKt.bin")
+        }
 
         defaultConfig {
             applicationId = KatanaConfiguration.PackageName

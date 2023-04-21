@@ -12,7 +12,7 @@ open class KatanaMultiplatformMobileExtension @Inject constructor(
     }
 
     fun androidTestDependencies(dependencies: KotlinDependencyHandler.() -> Unit) {
-        configureSourceSet("androidTest", dependencies)
+        configureSourceSet("androidUnitTest", dependencies)
     }
 
     fun iosMainDependencies(dependencies: KotlinDependencyHandler.() -> Unit) {
@@ -21,5 +21,13 @@ open class KatanaMultiplatformMobileExtension @Inject constructor(
 
     fun iosTestDependencies(dependencies: KotlinDependencyHandler.() -> Unit) {
         configureSourceSet("iosTest", dependencies)
+    }
+
+    fun iosSimulatorMainDependencies(dependencies: KotlinDependencyHandler.() -> Unit) {
+        configureSourceSet("iosSimulatorArm64Main", dependencies)
+    }
+
+    fun iosSimulatorTestDependencies(dependencies: KotlinDependencyHandler.() -> Unit) {
+        configureSourceSet("iosSimulatorArm64Test", dependencies)
     }
 }

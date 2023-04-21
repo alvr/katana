@@ -45,8 +45,8 @@ internal class KatanaAndroidComposeLibraryPlugin : ConventionPlugin {
             ksp(catalogBundle("ksp-ui"))
 
             testImplementation(platform(catalogLib("compose-bom")))
-            testImplementation(catalogBundle("test"))
-            testImplementation(catalogBundle("test-android"))
+            testImplementation(catalogBundle("common-test"))
+            testImplementation(catalogBundle("common-test-android"))
             testImplementation(catalogBundle("test-ui"))
         }
     }

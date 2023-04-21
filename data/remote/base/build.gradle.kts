@@ -1,39 +1,23 @@
-import dev.alvr.katana.buildlogic.KatanaConfiguration
-
 plugins {
-    id("katana.android.library")
-    alias(libs.plugins.apollo)
+    id("katana.multiplatform.data.remote")
 }
 
-val pkg = "${KatanaConfiguration.PackageName}.data.remote.base"
+android.buildFeatures.buildConfig = true
 
-android {
-    namespace = pkg
-    buildFeatures.buildConfig = true
-}
-
-apollo {
-    service("anilist") {
-        alwaysGenerateTypesMatching.set(listOf("Query", "User"))
-        generateApolloMetadata.set(true)
-        generateDataBuilders.set(true)
-        packageName.set(pkg)
-
-        introspection {
-            endpointUrl.set("https://graphql.anilist.co")
-            schemaFile.set(file("src/main/graphql/schema.graphqls"))
-        }
+katanaMultiplatform {
+    commonMainDependencies {
+        implementation(projects.common.core)
+        implementation(projects.domain.session)
+        implementation(libs.apollo.cache.sql)
     }
-}
 
-dependencies {
-    implementation(projects.common.core)
-    implementation(projects.domain.session)
-    implementation(libs.bundles.data.remote)
-    implementation(libs.apollo.cache.sql)
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logger)
-    implementation(libs.sentry.apollo)
+    androidMainDependencies {
+        implementation(libs.okhttp)
+        implementation(libs.okhttp.logger)
+        implementation(libs.sentry.apollo)
+    }
 
-    testImplementation(projects.common.tests)
+    commonTestDependencies {
+        implementation(projects.common.tests)
+    }
 }

@@ -26,7 +26,6 @@ detekt = "1.23.0"
 kotest = "5.6.2"
 
 [plugins]
-apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
@@ -64,7 +63,6 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 
 # Coroutines
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 # DataStore
@@ -84,6 +82,7 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version = "8.0.2" }
+gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
 gradle-compose-multiplatform = { module = "org.jetbrains.compose:compose-gradle-plugin", version = "1.4.0" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -149,21 +148,24 @@ robolectric = { module = "org.robolectric:robolectric", version = "4.10.3" }
 turbine = { module = "app.cash.turbine:turbine", version = "0.13.0" }
 
 [bundles]
-common = [
+common-core = [
     "arrow",
     "coroutines",
     "koin",
     "kotlin",
     "kotlin-immutable",
 ]
-common-android = [
+common-jvm = []
+common-mobile = [
     "arrow",
-    "coroutines-android",
+    "coroutines",
     "koin",
     "kotlin",
     "kotlin-immutable",
     "napier",
 ]
+common-android = []
+common-ios = []
 
 app = [
     "androidx-activity",
@@ -208,23 +210,34 @@ ui-compose = [
     "orbit",
 ]
 
-test = [
+# Tests bundles
+common-test = [
     "coroutines-test",
     "kotest-assertions-arrow",
     "kotest-assertions-core",
     "kotest-property",
     "turbine",
 ]
-test-jvm = [
+common-test-jvm = [
     "junit5",
     "koin-junit5",
     "mockk",
 ]
-test-android = [
+common-test-mobile = [
+    "coroutines-test",
+    "kotest-assertions-arrow",
+    "kotest-assertions-core",
+    "kotest-property",
+    "turbine",
+]
+common-test-android = [
+    "junit5",
     "junit5-vintage",
     "koin-junit5",
+    "mockk",
     "robolectric",
 ]
+common-test-ios = []
 
 test-data-remote = [
     "apollo-mockserver",

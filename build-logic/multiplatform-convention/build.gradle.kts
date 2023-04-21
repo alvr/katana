@@ -7,6 +7,7 @@ version = extra["katana.plugins.version"].toString()
 
 dependencies {
     implementation(libs.gradle.android)
+    implementation(libs.gradle.apollo)
     implementation(libs.gradle.compose.multiplatform)
     implementation(libs.gradle.kotlin)
     implementation(libs.gradle.ksp)
@@ -26,6 +27,10 @@ gradlePlugin {
         register("multiplatform-compose") {
             id = "katana.multiplatform.compose"
             implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformComposePlugin"
+        }
+        register("multiplatform-data-remote") {
+            id = "katana.multiplatform.data.remote"
+            implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformDataRemotePlugin"
         }
     }
 }
