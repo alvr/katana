@@ -1,5 +1,7 @@
 package dev.alvr.katana.data.remote.base
 
+import arrow.core.Either
+import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloHttpException
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.apollographql.apollo3.exception.ApolloParseException
@@ -8,6 +10,8 @@ import com.apollographql.apollo3.exception.HttpCacheMissException
 import com.apollographql.apollo3.exception.JsonDataException
 import com.apollographql.apollo3.exception.JsonEncodingException
 import dev.alvr.katana.domain.base.failures.Failure
+
+fun <A, B> Either<A, B>.optional() = Optional.presentIfNotNull(getOrNull())
 
 fun Throwable.toFailure(
     network: Failure = Failure.Unknown,

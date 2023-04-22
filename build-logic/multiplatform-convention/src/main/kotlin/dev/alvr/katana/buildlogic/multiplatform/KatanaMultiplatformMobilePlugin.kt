@@ -5,6 +5,7 @@ import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.commonTasks
+import dev.alvr.katana.buildlogic.implementation
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
@@ -49,7 +50,7 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
                 dependsOn(commonMain)
                 dependencies {
                     implementation(catalogBundle("common-android"))
-                    implementation(catalogLib("koin-android"))
+                    implementation(catalogLib("koin-android")) { excludeKoinDeps() }
                 }
             }
             val iosMain by getting {

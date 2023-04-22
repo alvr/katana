@@ -8,7 +8,6 @@ koin = "3.4.1"
 koin-compose = "3.4.5"
 kotlin = "1.8.21"
 lifecycle = "2.6.1"
-okhttp = "4.11.0"
 orbit = "6.0.0"
 sentry = "6.21.0"
 
@@ -39,8 +38,7 @@ androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.1
 
 # Apollo
 apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
-apollo-cache = { module = "com.apollographql.apollo3:apollo-normalized-cache", version.ref = "apollo" }
-apollo-cache-sql = { module = "com.apollographql.apollo3:apollo-normalized-cache-sqlite", version.ref = "apollo" }
+apollo-cache = { module = "com.apollographql.apollo3:apollo-normalized-cache-sqlite", version.ref = "apollo" }
 apollo-mockserver = { module = "com.apollographql.apollo3:apollo-mockserver", version.ref = "apollo" }
 apollo-test = { module = "com.apollographql.apollo3:apollo-testing-support", version.ref = "apollo" }
 
@@ -109,10 +107,6 @@ lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose
 
 # Napier
 napier = { module = "io.github.aakira:napier", version = "2.6.1" }
-
-# OkHttp
-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
-okhttp-logger = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 
 # Orbit
 orbit = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }

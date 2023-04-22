@@ -8,7 +8,7 @@ import com.apollographql.apollo3.cache.normalized.fetchPolicyInterceptor
 import com.apollographql.apollo3.cache.normalized.watch
 import com.apollographql.apollo3.interceptor.ApolloInterceptor
 import dev.alvr.katana.common.core.catchUnit
-import dev.alvr.katana.data.remote.base.extensions.optional
+import dev.alvr.katana.data.remote.base.optional
 import dev.alvr.katana.data.remote.base.toFailure
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery

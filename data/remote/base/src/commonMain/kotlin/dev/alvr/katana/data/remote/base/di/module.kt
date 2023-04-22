@@ -13,29 +13,25 @@ import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.interceptor.ApolloInterceptor
 import com.apollographql.apollo3.network.http.HttpInterceptor
 import com.apollographql.apollo3.network.http.HttpInterceptorChain
-import com.apollographql.apollo3.network.okHttpClient
-import dev.alvr.katana.data.remote.base.BuildConfig
+import com.apollographql.apollo3.network.http.LoggingInterceptor
 import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.session.usecases.DeleteAnilistTokenUseCase
 import dev.alvr.katana.domain.session.usecases.GetAnilistTokenUseCase
-import io.sentry.apollo3.sentryTracing
-import java.net.HttpURLConnection
-import java.util.concurrent.TimeUnit
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.ext.koin.androidApplication
+import io.github.aakira.napier.Napier
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
+internal expect fun ApolloClient.Builder.sentryInterceptor(): ApolloClient.Builder
+
 private val getAnilistTokenInterceptor = named("getAnilistTokenInterceptor")
 private val deleteAnilistTokenInterceptor = named("deleteAnilistTokenInterceptor")
+private val loggingInterceptor = named("loggingInterceptor")
 
-private val apolloModule = module {
-    single<NormalizedCacheFactory> { SqlNormalizedCacheFactory(androidApplication(), CACHE_DATABASE) }
-
+private val apolloClientModule = module {
     single {
         val cacheKeyGenerator = object : CacheKeyGenerator {
             override fun cacheKeyForObject(
@@ -55,9 +51,9 @@ private val apolloModule = module {
             .serverUrl(ANILIST_BASE_URL)
             .addHttpInterceptor(get(getAnilistTokenInterceptor))
             .addHttpInterceptor(get(deleteAnilistTokenInterceptor))
+            .addHttpInterceptor(get(loggingInterceptor))
+            .sentryInterceptor()
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
-            .okHttpClient(get())
-            .sentryTracing()
             .normalizedCache(
                 normalizedCacheFactory = get(),
                 cacheKeyGenerator = cacheKeyGenerator,
@@ -65,6 +61,10 @@ private val apolloModule = module {
             )
             .build()
     }
+}
+
+private val apolloDatabaseModule: Module = module {
+    single<NormalizedCacheFactory> { SqlNormalizedCacheFactory(CACHE_DATABASE) }
 }
 
 private val apolloInterceptorsModule = module {
@@ -88,8 +88,8 @@ private val apolloInterceptorsModule = module {
             override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain) =
                 chain.proceed(request).also { response ->
                     if (
-                        response.statusCode == HttpURLConnection.HTTP_BAD_REQUEST ||
-                        response.statusCode == HttpURLConnection.HTTP_UNAUTHORIZED
+                        response.statusCode == HTTP_BAD_REQUEST ||
+                        response.statusCode == HTTP_UNAUTHORIZED
                     ) {
                         useCase()
                     }
@@ -97,30 +97,18 @@ private val apolloInterceptorsModule = module {
         }
     }
 
-    factoryOf(::ReloadInterceptor) bind ApolloInterceptor::class
-}
-
-private val okhttpModule = module {
-    single {
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
-        }
-
-        OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .connectTimeout(CLIENT_TIMEOUT, TimeUnit.SECONDS)
-            .writeTimeout(CLIENT_TIMEOUT, TimeUnit.SECONDS)
-            .readTimeout(CLIENT_TIMEOUT, TimeUnit.SECONDS)
-            .build()
+    single<HttpInterceptor>(loggingInterceptor) {
+        LoggingInterceptor(
+            log = { Napier.i(tag = "ApolloLoggingInterceptor") { it } },
+            level = LoggingInterceptor.Level.BODY,
+        )
     }
+
+    factoryOf(::ReloadInterceptor).bind<ApolloInterceptor>()
 }
 
 val baseDataRemoteModule = module {
-    includes(apolloModule, apolloInterceptorsModule, okhttpModule)
+    includes(apolloClientModule, apolloDatabaseModule, apolloInterceptorsModule)
 }
 
 private const val ANILIST_BASE_URL = "https://graphql.anilist.co"
@@ -129,4 +117,5 @@ private const val CACHE_DATABASE = "katana_data.db"
 private const val CACHE_ID_KEY = "id"
 private const val CACHE_TYPE_KEY = "__typename"
 
-private const val CLIENT_TIMEOUT = 30L
+private const val HTTP_BAD_REQUEST = 400
+private const val HTTP_UNAUTHORIZED = 401
