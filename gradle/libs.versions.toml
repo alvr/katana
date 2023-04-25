@@ -2,7 +2,7 @@
 accompanist = "0.30.1"
 apollo = "3.8.1"
 coroutines = "1.6.4"
-destinations = "1.8.39-beta"
+destinations = "1.8.41-beta"
 junit5 = "5.9.2"
 koin = "3.4.0"
 koin-compose = "3.4.4"
