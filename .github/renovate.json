@@ -24,13 +24,6 @@
       "groupName": "koin"
     },
     {
-      "matchPackagePrefixes": [
-        "io.github.raamcosta.compose-destinations"
-      ],
-      "groupName": "destinations",
-      "ignoreUnstable": false
-    },
-    {
       "automerge": true,
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"]
     }
