@@ -5,8 +5,8 @@ plugins {
 katanaMultiplatform {
     commonMainDependencies {
         implementation(libs.arrow)
-        implementation(libs.bundles.common.test)
+        implementation(libs.bundles.core.common.test)
     }
 
-    jvmMainDependencies { implementation(libs.bundles.common.test.jvm) }
+    jvmMainDependencies { implementation(libs.bundles.core.jvm.test) }
 }

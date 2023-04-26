@@ -44,38 +44,38 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
         configureSourceSets {
             val commonMain by getting {
                 dependencies {
-                    implementation(catalogBundle("common-core"))
+                    implementation(catalogBundle("core-common"))
                 }
             }
             val jvmMain by getting {
                 dependsOn(commonMain)
                 dependencies {
-                    implementation(catalogBundle("common-jvm"))
+                    implementation(catalogBundle("core-jvm"))
                 }
             }
             val iosMain by getting {
                 dependsOn(commonMain)
                 dependencies {
-                    implementation(catalogBundle("common-ios"))
+                    implementation(catalogBundle("core-ios"))
                 }
             }
             val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
             val commonTest by getting {
                 dependencies {
-                    implementation(catalogBundle("common-test"))
+                    implementation(catalogBundle("core-common-test"))
                 }
             }
             val jvmTest by getting {
                 dependsOn(commonTest)
                 dependencies {
-                    implementation(catalogBundle("common-test-jvm"))
+                    implementation(catalogBundle("core-jvm-test"))
                 }
             }
             val iosTest by getting {
                 dependsOn(commonTest)
                 dependencies {
-                    implementation(catalogBundle("common-test-ios"))
+                    implementation(catalogBundle("core-ios-test"))
                 }
             }
             val iosSimulatorArm64Test by getting { dependsOn(iosTest) }

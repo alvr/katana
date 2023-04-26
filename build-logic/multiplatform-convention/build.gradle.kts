@@ -28,6 +28,10 @@ gradlePlugin {
             id = "katana.multiplatform.compose"
             implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformComposePlugin"
         }
+        register("multiplatform-data-preferences") {
+            id = "katana.multiplatform.data.preferences"
+            implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformDataPreferencesPlugin"
+        }
         register("multiplatform-data-remote") {
             id = "katana.multiplatform.data.remote"
             implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformDataRemotePlugin"

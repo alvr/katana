@@ -14,6 +14,5 @@ katanaMultiplatform {
 
     commonTestDependencies {
         implementation(projects.common.tests)
-        implementation(libs.bundles.test.data.remote)
     }
 }

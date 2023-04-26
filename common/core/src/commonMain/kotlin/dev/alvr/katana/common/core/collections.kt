@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package dev.alvr.katana.common.core
 
 import kotlinx.collections.immutable.ImmutableList

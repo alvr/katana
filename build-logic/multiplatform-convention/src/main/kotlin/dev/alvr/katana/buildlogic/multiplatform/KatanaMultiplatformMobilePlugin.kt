@@ -43,39 +43,39 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
         configureSourceSets {
             val commonMain by getting {
                 dependencies {
-                    implementation(catalogBundle("common-mobile"))
+                    implementation(catalogBundle("mobile-common"))
                 }
             }
             val androidMain by getting {
                 dependsOn(commonMain)
                 dependencies {
-                    implementation(catalogBundle("common-android"))
+                    implementation(catalogBundle("mobile-android"))
                     implementation(catalogLib("koin-android")) { excludeKoinDeps() }
                 }
             }
             val iosMain by getting {
                 dependsOn(commonMain)
                 dependencies {
-                    implementation(catalogBundle("common-ios"))
+                    implementation(catalogBundle("mobile-ios"))
                 }
             }
             val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
             val commonTest by getting {
                 dependencies {
-                    implementation(catalogBundle("common-test-mobile"))
+                    implementation(catalogBundle("mobile-common-test"))
                 }
             }
             val androidUnitTest by getting {
                 dependsOn(commonTest)
                 dependencies {
-                    implementation(catalogBundle("common-test-android"))
+                    implementation(catalogBundle("mobile-android-test"))
                 }
             }
             val iosTest by getting {
                 dependsOn(commonTest)
                 dependencies {
-                    implementation(catalogBundle("common-test-ios"))
+                    implementation(catalogBundle("mobile-ios-test"))
                 }
             }
             val iosSimulatorArm64Test by getting { dependsOn(iosTest) }

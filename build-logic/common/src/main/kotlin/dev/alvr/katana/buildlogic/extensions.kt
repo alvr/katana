@@ -34,7 +34,10 @@ fun KotlinDependencyHandler.catalogVersion(alias: String) = project.catalogVersi
 fun KotlinDependencyHandler.catalogLib(alias: String) = project.catalogLib(alias)
 fun KotlinDependencyHandler.catalogBundle(alias: String) = project.catalogBundle(alias)
 
-fun KotlinDependencyHandler.implementation(dependencyNotation: Provider<*>, configure: ExternalModuleDependency.() -> Unit) {
+fun KotlinDependencyHandler.implementation(
+    dependencyNotation: Provider<*>,
+    configure: ExternalModuleDependency.() -> Unit
+) {
     implementation(dependencyNotation.get().toString(), configure)
 }
 

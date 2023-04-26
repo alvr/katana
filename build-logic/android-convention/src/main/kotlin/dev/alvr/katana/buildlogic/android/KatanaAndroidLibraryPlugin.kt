@@ -27,13 +27,13 @@ internal class KatanaAndroidLibraryPlugin : ConventionPlugin {
         tasks.commonTasks()
 
         dependencies {
-            implementation(catalogBundle("common-mobile"))
+            implementation(catalogBundle("mobile-common"))
             implementation(catalogLib("koin-android")) { excludeKoinDeps() }
 
             desugaring(catalogLib("desugaring"))
 
-            testImplementation(catalogBundle("common-test"))
-            testImplementation(catalogBundle("common-test-android"))
+            testImplementation(catalogBundle("core-common-test"))
+            testImplementation(catalogBundle("mobile-android-test"))
         }
     }
 }

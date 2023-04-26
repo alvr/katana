@@ -118,7 +118,7 @@ sentry-apollo = { module = "io.sentry:sentry-apollo-3", version.ref = "sentry" }
 sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry" }
 
 # Serialization
-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.5.0" }
+serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.5.0" }
 
 # Tink
 tink = { module = "com.google.crypto.tink:tink-android", version = "1.9.0" }
@@ -142,15 +142,33 @@ robolectric = { module = "org.robolectric:robolectric", version = "4.10.3" }
 turbine = { module = "app.cash.turbine:turbine", version = "0.13.0" }
 
 [bundles]
-common-core = [
+# Deps for Multiplatform Core (Common, JVM & iOS)
+core-common = [
     "arrow",
     "coroutines",
     "koin",
     "kotlin",
     "kotlin-immutable",
 ]
-common-jvm = []
-common-mobile = [
+core-jvm = []
+core-ios = []
+
+core-common-test = [
+    "coroutines-test",
+    "kotest-assertions-arrow",
+    "kotest-assertions-core",
+    "kotest-property",
+    "turbine",
+]
+core-jvm-test = [
+    "junit5",
+    "koin-junit5",
+    "mockk",
+]
+core-ios-test = []
+
+# Deps for Multiplatform Mobile (Common, Android & iOS)
+mobile-common = [
     "arrow",
     "coroutines",
     "koin",
@@ -158,8 +176,85 @@ common-mobile = [
     "kotlin-immutable",
     "napier",
 ]
-common-android = []
-common-ios = []
+mobile-android = []
+mobile-ios = []
+
+mobile-common-test = [
+    "coroutines-test",
+    "kotest-assertions-arrow",
+    "kotest-assertions-core",
+    "kotest-property",
+    "turbine",
+]
+mobile-android-test = [
+    "junit5",
+    "junit5-vintage",
+    "koin-junit5",
+    "mockk",
+    "robolectric",
+]
+mobile-ios-test = []
+
+# Deps for Data Preferences
+data-preferences-common = [
+    "serialization",
+]
+data-preferences-android = [
+    "datastore",
+    "tink",
+]
+data-preferences-ios = []
+
+data-preferences-common-test = []
+data-preferences-android-test = []
+data-preferences-ios-test = []
+
+# Deps for Data Remote
+data-remote-common = [
+    "apollo",
+    "apollo-cache",
+]
+data-remote-android = []
+data-remote-ios = []
+
+data-remote-common-test = [
+    "apollo-test",
+]
+data-remote-android-test = [
+    "apollo-mockserver",
+]
+data-remote-ios-test = []
+
+# Deps for UI
+ui-common = []
+ui-android = [
+    "accompanist-placeholder",
+    "coil",
+    "compose-animation", # TODO Remove when finished Multiplatform Compose
+    "compose-foundation", # TODO Remove when finished Multiplatform Compose
+    "compose-foundation-layout", # TODO Remove when finished Multiplatform Compose
+    "compose-material", # TODO Remove when finished Multiplatform Compose
+    "compose-material-icons",
+    "compose-ui", # TODO Remove when finished Multiplatform Compose
+    "compose-ui-tooling", # TODO Remove when finished Multiplatform Compose
+    "destinations",
+    "lifecycle-runtime",
+    "lifecycle-viewmodel",
+    "orbit",
+]
+ui-ios = []
+
+ui-common-ksp = [
+    "destinations-compiler",
+]
+
+ui-common-test = []
+ui-android-test = [
+    "compose-ui-test",
+    "koin-junit4",
+    "orbit-test",
+]
+ui-ios-test = []
 
 app = [
     "androidx-activity",
@@ -172,72 +267,4 @@ app = [
     "orbit",
     "sentry",
     "sentry-compose",
-]
-
-ksp-ui = [
-    "destinations-compiler",
-]
-
-data-preferences = [
-    "datastore",
-    "protobuf",
-    "tink",
-]
-data-remote = [
-    "apollo",
-    "apollo-cache",
-]
-
-ui-compose = [
-    "accompanist-placeholder",
-    "coil",
-    "compose-animation",
-    "compose-foundation",
-    "compose-foundation-layout",
-    "compose-material",
-    "compose-material-icons",
-    "compose-ui",
-    "compose-ui-tooling",
-    "destinations",
-    "lifecycle-runtime",
-    "lifecycle-viewmodel",
-    "orbit",
-]
-
-# Tests bundles
-common-test = [
-    "coroutines-test",
-    "kotest-assertions-arrow",
-    "kotest-assertions-core",
-    "kotest-property",
-    "turbine",
-]
-common-test-jvm = [
-    "junit5",
-    "koin-junit5",
-    "mockk",
-]
-common-test-mobile = [
-    "coroutines-test",
-    "kotest-assertions-arrow",
-    "kotest-assertions-core",
-    "kotest-property",
-    "turbine",
-]
-common-test-android = [
-    "junit5",
-    "junit5-vintage",
-    "koin-junit5",
-    "mockk",
-    "robolectric",
-]
-common-test-ios = []
-
-test-data-remote = [
-    "apollo-mockserver",
-    "apollo-test",
-]
-test-ui = [
-    "koin-junit4",
-    "orbit-test",
 ]

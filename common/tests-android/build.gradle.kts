@@ -10,8 +10,8 @@ dependencies {
     api(projects.common.tests)
 
     implementation(platform(libs.compose.bom))
-    implementation(libs.bundles.common.test)
-    implementation(libs.bundles.common.test.jvm)
-    implementation(libs.bundles.common.test.android)
-    implementation(libs.bundles.test.ui)
+    implementation(libs.bundles.core.common.test)
+    implementation(libs.bundles.core.jvm.test)
+    implementation(libs.bundles.mobile.android.test)
+    implementation(libs.bundles.ui.android.test)
 }

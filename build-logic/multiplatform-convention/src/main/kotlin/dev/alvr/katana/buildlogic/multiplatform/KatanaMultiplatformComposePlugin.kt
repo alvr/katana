@@ -31,18 +31,47 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
         configureSourceSets {
             val commonMain by getting {
                 dependencies {
+                    implementation(compose.animation)
                     implementation(compose.foundation)
                     implementation(compose.material)
                     implementation(compose.runtime)
                     implementation(compose.ui)
+                    implementation(compose.uiTooling)
+                    implementation(catalogBundle("ui-common"))
                 }
             }
             val androidMain by getting {
                 dependsOn(commonMain)
                 dependencies {
-                    implementation(catalogBundle("ui-compose"))
+                    implementation(catalogBundle("ui-android"))
                 }
             }
+            val iosMain by getting {
+                dependsOn(commonMain)
+                dependencies {
+                    implementation(catalogBundle("ui-ios"))
+                }
+            }
+            val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
+
+            val commonTest by getting {
+                dependencies {
+                    implementation(catalogBundle("ui-common-test"))
+                }
+            }
+            val androidUnitTest by getting {
+                dependsOn(commonTest)
+                dependencies {
+                    implementation(catalogBundle("ui-android-test"))
+                }
+            }
+            val iosTest by getting {
+                dependsOn(commonTest)
+                dependencies {
+                    implementation(catalogBundle("ui-ios-test"))
+                }
+            }
+            val iosSimulatorArm64Test by getting { dependsOn(iosTest) }
         }
     }
 }

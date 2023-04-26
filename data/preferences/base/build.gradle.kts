@@ -1,16 +1,15 @@
-import dev.alvr.katana.buildlogic.KatanaConfiguration
-
 plugins {
-    id("katana.android.library")
+    id("katana.multiplatform.data.preferences")
+    alias(libs.plugins.serialization)
 }
 
-android.namespace = "${KatanaConfiguration.PackageName}.data.preferences.base"
+katanaMultiplatform {
+    commonMainDependencies {
+        implementation(projects.common.core)
+        implementation(projects.domain.base)
+    }
 
-dependencies {
-    implementation(projects.common.core)
-    implementation(projects.domain.base)
-
-    implementation(libs.bundles.data.preferences)
-
-    testImplementation(projects.common.testsAndroid)
+    androidTestDependencies {
+        implementation(projects.common.testsAndroid)
+    }
 }

@@ -35,7 +35,7 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
 
         dependencies {
             implementation(platform(catalogLib("compose-bom")))
-            implementation(catalogBundle("common-mobile"))
+            implementation(catalogBundle("mobile-common"))
             implementation(catalogBundle("app"))
             implementation(catalogLib("koin-android")) { excludeKoinDeps() }
             implementation(catalogLib("koin-compose")) { excludeKoinDeps() }
@@ -43,9 +43,9 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
             desugaring(catalogLib("desugaring"))
 
             testImplementation(platform(catalogLib("compose-bom")))
-            testImplementation(catalogBundle("common-test"))
-            testImplementation(catalogBundle("common-test-android"))
-            testImplementation(catalogBundle("test-ui"))
+            testImplementation(catalogBundle("mobile-common-test"))
+            testImplementation(catalogBundle("mobile-android-test"))
+            testImplementation(catalogBundle("ui-android-test"))
         }
     }
 
