@@ -11,7 +11,7 @@ open class KatanaMultiplatformMobileExtension @Inject constructor(
         configureSourceSet("androidMain", dependencies)
     }
 
-    fun androidTestDependencies(dependencies: KotlinDependencyHandler.() -> Unit) {
+    fun androidUnitTestDependencies(dependencies: KotlinDependencyHandler.() -> Unit) {
         configureSourceSet("androidUnitTest", dependencies)
     }
 

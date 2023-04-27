@@ -2,6 +2,7 @@
 accompanist = "0.30.1"
 apollo = "3.8.2"
 coroutines = "1.7.1"
+datastore = "1.1.0-alpha04"
 destinations = "1.8.41-beta"
 junit5 = "5.9.3"
 koin = "3.4.1"
@@ -12,7 +13,6 @@ orbit = "6.0.0"
 sentry = "6.21.0"
 
 # Compose
-compose = "2023.05.01"
 compose-compiler = "1.4.7"
 
 # Coverage Engine
@@ -50,7 +50,7 @@ coil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }
 
 # Compose
 compose-animation = { module = "androidx.compose.animation:animation" }
-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose" }
+compose-bom = { module = "androidx.compose:compose-bom", version = "2023.04.01" }
 compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
 compose-material = { module = "androidx.compose.material:material" }
@@ -63,8 +63,9 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-# DataStore
-datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
+# Datastore
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+datastore-okio = { module = "androidx.datastore:datastore-core-okio", version.ref = "datastore" }
 
 # Destiantions
 destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "destinations" }
@@ -197,10 +198,11 @@ mobile-ios-test = []
 
 # Deps for Data Preferences
 data-preferences-common = [
+    "datastore",
+    "datastore-okio",
     "serialization",
 ]
 data-preferences-android = [
-    "datastore",
     "tink",
 ]
 data-preferences-ios = []

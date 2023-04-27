@@ -1,5 +1,7 @@
 package dev.alvr.katana.domain.session.models
 
+import kotlin.jvm.JvmInline
+
 @JvmInline
 value class AnilistToken(val token: String) {
     init {
