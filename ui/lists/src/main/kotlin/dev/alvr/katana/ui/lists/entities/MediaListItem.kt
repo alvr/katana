@@ -4,9 +4,9 @@ import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import com.soywiz.klock.Date
+import com.soywiz.klock.DateTimeTz
 import dev.alvr.katana.ui.lists.R
-import java.time.LocalDate
-import java.time.LocalDateTime
 import kotlinx.parcelize.Parcelize
 
 @Immutable
@@ -24,9 +24,9 @@ internal sealed interface MediaListItem : Parcelable {
     val private: Boolean
     val notes: String
     val hiddenFromStatusLists: Boolean
-    val startedAt: LocalDate?
-    val completedAt: LocalDate?
-    val updatedAt: LocalDateTime?
+    val startedAt: Date?
+    val completedAt: Date?
+    val updatedAt: DateTimeTz?
 
     @Parcelize
     data class AnimeListItem(
@@ -42,16 +42,16 @@ internal sealed interface MediaListItem : Parcelable {
         override val private: Boolean,
         override val notes: String,
         override val hiddenFromStatusLists: Boolean,
-        override val startedAt: LocalDate?,
-        override val completedAt: LocalDate?,
-        override val updatedAt: LocalDateTime?,
+        override val startedAt: Date?,
+        override val completedAt: Date?,
+        override val updatedAt: DateTimeTz?,
         val nextEpisode: NextEpisode?,
     ) : MediaListItem {
         @Stable
         @Parcelize
         data class NextEpisode(
             val number: Int,
-            val date: LocalDateTime,
+            val date: DateTimeTz,
         ) : Parcelable
     }
 
@@ -69,9 +69,9 @@ internal sealed interface MediaListItem : Parcelable {
         override val private: Boolean,
         override val notes: String,
         override val hiddenFromStatusLists: Boolean,
-        override val startedAt: LocalDate?,
-        override val completedAt: LocalDate?,
-        override val updatedAt: LocalDateTime?,
+        override val startedAt: Date?,
+        override val completedAt: Date?,
+        override val updatedAt: DateTimeTz?,
         val volumesProgress: Int,
         val volumesTotal: Int?,
     ) : MediaListItem

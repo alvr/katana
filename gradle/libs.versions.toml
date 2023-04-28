@@ -91,6 +91,9 @@ gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "3.4.0.2513" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.46.0" }
 
+# Klock
+klock = { module = "com.soywiz.korlibs.klock:klock", version = "3.4.0" }
+
 # Koin
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
@@ -147,6 +150,7 @@ turbine = { module = "app.cash.turbine:turbine", version = "0.13.0" }
 core-common = [
     "arrow",
     "coroutines",
+    "klock",
     "koin",
     "kotlin",
     "kotlin-immutable",
@@ -172,6 +176,7 @@ core-ios-test = []
 mobile-common = [
     "arrow",
     "coroutines",
+    "klock",
     "koin",
     "kotlin",
     "kotlin-immutable",
