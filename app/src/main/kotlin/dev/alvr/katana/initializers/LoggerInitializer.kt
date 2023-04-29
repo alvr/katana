@@ -19,7 +19,7 @@ internal class LoggerInitializer : Initializer<Unit> {
         }
     }
 
-    override fun dependencies() = emptyList<Class<out Initializer<*>>>()
+    override fun dependencies() = listOf(SentryInitializer::class.java)
 }
 
 private class SentryLogger(private val minSeverity: LogLevel) : Antilog() {

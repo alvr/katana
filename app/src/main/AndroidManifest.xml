@@ -38,16 +38,8 @@
         </activity>
 
         <meta-data
-            android:name="io.sentry.dsn"
-            android:value="@string/sentry_dsn" />
-
-        <meta-data
-            android:name="io.sentry.traces.sample-rate"
-            android:value="@integer/sentry_sample_rate" />
-
-        <meta-data
-            android:name="io.sentry.traces.profiling.sample-rate"
-            android:value="@integer/sentry_sample_rate" />
+            android:name="io.sentry.auto-init"
+            android:value="false" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"
@@ -57,6 +49,10 @@
 
             <meta-data
                 android:name="dev.alvr.katana.initializers.LoggerInitializer"
+                android:value="androidx.startup" />
+
+            <meta-data
+                android:name="dev.alvr.katana.initializers.SentryInitializer"
                 android:value="androidx.startup" />
         </provider>
     </application>
