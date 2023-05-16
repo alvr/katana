@@ -23,7 +23,7 @@ coverage-engine = "1.0.716"
 detekt = "1.22.0"
 
 # Tests
-kotest = "5.6.1"
+kotest = "5.6.2"
 
 [plugins]
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
