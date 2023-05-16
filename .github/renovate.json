@@ -24,6 +24,13 @@
       "groupName": "koin"
     },
     {
+      "matchPackagePrefixes": [
+        "io.kotest",
+        "io.kotest.extensions"
+      ],
+      "groupName": "kotest"
+    },
+    {
       "automerge": true,
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"]
     }

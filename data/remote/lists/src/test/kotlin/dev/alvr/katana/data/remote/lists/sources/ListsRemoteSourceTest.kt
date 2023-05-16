@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import arrow.core.right
 import com.apollographql.apollo3.annotations.ApolloExperimental
 import dev.alvr.katana.common.tests.TestBase
+import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSource
 import dev.alvr.katana.data.remote.lists.sources.anime.AnimeListsRemoteSourceImpl
@@ -11,7 +12,6 @@ import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSource
 import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSourceImpl
 import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
-import io.kotest.assertions.arrow.core.shouldBeRight
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verifyAll

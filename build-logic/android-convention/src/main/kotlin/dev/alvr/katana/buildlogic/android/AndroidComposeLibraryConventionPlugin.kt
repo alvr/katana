@@ -5,7 +5,6 @@ import com.google.devtools.ksp.gradle.KspExtension
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
-import dev.alvr.katana.buildlogic.debugImplementation
 import dev.alvr.katana.buildlogic.implementation
 import dev.alvr.katana.buildlogic.ksp
 import dev.alvr.katana.buildlogic.testImplementation
@@ -42,8 +41,6 @@ internal class AndroidComposeLibraryConventionPlugin : ConventionPlugin {
             implementation(platform(catalogLib("compose-bom")))
             implementation(catalogBundle("ui-compose"))
             implementation(catalogLib("koin-compose")) { excludeKoinDeps() }
-
-            debugImplementation(catalogLib("compose-ui-test-manifest"))
 
             ksp(catalogBundle("ksp-ui"))
 

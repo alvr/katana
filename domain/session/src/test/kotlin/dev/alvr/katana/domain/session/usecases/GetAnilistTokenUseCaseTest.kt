@@ -3,12 +3,12 @@ package dev.alvr.katana.domain.session.usecases
 import arrow.core.none
 import arrow.core.some
 import dev.alvr.katana.common.tests.TestBase
+import dev.alvr.katana.common.tests.shouldBeNone
+import dev.alvr.katana.common.tests.shouldBeSome
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.session.anilistToken
 import dev.alvr.katana.domain.session.repositories.SessionRepository
-import io.kotest.assertions.arrow.core.shouldBeNone
-import io.kotest.assertions.arrow.core.shouldBeSome
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
