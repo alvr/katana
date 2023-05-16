@@ -10,7 +10,7 @@ kotlin = "1.8.21"
 lifecycle = "2.6.1"
 okhttp = "4.11.0"
 orbit = "4.6.1"
-sentry = "6.18.1"
+sentry = "6.19.0"
 
 # Compose
 compose = "2023.05.01"
