@@ -4,12 +4,12 @@ import arrow.core.Either
 import arrow.core.left
 import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.common.tests.coEitherJustRun
+import dev.alvr.katana.common.tests.shouldBeLeft
+import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
-import io.kotest.assertions.arrow.core.shouldBeLeft
-import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.bind
 import io.kotest.property.arbitrary.localDate

@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.30.1"
 apollo = "3.8.1"
-coroutines = "1.6.4"
+coroutines = "1.7.1"
 destinations = "1.8.41-beta"
 junit5 = "5.9.3"
 koin = "3.4.0"
@@ -17,13 +17,13 @@ compose = "2023.05.01"
 compose-compiler = "1.4.7"
 
 # Coverage Engine
-coverage-engine = "1.0.716"
+coverage-engine = "1.0.719"
 
 # Plugins
 detekt = "1.22.0"
 
 # Tests
-kotest = "5.6.1"
+kotest = "5.6.2"
 
 [plugins]
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
@@ -61,8 +61,6 @@ compose-material3-windowsize = { module = "androidx.compose.material3:material3-
 compose-material-icons = { module = "androidx.compose.material:material-icons-extended" }
 compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4" }
-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 
 # Coroutines
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -137,7 +135,6 @@ junit5 = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
 junit5-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
 
 ## Kotest
-kotest-assertions-arrow = { module = "io.kotest.extensions:kotest-assertions-arrow", version = "1.3.3" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 
@@ -145,10 +142,10 @@ kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest"
 mockk = { module = "io.mockk:mockk", version = "1.13.5" }
 
 ## Robolectric
-robolectric = { module = "org.robolectric:robolectric", version = "4.10.2" }
+robolectric = { module = "org.robolectric:robolectric", version = "4.10.3" }
 
 ## Turbine
-turbine = { module = "app.cash.turbine:turbine", version = "0.12.3" }
+turbine = { module = "app.cash.turbine:turbine", version = "0.13.0" }
 
 [bundles]
 common = [
@@ -214,7 +211,6 @@ test = [
     "coroutines-test",
     "junit5",
     "koin-junit5",
-    "kotest-assertions-arrow",
     "kotest-assertions-core",
     "kotest-property",
     "mockk",
@@ -231,7 +227,6 @@ test-data-remote = [
     "apollo-test",
 ]
 test-ui = [
-    "compose-ui-test",
     "koin-junit4",
     "orbit-test",
 ]

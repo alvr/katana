@@ -13,14 +13,14 @@ import com.apollographql.apollo3.exception.MissingValueException
 import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
 import dev.alvr.katana.common.tests.TestBase
+import dev.alvr.katana.common.tests.shouldBeLeft
+import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.data.remote.base.type.buildUser
 import dev.alvr.katana.data.remote.user.UserIdQuery
 import dev.alvr.katana.data.remote.user.mappers.responses.invoke
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.models.UserId
-import io.kotest.assertions.arrow.core.shouldBeLeft
-import io.kotest.assertions.arrow.core.shouldBeRight
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic

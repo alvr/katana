@@ -4,13 +4,13 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.common.tests.TestBase
+import dev.alvr.katana.common.tests.shouldBeLeft
+import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
-import io.kotest.assertions.arrow.core.shouldBeLeft
-import io.kotest.assertions.arrow.core.shouldBeRight
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

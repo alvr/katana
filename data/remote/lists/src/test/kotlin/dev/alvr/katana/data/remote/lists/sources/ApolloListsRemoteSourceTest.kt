@@ -10,6 +10,8 @@ import com.apollographql.apollo3.testing.registerTestNetworkError
 import com.apollographql.apollo3.testing.registerTestResponse
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.common.tests.TestBase
+import dev.alvr.katana.common.tests.shouldBeLeft
+import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.data.remote.base.extensions.optional
 import dev.alvr.katana.data.remote.base.type.MediaFormat
 import dev.alvr.katana.data.remote.base.type.MediaType
@@ -33,8 +35,6 @@ import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.user.managers.UserIdManager
-import io.kotest.assertions.arrow.core.shouldBeLeft
-import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty

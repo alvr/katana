@@ -3,13 +3,13 @@ package dev.alvr.katana.data.remote.user.managers
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.common.tests.TestBase
+import dev.alvr.katana.common.tests.shouldBeLeft
+import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import dev.alvr.katana.domain.user.models.UserId
 import dev.alvr.katana.domain.user.usecases.GetUserIdUseCase
-import io.kotest.assertions.arrow.core.shouldBeLeft
-import io.kotest.assertions.arrow.core.shouldBeRight
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK

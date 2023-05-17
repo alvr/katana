@@ -5,13 +5,13 @@ import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.common.tests.coEitherJustRun
+import dev.alvr.katana.common.tests.shouldBeLeft
+import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.data.remote.user.sources.UserRemoteSource
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.models.UserId
 import dev.alvr.katana.domain.user.repositories.UserRepository
-import io.kotest.assertions.arrow.core.shouldBeLeft
-import io.kotest.assertions.arrow.core.shouldBeRight
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
