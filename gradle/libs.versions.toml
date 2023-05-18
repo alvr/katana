@@ -9,7 +9,7 @@ koin-compose = "3.4.4"
 kotlin = "1.8.21"
 lifecycle = "2.6.1"
 okhttp = "4.11.0"
-orbit = "5.0.0"
+orbit = "6.0.0"
 sentry = "6.19.0"
 
 # Compose
