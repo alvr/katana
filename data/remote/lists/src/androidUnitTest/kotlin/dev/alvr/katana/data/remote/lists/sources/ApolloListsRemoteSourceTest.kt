@@ -12,7 +12,7 @@ import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.common.tests.shouldBeLeft
 import dev.alvr.katana.common.tests.shouldBeRight
-import dev.alvr.katana.data.remote.base.extensions.optional
+import dev.alvr.katana.data.remote.base.optional
 import dev.alvr.katana.data.remote.base.type.MediaFormat
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.base.type.buildAiringSchedule
@@ -49,8 +49,10 @@ import io.kotest.matchers.types.shouldNotBeTypeOf
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import java.time.LocalDate
-import java.time.LocalDateTime
+import korlibs.time.Date
+import korlibs.time.DateTime
+import korlibs.time.DateTimeTz
+import korlibs.time.TimezoneOffset
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.DisplayName
@@ -313,8 +315,8 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                         private.shouldBeTrue()
                         notes shouldBe "My notes :)"
                         hiddenFromStatusLists.shouldBeTrue()
-                        startedAt?.shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
-                        completedAt?.shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
+                        startedAt?.shouldBeEqualComparingTo(Date(1999, 12, 23))
+                        completedAt?.shouldBeEqualComparingTo(Date(2009, 5, 5))
                     }
 
                     with(entry.entry) {
@@ -328,7 +330,10 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                         format shouldBe CommonMediaEntry.Format.TV
                         episodes shouldBe 23
                         with(nextEpisode.shouldNotBeNull()) {
-                            at shouldBeEqualComparingTo LocalDateTime.of(2022, 4, 12, 19, 0, 0)
+                            at shouldBeEqualComparingTo DateTimeTz.local(
+                                DateTime(2022, 4, 12, 19, 0, 0),
+                                TimezoneOffset.UTC,
+                            )
                             number shouldBe 13
                         }
                     }
@@ -601,8 +606,8 @@ internal class ApolloListsRemoteSourceTest : TestBase() {
                         private.shouldBeTrue()
                         notes shouldBe "My notes :)"
                         hiddenFromStatusLists.shouldBeTrue()
-                        startedAt?.shouldBeEqualComparingTo(LocalDate.of(1999, 12, 23))
-                        completedAt?.shouldBeEqualComparingTo(LocalDate.of(2009, 5, 5))
+                        startedAt?.shouldBeEqualComparingTo(Date(1999, 12, 23))
+                        completedAt?.shouldBeEqualComparingTo(Date(2009, 5, 5))
                     }
 
                     with(entry.entry) {

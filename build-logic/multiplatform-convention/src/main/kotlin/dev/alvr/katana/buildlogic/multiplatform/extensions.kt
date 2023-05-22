@@ -5,6 +5,7 @@ import com.android.build.gradle.BaseExtension
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogVersion
 import dev.alvr.katana.buildlogic.fullPackageName
+import dev.alvr.katana.buildlogic.isRelease
 import java.io.File
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
@@ -64,6 +65,7 @@ internal fun BaseExtension.configureAndroid(project: Project) {
             isIncludeAndroidResources = true
             all { test ->
                 test.useJUnitPlatform()
+                test.enabled = !test.isRelease
                 test.jvmArgs = listOf("-Xmx8G")
                 test.systemProperties(
                     "robolectric.usePreinstrumentedJars" to "true",

@@ -14,9 +14,11 @@ import io.kotest.property.Arb
 import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.next
 import io.kotest.property.arbitrary.string
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.stream.Stream
+import korlibs.time.Date
+import korlibs.time.DateTime
+import korlibs.time.DateTimeTz
+import korlibs.time.TimezoneOffset
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -87,9 +89,12 @@ internal class CommonListItemMapperTest : TestBase() {
             private = false,
             notes = String.noData,
             hiddenFromStatusLists = true,
-            startedAt = LocalDate.of(2022, 7, 20),
-            completedAt = LocalDate.of(2022, 7, 20),
-            updatedAt = LocalDateTime.of(2022, 8, 14, 9, 0),
+            startedAt = Date(2022, 7, 20),
+            completedAt = Date(2022, 7, 20),
+            updatedAt = DateTimeTz.local(
+                DateTime(2022, 8, 14, 9, 0),
+                TimezoneOffset.UTC,
+            ),
             nextEpisode = null,
         )
         private val mangaListItem = MediaListItem.MangaListItem(
@@ -107,9 +112,12 @@ internal class CommonListItemMapperTest : TestBase() {
             private = true,
             notes = String.noData,
             hiddenFromStatusLists = false,
-            startedAt = LocalDate.of(2022, 7, 20),
-            completedAt = LocalDate.of(2022, 7, 20),
-            updatedAt = LocalDateTime.of(2022, 8, 14, 9, 0),
+            startedAt = Date(2022, 7, 20),
+            completedAt = Date(2022, 7, 20),
+            updatedAt = DateTimeTz.local(
+                DateTime(2022, 8, 14, 9, 0),
+                TimezoneOffset.UTC,
+            ),
         )
 
         private val animeMediaList = MediaList(
@@ -121,9 +129,12 @@ internal class CommonListItemMapperTest : TestBase() {
             private = false,
             notes = String.noData,
             hiddenFromStatusLists = true,
-            startedAt = LocalDate.of(2022, 7, 20),
-            completedAt = LocalDate.of(2022, 7, 20),
-            updatedAt = LocalDateTime.of(2022, 8, 14, 9, 0),
+            startedAt = Date(2022, 7, 20),
+            completedAt = Date(2022, 7, 20),
+            updatedAt = DateTimeTz.local(
+                DateTime(2022, 8, 14, 9, 0),
+                TimezoneOffset.UTC,
+            ),
         )
         private val mangaMediaList = MediaList(
             id = 5678,
@@ -134,9 +145,12 @@ internal class CommonListItemMapperTest : TestBase() {
             private = true,
             notes = String.noData,
             hiddenFromStatusLists = false,
-            startedAt = LocalDate.of(2022, 7, 20),
-            completedAt = LocalDate.of(2022, 7, 20),
-            updatedAt = LocalDateTime.of(2022, 8, 14, 9, 0),
+            startedAt = Date(2022, 7, 20),
+            completedAt = Date(2022, 7, 20),
+            updatedAt = DateTimeTz.local(
+                DateTime(2022, 8, 14, 9, 0),
+                TimezoneOffset.UTC,
+            ),
         )
 
         override fun provideArguments(context: ExtensionContext?): Stream<Arguments> =

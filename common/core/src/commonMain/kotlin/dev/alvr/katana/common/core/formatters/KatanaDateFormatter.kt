@@ -1,9 +1,9 @@
 package dev.alvr.katana.common.core.formatters
 
-import com.soywiz.klock.Date
-import com.soywiz.klock.DateTime
-import com.soywiz.klock.DateTimeTz
-import com.soywiz.klock.Time
+import korlibs.time.Date
+import korlibs.time.DateTime
+import korlibs.time.DateTimeTz
+import korlibs.time.Time
 
 expect class DateFormatterBuilder
 

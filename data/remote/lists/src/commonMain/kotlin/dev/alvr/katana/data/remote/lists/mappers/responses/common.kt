@@ -1,7 +1,7 @@
 package dev.alvr.katana.data.remote.lists.mappers.responses
 
-import com.soywiz.klock.DateTimeTz
 import dev.alvr.katana.data.remote.base.type.MediaType
+import korlibs.time.DateTimeTz
 
 internal fun Number.toLocalDateTime() = DateTimeTz.fromUnix(toLong() * TO_UNIX)
 

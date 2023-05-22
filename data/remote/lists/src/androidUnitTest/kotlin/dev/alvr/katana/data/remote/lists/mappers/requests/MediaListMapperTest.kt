@@ -8,10 +8,8 @@ import dev.alvr.katana.data.remote.base.type.FuzzyDateInput
 import dev.alvr.katana.data.remote.lists.MediaListEntriesMutation
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
-import io.kotest.property.Arb
-import io.kotest.property.arbitrary.localDateTime
-import io.kotest.property.arbitrary.next
-import java.time.LocalDate
+import korlibs.time.Date
+import korlibs.time.DateTimeTz
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -31,9 +29,9 @@ internal class MediaListMapperTest : TestBase() {
             private = false,
             notes = String.empty,
             hiddenFromStatusLists = false,
-            startedAt = LocalDate.of(2022, 7, 20),
-            completedAt = LocalDate.of(2022, 7, 20),
-            updatedAt = Arb.localDateTime().next(),
+            startedAt = Date(2022, 7, 20),
+            completedAt = Date(2022, 7, 20),
+            updatedAt = DateTimeTz.nowLocal(),
         )
 
         // WHEN

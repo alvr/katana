@@ -9,10 +9,8 @@ import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.common.tests.shouldBeSome
 import dev.alvr.katana.data.preferences.session.anilistToken
 import dev.alvr.katana.data.preferences.session.models.Session
-import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.session.failures.SessionFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
-import io.kotest.property.checkAll
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -79,7 +77,7 @@ internal class SessionLocalSourceTest : TestBase() {
         fun `getting the saved token`() = runTest {
             // GIVEN
             every { store.data } returns flowOf(
-                Session(anilistToken = SAVED_TOKEN, isSessionActive = true),
+                Session(anilistToken = AnilistToken(SAVED_TOKEN), isSessionActive = true),
             )
 
             // WHEN
@@ -123,7 +121,12 @@ internal class SessionLocalSourceTest : TestBase() {
         @Test
         @DisplayName("WHEN checking all conditions for active session THEN the token should be read from memory")
         fun `checking all conditions for active session`() = runTest {
-            checkAll<Int, Session>(16) { _, session ->
+            listOf(
+                Session(anilistToken = null, isSessionActive = false),
+                Session(anilistToken = null, isSessionActive = true),
+                Session(anilistToken = AnilistToken("token"), isSessionActive = false),
+                Session(anilistToken = AnilistToken("token"), isSessionActive = true),
+            ).forEach { session ->
                 // GIVEN
                 every { store.data } returns flowOf(session)
 
@@ -149,7 +152,7 @@ internal class SessionLocalSourceTest : TestBase() {
             """
             WHEN the clearing the session fails
                 AND it's a common Exception
-            THEN should be a left of Failure.Unknown
+            THEN should be a left of SessionFailure.ClearingSession
             """,
         )
         fun `the clearing the session fails AND it's a common Exception`() = runTest {
@@ -160,7 +163,7 @@ internal class SessionLocalSourceTest : TestBase() {
             val result = source.clearActiveSession()
 
             // THEN
-            result.shouldBeLeft(Failure.Unknown)
+            result.shouldBeLeft(SessionFailure.ClearingSession)
             coVerify(exactly = 1) { store.updateData(any()) }
         }
 
@@ -189,7 +192,7 @@ internal class SessionLocalSourceTest : TestBase() {
             """
             WHEN it's the deleting token
                 AND it's a common Exception
-            THEN should be a left of Failure.Unknown
+            THEN should be a left of SessionFailure.DeletingToken
             """,
         )
         fun `it's the deleting token AND it's a common Exception`() = runTest {
@@ -200,7 +203,7 @@ internal class SessionLocalSourceTest : TestBase() {
             val result = source.deleteAnilistToken()
 
             // THEN
-            result.shouldBeLeft(Failure.Unknown)
+            result.shouldBeLeft(SessionFailure.DeletingToken)
             coVerify(exactly = 1) { store.updateData(any()) }
         }
 
@@ -225,7 +228,13 @@ internal class SessionLocalSourceTest : TestBase() {
         }
 
         @Test
-        @DisplayName("WHEN it's the saving token AND it's a common Exception THEN should be a left of Failure.Unknown")
+        @DisplayName(
+            """
+            WHEN it's the saving token
+                AND it's a common Exception
+            THEN should be a left of SessionFailure.SavingSession
+            """,
+        )
         fun `it's the saving token AND it's a common Exception`() = runTest {
             // GIVEN
             coEvery { store.updateData(any()) } throws Exception()
@@ -234,7 +243,7 @@ internal class SessionLocalSourceTest : TestBase() {
             val result = source.saveSession(anilistToken)
 
             // THEN
-            result.shouldBeLeft(Failure.Unknown)
+            result.shouldBeLeft(SessionFailure.SavingSession)
             coVerify(exactly = 1) { store.updateData(any()) }
         }
 

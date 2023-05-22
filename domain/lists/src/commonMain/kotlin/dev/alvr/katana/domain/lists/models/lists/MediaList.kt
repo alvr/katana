@@ -1,7 +1,7 @@
 package dev.alvr.katana.domain.lists.models.lists
 
-import com.soywiz.klock.Date
-import com.soywiz.klock.DateTimeTz
+import korlibs.time.Date
+import korlibs.time.DateTimeTz
 
 data class MediaList(
     val id: Int,

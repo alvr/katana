@@ -1,9 +1,5 @@
 package dev.alvr.katana.common.core.formatters
 
-import com.soywiz.klock.Date
-import com.soywiz.klock.DateTime
-import com.soywiz.klock.DateTimeTz
-import com.soywiz.klock.Time
 import dev.alvr.katana.common.core.noData
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -12,6 +8,10 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
 import java.time.temporal.TemporalAccessor
+import korlibs.time.Date
+import korlibs.time.DateTime
+import korlibs.time.DateTimeTz
+import korlibs.time.Time
 
 internal actual typealias DateFormatterBuilder = DateTimeFormatterBuilder
 

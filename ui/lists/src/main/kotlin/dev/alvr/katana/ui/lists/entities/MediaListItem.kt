@@ -4,9 +4,9 @@ import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import com.soywiz.klock.Date
-import com.soywiz.klock.DateTimeTz
 import dev.alvr.katana.ui.lists.R
+import korlibs.time.Date
+import korlibs.time.DateTimeTz
 import kotlinx.parcelize.Parcelize
 
 @Immutable

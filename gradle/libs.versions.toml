@@ -16,7 +16,7 @@ sentry = "6.21.0"
 compose-compiler = "1.4.7"
 
 # Coverage Engine
-coverage-engine = "1.0.719"
+coverage-engine = "1.0.720"
 
 # Plugins
 detekt = "1.23.0"
@@ -50,7 +50,7 @@ coil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }
 
 # Compose
 compose-animation = { module = "androidx.compose.animation:animation" }
-compose-bom = { module = "androidx.compose:compose-bom", version = "2023.04.01" }
+compose-bom = { module = "androidx.compose:compose-bom", version = "2023.05.01" }
 compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
 compose-material = { module = "androidx.compose.material:material" }
@@ -92,7 +92,7 @@ gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-p
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.46.0" }
 
 # Klock
-klock = { module = "com.soywiz.korlibs.klock:klock", version = "3.4.0" }
+klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.0" }
 
 # Koin
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -104,6 +104,7 @@ koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin"
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.3.5" }
+kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.5.1" }
 
 # Lifecycle
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
@@ -111,6 +112,9 @@ lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose
 
 # Napier
 napier = { module = "io.github.aakira:napier", version = "2.6.1" }
+
+# Okio
+okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version = "3.3.0" }
 
 # Orbit
 orbit = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
@@ -120,9 +124,6 @@ orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
 sentry = { module = "io.sentry:sentry-android-core", version.ref = "sentry" }
 sentry-apollo = { module = "io.sentry:sentry-apollo-3", version.ref = "sentry" }
 sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry" }
-
-# Serialization
-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.5.0" }
 
 # Tink
 tink = { module = "com.google.crypto.tink:tink-android", version = "1.9.0" }
@@ -160,7 +161,6 @@ core-ios = []
 
 core-common-test = [
     "coroutines-test",
-    "kotest-assertions-arrow",
     "kotest-assertions-core",
     "kotest-property",
     "turbine",
@@ -187,7 +187,6 @@ mobile-ios = []
 
 mobile-common-test = [
     "coroutines-test",
-    "kotest-assertions-arrow",
     "kotest-assertions-core",
     "kotest-property",
     "turbine",
@@ -205,7 +204,8 @@ mobile-ios-test = []
 data-preferences-common = [
     "datastore",
     "datastore-okio",
-    "serialization",
+    "kotlin-serialization",
+    "okio-fakefilesystem",
 ]
 data-preferences-android = [
     "tink",
@@ -257,7 +257,6 @@ ui-common-ksp = [
 
 ui-common-test = []
 ui-android-test = [
-    "compose-ui-test",
     "koin-junit4",
     "orbit-test",
 ]

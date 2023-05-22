@@ -34,8 +34,10 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldBeEmpty
 import io.kotest.matchers.types.shouldBeTypeOf
 import io.kotest.matchers.types.shouldNotBeTypeOf
-import java.time.LocalDate
-import java.time.LocalDateTime
+import korlibs.time.Date
+import korlibs.time.DateTime
+import korlibs.time.DateTimeTz
+import korlibs.time.TimezoneOffset
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -392,9 +394,12 @@ internal class MediaListMapperTest : TestBase() {
                         private.shouldBeTrue()
                         notes shouldBe "My notes :)"
                         hiddenFromStatusLists.shouldBeTrue()
-                        startedAt.shouldNotBeNull() shouldBeEqualComparingTo LocalDate.of(1999, 12, 23)
-                        completedAt.shouldNotBeNull() shouldBeEqualComparingTo LocalDate.of(2009, 5, 5)
-                        updatedAt.shouldNotBeNull() shouldBeEqualComparingTo LocalDateTime.of(2022, 4, 12, 19, 0, 0)
+                        startedAt.shouldNotBeNull() shouldBeEqualComparingTo Date(1999, 12, 23)
+                        completedAt.shouldNotBeNull() shouldBeEqualComparingTo Date(2009, 5, 5)
+                        updatedAt.shouldNotBeNull() shouldBeEqualComparingTo DateTimeTz.local(
+                            DateTime(2022, 4, 12, 19, 0, 0),
+                            TimezoneOffset.UTC,
+                        )
                     }
 
                     with(entry.entry) {
@@ -408,7 +413,10 @@ internal class MediaListMapperTest : TestBase() {
                         format shouldBe CommonMediaEntry.Format.TV
                         episodes shouldBe 23
                         with(nextEpisode.shouldNotBeNull()) {
-                            at shouldBeEqualComparingTo LocalDateTime.of(2022, 4, 12, 19, 0, 0)
+                            at shouldBeEqualComparingTo DateTimeTz.local(
+                                DateTime(2022, 4, 12, 19, 0, 0),
+                                TimezoneOffset.UTC,
+                            )
                             number shouldBe 13
                         }
                     }
@@ -712,6 +720,7 @@ internal class MediaListMapperTest : TestBase() {
             THEN the media should be type of MediaEntry.Manga
             """,
         )
+        @Suppress("LongMethod")
         fun `a collection of mangas with valid entries`() = runTest {
             // GIVEN
             val data = MediaListCollectionQuery.Data {
@@ -775,9 +784,12 @@ internal class MediaListMapperTest : TestBase() {
                         private.shouldBeTrue()
                         notes shouldBe "My notes :)"
                         hiddenFromStatusLists.shouldBeTrue()
-                        startedAt.shouldNotBeNull() shouldBeEqualComparingTo LocalDate.of(1999, 12, 23)
-                        completedAt.shouldNotBeNull() shouldBeEqualComparingTo LocalDate.of(2009, 5, 5)
-                        updatedAt.shouldNotBeNull() shouldBeEqualComparingTo LocalDateTime.of(2022, 4, 12, 19, 0, 0)
+                        startedAt.shouldNotBeNull() shouldBeEqualComparingTo Date(1999, 12, 23)
+                        completedAt.shouldNotBeNull() shouldBeEqualComparingTo Date(2009, 5, 5)
+                        updatedAt.shouldNotBeNull() shouldBeEqualComparingTo DateTimeTz.local(
+                            DateTime(2022, 4, 12, 19, 0, 0),
+                            TimezoneOffset.UTC,
+                        )
                     }
 
                     with(entry.entry) {

@@ -1,8 +1,8 @@
 package dev.alvr.katana.data.remote.lists.mappers.requests
 
 import com.apollographql.apollo3.api.Optional
-import com.soywiz.klock.Date
 import dev.alvr.katana.data.remote.base.type.FuzzyDateInput
+import korlibs.time.Date
 
 internal fun Date?.toFuzzyDate() = FuzzyDateInput(
     year = Optional.presentIfNotNull(this?.year),

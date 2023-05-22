@@ -4,6 +4,7 @@ import dev.alvr.katana.common.tests.TestBase
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
 import io.kotest.matchers.nulls.shouldBeNull
 import java.time.LocalDate
+import korlibs.time.Date
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -22,7 +23,7 @@ internal class DateMapperTest : TestBase() {
     @Test
     @DisplayName("WHEN a date does not have a null value THEN the LocalDate should be the same")
     fun `without a null value`() = runTest {
-        dateMapper(13, 4, 2022)?.shouldBeEqualComparingTo(LocalDate.of(2022, 4, 13))
+        dateMapper(13, 4, 2022)?.shouldBeEqualComparingTo(Date(2022, 4, 13))
     }
 
     private companion object {

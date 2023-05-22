@@ -11,6 +11,6 @@ katanaMultiplatform {
     }
 
     androidUnitTestDependencies {
-        implementation(projects.common.testsAndroid)
+        implementation(projects.common.tests)
     }
 }

@@ -19,5 +19,5 @@ dependencies {
     implementation(projects.domain.lists)
     implementation(projects.ui.base)
 
-    testImplementation(projects.common.testsAndroid)
+    testImplementation(projects.common.tests)
 }

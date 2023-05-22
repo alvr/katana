@@ -1,12 +1,9 @@
 plugins {
-    id("katana.multiplatform.core")
+    id("katana.multiplatform.tests")
 }
 
 katanaMultiplatform {
     commonMainDependencies {
         implementation(libs.arrow)
-        implementation(libs.bundles.core.common.test)
     }
-
-    jvmMainDependencies { implementation(libs.bundles.core.jvm.test) }
 }

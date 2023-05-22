@@ -1,6 +1,6 @@
 package dev.alvr.katana.domain.lists.models.entries
 
-import com.soywiz.klock.DateTimeTz
+import korlibs.time.DateTimeTz
 
 sealed class MediaEntry(
     val id: Int,

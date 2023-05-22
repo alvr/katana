@@ -1,10 +1,10 @@
 package dev.alvr.katana.common.core.formatters
 
-import com.soywiz.klock.Date
-import com.soywiz.klock.DateTime
-import com.soywiz.klock.DateTimeTz
-import com.soywiz.klock.Time
 import dev.alvr.katana.common.core.noData
+import korlibs.time.Date
+import korlibs.time.DateTime
+import korlibs.time.DateTimeTz
+import korlibs.time.Time
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateFormatter
 import platform.Foundation.NSDateFormatterMediumStyle
@@ -37,14 +37,18 @@ actual sealed class KatanaDateFormatter private actual constructor(
     private fun Date?.toNSDate() = this?.dateTimeDayStart.toNSDate()
 
     private fun Time?.toNSDate() = this?.let {
-        NSDate.dateWithTimeIntervalSince1970((second + millisecond / 1000).toDouble())
+        NSDate.dateWithTimeIntervalSince1970((second + millisecond / TO_SECONDS).toDouble())
     }
 
     private fun DateTime?.toNSDate() = this?.let {
-        NSDate.dateWithTimeIntervalSince1970((seconds + milliseconds / 1000).toDouble())
+        NSDate.dateWithTimeIntervalSince1970((seconds + milliseconds / TO_SECONDS).toDouble())
     }
 
     private fun DateTimeTz?.toNSDate() = this?.local?.toNSDate()
 
     private fun NSDate?.format() = this?.let { formatter.stringFromDate(it) } ?: String.noData
+
+    private companion object {
+        const val TO_SECONDS = 1000
+    }
 }

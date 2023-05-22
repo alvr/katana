@@ -7,7 +7,9 @@ import dev.alvr.katana.data.remote.base.type.MediaFormat
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
-import java.time.LocalDateTime
+import korlibs.time.DateTime
+import korlibs.time.DateTimeTz
+import korlibs.time.TimezoneOffset
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -150,7 +152,10 @@ internal class AnimeEntryMapperTest : TestBase() {
             episodes = 1000,
             nextEpisode = MediaEntry.Anime.NextEpisode(
                 1001,
-                LocalDateTime.of(2009, 5, 5, 10, 0, 0),
+                DateTimeTz.local(
+                    DateTime(2009, 5, 5, 10, 0, 0),
+                    TimezoneOffset.UTC,
+                ),
             ),
         )
 
@@ -159,7 +164,10 @@ internal class AnimeEntryMapperTest : TestBase() {
             episodes = 1000,
             nextEpisode = MediaEntry.Anime.NextEpisode(
                 1001,
-                LocalDateTime.of(2009, 5, 5, 10, 0, 0),
+                DateTimeTz.local(
+                    DateTime(2009, 5, 5, 10, 0, 0),
+                    TimezoneOffset.UTC,
+                ),
             ),
         )
     }

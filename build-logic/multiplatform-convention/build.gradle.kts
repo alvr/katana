@@ -36,5 +36,9 @@ gradlePlugin {
             id = "katana.multiplatform.data.remote"
             implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformDataRemotePlugin"
         }
+        register("multiplatform-tests") {
+            id = "katana.multiplatform.tests"
+            implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformTestsPlugin"
+        }
     }
 }

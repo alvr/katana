@@ -13,7 +13,7 @@ import io.kotest.property.arbitrary.constant
 import io.kotest.property.arbitrary.edgecases
 import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.next
-import java.time.LocalDate
+import korlibs.time.Date
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -24,7 +24,7 @@ internal class FuzzyDateMapperTest : TestBase() {
     @DisplayName("WHEN a null LocalDate THEN it should be mapped to a FuzzyDate with all values Absent")
     fun `a null LocalDate`() = runTest {
         // GIVEN
-        val date: LocalDate? = null
+        val date: Date? = null
 
         // WHEN
         val result = date.toFuzzyDate()
@@ -41,7 +41,7 @@ internal class FuzzyDateMapperTest : TestBase() {
     @DisplayName("WHEN a nullable LocalDate with value THEN it should be mapped to a FuzzyDate with all values Present")
     fun `a nullable LocalDate with value`() = runTest {
         // GIVEN
-        val date: LocalDate? = LocalDate.of(2022, 7, 20)
+        val date: Date? = Date(2022, 7, 20)
 
         // WHEN
         val result = date.toFuzzyDate()
@@ -58,7 +58,7 @@ internal class FuzzyDateMapperTest : TestBase() {
     @DisplayName("WHEN a LocalDate THEN it should be mapped to a FuzzyDate with all values Present")
     fun `a LocalDate`() = runTest {
         // GIVEN
-        val date: LocalDate = LocalDate.of(2022, 7, 20)
+        val date: Date = Date(2022, 7, 20)
 
         // WHEN
         val result = date.toFuzzyDate()

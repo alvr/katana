@@ -5,6 +5,7 @@ import com.android.build.gradle.BaseExtension
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogVersion
 import dev.alvr.katana.buildlogic.commonExtensions
+import dev.alvr.katana.buildlogic.isRelease
 import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
@@ -38,7 +39,6 @@ internal fun BaseExtension.baseAndroidConfig() {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            consumerProguardFile("consumer-rules.pro")
         }
     }
 
@@ -53,6 +53,7 @@ internal fun BaseExtension.baseAndroidConfig() {
             isIncludeAndroidResources = true
             all { test ->
                 test.useJUnitPlatform()
+                test.enabled = !test.isRelease
                 test.jvmArgs = listOf("-Xmx8G")
                 test.systemProperties(
                     "robolectric.usePreinstrumentedJars" to "true",

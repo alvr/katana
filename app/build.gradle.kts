@@ -33,5 +33,4 @@ dependencies {
     implementation(projects.ui.social)
 
     testImplementation(projects.common.tests)
-    testImplementation(projects.common.testsAndroid)
 }

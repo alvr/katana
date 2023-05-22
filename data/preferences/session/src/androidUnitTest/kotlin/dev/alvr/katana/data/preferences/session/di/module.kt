@@ -1,21 +1,20 @@
 package dev.alvr.katana.data.preferences.session.di
 
-import android.annotation.SuppressLint
 import android.util.Base64
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.core.okio.OkioStorage
 import androidx.datastore.dataStoreFile
-import com.google.crypto.tink.Aead
 import dev.alvr.katana.data.preferences.base.di.baseDataPreferencesModule
-import dev.alvr.katana.data.preferences.base.serializers.encoded
-import dev.alvr.katana.data.preferences.base.serializers.encrypted
+import dev.alvr.katana.data.preferences.base.securer.PreferencesSecurer
 import dev.alvr.katana.data.preferences.session.models.Session
-import dev.alvr.katana.data.preferences.session.serializers.SessionSerializer
+import dev.alvr.katana.domain.session.models.AnilistToken
 import kotlin.io.path.createTempFile
 import kotlin.random.Random
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
-import kotlinx.serialization.ExperimentalSerializationApi
+import okio.FileSystem
+import okio.Path.Companion.toOkioPath
+import okio.fakefilesystem.FakeFileSystem
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -28,47 +27,54 @@ private const val CORRUPTED_DATASTORE_FILE = "err_test_session.pb"
 internal val dataStoreNamed = named(DATASTORE)
 internal val corruptedDataStoreNamed = named(CORRUPTED_DATASTORE)
 
-@OptIn(
-    ExperimentalCoroutinesApi::class,
-    ExperimentalSerializationApi::class,
-)
-@SuppressLint("NewApi")
 internal val dataStoreModule = module {
     includes(baseDataPreferencesModule)
 
-    fun serializers(aead: Aead) = listOf(
-        SessionSerializer.encoded(),
-        SessionSerializer.encrypted(aead),
+    fun serializers(securer: PreferencesSecurer) = listOf(
+        Session.serializer(securer),
     )
 
     single(dataStoreNamed) {
         serializers(get()).mapIndexed { index, serializer ->
             DataStoreFactory.create(
-                produceFile = { androidApplication().dataStoreFile("${DATASTORE_FILE}_$index") },
+                storage = OkioStorage(
+                    fileSystem = FileSystem.SYSTEM,
+                    producePath = {
+                        androidApplication().dataStoreFile("${DATASTORE_FILE}_$index").toOkioPath()
+                    },
+                    serializer = serializer,
+                ),
                 scope = TestScope(),
-                serializer = serializer,
             )
         }.toTypedArray()
     }
 
     single(corruptedDataStoreNamed) {
         serializers(get()).mapIndexed { index, serializer ->
+            val fileSystem = FakeFileSystem()
+
             val createFile by lazy {
                 createTempFile()
                     .toFile()
                     .absoluteFile
-                    .apply { writeText(Base64.encodeToString(Random.nextBytes(64), Base64.NO_WRAP)) }
-                    .copyTo(androidApplication().dataStoreFile("${CORRUPTED_DATASTORE_FILE}_$index"))
+                    .apply {
+                        writeText(Base64.encodeToString(Random.nextBytes(64), Base64.NO_WRAP))
+                        copyTo(androidApplication().dataStoreFile("${CORRUPTED_DATASTORE_FILE}_$index"))
+                    }
+                    .toOkioPath()
             }
 
             DataStoreFactory.create(
-                produceFile = { createFile },
+                storage = OkioStorage(
+                    fileSystem = FileSystem.SYSTEM,
+                    producePath = { createFile },
+                    serializer = serializer,
+                ),
                 scope = TestScope(),
                 corruptionHandler = ReplaceFileCorruptionHandler {
-                    createFile.delete() // Delete to be able to create the file again
-                    Session(anilistToken = "recreated")
+                    fileSystem.delete(createFile) // Delete to be able to create the file again
+                    Session(anilistToken = AnilistToken("recreated"))
                 },
-                serializer = serializer,
             )
         }.toTypedArray()
     }

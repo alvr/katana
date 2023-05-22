@@ -11,18 +11,17 @@ import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
 import io.kotest.property.Arb
+import io.kotest.property.arbitrary.arbitrary
 import io.kotest.property.arbitrary.bind
-import io.kotest.property.arbitrary.localDate
-import io.kotest.property.arbitrary.localDateTime
 import io.kotest.property.arbitrary.next
+import io.kotest.property.arbitrary.positiveLong
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
 import io.mockk.verify
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.stream.Stream
+import korlibs.time.DateTimeTz
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -42,8 +41,9 @@ internal class UpdateListUseCaseTest : TestBase() {
 
     private val mediaList = Arb.bind<MediaList>(
         mapOf(
-            LocalDate::class to Arb.localDate(),
-            LocalDateTime::class to Arb.localDateTime(),
+            DateTimeTz::class to arbitrary {
+                DateTimeTz.fromUnix(Arb.positiveLong().next())
+            },
         ),
     ).next()
 

@@ -35,19 +35,18 @@ import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.user.managers.UserIdManager
 import io.kotest.property.Arb
+import io.kotest.property.arbitrary.arbitrary
 import io.kotest.property.arbitrary.bind
-import io.kotest.property.arbitrary.localDate
-import io.kotest.property.arbitrary.localDateTime
 import io.kotest.property.arbitrary.next
+import io.kotest.property.arbitrary.positiveLong
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.stream.Stream
+import korlibs.time.DateTimeTz
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -69,8 +68,9 @@ internal class CommonListsRemoteSourceTest : TestBase() {
 
     private val mediaList = Arb.bind<MediaList>(
         mapOf(
-            LocalDate::class to Arb.localDate(),
-            LocalDateTime::class to Arb.localDateTime(),
+            DateTimeTz::class to arbitrary {
+                DateTimeTz.fromUnix(Arb.positiveLong().next())
+            },
         ),
     ).next()
 

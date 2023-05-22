@@ -28,9 +28,9 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.SpyK
 import io.mockk.verify
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.stream.Stream
+import korlibs.time.Date
+import korlibs.time.DateTimeTz
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -244,9 +244,9 @@ internal class AnimeListsViewModelTest : TestBase() {
                         private = false,
                         notes = String.empty,
                         hiddenFromStatusLists = false,
-                        startedAt = LocalDate.MAX,
-                        completedAt = LocalDate.MAX,
-                        updatedAt = LocalDateTime.MAX,
+                        startedAt = Date(Int.MAX_VALUE),
+                        completedAt = Date(Int.MAX_VALUE),
+                        updatedAt = DateTimeTz.fromUnix(Long.MAX_VALUE),
                     ),
                 )
             }
