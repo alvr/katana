@@ -30,6 +30,7 @@ dependencies {
     implementation(projects.ui.explore)
     implementation(projects.ui.lists)
     implementation(projects.ui.login)
+    implementation(projects.ui.main)
     implementation(projects.ui.social)
 
     testImplementation(projects.common.tests)

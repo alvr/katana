@@ -5,10 +5,8 @@ import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogBundle
-import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.implementation
-import dev.alvr.katana.buildlogic.testImplementation
 import java.io.FileInputStream
 import java.util.Properties
 import org.gradle.api.Project
@@ -33,16 +31,7 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
         configurations.getByName("debugImplementation").exclude(group = "junit", module = "junit")
 
         dependencies {
-            implementation(platform(catalogLib("compose-bom")))
-            implementation(catalogBundle("mobile-common"))
             implementation(catalogBundle("app"))
-            implementation(catalogLib("koin-android")) { excludeKoinDeps() }
-            implementation(catalogLib("koin-compose")) { excludeKoinDeps() }
-
-            testImplementation(platform(catalogLib("compose-bom")))
-            testImplementation(catalogBundle("mobile-common-test"))
-            testImplementation(catalogBundle("mobile-android-test"))
-            testImplementation(catalogBundle("ui-android-test"))
         }
     }
 
@@ -51,7 +40,6 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
         val rootProject = project.rootProject
 
         baseAndroidConfig()
-        project.configureCompose(this)
 
         namespace = KatanaConfiguration.PackageName
 

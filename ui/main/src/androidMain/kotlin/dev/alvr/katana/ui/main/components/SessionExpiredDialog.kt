@@ -6,7 +6,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
-import dev.alvr.katana.R
+import dev.alvr.katana.ui.main.R
 
 @Composable
 internal fun SessionExpiredDialog(

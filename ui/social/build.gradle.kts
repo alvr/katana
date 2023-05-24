@@ -11,9 +11,6 @@ katanaMultiplatform {
     commonMainDependencies {
         implementation(projects.common.core)
         implementation(projects.domain.social)
-    }
-
-    androidMainDependencies {
         implementation(projects.ui.base)
     }
 

@@ -8,11 +8,11 @@ import androidx.compose.material.icons.twotone.LibraryBooks
 import androidx.compose.material.icons.twotone.VideoLibrary
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ramcosta.composedestinations.spec.NavGraphSpec
-import dev.alvr.katana.R
 import dev.alvr.katana.ui.account.navigation.AccountNavGraph
 import dev.alvr.katana.ui.explore.navigation.ExploreNavGraph
 import dev.alvr.katana.ui.lists.navigation.AnimeNavGraph
 import dev.alvr.katana.ui.lists.navigation.MangaNavGraph
+import dev.alvr.katana.ui.main.R
 import dev.alvr.katana.ui.social.navigation.SocialNavGraph
 import kotlinx.collections.immutable.persistentListOf
 

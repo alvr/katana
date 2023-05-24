@@ -18,7 +18,7 @@ private val appUiModule = module {
     viewModelOf(::MainViewModel)
 }
 
-internal val katanaModule = module {
+val katanaModule = module {
     includes(
         // Domain
         listsDomainModule,
