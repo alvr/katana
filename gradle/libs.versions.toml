@@ -49,15 +49,11 @@ arrow = { module = "io.arrow-kt:arrow-core", version = "1.1.5" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }
 
 # Compose
-compose-animation = { module = "androidx.compose.animation:animation" }
 compose-bom = { module = "androidx.compose:compose-bom", version = "2023.05.01" }
-compose-foundation = { module = "androidx.compose.foundation:foundation" }
-compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
+compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 compose-material = { module = "androidx.compose.material:material" }
 compose-material3-windowsize = { module = "androidx.compose.material3:material3-window-size-class" }
 compose-material-icons = { module = "androidx.compose.material:material-icons-extended" }
-compose-ui = { module = "androidx.compose.ui:ui" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 
 # Coroutines
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -70,9 +66,6 @@ datastore-okio = { module = "androidx.datastore:datastore-core-okio", version.re
 # Destiantions
 destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "destinations" }
 destinations-compiler = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "destinations" }
-
-# Desugaring
-desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "2.0.3" }
 
 # Detekt
 detekt-compose = { module = "io.nlopez.compose.rules:detekt", version = "0.1.7" }
@@ -205,14 +198,15 @@ data-preferences-common = [
     "datastore",
     "datastore-okio",
     "kotlin-serialization",
-    "okio-fakefilesystem",
 ]
 data-preferences-android = [
     "tink",
 ]
 data-preferences-ios = []
 
-data-preferences-common-test = []
+data-preferences-common-test = [
+    "okio-fakefilesystem",
+]
 data-preferences-android-test = []
 data-preferences-ios-test = []
 
@@ -237,23 +231,19 @@ ui-common = []
 ui-android = [
     "accompanist-placeholder",
     "coil",
-    "compose-animation", # TODO Remove when finished Multiplatform Compose
-    "compose-foundation", # TODO Remove when finished Multiplatform Compose
-    "compose-foundation-layout", # TODO Remove when finished Multiplatform Compose
-    "compose-material", # TODO Remove when finished Multiplatform Compose
-    "compose-material-icons",
-    "compose-ui", # TODO Remove when finished Multiplatform Compose
-    "compose-ui-tooling", # TODO Remove when finished Multiplatform Compose
     "destinations",
+    "koin-compose",
     "lifecycle-runtime",
     "lifecycle-viewmodel",
     "orbit",
 ]
 ui-ios = []
 
-ui-common-ksp = [
+ui-common-ksp = []
+ui-android-ksp = [
     "destinations-compiler",
 ]
+ui-ios-ksp = []
 
 ui-common-test = []
 ui-android-test = [

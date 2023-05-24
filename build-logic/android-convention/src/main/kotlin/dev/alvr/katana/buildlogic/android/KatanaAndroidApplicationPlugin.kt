@@ -7,7 +7,6 @@ import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.commonTasks
-import dev.alvr.katana.buildlogic.desugaring
 import dev.alvr.katana.buildlogic.implementation
 import dev.alvr.katana.buildlogic.testImplementation
 import java.io.FileInputStream
@@ -39,8 +38,6 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
             implementation(catalogBundle("app"))
             implementation(catalogLib("koin-android")) { excludeKoinDeps() }
             implementation(catalogLib("koin-compose")) { excludeKoinDeps() }
-
-            desugaring(catalogLib("desugaring"))
 
             testImplementation(platform(catalogLib("compose-bom")))
             testImplementation(catalogBundle("mobile-common-test"))

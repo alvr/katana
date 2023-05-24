@@ -31,7 +31,6 @@ internal fun BaseExtension.baseAndroidConfig() {
     }
 
     buildFeatures.buildConfig = false
-    compileOptions.isCoreLibraryDesugaringEnabled = true
 
     buildTypes {
         getByName("release") {

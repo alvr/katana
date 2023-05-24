@@ -18,13 +18,5 @@ gradlePlugin {
             id = "katana.android.application"
             implementationClass = "dev.alvr.katana.buildlogic.android.KatanaAndroidApplicationPlugin"
         }
-        register("android-library") {
-            id = "katana.android.library"
-            implementationClass = "dev.alvr.katana.buildlogic.android.KatanaAndroidLibraryPlugin"
-        }
-        register("android-compose-library") {
-            id = "katana.android.compose.library"
-            implementationClass = "dev.alvr.katana.buildlogic.android.KatanaAndroidComposeLibraryPlugin"
-        }
     }
 }

@@ -1,21 +1,24 @@
-import dev.alvr.katana.buildlogic.KatanaConfiguration
-
 plugins {
-    id("katana.android.compose.library")
+    id("katana.multiplatform.compose")
 }
-
-android.namespace = "${KatanaConfiguration.PackageName}.ui.login"
 
 ksp {
     arg("compose-destinations.mode", "destinations")
     arg("compose-destinations.moduleName", "login")
 }
 
-dependencies {
-    implementation(projects.common.core)
-    implementation(projects.domain.session)
-    implementation(projects.domain.user)
-    implementation(projects.ui.base)
+katanaMultiplatform {
+    commonMainDependencies {
+        implementation(projects.common.core)
+        implementation(projects.domain.session)
+        implementation(projects.domain.user)
+    }
 
-    testImplementation(projects.common.tests)
+    androidMainDependencies {
+        implementation(projects.ui.base)
+    }
+
+    commonTestDependencies {
+        implementation(projects.common.tests)
+    }
 }

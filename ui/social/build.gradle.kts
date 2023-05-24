@@ -1,20 +1,23 @@
-import dev.alvr.katana.buildlogic.KatanaConfiguration
-
 plugins {
-    id("katana.android.compose.library")
+    id("katana.multiplatform.compose")
 }
-
-android.namespace = "${KatanaConfiguration.PackageName}.ui.social"
 
 ksp {
     arg("compose-destinations.mode", "destinations")
     arg("compose-destinations.moduleName", "social")
 }
 
-dependencies {
-    implementation(projects.common.core)
-    implementation(projects.domain.social)
-    implementation(projects.ui.base)
+katanaMultiplatform {
+    commonMainDependencies {
+        implementation(projects.common.core)
+        implementation(projects.domain.social)
+    }
 
-    testImplementation(projects.common.tests)
+    androidMainDependencies {
+        implementation(projects.ui.base)
+    }
+
+    commonTestDependencies {
+        implementation(projects.common.tests)
+    }
 }

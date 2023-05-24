@@ -1,12 +1,6 @@
-import dev.alvr.katana.buildlogic.KatanaConfiguration
-
 plugins {
-    id("katana.android.compose.library")
+    id("katana.multiplatform.compose")
     id("org.jetbrains.kotlin.plugin.parcelize")
-}
-
-android {
-    namespace = "${KatanaConfiguration.PackageName}.ui.lists"
 }
 
 ksp {
@@ -14,10 +8,17 @@ ksp {
     arg("compose-destinations.moduleName", "lists")
 }
 
-dependencies {
-    implementation(projects.common.core)
-    implementation(projects.domain.lists)
-    implementation(projects.ui.base)
+katanaMultiplatform {
+    commonMainDependencies {
+        implementation(projects.common.core)
+        implementation(projects.domain.lists)
+    }
 
-    testImplementation(projects.common.tests)
+    androidMainDependencies {
+        implementation(projects.ui.base)
+    }
+
+    commonTestDependencies {
+        implementation(projects.common.tests)
+    }
 }
