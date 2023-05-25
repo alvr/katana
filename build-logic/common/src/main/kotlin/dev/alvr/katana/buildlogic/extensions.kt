@@ -1,5 +1,7 @@
 package dev.alvr.katana.buildlogic
 
+import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -14,6 +16,8 @@ import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.project
+import org.gradle.kotlin.dsl.systemProperties
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
@@ -48,20 +52,68 @@ fun DependencyHandlerScope.implementation(
     "implementation"(provider, dependencyConfiguration)
 }
 
-fun DependencyHandlerScope.debugImplementation(provider: Provider<*>) {
-    "debugImplementation"(provider)
-}
-
-fun DependencyHandlerScope.testImplementation(provider: Provider<*>) {
-    "testImplementation"(provider)
-}
-
-fun DependencyHandlerScope.ksp(provider: Provider<*>) {
-    "ksp"(provider)
-}
-
 fun DependencyHandlerScope.detekt(provider: Provider<*>) {
     "detektPlugins"(provider)
+}
+
+fun DependencyHandlerScope.kover(path: String) {
+    "kover"(project(path))
+}
+
+fun BaseExtension.configureAndroid(packageName: String) {
+    compileSdkVersion(KatanaConfiguration.CompileSdk)
+    buildToolsVersion(KatanaConfiguration.BuildTools)
+
+    buildFeatures.buildConfig = false
+    namespace = packageName
+
+    defaultConfig {
+        minSdk = KatanaConfiguration.MinSdk
+        targetSdk = KatanaConfiguration.TargetSdk
+        versionCode = KatanaConfiguration.VersionCode
+        versionName = KatanaConfiguration.VersionName
+
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        getByName("release") {
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = KatanaConfiguration.UseJavaVersion
+        targetCompatibility = KatanaConfiguration.UseJavaVersion
+    }
+
+    testOptions {
+        animationsDisabled = true
+        unitTests {
+            isIncludeAndroidResources = true
+            all { test ->
+                test.useJUnitPlatform()
+                test.enabled = !test.isRelease
+                test.jvmArgs = listOf("-Xmx8G")
+                test.systemProperties(
+                    "robolectric.usePreinstrumentedJars" to "true",
+                    "robolectric.logging.enabled" to "true",
+                )
+            }
+        }
+    }
+
+    if (this is BaseAppModuleExtension) {
+        defaultConfig.applicationId = packageName
+        lint.abortOnError = false
+        with(packagingOptions.resources.excludes) {
+            add("/META-INF/{AL2.0,LGPL2.1}")
+            add("DebugProbesKt.bin")
+        }
+    }
 }
 
 fun ExtensionContainer.commonExtensions() {

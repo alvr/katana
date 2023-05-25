@@ -1,7 +1,5 @@
 plugins {
     id("katana.android.application")
-    id("katana.sentry")
-    id("katana.sonar.android")
 }
 
 dependencies {

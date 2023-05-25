@@ -9,6 +9,7 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.withType
@@ -17,6 +18,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
+        apply(plugin = "katana.sonar.kotlin")
 
         with(extensions) {
             create<KatanaMultiplatformCoreExtension>(KATANA_MULTIPLATFORM_EXTENSION)
@@ -32,7 +34,9 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
     }
 
     private fun KotlinMultiplatformExtension.configure() {
-        jvm()
+        jvm {
+            testRuns["test"].executionTask.configure { useJUnitPlatform() }
+        }
         ios()
         iosSimulatorArm64()
 

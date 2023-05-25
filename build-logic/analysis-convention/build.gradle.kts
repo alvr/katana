@@ -21,9 +21,9 @@ gradlePlugin {
             id = "katana.sonar"
             implementationClass = "dev.alvr.katana.buildlogic.analysis.KatanaSonarPlugin"
         }
-        register("sonar-android") {
-            id = "katana.sonar.android"
-            implementationClass = "dev.alvr.katana.buildlogic.analysis.KatanaSonarAndroidPlugin"
+        register("sonar-mobile") {
+            id = "katana.sonar.mobile"
+            implementationClass = "dev.alvr.katana.buildlogic.analysis.KatanaSonarMobilePlugin"
         }
         register("sonar-kotlin") {
             id = "katana.sonar.kotlin"

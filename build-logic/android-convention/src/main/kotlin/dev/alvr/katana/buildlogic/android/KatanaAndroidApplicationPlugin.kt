@@ -5,56 +5,40 @@ import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogBundle
+import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
+import dev.alvr.katana.buildlogic.configureAndroid
 import dev.alvr.katana.buildlogic.implementation
 import java.io.FileInputStream
 import java.util.Properties
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.getByType
 
 internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "com.android.application")
         apply(plugin = "org.jetbrains.kotlin.android")
-        apply(plugin = "katana.sonar.android")
+        apply(plugin = "katana.sonar.mobile")
+        apply(plugin = "katana.sentry")
 
         with(extensions) {
-            commonAndroidExtensions()
+            commonExtensions()
             getByType<BaseAppModuleExtension>().configureApp(project)
         }
 
         tasks.commonTasks()
 
-        configurations.getByName("debugImplementation").exclude(group = "junit", module = "junit")
-
-        dependencies {
-            implementation(catalogBundle("app"))
-        }
+        dependencies { implementation(catalogBundle("app")) }
     }
 
     @Suppress("StringLiteralDuplication", "UnstableApiUsage")
     private fun BaseAppModuleExtension.configureApp(project: Project) {
-        val rootProject = project.rootProject
-
-        baseAndroidConfig()
-
-        namespace = KatanaConfiguration.PackageName
-
+        configureAndroid(KatanaConfiguration.PackageName)
         buildFeatures.buildConfig = true
-        lint.abortOnError = false
-        with(packagingOptions.resources.excludes) {
-            add("/META-INF/{AL2.0,LGPL2.1}")
-            add("DebugProbesKt.bin")
-        }
 
-        defaultConfig {
-            applicationId = KatanaConfiguration.PackageName
-            versionCode = KatanaConfiguration.VersionCode
-            versionName = KatanaConfiguration.VersionName
-        }
+        val rootProject = project.rootProject
 
         signingConfigs {
             register("release") {

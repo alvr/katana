@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Verify" type="GradleRunConfiguration" factoryName="Gradle" folderName="Tests">
+  <configuration default="false" name="Coverage [Verify]" type="GradleRunConfiguration" factoryName="Gradle" folderName="Tests">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="koverMergedVerify" />
+          <option value="koverVerify" />
         </list>
       </option>
       <option name="vmOptions" value="" />

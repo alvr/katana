@@ -1,116 +1,131 @@
 package dev.alvr.katana.buildlogic.gradle
 
 import dev.alvr.katana.buildlogic.ConventionPlugin
-import dev.alvr.katana.buildlogic.catalogVersion
 import dev.alvr.katana.buildlogic.isRelease
-import kotlinx.kover.api.CounterType
-import kotlinx.kover.api.IntellijEngine
-import kotlinx.kover.api.KoverMergedConfig
-import kotlinx.kover.api.KoverMergedFilters
-import kotlinx.kover.api.KoverProjectConfig
-import kotlinx.kover.api.KoverTaskExtension
-import kotlinx.kover.api.KoverVerifyConfig
+import dev.alvr.katana.buildlogic.kover
+import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
+import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
+import kotlinx.kover.gradle.plugin.dsl.KoverVerifyReportConfig
+import kotlinx.kover.gradle.plugin.dsl.MetricType
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
 internal class KatanaKoverPlugin : ConventionPlugin {
-    private val koverIncludes = listOf("dev.alvr.katana.*")
-    private val koverExcludes = listOf(
+    private val classesExcludes = listOf(
         // App
         "*.KatanaApp",
-        "*.initializers.*",
+        "*.*Initializer",
 
         // Apollo
-        "*.remote.*.adapter.*",
-        "*.remote.*.fragment.*",
-        "*.remote.*.selections.*",
-        "*.remote.*.type.*",
         "*.remote.*.*Mutation*",
         "*.remote.*.*Query*",
-
-        // Common
-        "*.common.*",
 
         // Common Android
         "*.BuildConfig",
         "*.*Activity",
         "*.*Fragment",
-        "*.base.*",
-        "*.navigation.*",
 
         // Compose
         "*.*ComposableSingletons*",
 
-        // Koin
-        "*.di.*",
-
         // Serializers
-        "*$\$serializer",
+        "*.*$\$serializer",
+    )
+    private val packagesIncludes = listOf("dev.alvr.katana")
+    private val packagesExcludes = listOf(
+        // Common
+        "*.common.tests",
 
-        // Ui
-        "*.ui.*.components.*",
-        "*.ui.*.view.*",
+        // DI
+        "*.di",
+
+        // Remote
+        "*.remote.*.adapter",
+        "*.remote.*.fragment",
+        "*.remote.*.selections",
+        "*.remote.*.type",
+    )
+
+    private val containerModules = listOf(
+        ":common",
+        ":data",
+        ":data:preferences",
+        ":data:remote",
+        ":domain",
+        ":ui",
     )
 
     override fun Project.configure() {
-        apply(plugin = "org.jetbrains.kotlinx.kover")
-        val engineVersion = catalogVersion("coverage-engine")
-
         allprojects {
-            apply(plugin = "kover")
-
-            extensions.configure<KoverProjectConfig> {
-                engine.set(IntellijEngine(engineVersion))
-                filters {
-                    classes {
-                        excludes.addAll(koverExcludes)
-                        includes.addAll(koverIncludes)
-                    }
-                }
-            }
-
-            tasks.withType<Test> {
-                extensions.configure<KoverTaskExtension> {
-                    isDisabled.set(isRelease)
-                }
+            if (path !in containerModules) {
+                apply(plugin = "org.jetbrains.kotlinx.kover")
             }
         }
 
-        extensions.configure<KoverMergedConfig> {
-            enable()
-            filters { commonFilters() }
-            verify { rules() }
+        with(extensions) {
+            configure<KoverProjectExtension> { configure(project) }
+            configure<KoverReportExtension> { configure() }
+        }
+
+        dependencies {
+            subprojects
+                .filterNot { it.path in containerModules }
+                .forEach { kover(it.path) }
         }
     }
 
-    private fun KoverMergedFilters.commonFilters() {
-        classes {
-            excludes.addAll(koverExcludes)
-            includes.addAll(koverIncludes)
+    private fun KoverProjectExtension.configure(project: Project) {
+        project.tasks.withType<Test> {
+            if (isRelease) disable()
         }
     }
 
-    private fun KoverVerifyConfig.rules() {
-        rule {
-            name = "Minimal instruction coverage rate in percent"
+    private fun KoverReportExtension.configure() {
+        filters {
+            includes { packages(packagesIncludes) }
+            excludes {
+                annotatedBy(
+                    "androidx.compose.runtime.Composable",
+                    "androidx.compose.ui.tooling.preview.Preview",
+                )
+                classes(classesExcludes)
+                packages(packagesExcludes)
+            }
+        }
+
+        defaults {
+//            mergeWith(ANDROID_VARIANT)
+            verify { configure() }
+        }
+
+        androidReports(ANDROID_VARIANT) {
+            verify { configure() }
+        }
+    }
+
+    private fun KoverVerifyReportConfig.configure() {
+        onCheck = true
+
+        rule("Minimal instruction coverage rate in percent") {
             bound {
-                counter = CounterType.INSTRUCTION
+                metric = MetricType.INSTRUCTION
                 minValue = MIN_COVERED_PERCENTAGE
             }
         }
-        rule {
-            name = "Minimal line coverage rate in percent"
+        rule("Minimal line coverage rate in percent") {
             bound {
-                counter = CounterType.LINE
+                metric = MetricType.LINE
                 minValue = MIN_COVERED_PERCENTAGE
             }
         }
     }
 
-    companion object {
-        private const val MIN_COVERED_PERCENTAGE = 80
+    private companion object {
+        const val ANDROID_VARIANT = "debug"
+        const val MIN_COVERED_PERCENTAGE = 80
     }
 }

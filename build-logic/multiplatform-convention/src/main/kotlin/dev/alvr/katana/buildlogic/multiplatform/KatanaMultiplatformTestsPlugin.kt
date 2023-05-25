@@ -4,10 +4,13 @@ import com.android.build.gradle.LibraryExtension
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonTasks
+import dev.alvr.katana.buildlogic.configureAndroid
+import dev.alvr.katana.buildlogic.fullPackageName
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
@@ -22,7 +25,7 @@ internal class KatanaMultiplatformTestsPlugin : ConventionPlugin {
             create<KatanaMultiplatformMobileExtension>(KATANA_MULTIPLATFORM_EXTENSION)
 
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
-            getByType<LibraryExtension>().configureAndroid(project)
+            getByType<LibraryExtension>().configureAndroid(project.fullPackageName)
         }
 
         tasks.commonTasks()
@@ -30,7 +33,7 @@ internal class KatanaMultiplatformTestsPlugin : ConventionPlugin {
 
     private fun KotlinMultiplatformExtension.configureMultiplatform() {
         android()
-        jvm()
+        jvm { testRuns["test"].executionTask.configure { enabled = false } }
         ios()
         iosSimulatorArm64()
 

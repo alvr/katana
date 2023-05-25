@@ -1,16 +1,8 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
-import com.android.build.gradle.BaseExtension
-import dev.alvr.katana.buildlogic.KatanaConfiguration
-import dev.alvr.katana.buildlogic.fullPackageName
-import dev.alvr.katana.buildlogic.isRelease
 import org.gradle.api.NamedDomainObjectContainer
-import org.gradle.api.Project
-import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.exclude
-import org.gradle.kotlin.dsl.systemProperties
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
@@ -24,56 +16,4 @@ internal inline fun <reified T : Any> KotlinMultiplatformExtension.configureExte
     noinline block: T.() -> Unit
 ) {
     (this as ExtensionAware).extensions.configure(block)
-}
-
-internal fun BaseExtension.configureAndroid(project: Project) {
-    buildFeatures.buildConfig = false
-    namespace = project.fullPackageName
-
-    compileSdkVersion(KatanaConfiguration.CompileSdk)
-    buildToolsVersion(KatanaConfiguration.BuildTools)
-
-    defaultConfig {
-        minSdk = KatanaConfiguration.MinSdk
-        targetSdk = KatanaConfiguration.TargetSdk
-
-        vectorDrawables.useSupportLibrary = true
-    }
-
-    buildTypes {
-        getByName("release") {
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility = KatanaConfiguration.UseJavaVersion
-        targetCompatibility = KatanaConfiguration.UseJavaVersion
-    }
-
-    testOptions {
-        animationsDisabled = true
-        unitTests {
-            isIncludeAndroidResources = true
-            all { test ->
-                test.useJUnitPlatform()
-                test.enabled = !test.isRelease
-                test.jvmArgs = listOf("-Xmx8G")
-                test.systemProperties(
-                    "robolectric.usePreinstrumentedJars" to "true",
-                    "robolectric.logging.enabled" to "true",
-                )
-            }
-        }
-    }
-}
-
-internal fun ExternalModuleDependency.excludeKoinDeps() {
-    exclude(group = "androidx.appcompat", module = "appcompat")
-    exclude(group = "androidx.activity", module = "activity-ktx")
-    exclude(group = "androidx.fragment", module = "fragment-ktx")
-    exclude(group = "androidx.lifecycle", module = "lifecycle-common-java8")
 }
