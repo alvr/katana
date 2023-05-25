@@ -1,6 +1,6 @@
 [versions]
 accompanist = "0.30.1"
-apollo = "3.8.1"
+apollo = "3.8.2"
 coroutines = "1.7.1"
 destinations = "1.8.41-beta"
 junit5 = "5.9.3"
