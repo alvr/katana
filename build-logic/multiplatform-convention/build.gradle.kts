@@ -9,8 +9,10 @@ dependencies {
     implementation(libs.gradle.android)
     implementation(libs.gradle.apollo)
     implementation(libs.gradle.compose)
+    implementation(libs.gradle.kotest)
     implementation(libs.gradle.kotlin)
     implementation(libs.gradle.ksp)
+    implementation(libs.gradle.mockmp)
     implementation(project(":common"))
 }
 

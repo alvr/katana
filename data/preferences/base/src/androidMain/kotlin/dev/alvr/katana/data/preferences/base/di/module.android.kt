@@ -4,8 +4,8 @@ import com.google.crypto.tink.Aead
 import com.google.crypto.tink.KeyTemplates
 import com.google.crypto.tink.aead.AeadConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
-import dev.alvr.katana.data.preferences.base.securer.AndroidPreferencesEncrypt
-import dev.alvr.katana.data.preferences.base.securer.PreferencesEncrypt
+import dev.alvr.katana.data.preferences.base.encrypt.AndroidPreferencesEncrypt
+import dev.alvr.katana.data.preferences.base.encrypt.PreferencesEncrypt
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind

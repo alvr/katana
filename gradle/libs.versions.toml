@@ -12,6 +12,7 @@ koin-test = "3.4.1"
 kotest = "5.6.2"
 kotlin = "1.8.22"
 lifecycle = "2.6.1"
+mockmp = "1.14.0"
 orbit = "6.0.0"
 sentry = "6.25.2"
 
@@ -65,9 +66,11 @@ gradle-android = { module = "com.android.tools.build:gradle", version = "8.0.2" 
 gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version = "1.4.1" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.7.2" }
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.8.22-1.0.11" }
+gradle-mockmp = { module = "org.kodein.mock:mockmp-gradle-plugin", version.ref = "mockmp" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.11.1" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "4.1.0.3113" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.47.0" }
@@ -78,9 +81,10 @@ klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.9" }
 # Koin
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-compose" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose", version = "3.4.5" }
 koin-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin-test" }
 koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin-test" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-test" }
 
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -116,10 +120,15 @@ junit5-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.re
 
 ## Kotest
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 
 ## MockK
 mockk = { module = "io.mockk:mockk", version = "1.13.5" }
+
+## MocKMP
+mockmp = { module = "org.kodein.mock:mockmp-runtime", version.ref = "mockmp" }
 
 ## Robolectric
 robolectric = { module = "org.robolectric:robolectric", version = "4.10.3" }
@@ -142,13 +151,16 @@ core-ios = []
 
 core-common-test = [
     "coroutines-test",
+    "koin-test",
     "kotest-assertions-core",
+    "kotest-engine",
     "kotest-property",
     "turbine",
 ]
 core-jvm-test = [
     "junit5",
     "koin-junit5",
+    "kotest-junit5",
     "mockk",
 ]
 core-ios-test = []
@@ -170,7 +182,9 @@ mobile-ios = []
 
 mobile-common-test = [
     "coroutines-test",
+    "koin-test",
     "kotest-assertions-core",
+    "kotest-engine",
     "kotest-property",
     "turbine",
 ]
@@ -178,6 +192,7 @@ mobile-android-test = [
     "junit5",
     "junit5-vintage",
     "koin-junit5",
+    "kotest-junit5",
     "mockk",
     "robolectric",
 ]

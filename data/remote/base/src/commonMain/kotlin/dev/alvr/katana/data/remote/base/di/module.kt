@@ -74,7 +74,7 @@ private val apolloInterceptorsModule = module {
 
             override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain) =
                 request.newBuilder()
-                    .addHeader("Authorization", "Bearer ${useCase().orNull()?.token}")
+                    .addHeader("Authorization", "Bearer ${useCase().getOrNull()?.token}")
                     .addHeader("Accept", "application/json")
                     .addHeader("Content-Type", "application/json")
                     .build().let { chain.proceed(it) }

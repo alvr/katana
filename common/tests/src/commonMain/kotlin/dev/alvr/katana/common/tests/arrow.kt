@@ -6,6 +6,7 @@ import arrow.core.Either.Right
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
+import io.kotest.assertions.assertionCounter
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import kotlin.contracts.ExperimentalContracts
@@ -18,6 +19,7 @@ fun <A, B> Either<A, B>.shouldBeRight(
     contract {
         returns() implies (this@shouldBeRight is Right<B>)
     }
+    assertionCounter.inc()
     return when (this) {
         is Right -> value
         is Left -> throw AssertionError(failureMessage(value))
@@ -37,6 +39,7 @@ fun <A, B> Either<A, B>.shouldBeLeft(
     contract {
         returns() implies (this@shouldBeLeft is Left<A>)
     }
+    assertionCounter.inc()
     return when (this) {
         is Left -> value
         is Right -> throw AssertionError(failureMessage(value))
@@ -54,6 +57,7 @@ fun <A> Option<A>.shouldBeSome(failureMessage: () -> String = { "Expected Some, 
     contract {
         returns() implies (this@shouldBeSome is Some<A>)
     }
+    assertionCounter.inc()
     return when (this) {
         None -> throw AssertionError(failureMessage())
         is Some -> value
@@ -73,6 +77,7 @@ fun <A> Option<A>.shouldBeNone(
     contract {
         returns() implies (this@shouldBeNone is None)
     }
+    assertionCounter.inc()
     return when (this) {
         None -> None
         is Some -> throw AssertionError(failureMessage(this))

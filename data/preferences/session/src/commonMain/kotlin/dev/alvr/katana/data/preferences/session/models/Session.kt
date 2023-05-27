@@ -1,7 +1,7 @@
 package dev.alvr.katana.data.preferences.session.models
 
+import dev.alvr.katana.data.preferences.base.encrypt.PreferencesEncrypt
 import dev.alvr.katana.data.preferences.base.encrypted
-import dev.alvr.katana.data.preferences.base.securer.PreferencesEncrypt
 import dev.alvr.katana.data.preferences.session.serializers.AnilistTokenSerializer
 import dev.alvr.katana.domain.session.models.AnilistToken
 import kotlinx.serialization.SerialName
