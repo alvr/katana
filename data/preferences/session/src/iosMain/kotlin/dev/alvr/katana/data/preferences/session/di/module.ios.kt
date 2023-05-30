@@ -6,6 +6,7 @@ import androidx.datastore.core.okio.OkioStorage
 import dev.alvr.katana.data.preferences.session.models.Session
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import okio.FileSystem
 import okio.Path.Companion.toPath
@@ -22,7 +23,7 @@ internal actual fun dataStoreModule() = module {
             ),
             corruptionHandler = ReplaceFileCorruptionHandler { Session() },
             migrations = emptyList(),
-            scope = CoroutineScope(Dispatchers.Default + SupervisorJob()),
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
         )
     }
 }

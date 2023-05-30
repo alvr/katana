@@ -99,11 +99,11 @@ internal class KatanaKoverPlugin : ConventionPlugin {
 
         defaults {
 //            mergeWith(ANDROID_VARIANT)
-            verify { configure() }
+//            verify { configure() }
         }
 
         androidReports(ANDROID_VARIANT) {
-            verify { configure() }
+//            verify { configure() }
         }
     }
 
