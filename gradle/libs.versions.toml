@@ -62,17 +62,17 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version = "8.0.2" }
 gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
-gradle-compose-multiplatform = { module = "org.jetbrains.compose:compose-gradle-plugin", version = "1.4.0" }
+gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version = "1.4.0" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.7.0" }
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.8.21-1.0.11" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.8.0" }
-gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "3.4.0.2513" }
+gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "4.1.0.3113" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.46.0" }
 
 # Klock
-klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.2" }
+klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.3" }
 
 # Koin
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }

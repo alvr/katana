@@ -5,7 +5,7 @@ import dev.alvr.katana.buildlogic.KatanaConfiguration
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.sonarqube.gradle.SonarQubeExtension
+import org.sonarqube.gradle.SonarExtension
 
 internal class KatanaSonarPlugin : ConventionPlugin {
     private val codeExclusions = listOf(
@@ -39,7 +39,7 @@ internal class KatanaSonarPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.sonarqube")
 
-        extensions.configure<SonarQubeExtension> {
+        extensions.configure<SonarExtension> {
             properties {
                 property("sonar.host.url", "https://sonarcloud.io")
                 property("sonar.organization", "alvr")
@@ -53,8 +53,8 @@ internal class KatanaSonarPlugin : ConventionPlugin {
                 property("sonar.pullrequest.github.repository", "alvr/katana")
                 property("sonar.pullrequest.provider", "GitHub")
 
-                property("sonar.coverage.exclusions", coverageExclusions.joinToString(separator = ","))
-                property("sonar.exclusions", codeExclusions.joinToString(separator = ","))
+                property("sonar.coverage.exclusions", coverageExclusions)
+                property("sonar.exclusions", codeExclusions)
                 property("sonar.java.coveragePlugin", "jacoco")
                 property("sonar.kotlin.detekt.reportPaths", "${rootProject.buildDir}/reports/detekt/detekt.xml")
                 property("sonar.language", "kotlin")
@@ -63,10 +63,6 @@ internal class KatanaSonarPlugin : ConventionPlugin {
                 property("sonar.sourceEncoding", "UTF-8")
                 property("sonar.tags", "android")
                 property("sonar.verbose", true)
-            }
-
-            subprojects {
-                androidVariant = "debug"
             }
         }
     }

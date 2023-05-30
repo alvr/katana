@@ -3,36 +3,40 @@ package dev.alvr.katana.buildlogic.analysis
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import org.sonarqube.gradle.SonarQubeExtension
+import org.sonarqube.gradle.SonarExtension
 
 internal class KatanaSonarMobilePlugin : ConventionPlugin {
     override fun Project.configure() {
-        extensions.configure<SonarQubeExtension> {
+        extensions.configure<SonarExtension> {
             properties {
-                addFilesIfExist(
+                property(
                     "sonar.android.lint.report",
                     "$buildDir/reports/lint-results-debug.xml",
                 )
-                addFilesIfExist(
+                property(
                     "sonar.coverage.jacoco.xmlReportPaths",
                     "$buildDir/reports/kover/report.xml",
                 )
-                addFilesIfExist("sonar.java.binaries", "$buildDir/tmp/kotlin-classes/debug")
-                addFilesIfExist(
+                property("sonar.java.binaries", "$buildDir/tmp/kotlin-classes/debug")
+                property(
                     "sonar.junit.reportPaths",
                     "$buildDir/test-results/testDebugUnitTest",
                 )
-                addFilesIfExist(
+                property(
                     "sonar.sources",
-                    "$projectDir/src/commonMain/kotlin",
-                    "$projectDir/src/androidMain/kotlin",
-                    "$projectDir/src/iosMain/kotlin",
+                    listOf(
+                        "$projectDir/src/commonMain/kotlin",
+                        "$projectDir/src/androidMain/kotlin",
+                        "$projectDir/src/iosMain/kotlin",
+                    ),
                 )
-                addFilesIfExist(
+                property(
                     "sonar.tests",
-                    "$projectDir/src/commonTest/kotlin",
-                    "$projectDir/src/androidUnitTest/kotlin",
-                    "$projectDir/src/iosTest/kotlin",
+                    listOf(
+                        "$projectDir/src/commonTest/kotlin",
+                        "$projectDir/src/androidUnitTest/kotlin",
+                        "$projectDir/src/iosTest/kotlin",
+                    ),
                 )
             }
         }
