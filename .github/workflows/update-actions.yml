@@ -1,0 +1,19 @@
+name: GitHub Actions Version Updater
+
+on:
+  schedule:
+    - cron:  '0 0 * * 0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.5.2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.WORKFLOW_SECRET }}
+      - name: Run GitHub Actions Version Updater
+        uses: saadmk11/github-actions-version-updater@v0.7.4
+        with:
+          token: ${{ secrets.WORKFLOW_SECRET }}

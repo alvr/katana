@@ -30,18 +30,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.2
         with:
           fetch-depth: 0
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v1.0.6
 
   assemble:
     name: Assembling
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.2
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -49,7 +49,7 @@ jobs:
       - name: Assemble Katana
         run: ./gradlew buildDebug --no-daemon --scan --stacktrace
       - name: Upload compose reports artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         if: always()
         with:
           name: compose-reports
@@ -66,7 +66,7 @@ jobs:
       security-events: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.2
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -74,7 +74,7 @@ jobs:
       - name: Run detekt
         run: ./gradlew detektAll lintDebug --no-daemon --stacktrace
       - name: Upload static reports artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: static-report
           path: |
@@ -82,7 +82,7 @@ jobs:
             **/build/reports/lint-results-debug.xml
           retention-days: 1
       - name: Analyze detekt report
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v2.3.6
         with:
           sarif_file: build/reports/detekt/detekt.sarif
           checkout_path: ${{ github.workspace }}
@@ -92,7 +92,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.2
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -100,14 +100,14 @@ jobs:
       - name: Run unit tests
         run: ./gradlew unitTests koverXmlReport koverVerify --no-daemon --scan --stacktrace
       - name: Upload tests reports artifact (success)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         if: success()
         with:
           name: tests-reports
           path: build/reports/allTests
           retention-days: 7
       - name: Upload tests reports artifact (failure)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         if: failure()
         with:
           name: tests-reports
@@ -116,13 +116,13 @@ jobs:
             **/build/reports/tests/testDebugUnitTest
           retention-days: 7
       - name: Upload coverage reports artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: coverage-reports
           path: '**/build/reports/kover/report.xml'
           retention-days: 1
       - name: Upload report to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v3.1.4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build/reports/kover/report.xml
@@ -135,18 +135,18 @@ jobs:
     needs: [ static-analysis, unit-tests ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.2
         with:
           fetch-depth: 0
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Download static report artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v3.0.2
         with:
           name: static-report
           path: .
       - name: Download coverage artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v3.0.2
         with:
           name: coverage-reports
           path: .
@@ -170,21 +170,21 @@ jobs:
     needs: [ assemble, static-analysis, unit-tests ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.2
         with:
           fetch-depth: 0
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Decode keystore
-        uses: timheuer/base64-to-file@v1.2
+        uses: timheuer/base64-to-file@v1.2.3
         with:
           fileDir: .
           fileName: ${{ secrets.SIGNING_FILE }}
           encodedString: ${{ secrets.SIGNING_FILE_BASE64 }}
       - name: Bump versionCode
-        uses: chkfung/android-version-actions@v1.2
+        uses: chkfung/android-version-actions@v1.2.1
         with:
-          gradlePath: build-logic/android-convention/src/main/kotlin/dev/alvr/katana/buildlogic/android/AndroidApplicationConventionPlugin.kt
+          gradlePath: build-logic/common/src/main/kotlin/dev/alvr/katana/buildlogic/extensions.kt
           versionCode: ${{ github.run_number }}
       - name: Build staging APK
         env:
@@ -206,7 +206,7 @@ jobs:
           include_git_commit_id: true
           notify: true
       - name: Create Sentry release
-        uses: getsentry/action-release@v1
+        uses: getsentry/action-release@v1.4.1
         env:
           SENTRY_PROJECT: ${{ secrets.SENTRY_BETA_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
@@ -222,13 +222,13 @@ jobs:
     needs: [ assemble, static-analysis, unit-tests ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.2
         with:
           fetch-depth: 0
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Decode keystore
-        uses: timheuer/base64-to-file@v1.2
+        uses: timheuer/base64-to-file@v1.2.3
         with:
           fileDir: .
           fileName: ${{ secrets.SIGNING_FILE }}
@@ -244,7 +244,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew assembleRelease bundleRelease --no-daemon --scan --stacktrace
       - name: Publish production AAB to Google Play
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.1.1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
           packageName: dev.alvr.katana
@@ -253,7 +253,7 @@ jobs:
           status: completed
           mappingFile: app/build/outputs/mapping/release/mapping.txt
       - name: Create Sentry release
-        uses: getsentry/action-release@v1
+        uses: getsentry/action-release@v1.4.1
         env:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROD_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
