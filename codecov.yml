@@ -2,11 +2,11 @@ coverage:
   status:
     patch:
       default:
-        target: 80%
+        target: 80% # TODO revert to 80% when finishing Kover integration
         threshold: 1%
     project:
       default:
-        target: 80%
+        target: 80% # TODO revert to 80% when finishing Kover integration
         threshold: 1%
 
 ignore:

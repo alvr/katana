@@ -6,7 +6,7 @@ import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.core.okio.OkioStorage
 import androidx.datastore.dataStoreFile
 import dev.alvr.katana.data.preferences.base.di.baseDataPreferencesModule
-import dev.alvr.katana.data.preferences.base.securer.PreferencesSecurer
+import dev.alvr.katana.data.preferences.base.securer.PreferencesEncrypt
 import dev.alvr.katana.data.preferences.session.models.Session
 import dev.alvr.katana.domain.session.models.AnilistToken
 import kotlin.io.path.createTempFile
@@ -30,7 +30,7 @@ internal val corruptedDataStoreNamed = named(CORRUPTED_DATASTORE)
 internal val dataStoreModule = module {
     includes(baseDataPreferencesModule)
 
-    fun serializers(securer: PreferencesSecurer) = listOf(
+    fun serializers(securer: PreferencesEncrypt) = listOf(
         Session.serializer(securer),
     )
 

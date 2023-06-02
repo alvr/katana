@@ -1,10 +1,9 @@
 package dev.alvr.katana.data.preferences.base.serializers
 
-import android.graphics.Color
 import androidx.datastore.core.CorruptionException
 import dev.alvr.katana.common.tests.KoinTest4
 import dev.alvr.katana.data.preferences.base.di.baseDataPreferencesModule
-import dev.alvr.katana.data.preferences.base.securer.PreferencesSecurer
+import dev.alvr.katana.data.preferences.base.securer.PreferencesEncrypt
 import io.kotest.assertions.throwables.shouldThrowExactlyUnit
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,7 +23,7 @@ import org.koin.test.inject
 @ExperimentalCoroutinesApi
 @ExperimentalSerializationApi
 internal class EncryptedPreferencesSerializerTest : KoinTest4() {
-    private val securer by inject<PreferencesSecurer>()
+    private val securer by inject<PreferencesEncrypt>()
 
     private val colorSerializer by lazy {
         EncryptedPreferencesSerializer(

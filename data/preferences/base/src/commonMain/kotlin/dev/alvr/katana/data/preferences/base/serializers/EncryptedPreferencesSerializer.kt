@@ -2,7 +2,7 @@ package dev.alvr.katana.data.preferences.base.serializers
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.okio.OkioSerializer
-import dev.alvr.katana.data.preferences.base.securer.PreferencesSecurer
+import dev.alvr.katana.data.preferences.base.securer.PreferencesEncrypt
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -15,7 +15,7 @@ import okio.use
 
 @OptIn(ExperimentalEncodingApi::class, ExperimentalSerializationApi::class)
 internal class EncryptedPreferencesSerializer<T>(
-    private val securer: PreferencesSecurer,
+    private val securer: PreferencesEncrypt,
     private val serializer: KSerializer<T>,
     override val defaultValue: T,
 ) : OkioSerializer<T> {
@@ -24,7 +24,7 @@ internal class EncryptedPreferencesSerializer<T>(
             val securedInput = source.use { buffered ->
                 buffered.readByteArray()
                     .let { secured -> Base64.decode(secured) }
-                    .let { decoded -> securer.fromSecured(decoded) }
+                    .let { decoded -> securer.decrypt(decoded) }
             }
 
             ProtoBuf.decodeFromByteArray(serializer, securedInput)
@@ -33,7 +33,7 @@ internal class EncryptedPreferencesSerializer<T>(
     override suspend fun writeTo(t: T, sink: BufferedSink) {
         operation("secured write") {
             val securedOutput = ProtoBuf.encodeToByteArray(serializer, t)
-                .let { encoded -> securer.toSecured(encoded) }
+                .let { encoded -> securer.encrypt(encoded) }
                 .let { secured -> Base64.encodeToByteArray(secured) }
 
             sink.use { buffered -> buffered.write(securedOutput) }

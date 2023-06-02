@@ -4,8 +4,8 @@ import com.google.crypto.tink.Aead
 import com.google.crypto.tink.KeyTemplates
 import com.google.crypto.tink.aead.AeadConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
-import dev.alvr.katana.data.preferences.base.securer.AndroidPreferencesSecurer
-import dev.alvr.katana.data.preferences.base.securer.PreferencesSecurer
+import dev.alvr.katana.data.preferences.base.securer.AndroidPreferencesEncrypt
+import dev.alvr.katana.data.preferences.base.securer.PreferencesEncrypt
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
@@ -26,7 +26,7 @@ private val aeadModule = module {
 }
 
 private val securerModule = module {
-    factoryOf(::AndroidPreferencesSecurer).bind<PreferencesSecurer>()
+    factoryOf(::AndroidPreferencesEncrypt).bind<PreferencesEncrypt>()
 }
 
 internal actual fun encryptionModule() = module {

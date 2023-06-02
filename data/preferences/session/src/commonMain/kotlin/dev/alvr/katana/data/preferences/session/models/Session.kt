@@ -1,7 +1,7 @@
 package dev.alvr.katana.data.preferences.session.models
 
 import dev.alvr.katana.data.preferences.base.encrypted
-import dev.alvr.katana.data.preferences.base.securer.PreferencesSecurer
+import dev.alvr.katana.data.preferences.base.securer.PreferencesEncrypt
 import dev.alvr.katana.data.preferences.session.serializers.AnilistTokenSerializer
 import dev.alvr.katana.domain.session.models.AnilistToken
 import kotlinx.serialization.SerialName
@@ -16,7 +16,7 @@ internal data class Session(
     val isSessionActive: Boolean = false,
 ) {
     internal companion object {
-        fun serializer(securer: PreferencesSecurer) = serializer().encrypted(
+        fun serializer(securer: PreferencesEncrypt) = serializer().encrypted(
             defaultValue = Session(),
             securer = securer,
         )
