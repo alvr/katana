@@ -98,7 +98,7 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Run unit tests
-        run: ./gradlew unitTests koverXmlReport koverMergedReport koverMergedVerify --no-daemon --scan --stacktrace
+        run: ./gradlew unitTests koverXmlReport koverVerify --no-daemon --scan --stacktrace
       - name: Upload tests reports artifact (success)
         uses: actions/upload-artifact@v3
         if: success()
@@ -119,18 +119,18 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage-reports
-          path: '**/build/reports/kover/xml/report.xml'
+          path: '**/build/reports/kover/report.xml'
           retention-days: 1
       - name: Upload report to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/reports/kover/merged/xml/report.xml
+          files: build/reports/kover/report.xml
           flags: unittests
           verbose: true
 
   sonar:
-    name: SonarQube
+    name: Sonar
     runs-on: ubuntu-latest
     needs: [ static-analysis, unit-tests ]
     steps:
@@ -145,23 +145,23 @@ jobs:
         with:
           name: static-report
           path: .
-#      - name: Download coverage artifact
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: coverage-reports
-#          path: .
-      - name: Run SonarQube
-        if: github.event_name != 'pull_request'
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-reports
+          path: .
+      - name: Run Sonar
+        if: false # github.event_name != 'pull_request' TODO Revert when Sonar accepts KMM
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube --no-daemon --stacktrace
-      - name: Run SonarQube in PR
-        if: github.event_name == 'pull_request'
+        run: ./gradlew sonar --no-daemon --stacktrace
+      - name: Run Sonar in PR
+        if: false # github.event_name == 'pull_request' TODO Revert when Sonar accepts KMM
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} --no-daemon --stacktrace
+        run: ./gradlew sonar -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} --no-daemon --stacktrace
 
   deploy-beta:
     name: Beta deployment

@@ -2,31 +2,19 @@
 accompanist = "0.30.1"
 apollo = "3.8.2"
 coroutines = "1.7.1"
+datastore = "1.1.0-alpha04"
 destinations = "1.8.41-beta"
+detekt = "1.23.0"
 junit5 = "5.9.3"
 koin = "3.4.1"
 koin-compose = "3.4.5"
+kotest = "5.6.2"
 kotlin = "1.8.21"
 lifecycle = "2.6.1"
-okhttp = "4.11.0"
 orbit = "6.0.0"
 sentry = "6.21.0"
 
-# Compose
-compose = "2023.05.01"
-compose-compiler = "1.4.7"
-
-# Coverage Engine
-coverage-engine = "1.0.719"
-
-# Plugins
-detekt = "1.23.0"
-
-# Tests
-kotest = "5.6.2"
-
 [plugins]
-apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
@@ -40,8 +28,7 @@ androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.1
 
 # Apollo
 apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
-apollo-cache = { module = "com.apollographql.apollo3:apollo-normalized-cache", version.ref = "apollo" }
-apollo-cache-sql = { module = "com.apollographql.apollo3:apollo-normalized-cache-sqlite", version.ref = "apollo" }
+apollo-cache = { module = "com.apollographql.apollo3:apollo-normalized-cache-sqlite", version.ref = "apollo" }
 apollo-mockserver = { module = "com.apollographql.apollo3:apollo-mockserver", version.ref = "apollo" }
 apollo-test = { module = "com.apollographql.apollo3:apollo-testing-support", version.ref = "apollo" }
 
@@ -52,30 +39,20 @@ arrow = { module = "io.arrow-kt:arrow-core", version = "1.1.5" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }
 
 # Compose
-compose-animation = { module = "androidx.compose.animation:animation" }
-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose" }
-compose-foundation = { module = "androidx.compose.foundation:foundation" }
-compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
-compose-material = { module = "androidx.compose.material:material" }
-compose-material3-windowsize = { module = "androidx.compose.material3:material3-window-size-class" }
-compose-material-icons = { module = "androidx.compose.material:material-icons-extended" }
-compose-ui = { module = "androidx.compose.ui:ui" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-compiler = { module = "androidx.compose.compiler:compiler", version = "1.4.7" }
+compose-material3-windowsize = { module = "androidx.compose.material3:material3-window-size-class", version = "1.1.0" }
 
 # Coroutines
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-# DataStore
-datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
+# Datastore
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+datastore-okio = { module = "androidx.datastore:datastore-core-okio", version.ref = "datastore" }
 
 # Destiantions
 destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "destinations" }
 destinations-compiler = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "destinations" }
-
-# Desugaring
-desugaring = { module = "com.android.tools:desugar_jdk_libs", version = "2.0.3" }
 
 # Detekt
 detekt-compose = { module = "io.nlopez.compose.rules:detekt", version = "0.1.7" }
@@ -84,13 +61,18 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version = "8.0.2" }
+gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
+gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version = "1.4.0" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-gradle-kover = { module = "org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kover.gradle.plugin", version = "0.6.1" }
+gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.7.1" }
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.8.21-1.0.11" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.8.0" }
-gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "3.4.0.2513" }
+gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "4.1.0.3113" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.46.0" }
+
+# Klock
+klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.3" }
 
 # Koin
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -102,6 +84,7 @@ koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin"
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.3.5" }
+kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.5.1" }
 
 # Lifecycle
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
@@ -110,9 +93,8 @@ lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose
 # Napier
 napier = { module = "io.github.aakira:napier", version = "2.6.1" }
 
-# OkHttp
-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
-okhttp-logger = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+# Okio
+okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version = "3.3.0" }
 
 # Orbit
 orbit = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
@@ -122,9 +104,6 @@ orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
 sentry = { module = "io.sentry:sentry-android-core", version.ref = "sentry" }
 sentry-apollo = { module = "io.sentry:sentry-apollo-3", version.ref = "sentry" }
 sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry" }
-
-# Serialization
-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.5.0" }
 
 # Tink
 tink = { module = "com.google.crypto.tink:tink-android", version = "1.9.0" }
@@ -148,85 +127,123 @@ robolectric = { module = "org.robolectric:robolectric", version = "4.10.3" }
 turbine = { module = "app.cash.turbine:turbine", version = "0.13.0" }
 
 [bundles]
-common = [
+# Deps for Multiplatform Core (Common, JVM & iOS)
+core-common = [
     "arrow",
     "coroutines",
+    "klock",
     "koin",
     "kotlin",
     "kotlin-immutable",
 ]
-common-android = [
+core-jvm = []
+core-ios = []
+
+core-common-test = [
+    "coroutines-test",
+    "kotest-assertions-core",
+    "kotest-property",
+    "turbine",
+]
+core-jvm-test = [
+    "junit5",
+    "koin-junit5",
+    "mockk",
+]
+core-ios-test = []
+
+# Deps for Multiplatform Mobile (Common, Android & iOS)
+mobile-common = [
     "arrow",
-    "coroutines-android",
+    "coroutines",
+    "klock",
     "koin",
     "kotlin",
     "kotlin-immutable",
     "napier",
 ]
-
-app = [
-    "androidx-activity",
-    "androidx-startup",
-    "compose-material",
-    "compose-material3-windowsize",
-    "compose-material-icons",
-    "destinations",
-    "koin",
-    "orbit",
-    "sentry",
-    "sentry-compose",
+mobile-android = [
+    "koin-android",
 ]
+mobile-ios = []
 
-ksp-ui = [
-    "destinations-compiler",
+mobile-common-test = [
+    "coroutines-test",
+    "kotest-assertions-core",
+    "kotest-property",
+    "turbine",
 ]
+mobile-android-test = [
+    "junit5",
+    "junit5-vintage",
+    "koin-junit5",
+    "mockk",
+    "robolectric",
+]
+mobile-ios-test = []
 
-data-preferences = [
+# Deps for Data Preferences
+data-preferences-common = [
     "datastore",
-    "protobuf",
+    "datastore-okio",
+    "kotlin-serialization",
+]
+data-preferences-android = [
     "tink",
 ]
-data-remote = [
+data-preferences-ios = []
+
+data-preferences-common-test = [
+    "okio-fakefilesystem",
+]
+data-preferences-android-test = []
+data-preferences-ios-test = []
+
+# Deps for Data Remote
+data-remote-common = [
     "apollo",
     "apollo-cache",
 ]
+data-remote-android = []
+data-remote-ios = []
 
-ui-compose = [
+data-remote-common-test = [
+    "apollo-test",
+]
+data-remote-android-test = [
+    "apollo-mockserver",
+]
+data-remote-ios-test = []
+
+# Deps for UI
+ui-common = []
+ui-android = [
     "accompanist-placeholder",
     "coil",
-    "compose-animation",
-    "compose-foundation",
-    "compose-foundation-layout",
-    "compose-material",
-    "compose-material-icons",
-    "compose-ui",
-    "compose-ui-tooling",
     "destinations",
+    "koin-compose",
     "lifecycle-runtime",
     "lifecycle-viewmodel",
     "orbit",
 ]
+ui-ios = []
 
-test = [
-    "coroutines-test",
-    "junit5",
-    "koin-junit5",
-    "kotest-assertions-core",
-    "kotest-property",
-    "mockk",
-    "turbine",
+ui-common-ksp = []
+ui-android-ksp = [
+    "destinations-compiler",
 ]
-test-android = [
-    "junit5-vintage",
-    "koin-junit5",
-    "robolectric",
-]
+ui-ios-ksp = []
 
-test-data-remote = [
-    "apollo-mockserver",
-    "apollo-test",
-]
-test-ui = [
+ui-common-test = []
+ui-android-test = [
     "koin-junit4",
     "orbit-test",
+]
+ui-ios-test = []
+
+app = [
+    "androidx-startup",
+    "koin-android",
+    "napier",
+    "sentry",
 ]

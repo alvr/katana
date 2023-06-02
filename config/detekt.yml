@@ -1008,6 +1008,7 @@ Compose:
   ViewModelInjection:
     active: true
 
+compose:
   # appKode
   ReusedModifierInstance:
     active: true

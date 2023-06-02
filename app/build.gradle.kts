@@ -1,7 +1,5 @@
 plugins {
     id("katana.android.application")
-    id("katana.sentry")
-    id("katana.sonarqube.android")
 }
 
 dependencies {
@@ -30,8 +28,8 @@ dependencies {
     implementation(projects.ui.explore)
     implementation(projects.ui.lists)
     implementation(projects.ui.login)
+    implementation(projects.ui.main)
     implementation(projects.ui.social)
 
     testImplementation(projects.common.tests)
-    testImplementation(projects.common.testsAndroid)
 }

@@ -1,33 +1,20 @@
-import dev.alvr.katana.buildlogic.KatanaConfiguration
-
 plugins {
-    id("katana.android.library")
-    alias(libs.plugins.apollo)
-}
-
-val pkg = "${KatanaConfiguration.PackageName}.data.remote.lists"
-
-android {
-    namespace = pkg
-}
-
-apollo {
-    service("anilist") {
-        generateAsInternal.set(true)
-        generateDataBuilders.set(true)
-        packageName.set(pkg)
-    }
+    id("katana.multiplatform.data.remote")
 }
 
 dependencies {
     apolloMetadata(projects.data.remote.base)
+}
 
-    implementation(projects.common.core)
-    implementation(projects.data.remote.base)
-    implementation(projects.domain.lists)
-    implementation(projects.domain.user)
-    implementation(libs.bundles.data.remote)
+katanaMultiplatform {
+    commonMainDependencies {
+        implementation(projects.common.core)
+        implementation(projects.data.remote.base)
+        implementation(projects.domain.lists)
+        implementation(projects.domain.user)
+    }
 
-    testImplementation(projects.common.tests)
-    testImplementation(libs.bundles.test.data.remote)
+    commonTestDependencies {
+        implementation(projects.common.tests)
+    }
 }

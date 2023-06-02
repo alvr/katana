@@ -1,8 +1,9 @@
 plugins {
-    id("katana.kotlin.test")
+    id("katana.multiplatform.tests")
 }
 
-dependencies {
-    implementation(libs.arrow)
-    implementation(libs.bundles.test)
+katanaMultiplatform {
+    commonMainDependencies {
+        implementation(libs.arrow)
+    }
 }

@@ -1,15 +1,17 @@
-import dev.alvr.katana.buildlogic.KatanaConfiguration
-
 plugins {
-    id("katana.android.compose.library")
+    id("katana.multiplatform.compose")
 }
 
-android.namespace = "${KatanaConfiguration.PackageName}.ui.base"
+katanaMultiplatform {
+    commonMainDependencies {
+        implementation(projects.common.core)
+    }
 
-dependencies {
-    implementation(projects.common.core)
+    androidMainDependencies {
+        implementation(libs.accompanist.systemuicontroller)
+    }
 
-    implementation(libs.accompanist.systemuicontroller)
-
-    testImplementation(projects.common.tests)
+    commonTestDependencies {
+        implementation(projects.common.tests)
+    }
 }

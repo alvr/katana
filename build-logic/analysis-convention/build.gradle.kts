@@ -3,6 +3,7 @@ plugins {
 }
 
 group = "dev.alvr.katana.buildlogic.analysis"
+version = extra["katana.plugins.version"].toString()
 
 dependencies {
     implementation(libs.gradle.detekt)
@@ -14,19 +15,19 @@ gradlePlugin {
     plugins {
         register("detekt") {
             id = "katana.detekt"
-            implementationClass = "dev.alvr.katana.buildlogic.analysis.DetektConventionPlugin"
+            implementationClass = "dev.alvr.katana.buildlogic.analysis.KatanaDetektPlugin"
         }
-        register("sonarqube") {
-            id = "katana.sonarqube"
-            implementationClass = "dev.alvr.katana.buildlogic.analysis.SonarQubeConventionPlugin"
+        register("sonar") {
+            id = "katana.sonar"
+            implementationClass = "dev.alvr.katana.buildlogic.analysis.KatanaSonarPlugin"
         }
-        register("sonarqube-android") {
-            id = "katana.sonarqube.android"
-            implementationClass = "dev.alvr.katana.buildlogic.analysis.SonarQubeAndroidConventionPlugin"
+        register("sonar-mobile") {
+            id = "katana.sonar.mobile"
+            implementationClass = "dev.alvr.katana.buildlogic.analysis.KatanaSonarMobilePlugin"
         }
-        register("sonarqube-kotlin") {
-            id = "katana.sonarqube.kotlin"
-            implementationClass = "dev.alvr.katana.buildlogic.analysis.SonarQubeKotlinConventionPlugin"
+        register("sonar-kotlin") {
+            id = "katana.sonar.kotlin"
+            implementationClass = "dev.alvr.katana.buildlogic.analysis.KatanaSonarKotlinPlugin"
         }
     }
 }
