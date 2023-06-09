@@ -70,7 +70,7 @@ gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version =
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.8.21-1.0.11" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.10.0" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "4.1.0.3113" }
-gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.46.0" }
+gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.47.0" }
 
 # Klock
 klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.3" }
