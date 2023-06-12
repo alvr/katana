@@ -73,7 +73,7 @@ gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-p
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.47.0" }
 
 # Klock
-klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.3" }
+klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.5" }
 
 # Koin
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
