@@ -125,7 +125,7 @@ mockk = { module = "io.mockk:mockk", version = "1.13.5" }
 robolectric = { module = "org.robolectric:robolectric", version = "4.10.3" }
 
 ## Turbine
-turbine = { module = "app.cash.turbine:turbine", version = "0.13.0" }
+turbine = { module = "app.cash.turbine:turbine", version = "1.0.0" }
 
 [bundles]
 # Deps for Multiplatform Core (Common, JVM & iOS)
