@@ -97,14 +97,14 @@ internal class KatanaKoverPlugin : ConventionPlugin {
             }
         }
 
-        defaults {
+//        defaults {
 //            mergeWith(ANDROID_VARIANT)
 //            verify { configure() }
-        }
+//        }
 
-        androidReports(ANDROID_VARIANT) {
+//        androidReports(ANDROID_VARIANT) {
 //            verify { configure() }
-        }
+//        }
     }
 
     private fun KoverVerifyReportConfig.configure() {

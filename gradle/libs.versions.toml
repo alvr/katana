@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.30.1"
 apollo = "3.8.2"
-coroutines = "1.7.1"
+coroutines = "1.7.2"
 datastore = "1.1.0-alpha04"
 destinations = "1.8.41-beta"
 detekt = "1.23.0"
@@ -10,7 +10,7 @@ koin = "3.4.2"
 koin-compose = "3.4.5"
 koin-test = "3.4.1"
 kotest = "5.6.2"
-kotlin = "1.8.21"
+kotlin = "1.8.22"
 lifecycle = "2.6.1"
 orbit = "6.0.0"
 sentry = "6.24.0"
@@ -40,7 +40,7 @@ arrow = { module = "io.arrow-kt:arrow-core", version = "1.1.5" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }
 
 # Compose
-compose-compiler = { module = "androidx.compose.compiler:compiler", version = "1.4.7" }
+compose-compiler = { module = "androidx.compose.compiler:compiler", version = "1.4.8" }
 compose-material3-windowsize = { module = "androidx.compose.material3:material3-window-size-class", version = "1.1.1" }
 
 # Coroutines
@@ -66,8 +66,8 @@ gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", ver
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version = "1.4.1" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.7.1" }
-gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.8.21-1.0.11" }
+gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.7.2" }
+gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.8.22-1.0.11" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.11.1" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "4.1.0.3113" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.47.0" }
