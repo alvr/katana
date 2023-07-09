@@ -95,7 +95,7 @@ lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose
 napier = { module = "io.github.aakira:napier", version = "2.6.1" }
 
 # Okio
-okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version = "3.3.0" }
+okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version = "3.4.0" }
 
 # Orbit
 orbit = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
