@@ -9,6 +9,7 @@
   <a href="https://sonarcloud.io/summary/new_code?id=alvr_katana"><img alt="SonarCloud quality gate" src="https://img.shields.io/sonar/quality_gate/alvr_katana?logo=sonarcloud&logoColor=white&server=https%3A%2F%2Fsonarcloud.io"/></a>
   <a href="https://app.codecov.io/gh/alvr/katana"><img alt="Code coverage" src="https://img.shields.io/codecov/c/gh/alvr/katana?logo=codecov&logoColor=white"></a>
   <a href="https://portal.testapp.io/apps/install/nvbRLRmegznkO"><img alt="Download latest beta" src="https://img.shields.io/badge/%F0%9F%A5%BC%F0%9F%A7%AA-download%20latest%20beta-%230F4C75"/></a>
+  <a href="https://install.appcenter.ms/orgs/KatanaApp/apps/Katana-Android/distribution_groups/testers"><img alt="Beta APKs archive" src="https://img.shields.io/badge/%F0%9F%A5%BC%F0%9F%A7%AA-beta%20APKs%20archive-%23CB2E62"/></a>
 </p>
 
 ---

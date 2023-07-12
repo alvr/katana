@@ -205,6 +205,16 @@ jobs:
           git_release_notes: true
           include_git_commit_id: true
           notify: true
+      - name: Publish beta APK to AppCenter
+        uses: wzieba/AppCenter-Github-Action@v1.3.3
+        with:
+          appName: KatanaApp/Katana-Android
+          token: ${{ secrets.APPCENTER_TOKEN }}
+          group: Testers
+          file: app/build/outputs/apk/beta/app-beta.apk
+          notifyTesters: true
+          gitReleaseNotes: true
+          debug: false
       - name: Create Sentry release
         uses: getsentry/action-release@v1.4.1
         env:
