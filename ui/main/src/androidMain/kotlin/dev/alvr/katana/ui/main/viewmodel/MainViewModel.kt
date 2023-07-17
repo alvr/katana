@@ -24,7 +24,7 @@ internal class MainViewModel(
     }
 
     private val initialNavGraph
-        get() = if (getAnilistTokenUseCase.sync().nonEmpty()) {
+        get() = if (getAnilistTokenUseCase.sync().isSome()) {
             NavGraphs.home
         } else {
             LoginNavGraph

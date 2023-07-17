@@ -9,7 +9,7 @@ katanaMultiplatform {
         implementation(projects.domain.base)
     }
 
-    androidUnitTestDependencies {
+    commonTestDependencies {
         implementation(projects.common.tests)
     }
 }

@@ -19,6 +19,9 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = "katana.sonar.kotlin")
+        apply(plugin = "com.google.devtools.ksp")
+        apply(plugin = "io.kotest.multiplatform")
+        apply(plugin = "org.kodein.mock.mockmp")
 
         with(extensions) {
             create<KatanaMultiplatformCoreExtension>(KATANA_MULTIPLATFORM_EXTENSION)

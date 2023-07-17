@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "katana.multiplatform.mobile")
-        apply(plugin = "com.google.devtools.ksp")
         apply(plugin = "org.jetbrains.compose")
 
         with(extensions) {

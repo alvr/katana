@@ -1,7 +1,7 @@
 package dev.alvr.katana.data.preferences.base.di
 
-import dev.alvr.katana.data.preferences.base.securer.IosPreferencesEncrypt
-import dev.alvr.katana.data.preferences.base.securer.PreferencesEncrypt
+import dev.alvr.katana.data.preferences.base.encrypt.IosPreferencesEncrypt
+import dev.alvr.katana.data.preferences.base.encrypt.PreferencesEncrypt
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
