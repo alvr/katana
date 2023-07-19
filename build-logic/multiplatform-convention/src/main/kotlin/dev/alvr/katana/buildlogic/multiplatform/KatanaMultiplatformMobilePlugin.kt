@@ -11,7 +11,6 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
@@ -32,7 +31,7 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
 
             commonExtensions()
             configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
-            getByType<LibraryExtension>().configureAndroid(project.fullPackageName)
+            configure<LibraryExtension> { configureAndroid(project.fullPackageName) }
         }
 
         tasks.commonTasks()

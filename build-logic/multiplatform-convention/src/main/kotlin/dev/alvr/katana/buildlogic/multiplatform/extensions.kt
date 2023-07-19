@@ -30,9 +30,9 @@ internal fun KotlinMultiplatformExtension.configureCocoapods(project: Project) {
     configureExtension<CocoapodsExtension> {
         name = podName
         homepage = "https://github.com/alvr/katana"
-        podfile = project.file("../iosApp/Podfile")
-        summary = "Cocoapod ${project.name}'s module"
-        version = "${KatanaConfiguration.VersionName}_${KatanaConfiguration.VersionCode}"
+        podfile = project.file("${project.rootDir}/iosApp/Podfile")
+        summary = "Cocoapod $podName module"
+        version = KatanaConfiguration.VersionName
         ios.deploymentTarget = "14.1"
 
         framework {

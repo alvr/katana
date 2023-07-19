@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'uiExplore'
-    spec.version                  = '0.0.1_1'
+    spec.version                  = '0.0.1'
     spec.homepage                 = 'https://github.com/alvr/katana'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = 'Cocoapod explore's module'
+    spec.summary                  = 'Cocoapod uiExplore module'
     spec.vendored_frameworks      = 'build/cocoapods/framework/uiExplore.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '14.1'

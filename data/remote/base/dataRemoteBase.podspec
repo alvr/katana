@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'dataRemoteBase'
-    spec.version                  = '0.0.1_1'
+    spec.version                  = '0.0.1'
     spec.homepage                 = 'https://github.com/alvr/katana'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = 'Cocoapod base's module'
+    spec.summary                  = 'Cocoapod dataRemoteBase module'
     spec.vendored_frameworks      = 'build/cocoapods/framework/dataRemoteBase.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '14.1'
