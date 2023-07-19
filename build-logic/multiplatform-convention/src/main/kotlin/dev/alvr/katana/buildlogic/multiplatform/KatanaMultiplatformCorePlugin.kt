@@ -13,11 +13,13 @@ import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
+        apply(plugin = "org.jetbrains.kotlin.native.cocoapods")
         apply(plugin = "katana.sonar.kotlin")
         apply(plugin = "com.google.devtools.ksp")
         apply(plugin = "io.kotest.multiplatform")
@@ -27,7 +29,7 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
             create<KatanaMultiplatformCoreExtension>(KATANA_MULTIPLATFORM_EXTENSION)
 
             commonExtensions()
-            configure<KotlinMultiplatformExtension> { configure() }
+            configure<KotlinMultiplatformExtension> { configure(project) }
         }
 
         with(tasks) {
@@ -36,13 +38,17 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
         }
     }
 
-    private fun KotlinMultiplatformExtension.configure() {
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    private fun KotlinMultiplatformExtension.configure(project: Project) {
+        targetHierarchy.default()
+
         jvm {
             testRuns["test"].executionTask.configure { useJUnitPlatform() }
         }
         ios()
         iosSimulatorArm64()
 
+        configureCocoapods(project)
         configureSourceSets()
     }
 
