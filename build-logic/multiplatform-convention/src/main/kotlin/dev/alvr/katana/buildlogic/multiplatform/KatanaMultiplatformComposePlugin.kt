@@ -85,6 +85,7 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
     private fun DependencyHandler.kspDependencies(project: Project) {
         add("kspCommonMainMetadata", project.catalogBundle("ui-common-ksp"))
         add("kspAndroid", project.catalogBundle("ui-android-ksp"))
+        add("kspIosArm64", project.catalogBundle("ui-ios-ksp"))
         add("kspIosX64", project.catalogBundle("ui-ios-ksp"))
     }
 

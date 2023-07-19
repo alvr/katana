@@ -14,6 +14,7 @@ import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformTestsPlugin : ConventionPlugin {
@@ -31,7 +32,10 @@ internal class KatanaMultiplatformTestsPlugin : ConventionPlugin {
         tasks.commonTasks()
     }
 
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     private fun KotlinMultiplatformExtension.configureMultiplatform() {
+        targetHierarchy.default()
+
         android()
         jvm { testRuns["test"].executionTask.configure { enabled = false } }
         ios()

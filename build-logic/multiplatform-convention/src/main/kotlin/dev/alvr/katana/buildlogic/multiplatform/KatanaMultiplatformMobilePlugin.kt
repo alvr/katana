@@ -14,11 +14,13 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
+        apply(plugin = "org.jetbrains.kotlin.native.cocoapods")
         apply(plugin = "com.android.library")
         apply(plugin = "katana.sonar.mobile")
         apply(plugin = "com.google.devtools.ksp")
@@ -29,18 +31,22 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
             create<KatanaMultiplatformMobileExtension>(KATANA_MULTIPLATFORM_EXTENSION)
 
             commonExtensions()
-            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
             getByType<LibraryExtension>().configureAndroid(project.fullPackageName)
         }
 
         tasks.commonTasks()
     }
 
-    private fun KotlinMultiplatformExtension.configureMultiplatform() {
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
+        targetHierarchy.default()
+
         android()
         ios()
         iosSimulatorArm64()
 
+        configureCocoapods(project)
         configureSourceSets()
     }
 
