@@ -14,7 +14,7 @@ kotlin = "1.8.22"
 lifecycle = "2.6.1"
 mockmp = "1.14.0"
 orbit = "6.0.0"
-sentry = "6.25.2"
+sentry = "6.26.0"
 
 [plugins]
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
