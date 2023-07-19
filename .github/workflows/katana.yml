@@ -201,7 +201,7 @@ jobs:
         with:
           api_token: ${{ secrets.TESTAPPIO_API_TOKEN }}
           app_id: ${{ secrets.TESTAPPIO_APP_ID }}
-          file: app/build/outputs/apk/beta/app-beta.apk
+          file: androidApp/build/outputs/apk/beta/app-beta.apk
           git_release_notes: true
           include_git_commit_id: true
           notify: true
@@ -211,7 +211,7 @@ jobs:
           appName: KatanaApp/Katana-Android
           token: ${{ secrets.APPCENTER_TOKEN }}
           group: Testers
-          file: app/build/outputs/apk/beta/app-beta.apk
+          file: androidApp/build/outputs/apk/beta/app-beta.apk
           notifyTesters: true
           gitReleaseNotes: true
           debug: false
@@ -258,10 +258,10 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
           packageName: dev.alvr.katana
-          releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          releaseFiles: androidApp/build/outputs/bundle/release/app-release.aab
           track: internal
           status: completed
-          mappingFile: app/build/outputs/mapping/release/mapping.txt
+          mappingFile: androidApp/build/outputs/mapping/release/mapping.txt
       - name: Create Sentry release
         uses: getsentry/action-release@v1.4.1
         env:
@@ -279,6 +279,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Katana ${{ github.ref_name }}
           files: |
-            app/build/outputs/apk/release/app-release.apk
+            androidApp/build/outputs/apk/release/app-release.apk
           draft: true
           prerelease: false
