@@ -15,6 +15,9 @@ concurrency:
 env:
   TZ: UTC
 
+permissions:
+  contents: write
+
 jobs:
   cancel-stale-jobs:
     name: Cancel stale jobs
@@ -151,13 +154,13 @@ jobs:
           name: coverage-reports
           path: .
       - name: Run Sonar
-        if: false # github.event_name != 'pull_request' TODO Revert when Sonar accepts KMM
+        if: github.event_name != 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonar --no-daemon --stacktrace
       - name: Run Sonar in PR
-        if: false # github.event_name == 'pull_request' TODO Revert when Sonar accepts KMM
+        if: github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

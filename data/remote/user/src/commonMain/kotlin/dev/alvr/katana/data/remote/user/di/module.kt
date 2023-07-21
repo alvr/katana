@@ -22,6 +22,6 @@ private val sourcesModule = module {
     singleOf(::UserRemoteSourceImpl).bind<UserRemoteSource>()
 }
 
-val userDataRemoteModule = module {
+val dataRemoteUserModule = module {
     includes(managersModule, repositoriesModule, sourcesModule)
 }

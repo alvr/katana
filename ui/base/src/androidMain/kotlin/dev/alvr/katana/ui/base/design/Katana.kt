@@ -6,12 +6,7 @@ import androidx.compose.runtime.SideEffect
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun Katana(content: @Composable () -> Unit) {
-    KatanaTheme(content)
-}
-
-@Composable
-private fun KatanaTheme(
+fun KatanaTheme(
     content: @Composable () -> Unit,
 ) {
     val colors = KatanaDarkTheme

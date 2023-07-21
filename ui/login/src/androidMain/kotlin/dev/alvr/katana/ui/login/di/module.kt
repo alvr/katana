@@ -8,6 +8,6 @@ private val viewModelsModule = module {
     viewModelOf(::LoginViewModel)
 }
 
-val loginUiModule = module {
+val uiLoginModule = module {
     includes(viewModelsModule)
 }

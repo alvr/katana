@@ -5,6 +5,6 @@ import org.koin.dsl.module
 
 internal expect fun encryptionModule(): Module
 
-val baseDataPreferencesModule = module {
+val dataPreferencesBaseModule = module {
     includes(encryptionModule())
 }

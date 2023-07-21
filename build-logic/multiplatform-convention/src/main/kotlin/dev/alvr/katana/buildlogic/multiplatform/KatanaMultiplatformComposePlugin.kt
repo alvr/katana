@@ -94,11 +94,11 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
 
         kotlinCompilerPluginArgs.set(
             buildList {
-                if (project.composePluginEnabled("enableComposeCompilerMetrics")) {
+                if (project.composePluginEnabled("katana.enableComposeCompilerMetrics")) {
                     add("metricsDestination=${project.composePluginDir("compose-metrics")}")
                 }
 
-                if (project.composePluginEnabled("enableComposeCompilerReports")) {
+                if (project.composePluginEnabled("katana.enableComposeCompilerReports")) {
                     add("reportsDestination=${project.composePluginDir("compose-reports")}")
                 }
             },

@@ -36,7 +36,6 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
     @Suppress("StringLiteralDuplication", "UnstableApiUsage")
     private fun BaseAppModuleExtension.configureApp(project: Project) {
         configureAndroid(KatanaConfiguration.PackageName)
-        buildFeatures.buildConfig = true
 
         val rootProject = project.rootProject
 

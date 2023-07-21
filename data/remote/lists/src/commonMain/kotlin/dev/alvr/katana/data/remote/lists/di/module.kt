@@ -22,6 +22,6 @@ private val sourcesModule = module {
     singleOf(::MangaListsRemoteSourceImpl).bind<MangaListsRemoteSource>()
 }
 
-val listsDataRemoteModule = module {
+val dataRemoteListsModule = module {
     includes(repositoriesModule, sourcesModule)
 }

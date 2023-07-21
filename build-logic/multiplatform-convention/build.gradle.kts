@@ -8,6 +8,7 @@ version = extra["katana.plugins.version"].toString()
 dependencies {
     implementation(libs.gradle.android)
     implementation(libs.gradle.apollo)
+    implementation(libs.gradle.buildconfig)
     implementation(libs.gradle.compose)
     implementation(libs.gradle.kotest)
     implementation(libs.gradle.kotlin)
