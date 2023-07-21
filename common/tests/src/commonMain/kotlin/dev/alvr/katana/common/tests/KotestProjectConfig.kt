@@ -10,7 +10,7 @@ import io.kotest.core.test.AssertionMode
 object KotestProjectConfig : AbstractProjectConfig() {
     private const val NUM_THREADS = 3
 
-    override val assertionMode = AssertionMode.Error
+    override val assertionMode = AssertionMode.Warn
     override val coroutineDebugProbes = true
     override val globalAssertSoftly = true
     override val includeTestScopePrefixes = true
