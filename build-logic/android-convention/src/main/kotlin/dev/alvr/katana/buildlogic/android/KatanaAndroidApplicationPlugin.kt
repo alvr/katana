@@ -13,8 +13,8 @@ import java.io.FileInputStream
 import java.util.Properties
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 
 internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
     override fun Project.configure() {
@@ -25,7 +25,7 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
 
         with(extensions) {
             commonExtensions()
-            getByType<BaseAppModuleExtension>().configureApp(project)
+            configure<BaseAppModuleExtension> { configureApp(project) }
         }
 
         tasks.commonTasks()

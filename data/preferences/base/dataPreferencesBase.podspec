@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'dataPreferencesBase'
-    spec.version                  = '0.0.1_1'
+    spec.version                  = '0.0.1'
     spec.homepage                 = 'https://github.com/alvr/katana'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = 'Cocoapod base's module'
+    spec.summary                  = 'Cocoapod dataPreferencesBase module'
     spec.vendored_frameworks      = 'build/cocoapods/framework/dataPreferencesBase.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '14.1'

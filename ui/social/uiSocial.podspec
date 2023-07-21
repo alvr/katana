@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'uiSocial'
-    spec.version                  = '0.0.1_1'
+    spec.version                  = '0.0.1'
     spec.homepage                 = 'https://github.com/alvr/katana'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = 'Cocoapod social's module'
+    spec.summary                  = 'Cocoapod uiSocial module'
     spec.vendored_frameworks      = 'build/cocoapods/framework/uiSocial.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '14.1'

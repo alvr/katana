@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'uiLists'
-    spec.version                  = '0.0.1_1'
+    spec.version                  = '0.0.1'
     spec.homepage                 = 'https://github.com/alvr/katana'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = 'Cocoapod lists's module'
+    spec.summary                  = 'Cocoapod uiLists module'
     spec.vendored_frameworks      = 'build/cocoapods/framework/uiLists.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '14.1'
