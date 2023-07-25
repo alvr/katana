@@ -62,7 +62,7 @@ detekt-compose2 = { module = "ru.kode:detekt-rules-compose", version = "1.2.2" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 # Gradle
-gradle-android = { module = "com.android.tools.build:gradle", version = "8.0.2" }
+gradle-android = { module = "com.android.tools.build:gradle", version = "8.1.0" }
 gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version = "1.4.1" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
