@@ -64,7 +64,6 @@ private fun initSentry(context: Context) {
     Sentry.init(context) { options ->
         options.debug = KatanaBuildConfig.DEBUG
         options.dsn = KatanaBuildConfig.SENTRY_DSN
-        options.attachScreenshot = true
     }
 }
 

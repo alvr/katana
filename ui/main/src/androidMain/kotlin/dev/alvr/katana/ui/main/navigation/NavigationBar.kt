@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -30,6 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.moriatsushi.insetsx.systemBars
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.utils.destination
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
