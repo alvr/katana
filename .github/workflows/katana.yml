@@ -198,7 +198,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_BETA_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew assembleBeta --no-daemon --scan --stacktrace
+        run: ./gradlew assembleBeta -Pkatana.flavor=beta --no-daemon --scan --stacktrace
       - name: Publish beta APK to TestApp.io
         uses: testappio/github-action@v5
         with:
@@ -255,7 +255,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROD_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew assembleRelease bundleRelease --no-daemon --scan --stacktrace
+        run: ./gradlew assembleRelease bundleRelease -Pkatana.flavor=release --no-daemon --scan --stacktrace
       - name: Publish production AAB to Google Play
         uses: r0adkll/upload-google-play@v1.1.1
         with:

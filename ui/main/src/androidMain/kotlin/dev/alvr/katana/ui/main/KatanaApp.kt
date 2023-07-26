@@ -53,7 +53,7 @@ private fun initApp(context: Context) {
 }
 
 private fun initNapier() {
-    if (BuildConfig.DEBUG) {
+    if (KatanaBuildConfig.DEBUG) {
         Napier.base(DebugAntilog())
     } else {
         Napier.base(SentryLogger(LogLevel.ERROR))
@@ -62,8 +62,8 @@ private fun initNapier() {
 
 private fun initSentry(context: Context) {
     Sentry.init(context) { options ->
-        options.debug = BuildConfig.DEBUG
-        options.dsn = "" // TODO Add Sentry DSN
+        options.debug = KatanaBuildConfig.DEBUG
+        options.dsn = KatanaBuildConfig.SENTRY_DSN
         options.attachScreenshot = true
     }
 }
@@ -80,7 +80,7 @@ private class SentryLogger(private val minSeverity: LogLevel) : Antilog() {
         }
 
     override fun isEnable(priority: LogLevel, tag: String?) =
-        !BuildConfig.DEBUG && priority >= minSeverity
+        !KatanaBuildConfig.DEBUG && priority >= minSeverity
 
     override fun performLog(
         priority: LogLevel,

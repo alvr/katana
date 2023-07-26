@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="sentry_dsn" translatable="false">https://8144916afab84ceba1da1443079b1809@o387687.ingest.sentry.io/4504198472007680</string>
-</resources>

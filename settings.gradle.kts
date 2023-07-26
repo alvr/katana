@@ -2,16 +2,16 @@ rootProject.name = "Katana"
 
 dependencyResolutionManagement {
     repositories {
-        google()
         mavenCentral()
+        google()
     }
 }
 
 pluginManagement {
     includeBuild("build-logic")
     repositories {
-        google()
         mavenCentral()
+        google()
         gradlePluginPortal()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }

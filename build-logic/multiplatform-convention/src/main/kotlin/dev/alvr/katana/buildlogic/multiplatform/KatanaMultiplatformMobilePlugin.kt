@@ -1,6 +1,7 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
 import com.android.build.gradle.LibraryExtension
+import com.github.gmazzo.gradle.plugins.BuildConfigExtension
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonExtensions
@@ -33,6 +34,7 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
             commonExtensions()
             configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
             configure<LibraryExtension> { configureAndroid(project.fullPackageName) }
+            configure<BuildConfigExtension> { configureBuildConfig(project) }
         }
 
         tasks.commonTasks()
@@ -42,7 +44,7 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
     private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
         targetHierarchy.default()
 
-        android()
+        androidTarget()
         ios()
         iosSimulatorArm64()
 
@@ -91,5 +93,32 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
             }
             val iosSimulatorArm64Test by getting { dependsOn(iosTest) }
         }
+    }
+
+    private fun BuildConfigExtension.configureBuildConfig(project: Project) {
+        packageName.set(project.fullPackageName)
+
+        project.katanaBuildConfig(
+            android = { androidConfig ->
+                sourceSets.getByName("androidMain") {
+                    className.set(BUILD_CONFIG_FILE)
+                    androidConfig.forEach { config ->
+                        buildConfigField(config.type, config.name, config.value)
+                    }
+                }
+            },
+            ios = { iosConfig ->
+                sourceSets.getByName("iosMain") {
+                    className.set(BUILD_CONFIG_FILE)
+                    iosConfig.forEach { config ->
+                        buildConfigField(config.type, config.name, config.value)
+                    }
+                }
+            },
+        )
+    }
+
+    private companion object {
+        const val BUILD_CONFIG_FILE = "KatanaBuildConfig"
     }
 }

@@ -110,10 +110,13 @@ orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
 sentry = { module = "io.sentry:sentry-android-core", version.ref = "sentry" }
 sentry-apollo = { module = "io.sentry:sentry-apollo-3", version.ref = "sentry" }
 sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry" }
-sentry-multiplatform = { module = "io.sentry:sentry-kotlin-multiplatform", version = "0.2.0" }
+sentry-multiplatform = { module = "io.sentry:sentry-kotlin-multiplatform", version = "0.2.1" }
 
 # Tink
 tink = { module = "com.google.crypto.tink:tink-android", version = "1.10.0" }
+
+# YAML
+yamlbeans = { module = "com.esotericsoftware.yamlbeans:yamlbeans", version = "1.15" }
 
 # Tests
 ## JUnit
