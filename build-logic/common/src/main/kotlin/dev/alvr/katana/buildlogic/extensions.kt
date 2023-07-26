@@ -15,6 +15,7 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.project
 import org.gradle.kotlin.dsl.systemProperties
@@ -89,6 +90,8 @@ fun BaseExtension.configureAndroid(packageName: String) {
         sourceCompatibility = KatanaConfiguration.UseJavaVersion
         targetCompatibility = KatanaConfiguration.UseJavaVersion
     }
+
+    sourceSets["main"].res.srcDirs("src/androidMain/res", "src/commonMain/resources")
 
     testOptions {
         animationsDisabled = true

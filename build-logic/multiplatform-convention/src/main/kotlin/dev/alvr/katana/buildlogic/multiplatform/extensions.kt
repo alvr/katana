@@ -40,6 +40,8 @@ internal fun KotlinMultiplatformExtension.configureCocoapods(project: Project) {
         framework {
             baseName = podName
         }
+
+        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 }
 

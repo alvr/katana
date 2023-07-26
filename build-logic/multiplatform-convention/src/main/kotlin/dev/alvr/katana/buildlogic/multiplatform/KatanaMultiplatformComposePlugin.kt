@@ -13,6 +13,7 @@ import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.compose.ComposePlugin
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
@@ -29,6 +30,7 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
     }
 
     @Suppress("UNUSED_VARIABLE")
+    @OptIn(ExperimentalComposeLibrary::class)
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         val compose = (this as ExtensionAware).extensions.getByName("compose") as ComposePlugin.Dependencies
 
@@ -36,6 +38,7 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
             val commonMain by getting {
                 dependencies {
                     implementation(compose.animation)
+                    implementation(compose.components.resources)
                     implementation(compose.foundation)
                     implementation(compose.material)
                     implementation(compose.material3)
