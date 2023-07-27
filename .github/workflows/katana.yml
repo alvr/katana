@@ -206,7 +206,7 @@ jobs:
           include_git_commit_id: true
           notify: true
       - name: Publish beta APK to AppCenter
-        uses: wzieba/AppCenter-Github-Action@v1.3.3
+        uses: wzieba/AppCenter-Github-Action@v1.3.4
         with:
           appName: KatanaApp/Katana-Android
           token: ${{ secrets.APPCENTER_TOKEN }}
