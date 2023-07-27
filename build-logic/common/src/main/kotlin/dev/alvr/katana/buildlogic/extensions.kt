@@ -116,6 +116,12 @@ fun BaseExtension.configureAndroid(packageName: String) {
             add("/META-INF/{AL2.0,LGPL2.1}")
             add("DebugProbesKt.bin")
         }
+
+        with(packagingOptions.jniLibs.excludes) {
+            add("**/libdatastore_shared_counter.so")
+            add("**/libsentry-android.so")
+            add("**/libsentry.so")
+        }
     }
 }
 
