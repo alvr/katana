@@ -10,6 +10,6 @@ private val useCasesModule = module {
     factoryOf(::SaveUserIdUseCase)
 }
 
-val userDomainModule = module {
+val domainUserModule = module {
     includes(useCasesModule)
 }

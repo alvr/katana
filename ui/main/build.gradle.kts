@@ -4,6 +4,9 @@ plugins {
 
 katanaMultiplatform {
     commonMainDependencies {
+        implementation(libs.compose.material3.windowsize)
+        implementation(libs.sentry.multiplatform)
+
         implementation(projects.data.preferences.base)
         implementation(projects.data.preferences.session)
 
@@ -31,7 +34,6 @@ katanaMultiplatform {
     }
 
     androidMainDependencies {
-        implementation(libs.compose.material3.windowsize)
         implementation(libs.sentry.compose)
     }
 

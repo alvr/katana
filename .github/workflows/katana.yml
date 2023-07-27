@@ -15,6 +15,9 @@ concurrency:
 env:
   TZ: UTC
 
+permissions:
+  contents: write
+
 jobs:
   cancel-stale-jobs:
     name: Cancel stale jobs
@@ -151,13 +154,13 @@ jobs:
           name: coverage-reports
           path: .
       - name: Run Sonar
-        if: false # github.event_name != 'pull_request' TODO Revert when Sonar accepts KMM
+        if: false # github.event_name != 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonar --no-daemon --stacktrace
       - name: Run Sonar in PR
-        if: false # github.event_name == 'pull_request' TODO Revert when Sonar accepts KMM
+        if: false # github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -195,7 +198,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_BETA_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew assembleBeta --no-daemon --scan --stacktrace
+        run: ./gradlew assembleBeta -Pkatana.flavor=beta --no-daemon --scan --stacktrace
       - name: Publish beta APK to TestApp.io
         uses: testappio/github-action@v5
         with:
@@ -218,7 +221,7 @@ jobs:
       - name: Create Sentry release
         uses: getsentry/action-release@v1.4.1
         env:
-          SENTRY_PROJECT: ${{ secrets.SENTRY_BETA_PROJECT }}
+          SENTRY_PROJECT: android-katana-beta
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
@@ -252,7 +255,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROD_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew assembleRelease bundleRelease --no-daemon --scan --stacktrace
+        run: ./gradlew assembleRelease bundleRelease -Pkatana.flavor=release --no-daemon --scan --stacktrace
       - name: Publish production AAB to Google Play
         uses: r0adkll/upload-google-play@v1.1.1
         with:
@@ -265,7 +268,7 @@ jobs:
       - name: Create Sentry release
         uses: getsentry/action-release@v1.4.1
         env:
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROD_PROJECT }}
+          SENTRY_PROJECT: android-katana-release
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:

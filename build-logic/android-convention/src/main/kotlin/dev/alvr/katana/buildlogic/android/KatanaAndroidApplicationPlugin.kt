@@ -20,6 +20,7 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "com.android.application")
         apply(plugin = "org.jetbrains.kotlin.android")
+        apply(plugin = "org.jetbrains.compose")
         apply(plugin = "katana.sonar.mobile")
         apply(plugin = "katana.sentry")
 
@@ -33,10 +34,9 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
         dependencies { implementation(catalogBundle("app")) }
     }
 
-    @Suppress("StringLiteralDuplication", "UnstableApiUsage")
+    @Suppress("StringLiteralDuplication")
     private fun BaseAppModuleExtension.configureApp(project: Project) {
         configureAndroid(KatanaConfiguration.PackageName)
-        buildFeatures.buildConfig = true
 
         val rootProject = project.rootProject
 

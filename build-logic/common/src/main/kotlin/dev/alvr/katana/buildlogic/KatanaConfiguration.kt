@@ -16,5 +16,5 @@ object KatanaConfiguration {
     val UseJavaVersion = JavaVersion.VERSION_11
     val JvmTarget = KtJvmTarget.fromTarget(UseJavaVersion.toString())
     val JvmTargetStr = JvmTarget.target
-    val KotlinVersion = KtVersion.KOTLIN_1_8
+    val KotlinVersion = KtVersion.KOTLIN_1_9
 }

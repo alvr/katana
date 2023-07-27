@@ -19,7 +19,7 @@ private val sourcesModule = module {
     singleOf(::SessionLocalSourceImpl).bind<SessionLocalSource>()
 }
 
-val sessionDataPreferencesModule = module {
+val dataPreferencesSessionModule = module {
     includes(dataStoreModule(), repositoriesModule, sourcesModule)
 }
 

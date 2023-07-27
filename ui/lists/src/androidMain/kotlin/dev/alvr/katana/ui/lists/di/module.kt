@@ -10,6 +10,6 @@ private val viewModelsModule = module {
     viewModelOf(::MangaListsViewModel)
 }
 
-val listsUiModule = module {
+val uiListsModule = module {
     includes(viewModelsModule)
 }

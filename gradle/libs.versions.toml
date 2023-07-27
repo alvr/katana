@@ -26,7 +26,6 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version = "1.7.2" }
-androidx-startup = { module = "androidx.startup:startup-runtime", version = "1.1.1" }
 
 # Apollo
 apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
@@ -42,7 +41,8 @@ coil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }
 
 # Compose
 compose-compiler = { module = "androidx.compose.compiler:compiler", version = "1.5.1" }
-compose-material3-windowsize = { module = "androidx.compose.material3:material3-window-size-class", version = "1.1.1" }
+compose-insets = { module = "com.moriatsushi.insetsx:insetsx", version = "0.1.0-alpha10" }
+compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version = "0.2.0" }
 
 # Coroutines
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -64,6 +64,7 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version = "8.1.0" }
 gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
+gradle-buildconfig = { module = "com.github.gmazzo.buildconfig:plugin", version = "4.1.2" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version = "1.4.3" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
@@ -81,7 +82,8 @@ klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.9" }
 # Koin
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version = "3.4.5" }
+koin-compose = { module = "io.insert-koin:koin-compose", version = "1.0.3" }
+koin-compose-android = { module = "io.insert-koin:koin-androidx-compose", version = "3.4.5" }
 koin-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin-test" }
 koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin-test" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-test" }
@@ -109,9 +111,13 @@ orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
 sentry = { module = "io.sentry:sentry-android-core", version.ref = "sentry" }
 sentry-apollo = { module = "io.sentry:sentry-apollo-3", version.ref = "sentry" }
 sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry" }
+sentry-multiplatform = { module = "io.sentry:sentry-kotlin-multiplatform", version = "0.2.1" }
 
 # Tink
 tink = { module = "com.google.crypto.tink:tink-android", version = "1.10.0" }
+
+# YAML
+yamlbeans = { module = "com.esotericsoftware.yamlbeans:yamlbeans", version = "1.15" }
 
 # Tests
 ## JUnit
@@ -232,12 +238,15 @@ data-remote-android-test = [
 data-remote-ios-test = []
 
 # Deps for UI
-ui-common = []
+ui-common = [
+    "compose-insets",
+    "koin-compose",
+]
 ui-android = [
     "accompanist-placeholder",
     "coil",
     "destinations",
-    "koin-compose",
+    "koin-compose-android",
     "lifecycle-runtime",
     "lifecycle-viewmodel",
     "orbit",
@@ -258,8 +267,6 @@ ui-android-test = [
 ui-ios-test = []
 
 app = [
-    "androidx-startup",
-    "koin-android",
-    "napier",
+    "androidx-activity",
     "sentry",
 ]
