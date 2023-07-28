@@ -195,7 +195,7 @@ jobs:
           SIGNING_ALIAS_PASS: ${{ secrets.SIGNING_ALIAS_PASS }}
           SIGNING_FILE: ${{ secrets.SIGNING_FILE }}
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_BETA_PROJECT }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_BETA_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew assembleBeta -Pkatana.flavor=beta --no-daemon --scan --stacktrace
@@ -221,7 +221,7 @@ jobs:
       - name: Create Sentry release
         uses: getsentry/action-release@v1.4.1
         env:
-          SENTRY_PROJECT: android-katana-beta
+          SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_BETA_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
@@ -252,7 +252,7 @@ jobs:
           SIGNING_ALIAS_PASS: ${{ secrets.SIGNING_ALIAS_PASS }}
           SIGNING_FILE: ${{ secrets.SIGNING_FILE }}
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROD_PROJECT }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_RELEASE_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew assembleRelease bundleRelease -Pkatana.flavor=release --no-daemon --scan --stacktrace
@@ -268,7 +268,7 @@ jobs:
       - name: Create Sentry release
         uses: getsentry/action-release@v1.4.1
         env:
-          SENTRY_PROJECT: android-katana-release
+          SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_RELEASE_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:

@@ -12,6 +12,7 @@ koin-test = "3.4.3"
 kotest = "5.6.2"
 kotlin = "1.9.0"
 lifecycle = "2.6.1"
+lyricist = "1.4.2"
 mockmp = "1.15.0"
 orbit = "6.0.0"
 sentry = "6.28.0"
@@ -102,6 +103,10 @@ kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-p
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 
+# Lyricist
+lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
+lyricist-processor = { module = "cafe.adriel.lyricist:lyricist-processor", version.ref = "lyricist" }
+
 # Okio
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version = "3.5.0" }
 
@@ -160,6 +165,10 @@ core-common = [
 core-jvm = []
 core-ios = []
 
+core-common-ksp = []
+core-jvm-ksp = []
+core-ios-ksp = []
+
 core-common-test = [
     "coroutines-test",
     "koin-test",
@@ -190,6 +199,10 @@ mobile-android = [
     "koin-android",
 ]
 mobile-ios = []
+
+mobile-common-ksp = []
+mobile-android-ksp = []
+mobile-ios-ksp = []
 
 mobile-common-test = [
     "coroutines-test",
@@ -246,6 +259,7 @@ data-remote-ios-test = []
 ui-common = [
     "compose-insets",
     "koin-compose",
+    "lyricist",
 ]
 ui-android = [
     "accompanist-placeholder",
@@ -258,7 +272,9 @@ ui-android = [
 ]
 ui-ios = []
 
-ui-common-ksp = []
+ui-common-ksp = [
+    "lyricist-processor",
+]
 ui-android-ksp = [
     "destinations-compiler",
 ]

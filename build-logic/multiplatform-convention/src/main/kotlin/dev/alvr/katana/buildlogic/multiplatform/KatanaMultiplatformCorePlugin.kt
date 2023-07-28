@@ -9,11 +9,13 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
@@ -36,6 +38,8 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
             commonTasks()
             withType<Test>().configureEach { useJUnitPlatform() }
         }
+
+        kspDependencies()
     }
 
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -56,6 +60,8 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
             val commonMain by getting {
+                kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+
                 dependencies {
                     implementation(catalogBundle("core-common"))
                 }
@@ -93,5 +99,25 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
             }
             val iosSimulatorArm64Test by getting { dependsOn(iosTest) }
         }
+    }
+
+    private fun Project.kspDependencies() {
+        dependencies {
+            addProvider("kspCommonMainMetadata", catalogBundle("core-common-ksp"))
+            addProvider("kspJvm", catalogBundle("core-jvm-ksp"))
+            addProvider("kspIosArm64", catalogBundle(CORE_IOS_KSP))
+            addProvider("kspIosSimulatorArm64", catalogBundle(CORE_IOS_KSP))
+            addProvider("kspIosX64", catalogBundle(CORE_IOS_KSP))
+        }
+
+        tasks.withType<KotlinCompile<*>>().all {
+            if (name != "kspCommonMainKotlinMetadata") {
+                dependsOn("kspCommonMainKotlinMetadata")
+            }
+        }
+    }
+
+    private companion object {
+        const val CORE_IOS_KSP = "core-ios-ksp"
     }
 }

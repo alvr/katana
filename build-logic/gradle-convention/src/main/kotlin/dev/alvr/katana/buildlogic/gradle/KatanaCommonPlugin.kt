@@ -16,7 +16,7 @@ internal class KatanaCommonPlugin : ConventionPlugin {
 
         with(tasks) {
             register<Delete>("clean") {
-                delete(buildDir)
+                allprojects { delete(buildDir) }
             }
 
             register<TestReport>("unitTests") {

@@ -1,14 +1,16 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
+import com.google.devtools.ksp.gradle.KspExtension
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
+import dev.alvr.katana.buildlogic.fullPackageName
 import java.io.File
 import org.gradle.api.Project
-import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.jetbrains.compose.ComposeExtension
@@ -24,9 +26,10 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
         with(extensions) {
             configure<KotlinMultiplatformExtension> { configureSourceSets() }
             configure<ComposeExtension> { configureComposeMultiplatform(project) }
+            configure<KspExtension> { configureKsp(project) }
         }
 
-        dependencies.kspDependencies(project)
+        kspDependencies()
     }
 
     @Suppress("UNUSED_VARIABLE")
@@ -85,13 +88,6 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
         }
     }
 
-    private fun DependencyHandler.kspDependencies(project: Project) {
-        add("kspCommonMainMetadata", project.catalogBundle("ui-common-ksp"))
-        add("kspAndroid", project.catalogBundle("ui-android-ksp"))
-        add("kspIosArm64", project.catalogBundle("ui-ios-ksp"))
-        add("kspIosX64", project.catalogBundle("ui-ios-ksp"))
-    }
-
     private fun ComposeExtension.configureComposeMultiplatform(project: Project) {
         kotlinCompilerPlugin.set(project.catalogLib("compose-compiler").get().toString())
 
@@ -108,9 +104,29 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
         )
     }
 
+    private fun KspExtension.configureKsp(project: Project) {
+        arg("lyricist.internalVisibility", "true")
+        arg("lyricist.moduleName", project.name)
+        arg("lyricist.packageName", "${project.fullPackageName}.strings")
+    }
+
+    private fun Project.kspDependencies() {
+        dependencies {
+            addProvider("kspCommonMainMetadata", catalogBundle("ui-common-ksp"))
+            addProvider("kspAndroid", catalogBundle("ui-android-ksp"))
+            addProvider("kspIosArm64", catalogBundle(UI_IOS_KSP))
+            addProvider("kspIosSimulatorArm64", catalogBundle(UI_IOS_KSP))
+            addProvider("kspIosX64", catalogBundle(UI_IOS_KSP))
+        }
+    }
+
     private fun Project.composePluginEnabled(property: String) =
         providers.gradleProperty(property).orNull == "true"
 
     private fun Project.composePluginDir(directory: String) =
         File(buildDir, directory).absolutePath
+
+    private companion object {
+        const val UI_IOS_KSP = "ui-ios-ksp"
+    }
 }
