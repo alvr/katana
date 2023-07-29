@@ -6,24 +6,25 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
-import dev.alvr.katana.ui.social.R
+import dev.alvr.katana.ui.social.strings.LocalSocialStrings
 
 @Composable
 @Destination
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 internal fun SocialScreen() {
+    val strings = LocalSocialStrings.current
+
     KatanaHomeScaffold(
-        title = R.string.social_toolbar_title,
-        searchPlaceholder = stringResource(R.string.social_toolbar_search_placeholder),
+        title = strings.socialToolbarTitle,
+        searchPlaceholder = strings.socialToolbarSearchPlaceholder,
         onSearch = {},
         backContent = { Filter() },
     ) { paddingValues ->
         Text(
             modifier = Modifier.padding(paddingValues),
-            text = stringResource(R.string.social_toolbar_title),
+            text = strings.socialToolbarTitle,
         )
     }
 }

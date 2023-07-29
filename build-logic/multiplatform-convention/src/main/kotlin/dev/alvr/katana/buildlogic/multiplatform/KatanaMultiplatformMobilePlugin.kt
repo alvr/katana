@@ -2,7 +2,6 @@ package dev.alvr.katana.buildlogic.multiplatform
 
 import com.android.build.gradle.LibraryExtension
 import com.github.gmazzo.gradle.plugins.BuildConfigExtension
-import com.google.devtools.ksp.gradle.KspExtension
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonExtensions
@@ -16,9 +15,7 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
@@ -42,7 +39,6 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
         }
 
         tasks.commonTasks()
-        kspDependencies()
     }
 
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -125,24 +121,7 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
         )
     }
 
-    private fun Project.kspDependencies() {
-        dependencies {
-            addProvider("kspCommonMainMetadata", catalogBundle("mobile-common-ksp"))
-            addProvider("kspAndroid", catalogBundle("mobile-android-ksp"))
-            addProvider("kspIosArm64", catalogBundle(MOBILE_IOS_KSP))
-            addProvider("kspIosSimulatorArm64", catalogBundle(MOBILE_IOS_KSP))
-            addProvider("kspIosX64", catalogBundle(MOBILE_IOS_KSP))
-        }
-
-        tasks.withType<KotlinCompile<*>>().all {
-            if (name != "kspCommonMainKotlinMetadata") {
-                dependsOn("kspCommonMainKotlinMetadata")
-            }
-        }
-    }
-
     private companion object {
         const val BUILD_CONFIG_FILE = "KatanaBuildConfig"
-        const val MOBILE_IOS_KSP = "mobile-ios-ksp"
     }
 }

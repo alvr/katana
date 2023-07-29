@@ -1,10 +1,8 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
-import com.google.devtools.ksp.gradle.KspExtension
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
-import dev.alvr.katana.buildlogic.fullPackageName
 import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
@@ -26,7 +24,6 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
         with(extensions) {
             configure<KotlinMultiplatformExtension> { configureSourceSets() }
             configure<ComposeExtension> { configureComposeMultiplatform(project) }
-            configure<KspExtension> { configureKsp(project) }
         }
 
         kspDependencies()
@@ -102,12 +99,6 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
                 }
             },
         )
-    }
-
-    private fun KspExtension.configureKsp(project: Project) {
-        arg("lyricist.internalVisibility", "true")
-        arg("lyricist.moduleName", project.name)
-        arg("lyricist.packageName", "${project.fullPackageName}.strings")
     }
 
     private fun Project.kspDependencies() {
