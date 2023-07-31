@@ -4,14 +4,15 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import co.touchlab.kermit.DefaultFormatter
+import co.touchlab.kermit.LogWriter
+import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Severity
+import co.touchlab.kermit.platformLogWriter
 import dev.alvr.katana.ui.base.design.KatanaTheme
 import dev.alvr.katana.ui.main.di.katanaModule
 import dev.alvr.katana.ui.main.di.platformModule
 import dev.alvr.katana.ui.main.navigation.KatanaDestinations
-import io.github.aakira.napier.Antilog
-import io.github.aakira.napier.DebugAntilog
-import io.github.aakira.napier.LogLevel
-import io.github.aakira.napier.Napier
 import io.sentry.kotlin.multiplatform.Context
 import io.sentry.kotlin.multiplatform.Sentry
 import io.sentry.kotlin.multiplatform.SentryLevel
@@ -54,9 +55,9 @@ private fun initApp(context: Context) {
 
 private fun initNapier() {
     if (KatanaBuildConfig.DEBUG) {
-        Napier.base(DebugAntilog())
+        Logger.setLogWriters(platformLogWriter(DefaultFormatter))
     } else {
-        Napier.base(SentryLogger(LogLevel.ERROR))
+        Logger.setLogWriters(SentryLogger(Severity.Error))
     }
 }
 
@@ -67,30 +68,25 @@ private fun initSentry(context: Context) {
     }
 }
 
-private class SentryLogger(private val minSeverity: LogLevel) : Antilog() {
-    private val LogLevel.sentryLevel
+private class SentryLogger(private val minSeverity: Severity) : LogWriter() {
+    private val Severity.sentryLevel
         get() = when (this) {
-            LogLevel.VERBOSE -> SentryLevel.DEBUG
-            LogLevel.DEBUG -> SentryLevel.DEBUG
-            LogLevel.INFO -> SentryLevel.INFO
-            LogLevel.WARNING -> SentryLevel.WARNING
-            LogLevel.ERROR -> SentryLevel.ERROR
-            LogLevel.ASSERT -> SentryLevel.FATAL
+            Severity.Verbose -> SentryLevel.DEBUG
+            Severity.Debug -> SentryLevel.DEBUG
+            Severity.Info -> SentryLevel.INFO
+            Severity.Warn -> SentryLevel.WARNING
+            Severity.Error -> SentryLevel.ERROR
+            Severity.Assert -> SentryLevel.FATAL
         }
 
-    override fun isEnable(priority: LogLevel, tag: String?) =
-        !KatanaBuildConfig.DEBUG && priority >= minSeverity
+    override fun isLoggable(tag: String, severity: Severity) =
+        !KatanaBuildConfig.DEBUG && severity >= minSeverity
 
-    override fun performLog(
-        priority: LogLevel,
-        tag: String?,
-        throwable: Throwable?,
-        message: String?,
-    ) {
-        if (throwable != null && priority >= minSeverity) {
+    override fun log(severity: Severity, message: String, tag: String, throwable: Throwable?) {
+        if (throwable != null && severity >= minSeverity) {
             Sentry.addBreadcrumb(
                 Breadcrumb(
-                    level = priority.sentryLevel,
+                    level = severity.sentryLevel,
                     message = "$tag: $message",
                 ),
             )

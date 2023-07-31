@@ -3,6 +3,7 @@ package dev.alvr.katana.data.remote.lists.sources
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import co.touchlab.kermit.Logger
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.fetchPolicyInterceptor
 import com.apollographql.apollo3.cache.normalized.watch
@@ -19,7 +20,6 @@ import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.user.managers.UserIdManager
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
@@ -34,7 +34,7 @@ internal class CommonListsRemoteSourceImpl(
     override suspend fun updateList(entry: MediaList) = Either.catchUnit {
         client.mutation(entry.toMutation()).execute()
     }.mapLeft { error ->
-        Napier.e(error) { "There was an error updating the entry" }
+        Logger.e(error) { "There was an error updating the entry" }
 
         error.toFailure(
             network = ListsFailure.UpdatingList,
@@ -51,7 +51,7 @@ internal class CommonListsRemoteSourceImpl(
             .map { res -> MediaCollection(res.data?.mediaList<T>(type).orEmpty()).right() }
             .distinctUntilChanged()
             .catch { error ->
-                Napier.e(error) { "There was an error collecting the lists" }
+                Logger.e(error) { "There was an error collecting the lists" }
 
                 emit(
                     error.toFailure(

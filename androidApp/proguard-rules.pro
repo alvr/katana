@@ -13,7 +13,7 @@
 -dontwarn org.openjsse.net.ssl.OpenJSSE
 
 # Logger
--assumenosideeffects class io.github.aakira.napier.Napier {
+-assumenosideeffects class co.touchlab.kermit.Logger {
     public void v(...);
     public void d(...);
     public void i(...);

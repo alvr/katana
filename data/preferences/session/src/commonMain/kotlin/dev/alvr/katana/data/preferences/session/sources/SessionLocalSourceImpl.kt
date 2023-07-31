@@ -6,11 +6,11 @@ import arrow.core.None
 import arrow.core.left
 import arrow.core.right
 import arrow.core.toOption
+import co.touchlab.kermit.Logger
 import dev.alvr.katana.data.preferences.session.models.Session
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.session.failures.SessionFailure
 import dev.alvr.katana.domain.session.models.AnilistToken
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -23,38 +23,38 @@ internal class SessionLocalSourceImpl(
         get() = store.data.map { session ->
             (session.anilistToken == null && session.isSessionActive).not().right() as Either<Failure, Boolean>
         }.catch { error ->
-            Napier.e(error) { "Error observing the session, setting the as inactive" }
+            Logger.e(error) { "Error observing the session, setting the as inactive" }
             emit(SessionFailure.CheckingActiveSession.left())
         }
 
     override suspend fun clearActiveSession() = Either.catch {
         store.updateData { p -> p.copy(isSessionActive = false) }
-        Napier.d { "Session cleared" }
+        Logger.d { "Session cleared" }
     }.mapLeft { error ->
-        Napier.e(error) { "Error clearing session" }
+        Logger.e(error) { "Error clearing session" }
         SessionFailure.ClearingSession
     }
 
     override suspend fun deleteAnilistToken() = Either.catch {
         store.updateData { p -> p.copy(anilistToken = null) }
-        Napier.d { "Anilist token deleted" }
+        Logger.d { "Anilist token deleted" }
     }.mapLeft { error ->
-        Napier.e(error) { "Was not possible to delete the token" }
+        Logger.e(error) { "Was not possible to delete the token" }
         SessionFailure.DeletingToken
     }
 
     override suspend fun getAnilistToken() = store.data
         .map { session -> session.anilistToken.toOption() }
         .catch { error ->
-            Napier.e(error) { "There was an error reading the token from the preferences" }
+            Logger.e(error) { "There was an error reading the token from the preferences" }
             emit(None)
         }.first()
 
     override suspend fun saveSession(anilistToken: AnilistToken) = Either.catch {
         store.updateData { p -> p.copy(anilistToken = anilistToken, isSessionActive = true) }
-        Napier.d { "Token saved: ${anilistToken.token}" }
+        Logger.d { "Token saved: ${anilistToken.token}" }
     }.mapLeft { error ->
-        Napier.e(error) { "Was not possible to save the token" }
+        Logger.e(error) { "Was not possible to save the token" }
         SessionFailure.SavingSession
     }
 }
