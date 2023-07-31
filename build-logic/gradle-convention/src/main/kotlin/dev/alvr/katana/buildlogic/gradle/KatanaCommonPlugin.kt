@@ -6,11 +6,14 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestReport
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 
 internal class KatanaCommonPlugin : ConventionPlugin {
     override fun Project.configure() {
+        apply(plugin = "com.louiscad.complete-kotlin")
+
         with(tasks) {
             register<Delete>("clean") {
                 delete(buildDir)

@@ -1,5 +1,6 @@
 package dev.alvr.katana.data.remote.base.di
 
+import co.touchlab.kermit.Logger
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.http.HttpRequest
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
@@ -18,7 +19,6 @@ import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.session.usecases.DeleteAnilistTokenUseCase
 import dev.alvr.katana.domain.session.usecases.GetAnilistTokenUseCase
-import io.github.aakira.napier.Napier
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.qualifier.named
@@ -99,7 +99,7 @@ private val apolloInterceptorsModule = module {
 
     single<HttpInterceptor>(loggingInterceptor) {
         LoggingInterceptor(
-            log = { Napier.i(tag = "ApolloLoggingInterceptor") { it } },
+            log = { Logger.i(tag = "ApolloLoggingInterceptor") { it } },
             level = LoggingInterceptor.Level.BODY,
         )
     }

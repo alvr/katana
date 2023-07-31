@@ -1,5 +1,6 @@
 package dev.alvr.katana.ui.main.navigation
 
+import co.touchlab.kermit.Logger
 import com.ramcosta.composedestinations.dynamic.within
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -9,7 +10,6 @@ import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
 import dev.alvr.katana.ui.login.view.destinations.LoginScreenDestination
-import io.github.aakira.napier.Napier
 
 internal class Navigator(
     private val navGraph: NavGraphSpec,
@@ -35,11 +35,11 @@ internal class Navigator(
 
     //region [ListsNavigator]
     override fun editEntry(id: Int) {
-        Napier.d { "Open bottom sheet to edit entry $id" }
+        Logger.d { "Open bottom sheet to edit entry $id" }
     }
 
     override fun entryDetails(id: Int) {
-        Napier.d { "Navigate to media details of entry $id" }
+        Logger.d { "Navigate to media details of entry $id" }
     }
 
     override fun listSelector(lists: Array<UserList>, selectedList: String) {
