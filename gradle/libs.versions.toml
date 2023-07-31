@@ -17,6 +17,7 @@ orbit = "6.0.0"
 sentry = "6.27.0"
 
 [plugins]
+parcelize = { id = "com.arkivanov.parcelize.darwin", version = "0.1.4" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
@@ -65,6 +66,7 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 gradle-android = { module = "com.android.tools.build:gradle", version = "8.1.0" }
 gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
 gradle-buildconfig = { module = "com.github.gmazzo.buildconfig:plugin", version = "4.1.2" }
+gradle-complete-kotlin = { module = "com.louiscad.complete-kotlin:plugin", version = "1.1.0" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version = "1.4.3" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
@@ -106,6 +108,9 @@ okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", versio
 # Orbit
 orbit = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
 orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
+
+# Parcelable
+parcelable = { module = "com.arkivanov.essenty:parcelable", version = "1.1.0" }
 
 # Sentry
 sentry = { module = "io.sentry:sentry-android-core", version.ref = "sentry" }

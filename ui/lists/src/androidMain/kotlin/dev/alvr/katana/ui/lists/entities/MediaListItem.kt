@@ -1,13 +1,13 @@
 package dev.alvr.katana.ui.lists.entities
 
-import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import com.arkivanov.essenty.parcelable.Parcelable
+import com.arkivanov.essenty.parcelable.Parcelize
 import dev.alvr.katana.ui.lists.R
 import korlibs.time.Date
 import korlibs.time.DateTimeTz
-import kotlinx.parcelize.Parcelize
 
 @Immutable
 @Suppress("ComplexInterface")

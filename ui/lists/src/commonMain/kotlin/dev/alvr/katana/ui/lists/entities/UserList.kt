@@ -1,7 +1,8 @@
 package dev.alvr.katana.ui.lists.entities
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.arkivanov.essenty.parcelable.Parcelable
+import com.arkivanov.essenty.parcelable.Parcelize
+import kotlin.jvm.JvmInline
 
 @JvmInline
 @Parcelize
