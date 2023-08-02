@@ -103,7 +103,7 @@ lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", v
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 
 # Okio
-okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version = "3.4.0" }
+okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version = "3.5.0" }
 
 # Orbit
 orbit = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
