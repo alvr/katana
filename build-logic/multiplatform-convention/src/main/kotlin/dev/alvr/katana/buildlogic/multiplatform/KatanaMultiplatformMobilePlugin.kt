@@ -12,6 +12,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
@@ -56,6 +57,8 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
             val commonMain by getting {
+                kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+
                 dependencies {
                     implementation(catalogBundle("mobile-common"))
                 }

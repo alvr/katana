@@ -13,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.List
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -24,8 +23,8 @@ import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
-import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.UserList
+import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 
 @Composable
 @Destination(style = DestinationStyle.BottomSheet::class)
@@ -70,7 +69,7 @@ internal fun ChangeListButton(
         FloatingActionButton(onClick = onClick) {
             Icon(
                 imageVector = Icons.TwoTone.List,
-                contentDescription = stringResource(R.string.lists_change_list_button),
+                contentDescription = LocalListsStrings.current.changeListButton,
             )
         }
     }

@@ -1,6 +1,5 @@
 package dev.alvr.katana.ui.base.components.home
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
@@ -30,7 +29,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.stringResource
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.ui.base.components.KatanaSearchTopAppBar
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +38,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 fun KatanaHomeScaffold(
-    @StringRes title: Int,
+    title: String,
     searchPlaceholder: String,
     onSearch: (String) -> Unit,
     backContent: @Composable () -> Unit,
@@ -82,7 +80,7 @@ fun KatanaHomeScaffold(
 private fun KatanaTopAppBar(
     katanaScaffoldState: KatanaHomeScaffoldState,
     scaffoldState: BackdropScaffoldState,
-    @StringRes title: Int,
+    title: String,
     searchPlaceholder: String,
     onSearch: (String) -> Unit,
     subtitle: String? = null,
@@ -91,6 +89,7 @@ private fun KatanaTopAppBar(
 
     Surface {
         AnimatedContent(
+            label = "KatanaTopAppBar",
             targetState = katanaScaffoldState.topAppBarStyle,
             transitionSpec = {
                 fadeIn(tween(ANIMATION_MILLIS, easing = EaseIn)) with
@@ -105,7 +104,7 @@ private fun KatanaTopAppBar(
         ) { targetState ->
             when (targetState) {
                 TopAppBarStyle.Normal -> KatanaHomeTopAppBar(
-                    title = stringResource(title),
+                    title = title,
                     subtitle = subtitle,
                     onSearch = { katanaScaffoldState.searchToolbar() }.takeIf {
                         katanaScaffoldState.showTopAppBarActions

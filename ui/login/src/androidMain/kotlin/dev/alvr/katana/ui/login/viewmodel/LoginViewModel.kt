@@ -7,7 +7,7 @@ import dev.alvr.katana.domain.session.usecases.SaveSessionUseCase
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK_TOKEN
-import dev.alvr.katana.ui.login.R
+import dev.alvr.katana.ui.login.viewmodel.LoginState.ErrorType
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
@@ -18,7 +18,7 @@ internal class LoginViewModel(
     private val saveUserIdUseCase: SaveUserIdUseCase,
 ) : BaseViewModel<LoginState, Nothing>() {
     override val container = container<LoginState, Nothing>(LoginState()) {
-        saveAnilistToken(savedStateHandle.get<String>(LOGIN_DEEP_LINK_TOKEN))
+        saveAnilistToken(savedStateHandle[LOGIN_DEEP_LINK_TOKEN])
     }
 
     private fun saveAnilistToken(token: String?) {
@@ -35,7 +35,7 @@ internal class LoginViewModel(
     private suspend fun saveToken(token: String) {
         saveSessionUseCase(AnilistToken(token)).fold(
             ifLeft = {
-                updateState { copy(loading = false, errorMessage = R.string.save_token_error) }
+                updateState { copy(loading = false, errorType = ErrorType.SaveToken) }
             },
             ifRight = { saveUserId() },
         )
@@ -44,10 +44,10 @@ internal class LoginViewModel(
     private suspend fun saveUserId() {
         saveUserIdUseCase().fold(
             ifLeft = {
-                updateState { copy(loading = false, errorMessage = R.string.fetch_userid_error) }
+                updateState { copy(loading = false, errorType = ErrorType.SaveUserId) }
             },
             ifRight = {
-                updateState { copy(saved = true, loading = false, errorMessage = null) }
+                updateState { copy(saved = true, loading = false, errorType = null) }
             },
         )
     }

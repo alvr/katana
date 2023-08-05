@@ -849,8 +849,6 @@ style:
     active: true
   OptionalUnit:
     active: true
-  OptionalWhenBraces:
-    active: true
   PreferToOverPairSyntax:
     active: true
   ProtectedMemberInFinalClass:
@@ -976,6 +974,7 @@ Compose:
   # mrmans0n
   CompositionLocalAllowlist:
     active: true
+    allowedCompositionLocals: LocalAccountStrings,LocalExploreStrings,LocalListsStrings,LocalLoginStrings,LocalSocialStrings
   ContentEmitterReturningValues:
     active: true
   ModifierComposable:

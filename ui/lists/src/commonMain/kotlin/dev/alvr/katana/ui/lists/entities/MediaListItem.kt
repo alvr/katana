@@ -1,11 +1,11 @@
 package dev.alvr.katana.ui.lists.entities
 
-import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
-import dev.alvr.katana.ui.lists.R
+import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import korlibs.time.Date
 import korlibs.time.DateTimeTz
 
@@ -77,17 +77,34 @@ internal sealed interface MediaListItem : Parcelable {
     ) : MediaListItem
 
     @Immutable
-    enum class Format(@StringRes val value: Int) {
-        Tv(R.string.lists_entry_format_tv),
-        TvShort(R.string.lists_entry_format_tv_short),
-        Movie(R.string.lists_entry_format_movie),
-        Special(R.string.lists_entry_format_special),
-        Ova(R.string.lists_entry_format_ova),
-        Ona(R.string.lists_entry_format_ona),
-        Music(R.string.lists_entry_format_music),
-        Manga(R.string.lists_entry_format_manga),
-        Novel(R.string.lists_entry_format_novel),
-        OneShot(R.string.lists_entry_format_one_shot),
-        Unknown(R.string.lists_entry_format_unknown),
+    enum class Format {
+        Tv,
+        TvShort,
+        Movie,
+        Special,
+        Ova,
+        Ona,
+        Music,
+        Manga,
+        Novel,
+        OneShot,
+        Unknown;
+
+        val value
+            @Composable get() = with(LocalListsStrings.current) {
+                when (this@Format) {
+                    Tv -> entryFormatTv
+                    TvShort -> entryFormatTvShort
+                    Movie -> entryFormatMovie
+                    Special -> entryFormatSpecial
+                    Ova -> entryFormatOva
+                    Ona -> entryFormatOna
+                    Music -> entryFormatMusic
+                    Manga -> entryFormatManga
+                    Novel -> entryFormatNovel
+                    OneShot -> entryFormatOneShot
+                    Unknown -> entryFormatUnknown
+                }
+            }
     }
 }

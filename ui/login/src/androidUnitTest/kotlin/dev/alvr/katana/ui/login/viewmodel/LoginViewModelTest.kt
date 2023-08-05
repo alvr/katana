@@ -11,7 +11,7 @@ import dev.alvr.katana.domain.session.usecases.SaveSessionUseCase
 import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
 import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK_TOKEN
-import dev.alvr.katana.ui.login.R
+import dev.alvr.katana.ui.login.viewmodel.LoginState.ErrorType
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -113,7 +113,7 @@ internal class LoginViewModelTest : TestBase() {
         viewModel.assert(LoginState()) {
             states(
                 { copy(loading = true) },
-                { copy(loading = false, errorMessage = R.string.save_token_error) },
+                { copy(loading = false, errorType = ErrorType.SaveToken) },
             )
         }
 
@@ -142,7 +142,7 @@ internal class LoginViewModelTest : TestBase() {
         viewModel.assert(LoginState()) {
             states(
                 { copy(loading = true) },
-                { copy(loading = false, errorMessage = R.string.fetch_userid_error) },
+                { copy(loading = false, errorType = ErrorType.SaveUserId) },
             )
         }
 

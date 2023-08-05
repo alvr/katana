@@ -9,11 +9,11 @@ import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
 
-private val cache: MutableMap<String, Font> = mutableMapOf()
+private val cache = mutableMapOf<String, Font>()
 
 @Composable
 @OptIn(ExperimentalResourceApi::class)
-internal actual fun font(font: String, weight: FontWeight, style: FontStyle): Font =
+internal actual fun font(font: String, weight: FontWeight, style: FontStyle) =
     cache.getOrPut(font) {
         val byteArray = runBlocking { resource("font/$font.ttf").readBytes() }
         Font(font, byteArray, weight, style)

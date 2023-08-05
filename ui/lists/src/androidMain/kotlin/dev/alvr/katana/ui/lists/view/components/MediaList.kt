@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,6 +54,7 @@ import dev.alvr.katana.ui.base.components.KatanaPullRefresh
 import dev.alvr.katana.ui.base.modifiers.katanaPlaceholder
 import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
+import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.viewmodel.ListState
 import kotlinx.collections.immutable.ImmutableList
 
@@ -290,14 +290,14 @@ private fun Subtitle(
     modifier: Modifier = Modifier,
     nextEpisode: MediaListItem.AnimeListItem.NextEpisode? = null,
 ) {
+    val strings = LocalListsStrings.current
     val text = buildAnnotatedString {
-        append(stringResource(format.value))
+        append(format.value)
 
         if (nextEpisode != null) {
-            append(" ${stringResource(R.string.lists_entry_next_episode_separator)} ")
+            append(" ${strings.entryNextEpisodeSeparator} ")
             append(
-                stringResource(
-                    R.string.lists_entry_next_episode,
+                strings.entryNextEpisode(
                     nextEpisode.number,
                     KatanaDateFormatter.DateWithTime(nextEpisode.date),
                 ),
@@ -345,11 +345,7 @@ private fun PlusOne(
     // Episodes - Chapters (Anime & Manga)
     if (progress != total) {
         PlusOneButton(
-            progress = stringResource(
-                R.string.lists_entry_progress,
-                progress,
-                total ?: String.unknown,
-            ),
+            progress = LocalListsStrings.current.entryProgress(progress, total ?: String.unknown),
             itemLoading = itemLoading,
             onAddPlusOne = onAddPlusOne,
             modifier = modifier,
@@ -374,7 +370,7 @@ private fun PlusOneButton(
     ) {
         Text(
             modifier = Modifier.katanaPlaceholder(visible = itemLoading),
-            text = stringResource(R.string.lists_entry_plus_one, progress),
+            text = LocalListsStrings.current.entryPlusOne(progress),
         )
     }
 }

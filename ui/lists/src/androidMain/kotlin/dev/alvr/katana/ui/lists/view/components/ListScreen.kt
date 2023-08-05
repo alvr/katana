@@ -1,6 +1,5 @@
 package dev.alvr.katana.ui.lists.view.components
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.OnNavValue
@@ -22,8 +20,8 @@ import dev.alvr.katana.ui.base.components.KatanaErrorState
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
 import dev.alvr.katana.ui.base.components.home.rememberKatanaHomeScaffoldState
 import dev.alvr.katana.ui.base.viewmodel.collectAsState
-import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
+import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.ui.lists.viewmodel.AnimeListsViewModel
 import dev.alvr.katana.ui.lists.viewmodel.ListsViewModel
@@ -38,8 +36,8 @@ internal fun ListScreen(
     vm: ListsViewModel<*, *>,
     navigator: ListsNavigator,
     resultRecipient: ResultRecipient<ChangeListSheetDestination, String>,
-    @StringRes title: Int,
-    @StringRes emptyStateRes: Int,
+    title: String,
+    emptyStateRes: String,
     backContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -47,6 +45,7 @@ internal fun ListScreen(
     val katanaScaffoldState = rememberKatanaHomeScaffoldState()
     val lazyGridState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
+    val strings = LocalListsStrings.current
 
     resultRecipient.OnNavValue { result ->
         vm.selectList(result).also {
@@ -56,9 +55,9 @@ internal fun ListScreen(
     }
 
     val searchPlaceholder = when (vm) {
-        is AnimeListsViewModel -> R.string.lists_toolbar_search_anime_placeholder
-        is MangaListsViewModel -> R.string.lists_toolbar_search_manga_placeholder
-    }.let { stringResource(it) }
+        is AnimeListsViewModel -> strings.animeToolbarSearchPlaceholder
+        is MangaListsViewModel -> strings.mangaToolbarSearchPlaceholder
+    }
 
     val buttonsVisible by remember(state.isError) {
         derivedStateOf(structuralEqualityPolicy()) { !state.isError }
@@ -82,7 +81,7 @@ internal fun ListScreen(
             when {
                 isError -> KatanaErrorState(
                     modifier = modifier.padding(paddingValues),
-                    text = stringResource(R.string.lists_error_message),
+                    text = strings.errorMessage,
                     onRetry = {
                         vm.refreshList()
                         katanaScaffoldState.resetToolbar()
@@ -91,7 +90,7 @@ internal fun ListScreen(
                 )
                 isEmpty && !isLoading -> KatanaEmptyState(
                     modifier = modifier.padding(paddingValues),
-                    text = stringResource(emptyStateRes),
+                    text = emptyStateRes,
                 )
                 else -> MediaList(
                     lazyGridState = lazyGridState,

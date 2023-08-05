@@ -7,9 +7,14 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 
+private val cache = mutableMapOf<String, Font>()
+
 @Composable
 @SuppressLint("DiscouragedApi")
-internal actual fun font(font: String, weight: FontWeight, style: FontStyle): Font {
-    val id = with(LocalContext.current) { resources.getIdentifier(font, "font", packageName) }
-    return Font(id, weight, style)
-}
+internal actual fun font(font: String, weight: FontWeight, style: FontStyle) =
+    with(LocalContext.current) {
+        cache.getOrPut(font) {
+            val id = resources.getIdentifier(font, "font", packageName)
+            Font(id, weight, style)
+        }
+    }

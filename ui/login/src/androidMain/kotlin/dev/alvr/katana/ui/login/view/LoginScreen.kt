@@ -55,7 +55,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
@@ -81,6 +80,7 @@ import dev.alvr.katana.ui.login.LOGO_FULL_SIZE
 import dev.alvr.katana.ui.login.LOGO_RESIZED
 import dev.alvr.katana.ui.login.R
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
+import dev.alvr.katana.ui.login.strings.LocalLoginStrings
 import dev.alvr.katana.ui.login.viewmodel.LoginState
 import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -105,6 +105,7 @@ internal fun LoginScreen(
 
 @Composable
 private fun Login(state: LoginState, onLogin: () -> Unit) {
+    val strings = LocalLoginStrings.current
     var loading by remember { mutableStateOf(false) }
 
     val background = rememberSaveable {
@@ -121,11 +122,14 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
     when {
         state.saved -> onLogin()
         state.loading -> loading = true
-        state.errorMessage != null -> {
+        state.errorType != null -> {
             loading = false
-            val loginError = stringResource(state.errorMessage)
-            LaunchedEffect(state.errorMessage) {
-                scaffoldState.snackbarHostState.showSnackbar(loginError)
+            val message = when (state.errorType) {
+                LoginState.ErrorType.SaveToken -> strings.saveTokenError
+                LoginState.ErrorType.SaveUserId -> strings.fetchUserIdError
+            }
+            LaunchedEffect(state.errorType) {
+                scaffoldState.snackbarHostState.showSnackbar(message)
             }
         }
     }
@@ -137,7 +141,7 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
             } else {
                 Image(
                     painter = painterResource(background),
-                    contentDescription = stringResource(R.string.content_description_background),
+                    contentDescription = strings.contentDescriptionBackground,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.alpha(BACKGROUND_ALPHA),
                 )
@@ -183,7 +187,7 @@ private fun KatanaLogo() {
 
     Image(
         painter = painterResource(R.drawable.ic_katana_logo),
-        contentDescription = stringResource(R.string.content_description_katana_logo),
+        contentDescription = LocalLoginStrings.current.contentDescriptionKatanaLogo,
         modifier = Modifier
             .padding(top = 8.dp)
             .fillMaxWidth(fraction = sizeFraction),
@@ -193,7 +197,7 @@ private fun KatanaLogo() {
 @Composable
 private fun Description() {
     Text(
-        text = stringResource(R.string.header_katana_description),
+        text = LocalLoginStrings.current.headerKatanaDescription,
         style = MaterialTheme.typography.h5,
     )
 }
@@ -208,6 +212,7 @@ internal fun Bottom(modifier: Modifier = Modifier) {
         modifier = modifier,
     ) {
         Crossfade(
+            label = "BottomCrossfade",
             targetState = currentState,
             animationSpec = tween(durationMillis = BOTTOM_CROSSFADE_ANIM_DURATION),
         ) { state ->
@@ -233,7 +238,7 @@ private fun GetStarted(onStartedClick: (State) -> Unit) {
 @Composable
 private fun GetStartedDescription() {
     Text(
-        text = stringResource(R.string.get_started_description),
+        text = LocalLoginStrings.current.getStartedDescription,
         textAlign = TextAlign.Justify,
     )
 }
@@ -242,12 +247,15 @@ private fun GetStartedDescription() {
 private fun GetStartedButton(onStartedClick: (State) -> Unit) {
     val inlineArrow = "inlineArrowContent"
     val text = buildAnnotatedString {
-        append(stringResource(R.string.get_started_button))
+        append(LocalLoginStrings.current.getStartedButton)
         append(' ')
         appendInlineContent(inlineArrow)
     }
 
-    val translation by rememberInfiniteTransition().animateValue(
+    val translation by rememberInfiniteTransition(
+        label = "InfiniteArrowTransition",
+    ).animateValue(
+        label = "ArrowTranslation",
         initialValue = Int.zero.dp,
         targetValue = 5.dp,
         typeConverter = Dp.VectorConverter,
@@ -270,7 +278,7 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
         ) {
             Icon(
                 imageVector = Icons.Filled.ArrowForward,
-                contentDescription = stringResource(R.string.content_description_get_started_arrow),
+                contentDescription = LocalLoginStrings.current.contentDescriptionGetStartedArrow,
                 modifier = Modifier.offset(x = translation),
                 tint = MaterialTheme.colors.onSurface,
             )
@@ -320,7 +328,7 @@ private fun Begin() {
 @Composable
 private fun BeginText() {
     Text(
-        text = stringResource(R.string.begin_description),
+        text = LocalLoginStrings.current.beginDescription,
         textAlign = TextAlign.Justify,
     )
 }
@@ -335,7 +343,7 @@ private fun BeginRegisterButton(modifier: Modifier = Modifier) {
         onClick = { uriHandler.openUri(ANILIST_REGISTER) },
     ) {
         Text(
-            text = stringResource(R.string.begin_register_button),
+            text = LocalLoginStrings.current.beginRegisterButton,
             color = MaterialTheme.colors.onSurface,
         )
     }
@@ -350,7 +358,7 @@ private fun BeginLoginButton(modifier: Modifier = Modifier) {
         onClick = { uriHandler.openUri(ANILIST_LOGIN) },
     ) {
         Text(
-            text = stringResource(R.string.begin_login_button),
+            text = LocalLoginStrings.current.beginLoginButton,
             color = MaterialTheme.colors.onSurface,
         )
     }

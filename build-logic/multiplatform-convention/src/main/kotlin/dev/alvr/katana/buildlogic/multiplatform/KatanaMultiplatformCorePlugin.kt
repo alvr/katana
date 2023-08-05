@@ -9,6 +9,7 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
@@ -56,6 +57,8 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
             val commonMain by getting {
+                kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+
                 dependencies {
                     implementation(catalogBundle("core-common"))
                 }
