@@ -18,7 +18,6 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.project
-import org.gradle.kotlin.dsl.systemProperties
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
@@ -100,11 +99,6 @@ fun BaseExtension.configureAndroid(packageName: String) {
             all { test ->
                 test.useJUnitPlatform()
                 test.enabled = !test.isRelease
-                test.jvmArgs = listOf("-Xmx8G")
-                test.systemProperties(
-                    "robolectric.usePreinstrumentedJars" to "true",
-                    "robolectric.logging.enabled" to "true",
-                )
             }
         }
     }

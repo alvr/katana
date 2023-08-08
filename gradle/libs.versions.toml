@@ -90,7 +90,6 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version = "1.0.4" }
 koin-compose-android = { module = "io.insert-koin:koin-androidx-compose", version = "3.4.6" }
 koin-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin-test" }
-koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin-test" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-test" }
 
 # Kotlin
@@ -144,9 +143,6 @@ mockk = { module = "io.mockk:mockk", version = "1.13.5" }
 ## MocKMP
 mockmp = { module = "org.kodein.mock:mockmp-runtime", version.ref = "mockmp" }
 
-## Robolectric
-robolectric = { module = "org.robolectric:robolectric", version = "4.10.3" }
-
 ## Turbine
 turbine = { module = "app.cash.turbine:turbine", version = "1.0.0" }
 
@@ -177,7 +173,6 @@ core-common-test = [
 ]
 core-jvm-test = [
     "junit5",
-    "koin-junit5",
     "kotest-junit5",
     "mockk",
 ]
@@ -213,10 +208,8 @@ mobile-common-test = [
 mobile-android-test = [
     "junit5",
     "junit5-vintage",
-    "koin-junit5",
     "kotest-junit5",
     "mockk",
-    "robolectric",
 ]
 mobile-ios-test = []
 
