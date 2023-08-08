@@ -40,6 +40,8 @@ internal class KatanaSonarPlugin : ConventionPlugin {
         apply(plugin = "org.sonarqube")
 
         extensions.configure<SonarExtension> {
+            val buildDir = rootProject.layout.buildDirectory.asFile.get()
+
             properties {
                 property("sonar.host.url", "https://sonarcloud.io")
                 property("sonar.organization", "alvr")
@@ -56,7 +58,7 @@ internal class KatanaSonarPlugin : ConventionPlugin {
                 property("sonar.coverage.exclusions", coverageExclusions)
                 property("sonar.exclusions", codeExclusions)
                 property("sonar.java.coveragePlugin", "jacoco")
-                property("sonar.kotlin.detekt.reportPaths", "${rootProject.buildDir}/reports/detekt/detekt.xml")
+                property("sonar.kotlin.detekt.reportPaths", "$buildDir/reports/detekt/detekt.xml")
                 property("sonar.language", "kotlin")
                 property("sonar.log.level", "TRACE")
                 property("sonar.qualitygate.wait", true)

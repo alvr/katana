@@ -115,7 +115,7 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
         providers.gradleProperty(property).orNull == "true"
 
     private fun Project.composePluginDir(directory: String) =
-        File(buildDir, directory).absolutePath
+        File(layout.buildDirectory.asFile.get(), directory).absolutePath
 
     private companion object {
         const val UI_IOS_KSP = "ui-ios-ksp"

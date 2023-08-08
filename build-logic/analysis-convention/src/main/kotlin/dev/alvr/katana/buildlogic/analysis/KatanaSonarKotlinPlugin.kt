@@ -8,6 +8,8 @@ import org.sonarqube.gradle.SonarExtension
 internal class KatanaSonarKotlinPlugin : ConventionPlugin {
     override fun Project.configure() {
         extensions.configure<SonarExtension> {
+            val buildDir = layout.buildDirectory.asFile.get()
+
             properties {
                 property(
                     "sonar.coverage.jacoco.xmlReportPaths",

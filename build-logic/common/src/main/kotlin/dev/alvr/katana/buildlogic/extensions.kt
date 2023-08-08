@@ -1,7 +1,6 @@
 package dev.alvr.katana.buildlogic
 
 import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -76,15 +75,6 @@ fun BaseExtension.configureAndroid(packageName: String) {
         vectorDrawables.useSupportLibrary = true
     }
 
-    buildTypes {
-        getByName("release") {
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-        }
-    }
-
     compileOptions {
         sourceCompatibility = KatanaConfiguration.UseJavaVersion
         targetCompatibility = KatanaConfiguration.UseJavaVersion
@@ -100,21 +90,6 @@ fun BaseExtension.configureAndroid(packageName: String) {
                 test.useJUnitPlatform()
                 test.enabled = !test.isRelease
             }
-        }
-    }
-
-    if (this is BaseAppModuleExtension) {
-        defaultConfig.applicationId = packageName
-        lint.abortOnError = false
-        with(packagingOptions.resources.excludes) {
-            add("/META-INF/{AL2.0,LGPL2.1}")
-            add("DebugProbesKt.bin")
-        }
-
-        with(packagingOptions.jniLibs.excludes) {
-            add("**/libdatastore_shared_counter.so")
-            add("**/libsentry-android.so")
-            add("**/libsentry.so")
         }
     }
 }

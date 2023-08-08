@@ -14,6 +14,8 @@ internal class KatanaCommonPlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "com.louiscad.complete-kotlin")
 
+        val buildDir = layout.buildDirectory.asFile.get()
+
         with(tasks) {
             register<Delete>("clean") {
                 allprojects { delete(buildDir) }
