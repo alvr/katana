@@ -11,6 +11,7 @@ koin-compose = "3.4.5"
 koin-test = "3.4.3"
 kotest = "5.6.2"
 kotlin = "1.9.0"
+ktor = "2.3.3"
 lifecycle = "2.6.1"
 mockmp = "1.15.0"
 orbit = "6.0.0"
@@ -36,9 +37,6 @@ apollo-test = { module = "com.apollographql.apollo3:apollo-testing-support", ver
 
 # Arrow
 arrow = { module = "io.arrow-kt:arrow-core", version = "1.2.0" }
-
-# Coil
-coil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }
 
 # Compose
 compose-compiler = { module = "androidx.compose.compiler:compiler", version = "1.5.1" }
@@ -78,6 +76,9 @@ gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "4.3.0.3225" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.47.0" }
 
+# Kamel
+kamel = { module = "media.kamel:kamel-image", version = "0.7.1" }
+
 # Kermit
 kermit = { module = "co.touchlab:kermit", version = "2.0.0-RC5" }
 
@@ -96,6 +97,10 @@ koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-test" }
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.3.5" }
 kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.5.1" }
+
+# Ktor
+ktor-android = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 
 # Lifecycle
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
@@ -190,8 +195,11 @@ mobile-common = [
 ]
 mobile-android = [
     "koin-android",
+    "ktor-android",
 ]
-mobile-ios = []
+mobile-ios = [
+    "ktor-ios",
+]
 
 mobile-common-ksp = []
 mobile-android-ksp = []
@@ -249,12 +257,12 @@ data-remote-ios-test = []
 # Deps for UI
 ui-common = [
     "compose-insets",
+    "kamel",
     "koin-compose",
     "lyricist",
 ]
 ui-android = [
     "accompanist-placeholder",
-    "coil",
     "destinations",
     "koin-compose-android",
     "lifecycle-runtime",

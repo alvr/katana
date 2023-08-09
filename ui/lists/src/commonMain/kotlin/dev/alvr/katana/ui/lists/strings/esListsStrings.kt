@@ -20,6 +20,7 @@ internal val esListsStrings = ListsStrings(
     emptyMangaList = "Esta lista de Manga está vacía",
 
     errorMessage = "Algo ha ocurrido al obtener la información de la lista seleccionada",
+    errorCover = "Carátula no encontrada",
 
     changeListButton = "Cambiar lista",
 )

@@ -26,6 +26,7 @@ class ListsStrings internal constructor(
     internal val emptyMangaList: String,
 
     internal val errorMessage: String,
+    internal val errorCover: String,
 
     internal val entryFormatTv: String,
     internal val entryFormatTvShort: String,

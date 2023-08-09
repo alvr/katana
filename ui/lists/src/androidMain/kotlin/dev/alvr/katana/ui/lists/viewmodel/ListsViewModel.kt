@@ -9,6 +9,7 @@ import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
+import dev.alvr.katana.ui.lists.entities.ListsCollection
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.entities.UserList
 import dev.alvr.katana.ui.lists.entities.mappers.toMediaList
@@ -20,8 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-
-internal typealias ListsCollection<T> = Map<String, List<T>>
 
 internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     private val savedStateHandle: SavedStateHandle,
