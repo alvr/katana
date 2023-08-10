@@ -17,7 +17,7 @@ orbit = "6.0.0"
 sentry = "6.28.0"
 
 [plugins]
-parcelize = { id = "com.arkivanov.parcelize.darwin", version = "0.1.4" }
+parcelize = { id = "com.arkivanov.parcelize.darwin", version = "0.1.5" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
