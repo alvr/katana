@@ -9,7 +9,7 @@ Pod::Spec.new do |spec|
     spec.vendored_frameworks      = 'build/cocoapods/framework/uiLogin.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '14.1'
-    spec.dependency 'Sentry', '~> 8.9.5'
+    spec.dependency 'Sentry', '~> 8.9.2'
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':ui:login',
@@ -35,5 +35,8 @@ Pod::Spec.new do |spec|
             SCRIPT
         }
     ]
-    spec.resources = ['build\compose\ios\uiLogin\compose-resources']
+    spec.resources = ['src/commonMain/resources/**', 'src/iosMain/resources/**']
+    spec.resource_bundles = {
+        'LibresUiLogin' => ['build/generated/libres/apple/resources/images/LibresUiLogin.xcassets']
+    }
 end
