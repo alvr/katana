@@ -8,23 +8,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
-import dev.alvr.katana.ui.explore.strings.LocalExploreStrings
+import dev.alvr.katana.ui.explore.KR
 
 @Composable
 @Destination
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 internal fun ExploreScreen() {
-    val strings = LocalExploreStrings.current
-
     KatanaHomeScaffold(
-        title = strings.exploreToolbarTitle,
-        searchPlaceholder = strings.exploreToolbarSearchPlaceholder,
+        title = KR.string.explore_toolbar_title,
+        searchPlaceholder = KR.string.explore_toolbar_search_placeholder,
         onSearch = {},
         backContent = { Filter() },
     ) { paddingValues ->
         Text(
             modifier = Modifier.padding(paddingValues),
-            text = strings.exploreToolbarTitle,
+            text = KR.string.explore_toolbar_title,
         )
     }
 }

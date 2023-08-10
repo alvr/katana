@@ -8,23 +8,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
-import dev.alvr.katana.ui.social.strings.LocalSocialStrings
+import dev.alvr.katana.ui.social.KR
 
 @Composable
 @Destination
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 internal fun SocialScreen() {
-    val strings = LocalSocialStrings.current
-
     KatanaHomeScaffold(
-        title = strings.socialToolbarTitle,
-        searchPlaceholder = strings.socialToolbarSearchPlaceholder,
+        title = KR.string.social_toolbar_title,
+        searchPlaceholder = KR.string.social_toolbar_search_placeholder,
         onSearch = {},
         backContent = { Filter() },
     ) { paddingValues ->
         Text(
             modifier = Modifier.padding(paddingValues),
-            text = strings.socialToolbarTitle,
+            text = KR.string.social_toolbar_title,
         )
     }
 }

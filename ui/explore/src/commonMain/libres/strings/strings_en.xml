@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="explore_toolbar_title">Explore</string>
+
+    <string name="explore_toolbar_search_placeholder">Search…</string>
+</resources>

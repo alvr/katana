@@ -7,8 +7,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultRecipient
+import dev.alvr.katana.ui.lists.KR
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
-import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.view.components.ListScreen
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.ui.lists.viewmodel.MangaListsViewModel
@@ -25,14 +25,12 @@ internal fun MangaScreen(
     navigator: ListsNavigator,
     resultRecipient: ResultRecipient<ChangeListSheetDestination, String>,
 ) {
-    val strings = LocalListsStrings.current
-
     ListScreen(
         vm = koinViewModel<MangaListsViewModel>(),
         navigator = navigator,
         resultRecipient = resultRecipient,
-        title = strings.mangaToolbar,
-        emptyStateRes = strings.emptyMangaList,
+        title = KR.string.lists_manga_toolbar_title,
+        emptyStateRes = KR.string.lists_empty_manga_list,
         backContent = { Filter() },
     )
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header_katana_description">Un cliente Android para Anilist</string>
+
+    <string name="get_started_description">Katana es un cliente de Anilist para Android donde puedes llevar la cuenta, explorar, descubrir y comentar Anime &amp; Manga.</string>
+    <string name="get_started_button">Empezar</string>
+
+    <string name="begin_description">Para empezar a usar Katana necesitas una cuenta de Anilist. Toca uno de los botones de abajo para registrarte o iniciar sesión.</string>
+    <string name="begin_register_button">Registrarse</string>
+    <string name="begin_login_button">Iniciar sesión</string>
+
+    <string name="fetch_userid_error">Ha habido un error al obtener el usuario, por favor, inténtalo de nuevo.</string>
+    <string name="save_token_error">Ha habido un error al iniciar sesión, por favor, inténtalo de nuevo.</string>
+
+    <!-- Content descriptions -->
+    <string name="content_description_background">Fondo de inicio de sesión. Selección variada de Studio Ghibli</string>
+    <string name="content_description_katana_logo">Logo de Katana</string>
+    <string name="content_description_get_started_arrow">Flecha indicando continuación</string>
+</resources>

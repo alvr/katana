@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyleBottomSheet
+import dev.alvr.katana.ui.lists.KR
 import dev.alvr.katana.ui.lists.entities.UserList
-import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 
 @Composable
 @Destination(style = DestinationStyleBottomSheet::class)
@@ -69,7 +69,7 @@ internal fun ChangeListButton(
         FloatingActionButton(onClick = onClick) {
             Icon(
                 imageVector = Icons.TwoTone.List,
-                contentDescription = LocalListsStrings.current.changeListButton,
+                contentDescription = KR.string.lists_change_list_button,
             )
         }
     }

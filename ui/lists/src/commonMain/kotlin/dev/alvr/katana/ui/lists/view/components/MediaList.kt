@@ -52,8 +52,8 @@ import dev.alvr.katana.common.core.unknown
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.components.KatanaPullRefresh
 import dev.alvr.katana.ui.base.modifiers.katanaPlaceholder
+import dev.alvr.katana.ui.lists.KR
 import dev.alvr.katana.ui.lists.entities.MediaListItem
-import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.viewmodel.ListState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -265,7 +265,7 @@ private fun Cover(
             Icon(
                 modifier = Modifier.align(Alignment.Center),
                 imageVector = Icons.TwoTone.BrokenImage,
-                contentDescription = LocalListsStrings.current.errorCover,
+                contentDescription = KR.string.lists_error_cover,
             )
         },
     )
@@ -292,16 +292,15 @@ private fun Subtitle(
     modifier: Modifier = Modifier,
     nextEpisode: MediaListItem.AnimeListItem.NextEpisode? = null,
 ) {
-    val strings = LocalListsStrings.current
     val text = buildAnnotatedString {
         append(format.value)
 
         if (nextEpisode != null) {
-            append(" ${strings.entryNextEpisodeSeparator} ")
+            append(" ${KR.string.lists_entry_next_episode_separator} ")
             append(
-                strings.entryNextEpisode(
-                    nextEpisode.number,
-                    KatanaDateFormatter.DateWithTime(nextEpisode.date),
+                KR.string.lists_entry_next_episode.format(
+                    number = "${nextEpisode.number}",
+                    date = KatanaDateFormatter.DateWithTime(nextEpisode.date),
                 ),
             )
         }
@@ -347,7 +346,10 @@ private fun PlusOne(
     // Episodes - Chapters (Anime & Manga)
     if (progress != total) {
         PlusOneButton(
-            progress = LocalListsStrings.current.entryProgress(progress, total ?: String.unknown),
+            progress = KR.string.lists_entry_progress.format(
+                current = "$progress",
+                total = "${total ?: String.unknown}",
+            ),
             itemLoading = itemLoading,
             onAddPlusOne = onAddPlusOne,
             modifier = modifier,
@@ -372,7 +374,7 @@ private fun PlusOneButton(
     ) {
         Text(
             modifier = Modifier.katanaPlaceholder(visible = itemLoading),
-            text = LocalListsStrings.current.entryPlusOne(progress),
+            text = KR.string.lists_entry_plus_one.format(progress = progress),
         )
     }
 }

@@ -4,26 +4,15 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import co.touchlab.kermit.DefaultFormatter
 import co.touchlab.kermit.LogWriter
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import co.touchlab.kermit.platformLogWriter
-import dev.alvr.katana.ui.account.strings.LocalAccountStrings
-import dev.alvr.katana.ui.account.strings.rememberAccountStrings
 import dev.alvr.katana.ui.base.design.KatanaTheme
-import dev.alvr.katana.ui.explore.strings.LocalExploreStrings
-import dev.alvr.katana.ui.explore.strings.rememberExploreStrings
-import dev.alvr.katana.ui.lists.strings.LocalListsStrings
-import dev.alvr.katana.ui.lists.strings.rememberListsStrings
-import dev.alvr.katana.ui.login.strings.LocalLoginStrings
-import dev.alvr.katana.ui.login.strings.rememberLoginStrings
 import dev.alvr.katana.ui.main.di.katanaModule
 import dev.alvr.katana.ui.main.di.platformModule
 import dev.alvr.katana.ui.main.navigation.KatanaDestinations
-import dev.alvr.katana.ui.social.strings.LocalSocialStrings
-import dev.alvr.katana.ui.social.strings.rememberSocialStrings
 import io.sentry.kotlin.multiplatform.Context
 import io.sentry.kotlin.multiplatform.Sentry
 import io.sentry.kotlin.multiplatform.SentryLevel
@@ -39,12 +28,10 @@ fun KatanaApp() {
         initApp(LocalKoinApplication.current.get())
 
         KatanaTheme {
-            KatanaStrings {
-                KatanaDestinations(
-                    useNavRail = calculateWindowSizeClass().widthSizeClass > WindowWidthSizeClass.Medium,
-                    vm = koinViewModel(),
-                )
-            }
+            KatanaDestinations(
+                useNavRail = calculateWindowSizeClass().widthSizeClass > WindowWidthSizeClass.Medium,
+                vm = koinViewModel(),
+            )
         }
     }
 }
@@ -57,20 +44,6 @@ private fun KatanaDI(
 
     KoinApplication(
         application = { modules(katanaModule, platformModule) },
-        content = content,
-    )
-}
-
-@Composable
-private fun KatanaStrings(
-    content: @Composable () -> Unit,
-) {
-    CompositionLocalProvider(
-        LocalAccountStrings provides rememberAccountStrings(),
-        LocalExploreStrings provides rememberExploreStrings(),
-        LocalListsStrings provides rememberListsStrings(),
-        LocalLoginStrings provides rememberLoginStrings(),
-        LocalSocialStrings provides rememberSocialStrings(),
         content = content,
     )
 }
