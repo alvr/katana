@@ -7,9 +7,9 @@ import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 
-fun Modifier.katanaPlaceholder(
+actual fun Modifier.katanaPlaceholder(
     visible: Boolean,
-    shape: Shape? = null,
+    shape: Shape?,
 ) = composed {
     placeholder(
         visible = visible,

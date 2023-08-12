@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 fun KatanaPullRefresh(
     loading: Boolean,
     onRefresh: () -> Unit,

@@ -1,5 +1,6 @@
 package dev.alvr.katana.ui.lists.view.components
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -15,7 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -25,11 +26,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.BrokenImage
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
@@ -37,30 +40,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import dev.alvr.katana.common.core.formatters.KatanaDateFormatter
 import dev.alvr.katana.common.core.formatters.KatanaNumberFormatter
 import dev.alvr.katana.common.core.unknown
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.components.KatanaPullRefresh
 import dev.alvr.katana.ui.base.modifiers.katanaPlaceholder
-import dev.alvr.katana.ui.lists.R
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.viewmodel.ListState
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-@ExperimentalMaterialApi
-@ExperimentalFoundationApi
 internal fun MediaList(
     listState: ListState<out MediaListItem>,
     onRefresh: () -> Unit,
@@ -88,7 +87,6 @@ internal fun MediaList(
 }
 
 @Composable
-@ExperimentalFoundationApi
 private fun MediaList(
     lazyGridState: LazyGridState,
     items: ImmutableList<MediaListItem>,
@@ -127,7 +125,7 @@ private fun MediaList(
 }
 
 @Composable
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 private fun MediaListItem(
     item: MediaListItem,
     itemLoading: Boolean,
@@ -234,12 +232,12 @@ private fun CoverAndScore(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.widthIn(max = COVER_MAX_WIDTH),
+        modifier = modifier.width(COVER_MAX_WIDTH),
     ) {
         Cover(
             cover = cover,
             title = title,
-            modifier = Modifier.fillMaxHeight(),
+            modifier = Modifier.fillMaxSize(),
         )
 
         Score(
@@ -257,15 +255,19 @@ private fun Cover(
     title: String,
     modifier: Modifier = Modifier,
 ) {
-    AsyncImage(
+    KamelImage(
         modifier = modifier,
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(cover)
-            .error(R.drawable.default_cover)
-            .crossfade(true)
-            .build(),
+        resource = asyncPainterResource(cover),
         contentDescription = title,
         contentScale = ContentScale.Crop,
+        animationSpec = tween(),
+        onFailure = {
+            Icon(
+                modifier = Modifier.align(Alignment.Center),
+                imageVector = Icons.TwoTone.BrokenImage,
+                contentDescription = LocalListsStrings.current.errorCover,
+            )
+        },
     )
 }
 
