@@ -42,7 +42,6 @@ arrow = { module = "io.arrow-kt:arrow-core", version = "1.2.0" }
 
 # Compose
 compose-compiler = { module = "androidx.compose.compiler:compiler", version = "1.5.1" }
-compose-insets = { module = "com.moriatsushi.insetsx:insetsx", version = "0.1.0-alpha10" }
 compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version = "0.3.0" }
 
 # Coroutines
@@ -258,7 +257,6 @@ data-remote-ios-test = []
 
 # Deps for UI
 ui-common = [
-    "compose-insets",
     "kamel",
     "koin-compose",
     "lyricist",
