@@ -42,7 +42,7 @@ arrow = { module = "io.arrow-kt:arrow-core", version = "1.2.0" }
 
 # Compose
 compose-compiler = { module = "androidx.compose.compiler:compiler", version = "1.5.1" }
-compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version = "0.3.0" }
+compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version = "0.3.1" }
 
 # Coroutines
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
