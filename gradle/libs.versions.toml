@@ -1,9 +1,10 @@
 [versions]
-accompanist = "0.30.1"
+accompanist = "0.31.6-rc"
 apollo = "3.8.2"
+compose = "1.5.0-beta02"
 coroutines = "1.7.3"
 datastore = "1.1.0-alpha04"
-destinations = "1.8.41-beta"
+destinations = "1.9.52"
 detekt = "1.23.1"
 junit5 = "5.10.0"
 koin = "3.4.3"
@@ -18,6 +19,7 @@ orbit = "6.0.0"
 sentry = "6.28.0"
 
 [plugins]
+compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 parcelize = { id = "com.arkivanov.parcelize.darwin", version = "0.1.5" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
@@ -40,7 +42,6 @@ arrow = { module = "io.arrow-kt:arrow-core", version = "1.2.0" }
 
 # Compose
 compose-compiler = { module = "androidx.compose.compiler:compiler", version = "1.5.1" }
-compose-insets = { module = "com.moriatsushi.insetsx:insetsx", version = "0.1.0-alpha10" }
 compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version = "0.3.0" }
 
 # Coroutines
@@ -65,7 +66,7 @@ gradle-android = { module = "com.android.tools.build:gradle", version = "8.1.0" 
 gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
 gradle-buildconfig = { module = "com.github.gmazzo.buildconfig:plugin", version = "4.1.2" }
 gradle-complete-kotlin = { module = "com.louiscad.complete-kotlin:plugin", version = "1.1.0" }
-gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version = "1.4.3" }
+gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -256,7 +257,6 @@ data-remote-ios-test = []
 
 # Deps for UI
 ui-common = [
-    "compose-insets",
     "kamel",
     "koin-compose",
     "lyricist",

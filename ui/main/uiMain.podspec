@@ -9,7 +9,7 @@ Pod::Spec.new do |spec|
     spec.vendored_frameworks      = 'build/cocoapods/framework/uiMain.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '14.1'
-    spec.dependency 'Sentry', '~> 8.9.2'
+    spec.dependency 'Sentry', '~> 8.9.5'
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':ui:main',
@@ -35,5 +35,5 @@ Pod::Spec.new do |spec|
             SCRIPT
         }
     ]
-    spec.resources = ['src/commonMain/resources/**', 'src/iosMain/resources/**']
+    spec.resources = ['build\compose\ios\uiMain\compose-resources']
 end

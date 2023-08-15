@@ -4,4 +4,5 @@ plugins {
     id("katana.detekt")
     id("katana.kover")
     id("katana.sonar")
+    alias(libs.plugins.compose) apply false
 }
