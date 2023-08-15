@@ -35,13 +35,11 @@ internal fun KotlinMultiplatformExtension.configureCocoapods(project: Project) {
         version = KatanaConfiguration.VersionName
         ios.deploymentTarget = "14.1"
 
-        pod("Sentry", "~> 8.9.2")
+        pod("Sentry", "~> 8.9.5")
 
         framework {
             baseName = podName
         }
-
-        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
 }
 
