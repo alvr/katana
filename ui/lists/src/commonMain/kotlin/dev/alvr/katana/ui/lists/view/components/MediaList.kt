@@ -1,3 +1,5 @@
+@file:Suppress("INLINE_FROM_HIGHER_PLATFORM")
+
 package dev.alvr.katana.ui.lists.view.components
 
 import androidx.compose.animation.core.tween

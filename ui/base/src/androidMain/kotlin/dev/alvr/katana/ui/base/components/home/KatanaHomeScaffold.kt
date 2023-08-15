@@ -9,7 +9,7 @@ import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.BackdropScaffold
 import androidx.compose.material.BackdropScaffoldState
@@ -92,7 +92,7 @@ private fun KatanaTopAppBar(
             label = "KatanaTopAppBar",
             targetState = katanaScaffoldState.topAppBarStyle,
             transitionSpec = {
-                fadeIn(tween(ANIMATION_MILLIS, easing = EaseIn)) with
+                fadeIn(tween(ANIMATION_MILLIS, easing = EaseIn)) togetherWith
                     fadeOut(tween(ANIMATION_MILLIS, easing = EaseOut)) using
                     SizeTransform(
                         clip = false,
