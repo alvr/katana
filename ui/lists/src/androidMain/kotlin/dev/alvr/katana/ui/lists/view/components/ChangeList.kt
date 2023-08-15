@@ -22,12 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
-import com.ramcosta.composedestinations.spec.DestinationStyle
+import com.ramcosta.composedestinations.spec.DestinationStyleBottomSheet
 import dev.alvr.katana.ui.lists.entities.UserList
 import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 
 @Composable
-@Destination(style = DestinationStyle.BottomSheet::class)
+@Destination(style = DestinationStyleBottomSheet::class)
 internal fun ChangeListSheet(
     lists: Array<UserList>,
     selectedList: String,
