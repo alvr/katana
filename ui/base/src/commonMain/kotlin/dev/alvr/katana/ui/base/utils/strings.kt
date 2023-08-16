@@ -9,10 +9,15 @@ import kotlinx.collections.immutable.ImmutableMap
 
 @Composable
 fun <T> rememberKatanaStrings(strings: ImmutableMap<LanguageTag, T>): T = remember {
-    Lyricist(Locale.current.toLanguageTag(), strings).strings
+    Lyricist(
+        defaultLanguageTag = Locales.Default,
+        translations = strings,
+    ).apply { languageTag = Locale.current.toLanguageTag() }.strings
 }
 
 object Locales {
     const val EN = "en"
     const val ES = "es"
+
+    internal const val Default = EN
 }
