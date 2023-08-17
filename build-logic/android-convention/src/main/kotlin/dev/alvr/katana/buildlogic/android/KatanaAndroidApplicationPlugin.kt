@@ -37,8 +37,15 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
     @Suppress("StringLiteralDuplication")
     private fun BaseAppModuleExtension.configureApp(project: Project) {
         configureAndroid(KatanaConfiguration.PackageName)
-
         val rootProject = project.rootProject
+
+        defaultConfig.applicationId = KatanaConfiguration.PackageName
+        lint.abortOnError = false
+
+        with(packagingOptions.resources.excludes) {
+            add("/META-INF/{AL2.0,LGPL2.1}")
+            add("DebugProbesKt.bin")
+        }
 
         signingConfigs {
             register("release") {
