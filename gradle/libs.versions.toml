@@ -97,7 +97,7 @@ koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-test" }
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.3.5" }
-kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.5.1" }
+kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.6.0" }
 
 # Ktor
 ktor-android = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
