@@ -84,7 +84,7 @@ kamel = { module = "media.kamel:kamel-image", version = "0.7.1" }
 kermit = { module = "co.touchlab:kermit", version = "2.0.0-RC5" }
 
 # Klock
-klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.9" }
+klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.10" }
 
 # Koin
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
