@@ -41,7 +41,7 @@ apollo-test = { module = "com.apollographql.apollo3:apollo-testing-support", ver
 arrow = { module = "io.arrow-kt:arrow-core", version = "1.2.0" }
 
 # Compose
-compose-compiler = { module = "androidx.compose.compiler:compiler", version = "1.5.2" }
+compose-compiler = { module = "org.jetbrains.compose.compiler:compiler", version = "1.5.2" }
 compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version = "0.3.1" }
 
 # Coroutines
