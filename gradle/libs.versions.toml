@@ -13,7 +13,6 @@ koin-test = "3.4.3"
 kotest = "5.7.2"
 kotlin = "1.9.10"
 ktor = "2.3.4"
-libres = "1.2.0-beta01"
 lifecycle = "2.6.1"
 mockmp = "1.15.0"
 orbit = "6.0.0"
@@ -73,7 +72,6 @@ gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-grad
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.7.3" }
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.9.10-1.0.13" }
-gradle-libres = { module = "io.github.skeptick.libres:gradle-plugin", version.ref = "libres" }
 gradle-mockmp = { module = "org.kodein.mock:mockmp-gradle-plugin", version.ref = "mockmp" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "3.12.0" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "4.3.1.3277" }
@@ -105,12 +103,12 @@ kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-p
 ktor-android = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 
-# Libres
-libres-compose = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
-
 # Lifecycle
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+
+# Lyricist
+lyricist = { module = "cafe.adriel.lyricist:lyricist", version = "1.4.2" }
 
 # Okio
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version = "3.5.0" }
@@ -261,7 +259,7 @@ data-remote-ios-test = []
 ui-common = [
     "kamel",
     "koin-compose",
-    "libres-compose",
+    "lyricist",
 ]
 ui-android = [
     "accompanist-placeholder",

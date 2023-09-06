@@ -75,11 +75,12 @@ import dev.alvr.katana.ui.login.BOTTOM_CROSSFADE_ANIM_DURATION
 import dev.alvr.katana.ui.login.GET_STARTED_BUTTON_TAG
 import dev.alvr.katana.ui.login.HEADER_ANIMATION_DELAY
 import dev.alvr.katana.ui.login.HEADER_ANIMATION_DURATION
-import dev.alvr.katana.ui.login.KR
 import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK
 import dev.alvr.katana.ui.login.LOGO_FULL_SIZE
 import dev.alvr.katana.ui.login.LOGO_RESIZED
+import dev.alvr.katana.ui.login.R
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
+import dev.alvr.katana.ui.login.strings.LocalLoginStrings
 import dev.alvr.katana.ui.login.viewmodel.LoginState
 import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -104,14 +105,15 @@ internal fun LoginScreen(
 
 @Composable
 private fun Login(state: LoginState, onLogin: () -> Unit) {
+    val strings = LocalLoginStrings.current
     var loading by remember { mutableStateOf(false) }
 
     val background = rememberSaveable {
         listOf(
-            KR.image.background_chihiro,
-            KR.image.background_howl,
-            KR.image.background_mononoke,
-            KR.image.background_totoro,
+            R.drawable.background_chihiro,
+            R.drawable.background_howl,
+            R.drawable.background_mononoke,
+            R.drawable.background_totoro,
         ).random()
     }
 
@@ -123,8 +125,8 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
         state.errorType != null -> {
             loading = false
             val message = when (state.errorType) {
-                LoginState.ErrorType.SaveToken -> KR.string.save_token_error
-                LoginState.ErrorType.SaveUserId -> KR.string.fetch_userid_error
+                LoginState.ErrorType.SaveToken -> strings.saveTokenError
+                LoginState.ErrorType.SaveUserId -> strings.fetchUserIdError
             }
             LaunchedEffect(state.errorType) {
                 scaffoldState.snackbarHostState.showSnackbar(message)
@@ -139,7 +141,7 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
             } else {
                 Image(
                     painter = painterResource(background),
-                    contentDescription = KR.string.content_description_background,
+                    contentDescription = strings.contentDescriptionBackground,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.alpha(BACKGROUND_ALPHA),
                 )
@@ -184,8 +186,8 @@ private fun KatanaLogo() {
     }
 
     Image(
-        painter = painterResource(KR.image.ic_katana_logo),
-        contentDescription = KR.string.content_description_katana_logo,
+        painter = painterResource(R.drawable.ic_katana_logo),
+        contentDescription = LocalLoginStrings.current.contentDescriptionKatanaLogo,
         modifier = Modifier
             .padding(top = 8.dp)
             .fillMaxWidth(fraction = sizeFraction),
@@ -195,7 +197,7 @@ private fun KatanaLogo() {
 @Composable
 private fun Description() {
     Text(
-        text = KR.string.header_katana_description,
+        text = LocalLoginStrings.current.headerKatanaDescription,
         style = MaterialTheme.typography.h5,
     )
 }
@@ -236,7 +238,7 @@ private fun GetStarted(onStartedClick: (State) -> Unit) {
 @Composable
 private fun GetStartedDescription() {
     Text(
-        text = KR.string.get_started_description,
+        text = LocalLoginStrings.current.getStartedDescription,
         textAlign = TextAlign.Justify,
     )
 }
@@ -245,7 +247,7 @@ private fun GetStartedDescription() {
 private fun GetStartedButton(onStartedClick: (State) -> Unit) {
     val inlineArrow = "inlineArrowContent"
     val text = buildAnnotatedString {
-        append(KR.string.get_started_button)
+        append(LocalLoginStrings.current.getStartedButton)
         append(' ')
         appendInlineContent(inlineArrow)
     }
@@ -276,7 +278,7 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
         ) {
             Icon(
                 imageVector = Icons.Filled.ArrowForward,
-                contentDescription = KR.string.content_description_get_started_arrow,
+                contentDescription = LocalLoginStrings.current.contentDescriptionGetStartedArrow,
                 modifier = Modifier.offset(x = translation),
                 tint = MaterialTheme.colors.onSurface,
             )
@@ -326,7 +328,7 @@ private fun Begin() {
 @Composable
 private fun BeginText() {
     Text(
-        text = KR.string.begin_description,
+        text = LocalLoginStrings.current.beginDescription,
         textAlign = TextAlign.Justify,
     )
 }
@@ -341,7 +343,7 @@ private fun BeginRegisterButton(modifier: Modifier = Modifier) {
         onClick = { uriHandler.openUri(ANILIST_REGISTER) },
     ) {
         Text(
-            text = KR.string.begin_register_button,
+            text = LocalLoginStrings.current.beginRegisterButton,
             color = MaterialTheme.colors.onSurface,
         )
     }
@@ -356,7 +358,7 @@ private fun BeginLoginButton(modifier: Modifier = Modifier) {
         onClick = { uriHandler.openUri(ANILIST_LOGIN) },
     ) {
         Text(
-            text = KR.string.begin_login_button,
+            text = LocalLoginStrings.current.beginLoginButton,
             color = MaterialTheme.colors.onSurface,
         )
     }

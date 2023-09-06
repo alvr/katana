@@ -13,7 +13,6 @@ dependencies {
     implementation(libs.gradle.kotest)
     implementation(libs.gradle.kotlin)
     implementation(libs.gradle.ksp)
-    implementation(libs.gradle.libres)
     implementation(libs.gradle.mockmp)
     implementation(libs.yamlbeans)
     implementation(project(":common"))

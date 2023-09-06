@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
@@ -148,13 +149,13 @@ private fun RailNavigationBar(
 private fun NavigationBarIcon(destination: NavigationBarItem) {
     Icon(
         imageVector = destination.icon,
-        contentDescription = destination.label,
+        contentDescription = stringResource(destination.label),
     )
 }
 
 @Composable
 private fun NavigationBarLabel(destination: NavigationBarItem) {
-    Text(text = destination.label)
+    Text(text = stringResource(destination.label))
 }
 
 private fun NavController.navigate(destination: NavigationBarItem) {

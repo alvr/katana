@@ -1,10 +1,11 @@
 package dev.alvr.katana.ui.lists.entities
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
-import dev.alvr.katana.ui.lists.KR
+import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import korlibs.time.Date
 import korlibs.time.DateTimeTz
 
@@ -76,17 +77,34 @@ internal sealed interface MediaListItem : Parcelable {
     ) : MediaListItem
 
     @Immutable
-    enum class Format(val value: String) {
-        Tv(KR.string.lists_entry_format_tv),
-        TvShort(KR.string.lists_entry_format_tv_short),
-        Movie(KR.string.lists_entry_format_movie),
-        Special(KR.string.lists_entry_format_special),
-        Ova(KR.string.lists_entry_format_ova),
-        Ona(KR.string.lists_entry_format_ona),
-        Music(KR.string.lists_entry_format_music),
-        Manga(KR.string.lists_entry_format_manga),
-        Novel(KR.string.lists_entry_format_novel),
-        OneShot(KR.string.lists_entry_format_one_shot),
-        Unknown(KR.string.lists_entry_format_unknown),
+    enum class Format {
+        Tv,
+        TvShort,
+        Movie,
+        Special,
+        Ova,
+        Ona,
+        Music,
+        Manga,
+        Novel,
+        OneShot,
+        Unknown;
+
+        val value
+            @Composable get() = with(LocalListsStrings.current) {
+                when (this@Format) {
+                    Tv -> entryFormatTv
+                    TvShort -> entryFormatTvShort
+                    Movie -> entryFormatMovie
+                    Special -> entryFormatSpecial
+                    Ova -> entryFormatOva
+                    Ona -> entryFormatOna
+                    Music -> entryFormatMusic
+                    Manga -> entryFormatManga
+                    Novel -> entryFormatNovel
+                    OneShot -> entryFormatOneShot
+                    Unknown -> entryFormatUnknown
+                }
+            }
     }
 }
