@@ -11,10 +11,9 @@ import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.alvr.katana.common.core.zero
-import dev.alvr.katana.ui.base.R
+import dev.alvr.katana.ui.base.KR
 
 @Composable
 fun KatanaHomeTopAppBar(
@@ -39,7 +38,7 @@ fun KatanaHomeTopAppBar(
                 IconButton(onClick = onSearch) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
-                        contentDescription = stringResource(R.string.toolbar_menu_search),
+                        contentDescription = KR.string.toolbar_menu_search,
                     )
                 }
             }
@@ -48,7 +47,7 @@ fun KatanaHomeTopAppBar(
                 IconButton(onClick = onFilter) {
                     Icon(
                         imageVector = Icons.Outlined.FilterAlt,
-                        contentDescription = stringResource(R.string.toolbar_menu_filter),
+                        contentDescription = KR.string.toolbar_menu_filter,
                     )
                 }
             }

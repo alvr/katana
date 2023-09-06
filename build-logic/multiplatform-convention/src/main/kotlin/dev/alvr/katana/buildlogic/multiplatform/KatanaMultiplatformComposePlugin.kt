@@ -3,6 +3,7 @@ package dev.alvr.katana.buildlogic.multiplatform
 import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
+import io.github.skeptick.libres.plugin.ResourcesPluginExtension
 import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
@@ -20,10 +21,12 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "katana.multiplatform.mobile")
         apply(plugin = "org.jetbrains.compose")
+        apply(plugin = "io.github.skeptick.libres")
 
         with(extensions) {
             configure<KotlinMultiplatformExtension> { configureSourceSets() }
             configure<ComposeExtension> { configureComposeMultiplatform(project) }
+            configure<ResourcesPluginExtension> { configureLibres() }
         }
 
         kspDependencies()
@@ -99,6 +102,11 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
                 }
             },
         )
+    }
+
+    private fun ResourcesPluginExtension.configureLibres() {
+        generatedClassName = "KR"
+        generateNamedArguments = true
     }
 
     private fun Project.kspDependencies() {
