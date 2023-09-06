@@ -20,8 +20,8 @@ import dev.alvr.katana.ui.base.components.KatanaErrorState
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
 import dev.alvr.katana.ui.base.components.home.rememberKatanaHomeScaffoldState
 import dev.alvr.katana.ui.base.viewmodel.collectAsState
-import dev.alvr.katana.ui.lists.KR
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
+import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.ui.lists.viewmodel.AnimeListsViewModel
 import dev.alvr.katana.ui.lists.viewmodel.ListsViewModel
@@ -45,6 +45,7 @@ internal fun ListScreen(
     val katanaScaffoldState = rememberKatanaHomeScaffoldState()
     val lazyGridState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
+    val strings = LocalListsStrings.current
 
     resultRecipient.OnNavValue { result ->
         vm.selectList(result).also {
@@ -54,8 +55,8 @@ internal fun ListScreen(
     }
 
     val searchPlaceholder = when (vm) {
-        is AnimeListsViewModel -> KR.string.lists_toolbar_search_anime_placeholder
-        is MangaListsViewModel -> KR.string.lists_toolbar_search_manga_placeholder
+        is AnimeListsViewModel -> strings.animeToolbarSearchPlaceholder
+        is MangaListsViewModel -> strings.mangaToolbarSearchPlaceholder
     }
 
     val buttonsVisible by remember(state.isError) {
@@ -80,7 +81,7 @@ internal fun ListScreen(
             when {
                 isError -> KatanaErrorState(
                     modifier = modifier.padding(paddingValues),
-                    text = KR.string.lists_error_message,
+                    text = strings.errorMessage,
                     onRetry = {
                         vm.refreshList()
                         katanaScaffoldState.resetToolbar()

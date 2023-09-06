@@ -26,9 +26,10 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import dev.alvr.katana.common.core.empty
-import dev.alvr.katana.ui.base.KR
+import dev.alvr.katana.ui.base.R
 
 @Composable
 fun KatanaSearchTopAppBar(
@@ -66,7 +67,7 @@ fun KatanaSearchTopAppBar(
             IconButton(onClick = onBack) {
                 Icon(
                     imageVector = Icons.Outlined.ArrowBack,
-                    contentDescription = KR.string.toolbar_search_close,
+                    contentDescription = stringResource(R.string.toolbar_search_close),
                 )
             }
         },
@@ -79,7 +80,7 @@ fun KatanaSearchTopAppBar(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Clear,
-                    contentDescription = KR.string.toolbar_search_clear,
+                    contentDescription = stringResource(R.string.toolbar_search_clear),
                 )
             }
         },

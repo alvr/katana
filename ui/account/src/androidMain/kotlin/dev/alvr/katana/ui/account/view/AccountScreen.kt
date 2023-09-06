@@ -6,14 +6,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ramcosta.composedestinations.annotation.Destination
-import dev.alvr.katana.ui.account.KR
+import dev.alvr.katana.ui.account.strings.LocalAccountStrings
 
 @Composable
 @Destination
 internal fun AccountScreen() {
     Scaffold { paddingValues ->
         Text(
-            text = KR.string.title,
+            text = LocalAccountStrings.current.title,
             modifier = Modifier.padding(paddingValues),
         )
     }

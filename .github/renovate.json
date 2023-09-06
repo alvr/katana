@@ -7,28 +7,30 @@
   "reviewers": ["alvr"],
   "packageRules": [
     {
-      "groupName": "Kotlin, KSP and Compose Compiler",
+      "groupName": "Kotlin, KSP and Compose",
       "groupSlug": "kotlin",
       "matchPackagePrefixes": [
-        "org.jetbrains.compose.compiler",
-        "com.google.devtools.ksp"
+        "com.google.devtools.ksp",
+        "org.jetbrains.compose"
       ],
       "matchPackagePatterns": [
         "org.jetbrains.kotlin.*"
       ]
     },
     {
+      "groupName": "Koin",
+      "groupSlug": "koin",
       "matchPackagePrefixes": [
         "io.insert-koin"
       ],
-      "groupName": "koin"
     },
     {
+      "groupName": "Kotest",
+      "groupSlug": "kotest",
       "matchPackagePrefixes": [
         "io.kotest",
         "io.kotest.extensions"
       ],
-      "groupName": "kotest"
     },
     {
       "automerge": true,
