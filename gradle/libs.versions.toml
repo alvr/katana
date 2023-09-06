@@ -16,7 +16,7 @@ ktor = "2.3.4"
 lifecycle = "2.6.1"
 mockmp = "1.15.0"
 orbit = "6.0.0"
-sentry = "6.28.0"
+sentry = "6.29.0"
 
 [plugins]
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
