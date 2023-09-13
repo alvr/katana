@@ -7,9 +7,9 @@ datastore = "1.1.0-alpha05"
 destinations = "1.9.53"
 detekt = "1.23.1"
 junit5 = "5.10.0"
-koin = "3.4.3"
+koin = "3.5.0"
 koin-compose = "3.4.5"
-koin-test = "3.4.3"
+koin-test = "3.5.0"
 kotest = "5.7.2"
 kotlin = "1.9.10"
 ktor = "2.3.4"
@@ -89,8 +89,8 @@ klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.10" }
 # Koin
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-compose", version = "1.0.4" }
-koin-compose-android = { module = "io.insert-koin:koin-androidx-compose", version = "3.4.6" }
+koin-compose = { module = "io.insert-koin:koin-compose", version = "1.1.0" }
+koin-compose-android = { module = "io.insert-koin:koin-androidx-compose", version = "3.5.0" }
 koin-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin-test" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-test" }
 
