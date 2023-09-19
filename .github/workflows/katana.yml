@@ -278,7 +278,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew assembleRelease bundleRelease -Pkatana.flavor=release --no-daemon --scan --stacktrace
       - name: Publish production AAB to Google Play
-        uses: r0adkll/upload-google-play@v1.1.1
+        uses: r0adkll/upload-google-play@v1.1.2
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
           packageName: dev.alvr.katana
