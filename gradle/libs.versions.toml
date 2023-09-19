@@ -15,7 +15,7 @@ kotlin = "1.9.10"
 ktor = "2.3.4"
 lifecycle = "2.6.2"
 mockmp = "1.15.0"
-orbit = "6.0.0"
+orbit = "6.1.0"
 sentry = "6.29.0"
 
 [plugins]
