@@ -118,7 +118,7 @@ orbit = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
 orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
 
 # Parcelable
-parcelable = { module = "com.arkivanov.essenty:parcelable", version = "1.1.0" }
+parcelable = { module = "com.arkivanov.essenty:parcelable", version = "1.2.0" }
 
 # Sentry
 sentry = { module = "io.sentry:sentry-android-core", version.ref = "sentry" }
