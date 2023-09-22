@@ -144,7 +144,7 @@ kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kote
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 
 ## MockK
-mockk = { module = "io.mockk:mockk", version = "1.13.7" }
+mockk = { module = "io.mockk:mockk", version = "1.13.8" }
 
 ## MocKMP
 mockmp = { module = "org.kodein.mock:mockmp-runtime", version.ref = "mockmp" }
