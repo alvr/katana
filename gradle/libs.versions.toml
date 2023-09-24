@@ -20,7 +20,7 @@ sentry = "6.29.0"
 
 [plugins]
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
-parcelize = { id = "com.arkivanov.parcelize.darwin", version = "0.2.1" }
+parcelize = { id = "com.arkivanov.parcelize.darwin", version = "0.2.2" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
