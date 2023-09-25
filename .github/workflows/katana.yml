@@ -63,7 +63,7 @@ jobs:
             **/build/compose-reports
           retention-days: 7
       - name: Upload Android APK
-        uses: rnkdsh/action-upload-diawi@v1.5.1
+        uses: rnkdsh/action-upload-diawi@v1.5.2
         id: diawi_android
         with:
           token: ${{ secrets.DIAWI_TOKEN }}
