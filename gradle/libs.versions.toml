@@ -29,7 +29,7 @@ accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeho
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 # AndroidX
-androidx-activity = { module = "androidx.activity:activity-compose", version = "1.7.2" }
+androidx-activity = { module = "androidx.activity:activity-compose", version = "1.8.0" }
 
 # Apollo
 apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
