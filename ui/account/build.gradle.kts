@@ -11,6 +11,7 @@ katanaMultiplatform {
     commonMainDependencies {
         implementation(projects.common.core)
         implementation(projects.domain.account)
+        implementation(projects.domain.session)
         implementation(projects.ui.base)
     }
 

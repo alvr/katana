@@ -50,6 +50,14 @@ internal class SessionLocalSourceImpl(
             emit(None)
         }.first()
 
+    override suspend fun logout() = Either.catch {
+        store.updateData { p -> p.copy(anilistToken = null, isSessionActive = false) }
+        Logger.d { "Logged out" }
+    }.mapLeft { error ->
+        Logger.e(error) { "Was not possible to logout" }
+        SessionFailure.LoggingOut
+    }
+
     override suspend fun saveSession(anilistToken: AnilistToken) = Either.catch {
         store.updateData { p -> p.copy(anilistToken = anilistToken, isSessionActive = true) }
         Logger.d { "Token saved: ${anilistToken.token}" }

@@ -8,6 +8,8 @@ import dev.alvr.katana.common.tests.shouldBeLeft
 import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.data.remote.base.type.buildUser
 import dev.alvr.katana.data.remote.user.UserIdQuery
+import dev.alvr.katana.data.remote.user.sources.id.UserIdRemoteSource
+import dev.alvr.katana.data.remote.user.sources.id.UserIdRemoteSourceImpl
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.user.models.UserId
 import io.kotest.core.spec.style.FreeSpec
@@ -15,7 +17,7 @@ import io.kotest.core.spec.style.FreeSpec
 @OptIn(ApolloExperimental::class)
 internal class UserRemoteSourceTest : FreeSpec() {
     private val client = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport()).build()
-    private val source: UserRemoteSource = UserRemoteSourceImpl(client)
+    private val source: UserIdRemoteSource = UserIdRemoteSourceImpl(client)
 
     init {
         "getting the userId" - {

@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.remote.user.sources
+package dev.alvr.katana.data.remote.user.sources.id
 
 import arrow.core.Either
 import co.touchlab.kermit.Logger
@@ -11,9 +11,9 @@ import dev.alvr.katana.data.remote.user.UserIdQuery
 import dev.alvr.katana.data.remote.user.mappers.responses.invoke
 import dev.alvr.katana.domain.user.failures.UserFailure
 
-internal class UserRemoteSourceImpl(
+internal class UserIdRemoteSourceImpl(
     private val client: ApolloClient,
-) : UserRemoteSource {
+) : UserIdRemoteSource {
     override suspend fun getUserId() = Either.catch {
         userIdHandler(FetchPolicy.CacheOnly)
     }.mapLeft { error ->

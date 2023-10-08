@@ -5,6 +5,7 @@ import com.ramcosta.composedestinations.dynamic.within
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.spec.NavGraphSpec
+import dev.alvr.katana.ui.account.navigation.AccountNavigator
 import dev.alvr.katana.ui.lists.entities.UserList
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
@@ -14,7 +15,8 @@ import dev.alvr.katana.ui.login.view.destinations.LoginScreenDestination
 internal class Navigator(
     private val navGraph: NavGraphSpec,
     private val navigator: DestinationsNavigator,
-) : LoginNavigator,
+) : AccountNavigator,
+    LoginNavigator,
     ListsNavigator {
 
     //region [BaseNavigator]
@@ -22,6 +24,16 @@ internal class Navigator(
         navigator.navigateUp()
     }
     //endregion [BaseNavigator]
+
+    //region [AccountNavigator]
+    override fun logout() {
+        navigator.navigate(NavGraphs.root) {
+            popUpTo(LoginScreenDestination) {
+                inclusive = false
+            }
+        }
+    }
+    //endregion [AccountNavigator]
 
     //region [LoginNavigator]
     override fun toHome() {

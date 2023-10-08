@@ -1,0 +1,8 @@
+query UserInfoQuery {
+    user: User {
+        name
+        avatar {
+            medium
+        }
+    }
+}
