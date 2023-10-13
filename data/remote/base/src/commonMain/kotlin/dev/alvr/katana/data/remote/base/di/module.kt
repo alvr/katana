@@ -15,6 +15,7 @@ import com.apollographql.apollo3.interceptor.ApolloInterceptor
 import com.apollographql.apollo3.network.http.HttpInterceptor
 import com.apollographql.apollo3.network.http.HttpInterceptorChain
 import com.apollographql.apollo3.network.http.LoggingInterceptor
+import dev.alvr.katana.data.remote.base.KatanaBuildConfig
 import dev.alvr.katana.data.remote.base.interceptors.ReloadInterceptor
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.session.usecases.DeleteAnilistTokenUseCase
@@ -99,8 +100,12 @@ private val apolloInterceptorsModule = module {
 
     single<HttpInterceptor>(loggingInterceptor) {
         LoggingInterceptor(
-            log = { Logger.i(tag = "ApolloLoggingInterceptor") { it } },
-            level = LoggingInterceptor.Level.BODY,
+            log = { Logger.i("ApolloLoggingInterceptor") { it } },
+            level = if (KatanaBuildConfig.DEBUG) {
+                LoggingInterceptor.Level.BODY
+            } else {
+                LoggingInterceptor.Level.NONE
+            },
         )
     }
 
