@@ -81,7 +81,7 @@ gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", versi
 kamel = { module = "media.kamel:kamel-image", version = "0.7.3" }
 
 # Kermit
-kermit = { module = "co.touchlab:kermit", version = "2.0.1" }
+kermit = { module = "co.touchlab:kermit", version = "2.0.2" }
 
 # Klock
 klock = { module = "com.soywiz.korlibs.klock:klock", version = "4.0.10" }
