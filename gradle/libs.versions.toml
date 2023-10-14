@@ -25,7 +25,6 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 
 [libraries]
 # Accompanist
-accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 # AndroidX
@@ -43,6 +42,7 @@ arrow = { module = "io.arrow-kt:arrow-core", version = "1.2.1" }
 # Compose
 compose-compiler = { module = "org.jetbrains.compose.compiler:compiler", version = "1.5.2" }
 compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version = "0.3.1" }
+compose-placeholder = { module = "com.eygraber:compose-placeholder-material", version = "1.0.3" }
 
 # Coroutines
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -262,7 +262,6 @@ ui-common = [
     "lyricist",
 ]
 ui-android = [
-    "accompanist-placeholder",
     "destinations",
     "koin-compose-android",
     "lifecycle-runtime",
