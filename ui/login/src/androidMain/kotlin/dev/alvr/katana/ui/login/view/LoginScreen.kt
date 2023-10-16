@@ -84,6 +84,7 @@ import dev.alvr.katana.ui.login.strings.LocalLoginStrings
 import dev.alvr.katana.ui.login.viewmodel.LoginState
 import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 @Destination(
@@ -92,8 +93,9 @@ import org.koin.androidx.compose.koinViewModel
     ],
 )
 internal fun LoginScreen(
+    token: String?,
     navigator: LoginNavigator,
-    vm: LoginViewModel = koinViewModel(),
+    vm: LoginViewModel = koinViewModel { parametersOf(token) },
 ) {
     val state by vm.collectAsState()
 

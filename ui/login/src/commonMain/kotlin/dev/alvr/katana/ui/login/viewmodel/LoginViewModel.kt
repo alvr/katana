@@ -1,24 +1,22 @@
 package dev.alvr.katana.ui.login.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.session.models.AnilistToken
 import dev.alvr.katana.domain.session.usecases.SaveSessionUseCase
 import dev.alvr.katana.domain.user.usecases.SaveUserIdUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
-import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK_TOKEN
 import dev.alvr.katana.ui.login.viewmodel.LoginState.ErrorType
+import org.orbitmvi.orbit.container
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
-import org.orbitmvi.orbit.viewmodel.container
 
 internal class LoginViewModel(
-    savedStateHandle: SavedStateHandle,
+    private val token: String?,
     private val saveSessionUseCase: SaveSessionUseCase,
     private val saveUserIdUseCase: SaveUserIdUseCase,
 ) : BaseViewModel<LoginState, Nothing>() {
-    override val container = container<LoginState, Nothing>(LoginState()) {
-        saveAnilistToken(savedStateHandle[LOGIN_DEEP_LINK_TOKEN])
+    override val container = coroutineScope.container<LoginState, Nothing>(LoginState()) {
+        saveAnilistToken(token)
     }
 
     private fun saveAnilistToken(token: String?) {

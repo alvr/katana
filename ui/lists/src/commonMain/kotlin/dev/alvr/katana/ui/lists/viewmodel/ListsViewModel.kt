@@ -1,6 +1,5 @@
 package dev.alvr.katana.ui.lists.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import arrow.core.Either
 import dev.alvr.katana.common.core.orEmpty
 import dev.alvr.katana.domain.base.failures.Failure
@@ -14,27 +13,26 @@ import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.entities.UserList
 import dev.alvr.katana.ui.lists.entities.mappers.toMediaList
 import dev.alvr.katana.ui.lists.entities.mappers.toUserList
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
+import org.orbitmvi.orbit.container
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
-import org.orbitmvi.orbit.viewmodel.container
 
 internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
-    private val savedStateHandle: SavedStateHandle,
     private val updateListUseCase: UpdateListUseCase,
 ) : BaseViewModel<ListState<I>, Nothing>() {
     protected abstract val collectionFlow: Flow<Either<Failure, MediaCollection<E>>>
 
-    override val container = container<ListState<I>, Nothing>(ListState()) {
+    override val container = coroutineScope.container<ListState<I>, Nothing>(ListState()) {
         observeLists()
     }
 
-    private var currentList: ImmutableList<I> = persistentListOf()
+    private var currentList: List<I> = emptyList()
+    private var collection: ListsCollection<I> = emptyMap()
 
-    val userLists get() = savedStateHandle.get<Array<UserList>>(USER_LISTS) ?: emptyArray()
+    var userLists: Array<UserList> = emptyArray()
+        private set
 
     protected abstract fun List<MediaListGroup<E>>.entryMap(): List<I>
 
@@ -117,21 +115,13 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
         updateState { copy(isError = true, isLoading = false, isEmpty = true) }
     }
 
-    private fun <T : MediaListItem> setCollection(items: ListsCollection<T>) {
-        savedStateHandle[COLLECTION] = items
-        savedStateHandle[USER_LISTS] = items.toUserList()
+    private fun setCollection(items: ListsCollection<I>) {
+        collection = items
+        userLists = items.toUserList()
     }
-
-    private fun <T : MediaListItem> getCollection() =
-        savedStateHandle.get<ListsCollection<T>>(COLLECTION).orEmpty()
 
     private fun <T : MediaListItem> ListsCollection<T>.getListByName(name: String?) =
         get(name)?.toImmutableList()
 
-    private fun getListByName(listName: String?) = getCollection<I>().getListByName(listName)
-
-    companion object {
-        private const val COLLECTION = "collection"
-        private const val USER_LISTS = "userLists"
-    }
+    private fun getListByName(listName: String?) = collection.getListByName(listName)
 }

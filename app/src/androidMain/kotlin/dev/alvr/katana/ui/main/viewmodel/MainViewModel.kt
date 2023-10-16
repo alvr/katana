@@ -8,16 +8,16 @@ import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
 import dev.alvr.katana.ui.main.navigation.NavGraphs
+import org.orbitmvi.orbit.container
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
-import org.orbitmvi.orbit.viewmodel.container
 
 internal class MainViewModel(
     private val clearActiveSessionUseCase: ClearActiveSessionUseCase,
     private val getAnilistTokenUseCase: GetAnilistTokenUseCase,
     private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,
 ) : BaseViewModel<MainState, Nothing>() {
-    override val container = container<MainState, Nothing>(
+    override val container = coroutineScope.container<MainState, Nothing>(
         MainState(initialNavGraph = initialNavGraph),
     ) {
         observeSession()

@@ -118,7 +118,7 @@ private fun DependenciesContainerBuilder<*>.currentNavigator(): Navigator = reme
 }
 
 private fun NavController.logout() {
-    navigate(LoginScreenDestination) {
+    navigate(LoginScreenDestination(null)) {
         popUpTo(NavGraphs.home) {
             inclusive = true
         }

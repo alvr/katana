@@ -139,7 +139,7 @@ ktor-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 
 # Lifecycle
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle" }
 
 # Lyricist
 lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
@@ -148,7 +148,7 @@ lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" 
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
 
 # Orbit
-orbit = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
+orbit = { module = "org.orbit-mvi:orbit-core", version.ref = "orbit" }
 orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
 
 # Sentry
@@ -292,13 +292,13 @@ ui-common = [
     "koin-compose",
     "kotlin-serialization",
     "lyricist",
+    "orbit",
 ]
 ui-android = [
     "destinations",
     "koin-compose-android",
     "lifecycle-runtime",
     "lifecycle-viewmodel",
-    "orbit",
 ]
 ui-ios = []
 
