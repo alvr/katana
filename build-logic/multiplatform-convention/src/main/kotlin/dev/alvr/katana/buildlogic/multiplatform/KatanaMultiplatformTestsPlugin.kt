@@ -34,12 +34,9 @@ internal class KatanaMultiplatformTestsPlugin : ConventionPlugin {
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     private fun KotlinMultiplatformExtension.configureMultiplatform() {
         targetHierarchy.default()
-
         androidTarget()
         jvm { testRuns["test"].executionTask.configure { enabled = false } }
-        ios()
-        iosSimulatorArm64()
-
+        configureIos()
         configureSourceSets()
     }
 

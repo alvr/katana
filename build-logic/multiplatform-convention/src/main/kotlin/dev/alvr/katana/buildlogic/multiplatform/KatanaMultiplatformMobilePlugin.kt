@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
-        apply(plugin = "org.jetbrains.kotlin.native.cocoapods")
         apply(plugin = "com.android.library")
         apply(plugin = "com.github.gmazzo.buildconfig")
         apply(plugin = "katana.sonar.mobile")
@@ -33,7 +32,7 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
             create<KatanaMultiplatformMobileExtension>(KATANA_MULTIPLATFORM_EXTENSION)
 
             commonExtensions()
-            configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
             configure<LibraryExtension> { configureAndroid(project.fullPackageName) }
             configure<BuildConfigExtension> { configureBuildConfig(project) }
         }
@@ -42,14 +41,10 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
     }
 
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
+    private fun KotlinMultiplatformExtension.configureMultiplatform() {
         targetHierarchy.default()
-
         androidTarget()
-        ios()
-        iosSimulatorArm64()
-
-        configureCocoapods(project)
+        configureIos()
         configureSourceSets()
     }
 
