@@ -5,6 +5,7 @@ plugins {
 katanaMultiplatform {
     commonMainDependencies {
         implementation(projects.common.core)
+        implementation(libs.compose.placeholder)
     }
 
     androidMainDependencies {
