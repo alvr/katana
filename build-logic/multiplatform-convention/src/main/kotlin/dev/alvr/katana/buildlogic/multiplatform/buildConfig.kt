@@ -7,13 +7,13 @@ import org.gradle.api.Project
 private typealias YamlBuildConfig = Map<String, FlavorBuildConfig>
 private typealias FlavorBuildConfig = Map<String, ArrayList<LinkedHashMap<String, String>>>
 
-private var initialized = AtomicBoolean(false)
+private val initialized = AtomicBoolean(false)
 
-internal data class BuildConfig(
-    val type: String,
-    val name: String,
-    val value: String,
-)
+internal class BuildConfig(map: Map<String, String>) {
+    val type: String by map
+    val name: String by map
+    val value: String by map
+}
 
 internal fun Project.katanaBuildConfig(
     android: (List<BuildConfig>) -> Unit,
@@ -32,12 +32,6 @@ internal fun Project.katanaBuildConfig(
 private fun FlavorBuildConfig?.map(flavor: String?) =
     this?.get(flavor)
         .orEmpty()
-        .map {
-            BuildConfig(
-                type = it["type"].orEmpty(),
-                name = it["name"].orEmpty(),
-                value = it["value"].orEmpty(),
-            )
-        }
+        .map(::BuildConfig)
 
 private inline fun <reified T> YamlReader.parse(): T = read(T::class.java)
