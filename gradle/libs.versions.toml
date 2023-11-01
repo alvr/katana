@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.32.0"
 apollo = "3.8.2"
-compose = "1.5.3"
+compose = "1.5.10"
 coroutines = "1.7.3"
 datastore = "1.1.0-alpha07"
 destinations = "1.9.55"
@@ -11,7 +11,7 @@ koin = "3.5.0"
 koin-compose = "3.4.5"
 koin-test = "3.5.0"
 kotest = "5.8.0"
-kotlin = "1.9.10"
+kotlin = "1.9.20"
 ktor = "2.3.6"
 lifecycle = "2.6.2"
 mockmp = "1.16.0"
@@ -40,7 +40,7 @@ apollo-test = { module = "com.apollographql.apollo3:apollo-testing-support", ver
 arrow = { module = "io.arrow-kt:arrow-core", version = "1.2.1" }
 
 # Compose
-compose-compiler = { module = "org.jetbrains.compose.compiler:compiler", version = "1.5.2" }
+compose-compiler = { module = "org.jetbrains.compose.compiler:compiler", version = "1.5.3" }
 compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version = "0.3.1" }
 compose-placeholder = { module = "com.eygraber:compose-placeholder-material", version = "1.0.7" }
 
@@ -71,7 +71,7 @@ gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", v
 gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.7.4" }
-gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.9.10-1.0.13" }
+gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.9.20-1.0.14" }
 gradle-mockmp = { module = "org.kodein.mock:mockmp-gradle-plugin", version.ref = "mockmp" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "4.0.0" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "4.4.0.3356" }
