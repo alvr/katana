@@ -80,7 +80,10 @@ fun BaseExtension.configureAndroid(packageName: String) {
         targetCompatibility = KatanaConfiguration.UseJavaVersion
     }
 
-    sourceSets["main"].res.srcDirs("src/androidMain/res", "src/commonMain/resources")
+    with(sourceSets["main"]) {
+        res.srcDirs("src/androidMain/res")
+        resources.srcDirs("src/commonMain/resources")
+    }
 
     testOptions {
         animationsDisabled = true
