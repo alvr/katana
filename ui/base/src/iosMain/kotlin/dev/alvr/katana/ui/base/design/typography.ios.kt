@@ -5,16 +5,12 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.platform.Font
-import kotlinx.coroutines.runBlocking
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.resource
+import dev.alvr.katana.ui.base.resources.KatanaResource
 
 private val cache = mutableMapOf<String, Font>()
 
 @Composable
-@OptIn(ExperimentalResourceApi::class)
-internal actual fun font(font: String, weight: FontWeight, style: FontStyle) =
-    cache.getOrPut(font) {
-        val byteArray = runBlocking { resource("font/$font.ttf").readBytes() }
-        Font(font, byteArray, weight, style)
+internal actual fun font(font: KatanaResource, weight: FontWeight, style: FontStyle) =
+    cache.getOrPut(font.id) {
+        Font(font.id, font.asByteArray, weight, style)
     }

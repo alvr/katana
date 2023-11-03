@@ -54,7 +54,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
@@ -64,6 +63,7 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.common.core.zero
+import dev.alvr.katana.ui.base.resources.KatanaResource
 import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.login.ANILIST_LOGIN
 import dev.alvr.katana.ui.login.ANILIST_REGISTER
@@ -78,8 +78,8 @@ import dev.alvr.katana.ui.login.HEADER_ANIMATION_DURATION
 import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK
 import dev.alvr.katana.ui.login.LOGO_FULL_SIZE
 import dev.alvr.katana.ui.login.LOGO_RESIZED
-import dev.alvr.katana.ui.login.R
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
+import dev.alvr.katana.ui.login.resources.KatanaResources
 import dev.alvr.katana.ui.login.strings.LocalLoginStrings
 import dev.alvr.katana.ui.login.viewmodel.LoginState
 import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
@@ -108,12 +108,12 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
     val strings = LocalLoginStrings.current
     var loading by remember { mutableStateOf(false) }
 
-    val background = rememberSaveable {
+    val background = rememberSaveable(saver = KatanaResource.saver) {
         listOf(
-            R.drawable.background_chihiro,
-            R.drawable.background_howl,
-            R.drawable.background_mononoke,
-            R.drawable.background_totoro,
+            KatanaResources.backgroundChihiro,
+            KatanaResources.backgroundHowl,
+            KatanaResources.backgroundMononoke,
+            KatanaResources.backgroundTotoro,
         ).random()
     }
 
@@ -140,7 +140,7 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
                 Loading()
             } else {
                 Image(
-                    painter = painterResource(background),
+                    painter = background.asPainter,
                     contentDescription = strings.contentDescriptionBackground,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.alpha(BACKGROUND_ALPHA),
@@ -186,7 +186,7 @@ private fun KatanaLogo() {
     }
 
     Image(
-        painter = painterResource(R.drawable.ic_katana_logo),
+        painter = KatanaResources.icKatanaLogo.asPainter,
         contentDescription = LocalLoginStrings.current.contentDescriptionKatanaLogo,
         modifier = Modifier
             .padding(top = 8.dp)

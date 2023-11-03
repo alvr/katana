@@ -1,8 +1,11 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
 import dev.alvr.katana.buildlogic.ConventionPlugin
+import dev.alvr.katana.buildlogic.ResourcesDir
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
+import dev.alvr.katana.buildlogic.fullPackageName
+import dev.alvr.katana.buildlogic.multiplatform.tasks.GenerateResourcesFileTask
 import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
@@ -11,6 +14,8 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
+import org.gradle.kotlin.dsl.provideDelegate
+import org.gradle.kotlin.dsl.registering
 import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.compose.ExperimentalComposeLibrary
@@ -26,6 +31,7 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
             configure<ComposeExtension> { configureComposeMultiplatform(project) }
         }
 
+        generateResourcesTask()
         kspDependencies()
     }
 
@@ -36,6 +42,8 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
 
         configureSourceSets {
             val commonMain by getting {
+                kotlin.srcDirs("build/$GeneratedResourcesDir")
+
                 dependencies {
                     implementation(compose.animation)
                     implementation(compose.components.resources)
@@ -111,6 +119,16 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
         }
     }
 
+    private fun Project.generateResourcesTask() {
+        val generateResourcesFile by tasks.registering(GenerateResourcesFileTask::class) {
+            packageName.set(fullPackageName)
+            inputFiles.from(layout.projectDirectory.dir(ResourcesDir).asFileTree)
+            outputDir.set(layout.buildDirectory.dir(GeneratedResourcesDir))
+        }
+
+        tasks.named("preBuild").configure { dependsOn(generateResourcesFile) }
+    }
+
     private fun Project.composePluginEnabled(property: String) =
         providers.gradleProperty(property).orNull == "true"
 
@@ -119,5 +137,7 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
 
     private companion object {
         const val UI_IOS_KSP = "ui-ios-ksp"
+
+        const val GeneratedResourcesDir = "generated/sources/katana/main"
     }
 }

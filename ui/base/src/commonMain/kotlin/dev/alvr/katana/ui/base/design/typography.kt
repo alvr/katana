@@ -6,16 +6,18 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import dev.alvr.katana.ui.base.resources.KatanaResource
+import dev.alvr.katana.ui.base.resources.KatanaResources
 
 internal val KatanaTypography
     @Composable get() = Typography(
         defaultFontFamily = FontFamily(
-            font("barlow_light", FontWeight.Light, FontStyle.Normal),
-            font("barlow_normal", FontWeight.Normal, FontStyle.Normal),
-            font("barlow_medium", FontWeight.Medium, FontStyle.Normal),
-            font("barlow_bold", FontWeight.Bold, FontStyle.Normal),
+            font(KatanaResources.barlowLight, FontWeight.Light, FontStyle.Normal),
+            font(KatanaResources.barlowNormal, FontWeight.Normal, FontStyle.Normal),
+            font(KatanaResources.barlowMedium, FontWeight.Medium, FontStyle.Normal),
+            font(KatanaResources.barlowBold, FontWeight.Bold, FontStyle.Normal),
         ),
     )
 
 @Composable
-internal expect fun font(font: String, weight: FontWeight, style: FontStyle): Font
+internal expect fun font(font: KatanaResource, weight: FontWeight, style: FontStyle): Font

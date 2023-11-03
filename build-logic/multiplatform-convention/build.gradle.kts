@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.gradle.kotlin)
     implementation(libs.gradle.ksp)
     implementation(libs.gradle.mockmp)
+    implementation(libs.kotlinpoet)
     implementation(libs.yamlbeans)
     implementation(project(":common"))
 }
