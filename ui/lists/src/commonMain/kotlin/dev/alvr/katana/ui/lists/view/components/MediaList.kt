@@ -2,6 +2,7 @@ package dev.alvr.katana.ui.lists.view.components
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,13 +27,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.BrokenImage
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
@@ -53,6 +51,7 @@ import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.components.KatanaPullRefresh
 import dev.alvr.katana.ui.base.modifiers.katanaPlaceholder
 import dev.alvr.katana.ui.lists.entities.MediaListItem
+import dev.alvr.katana.ui.lists.resources.KatanaResources
 import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.viewmodel.ListState
 import io.kamel.image.KamelImage
@@ -262,9 +261,9 @@ private fun Cover(
         contentScale = ContentScale.Crop,
         animationSpec = tween(),
         onFailure = {
-            Icon(
+            Image(
                 modifier = Modifier.align(Alignment.Center),
-                imageVector = Icons.TwoTone.BrokenImage,
+                painter = KatanaResources.defaultCover.asPainter,
                 contentDescription = LocalListsStrings.current.errorCover,
             )
         },

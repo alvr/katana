@@ -64,7 +64,6 @@ import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.resources.KatanaResource
-import dev.alvr.katana.ui.base.resources.painterResource
 import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.login.ANILIST_LOGIN
 import dev.alvr.katana.ui.login.ANILIST_REGISTER
@@ -79,8 +78,8 @@ import dev.alvr.katana.ui.login.HEADER_ANIMATION_DURATION
 import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK
 import dev.alvr.katana.ui.login.LOGO_FULL_SIZE
 import dev.alvr.katana.ui.login.LOGO_RESIZED
-import dev.alvr.katana.ui.login.Resources
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
+import dev.alvr.katana.ui.login.resources.KatanaResources
 import dev.alvr.katana.ui.login.strings.LocalLoginStrings
 import dev.alvr.katana.ui.login.viewmodel.LoginState
 import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
@@ -111,10 +110,10 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
 
     val background = rememberSaveable(saver = KatanaResource.saver) {
         listOf(
-           Resources.Chihiro,
-           Resources.Howl,
-           Resources.Mononoke,
-           Resources.Totoro,
+            KatanaResources.backgroundChihiro,
+            KatanaResources.backgroundHowl,
+            KatanaResources.backgroundMononoke,
+            KatanaResources.backgroundTotoro,
         ).random()
     }
 
@@ -141,7 +140,7 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
                 Loading()
             } else {
                 Image(
-                    painter = painterResource(background),
+                    painter = background.asPainter,
                     contentDescription = strings.contentDescriptionBackground,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.alpha(BACKGROUND_ALPHA),
@@ -187,7 +186,7 @@ private fun KatanaLogo() {
     }
 
     Image(
-        painter = painterResource(Resources.KatanaLogo),
+        painter = KatanaResources.icKatanaLogo.asPainter,
         contentDescription = LocalLoginStrings.current.contentDescriptionKatanaLogo,
         modifier = Modifier
             .padding(top = 8.dp)

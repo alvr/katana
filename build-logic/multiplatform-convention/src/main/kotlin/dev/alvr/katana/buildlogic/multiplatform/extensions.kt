@@ -27,15 +27,17 @@ internal fun KotlinMultiplatformExtension.configureIos() {
         iosSimulatorArm64(),
     ).forEach { ios ->
         ios.binaries.framework {
-            baseName = project.frameworkBaseName
+            baseName = project.frameworkIdentifier
             isStatic = true
         }
     }
 }
 
-internal val Project.frameworkBaseName
-    get() = path.split(':')
-        .filter { it.isNotEmpty() }
+private val Project.frameworkIdentifier
+    get() = path.split(':').identifier
+
+internal val List<String>.identifier
+    get() = filter { it.isNotEmpty() }
         .reduceRight { acc, s -> "$acc${s.capitalize()}" }
 
 private fun String.capitalize() =

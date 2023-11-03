@@ -81,8 +81,8 @@ fun BaseExtension.configureAndroid(packageName: String) {
     }
 
     with(sourceSets["main"]) {
-        res.srcDirs("src/androidMain/res")
-        resources.srcDirs("src/commonMain/resources")
+        res.srcDirs("src/androidMain/res", ResourcesDir)
+        resources.srcDirs(ResourcesDir)
     }
 
     testOptions {
