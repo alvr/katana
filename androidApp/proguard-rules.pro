@@ -13,9 +13,6 @@
 -dontwarn org.openjsse.net.ssl.OpenJSSE
 -dontwarn org.slf4j.impl.StaticLoggerBinder
 
-# Kamel
--keep class io.kamel.** { *; }
-
 # Logger
 -assumenosideeffects class co.touchlab.kermit.Logger {
     public void v(...);

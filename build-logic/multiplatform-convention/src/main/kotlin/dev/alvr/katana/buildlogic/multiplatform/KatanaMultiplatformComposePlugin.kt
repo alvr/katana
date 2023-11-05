@@ -122,7 +122,11 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
     private fun Project.generateResourcesTask() {
         val generateResourcesFile by tasks.registering(GenerateResourcesFileTask::class) {
             packageName.set(fullPackageName)
-            inputFiles.from(layout.projectDirectory.dir(ResourcesDir).asFileTree)
+            inputFiles.from(
+                layout.projectDirectory.dir(ResourcesDir).asFileTree.matching {
+                    include("**/*.webp", "**/*.xml")
+                },
+            )
             outputDir.set(layout.buildDirectory.dir(GeneratedResourcesDir))
         }
 
