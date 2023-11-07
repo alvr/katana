@@ -111,7 +111,7 @@ lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", v
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 
 # Lyricist
-lyricist = { module = "cafe.adriel.lyricist:lyricist", version = "1.6.1" }
+lyricist = { module = "cafe.adriel.lyricist:lyricist", version = "1.6.2" }
 
 # Okio
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version = "3.6.0" }
