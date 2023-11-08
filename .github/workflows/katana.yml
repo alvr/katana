@@ -200,7 +200,7 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Decode keystore
-        uses: timheuer/base64-to-file@v1.2.3
+        uses: timheuer/base64-to-file@v1.2.4
         with:
           fileDir: .
           fileName: ${{ secrets.SIGNING_FILE }}
@@ -262,7 +262,7 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Decode keystore
-        uses: timheuer/base64-to-file@v1.2.3
+        uses: timheuer/base64-to-file@v1.2.4
         with:
           fileDir: .
           fileName: ${{ secrets.SIGNING_FILE }}
