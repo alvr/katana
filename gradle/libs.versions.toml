@@ -1,6 +1,9 @@
 [versions]
 accompanist = "0.32.0"
+android = "8.1.3"
 apollo = "3.8.2"
+buildconfig = "4.1.2"
+complete-kotlin = "1.1.0"
 compose = "1.5.11"
 coroutines = "1.7.3"
 datastore = "1.1.0-alpha07"
@@ -11,14 +14,29 @@ koin = "3.5.0"
 koin-test = "3.5.0"
 kotest = "5.8.0"
 kotlin = "1.9.21"
+kover = "0.7.4"
+ksp = "1.9.10-1.0.13"
 ktor = "2.3.7"
 lifecycle = "2.6.2"
 mockmp = "1.16.0"
 orbit = "6.1.0"
 sentry = "7.0.0"
+sentry-plugin = "3.14.0"
 
 [plugins]
+android-application = { id = "com.android.application", version.ref = "android" }
+android-library = { id = "com.android.library", version.ref = "android" }
+apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
+complete-kotlin = { id = "com.louiscad.complete-kotlin", version.ref = "complete-kotlin" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
+kotlin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+mockmp = { id = "org.kodein.mock.mockmp", version.ref = "mockmp" }
+sentry = { id = "io.sentry.android.gradle", version.ref = "sentry-plugin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
@@ -60,18 +78,18 @@ detekt-compose2 = { module = "ru.kode:detekt-rules-compose", version = "1.3.0" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 # Gradle
-gradle-android = { module = "com.android.tools.build:gradle", version = "8.2.0" }
+gradle-android = { module = "com.android.tools.build:gradle", version.ref = "android" }
 gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
-gradle-buildconfig = { module = "com.github.gmazzo.buildconfig:plugin", version = "4.2.0" }
-gradle-complete-kotlin = { module = "com.louiscad.complete-kotlin:plugin", version = "1.1.0" }
+gradle-buildconfig = { module = "com.github.gmazzo.buildconfig:plugin", version.ref = "buildconfig" }
+gradle-complete-kotlin = { module = "com.louiscad.complete-kotlin:plugin", version.ref = "complete-kotlin" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.7.5" }
-gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.9.21-1.0.16" }
+gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
+gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 gradle-mockmp = { module = "org.kodein.mock:mockmp-gradle-plugin", version.ref = "mockmp" }
-gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "4.0.0" }
+gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version.ref = "sentry-plugin" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "4.4.1.3373" }
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.50.0" }
 

@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.gradle.android)
-    implementation(libs.gradle.kotlin)
+    compileOnly(libs.gradle.android)
+    compileOnly(libs.gradle.kotlin)
 }

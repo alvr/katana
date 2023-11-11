@@ -18,9 +18,9 @@ import org.kodein.mock.gradle.MocKMPGradlePlugin
 internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
     override fun Project.configure() {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
-        apply(plugin = "katana.sonar.kotlin")
         apply(plugin = "com.google.devtools.ksp")
         apply(plugin = "io.kotest.multiplatform")
+        apply(plugin = "org.jetbrains.kotlinx.kover")
         apply(plugin = "org.kodein.mock.mockmp")
 
         with(extensions) {

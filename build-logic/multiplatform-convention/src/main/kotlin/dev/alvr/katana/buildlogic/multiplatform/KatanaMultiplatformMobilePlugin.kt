@@ -22,9 +22,9 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = "com.android.library")
         apply(plugin = "com.github.gmazzo.buildconfig")
-        apply(plugin = "katana.sonar.mobile")
         apply(plugin = "com.google.devtools.ksp")
         apply(plugin = "io.kotest.multiplatform")
+        apply(plugin = "org.jetbrains.kotlinx.kover")
         apply(plugin = "org.kodein.mock.mockmp")
 
         with(extensions) {

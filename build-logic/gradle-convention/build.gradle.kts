@@ -6,11 +6,10 @@ group = "dev.alvr.katana.buildlogic.gradle"
 version = extra["katana.plugins.version"].toString()
 
 dependencies {
-    implementation(libs.gradle.complete.kotlin)
-    implementation(libs.gradle.kotlin)
-    implementation(libs.gradle.kover)
-    implementation(libs.gradle.sentry)
-    implementation(libs.gradle.updates)
+    compileOnly(libs.gradle.complete.kotlin)
+    compileOnly(libs.gradle.kotlin)
+    compileOnly(libs.gradle.kover)
+    compileOnly(libs.gradle.sentry)
     implementation(project(":common"))
 }
 
@@ -19,10 +18,6 @@ gradlePlugin {
         register("common") {
             id = "katana.common"
             implementationClass = "dev.alvr.katana.buildlogic.gradle.KatanaCommonPlugin"
-        }
-        register("dependency-versions") {
-            id = "katana.dependency-versions"
-            implementationClass = "dev.alvr.katana.buildlogic.gradle.KatanaDependencyVersionsPlugin"
         }
         register("kover") {
             id = "katana.kover"

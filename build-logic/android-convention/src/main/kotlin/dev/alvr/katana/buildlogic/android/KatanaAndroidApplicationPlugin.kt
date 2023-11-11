@@ -21,7 +21,6 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
         apply(plugin = "com.android.application")
         apply(plugin = "org.jetbrains.kotlin.android")
         apply(plugin = "org.jetbrains.compose")
-        apply(plugin = "katana.sonar.mobile")
         apply(plugin = "katana.sentry")
 
         with(extensions) {

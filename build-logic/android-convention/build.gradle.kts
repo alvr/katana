@@ -6,9 +6,9 @@ group = "dev.alvr.katana.buildlogic.android"
 version = extra["katana.plugins.version"].toString()
 
 dependencies {
-    implementation(libs.gradle.android)
-    implementation(libs.gradle.compose)
-    implementation(libs.gradle.kotlin)
+    compileOnly(libs.gradle.android)
+    compileOnly(libs.gradle.compose)
+    compileOnly(libs.gradle.kotlin)
     implementation(project(":common"))
 }
 
