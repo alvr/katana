@@ -1,24 +1,15 @@
 package dev.alvr.katana
 
-import App
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
+import dev.alvr.katana.ui.main.KatanaApp
 
-class MainActivity : ComponentActivity() {
+internal class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContent {
-            App()
-        }
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        setContent { KatanaApp() }
     }
-}
-
-@Preview
-@Composable
-fun AppAndroidPreview() {
-    App()
 }

@@ -21,6 +21,10 @@ dependencies {
 
 gradlePlugin {
     plugins {
+        register("multiplatform-app") {
+            id = "katana.multiplatform.app"
+            implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformAppPlugin"
+        }
         register("multiplatform-core") {
             id = "katana.multiplatform.core"
             implementationClass = "dev.alvr.katana.buildlogic.multiplatform.KatanaMultiplatformCorePlugin"

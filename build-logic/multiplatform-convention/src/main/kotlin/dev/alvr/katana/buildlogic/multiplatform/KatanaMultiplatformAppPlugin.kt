@@ -1,36 +1,40 @@
-package dev.alvr.katana.buildlogic.android
+package dev.alvr.katana.buildlogic.multiplatform
 
 import com.android.build.api.dsl.ApplicationBuildType
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogBundle
-import dev.alvr.katana.buildlogic.commonExtensions
-import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.configureAndroid
-import dev.alvr.katana.buildlogic.implementation
 import java.io.FileInputStream
 import java.util.Properties
+import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.apply
+import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.get
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
-internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
-    override fun Project.configure() {
-        apply(plugin = "com.android.application")
-        apply(plugin = "org.jetbrains.kotlin.android")
-        apply(plugin = "org.jetbrains.compose")
-        apply(plugin = "katana.sentry")
+internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugin(AndroidPlugin) {
+    override fun ExtensionContainer.configureAndroid(project: Project) {
+        configure<BaseAppModuleExtension> { configureApp(project) }
+    }
 
-        with(extensions) {
-            commonExtensions()
-            configure<BaseAppModuleExtension> { configureApp(project) }
+    override fun NamedDomainObjectContainer<KotlinSourceSet>.configureSourceSets() {
+        getByName("commonMain") {
+            dependencies {
+                implementation(catalogBundle("app-common"))
+            }
         }
-
-        tasks.commonTasks()
-
-        dependencies { implementation(catalogBundle("app-android")) }
+        getByName("androidMain") {
+            dependencies {
+                implementation(catalogBundle("app-android"))
+            }
+        }
+        getByName("iosMain") {
+            dependencies {
+                implementation(catalogBundle("app-ios"))
+            }
+        }
     }
 
     @Suppress("StringLiteralDuplication")
@@ -95,6 +99,10 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
                 versionNameSuffix = "-beta"
             }
         }
+
+        sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+        sourceSets["main"].res.srcDirs("src/androidMain/res")
+        sourceSets["main"].resources.srcDirs("src/commonMain/resources")
     }
 
     private fun ApplicationBuildType.configure(isDebug: Boolean) {
@@ -107,4 +115,8 @@ internal class KatanaAndroidApplicationPlugin : ConventionPlugin {
 
     private fun Properties.getValue(key: String, env: String) =
         getOrElse(key) { System.getenv(env) } as? String
+
+    private companion object {
+        const val AndroidPlugin = "com.android.application"
+    }
 }
