@@ -1,11 +1,11 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
 import com.android.build.gradle.LibraryExtension
-import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.configureAndroid
 import dev.alvr.katana.buildlogic.fullPackageName
+import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
@@ -15,8 +15,9 @@ import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal class KatanaMultiplatformTestsPlugin : ConventionPlugin {
-    override fun Project.configure() {
+internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
+
+    override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = "com.android.library")
 

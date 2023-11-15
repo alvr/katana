@@ -28,7 +28,6 @@ private val Project.libs get() = extensions.getByType<VersionCatalogsExtension>(
 val Test.isRelease get() = name.contains("""beta|release""".toRegex(RegexOption.IGNORE_CASE))
 
 val Project.fullPackageName get() = KatanaConfiguration.PackageName + path.replace(':', '.')
-
 fun Project.catalogVersion(alias: String) = libs.findVersion(alias).get().toString()
 fun Project.catalogLib(alias: String) = libs.findLibrary(alias).get()
 fun Project.catalogBundle(alias: String) = libs.findBundle(alias).get()
@@ -81,7 +80,7 @@ fun BaseExtension.configureAndroid(packageName: String) {
     }
 
     with(sourceSets["main"]) {
-        res.srcDirs("src/androidMain/res", ResourcesDir)
+        res.srcDirs("$AndroidDir/res", ResourcesDir)
         resources.srcDirs(ResourcesDir)
     }
 

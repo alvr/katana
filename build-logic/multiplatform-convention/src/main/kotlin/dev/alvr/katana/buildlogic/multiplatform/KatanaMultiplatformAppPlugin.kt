@@ -2,7 +2,9 @@ package dev.alvr.katana.buildlogic.multiplatform
 
 import com.android.build.api.dsl.ApplicationBuildType
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import dev.alvr.katana.buildlogic.AndroidDir
 import dev.alvr.katana.buildlogic.KatanaConfiguration
+import dev.alvr.katana.buildlogic.ResourcesDir
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.configureAndroid
 import java.io.FileInputStream
@@ -10,11 +12,18 @@ import java.util.Properties
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionContainer
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugin(AndroidPlugin) {
+
+    override fun apply(target: Project) {
+        super.apply(target)
+        target.apply(plugin = "katana.multiplatform.compose")
+    }
+
     override fun ExtensionContainer.configureAndroid(project: Project) {
         configure<BaseAppModuleExtension> { configureApp(project) }
     }
@@ -85,7 +94,7 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
 
                 proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro",
+                    "$AndroidDir/proguard-rules.pro",
                 )
 
                 signingConfig = signingConfigs.getByName("release")
@@ -100,9 +109,9 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
             }
         }
 
-        sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-        sourceSets["main"].res.srcDirs("src/androidMain/res")
-        sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+        sourceSets["main"].manifest.srcFile("$AndroidDir/AndroidManifest.xml")
+        sourceSets["main"].res.srcDirs("$AndroidDir/res")
+        sourceSets["main"].resources.srcDirs(ResourcesDir)
     }
 
     private fun ApplicationBuildType.configure(isDebug: Boolean) {

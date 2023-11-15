@@ -1,7 +1,7 @@
 package dev.alvr.katana.buildlogic.gradle
 
-import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.isRelease
+import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.testing.Test
@@ -10,25 +10,28 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 
-internal class KatanaCommonPlugin : ConventionPlugin {
-    override fun Project.configure() {
-        apply(plugin = "com.louiscad.complete-kotlin")
+internal class KatanaCommonPlugin : Plugin<Project> {
 
-        val buildDir = layout.buildDirectory.asFile.get()
+    override fun apply(target: Project) {
+        with(target) {
+            apply(plugin = "com.louiscad.complete-kotlin")
 
-        with(tasks) {
-            register<Delete>("clean") {
-                allprojects { delete(buildDir) }
-            }
+            val buildDir = layout.buildDirectory.asFile.get()
 
-            register<TestReport>("unitTests") {
-                val testTasks = subprojects.map { p ->
-                    p.tasks.withType<Test>().matching { t -> !t.isRelease }
+            with(tasks) {
+                register<Delete>("clean") {
+                    allprojects { delete(buildDir) }
                 }
 
-                mustRunAfter(testTasks)
-                destinationDirectory.set(file("$buildDir/reports/allTests"))
-                testResults.setFrom(testTasks)
+                register<TestReport>("unitTests") {
+                    val testTasks = subprojects.map { p ->
+                        p.tasks.withType<Test>().matching { t -> !t.isRelease }
+                    }
+
+                    mustRunAfter(testTasks)
+                    destinationDirectory.set(file("$buildDir/reports/allTests"))
+                    testResults.setFrom(testTasks)
+                }
             }
         }
     }

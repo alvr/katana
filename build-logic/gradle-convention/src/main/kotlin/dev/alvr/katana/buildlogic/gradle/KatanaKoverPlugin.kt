@@ -1,12 +1,12 @@
 package dev.alvr.katana.buildlogic.gradle
 
-import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.isRelease
 import dev.alvr.katana.buildlogic.kover
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverVerifyReportConfig
 import kotlinx.kover.gradle.plugin.dsl.MetricType
+import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
@@ -14,7 +14,8 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
-internal class KatanaKoverPlugin : ConventionPlugin {
+internal class KatanaKoverPlugin : Plugin<Project> {
+
     private val classesExcludes = listOf(
         // App
         "*.KatanaApp",
@@ -59,7 +60,7 @@ internal class KatanaKoverPlugin : ConventionPlugin {
         ":ui",
     )
 
-    override fun Project.configure() {
+    override fun apply(target: Project) = with(target) {
         allprojects {
             if (path !in containerModules) {
                 apply(plugin = "org.jetbrains.kotlinx.kover")

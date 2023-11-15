@@ -1,13 +1,12 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
-import com.android.build.gradle.internal.crash.afterEvaluate
 import com.github.gmazzo.gradle.plugins.BuildConfigExtension
-import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.fullPackageName
 import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.apply
@@ -21,10 +20,10 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 internal abstract class KatanaMultiplatformMobileBasePlugin(
     private val androidPlugin: String,
-) : ConventionPlugin {
+) : Plugin<Project> {
     abstract fun ExtensionContainer.configureAndroid(project: Project)
 
-    override fun Project.configure() {
+    override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = androidPlugin)
         apply(plugin = "com.github.gmazzo.buildconfig")
@@ -102,7 +101,7 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
 
     private fun BuildConfigExtension.configureBuildConfig(project: Project) {
         project.afterEvaluate {
-            packageName.set(project.fullPackageName)
+            packageName.set(project.fullPackageName.removeSuffix(APP_PACKAGE))
 
             project.katanaBuildConfig(
                 android = { androidConfig ->
@@ -129,5 +128,7 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
 
     private companion object {
         const val BUILD_CONFIG_FILE = "KatanaBuildConfig"
+
+        const val APP_PACKAGE = ".app"
     }
 }

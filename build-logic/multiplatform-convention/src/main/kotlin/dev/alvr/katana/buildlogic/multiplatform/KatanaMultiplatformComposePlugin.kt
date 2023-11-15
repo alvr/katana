@@ -1,12 +1,12 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
-import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.ResourcesDir
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.multiplatform.tasks.GenerateResourcesFileTask
 import java.io.File
+import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.apply
@@ -20,9 +20,9 @@ import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
-    override fun Project.configure() {
-        apply(plugin = "katana.multiplatform.mobile")
+internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
+    override fun apply(target: Project) = with(target) {
+        apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = "org.jetbrains.compose")
 
         with(extensions) {

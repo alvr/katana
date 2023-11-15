@@ -1,15 +1,16 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
-import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
+import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getValue
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal class KatanaMultiplatformDataPreferencesPlugin : ConventionPlugin {
-    override fun Project.configure() {
+internal class KatanaMultiplatformDataPreferencesPlugin : Plugin<Project> {
+
+    override fun apply(target: Project) = with(target) {
         apply(plugin = "katana.multiplatform.mobile")
 
         with(extensions) {

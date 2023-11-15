@@ -1,17 +1,18 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
 import com.apollographql.apollo3.gradle.api.ApolloExtension
-import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.fullPackageName
+import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getValue
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal class KatanaMultiplatformDataRemotePlugin : ConventionPlugin {
-    override fun Project.configure() {
+internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
+
+    override fun apply(target: Project) = with(target) {
         apply(plugin = "katana.multiplatform.mobile")
         apply(plugin = "com.apollographql.apollo3")
 

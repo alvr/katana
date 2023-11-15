@@ -1,9 +1,9 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
-import dev.alvr.katana.buildlogic.ConventionPlugin
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
+import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
@@ -15,8 +15,9 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.kodein.mock.gradle.MocKMPGradlePlugin
 
-internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
-    override fun Project.configure() {
+internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
+
+    override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = "com.google.devtools.ksp")
         apply(plugin = "io.kotest.multiplatform")
