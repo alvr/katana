@@ -100,7 +100,7 @@ kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutab
 kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.6.0" }
 
 # KotlinPoet
-kotlinpoet = { module = "com.squareup:kotlinpoet", version = "1.15.0" }
+kotlinpoet = { module = "com.squareup:kotlinpoet", version = "1.15.1" }
 
 # Ktor
 ktor-android = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
