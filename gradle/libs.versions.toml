@@ -78,7 +78,7 @@ gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-p
 gradle-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.48.0" }
 
 # Kamel
-kamel = { module = "media.kamel:kamel-image", version = "0.8.3" }
+kamel = { module = "media.kamel:kamel-image", version = "0.9.0" }
 
 # Kermit
 kermit = { module = "co.touchlab:kermit", version = "2.0.2" }
