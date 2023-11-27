@@ -133,7 +133,7 @@ sentry-multiplatform = { module = "io.sentry:sentry-kotlin-multiplatform", versi
 tink = { module = "com.google.crypto.tink:tink-android", version = "1.11.0" }
 
 # YAML
-yamlbeans = { module = "com.esotericsoftware.yamlbeans:yamlbeans", version = "1.15" }
+yamlbeans = { module = "com.esotericsoftware.yamlbeans:yamlbeans", version = "1.17" }
 
 # Tests
 ## JUnit
