@@ -14,7 +14,7 @@ kotest = "5.8.0"
 kotlin = "1.9.10"
 ktor = "2.3.6"
 lifecycle = "2.6.2"
-mockmp = "1.15.0"
+mockmp = "1.16.0"
 orbit = "6.1.0"
 sentry = "7.0.0"
 

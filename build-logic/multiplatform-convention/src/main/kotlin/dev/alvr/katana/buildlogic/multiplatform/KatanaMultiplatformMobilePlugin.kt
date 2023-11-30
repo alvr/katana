@@ -17,6 +17,7 @@ import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.kodein.mock.gradle.MocKMPGradlePlugin
 
 internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
     override fun Project.configure() {
@@ -35,6 +36,7 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
             configure<LibraryExtension> { configureAndroid(project.fullPackageName) }
             configure<BuildConfigExtension> { configureBuildConfig(project) }
+            configure<MocKMPGradlePlugin.Extension> { installWorkaround() }
         }
 
         tasks.commonTasks()

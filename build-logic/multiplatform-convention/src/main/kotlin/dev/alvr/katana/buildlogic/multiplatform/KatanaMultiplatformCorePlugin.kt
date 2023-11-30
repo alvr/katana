@@ -15,6 +15,7 @@ import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.kodein.mock.gradle.MocKMPGradlePlugin
 
 internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
     override fun Project.configure() {
@@ -29,6 +30,7 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
 
             commonExtensions()
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<MocKMPGradlePlugin.Extension> { installWorkaround() }
         }
 
         with(tasks) {
