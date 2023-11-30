@@ -972,16 +972,28 @@ style:
 
 Compose:
   # mrmans0n
+  ComposableAnnotationNaming:
+    active: true
   CompositionLocalAllowlist:
     active: true
     allowedCompositionLocals: LocalAccountStrings,LocalExploreStrings,LocalListsStrings,LocalLoginStrings,LocalSocialStrings
+  CompositionLocalNaming:
+    active: true
   ContentEmitterReturningValues:
+    active: true
+  DefaultsVisibility:
+    active: true
+  ModifierClickableOrder:
     active: true
   ModifierComposable:
     active: true
   ModifierMissing:
     active: true
-    checkModifiersForVisibility: all
+    checkModifiersForVisibility: only_public
+  ModifierNaming:
+    active: true
+  ModifierNotUsedAtRoot:
+    active: true
   ModifierReused:
     active: true
   ModifierWithoutDefault:
@@ -994,11 +1006,13 @@ Compose:
     active: true
   ComposableParamOrder:
     active: true
-  PreviewNaming:
+  PreviewAnnotationNaming:
     active: true
   PreviewPublic:
     active: true
   RememberMissing:
+    active: true
+  RememberContentMissing:
     active: true
   UnstableCollections:
     active: true
