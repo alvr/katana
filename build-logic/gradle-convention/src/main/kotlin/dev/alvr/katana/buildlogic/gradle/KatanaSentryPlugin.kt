@@ -13,7 +13,7 @@ internal class KatanaSentryPlugin : ConventionPlugin {
         extensions.configure<SentryPluginExtension> {
             includeProguardMapping.set(true)
             autoUploadProguardMapping.set(true)
-            experimentalGuardsquareSupport.set(false)
+            dexguardEnabled.set(false)
             uploadNativeSymbols.set(false)
             includeNativeSources.set(false)
             tracingInstrumentation.enabled.set(false)
