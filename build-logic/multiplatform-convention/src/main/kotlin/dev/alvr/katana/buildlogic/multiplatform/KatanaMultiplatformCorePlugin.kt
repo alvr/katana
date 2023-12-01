@@ -11,9 +11,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.kodein.mock.gradle.MocKMPGradlePlugin
 
@@ -39,56 +37,38 @@ internal class KatanaMultiplatformCorePlugin : ConventionPlugin {
         }
     }
 
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     private fun KotlinMultiplatformExtension.configureMultiplatform() {
-        targetHierarchy.default()
+        applyDefaultHierarchyTemplate()
         jvm { testRuns["test"].executionTask.configure { useJUnitPlatform() } }
         configureIos()
         configureSourceSets()
     }
 
-    @Suppress("UNUSED_VARIABLE")
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
-            val commonMain by getting {
+            commonMain {
                 kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
 
                 dependencies {
                     implementation(catalogBundle("core-common"))
                 }
             }
-            val jvmMain by getting {
-                dependsOn(commonMain)
-                dependencies {
-                    implementation(catalogBundle("core-jvm"))
-                }
+            jvmMain.dependencies {
+                implementation(catalogBundle("core-jvm"))
             }
-            val iosMain by getting {
-                dependsOn(commonMain)
-                dependencies {
-                    implementation(catalogBundle("core-ios"))
-                }
+            iosMain.dependencies {
+                implementation(catalogBundle("core-ios"))
             }
-            val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
-            val commonTest by getting {
-                dependencies {
-                    implementation(catalogBundle("core-common-test"))
-                }
+            commonTest.dependencies {
+                implementation(catalogBundle("core-common-test"))
             }
-            val jvmTest by getting {
-                dependsOn(commonTest)
-                dependencies {
-                    implementation(catalogBundle("core-jvm-test"))
-                }
+            jvmTest.dependencies {
+                implementation(catalogBundle("core-jvm-test"))
             }
-            val iosTest by getting {
-                dependsOn(commonTest)
-                dependencies {
-                    implementation(catalogBundle("core-ios-test"))
-                }
+            iosTest.dependencies {
+                implementation(catalogBundle("core-ios-test"))
             }
-            val iosSimulatorArm64Test by getting { dependsOn(iosTest) }
         }
     }
 }

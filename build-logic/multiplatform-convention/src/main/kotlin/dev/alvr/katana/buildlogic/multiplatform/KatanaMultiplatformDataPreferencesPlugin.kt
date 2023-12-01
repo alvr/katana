@@ -6,7 +6,6 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformDataPreferencesPlugin : ConventionPlugin {
@@ -18,46 +17,27 @@ internal class KatanaMultiplatformDataPreferencesPlugin : ConventionPlugin {
         }
     }
 
-    @Suppress("UNUSED_VARIABLE")
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
-            val commonMain by getting {
-                dependencies {
-                    implementation(catalogBundle("data-preferences-common"))
-                }
+            commonMain.dependencies {
+                implementation(catalogBundle("data-preferences-common"))
             }
-            val androidMain by getting {
-                dependsOn(commonMain)
-                dependencies {
-                    implementation(catalogBundle("data-preferences-android"))
-                }
+            androidMain.dependencies {
+                implementation(catalogBundle("data-preferences-android"))
             }
-            val iosMain by getting {
-                dependsOn(commonMain)
-                dependencies {
-                    implementation(catalogBundle("data-preferences-ios"))
-                }
+            iosMain.dependencies {
+                implementation(catalogBundle("data-preferences-ios"))
             }
-            val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
-            val commonTest by getting {
-                dependencies {
-                    implementation(catalogBundle("data-preferences-common-test"))
-                }
+            commonTest.dependencies {
+                implementation(catalogBundle("data-preferences-common-test"))
             }
-            val androidUnitTest by getting {
-                dependsOn(commonTest)
-                dependencies {
-                    implementation(catalogBundle("data-preferences-android-test"))
-                }
+            androidUnitTest.dependencies {
+                implementation(catalogBundle("data-preferences-android-test"))
             }
-            val iosTest by getting {
-                dependsOn(commonTest)
-                dependencies {
-                    implementation(catalogBundle("data-preferences-ios-test"))
-                }
+            iosTest.dependencies {
+                implementation(catalogBundle("data-preferences-ios-test"))
             }
-            val iosSimulatorArm64Test by getting { dependsOn(iosTest) }
         }
     }
 }
