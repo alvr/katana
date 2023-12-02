@@ -69,7 +69,7 @@ gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", versi
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.7.4" }
+gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.7.5" }
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.9.21-1.0.15" }
 gradle-mockmp = { module = "org.kodein.mock:mockmp-gradle-plugin", version.ref = "mockmp" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "4.0.0" }
@@ -96,7 +96,7 @@ koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-test" }
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.3.6" }
-kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.6.0" }
+kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version = "1.6.2" }
 
 # KotlinPoet
 kotlinpoet = { module = "com.squareup:kotlinpoet", version = "1.15.2" }
