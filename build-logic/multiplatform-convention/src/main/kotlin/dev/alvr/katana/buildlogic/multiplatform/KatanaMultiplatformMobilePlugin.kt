@@ -15,7 +15,6 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.kodein.mock.gradle.MocKMPGradlePlugin
 
@@ -42,15 +41,14 @@ internal class KatanaMultiplatformMobilePlugin : ConventionPlugin {
         tasks.commonTasks()
     }
 
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     private fun KotlinMultiplatformExtension.configureMultiplatform() {
-        targetHierarchy.default()
+        applyDefaultHierarchyTemplate()
         androidTarget()
         configureIos()
         configureSourceSets()
     }
 
-    @Suppress("UNUSED_VARIABLE")
+    @Suppress("UnusedPrivateProperty")
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
             val commonMain by getting {

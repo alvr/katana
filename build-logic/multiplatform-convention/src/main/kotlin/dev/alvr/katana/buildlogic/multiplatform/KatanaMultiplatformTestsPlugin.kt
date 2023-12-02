@@ -13,7 +13,6 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformTestsPlugin : ConventionPlugin {
@@ -31,16 +30,15 @@ internal class KatanaMultiplatformTestsPlugin : ConventionPlugin {
         tasks.commonTasks()
     }
 
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     private fun KotlinMultiplatformExtension.configureMultiplatform() {
-        targetHierarchy.default()
+        applyDefaultHierarchyTemplate()
         androidTarget()
         jvm { testRuns["test"].executionTask.configure { enabled = false } }
         configureIos()
         configureSourceSets()
     }
 
-    @Suppress("UNUSED_VARIABLE")
+    @Suppress("UnusedPrivateProperty")
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
             val commonMain by getting {
@@ -69,7 +67,6 @@ internal class KatanaMultiplatformTestsPlugin : ConventionPlugin {
                     implementation(catalogBundle("ui-ios-test"))
                 }
             }
-            val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
         }
     }
 }

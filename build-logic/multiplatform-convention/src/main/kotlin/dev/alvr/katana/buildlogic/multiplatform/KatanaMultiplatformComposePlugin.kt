@@ -13,7 +13,6 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.registering
 import org.jetbrains.compose.ComposeExtension
@@ -35,13 +34,13 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
         kspDependencies()
     }
 
-    @Suppress("UNUSED_VARIABLE")
     @OptIn(ExperimentalComposeLibrary::class)
     private fun KotlinMultiplatformExtension.configureSourceSets() {
-        val compose = (this as ExtensionAware).extensions.getByName("compose") as ComposePlugin.Dependencies
+        val compose =
+            (this as ExtensionAware).extensions.getByName("compose") as ComposePlugin.Dependencies
 
         configureSourceSets {
-            val commonMain by getting {
+            commonMain {
                 kotlin.srcDirs("build/$GeneratedResourcesDir")
 
                 dependencies {
@@ -56,40 +55,24 @@ internal class KatanaMultiplatformComposePlugin : ConventionPlugin {
                     implementation(catalogBundle("ui-common"))
                 }
             }
-            val androidMain by getting {
-                dependsOn(commonMain)
-                dependencies {
-                    implementation(compose.preview)
-                    implementation(compose.uiTooling)
-                    implementation(catalogBundle("ui-android"))
-                }
+            androidMain.dependencies {
+                implementation(compose.preview)
+                implementation(compose.uiTooling)
+                implementation(catalogBundle("ui-android"))
             }
-            val iosMain by getting {
-                dependsOn(commonMain)
-                dependencies {
-                    implementation(catalogBundle("ui-ios"))
-                }
+            iosMain.dependencies {
+                implementation(catalogBundle("ui-ios"))
             }
-            val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
-            val commonTest by getting {
-                dependencies {
-                    implementation(catalogBundle("ui-common-test"))
-                }
+            commonTest.dependencies {
+                implementation(catalogBundle("ui-common-test"))
             }
-            val androidUnitTest by getting {
-                dependsOn(commonTest)
-                dependencies {
-                    implementation(catalogBundle("ui-android-test"))
-                }
+            androidUnitTest.dependencies {
+                implementation(catalogBundle("ui-android-test"))
             }
-            val iosTest by getting {
-                dependsOn(commonTest)
-                dependencies {
-                    implementation(catalogBundle("ui-ios-test"))
-                }
+            iosTest.dependencies {
+                implementation(catalogBundle("ui-ios-test"))
             }
-            val iosSimulatorArm64Test by getting { dependsOn(iosTest) }
         }
     }
 
