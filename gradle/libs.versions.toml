@@ -129,7 +129,7 @@ sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "s
 sentry-multiplatform = { module = "io.sentry:sentry-kotlin-multiplatform", version = "0.3.0" }
 
 # Tink
-tink = { module = "com.google.crypto.tink:tink-android", version = "1.11.0" }
+tink = { module = "com.google.crypto.tink:tink-android", version = "1.12.0" }
 
 # YAML
 yamlbeans = { module = "com.esotericsoftware.yamlbeans:yamlbeans", version = "1.17" }
