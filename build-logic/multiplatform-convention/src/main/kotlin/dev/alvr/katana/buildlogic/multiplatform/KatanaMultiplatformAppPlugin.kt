@@ -21,7 +21,10 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
 
     override fun apply(target: Project) {
         super.apply(target)
-        target.apply(plugin = "katana.multiplatform.compose")
+        with(target) {
+            apply(plugin = "katana.multiplatform.compose")
+            apply(plugin = "katana.sentry")
+        }
     }
 
     override fun ExtensionContainer.configureAndroid(project: Project) {

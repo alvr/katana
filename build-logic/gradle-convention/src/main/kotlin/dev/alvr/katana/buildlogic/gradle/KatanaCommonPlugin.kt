@@ -16,11 +16,9 @@ internal class KatanaCommonPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "com.louiscad.complete-kotlin")
 
-            val buildDir = layout.buildDirectory.asFile.get()
-
             with(tasks) {
                 register<Delete>("clean") {
-                    allprojects { delete(buildDir) }
+                    allprojects { delete(layout.buildDirectory.asFile.get()) }
                 }
 
                 register<TestReport>("unitTests") {
@@ -29,7 +27,7 @@ internal class KatanaCommonPlugin : Plugin<Project> {
                     }
 
                     mustRunAfter(testTasks)
-                    destinationDirectory.set(file("$buildDir/reports/allTests"))
+                    destinationDirectory.set(file("${layout.buildDirectory.asFile.get()}/reports/allTests"))
                     testResults.setFrom(testTasks)
                 }
             }

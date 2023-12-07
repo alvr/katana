@@ -6,10 +6,10 @@ group = "dev.alvr.katana.buildlogic.gradle"
 version = extra["katana.plugins.version"].toString()
 
 dependencies {
-    compileOnly(libs.gradle.complete.kotlin)
-    compileOnly(libs.gradle.kotlin)
-    compileOnly(libs.gradle.kover)
-    compileOnly(libs.gradle.sentry)
+    implementation(libs.gradle.complete.kotlin)
+    implementation(libs.gradle.kotlin)
+    implementation(libs.gradle.kover)
+    implementation(libs.gradle.sentry)
     implementation(project(":common"))
 }
 

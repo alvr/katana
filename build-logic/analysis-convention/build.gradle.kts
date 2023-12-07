@@ -6,7 +6,7 @@ group = "dev.alvr.katana.buildlogic.analysis"
 version = extra["katana.plugins.version"].toString()
 
 dependencies {
-    compileOnly(libs.gradle.detekt)
+    implementation(libs.gradle.detekt)
     implementation(project(":common"))
 }
 

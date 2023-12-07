@@ -1023,7 +1023,7 @@ Compose:
     allowedStateHolderNames: .*ViewModel
   ViewModelInjection:
     active: true
-    viewModelFactories: koinViewModel,potatoViewModel
+    viewModelFactories: koinViewModel
 
 compose:
   # appKode

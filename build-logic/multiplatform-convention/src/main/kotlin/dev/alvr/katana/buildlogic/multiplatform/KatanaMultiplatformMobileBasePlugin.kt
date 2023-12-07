@@ -14,9 +14,9 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.kodein.mock.gradle.MocKMPGradlePlugin
 
 internal abstract class KatanaMultiplatformMobileBasePlugin(
     private val androidPlugin: String,
@@ -39,14 +39,14 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
             configureAndroid(project)
             configure<BuildConfigExtension> { configureBuildConfig(project) }
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<MocKMPGradlePlugin.Extension> { installWorkaround() }
         }
 
         tasks.commonTasks()
     }
 
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     private fun KotlinMultiplatformExtension.configureMultiplatform() {
-        targetHierarchy.default()
+        applyDefaultHierarchyTemplate()
         androidTarget()
         configureIos()
         configureSourceSets()
@@ -100,10 +100,10 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
     }
 
     private fun BuildConfigExtension.configureBuildConfig(project: Project) {
-        project.afterEvaluate {
-            packageName.set(project.fullPackageName.removeSuffix(APP_PACKAGE))
+        packageName.set(project.fullPackageName.removeSuffix(APP_PACKAGE))
 
-            project.katanaBuildConfig(
+        project.afterEvaluate {
+            katanaBuildConfig(
                 android = { androidConfig ->
                     sourceSets.getByName("androidMain") {
                         className.set(BUILD_CONFIG_FILE)

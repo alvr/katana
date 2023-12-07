@@ -2,7 +2,6 @@ plugins {
     id("katana.common")
     id("katana.detekt")
     id("katana.kover")
-    id("katana.sentry")
 
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false

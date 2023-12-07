@@ -1,13 +1,15 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
 import com.esotericsoftware.yamlbeans.YamlReader
-import java.util.concurrent.atomic.AtomicBoolean
+import dev.alvr.katana.buildlogic.TimedCache
+import kotlin.time.Duration.Companion.minutes
 import org.gradle.api.Project
 
 private typealias YamlBuildConfig = Map<String, FlavorBuildConfig>
-private typealias FlavorBuildConfig = Map<String, ArrayList<LinkedHashMap<String, String>>>
+private typealias FlavorBuildConfig = Map<String, ArrayList<Map<String, String>>>
+private typealias PlatformBuildConfig = Pair<List<BuildConfig>, List<BuildConfig>>
 
-private val initialized = AtomicBoolean(false)
+private val ymlMap = TimedCache<String, PlatformBuildConfig>(2.minutes)
 
 internal class BuildConfig(map: Map<String, String>) {
     val type: String by map
@@ -19,14 +21,14 @@ internal fun Project.katanaBuildConfig(
     android: (List<BuildConfig>) -> Unit,
     ios: (List<BuildConfig>) -> Unit,
 ) {
-    if (!initialized.compareAndSet(false, true)) {
-        val flavor = providers.gradleProperty("katana.flavor").getOrElse("dev")
-        val ymlConfig = rootDir.resolve("config/build_config.yml").readText()
-        val yml = YamlReader(ymlConfig).parse<YamlBuildConfig>()
-
-        android(yml["android"].map(flavor))
-        ios(yml["ios"].map(flavor))
+    val flavor = providers.gradleProperty("katana.flavor").getOrElse("dev")
+    val (androidConfig, iosConfig) = ymlMap.getOrPut(flavor) {
+        val yml = YamlReader(rootProject.file("config/build_config.yml").reader()).parse<YamlBuildConfig>()
+        yml["android"].map(flavor) to yml["ios"].map(flavor)
     }
+
+    android(androidConfig)
+    ios(iosConfig)
 }
 
 private fun FlavorBuildConfig?.map(flavor: String?) =
