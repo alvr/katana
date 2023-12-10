@@ -11,7 +11,7 @@ dependencies {
     implementation(libs.gradle.android)
     implementation(libs.gradle.apollo)
     implementation(libs.gradle.buildconfig)
-    implementation(libs.gradle.complete.kotlin)
+    // implementation(libs.gradle.complete.kotlin) TODO
     implementation(libs.gradle.compose)
     implementation(libs.gradle.detekt)
     implementation(libs.gradle.kotest)

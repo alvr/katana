@@ -14,9 +14,9 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
@@ -43,34 +43,29 @@ internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
         configureSourceSets()
     }
 
-    @Suppress("UnusedPrivateProperty")
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
-            val commonMain by getting {
-                dependencies {
-                    implementation(catalogBundle("core-common-test"))
-                    implementation(catalogBundle("mobile-common-test"))
-                }
+            commonMain.dependencies {
+                implementation(catalogBundle("core-common-test"))
+                implementation(catalogBundle("mobile-common-test"))
             }
-            val jvmMain by getting {
-                dependsOn(commonMain)
+            val jvmBased by creating {
+                dependsOn(commonMain.get())
                 dependencies {
                     implementation(catalogBundle("core-jvm-test"))
                 }
             }
-            val androidMain by getting {
-                dependsOn(jvmMain)
+            jvmMain.get().dependsOn(jvmBased)
+            androidMain {
+                dependsOn(jvmBased)
                 dependencies {
                     implementation(catalogBundle("mobile-android-test"))
                     implementation(catalogBundle("ui-android-test"))
                 }
             }
-            val iosMain by getting {
-                dependsOn(commonMain)
-                dependencies {
-                    implementation(catalogBundle("mobile-ios-test"))
-                    implementation(catalogBundle("ui-ios-test"))
-                }
+            iosMain.dependencies {
+                implementation(catalogBundle("mobile-ios-test"))
+                implementation(catalogBundle("ui-ios-test"))
             }
         }
     }
