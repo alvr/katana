@@ -1,7 +1,6 @@
 plugins {
     id("katana.multiplatform.compose")
-    id("kotlin-parcelize")
-    alias(libs.plugins.parcelize)
+    alias(libs.plugins.serialization)
 }
 
 ksp {
@@ -11,8 +10,6 @@ ksp {
 
 katanaMultiplatform {
     commonMainDependencies {
-        implementation(libs.parcelable)
-
         implementation(projects.common.core)
         implementation(projects.domain.lists)
         implementation(projects.ui.base)
