@@ -40,7 +40,7 @@ arrow = { module = "io.arrow-kt:arrow-core", version = "1.2.1" }
 
 # Compose
 compose-compiler = { module = "org.jetbrains.compose.compiler:compiler", version = "1.5.4" }
-compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version = "0.3.1" }
+compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version = "0.3.2" }
 compose-placeholder = { module = "com.eygraber:compose-placeholder-material", version = "1.0.7" }
 
 # Coroutines
