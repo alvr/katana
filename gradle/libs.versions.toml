@@ -26,7 +26,7 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 # AndroidX
-androidx-activity = { module = "androidx.activity:activity-compose", version = "1.8.1" }
+androidx-activity = { module = "androidx.activity:activity-compose", version = "1.8.2" }
 
 # Apollo
 apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
