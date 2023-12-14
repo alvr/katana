@@ -974,6 +974,10 @@ Compose:
   # mrmans0n
   ComposableAnnotationNaming:
     active: true
+  ComposableNaming:
+    active: true
+  ComposableParamOrder:
+    active: true
   CompositionLocalAllowlist:
     active: true
     allowedCompositionLocals: LocalAccountStrings,LocalExploreStrings,LocalListsStrings,LocalLoginStrings,LocalSocialStrings
@@ -1002,9 +1006,7 @@ Compose:
     active: true
   MutableParams:
     active: true
-  ComposableNaming:
-    active: true
-  ComposableParamOrder:
+  MutableStateParam:
     active: true
   PreviewAnnotationNaming:
     active: true
@@ -1018,8 +1020,10 @@ Compose:
     active: true
   ViewModelForwarding:
     active: true
+    allowedStateHolderNames: .*ViewModel
   ViewModelInjection:
     active: true
+    viewModelFactories: koinViewModel,potatoViewModel
 
 compose:
   # appKode
