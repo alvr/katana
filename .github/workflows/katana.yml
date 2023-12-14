@@ -165,12 +165,12 @@ jobs:
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Download static report artifacts
-        uses: actions/download-artifact@v3.0.2
+        uses: actions/download-artifact@v4.0.0
         with:
           name: static-report
           path: .
       - name: Download coverage artifact
-        uses: actions/download-artifact@v3.0.2
+        uses: actions/download-artifact@v4.0.0
         with:
           name: coverage-reports
           path: .
