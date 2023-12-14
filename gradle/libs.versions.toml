@@ -69,7 +69,7 @@ gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", v
 gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.7.5" }
-gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.9.21-1.0.15" }
+gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version = "1.9.21-1.0.16" }
 gradle-mockmp = { module = "org.kodein.mock:mockmp-gradle-plugin", version.ref = "mockmp" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version = "4.0.0" }
 gradle-sonarqube = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version = "4.4.1.3373" }
