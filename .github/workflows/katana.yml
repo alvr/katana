@@ -54,7 +54,7 @@ jobs:
       - name: Assemble Katana
         run: ./gradlew assembleDebug --no-daemon --scan --stacktrace
       - name: Upload compose reports artifact
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4.0.0
         if: always()
         with:
           name: compose-reports
@@ -97,7 +97,7 @@ jobs:
       - name: Run detekt
         run: ./gradlew detektAll lintDebug --no-daemon --stacktrace
       - name: Upload static reports artifact
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4.0.0
         with:
           name: static-report
           path: |
@@ -123,14 +123,14 @@ jobs:
       - name: Run unit tests
         run: ./gradlew unitTests koverXmlReport koverVerify --no-daemon --scan --stacktrace
       - name: Upload tests reports artifact (success)
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4.0.0
         if: success()
         with:
           name: tests-reports
           path: build/reports/allTests
           retention-days: 7
       - name: Upload tests reports artifact (failure)
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4.0.0
         if: failure()
         with:
           name: tests-reports
@@ -139,7 +139,7 @@ jobs:
             **/build/reports/tests/testDebugUnitTest
           retention-days: 7
       - name: Upload coverage reports artifact
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4.0.0
         with:
           name: coverage-reports
           path: '**/build/reports/kover/report.xml'
