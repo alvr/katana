@@ -1,13 +1,13 @@
-package dev.alvr.katana.main
+package dev.alvr.katana.ui.main
 
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import dev.alvr.katana.main.di.katanaModule
-import dev.alvr.katana.main.di.platformModule
-import dev.alvr.katana.main.navigation.KatanaDestinations
 import dev.alvr.katana.ui.base.design.KatanaTheme
+import dev.alvr.katana.ui.main.di.katanaModule
+import dev.alvr.katana.ui.main.di.platformModule
+import dev.alvr.katana.ui.main.navigation.KatanaDestinations
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.KoinApplication
 

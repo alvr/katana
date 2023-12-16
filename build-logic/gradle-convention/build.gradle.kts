@@ -9,7 +9,6 @@ dependencies {
     implementation(libs.gradle.complete.kotlin)
     implementation(libs.gradle.kotlin)
     implementation(libs.gradle.kover)
-    implementation(libs.gradle.sentry)
     implementation(project(":common"))
 }
 
@@ -22,10 +21,6 @@ gradlePlugin {
         register("kover") {
             id = "katana.kover"
             implementationClass = "dev.alvr.katana.buildlogic.gradle.KatanaKoverPlugin"
-        }
-        register("sentry") {
-            id = "katana.sentry"
-            implementationClass = "dev.alvr.katana.buildlogic.gradle.KatanaSentryPlugin"
         }
     }
 }

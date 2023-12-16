@@ -1,4 +1,4 @@
-package dev.alvr.katana.main.navigation
+package dev.alvr.katana.ui.main.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Row
@@ -34,10 +34,10 @@ import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.spec.NavGraphSpec
-import dev.alvr.katana.main.components.SessionExpiredDialog
-import dev.alvr.katana.main.viewmodel.MainViewModel
 import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.login.view.destinations.LoginScreenDestination
+import dev.alvr.katana.ui.main.components.SessionExpiredDialog
+import dev.alvr.katana.ui.main.viewmodel.MainViewModel
 import io.sentry.compose.withSentryObservableEffect
 
 @Composable

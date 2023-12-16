@@ -54,10 +54,6 @@ fun DependencyHandlerScope.detekt(provider: Provider<*>) {
     "detektPlugins"(provider)
 }
 
-fun DependencyHandlerScope.kover(path: String) {
-    "kover"(project(path))
-}
-
 fun BaseExtension.configureAndroid(packageName: String) {
     compileSdkVersion(KatanaConfiguration.CompileSdk)
     buildToolsVersion(KatanaConfiguration.BuildTools)

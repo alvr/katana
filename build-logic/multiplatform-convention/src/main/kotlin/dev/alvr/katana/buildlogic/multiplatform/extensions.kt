@@ -1,6 +1,8 @@
 package dev.alvr.katana.buildlogic.multiplatform
 
 import java.util.Locale
+import kotlinx.kover.gradle.plugin.dsl.KoverVerifyReportConfig
+import kotlinx.kover.gradle.plugin.dsl.MetricType
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.NamedDomainObjectProvider
 import org.gradle.api.Project
@@ -36,6 +38,23 @@ internal fun KotlinMultiplatformExtension.configureIos() {
     }
 }
 
+internal fun KoverVerifyReportConfig.configure() {
+    onCheck = true
+
+    rule("Minimal instruction coverage rate in percent") {
+        bound {
+            metric = MetricType.INSTRUCTION
+            minValue = MIN_COVERED_PERCENTAGE
+        }
+    }
+    rule("Minimal line coverage rate in percent") {
+        bound {
+            metric = MetricType.LINE
+            minValue = MIN_COVERED_PERCENTAGE
+        }
+    }
+}
+
 private val Project.frameworkIdentifier
     get() = path.split(':').identifier
 
@@ -49,3 +68,5 @@ internal val NamedDomainObjectContainer<KotlinSourceSet>.androidUnitTest:
 
 private fun String.capitalize() =
     replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+
+private const val MIN_COVERED_PERCENTAGE = 80

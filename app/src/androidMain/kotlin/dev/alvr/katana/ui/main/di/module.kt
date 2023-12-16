@@ -1,4 +1,4 @@
-package dev.alvr.katana.main.di
+package dev.alvr.katana.ui.main.di
 
 import android.app.Application
 import android.content.Context
@@ -18,11 +18,11 @@ import dev.alvr.katana.domain.lists.di.domainListsModule
 import dev.alvr.katana.domain.session.di.domainSessionModule
 import dev.alvr.katana.domain.social.di.domainSocialModule
 import dev.alvr.katana.domain.user.di.domainUserModule
-import dev.alvr.katana.main.viewmodel.MainViewModel
 import dev.alvr.katana.ui.account.di.uiAccountModule
 import dev.alvr.katana.ui.explore.di.uiExploreModule
 import dev.alvr.katana.ui.lists.di.uiListsModule
 import dev.alvr.katana.ui.login.di.uiLoginModule
+import dev.alvr.katana.ui.main.viewmodel.MainViewModel
 import dev.alvr.katana.ui.social.di.uiSocialModule
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module

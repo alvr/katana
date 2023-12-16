@@ -1,4 +1,4 @@
-package dev.alvr.katana.main.navigation
+package dev.alvr.katana.ui.main.navigation
 
 import com.ramcosta.composedestinations.spec.DestinationSpec
 import com.ramcosta.composedestinations.spec.NavGraphSpec

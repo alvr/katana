@@ -1,13 +1,13 @@
-package dev.alvr.katana.main.viewmodel
+package dev.alvr.katana.ui.main.viewmodel
 
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
 import dev.alvr.katana.domain.session.usecases.ClearActiveSessionUseCase
 import dev.alvr.katana.domain.session.usecases.GetAnilistTokenUseCase
 import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
-import dev.alvr.katana.main.navigation.NavGraphs
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
+import dev.alvr.katana.ui.main.navigation.NavGraphs
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container

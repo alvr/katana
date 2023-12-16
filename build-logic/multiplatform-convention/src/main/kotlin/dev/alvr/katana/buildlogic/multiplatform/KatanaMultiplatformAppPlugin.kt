@@ -2,11 +2,13 @@ package dev.alvr.katana.buildlogic.multiplatform
 
 import com.android.build.api.dsl.ApplicationBuildType
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import dev.alvr.katana.buildlogic.ANDROID_APPLICATION_PLUGIN
 import dev.alvr.katana.buildlogic.AndroidDir
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.ResourcesDir
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.configureAndroid
+import io.sentry.android.gradle.extensions.SentryPluginExtension
 import java.io.FileInputStream
 import java.util.Properties
 import org.gradle.api.NamedDomainObjectContainer
@@ -17,14 +19,14 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
-internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugin(AndroidPlugin) {
+internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugin(ANDROID_APPLICATION_PLUGIN) {
 
-    override fun apply(target: Project) {
-        super.apply(target)
-        with(target) {
-            apply(plugin = "katana.multiplatform.compose")
-            apply(plugin = "katana.sentry")
-        }
+    override fun apply(target: Project) = with(target) {
+        super.apply(this)
+        apply(plugin = "katana.multiplatform.compose")
+        apply(plugin = "io.sentry.android.gradle")
+
+        extensions.configure<SentryPluginExtension> { configureSentry() }
     }
 
     override fun ExtensionContainer.configureAndroid(project: Project) {
@@ -117,6 +119,17 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
         sourceSets["main"].resources.srcDirs(ResourcesDir)
     }
 
+    private fun SentryPluginExtension.configureSentry() {
+        includeProguardMapping.set(true)
+        autoUploadProguardMapping.set(true)
+        dexguardEnabled.set(false)
+        uploadNativeSymbols.set(false)
+        includeNativeSources.set(false)
+        tracingInstrumentation.enabled.set(false)
+        autoInstallation.enabled.set(false)
+        ignoredBuildTypes.set(setOf("debug"))
+    }
+
     private fun ApplicationBuildType.configure(isDebug: Boolean) {
         isDebuggable = isDebug
         isDefault = isDebug
@@ -127,8 +140,4 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
 
     private fun Properties.getValue(key: String, env: String) =
         getOrElse(key) { System.getenv(env) } as? String
-
-    private companion object {
-        const val AndroidPlugin = "com.android.application"
-    }
 }

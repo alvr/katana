@@ -41,3 +41,22 @@ katanaMultiplatform {
         implementation(projects.common.tests)
     }
 }
+
+dependencies {
+    kover(projects.data.preferences.base)
+    kover(projects.data.preferences.session)
+
+    kover(projects.data.remote.account)
+    kover(projects.data.remote.base)
+    kover(projects.data.remote.explore)
+    kover(projects.data.remote.lists)
+    kover(projects.data.remote.social)
+    kover(projects.data.remote.user)
+
+    kover(projects.ui.account)
+    kover(projects.ui.base)
+    kover(projects.ui.explore)
+    kover(projects.ui.lists)
+    kover(projects.ui.login)
+    kover(projects.ui.social)
+}

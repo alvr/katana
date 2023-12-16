@@ -1,4 +1,4 @@
-package dev.alvr.katana.main.navigation
+package dev.alvr.katana.ui.main.navigation
 
 import co.touchlab.kermit.Logger
 import com.ramcosta.composedestinations.dynamic.within

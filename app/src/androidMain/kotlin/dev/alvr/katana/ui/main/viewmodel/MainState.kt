@@ -1,4 +1,4 @@
-package dev.alvr.katana.main.viewmodel
+package dev.alvr.katana.ui.main.viewmodel
 
 import com.ramcosta.composedestinations.spec.NavGraphSpec
 

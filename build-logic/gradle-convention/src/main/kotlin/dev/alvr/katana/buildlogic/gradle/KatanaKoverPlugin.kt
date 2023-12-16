@@ -1,43 +1,48 @@
 package dev.alvr.katana.buildlogic.gradle
 
+import dev.alvr.katana.buildlogic.ANDROID_APPLICATION_PLUGIN
+import dev.alvr.katana.buildlogic.ANDROID_LIBRARY_PLUGIN
 import dev.alvr.katana.buildlogic.isRelease
-import dev.alvr.katana.buildlogic.kover
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
-import kotlinx.kover.gradle.plugin.dsl.KoverVerifyReportConfig
+import kotlinx.kover.gradle.plugin.dsl.KoverReportFilters
 import kotlinx.kover.gradle.plugin.dsl.MetricType
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 
 internal class KatanaKoverPlugin : Plugin<Project> {
 
+    // Keep in sync with codecov.yml
     private val classesExcludes = listOf(
-        // App
-        "*.KatanaApp",
-        "*.*Initializer",
+        // Common
+        "*.KatanaApp*",
+        "*.KatanaBuildConfig",
+
+        // Android
+        "*.*Activity",
+        "*.*Fragment",
 
         // Apollo
         "*.remote.*.*Mutation*",
         "*.remote.*.*Query*",
-
-        // Common Android
-        "*.BuildConfig",
-        "*.*Activity",
-        "*.*Fragment",
 
         // Compose
         "*.*ComposableSingletons*",
 
         // Serializers
         "*.*$\$serializer",
+
+        // Sentry
+        "*.SentryLogger",
     )
-    private val packagesIncludes = listOf("dev.alvr.katana")
     private val packagesExcludes = listOf(
+        // Base
+        "*.base",
+
         // Common
         "*.common.tests",
 
@@ -49,6 +54,12 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         "*.remote.*.fragment",
         "*.remote.*.selections",
         "*.remote.*.type",
+
+        // UI
+        "*.ui.*.navigation",
+        "*.ui.*.resources",
+        "*.ui.*.strings",
+        "*.ui.*.view",
     )
 
     private val containerModules = listOf(
@@ -61,67 +72,78 @@ internal class KatanaKoverPlugin : Plugin<Project> {
     )
 
     override fun apply(target: Project) = with(target) {
-        allprojects {
-            if (path !in containerModules) {
-                apply(plugin = "org.jetbrains.kotlinx.kover")
+        apply(plugin = "org.jetbrains.kotlinx.kover")
+
+        extensions.configure<KoverProjectExtension> { configure(rootProject) }
+        subprojects.configureKover()
+        extensions.configure<KoverReportExtension> { configureMergedReport() }
+    }
+
+    private fun Iterable<Project>.configureKover() {
+        forEach { project ->
+            with(project) {
+                if (path !in containerModules) {
+                    apply(plugin = "org.jetbrains.kotlinx.kover")
+                    extensions.configure<KoverReportExtension> { configure(project) }
+                    rootProject.dependencies.add("kover", this)
+                }
             }
-        }
-
-        with(extensions) {
-            configure<KoverProjectExtension> { configure(project) }
-            configure<KoverReportExtension> { configure() }
-        }
-
-        dependencies {
-            subprojects
-                .filterNot { it.path in containerModules }
-                .forEach { kover(it.path) }
         }
     }
 
     private fun KoverProjectExtension.configure(project: Project) {
-        project.tasks.withType<Test> {
-            if (isRelease) disable()
+        project.allprojects {
+            tasks.withType<Test> {
+                if (isRelease) disable()
+            }
+        }
+
+        excludeJavaCode()
+    }
+
+    private fun KoverReportExtension.configure(project: Project) {
+        with(project) {
+            pluginManager.withPlugin(ANDROID_APPLICATION_PLUGIN) { configureAndroidReport() }
+            pluginManager.withPlugin(ANDROID_LIBRARY_PLUGIN) { configureAndroidReport() }
         }
     }
 
-    private fun KoverReportExtension.configure() {
-        filters {
-            includes { packages(packagesIncludes) }
-            excludes {
-                annotatedBy(
-                    "androidx.compose.runtime.Composable",
-                    "androidx.compose.ui.tooling.preview.Preview",
-                )
-                classes(classesExcludes)
-                packages(packagesExcludes)
+    private fun KoverReportExtension.configureMergedReport() {
+        filters { configureFilters() }
+
+        verify {
+            rule("Minimal instruction coverage rate in percent") {
+                bound {
+                    metric = MetricType.INSTRUCTION
+                    minValue = MIN_COVERED_PERCENTAGE
+                }
+            }
+            rule("Minimal line coverage rate in percent") {
+                bound {
+                    metric = MetricType.LINE
+                    minValue = MIN_COVERED_PERCENTAGE
+                }
             }
         }
-
-//        defaults {
-//            mergeWith(ANDROID_VARIANT)
-//            verify { configure() }
-//        }
-
-//        androidReports(ANDROID_VARIANT) {
-//            verify { configure() }
-//        }
     }
 
-    private fun KoverVerifyReportConfig.configure() {
-        onCheck = true
+    private fun KoverReportExtension.configureAndroidReport() {
+        configureMergedReport()
 
-        rule("Minimal instruction coverage rate in percent") {
-            bound {
-                metric = MetricType.INSTRUCTION
-                minValue = MIN_COVERED_PERCENTAGE
-            }
+        defaults {
+            mergeWith(ANDROID_VARIANT)
+            filters { configureFilters() }
         }
-        rule("Minimal line coverage rate in percent") {
-            bound {
-                metric = MetricType.LINE
-                minValue = MIN_COVERED_PERCENTAGE
-            }
+    }
+
+    private fun KoverReportFilters.configureFilters() {
+        excludes {
+            annotatedBy(
+                "androidx.compose.runtime.Composable",
+                "androidx.compose.ui.tooling.preview.Preview",
+            )
+            classes(classesExcludes)
+            packages(packagesExcludes)
         }
     }
 

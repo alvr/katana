@@ -1,4 +1,4 @@
-package dev.alvr.katana.main.navigation
+package dev.alvr.katana.ui.main.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
@@ -32,9 +32,9 @@ import androidx.navigation.NavGraph
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.utils.destination
-import dev.alvr.katana.main.navigation.items.HomeNavigationBarItem
-import dev.alvr.katana.main.navigation.items.NavigationBarItem
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
+import dev.alvr.katana.ui.main.navigation.items.HomeNavigationBarItem
+import dev.alvr.katana.ui.main.navigation.items.NavigationBarItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

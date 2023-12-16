@@ -1,4 +1,4 @@
-package dev.alvr.katana.main
+package dev.alvr.katana.ui.main
 
 import androidx.compose.ui.window.ComposeUIViewController
 

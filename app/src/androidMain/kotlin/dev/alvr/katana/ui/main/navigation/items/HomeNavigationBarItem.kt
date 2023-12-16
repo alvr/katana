@@ -1,4 +1,4 @@
-package dev.alvr.katana.main.navigation.items
+package dev.alvr.katana.ui.main.navigation.items
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.AccountCircle

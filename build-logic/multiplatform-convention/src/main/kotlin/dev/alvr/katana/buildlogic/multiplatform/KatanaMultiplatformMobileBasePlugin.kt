@@ -128,7 +128,7 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
 
     private companion object {
         const val BUILD_CONFIG_FILE = "KatanaBuildConfig"
-
+        const val ANDROID_VARIANT = "debug"
         const val APP_PACKAGE = ".app"
     }
 }

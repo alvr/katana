@@ -1,4 +1,4 @@
-package dev.alvr.katana.main.components
+package dev.alvr.katana.ui.main.components
 
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text

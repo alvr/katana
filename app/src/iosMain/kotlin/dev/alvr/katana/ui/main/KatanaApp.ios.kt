@@ -1,4 +1,4 @@
-package dev.alvr.katana.main
+package dev.alvr.katana.ui.main
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

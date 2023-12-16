@@ -16,10 +16,8 @@ import dev.alvr.katana.domain.session.models.AnilistToken
 import dev.alvr.katana.domain.session.usecases.ClearActiveSessionUseCase
 import dev.alvr.katana.domain.session.usecases.GetAnilistTokenUseCase
 import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
-import dev.alvr.katana.main.navigation.NavGraphs
-import dev.alvr.katana.main.viewmodel.MainState
-import dev.alvr.katana.main.viewmodel.MainViewModel
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
+import dev.alvr.katana.ui.main.navigation.NavGraphs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
