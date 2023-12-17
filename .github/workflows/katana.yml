@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@v4.1.1
         with:
           fetch-depth: 0
       - name: Validate Gradle wrapper
@@ -46,7 +46,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@v4.1.1
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -67,7 +67,7 @@ jobs:
         id: diawi_android
         with:
           token: ${{ secrets.DIAWI_TOKEN }}
-          file: androidApp/build/outputs/apk/debug/androidApp-debug.apk
+          file: app/build/outputs/apk/debug/app-debug.apk
       - name: Post comment with Diawi link
         uses: peter-evans/create-or-update-comment@v3.1.0
         with:
@@ -89,7 +89,7 @@ jobs:
       security-events: write
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@v4.1.1
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -115,35 +115,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@v4.1.1
         with:
           fetch-depth: 0
       - name: Common Steps
         uses: ./.github/actions/common-steps
       - name: Run unit tests
-        run: ./gradlew unitTests koverXmlReport koverVerify --no-daemon --scan --stacktrace
-      - name: Upload tests reports artifact (success)
+        run: ./gradlew :koverXmlReport :koverVerify --no-daemon --scan --stacktrace
+      - name: Upload tests reports artifact
         uses: actions/upload-artifact@v4.0.0
-        if: success()
-        with:
-          name: tests-reports
-          path: build/reports/allTests
-          retention-days: 7
-      - name: Upload tests reports artifact (failure)
-        uses: actions/upload-artifact@v4.0.0
-        if: failure()
         with:
           name: tests-reports
           path: |
-            **/build/reports/tests/test
+            **/build/reports/tests/jvmTest
             **/build/reports/tests/testDebugUnitTest
           retention-days: 7
-      - name: Upload coverage reports artifact
-        uses: actions/upload-artifact@v4.0.0
-        with:
-          name: coverage-reports
-          path: '**/build/reports/kover/report.xml'
-          retention-days: 1
       - name: Upload report to Codecov
         uses: codecov/codecov-action@v3.1.4
         with:
@@ -152,41 +138,6 @@ jobs:
           flags: unittests
           verbose: true
 
-  sonar:
-    name: Sonar
-    if: true
-    runs-on: ubuntu-latest
-    needs: [ static-analysis, unit-tests ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        with:
-          fetch-depth: 0
-      - name: Common Steps
-        uses: ./.github/actions/common-steps
-      - name: Download static report artifacts
-        uses: actions/download-artifact@v4.0.0
-        with:
-          name: static-report
-          path: .
-      - name: Download coverage artifact
-        uses: actions/download-artifact@v4.0.0
-        with:
-          name: coverage-reports
-          path: .
-      - name: Run Sonar
-        if: github.event_name != 'pull_request'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonar --no-daemon --stacktrace
-      - name: Run Sonar in PR
-        if: github.event_name == 'pull_request'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonar -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }} -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} --no-daemon --stacktrace
-
   deploy-beta:
     name: Beta deployment
     runs-on: ubuntu-latest
@@ -194,7 +145,7 @@ jobs:
     needs: [ static-analysis, unit-tests ]
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@v4.1.1
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -225,7 +176,7 @@ jobs:
         with:
           api_token: ${{ secrets.TESTAPPIO_API_TOKEN }}
           app_id: ${{ secrets.TESTAPPIO_APP_ID }}
-          file: androidApp/build/outputs/apk/beta/androidApp-beta.apk
+          file: app/build/outputs/apk/beta/app-beta.apk
           git_release_notes: true
           include_git_commit_id: true
           notify: true
@@ -235,7 +186,7 @@ jobs:
           appName: KatanaApp/Katana-Android
           token: ${{ secrets.APPCENTER_TOKEN }}
           group: Testers
-          file: androidApp/build/outputs/apk/beta/androidApp-beta.apk
+          file: app/build/outputs/apk/beta/app-beta.apk
           notifyTesters: true
           gitReleaseNotes: true
           debug: false
@@ -256,7 +207,7 @@ jobs:
     needs: [ static-analysis, unit-tests ]
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@v4.1.1
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -282,10 +233,10 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
           packageName: dev.alvr.katana
-          releaseFiles: androidApp/build/outputs/bundle/release/androidApp-release.aab
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: internal
           status: completed
-          mappingFile: androidApp/build/outputs/mapping/release/mapping.txt
+          mappingFile: app/build/outputs/mapping/release/mapping.txt
       - name: Create Sentry release
         uses: getsentry/action-release@v1.6.0
         env:
@@ -303,6 +254,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Katana ${{ github.ref_name }}
           files: |
-            androidApp/build/outputs/apk/release/androidApp-release.apk
+            app/build/outputs/apk/release/app-release.apk
           draft: true
           prerelease: false

@@ -2,30 +2,35 @@ coverage:
   status:
     patch:
       default:
-        target: 50% # TODO revert to 80% when finishing Kover integration
+        target: 80%
         threshold: 1%
     project:
       default:
-        target: 50% # TODO revert to 80% when finishing Kover integration
+        target: 80%
         threshold: 1%
 
+# Keep in sync with KatanaKoverPlugin
 ignore:
   - '**/build/**'
 
-  # App
-  - '**/KatanaApp.kt'
-  - '**/initializers/**'
+  # Classes
+  ## Common
+  - '**/KatanaApp*.kt'
+  - '**/KatanaBuildConfig.kt'
 
-  # Common
-  - '**/common/**'
-
-  # Common Android
+  ## Android
   - '**/*Activity'
   - '**/*Fragment'
+
+  # Packages
+  ## Base
+  - '**/base/**'
+
+  ## DI
   - '**/di/**'
 
-  # Ui
-  - '**/ui/**/components/**'
-  - '**/ui/**/design/**'
+  # UI
   - '**/ui/**/navigation/**'
+  - '**/ui/**/resources/**'
+  - '**/ui/**/strings/**'
   - '**/ui/**/view/**'

@@ -1,5 +1,5 @@
 plugins {
-    id("katana.multiplatform.compose")
+    id("katana.multiplatform.ui")
 }
 
 ksp {

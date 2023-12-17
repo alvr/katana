@@ -37,7 +37,7 @@ gradleEnterprise {
     }
 }
 
-include(":androidApp")
+include(":app")
 
 // Include all modules in these directories
 listOf("common", "data/preferences", "data/remote", "domain", "ui").forEach { topDir ->

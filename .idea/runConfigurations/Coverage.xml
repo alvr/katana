@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="koverHtmlReport" />
+          <option value=":koverHtmlReport" />
         </list>
       </option>
       <option name="vmOptions" value="" />
