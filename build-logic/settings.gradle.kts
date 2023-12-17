@@ -20,7 +20,4 @@ buildCache {
     }
 }
 
-include(":common")
-include(":analysis-convention")
-include(":gradle-convention")
-include(":multiplatform-convention")
+include(":katana-convention")
