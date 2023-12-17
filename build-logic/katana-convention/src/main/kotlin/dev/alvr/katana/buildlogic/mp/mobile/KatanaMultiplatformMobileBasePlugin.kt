@@ -1,6 +1,6 @@
 package dev.alvr.katana.buildlogic.mp.mobile
 
-import com.github.gmazzo.gradle.plugins.BuildConfigExtension
+import com.github.gmazzo.buildconfig.BuildConfigExtension
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
@@ -132,7 +132,6 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
 
     private companion object {
         const val BUILD_CONFIG_FILE = "KatanaBuildConfig"
-        const val ANDROID_VARIANT = "debug"
         const val APP_PACKAGE = ".app"
     }
 }
