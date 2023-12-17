@@ -159,7 +159,7 @@ jobs:
       - name: Bump versionCode
         uses: chkfung/android-version-actions@v1.2.1
         with:
-          gradlePath: build-logic/common/src/main/kotlin/dev/alvr/katana/buildlogic/extensions.kt
+          gradlePath: build-logic/katana-convention/src/main/kotlin/dev/alvr/katana/buildlogic/extensions.kt
           versionCode: ${{ github.run_number }}
       - name: Build staging APK
         env:
