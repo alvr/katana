@@ -1,0 +1,61 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "assignees": [
+        "alvr",
+    ],
+    "baseBranches": [
+        "develop",
+    ],
+    "extends": [
+        "config:base",
+        ":disableDependencyDashboard",
+    ],
+    "rebaseWhen": "behind-base-branch",
+    "reviewers": [
+        "alvr",
+    ],
+    "packageRules": [
+        {
+            "groupName": "Kotlin, KSP and Compose",
+            "groupSlug": "kotlin",
+            "matchPackagePrefixes": [
+                "com.google.devtools.ksp",
+                "org.jetbrains.compose",
+            ],
+            "matchPackagePatterns": [
+                "org.jetbrains.kotlin.*"
+            ],
+        },
+        {
+            "groupName": "Koin",
+            "groupSlug": "koin",
+            "matchPackagePrefixes": [
+                "io.insert-koin",
+            ],
+        },
+        {
+            "groupName": "Kotest",
+            "groupSlug": "kotest",
+            "matchPackagePrefixes": [
+                "io.kotest",
+                "io.kotest.extensions",
+            ],
+        },
+        {
+            "groupName": "Sentry",
+            "groupSlug": "sentry",
+            "matchPackagePrefixes": [
+                "io.sentry",
+            ],
+        },
+        {
+            "automerge": true,
+            "matchUpdateTypes": [
+                "minor",
+                "patch",
+                "pin",
+                "digest",
+            ]
+        },
+    ],
+}

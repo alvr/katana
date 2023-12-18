@@ -1,5 +1,6 @@
 package dev.alvr.katana.buildlogic.common
 
+import dev.alvr.katana.buildlogic.catalogVersion
 import dev.alvr.katana.buildlogic.isRelease
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,6 +16,17 @@ internal class KatanaCommonPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = "com.louiscad.complete-kotlin")
+
+            // TODO remove when Sentry Multiplatform includes Sentry v7.0.0
+            allprojects {
+                configurations.configureEach {
+                    resolutionStrategy.eachDependency {
+                        if (requested.group == "io.sentry" && !requested.name.contains("multiplatform")) {
+                            useVersion(catalogVersion("sentry"))
+                        }
+                    }
+                }
+            }
 
             with(tasks) {
                 register<Delete>("clean") {

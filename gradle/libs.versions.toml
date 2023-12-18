@@ -36,7 +36,7 @@ mockmp = "1.16.0"
 okio = "3.7.0"
 orbit = "6.1.0"
 placeholder = "1.0.7"
-sentry = { strictly = "7.0.0" }
+sentry = "7.1.0"
 sentry-multiplatform = "0.3.0"
 sentry-plugin = "4.0.0"
 tink = "1.12.0"
