@@ -1,5 +1,4 @@
 [versions]
-accompanist = "0.32.0"
 activity = "1.8.2"
 android = "8.2.0"
 apollo = "3.8.2"
@@ -61,9 +60,6 @@ sentry = { id = "io.sentry.android.gradle", version.ref = "sentry-plugin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
-# Accompanist
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
-
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 
