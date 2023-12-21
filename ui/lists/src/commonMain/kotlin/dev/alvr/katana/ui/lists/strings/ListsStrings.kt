@@ -27,6 +27,7 @@ class ListsStrings internal constructor(
 
     internal val errorMessage: String,
     internal val errorCover: String,
+    internal val errorRetryButton: String,
 
     internal val entryFormatTv: String,
     internal val entryFormatTvShort: String,

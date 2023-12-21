@@ -86,6 +86,7 @@ internal fun ListScreen(
                         vm.refreshList()
                         katanaScaffoldState.resetToolbar()
                     },
+                    buttonText = strings.errorRetryButton,
                     loading = state.isLoading,
                 )
                 isEmpty && !isLoading -> KatanaEmptyState(
