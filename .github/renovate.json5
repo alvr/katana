@@ -23,7 +23,7 @@
                 "org.jetbrains.compose",
             ],
             "matchPackagePatterns": [
-                "org.jetbrains.kotlin.*"
+                "org.jetbrains.kotlin.*",
             ],
         },
         {

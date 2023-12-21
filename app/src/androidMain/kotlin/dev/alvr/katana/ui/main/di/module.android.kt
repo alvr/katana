@@ -30,7 +30,7 @@ import org.koin.dsl.binds
 import org.koin.dsl.module
 
 @Composable
-internal fun platformModule(): Module {
+internal actual fun platformModule(): Module {
     val applicationContext = LocalContext.current.applicationContext
 
     return module {
@@ -42,7 +42,7 @@ private val uiMainModule = module {
     viewModelOf(::MainViewModel)
 }
 
-internal val katanaModule = module {
+internal actual val katanaModule = module {
     includes(
         // Domain
         domainAccountModule,

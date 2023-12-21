@@ -21,6 +21,7 @@ internal val enListsStrings = ListsStrings(
 
     errorMessage = "Something has happened when getting the information from the selected list",
     errorCover = "Cover not found",
+    errorRetryButton = "Try again",
 
     changeListButton = "Change list",
 )

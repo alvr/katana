@@ -4,8 +4,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-internal fun KatanaApp() {
-    initApp()
-
+internal actual fun KatanaContent() {
     Text(text = "KatanaApp for iOS")
 }

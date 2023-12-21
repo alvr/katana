@@ -22,11 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.alvr.katana.ui.base.R
+import dev.alvr.katana.ui.base.strings.LocalBaseStrings
 
 @Composable
 fun KatanaEmptyState(
@@ -37,7 +36,7 @@ fun KatanaEmptyState(
         modifier = modifier,
         text = text,
         imageVector = Icons.TwoTone.Inbox,
-        contentDescription = stringResource(R.string.component_empty_state),
+        contentDescription = LocalBaseStrings.current.componentEmptyState,
     )
 }
 
@@ -45,15 +44,15 @@ fun KatanaEmptyState(
 fun KatanaErrorState(
     text: String,
     loading: Boolean,
+    buttonText: String,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
-    buttonText: String = stringResource(R.string.component_error_state_retry_button),
 ) {
     KatanaState(
         modifier = modifier,
         text = text,
         imageVector = Icons.TwoTone.Error,
-        contentDescription = stringResource(R.string.component_error_state),
+        contentDescription = LocalBaseStrings.current.componentErrorState,
     ) {
         Spacer(Modifier.height(16.dp))
 

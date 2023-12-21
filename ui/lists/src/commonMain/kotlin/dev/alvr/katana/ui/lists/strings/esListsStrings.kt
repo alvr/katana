@@ -21,6 +21,7 @@ internal val esListsStrings = ListsStrings(
 
     errorMessage = "Algo ha ocurrido al obtener la información de la lista seleccionada",
     errorCover = "Carátula no encontrada",
+    errorRetryButton = "Interta de nuevo",
 
     changeListButton = "Cambiar lista",
 )
