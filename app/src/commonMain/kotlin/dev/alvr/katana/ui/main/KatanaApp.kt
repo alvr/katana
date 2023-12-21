@@ -10,24 +10,59 @@ import co.touchlab.kermit.platformLogWriter
 import dev.alvr.katana.KatanaBuildConfig
 import dev.alvr.katana.ui.account.strings.LocalAccountStrings
 import dev.alvr.katana.ui.account.strings.rememberAccountStrings
+import dev.alvr.katana.ui.base.design.KatanaTheme
+import dev.alvr.katana.ui.base.strings.LocalBaseStrings
+import dev.alvr.katana.ui.base.strings.rememberBaseStrings
 import dev.alvr.katana.ui.explore.strings.LocalExploreStrings
 import dev.alvr.katana.ui.explore.strings.rememberExploreStrings
 import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.strings.rememberListsStrings
 import dev.alvr.katana.ui.login.strings.LocalLoginStrings
 import dev.alvr.katana.ui.login.strings.rememberLoginStrings
+import dev.alvr.katana.ui.main.di.katanaModule
+import dev.alvr.katana.ui.main.di.platformModule
 import dev.alvr.katana.ui.social.strings.LocalSocialStrings
 import dev.alvr.katana.ui.social.strings.rememberSocialStrings
 import io.sentry.kotlin.multiplatform.Sentry
 import io.sentry.kotlin.multiplatform.SentryLevel
 import io.sentry.kotlin.multiplatform.protocol.Breadcrumb
+import org.koin.compose.KoinApplication
 
 @Composable
-internal fun KatanaStrings(
+internal expect fun KatanaContent()
+
+@Composable
+internal fun KatanaApp() {
+    initApp()
+
+    KatanaTheme {
+        KatanaDI {
+            KatanaStrings {
+                KatanaContent()
+            }
+        }
+    }
+}
+
+@Composable
+private fun KatanaDI(
+    content: @Composable () -> Unit,
+) {
+    val platformModule = platformModule()
+
+    KoinApplication(
+        application = { modules(katanaModule, platformModule) },
+        content = content,
+    )
+}
+
+@Composable
+private fun KatanaStrings(
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
         LocalAccountStrings provides rememberAccountStrings(),
+        LocalBaseStrings provides rememberBaseStrings(),
         LocalExploreStrings provides rememberExploreStrings(),
         LocalListsStrings provides rememberListsStrings(),
         LocalLoginStrings provides rememberLoginStrings(),
@@ -36,7 +71,7 @@ internal fun KatanaStrings(
     )
 }
 
-internal fun initApp() {
+private fun initApp() {
     initSentry()
     initNapier()
 }
