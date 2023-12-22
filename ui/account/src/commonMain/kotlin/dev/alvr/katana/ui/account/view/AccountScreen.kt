@@ -5,8 +5,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.ui.account.strings.LocalAccountStrings
+import dev.alvr.katana.ui.base.navigation.Destination
 
 @Composable
 @Destination

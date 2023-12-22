@@ -19,14 +19,11 @@ import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.strings.rememberListsStrings
 import dev.alvr.katana.ui.login.strings.LocalLoginStrings
 import dev.alvr.katana.ui.login.strings.rememberLoginStrings
-import dev.alvr.katana.ui.main.di.katanaModule
-import dev.alvr.katana.ui.main.di.platformModule
 import dev.alvr.katana.ui.social.strings.LocalSocialStrings
 import dev.alvr.katana.ui.social.strings.rememberSocialStrings
 import io.sentry.kotlin.multiplatform.Sentry
 import io.sentry.kotlin.multiplatform.SentryLevel
 import io.sentry.kotlin.multiplatform.protocol.Breadcrumb
-import org.koin.compose.KoinApplication
 
 @Composable
 internal expect fun KatanaContent()
@@ -36,24 +33,10 @@ internal fun KatanaApp() {
     initApp()
 
     KatanaTheme {
-        KatanaDI {
-            KatanaStrings {
-                KatanaContent()
-            }
+        KatanaStrings {
+            KatanaContent()
         }
     }
-}
-
-@Composable
-private fun KatanaDI(
-    content: @Composable () -> Unit,
-) {
-    val platformModule = platformModule()
-
-    KoinApplication(
-        application = { modules(katanaModule, platformModule) },
-        content = content,
-    )
 }
 
 @Composable

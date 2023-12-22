@@ -1,16 +1,18 @@
 package dev.alvr.katana.ui.base.viewmodel
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewModelScope
+import androidx.compose.runtime.collectAsState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.annotation.OrbitDsl
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 
-actual abstract class BaseViewModel<S : Any, E : Any> : ViewModel(), ContainerHost<S, E> {
-    protected actual val coroutineScope = viewModelScope
+actual abstract class BaseViewModel<S : Any, E : Any> : ContainerHost<S, E> {
+    protected actual val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     @OrbitDsl
     protected actual fun updateState(block: S.() -> S) {
@@ -19,11 +21,11 @@ actual abstract class BaseViewModel<S : Any, E : Any> : ViewModel(), ContainerHo
         }
     }
 
-    actual override fun onCleared() {
-        super.onCleared()
+    protected actual fun onCleared() {
+        coroutineScope.cancel()
     }
 }
 
 @Composable
 actual fun <S : Any, E : Any> ContainerHost<S, E>.collectAsState() =
-    container.stateFlow.collectAsStateWithLifecycle()
+    container.stateFlow.collectAsState()

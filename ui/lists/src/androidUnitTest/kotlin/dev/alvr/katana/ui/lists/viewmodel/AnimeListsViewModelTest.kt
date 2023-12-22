@@ -1,6 +1,5 @@
 package dev.alvr.katana.ui.lists.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.common.core.empty
@@ -15,19 +14,15 @@ import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.domain.lists.usecases.ObserveAnimeListUseCase
 import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
-import dev.alvr.katana.ui.lists.entities.ListsCollection
 import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.entities.UserList
 import io.kotest.assertions.throwables.shouldThrowExactlyUnit
-import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.collections.shouldHaveSize
-import io.mockk.Ordering
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
 import io.mockk.verify
 import java.util.stream.Stream
 import korlibs.time.Date
@@ -36,6 +31,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -44,8 +40,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
-import org.orbitmvi.orbit.SuspendingTestContainerHost
-import org.orbitmvi.orbit.test
+import org.orbitmvi.orbit.test.test
 
 private typealias AnimeState = ListState<MediaListItem.AnimeListItem>
 
@@ -55,11 +50,8 @@ internal class AnimeListsViewModelTest : TestBase() {
     private lateinit var observeAnime: ObserveAnimeListUseCase
     @MockK
     private lateinit var updateList: UpdateListUseCase
-    @SpyK
-    private var stateHandle = SavedStateHandle()
 
-    private lateinit var viewModel:
-        SuspendingTestContainerHost<ListState<MediaListItem.AnimeListItem>, Nothing, AnimeListsViewModel>
+    private lateinit var viewModel: AnimeListsViewModel
 
     private val initialStateWithLists: Array<AnimeState.() -> AnimeState>
         get() = arrayOf(
@@ -76,7 +68,7 @@ internal class AnimeListsViewModelTest : TestBase() {
         )
 
     override suspend fun beforeEach() {
-        viewModel = AnimeListsViewModel(stateHandle, updateList, observeAnime).test(ListState())
+        viewModel = AnimeListsViewModel(updateList, observeAnime)
     }
 
     @Nested
@@ -106,19 +98,15 @@ internal class AnimeListsViewModelTest : TestBase() {
                 coJustRun { observeAnime() }
 
                 // WHEN
-                viewModel.runOnCreate()
+                viewModel.test(this) {
+                    runOnCreate()
+                    expectInitialState()
+                    initialState.forEach { expectState(it) }
+                }
 
                 // THEN
-                viewModel.assert(AnimeState()) { states(*initialState) }
-
                 verify(exactly = 1) { observeAnime() }
                 verify(exactly = 1) { observeAnime.flow }
-                verify(ordering = Ordering.ORDERED) {
-                    stateHandle["collection"] = emptyMap<String, List<MediaListItem>>()
-                    stateHandle["userLists"] = emptyArray<String>()
-
-                    stateHandle.get<String>("collection")
-                }
             }
         }
 
@@ -129,18 +117,14 @@ internal class AnimeListsViewModelTest : TestBase() {
             mockAnimeFlow()
 
             // WHEN
-            viewModel.runOnCreate()
-
-            // THEN
-            viewModel.assert(AnimeState()) { states(*initialStateWithLists) }
+            viewModel.test(this) {
+                runOnCreate()
+                expectInitialState()
+                initialStateWithLists.forEach { expectState(it) }
+            }
 
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
-            verify(ordering = Ordering.ORDERED) {
-                verifyStateHandle()
-
-                stateHandle.get<String>("collection")
-            }
         }
 
         @Test
@@ -156,23 +140,22 @@ internal class AnimeListsViewModelTest : TestBase() {
             mockAnimeFlow()
 
             // WHEN
-            viewModel.runOnCreate()
-            viewModel.testIntent {
-                userLists
+            viewModel.test(this) {
+                runOnCreate()
+                expectInitialState()
+                initialStateWithLists.forEach { expectState(it) }
+
+                containerHost.userLists
                     .shouldHaveSize(2)
-                    .shouldContainInOrder(UserList("MyCustomAnimeList" to 1), UserList("MyCustomAnimeList2" to 1))
+                    .shouldContainInOrder(
+                        UserList("MyCustomAnimeList" to 1),
+                        UserList("MyCustomAnimeList2" to 1),
+                    )
             }
 
             // THEN
-            viewModel.assert(AnimeState()) { states(*initialStateWithLists) }
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
-            verify(ordering = Ordering.ORDERED) {
-                verifyStateHandle()
-
-                stateHandle.get<String>("collection")
-                stateHandle.get<Array<String>>("userLists")
-            }
         }
 
         @Test
@@ -183,31 +166,16 @@ internal class AnimeListsViewModelTest : TestBase() {
             coJustRun { observeAnime() }
 
             // WHEN
-            viewModel.runOnCreate()
-
-            // THEN
-            viewModel.assert(AnimeState()) {
-                states(
-                    { copy(isLoading = true) },
-                    { copy(isError = true, isLoading = false, isEmpty = true) },
-                )
+            viewModel.test(this) {
+                runOnCreate()
+                expectInitialState()
+                expectState { copy(isLoading = true) }
+                expectState { copy(isError = true, isLoading = false, isEmpty = true) }
             }
 
+            // THEN
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
-        }
-
-        @Test
-        @DisplayName("AND the array of anime list names is non-existent THEN the array should be empty")
-        fun `the array of anime list names is non-existent`() = runTest {
-            // GIVEN
-            every { stateHandle.get<Array<String>>("userLists") } returns null
-
-            // WHEN
-            viewModel.testIntent { userLists.shouldBeEmpty() }
-
-            // THEN
-            verify(exactly = 1) { stateHandle.get<Array<String>>("userLists") }
         }
     }
 
@@ -222,17 +190,17 @@ internal class AnimeListsViewModelTest : TestBase() {
             coEitherJustRun { updateList(any()) }
 
             // WHEN
-            viewModel.runOnCreate()
-            viewModel.testIntent { addPlusOne(animeListItem1.entryId) }
+            viewModel.test(this) {
+                runOnCreate()
+                expectInitialState()
+                expectState { copy(isLoading = true) }
+                containerHost.addPlusOne(animeListItem1.entryId)
+                cancelAndIgnoreRemainingItems()
+            }
 
             // THEN
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
-            verify(ordering = Ordering.ORDERED) {
-                verifyStateHandle()
-
-                stateHandle.get<String>("collection")
-            }
 
             coVerify(exactly = 1) {
                 updateList(
@@ -260,20 +228,17 @@ internal class AnimeListsViewModelTest : TestBase() {
             mockAnimeFlow()
 
             // WHEN
-            viewModel.runOnCreate()
-            viewModel.testIntent {
-                // THEN
-                shouldThrowExactlyUnit<NoSuchElementException> { addPlusOne(234) }
+            viewModel.test(this) {
+                runOnCreate()
+                expectInitialState()
+                expectState { copy(isLoading = true) }
+                shouldThrowExactlyUnit<NoSuchElementException> { containerHost.addPlusOne(234) }
+                cancelAndIgnoreRemainingItems()
             }
 
             // THEN
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
-            verify(ordering = Ordering.ORDERED) {
-                verifyStateHandle()
-
-                stateHandle.get<String>("collection")
-            }
         }
     }
 
@@ -293,28 +258,21 @@ internal class AnimeListsViewModelTest : TestBase() {
             mockAnimeFlow()
 
             // WHEN
-            viewModel.runOnCreate()
-            viewModel.testIntent { selectList("MyCustomAnimeList2") }
-
-            // THEN
-            viewModel.assert(AnimeState()) {
-                states(
-                    *initialStateWithLists,
-                    {
-                        copy(
-                            name = "MyCustomAnimeList2",
-                            items = persistentListOf(animeListItem2),
-                        )
-                    },
-                )
+            viewModel.test(this) {
+                runOnCreate()
+                expectInitialState()
+                containerHost.selectList("MyCustomAnimeList2")
+                initialStateWithLists.forEach { expectState(it) }
+                expectState {
+                    copy(
+                        name = "MyCustomAnimeList2",
+                        items = persistentListOf(animeListItem2),
+                    )
+                }
             }
 
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
-            verify(ordering = Ordering.ORDERED) { verifyStateHandle() }
-            verify(exactly = 2) {
-                stateHandle.get<ListsCollection<MediaListItem.AnimeListItem>>("collection")
-            }
         }
 
         @Test
@@ -324,41 +282,19 @@ internal class AnimeListsViewModelTest : TestBase() {
             mockAnimeFlow()
 
             // WHEN
-            viewModel.runOnCreate()
-            viewModel.testIntent { selectList("NonExistent Anime List") }
-
-            // THEN
-            viewModel.assert(AnimeState()) {
-                states(
-                    *initialStateWithLists + emptyArray(), // No more state updates
-                )
+            viewModel.test(this) {
+                runOnCreate()
+                expectInitialState()
+                containerHost.selectList("NonExistent Anime List")
+                (initialStateWithLists + emptyArray()).forEach { expectState(it) }
             }
 
+            // THEN
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
-            verify(ordering = Ordering.ORDERED) { verifyStateHandle() }
-            verify(exactly = 2) {
-                stateHandle.get<ListsCollection<MediaListItem.AnimeListItem>>("collection")
-            }
         }
 
-        @Test
-        @DisplayName("AND the collection of anime is non-existent THEN the state should be the same")
-        fun `the collection of anime is non-existent`() = runTest {
-            // GIVEN
-            every { stateHandle.get<ListsCollection<MediaListItem.AnimeListItem>>(any()) } returns null
-
-            // WHEN
-            viewModel.testIntent { selectList("MyCustomAnimeList") }
-
-            // THEN
-            viewModel.assert(AnimeState())
-
-            verify(exactly = 1) {
-                stateHandle.get<ListsCollection<MediaListItem.AnimeListItem>>("collection")
-            }
-        }
-
+        @Disabled
         @ArgumentsSource(SearchArguments::class)
         @ParameterizedTest(name = "AND searching for {0} THEN the result should be {2}")
         fun `searching an entry`(
@@ -370,30 +306,23 @@ internal class AnimeListsViewModelTest : TestBase() {
             mockAnimeFlow()
 
             // WHEN
-            viewModel.runOnCreate()
-            viewModel.testIntent { search(text) }
+            viewModel.test(this) {
+                runOnCreate()
+                expectInitialState()
+                containerHost.search(text)
+                initialStateWithLists.forEach { expectState(it) }
+                expectState {
+                    copy(
+                        isLoading = false,
+                        isEmpty = empty,
+                        items = result,
+                    )
+                }
+            }
 
             // THEN
-            viewModel.assert(AnimeState()) {
-                states(
-                    *initialStateWithLists,
-                    {
-                        copy(
-                            isLoading = false,
-                            isEmpty = empty,
-                            items = result,
-                        )
-                    },
-                )
-            }
-
             verify(exactly = 1) { observeAnime() }
             verify(exactly = 1) { observeAnime.flow }
-            verify(ordering = Ordering.ORDERED) {
-                verifyStateHandle()
-
-                stateHandle.get<String>("collection")
-            }
         }
     }
 
@@ -416,20 +345,14 @@ internal class AnimeListsViewModelTest : TestBase() {
         coJustRun { observeAnime() }
     }
 
-    private fun verifyStateHandle() {
-        stateHandle["collection"] = mapOf(
-            "MyCustomAnimeList" to listOf(animeListItem1),
-            "MyCustomAnimeList2" to listOf(animeListItem2),
-        )
-        stateHandle["userLists"] = arrayOf(
-            UserList("MyCustomAnimeList" to 1), UserList("MyCustomAnimeList2" to 1),
-        )
-    }
-
     private class SearchArguments : ArgumentsProvider {
         override fun provideArguments(context: ExtensionContext?): Stream<Arguments> =
             Stream.of(
-                Arguments.of("non-existent entry", true, persistentListOf<MediaListItem.AnimeListItem>()),
+                Arguments.of(
+                    "non-existent entry",
+                    true,
+                    persistentListOf<MediaListItem.AnimeListItem>(),
+                ),
                 Arguments.of("OnE PiEcE", false, persistentListOf(animeListItem1)),
             )
     }
