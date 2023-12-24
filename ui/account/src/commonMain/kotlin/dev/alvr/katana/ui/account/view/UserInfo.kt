@@ -16,13 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import dev.alvr.katana.ui.account.entities.UserInfoUi
+import dev.alvr.katana.ui.account.strings.LocalAccountStrings
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
 @Composable
-internal fun Header(
-    username: String,
-    avatar: String,
+internal fun UserInfo(
+    userInfo: UserInfoUi,
     onLogoutClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -32,12 +33,12 @@ internal fun Header(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         UsernameAvatar(
-            avatar = avatar,
-            username = username,
+            avatar = userInfo.avatar,
+            username = userInfo.username,
         )
 
         Button(onClick = onLogoutClick) {
-            Text(text = "Logout")
+            Text(text = LocalAccountStrings.current.logoutButton)
         }
     }
 }

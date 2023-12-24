@@ -5,9 +5,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import dev.alvr.katana.ui.account.entities.UserInfoUi
 import dev.alvr.katana.ui.account.navigation.AccountNavigator
-import dev.alvr.katana.ui.account.viewmodel.AccountState
+import dev.alvr.katana.ui.account.strings.LocalAccountStrings
 import dev.alvr.katana.ui.account.viewmodel.AccountViewModel
+import dev.alvr.katana.ui.base.components.home.KatanaHomeTopAppBar
 import dev.alvr.katana.ui.base.navigation.Destination
 import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import org.koin.compose.koinInject
@@ -21,7 +23,7 @@ internal fun AccountScreen(
     val state by vm.collectAsState()
 
     AccountScreen(
-        state = state,
+        userInfo = state.userInfo,
         onLogoutClick = {
             vm.clearSession()
             navigator.logout()
@@ -31,14 +33,20 @@ internal fun AccountScreen(
 
 @Composable
 private fun AccountScreen(
-    state: AccountState,
+    userInfo: UserInfoUi,
     onLogoutClick: () -> Unit,
 ) {
-    Scaffold { paddingValues ->
-        Header(
+    Scaffold(
+        topBar = {
+            KatanaHomeTopAppBar(
+                title = LocalAccountStrings.current.title,
+                subtitle = null,
+            )
+        },
+    ) { paddingValues ->
+        UserInfo(
             modifier = Modifier.padding(paddingValues),
-            username = state.username,
-            avatar = state.avatar,
+            userInfo = userInfo,
             onLogoutClick = onLogoutClick,
         )
     }

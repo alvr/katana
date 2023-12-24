@@ -6,10 +6,10 @@ import dev.alvr.katana.domain.user.repositories.UserRepository
 
 internal class UserRepositoryImpl(
     private val idSource: UserIdRemoteSource,
-    private val infoSource: UserInfoRemoteSource,
+    infoSource: UserInfoRemoteSource,
 ) : UserRepository {
+    override val userInfo = infoSource.userInfo
+
     override suspend fun getUserId() = idSource.getUserId()
     override suspend fun saveUserId() = idSource.saveUserId()
-
-    override suspend fun getUserInfo() = infoSource.getUserInfo()
 }

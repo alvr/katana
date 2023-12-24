@@ -4,6 +4,7 @@ import dev.alvr.katana.data.remote.user.UserInfoQuery
 import dev.alvr.katana.domain.user.models.UserInfo
 
 internal operator fun UserInfoQuery.Data?.invoke() = UserInfo(
-    name = this?.user?.name.orEmpty(),
+    username = this?.user?.name.orEmpty(),
     avatar = this?.user?.avatar?.medium.orEmpty(),
+    banner = this?.user?.bannerImage.orEmpty(),
 )

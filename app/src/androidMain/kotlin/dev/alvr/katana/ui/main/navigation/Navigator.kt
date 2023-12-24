@@ -29,7 +29,7 @@ internal class Navigator(
     override fun logout() {
         navigator.navigate(NavGraphs.root) {
             popUpTo(LoginScreenDestination) {
-                inclusive = false
+                inclusive = true
             }
         }
     }
