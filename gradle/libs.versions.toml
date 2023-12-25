@@ -34,6 +34,7 @@ mockk = "1.13.8"
 mockmp = "1.16.0"
 okio = "3.7.0"
 orbit = "6.1.0"
+parcelize = "0.2.3"
 placeholder = "1.0.7"
 sentry = "7.1.0"
 sentry-multiplatform = "0.4.0"
@@ -56,6 +57,7 @@ kotlin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 mockmp = { id = "org.kodein.mock.mockmp", version.ref = "mockmp" }
+parcelize = { id = "com.arkivanov.parcelize.darwin", version.ref = "parcelize" }
 sentry = { id = "io.sentry.android.gradle", version.ref = "sentry-plugin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
@@ -150,6 +152,9 @@ okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", versio
 # Orbit
 orbit = { module = "org.orbit-mvi:orbit-core", version.ref = "orbit" }
 orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
+
+# Parcelable
+parcelable = { module = "com.arkivanov.essenty:parcelable", version = "1.3.0" }
 
 # Sentry
 sentry = { module = "io.sentry:sentry-android-core", version.ref = "sentry" }
@@ -290,7 +295,6 @@ data-remote-ios-test = []
 ui-common = [
     "kamel",
     "koin-compose",
-    "kotlin-serialization",
     "lyricist",
     "orbit",
 ]
