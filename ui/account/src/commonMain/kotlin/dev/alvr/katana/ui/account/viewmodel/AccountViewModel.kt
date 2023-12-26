@@ -9,12 +9,11 @@ import org.orbitmvi.orbit.container
 import org.orbitmvi.orbit.syntax.simple.intent
 
 internal class AccountViewModel(
-    private val getUserInfoUseCase: ObserveUserInfoUseCase,
+    private val observeUserInfoUseCase: ObserveUserInfoUseCase,
     private val logOutUseCase: LogOutUseCase,
 ) : BaseViewModel<AccountState, Nothing>() {
     override val container = coroutineScope.container<AccountState, Nothing>(AccountState()) {
-        getUserInfoUseCase()
-        getUserInfo()
+        collectUserInfo()
     }
 
     fun clearSession() {
@@ -23,9 +22,14 @@ internal class AccountViewModel(
         }
     }
 
-    private fun getUserInfo() {
+    private fun collectUserInfo() {
+        observeUserInfoUseCase()
+        observeUserInfo()
+    }
+
+    private fun observeUserInfo() {
         intent {
-            getUserInfoUseCase.flow.collect { res ->
+            observeUserInfoUseCase.flow.collect { res ->
                 res.fold(
                     ifLeft = {
                         updateState { copy(isLoading = false, isError = true) }
@@ -34,6 +38,7 @@ internal class AccountViewModel(
                         updateState {
                             copy(
                                 isLoading = false,
+                                isError = false,
                                 userInfo = userInfo.toEntity(),
                             )
                         }

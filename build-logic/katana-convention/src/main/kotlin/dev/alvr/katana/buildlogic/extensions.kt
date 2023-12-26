@@ -127,6 +127,7 @@ private fun KotlinJvmCompilerOptions.configureKotlin() {
             "-opt-in=kotlin.RequiresOptIn",
             "-Xcontext-receivers",
             "-Xlambdas=indy",
+            "-Xexpect-actual-classes",
         ),
     )
 }

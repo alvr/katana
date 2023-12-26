@@ -44,7 +44,7 @@ import org.kodein.mock.UsesMocks
     MediaListEntriesMutation::class,
 )
 @UsesMocks(UserIdManager::class, ApolloInterceptor::class)
-@ApolloExperimental
+@OptIn(ApolloExperimental::class)
 internal class CommonListsRemoteSourceTest : FreeSpec() {
     private val mocker = Mocker()
     private val userIdManager = MockUserIdManager(mocker)

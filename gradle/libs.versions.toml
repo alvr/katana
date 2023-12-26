@@ -312,10 +312,11 @@ ui-android-ksp = [
 ]
 ui-ios-ksp = []
 
-ui-common-test = []
+ui-common-test = [
+    "orbit-test",
+]
 ui-android-test = [
     "koin-junit4",
-    "orbit-test",
 ]
 ui-ios-test = []
 

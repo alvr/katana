@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.map
 internal class UserInfoRemoteSourceImpl(
     client: ApolloClient,
 ) : UserInfoRemoteSource {
+    @Suppress("USELESS_CAST")
     override val userInfo: Flow<Either<Failure, UserInfo>> =
         client.query(UserInfoQuery())
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
