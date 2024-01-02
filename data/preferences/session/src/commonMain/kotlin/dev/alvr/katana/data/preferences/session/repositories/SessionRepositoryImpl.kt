@@ -12,5 +12,6 @@ internal class SessionRepositoryImpl(
     override suspend fun clearActiveSession() = source.clearActiveSession()
     override suspend fun deleteAnilistToken() = source.deleteAnilistToken()
     override suspend fun getAnilistToken() = source.getAnilistToken()
+    override suspend fun logout() = source.logout()
     override suspend fun saveSession(anilistToken: AnilistToken) = source.saveSession(anilistToken)
 }

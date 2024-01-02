@@ -104,6 +104,20 @@ internal class SessionRepositoryTest : FreeSpec() {
                 mocker.verifyWithSuspend { source.clearActiveSession() }
             }
         }
+
+        "logging out" - {
+            "logging out without error" {
+                mocker.everySuspending { source.logout() } returns Unit.right()
+                repo.logout().shouldBeRight(Unit)
+                mocker.verifyWithSuspend { source.logout() }
+            }
+
+            "logging out with an error" {
+                mocker.everySuspending { source.logout() } returns SessionFailure.LoggingOut.left()
+                repo.logout().shouldBeLeft(SessionFailure.LoggingOut)
+                mocker.verifyWithSuspend { source.logout() }
+            }
+        }
     }
 
     override fun extensions() = listOf(mocker())

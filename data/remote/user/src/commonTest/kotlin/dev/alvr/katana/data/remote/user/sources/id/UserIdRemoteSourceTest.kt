@@ -1,4 +1,4 @@
-package dev.alvr.katana.data.remote.user.sources
+package dev.alvr.katana.data.remote.user.sources.id
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
@@ -13,9 +13,9 @@ import dev.alvr.katana.domain.user.models.UserId
 import io.kotest.core.spec.style.FreeSpec
 
 @OptIn(ApolloExperimental::class)
-internal class UserRemoteSourceTest : FreeSpec() {
+internal class UserIdRemoteSourceTest : FreeSpec() {
     private val client = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport()).build()
-    private val source: UserRemoteSource = UserRemoteSourceImpl(client)
+    private val source: UserIdRemoteSource = UserIdRemoteSourceImpl(client)
 
     init {
         "getting the userId" - {

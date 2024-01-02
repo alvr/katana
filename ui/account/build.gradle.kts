@@ -10,7 +10,8 @@ ksp {
 katanaMultiplatform {
     commonMainDependencies {
         implementation(projects.common.core)
-        implementation(projects.domain.account)
+        implementation(projects.domain.session)
+        implementation(projects.domain.user)
         implementation(projects.ui.base)
     }
 

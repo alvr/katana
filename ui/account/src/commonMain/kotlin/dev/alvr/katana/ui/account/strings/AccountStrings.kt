@@ -11,6 +11,7 @@ import kotlinx.collections.immutable.persistentMapOf
 @Suppress("LongParameterList", "UseDataClass")
 class AccountStrings internal constructor(
     internal val title: String,
+    internal val logoutButton: String,
 )
 
 internal val Strings = persistentMapOf(

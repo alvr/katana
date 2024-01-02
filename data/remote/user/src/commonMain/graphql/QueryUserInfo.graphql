@@ -1,0 +1,9 @@
+query UserInfoQuery {
+    user: Viewer {
+        name
+        avatar {
+            medium
+        }
+        bannerImage
+    }
+}

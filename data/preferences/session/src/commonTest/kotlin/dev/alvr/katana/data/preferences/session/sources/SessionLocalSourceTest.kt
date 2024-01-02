@@ -67,6 +67,12 @@ internal class SessionLocalSourceTest : FreeSpec() {
                 mocker.verifyWithSuspend { store.updateData(isAny()) }
             }
 
+            "logging out" {
+                mocker.everySuspending { store.updateData(isAny()) } returns fakeSession()
+                source.logout().shouldBeRight(Unit)
+                mocker.verifyWithSuspend { store.updateData(isAny()) }
+            }
+
             listOf(
                 Session(anilistToken = null, isSessionActive = false),
                 Session(anilistToken = null, isSessionActive = true),
@@ -120,6 +126,18 @@ internal class SessionLocalSourceTest : FreeSpec() {
             "it's the saving token AND it's a writing Exception" {
                 mocker.everySuspending { store.updateData(isAny()) } runs { throw IOException("Oops.") }
                 source.saveSession(anilistToken).shouldBeLeft(SessionFailure.SavingSession)
+                mocker.verifyWithSuspend { called { store.updateData(isAny()) } }
+            }
+
+            "it's logging out AND it's a common Exception" {
+                mocker.everySuspending { store.updateData(isAny()) } runs { throw Exception() }
+                source.logout().shouldBeLeft(SessionFailure.LoggingOut)
+                mocker.verifyWithSuspend { called { store.updateData(isAny()) } }
+            }
+
+            "it's logging out AND it's a writing Exception" {
+                mocker.everySuspending { store.updateData(isAny()) } runs { throw IOException("Oops.") }
+                source.logout().shouldBeLeft(SessionFailure.LoggingOut)
                 mocker.verifyWithSuspend { called { store.updateData(isAny()) } }
             }
         }

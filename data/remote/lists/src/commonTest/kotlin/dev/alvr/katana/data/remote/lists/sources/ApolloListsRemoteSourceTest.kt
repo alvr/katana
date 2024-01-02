@@ -71,8 +71,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
     private val userId = 37_384.right()
     private val userIdOpt = userId.optional()
 
-    private val source: CommonListsRemoteSource =
-        CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
+    private val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
     private val animeSource: AnimeListsRemoteSource = AnimeListsRemoteSourceImpl(source)
     private val mangaSource: MangaListsRemoteSource = MangaListsRemoteSourceImpl(source)
 
