@@ -24,10 +24,9 @@ internal class AnilistTokenTest : FreeSpec({
 
     "a token with value should not throw an exception" {
         val token = Arb.string(minSize = 1).next()
-        val anilistToken by lazy { AnilistToken(token) }
 
         shouldNotThrowExactlyUnit<IllegalStateException> {
-            anilistToken.token shouldBe token
+            AnilistToken(token).token shouldBe token
         }
     }
 })
