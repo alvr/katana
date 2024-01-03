@@ -44,7 +44,10 @@ internal val animeListItem2 = MediaListItem.AnimeListItem(
     private = true,
     notes = String.empty,
     hiddenFromStatusLists = false,
-    nextEpisode = null,
+    nextEpisode = MediaListItem.AnimeListItem.NextEpisode(
+        number = Int.zero,
+        date = DateTimeTz.local(DateTime(Long.MAX_VALUE), TimezoneOffset.UTC),
+    ),
     startedAt = Date(Int.MAX_VALUE),
     completedAt = Date(Int.MAX_VALUE),
     updatedAt = DateTimeTz.local(DateTime(Long.MAX_VALUE), TimezoneOffset.UTC),
@@ -138,7 +141,10 @@ internal val animeMediaEntry2 = MediaListEntry(
             format = CommonMediaEntry.Format.ONE_SHOT,
         ),
         episodes = null,
-        nextEpisode = null,
+        nextEpisode = MediaEntry.Anime.NextEpisode(
+            number = Int.zero,
+            at = DateTimeTz.local(DateTime(Long.MAX_VALUE), TimezoneOffset.UTC),
+        ),
     ),
 )
 

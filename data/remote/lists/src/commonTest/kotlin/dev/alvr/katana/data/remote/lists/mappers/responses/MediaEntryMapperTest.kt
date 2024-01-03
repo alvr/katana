@@ -6,10 +6,8 @@ import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import dev.alvr.katana.data.remote.lists.fragment.MediaEntry as MediaEntryFragment
 
-@ExperimentalCoroutinesApi
 internal class MediaEntryMapperTest : FreeSpec({
     MediaFormat.knownValues()
         .forEach { format ->

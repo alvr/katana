@@ -5,9 +5,8 @@ import arrow.core.left
 import arrow.core.none
 import arrow.core.right
 import arrow.core.some
-import dev.alvr.katana.common.tests.TestBase
 import dev.alvr.katana.common.tests.coEitherJustRun
-import dev.alvr.katana.common.tests.valueMockk
+import dev.alvr.katana.common.tests.orbitTestScope
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.base.usecases.sync
@@ -17,175 +16,151 @@ import dev.alvr.katana.domain.session.usecases.ClearActiveSessionUseCase
 import dev.alvr.katana.domain.session.usecases.GetAnilistTokenUseCase
 import dev.alvr.katana.domain.session.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.ui.login.navigation.LoginNavGraph
-import dev.alvr.katana.ui.main.navigation.NavGraphs
+import io.kotest.core.NamedTag
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.core.test.TestCase
+import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.orbitmvi.orbit.SuspendingTestContainerHost
-import org.orbitmvi.orbit.test
+import org.orbitmvi.orbit.test.test
 
-@ExperimentalCoroutinesApi
-internal class MainViewModelTest : TestBase() {
-    @MockK
-    private lateinit var clearActiveSession: ClearActiveSessionUseCase
-    @MockK
-    private lateinit var getAnilistToken: GetAnilistTokenUseCase
-    @MockK
-    private lateinit var observeSession: ObserveActiveSessionUseCase
+internal class MainViewModelTest : BehaviorSpec() {
+    private val clearActiveSession = mockk<ClearActiveSessionUseCase>()
+    private val getAnilistToken = mockk<GetAnilistTokenUseCase>()
+    private val observeSession = mockk<ObserveActiveSessionUseCase>()
 
-    private lateinit var viewModel: SuspendingTestContainerHost<MainState, Nothing, MainViewModel>
+    private lateinit var viewModel: MainViewModel
 
-    @Nested
-    @DisplayName("GIVEN a logged in user")
-    inner class LoggedIn {
-        @Test
-        @DisplayName(
-            """
-            WHEN the user does have a saved token
-            THEN the initial navGraph should be `NavGraphs.home`
-            """,
-        )
-        fun `user does have a saved token`() = runTest {
-            // GIVEN
-            initMocks(sessionFlow = emptyFlow())
+    init {
+        given("a logged in user") {
+            `when`("the user does have a saved token") {
+                then("the initial navGraph should be `NavGraphs.home`") {
+                    initMocks(sessionFlow = emptyFlow())
 
-            // WHEN
-            viewModel = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
-            viewModel.runOnCreate()
+                    viewModel.test(orbitTestScope) {
+                        runOnCreate()
+                        expectInitialState()
+                    }
 
-            // THEN
-            viewModel.assert(MainState(initialNavGraph = NavGraphs.home))
-            verifyMocks()
-        }
-
-        @Test
-        @DisplayName(
-            """
-            WHEN the user has an active session AND the session expires
-            THEN the initial navGraph should be `NavGraphs.home`
-            """,
-        )
-        fun `the user has an active session AND the session expires`() = runTest {
-            // GIVEN
-            initMocks()
-
-            // WHEN
-            viewModel = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
-            viewModel.runOnCreate()
-
-            // THEN
-            viewModel.assert(MainState(initialNavGraph = NavGraphs.home)) {
-                states(
-                    { copy(isSessionActive = false) },
-                )
+                    verifyMocks()
+                }
             }
-            verifyMocks()
-        }
 
-        @Test
-        @DisplayName("WHEN the user has an expired session THEN the active session is cleared (success)")
-        fun `the user has an expired session (success)`() = runTest {
-            // GIVEN
-            initMocks()
-            coEitherJustRun { clearActiveSession() }
+            `when`("the user has an active session") {
+                and("the session expires") {
+                    then("the initial navGraph should be `NavGraphs.home`") {
+                        initMocks()
 
-            // WHEN
-            viewModel = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
-            viewModel.runOnCreate()
-            viewModel.testIntent { clearSession() }
+                        viewModel.test(orbitTestScope) {
+                            runOnCreate()
+                            expectInitialState()
+                            expectState { copy(isSessionActive = false) }
+                        }
 
-            // THEN
-            coVerify(exactly = 1) { clearActiveSession() }
-            verifyMocks()
-        }
-
-        @Test
-        @DisplayName("WHEN the user has an expired session THEN the active session is cleared (failure)")
-        fun `the user has an expired session (failure)`() = runTest {
-            // GIVEN
-            initMocks()
-            coEvery { clearActiveSession() } returns mockk<SessionFailure>().left()
-
-            // WHEN
-            viewModel = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
-            viewModel.runOnCreate()
-            viewModel.testIntent { clearSession() }
-
-            // THEN
-            coVerify(exactly = 1) { clearActiveSession() }
-            verifyMocks()
-        }
-
-        @Test
-        @DisplayName(
-            """
-            WHEN something wrong happens when observing the session
-            THEN should update the session as not active
-            """,
-        )
-        fun `something wrong happens when observing the session`() = runTest {
-            // GIVEN
-            initMocks(sessionFlow = flowOf(mockk<SessionFailure>().left()))
-
-            // WHEN
-            viewModel = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
-            viewModel.runOnCreate()
-
-            // THEN
-            viewModel.assert(MainState(initialNavGraph = NavGraphs.home)) {
-                states(
-                    { copy(isSessionActive = false) },
-                )
+                        verifyMocks()
+                    }
+                }
             }
-            verifyMocks()
+
+            `when`("WHEN the user has an expired session") {
+                then("the active session is cleared (success)") {
+                    initMocks()
+                    coEitherJustRun { clearActiveSession() }
+
+                    viewModel.test(orbitTestScope) {
+                        runOnCreate()
+                        expectInitialState()
+                        containerHost.clearSession()
+                        expectState { copy(isSessionActive = false) }
+                    }
+
+                    coVerify(exactly = 1) { clearActiveSession() }
+                    verifyMocks()
+                }
+
+                then("the active session is cleared (failure)") {
+                    initMocks()
+                    coEvery { clearActiveSession() } returns mockk<SessionFailure>().left()
+
+                    viewModel.test(orbitTestScope) {
+                        runOnCreate()
+                        expectInitialState()
+                        containerHost.clearSession()
+                        expectState { copy(isSessionActive = false) }
+                    }
+
+                    coVerify(exactly = 1) { clearActiveSession() }
+                    verifyMocks()
+                }
+            }
+
+            `when`("something wrong happens when observing the session") {
+                then("should update the session as not active") {
+                    initMocks(sessionFlow = flowOf(mockk<SessionFailure>().left()))
+
+                    viewModel.test(orbitTestScope) {
+                        runOnCreate()
+                        expectInitialState()
+                        expectState { copy(isSessionActive = false) }
+                    }
+
+                    verifyMocks()
+                }
+            }
         }
 
-        private fun initMocks(
-            sessionFlow: Flow<Either<Failure, Boolean>> = flowOf(true.right(), true.right(), false.right())
-        ) {
-            justRun { observeSession() }
-            every { observeSession.flow } returns sessionFlow
-            every { getAnilistToken.sync() } returns valueMockk<AnilistToken>().some()
-        }
+        given("a logged out user") {
+            `when`("the user does not have a saved token") {
+                then("the initial navGraph should be `LoginNavGraph`").config(tags = setOf(LOGGED_OUT_TEST)) {
+                    viewModel.test(orbitTestScope) {
+                        expectState(MainState(initialNavGraph = LoginNavGraph))
+                    }
 
-        private fun verifyMocks() {
-            verify(exactly = 1) { observeSession() }
-            verify(exactly = 1) { observeSession.flow }
-            verify(exactly = 1) { getAnilistToken.sync() }
+                    verify(exactly = 1) { getAnilistToken.sync() }
+                }
+            }
         }
     }
 
-    @Nested
-    @DisplayName("GIVEN a logged out user")
-    inner class LoggedOut {
-        @Test
-        @DisplayName("WHEN the user does not have a saved token THEN the initial navGraph should be `LoginNavGraph`")
-        fun `user does not have a saved token`() = runTest {
-            // GIVEN
-            justRun { observeSession() }
-            every { observeSession.flow } returns emptyFlow()
-            every { getAnilistToken.sync() } returns none()
+    override suspend fun beforeTest(testCase: TestCase) {
+        clearMocks(clearActiveSession, getAnilistToken, observeSession)
 
-            // WHEN
-            viewModel = MainViewModel(clearActiveSession, getAnilistToken, observeSession).test()
-            viewModel.runOnCreate()
-
-            // THEN
-            viewModel.assert(MainState(initialNavGraph = LoginNavGraph))
-            verify(exactly = 1) { observeSession() }
-            verify(exactly = 1) { observeSession.flow }
-            verify(exactly = 1) { getAnilistToken.sync() }
+        every { getAnilistToken.sync() } answers {
+            if (testCase.config.tags.contains(LOGGED_OUT_TEST)) {
+                none()
+            } else {
+                AnilistToken("TOKEN").some()
+            }
         }
+
+        viewModel = MainViewModel(clearActiveSession, getAnilistToken, observeSession)
+    }
+
+    private fun initMocks(
+        sessionFlow: Flow<Either<Failure, Boolean>> = flowOf(
+            true.right(),
+            true.right(),
+            false.right(),
+        )
+    ) {
+        justRun { observeSession() }
+        every { observeSession.flow } returns sessionFlow
+    }
+
+    private fun verifyMocks() {
+        verify(exactly = 1) { observeSession() }
+        verify(exactly = 1) { observeSession.flow }
+        verify(exactly = 1) { getAnilistToken.sync() }
+    }
+
+    private companion object {
+        val LOGGED_OUT_TEST = NamedTag("loggedOut")
     }
 }
