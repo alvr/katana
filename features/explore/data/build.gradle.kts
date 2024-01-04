@@ -2,10 +2,6 @@ plugins {
     id("katana.multiplatform.data.remote")
 }
 
-dependencies {
-    apolloMetadata(projects.core.remote)
-}
-
 katanaMultiplatform {
     commonMainDependencies {
         implementation(projects.core.remote)

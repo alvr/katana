@@ -49,8 +49,7 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
                     val response = ApolloResponse.Builder(
                         operation = mediaListCollectionQueryMock,
                         requestUuid = uuid4(),
-                        data = data,
-                    ).build()
+                    ).data(data).build()
                     client.enqueueTestResponse(response)
 
                     source.getMediaCollection<MediaEntry>(type).test(5.seconds) {
@@ -65,8 +64,7 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
                     val response = ApolloResponse.Builder(
                         operation = mediaListCollectionQueryMock,
                         requestUuid = uuid4(),
-                        data = data,
-                    ).errors(listOf(apolloErrorMock)).build()
+                    ).data(data).errors(listOf(apolloErrorMock)).build()
                     client.enqueueTestResponse(response)
 
                     source.getMediaCollection<MediaEntry>(type).test(5.seconds) {
@@ -94,7 +92,7 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
                 reloadInterceptor,
             )
 
-            afterSpec { mockServer.stop() }
+            afterSpec { mockServer.close() }
 
             badClient().forEach { (type, action) ->
                 "a HTTP error occurs" {
@@ -123,7 +121,7 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
             add(null)
             add(empty)
         }
-        val types = MediaType.knownValues()
+        val types = MediaType.knownEntries
 
         return buildList {
             values.forEach { v -> types.forEach { t -> add(v to t) } }
@@ -140,7 +138,7 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
             add(apolloCommand { body("Malformed body") })
             add(apolloCommand { body("""{"data": {"random": 42}}""") })
         }
-        val types = MediaType.knownValues()
+        val types = MediaType.knownEntries
 
         return buildList {
             commands.forEach { c -> types.forEach { t -> add(t to c) } }
