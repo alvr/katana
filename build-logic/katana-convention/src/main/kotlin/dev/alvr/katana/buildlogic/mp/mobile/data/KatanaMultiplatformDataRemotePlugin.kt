@@ -61,23 +61,29 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
     private fun ApolloExtension.configureApollo() {
         service("anilist") {
             generateAsInternal = true
-            generateDataBuilders = true
             packageName = fullPackageName
+            generateMethods = listOf("equalsHashCode")
 
-            if (fullPackageName.contains(BASE_PACKAGE)) {
-                alwaysGenerateTypesMatching = listOf("Query", "User")
+            if (path == CORE_PROJECT) {
                 generateApolloMetadata = true
                 generateAsInternal = false
+                generateDataBuilders = true
+                schemaFiles.from(
+                    file("src/commonMain/graphql/schema.graphqls"),
+                    file("src/commonMain/graphql/extra.graphqls"),
+                )
 
                 introspection {
                     endpointUrl = "https://graphql.anilist.co"
-                    schemaFile = project.file("src/commonMain/graphql/schema.graphqls")
+                    schemaFiles.from(file("src/commonMain/graphql/schema.graphqls"))
                 }
+            } else {
+                dependsOn(project(CORE_PROJECT))
             }
         }
     }
 
     private companion object {
-        const val BASE_PACKAGE = ".remote"
+        const val CORE_PROJECT = ":core:remote"
     }
 }

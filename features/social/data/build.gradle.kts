@@ -2,10 +2,6 @@ plugins {
     id("katana.multiplatform.data.remote")
 }
 
-dependencies {
-    apolloMetadata(projects.core.remote)
-}
-
 kotlin {
     sourceSets {
         commonMain.dependencies {
