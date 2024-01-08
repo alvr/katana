@@ -191,7 +191,7 @@ jobs:
           gitReleaseNotes: true
           debug: false
       - name: Create Sentry release
-        uses: getsentry/action-release@v1.6.0
+        uses: getsentry/action-release@v1.7.0
         env:
           SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_BETA_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
@@ -238,7 +238,7 @@ jobs:
           status: completed
           mappingFile: app/build/outputs/mapping/release/mapping.txt
       - name: Create Sentry release
-        uses: getsentry/action-release@v1.6.0
+        uses: getsentry/action-release@v1.7.0
         env:
           SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_RELEASE_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
