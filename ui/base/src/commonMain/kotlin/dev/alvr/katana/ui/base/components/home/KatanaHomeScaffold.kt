@@ -15,9 +15,11 @@ import androidx.compose.material.BackdropScaffold
 import androidx.compose.material.BackdropScaffoldState
 import androidx.compose.material.BackdropValue
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material.rememberBackdropScaffoldState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -63,8 +65,13 @@ fun KatanaHomeScaffold(
                 searchPlaceholder = searchPlaceholder,
             )
         },
+        backLayerBackgroundColor = MaterialTheme.colorScheme.primary,
+        backLayerContentColor = contentColorFor(MaterialTheme.colorScheme.primary),
         backLayerContent = backContent,
         frontLayerShape = RectangleShape,
+        frontLayerBackgroundColor = MaterialTheme.colorScheme.surface,
+        frontLayerContentColor = contentColorFor(MaterialTheme.colorScheme.surface),
+        frontLayerScrimColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.60f),
         frontLayerContent = {
             Scaffold(
                 floatingActionButton = { fab?.invoke() },

@@ -12,13 +12,12 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.NavigationRail
-import androidx.compose.material.NavigationRailItem
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -104,9 +103,9 @@ private fun BottomNavigationBar(
     isItemSelected: (NavigationBarItem) -> Boolean,
     onClick: (NavigationBarItem) -> Unit,
 ) {
-    BottomNavigation {
+    NavigationBar {
         destinations.forEach { destination ->
-            BottomNavigationItem(
+            NavigationBarItem(
                 icon = { NavigationBarIcon(destination) },
                 label = { NavigationBarLabel(destination) },
                 selected = isItemSelected(destination),
@@ -136,7 +135,6 @@ private fun RailNavigationBar(
                 icon = { NavigationBarIcon(destination) },
                 label = { NavigationBarLabel(destination) },
                 selected = isItemSelected(destination),
-                selectedContentColor = LocalContentColor.current,
                 onClick = { onClick(destination) },
                 alwaysShowLabel = false,
             )

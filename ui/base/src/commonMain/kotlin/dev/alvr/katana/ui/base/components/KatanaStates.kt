@@ -8,15 +8,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Error
 import androidx.compose.material.icons.twotone.Inbox
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,8 +61,8 @@ fun KatanaErrorState(
             onClick = onRetry,
             enabled = !loading,
             colors = ButtonDefaults.outlinedButtonColors(
-                backgroundColor = MaterialTheme.colors.secondaryVariant,
-                contentColor = contentColorFor(MaterialTheme.colors.primaryVariant),
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = contentColorFor(MaterialTheme.colorScheme.primary),
             ),
         ) {
             Text(text = buttonText, fontWeight = FontWeight.Bold)

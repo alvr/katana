@@ -29,6 +29,7 @@ ksp = "1.9.22-1.0.16"
 ktor = "2.3.7"
 lifecycle = "2.7.0"
 lyricist = "1.6.2-1.8.20"
+materialkolor = "1.3.0"
 mockk = "1.13.9"
 mockmp = "1.16.0"
 okio = "3.7.0"
@@ -76,7 +77,7 @@ arrow = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 # Compose
 compose-compiler = { module = "org.jetbrains.compose.compiler:compiler", version.ref = "compose-compiler" }
 compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "window-size" }
-compose-placeholder = { module = "com.eygraber:compose-placeholder-material", version.ref = "placeholder" }
+compose-placeholder = { module = "com.eygraber:compose-placeholder-material3", version.ref = "placeholder" }
 
 # Coroutines
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -143,6 +144,9 @@ lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", versi
 
 # Lyricist
 lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
+
+# MaterialKolor
+materialkolor = { module = "com.materialkolor:material-kolor", version.ref = "materialkolor" }
 
 # Okio
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }

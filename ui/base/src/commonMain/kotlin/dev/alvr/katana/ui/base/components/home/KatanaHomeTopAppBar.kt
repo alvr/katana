@@ -1,21 +1,21 @@
 package dev.alvr.katana.ui.base.components.home
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.strings.LocalBaseStrings
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun KatanaHomeTopAppBar(
     title: String,
     subtitle: String?,
@@ -31,7 +31,7 @@ fun KatanaHomeTopAppBar(
             Column {
                 Text(text = title)
                 if (!subtitle.isNullOrBlank()) {
-                    Text(text = subtitle, style = MaterialTheme.typography.caption)
+                    Text(text = subtitle, style = MaterialTheme.typography.titleSmall)
                 }
             }
         },
@@ -54,6 +54,5 @@ fun KatanaHomeTopAppBar(
                 }
             }
         },
-        elevation = Int.zero.dp,
     )
 }
