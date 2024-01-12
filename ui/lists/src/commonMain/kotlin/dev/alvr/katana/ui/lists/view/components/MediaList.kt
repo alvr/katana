@@ -25,12 +25,11 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
@@ -133,7 +132,7 @@ private fun MediaListItem(
     onEntryDetails: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
+    ElevatedCard(
         modifier = modifier
             .height(144.dp)
             .combinedClickable(
@@ -309,7 +308,7 @@ private fun Subtitle(
     Text(
         text = text,
         modifier = modifier,
-        style = MaterialTheme.typography.caption,
+        style = MaterialTheme.typography.bodySmall,
     )
 }
 
@@ -322,7 +321,7 @@ private fun Score(
         Box(
             modifier = modifier
                 .clip(RoundedCornerShape(topEnd = 4.dp))
-                .background(MaterialTheme.colors.surface.copy(alpha = .6f))
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = .6f))
                 .padding(4.dp)
                 .defaultMinSize(minWidth = 18.dp),
         ) {
@@ -365,9 +364,6 @@ private fun PlusOneButton(
         onClick = onAddPlusOne,
         modifier = modifier,
         shape = CircleShape,
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colors.onPrimary,
-        ),
     ) {
         Text(
             modifier = Modifier.katanaPlaceholder(visible = itemLoading),
@@ -397,8 +393,8 @@ private fun Progress(
     )
 }
 
-private val CARD_WIDTH = 384.dp
-private val COVER_MAX_WIDTH = CARD_WIDTH / 4f
+private val CARD_WIDTH = 320.dp
+private val COVER_MAX_WIDTH = 96.dp
 private val ARRANGEMENT_SPACING = 8.dp
 private val CONTENT_TOP_PADDING = 4.dp
 private val CONTENT_HORIZONTAL_PADDING = 8.dp

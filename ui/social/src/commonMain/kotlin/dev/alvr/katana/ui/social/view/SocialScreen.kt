@@ -3,7 +3,7 @@ package dev.alvr.katana.ui.social.view
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold

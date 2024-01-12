@@ -17,6 +17,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,19 +27,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -49,7 +49,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalUriHandler
@@ -106,6 +105,7 @@ internal fun LoginScreen(
 }
 
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 private fun Login(state: LoginState, onLogin: () -> Unit) {
     val strings = LocalLoginStrings.current
     var loading by remember { mutableStateOf(false) }
@@ -136,8 +136,12 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
         }
     }
 
-    Scaffold(scaffoldState = scaffoldState) { padding ->
-        Surface(modifier = Modifier.fillMaxSize().padding(padding)) {
+    Scaffold { padding ->
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+        ) {
             if (loading) {
                 Loading()
             } else {
@@ -200,7 +204,7 @@ private fun KatanaLogo() {
 private fun Description() {
     Text(
         text = LocalLoginStrings.current.headerKatanaDescription,
-        style = MaterialTheme.typography.h5,
+        style = MaterialTheme.typography.headlineSmall,
     )
 }
 
@@ -273,8 +277,8 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
     val inlineContent = mapOf(
         inlineArrow to InlineTextContent(
             Placeholder(
-                width = MaterialTheme.typography.h5.fontSize,
-                height = MaterialTheme.typography.h5.fontSize,
+                width = MaterialTheme.typography.headlineSmall.fontSize,
+                height = MaterialTheme.typography.headlineSmall.fontSize,
                 placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
             ),
         ) {
@@ -282,7 +286,7 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
                 imageVector = Icons.Filled.ArrowForward,
                 contentDescription = LocalLoginStrings.current.contentDescriptionGetStartedArrow,
                 modifier = Modifier.offset(x = translation),
-                tint = MaterialTheme.colors.onSurface,
+                tint = MaterialTheme.colorScheme.onSurface,
             )
         },
     )
@@ -296,8 +300,8 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
         Text(
             text = text,
             inlineContent = inlineContent,
-            style = MaterialTheme.typography.h5,
-            color = MaterialTheme.colors.onSurface,
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
@@ -341,12 +345,10 @@ private fun BeginRegisterButton(modifier: Modifier = Modifier) {
 
     OutlinedButton(
         modifier = modifier,
-        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent),
         onClick = { uriHandler.openUri(ANILIST_REGISTER) },
     ) {
         Text(
             text = LocalLoginStrings.current.beginRegisterButton,
-            color = MaterialTheme.colors.onSurface,
         )
     }
 }
@@ -361,7 +363,6 @@ private fun BeginLoginButton(modifier: Modifier = Modifier) {
     ) {
         Text(
             text = LocalLoginStrings.current.beginLoginButton,
-            color = MaterialTheme.colors.onSurface,
         )
     }
 }
@@ -369,8 +370,8 @@ private fun BeginLoginButton(modifier: Modifier = Modifier) {
 @Composable
 private fun Animate(
     delayMillis: Int,
-    durationMillis: Int,
     modifier: Modifier = Modifier,
+    durationMillis: Int = BOTTOM_ANIM_DURATION,
     content: @Composable () -> Unit,
 ) {
     var animationFinished by rememberSaveable { mutableStateOf(false) }
