@@ -8,14 +8,15 @@
         android:name=".KatanaApp"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Katana.Theme"
+        android:theme="@style/Theme.Katana.Splash"
         android:usesCleartextTraffic="false"
-        tools:targetApi="s">
+        tools:targetApi="tiramisu">
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true"
