@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -136,11 +138,14 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
         }
     }
 
-    Scaffold { padding ->
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+    ) { padding ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
+                .padding(padding)
+                .consumeWindowInsets(padding),
         ) {
             if (loading) {
                 Loading()
@@ -149,7 +154,9 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
                     painter = background.asPainter,
                     contentDescription = strings.contentDescriptionBackground,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.alpha(BACKGROUND_ALPHA),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .alpha(BACKGROUND_ALPHA),
                 )
 
                 Box(modifier = Modifier.padding(24.dp)) {
@@ -226,6 +233,7 @@ internal fun Bottom(modifier: Modifier = Modifier) {
                 State.GetStarted -> GetStarted { changedState ->
                     currentState = changedState
                 }
+
                 State.Buttons -> Begin()
             }
         }
