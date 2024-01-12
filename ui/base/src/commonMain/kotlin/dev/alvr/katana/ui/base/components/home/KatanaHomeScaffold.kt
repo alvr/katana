@@ -11,6 +11,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.BackdropScaffold
 import androidx.compose.material.BackdropScaffoldState
 import androidx.compose.material.BackdropValue
@@ -75,6 +76,7 @@ fun KatanaHomeScaffold(
         frontLayerContent = {
             Scaffold(
                 floatingActionButton = { fab?.invoke() },
+                contentWindowInsets = WindowInsets(0, 0, 0, 0),
                 content = content,
             )
         },

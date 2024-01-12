@@ -6,12 +6,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -122,13 +116,7 @@ private fun RailNavigationBar(
     isItemSelected: (NavigationBarItem) -> Boolean,
     onClick: (NavigationBarItem) -> Unit,
 ) {
-    NavigationRail(
-        modifier = Modifier.padding(
-            WindowInsets.systemBars
-                .only(WindowInsetsSides.Start + WindowInsetsSides.Vertical)
-                .asPaddingValues(),
-        ),
-    ) {
+    NavigationRail {
         Spacer(Modifier.weight(1f))
         destinations.forEach { destination ->
             NavigationRailItem(

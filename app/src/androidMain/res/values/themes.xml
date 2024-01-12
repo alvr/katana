@@ -3,6 +3,8 @@
     <style name="NightAdjusted.Theme.Katana" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:navigationBarColor">@null</item>
+        <item name="android:statusBarColor">@null</item>
     </style>
 
     <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">

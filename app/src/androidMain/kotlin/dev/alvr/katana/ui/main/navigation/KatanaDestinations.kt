@@ -1,16 +1,16 @@
 package dev.alvr.katana.ui.main.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.contentColorFor
@@ -41,7 +41,11 @@ import dev.alvr.katana.ui.main.viewmodel.MainViewModel
 import io.sentry.compose.withSentryObservableEffect
 
 @Composable
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
+@OptIn(
+    ExperimentalAnimationApi::class,
+    ExperimentalMaterialNavigationApi::class,
+    ExperimentalLayoutApi::class,
+)
 internal fun KatanaDestinations(
     useNavRail: Boolean,
     vm: MainViewModel,
@@ -66,7 +70,6 @@ internal fun KatanaDestinations(
         scrimColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.32f),
     ) {
         Scaffold(
-            modifier = Modifier.systemBarsPadding(),
             bottomBar = {
                 if (!useNavRail) {
                     NavigationBar(
@@ -74,19 +77,17 @@ internal fun KatanaDestinations(
                         navController = navController,
                         type = NavigationBarType.Bottom,
                     )
-                } else {
-                    Spacer(
-                        Modifier
-                            .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                            .fillMaxWidth(),
-                    )
                 }
             },
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
         ) { paddingValues ->
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(paddingValues)
+                    .consumeWindowInsets(paddingValues)
+                    .systemBarsPadding()
+                    .displayCutoutPadding(),
             ) {
                 if (useNavRail) {
                     NavigationBar(
