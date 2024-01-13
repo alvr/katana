@@ -1,13 +1,18 @@
 [versions]
-activity = "1.8.2"
 android = "8.2.2"
+androidx-activity = "1.8.2"
+androidx-lifecycle = "2.7.0"
+androidx-splashscreen = "1.0.1"
 apollo = "3.8.2"
 arrow = "1.2.2"
 buildconfig = "5.3.5"
 complete-kotlin = "1.1.0"
 compose = "1.6.0"
 compose-compiler = "1.5.8.1"
+compose-placeholder = "1.0.7"
+compose-windowsize = "0.5.0"
 datastore = "1.1.0-beta01"
+decompose = "2.2.2-compose-experimental"
 destinations = "1.10.1"
 detekt = "1.23.5"
 detekt-compose = "0.3.11"
@@ -27,8 +32,7 @@ kotlinx-serialization = "1.6.3"
 kover = "0.7.6"
 ksp = "1.9.22-1.0.17"
 ktor = "2.3.8"
-lifecycle = "2.7.0"
-lyricist = "1.6.2-1.8.20"
+lyricist = "1.6.2"
 materialkolor = "1.4.0"
 mockk = "1.13.9"
 mockmp = "1.17.0"
@@ -36,14 +40,11 @@ okio = "3.8.0"
 orbit = "6.1.0"
 parcelable = "1.3.0"
 parcelize = "0.2.3"
-placeholder = "1.0.7"
 sentry = "7.4.0"
 sentry-multiplatform = "0.4.0"
 sentry-plugin = "4.3.0"
-splashscreen = "1.0.1"
 tink = "1.12.0"
 turbine = "1.0.0"
-window-size = "0.5.0"
 yamlbeans = "1.17"
 
 [plugins]
@@ -65,8 +66,10 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 
 [libraries]
 # AndroidX
-androidx-activity = { module = "androidx.activity:activity-compose", version.ref = "activity" }
-androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
+androidx-activity = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
 
 # Apollo
 apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
@@ -79,12 +82,16 @@ arrow = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 
 # Compose
 compose-compiler = { module = "org.jetbrains.compose.compiler:compiler", version.ref = "compose-compiler" }
-compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "window-size" }
-compose-placeholder = { module = "com.eygraber:compose-placeholder-material3", version.ref = "placeholder" }
+compose-placeholder = { module = "com.eygraber:compose-placeholder-material3", version.ref = "compose-placeholder" }
+compose-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "compose-windowsize" }
 
 # Datastore
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastore-okio = { module = "androidx.datastore:datastore-core-okio", version.ref = "datastore" }
+
+# Decompose
+decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
+decompose-extensions = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose" }
 
 # Destiantions
 destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "destinations" }
@@ -138,10 +145,6 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 # Ktor
 ktor-android = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
-
-# Lifecycle
-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle" }
 
 # Lyricist
 lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
@@ -225,12 +228,12 @@ core-ios-test-ksp = []
 # Deps for Multiplatform Mobile (Common, Android & iOS)
 mobile-common = [
     "arrow",
+    "kermit",
     "koin",
     "korge-foundation",
     "kotlin",
     "kotlinx-coroutines",
     "kotlinx-immutable",
-    "kermit",
 ]
 mobile-android = [
     "koin-android",
@@ -313,16 +316,19 @@ data-remote-ios-test-ksp = []
 
 # Deps for UI
 ui-common = [
+    "compose-windowsize",
+    "decompose",
+    "decompose-extensions",
     "kamel",
     "koin-compose",
     "lyricist",
     "orbit",
 ]
 ui-android = [
+    "androidx-lifecycle-runtime",
+    "androidx-lifecycle-viewmodel",
     "destinations",
     "koin-compose-android",
-    "lifecycle-runtime",
-    "lifecycle-viewmodel",
 ]
 ui-ios = []
 
