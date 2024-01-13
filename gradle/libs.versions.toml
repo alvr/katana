@@ -12,6 +12,7 @@ compose-compiler = "1.5.10.1"
 compose-placeholder = "1.0.7"
 compose-windowsize = "0.5.0"
 datastore = "1.1.0-beta02"
+decompose = "3.0.0-alpha08"
 destinations = "1.10.2"
 detekt = "1.23.5"
 detekt-compose = "0.3.12"
@@ -87,6 +88,10 @@ compose-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-
 # Datastore
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastore-okio = { module = "androidx.datastore:datastore-core-okio", version.ref = "datastore" }
+
+# Decompose
+decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
+decompose-extensions = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
 
 # Destiantions
 destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "destinations" }
@@ -220,12 +225,12 @@ core-ios-test-ksp = []
 # Deps for Multiplatform Mobile (Common, Android & iOS)
 mobile-common = [
     "arrow",
+    "kermit",
     "koin",
     "korge-foundation",
     "kotlin",
     "kotlinx-coroutines",
     "kotlinx-immutable",
-    "kermit",
 ]
 mobile-android = [
     "koin-android",
@@ -308,12 +313,17 @@ data-remote-ios-test-ksp = []
 
 # Deps for UI
 ui-common = [
+    "compose-windowsize",
+    "decompose",
+    "decompose-extensions",
     "kamel",
     "koin-compose",
     "lyricist",
     "orbit",
 ]
 ui-android = [
+    "androidx-lifecycle-runtime",
+    "androidx-lifecycle-viewmodel",
     "destinations",
     "koin-compose-android",
     "androidx-lifecycle-runtime",
