@@ -19,6 +19,8 @@ import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.strings.rememberListsStrings
 import dev.alvr.katana.ui.login.strings.LocalLoginStrings
 import dev.alvr.katana.ui.login.strings.rememberLoginStrings
+import dev.alvr.katana.ui.main.component.KatanaComponent
+import dev.alvr.katana.ui.main.content.KatanaContent
 import dev.alvr.katana.ui.social.strings.LocalSocialStrings
 import dev.alvr.katana.ui.social.strings.rememberSocialStrings
 import io.sentry.kotlin.multiplatform.Sentry
@@ -29,12 +31,12 @@ import io.sentry.kotlin.multiplatform.protocol.Breadcrumb
 internal expect fun KatanaContent()
 
 @Composable
-internal fun KatanaApp() {
+internal fun KatanaApp(component: KatanaComponent) {
     initApp()
 
     KatanaTheme {
         KatanaStrings {
-            KatanaContent()
+            KatanaContent(component)
         }
     }
 }
