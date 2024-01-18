@@ -27,6 +27,7 @@ katanaMultiplatform {
         implementation(projects.ui.account)
         implementation(projects.ui.base)
         implementation(projects.ui.explore)
+        implementation(projects.ui.home)
         implementation(projects.ui.lists)
         implementation(projects.ui.login)
         implementation(projects.ui.social)
