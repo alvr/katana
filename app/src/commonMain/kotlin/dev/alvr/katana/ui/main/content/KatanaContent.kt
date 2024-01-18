@@ -1,5 +1,6 @@
 package dev.alvr.katana.ui.main.content
 
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
@@ -14,7 +15,7 @@ internal fun KatanaContent(
     modifier: Modifier = Modifier,
 ) {
     Children(
-        modifier = modifier,
+        modifier = modifier.systemBarsPadding(),
         stack = component.stack,
     ) { (_, instance) ->
         when (instance) {
