@@ -37,7 +37,7 @@ import com.ramcosta.composedestinations.spec.NavGraphSpec
 import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.login.view.destinations.LoginScreenDestination
 import dev.alvr.katana.ui.main.components.SessionExpiredDialog
-import dev.alvr.katana.ui.main.viewmodel.MainViewModel
+import dev.alvr.katana.ui.main.viewmodel.MainViewModelAndroid
 import io.sentry.compose.withSentryObservableEffect
 
 @Composable
@@ -48,7 +48,7 @@ import io.sentry.compose.withSentryObservableEffect
 )
 internal fun KatanaDestinations(
     useNavRail: Boolean,
-    vm: MainViewModel,
+    vm: MainViewModelAndroid,
 ) {
     val bottomSheetNavigator = rememberBottomSheetNavigator()
     val navController = rememberNavController().withSentryObservableEffect().apply {

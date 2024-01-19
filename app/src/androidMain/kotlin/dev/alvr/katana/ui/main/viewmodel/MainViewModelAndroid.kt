@@ -12,7 +12,7 @@ import org.orbitmvi.orbit.container
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 
-internal class MainViewModel(
+internal class MainViewModelAndroid(
     private val clearActiveSessionUseCase: ClearActiveSessionUseCase,
     private val getAnilistTokenUseCase: GetAnilistTokenUseCase,
     private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,

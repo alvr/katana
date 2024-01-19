@@ -5,7 +5,7 @@ import com.arkivanov.decompose.router.stack.bringToFront
 import dev.alvr.katana.ui.account.component.createAccountComponent
 import dev.alvr.katana.ui.base.components.navigation.KatanaNavigationBarItem
 import dev.alvr.katana.ui.base.decompose.AppComponentContext
-import dev.alvr.katana.ui.base.decompose.appChildStack
+import dev.alvr.katana.ui.base.decompose.extensions.appChildStack
 import dev.alvr.katana.ui.explore.component.createExploreComponent
 import dev.alvr.katana.ui.home.component.HomeComponent.Child.AccountChild
 import dev.alvr.katana.ui.home.component.HomeComponent.Child.AnimeListChild

@@ -36,7 +36,7 @@ internal class MainViewModelTest : BehaviorSpec() {
     private val getAnilistToken = mockk<GetAnilistTokenUseCase>()
     private val observeSession = mockk<ObserveActiveSessionUseCase>()
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModelAndroid
 
     init {
         given("a logged in user") {
@@ -140,7 +140,7 @@ internal class MainViewModelTest : BehaviorSpec() {
             }
         }
 
-        viewModel = MainViewModel(clearActiveSession, getAnilistToken, observeSession)
+        viewModel = MainViewModelAndroid(clearActiveSession, getAnilistToken, observeSession)
     }
 
     private fun initMocks(

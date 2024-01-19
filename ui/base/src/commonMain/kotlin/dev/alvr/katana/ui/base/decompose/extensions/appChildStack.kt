@@ -1,8 +1,10 @@
-package dev.alvr.katana.ui.base.decompose
+package dev.alvr.katana.ui.base.decompose.extensions
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.StackNavigationSource
 import com.arkivanov.decompose.router.stack.childStack
+import dev.alvr.katana.ui.base.decompose.AppComponentContext
+import dev.alvr.katana.ui.base.decompose.DefaultAppComponentContext
 import kotlinx.serialization.KSerializer
 
 fun <C : Any, T : Any> ComponentContext.appChildStack(

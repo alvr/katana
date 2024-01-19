@@ -1,12 +1,10 @@
 package dev.alvr.katana.ui.main.content
 
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +19,6 @@ import dev.alvr.katana.ui.main.component.KatanaComponent
 import dev.alvr.katana.ui.main.component.KatanaComponent.Child
 
 @Composable
-@OptIn(ExperimentalLayoutApi::class)
 internal fun KatanaContent(
     component: KatanaComponent,
     modifier: Modifier = Modifier,
@@ -35,8 +32,7 @@ internal fun KatanaContent(
         KatanaChildren(
             modifier = Modifier.fillMaxSize()
                 .padding(paddingValues)
-                .consumeWindowInsets(paddingValues)
-                .systemBarsPadding()
+                .statusBarsPadding()
                 .displayCutoutPadding(),
             stack = stack,
         )

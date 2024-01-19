@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.arkivanov.decompose.defaultComponentContext
+import dev.alvr.katana.ui.base.decompose.extensions.asAppComponent
 import dev.alvr.katana.ui.main.component.DefaultKatanaComponent
 
 internal class MainActivity : ComponentActivity() {
@@ -16,7 +17,7 @@ internal class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val katanaComponent = DefaultKatanaComponent(
-            componentContext = defaultComponentContext(),
+            componentContext = defaultComponentContext().asAppComponent(),
         )
         setContent { KatanaApp(katanaComponent) }
     }
