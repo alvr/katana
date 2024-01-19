@@ -5,8 +5,8 @@ plugins {
 katanaMultiplatform {
     commonMainDependencies {
         implementation(projects.common.core)
-        implementation(projects.ui.base)
 
+        implementation(projects.ui.base)
         implementation(projects.ui.account)
         implementation(projects.ui.explore)
         implementation(projects.ui.lists)

@@ -15,6 +15,8 @@ import dev.alvr.katana.ui.base.strings.LocalBaseStrings
 import dev.alvr.katana.ui.base.strings.rememberBaseStrings
 import dev.alvr.katana.ui.explore.strings.LocalExploreStrings
 import dev.alvr.katana.ui.explore.strings.rememberExploreStrings
+import dev.alvr.katana.ui.home.strings.LocalHomeStrings
+import dev.alvr.katana.ui.home.strings.rememberHomeStrings
 import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.strings.rememberListsStrings
 import dev.alvr.katana.ui.login.strings.LocalLoginStrings
@@ -49,6 +51,7 @@ private fun KatanaStrings(
         LocalAccountStrings provides rememberAccountStrings(),
         LocalBaseStrings provides rememberBaseStrings(),
         LocalExploreStrings provides rememberExploreStrings(),
+        LocalHomeStrings provides rememberHomeStrings(),
         LocalListsStrings provides rememberListsStrings(),
         LocalLoginStrings provides rememberLoginStrings(),
         LocalSocialStrings provides rememberSocialStrings(),
