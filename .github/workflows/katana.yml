@@ -54,7 +54,7 @@ jobs:
       - name: Assemble Katana
         run: ./gradlew assembleDebug --no-daemon --scan --stacktrace
       - name: Upload compose reports artifact
-        uses: actions/upload-artifact@v4.2.0
+        uses: actions/upload-artifact@v4.3.0
         if: always()
         with:
           name: compose-reports
@@ -97,7 +97,7 @@ jobs:
       - name: Run detekt
         run: ./gradlew detektAll lintDebug --no-daemon --stacktrace
       - name: Upload static reports artifact
-        uses: actions/upload-artifact@v4.2.0
+        uses: actions/upload-artifact@v4.3.0
         with:
           name: static-report
           path: |
@@ -123,7 +123,7 @@ jobs:
       - name: Run unit tests
         run: ./gradlew :koverXmlReport :koverVerify --no-daemon --scan --stacktrace
       - name: Upload tests reports artifact
-        uses: actions/upload-artifact@v4.2.0
+        uses: actions/upload-artifact@v4.3.0
         with:
           name: tests-reports
           path: |
