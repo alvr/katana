@@ -1,7 +1,7 @@
 package dev.alvr.katana.buildlogic
 
 import com.android.build.gradle.BaseExtension
-import com.apollographql.apollo3.compiler.capitalizeFirstLetter
+import dev.alvr.katana.buildlogic.mp.capitalize
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -18,7 +18,6 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.project
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
@@ -28,6 +27,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.androidJvm
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.common
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.native
+import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.konan.util.visibleName
 
@@ -51,6 +51,7 @@ internal fun KotlinDependencyHandler.implementation(
     implementation(dependencyNotation.get().toString(), configure)
 }
 
+@Suppress("UnstableApiUsage")
 internal fun DependencyHandlerScope.implementation(
     provider: Provider<*>,
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
@@ -128,11 +129,14 @@ internal fun TaskContainer.commonTasks() {
         targetCompatibility = KatanaConfiguration.JvmTargetStr
     }
     withType<KotlinCompile>().configureEach {
-        compilerOptions.configureKotlin()
+        compilerOptions.configureKotlinCompiler()
     }
 }
 
-internal fun KotlinCommonCompilerOptions.configureKotlin() {
+internal fun KotlinCommonCompilerOptions.configureKotlinCompiler() {
+    if (this is KotlinJvmCompilerOptions) {
+        jvmTarget.set(KatanaConfiguration.JvmTarget)
+    }
     apiVersion.set(KatanaConfiguration.KotlinVersion)
     languageVersion.set(KatanaConfiguration.KotlinVersion)
     freeCompilerArgs.addAll(
@@ -143,40 +147,35 @@ internal fun KotlinCommonCompilerOptions.configureKotlin() {
     )
 }
 
-private fun KotlinJvmCompilerOptions.configureKotlin() {
-    jvmTarget.set(KatanaConfiguration.JvmTarget)
-    (this as KotlinCommonCompilerOptions).configureKotlin()
-}
-
 context(KotlinMultiplatformExtension)
 private fun Project.kspDependencies(
     configurationNameSuffix: String,
     catalogPrefix: String,
 ) {
     dependencies {
-        targets
-            .asSequence()
-            .forEach { target ->
-                val configurationName = if (target.platformType == common) {
-                    "CommonMainMetadata"
-                } else {
-                    "${target.targetName.capitalizeFirstLetter()}$configurationNameSuffix"
-                }.let { "ksp$it" }
+        targets.forEach { target ->
+            val configurationName = "ksp${target.configurationName(configurationNameSuffix)}"
+            val groupName = "${target.groupName}${configurationNameSuffix.suffix}"
+            val catalogAlias = "$catalogPrefix-$groupName-ksp".lowercase()
 
-                val groupName = if (target.platformType == native && target.targetName.contains(IOS_TARGET)) {
-                    IOS_TARGET
-                } else if (target.platformType == androidJvm) {
-                    ANDROID_TARGET
-                } else {
-                    target.platformType.visibleName
-                }
-
-                add(
-                    configurationName,
-                    catalogBundle("$catalogPrefix-$groupName-ksp"),
-                )
-            }
+            add(configurationName, catalogBundle(catalogAlias))
+        }
     }
+}
+
+private fun KotlinTarget.configurationName(suffix: String) =
+    if (platformType == common) {
+        "CommonMainMetadata"
+    } else {
+        "${targetName.capitalize()}$suffix"
+    }
+
+private val String.suffix get() = if (isNotEmpty()) "-$this" else ""
+
+private val KotlinTarget.groupName get() = when {
+    platformType == native && targetName.contains(IOS_TARGET) -> IOS_TARGET
+    platformType == androidJvm -> ANDROID_TARGET
+    else -> platformType.visibleName
 }
 
 private const val ANDROID_TARGET = "android"

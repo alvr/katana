@@ -1,6 +1,6 @@
 package dev.alvr.katana.buildlogic.mp
 
-import dev.alvr.katana.buildlogic.configureKotlin
+import dev.alvr.katana.buildlogic.configureKotlinCompiler
 import java.util.Locale
 import kotlinx.kover.gradle.plugin.dsl.KoverVerifyReportConfig
 import kotlinx.kover.gradle.plugin.dsl.MetricType
@@ -43,7 +43,7 @@ internal fun KotlinMultiplatformExtension.configureKotlin() {
     targets.configureEach {
         compilations.configureEach {
             compilerOptions.configure {
-                configureKotlin()
+                configureKotlinCompiler()
             }
         }
     }
@@ -77,7 +77,7 @@ internal val List<String>.identifier
 internal val NamedDomainObjectContainer<KotlinSourceSet>.androidUnitTest:
     NamedDomainObjectProvider<KotlinSourceSet> by KotlinSourceSetConvention
 
-private fun String.capitalize() =
+internal fun String.capitalize() =
     replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
 private const val MIN_COVERED_PERCENTAGE = 80

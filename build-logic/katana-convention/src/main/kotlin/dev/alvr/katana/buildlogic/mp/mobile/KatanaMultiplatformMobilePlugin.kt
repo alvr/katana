@@ -9,7 +9,8 @@ import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.configure
 
 internal class KatanaMultiplatformMobilePlugin : KatanaMultiplatformMobileBasePlugin(ANDROID_LIBRARY_PLUGIN) {
-    override fun ExtensionContainer.configureAndroid(project: Project) {
-        configure<LibraryExtension> { configureAndroid(project.fullPackageName) }
+    context(Project)
+    override fun ExtensionContainer.configureAndroid() {
+        configure<LibraryExtension> { configureAndroid(fullPackageName) }
     }
 }

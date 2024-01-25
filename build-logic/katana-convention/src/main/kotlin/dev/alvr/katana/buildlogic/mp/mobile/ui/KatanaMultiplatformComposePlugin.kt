@@ -28,22 +28,23 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
         apply(plugin = "org.jetbrains.compose")
 
         with(extensions) {
-            configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
-            configure<ComposeExtension> { configureComposeMultiplatform(project) }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<ComposeExtension> { configureComposeMultiplatform() }
         }
 
         generateResourcesTask()
     }
 
-    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
+    context(Project)
+    private fun KotlinMultiplatformExtension.configureMultiplatform() {
         configureSourceSets()
-        project.kspDependencies("ui")
+        kspDependencies("ui")
     }
 
     @OptIn(ExperimentalComposeLibrary::class)
     private fun KotlinMultiplatformExtension.configureSourceSets() {
-        val compose =
-            (this as ExtensionAware).extensions.getByName("compose") as ComposePlugin.Dependencies
+        val compose = (this as ExtensionAware).extensions
+            .getByName("compose") as ComposePlugin.Dependencies
 
         configureSourceSets {
             commonMain {
@@ -82,17 +83,18 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
         }
     }
 
-    private fun ComposeExtension.configureComposeMultiplatform(project: Project) {
-        kotlinCompilerPlugin.set(project.catalogLib("compose-compiler").get().toString())
+    context(Project)
+    private fun ComposeExtension.configureComposeMultiplatform() {
+        kotlinCompilerPlugin.set(catalogLib("compose-compiler").get().toString())
 
         kotlinCompilerPluginArgs.set(
             buildList {
-                if (project.composePluginEnabled("katana.enableComposeCompilerMetrics")) {
-                    add("metricsDestination=${project.composePluginDir("compose-metrics")}")
+                if (composePluginEnabled("katana.enableComposeCompilerMetrics")) {
+                    add("metricsDestination=${composePluginDir("compose-metrics")}")
                 }
 
-                if (project.composePluginEnabled("katana.enableComposeCompilerReports")) {
-                    add("reportsDestination=${project.composePluginDir("compose-reports")}")
+                if (composePluginEnabled("katana.enableComposeCompilerReports")) {
+                    add("reportsDestination=${composePluginDir("compose-reports")}")
                 }
             },
         )
@@ -119,8 +121,6 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
         File(layout.buildDirectory.asFile.get(), directory).absolutePath
 
     private companion object {
-        const val UI_IOS_KSP = "ui-ios-ksp"
-
         const val GeneratedResourcesDir = "generated/sources/katana/main"
     }
 }
