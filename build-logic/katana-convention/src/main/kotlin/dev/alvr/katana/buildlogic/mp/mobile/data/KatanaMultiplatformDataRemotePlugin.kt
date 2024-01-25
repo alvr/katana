@@ -3,6 +3,7 @@ package dev.alvr.katana.buildlogic.mp.mobile.data
 import com.apollographql.apollo3.gradle.api.ApolloExtension
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.fullPackageName
+import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.androidUnitTest
 import dev.alvr.katana.buildlogic.mp.configureSourceSets
 import org.gradle.api.Plugin
@@ -18,9 +19,15 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
         apply(plugin = "com.apollographql.apollo3")
 
         with(extensions) {
-            configure<KotlinMultiplatformExtension> { configureSourceSets() }
-            configure<ApolloExtension> { configureApollo(project) }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<ApolloExtension> { configureApollo() }
         }
+    }
+
+    context(Project)
+    private fun KotlinMultiplatformExtension.configureMultiplatform() {
+        configureSourceSets()
+        kspDependencies("mobile")
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
@@ -47,15 +54,14 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
         }
     }
 
-    private fun ApolloExtension.configureApollo(project: Project) {
-        val namespace = project.fullPackageName
-
+    context(Project)
+    private fun ApolloExtension.configureApollo() {
         service("anilist") {
             generateAsInternal.set(true)
             generateDataBuilders.set(true)
-            packageName.set(namespace)
+            packageName.set(fullPackageName)
 
-            if (namespace.contains(BASE_PACKAGE)) {
+            if (fullPackageName.contains(BASE_PACKAGE)) {
                 alwaysGenerateTypesMatching.set(listOf("Query", "User"))
                 generateApolloMetadata.set(true)
                 generateAsInternal.set(false)

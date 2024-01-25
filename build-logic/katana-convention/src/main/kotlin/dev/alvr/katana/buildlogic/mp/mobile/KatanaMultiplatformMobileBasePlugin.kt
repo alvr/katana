@@ -27,7 +27,8 @@ import org.kodein.mock.gradle.MocKMPGradlePlugin
 internal abstract class KatanaMultiplatformMobileBasePlugin(
     private val androidPlugin: String,
 ) : Plugin<Project> {
-    abstract fun ExtensionContainer.configureAndroid(project: Project)
+    context(Project)
+    abstract fun ExtensionContainer.configureAndroid()
 
     override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
@@ -42,24 +43,24 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
             create<KatanaMultiplatformMobileExtension>(KATANA_MULTIPLATFORM_EXTENSION)
 
             commonExtensions()
-            configureAndroid(project)
-            configure<BuildConfigExtension> { configureBuildConfig(project) }
-            configure<KotlinMultiplatformExtension> { configureMultiplatform(target) }
+            configureAndroid()
+            configure<BuildConfigExtension> { configureBuildConfig() }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
             configure<MocKMPGradlePlugin.Extension> { installWorkaround() }
         }
 
         tasks.commonTasks()
     }
 
-    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
+    context(Project)
+    private fun KotlinMultiplatformExtension.configureMultiplatform() {
         applyDefaultHierarchyTemplate()
         androidTarget()
         configureIos()
         configureSourceSets()
 
         configureKotlin()
-
-        project.kspDependencies("mobile")
+        kspDependencies("mobile")
     }
 
     @Suppress("UNUSED_VARIABLE")
@@ -107,10 +108,11 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
         }
     }
 
-    private fun BuildConfigExtension.configureBuildConfig(project: Project) {
-        packageName.set(project.fullPackageName.removeSuffix(APP_PACKAGE))
+    context(Project)
+    private fun BuildConfigExtension.configureBuildConfig() {
+        packageName.set(fullPackageName.removeSuffix(APP_PACKAGE))
 
-        project.afterEvaluate {
+        afterEvaluate {
             katanaBuildConfig(
                 android = { androidConfig ->
                     sourceSets.getByName("androidMain") {

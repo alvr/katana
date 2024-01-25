@@ -7,7 +7,6 @@ buildconfig = "5.3.5"
 complete-kotlin = "1.1.0"
 compose = "1.5.11"
 compose-compiler = "1.5.7.1"
-coroutines = "1.7.3"
 datastore = "1.1.0-beta01"
 destinations = "1.9.62"
 detekt = "1.23.4"
@@ -21,9 +20,10 @@ koin-test = "3.5.3"
 korge-foundation = "5.3.0"
 kotest = "5.8.0"
 kotlin = "1.9.22"
-kotlin-immutable = "0.3.7"
-kotlin-serialization = "1.6.2"
 kotlinpoet = "1.16.0"
+kotlinx-coroutines = "1.7.3"
+kotlinx-immutable = "0.3.7"
+kotlinx-serialization = "1.6.2"
 kover = "0.7.5"
 ksp = "1.9.22-1.0.17"
 ktor = "2.3.7"
@@ -34,6 +34,7 @@ mockk = "1.13.9"
 mockmp = "1.16.0"
 okio = "3.7.0"
 orbit = "6.1.0"
+parcelable = "1.3.0"
 parcelize = "0.2.3"
 placeholder = "1.0.7"
 sentry = "7.2.0"
@@ -81,10 +82,6 @@ compose-compiler = { module = "org.jetbrains.compose.compiler:compiler", version
 compose-material3-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "window-size" }
 compose-placeholder = { module = "com.eygraber:compose-placeholder-material3", version.ref = "placeholder" }
 
-# Coroutines
-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
-
 # Datastore
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastore-okio = { module = "androidx.datastore:datastore-core-okio", version.ref = "datastore" }
@@ -130,8 +127,10 @@ korge-foundation = { module = "com.soywiz.korge:korge-foundation", version.ref =
 
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlin-immutable" }
-kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "kotlin-serialization" }
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+kotlinx-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-immutable" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "kotlinx-serialization" }
 
 # KotlinPoet
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
@@ -158,7 +157,7 @@ orbit = { module = "org.orbit-mvi:orbit-core", version.ref = "orbit" }
 orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
 
 # Parcelable
-parcelable = { module = "com.arkivanov.essenty:parcelable", version = "1.3.0" }
+parcelable = { module = "com.arkivanov.essenty:parcelable", version.ref = "parcelable" }
 
 # Sentry
 sentry = { module = "io.sentry:sentry-android-core", version.ref = "sentry" }
@@ -192,11 +191,11 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 # Deps for Multiplatform Core (Common, JVM & iOS)
 core-common = [
     "arrow",
-    "coroutines",
     "koin",
     "korge-foundation",
     "kotlin",
-    "kotlin-immutable",
+    "kotlinx-coroutines",
+    "kotlinx-immutable",
 ]
 core-jvm = []
 core-ios = []
@@ -206,11 +205,11 @@ core-jvm-ksp = []
 core-ios-ksp = []
 
 core-common-test = [
-    "coroutines-test",
     "koin-test",
     "kotest-assertions-core",
     "kotest-engine",
     "kotest-property",
+    "kotlinx-coroutines-test",
     "turbine",
 ]
 core-jvm-test = [
@@ -219,14 +218,18 @@ core-jvm-test = [
 ]
 core-ios-test = []
 
+core-common-test-ksp = []
+core-jvm-test-ksp = []
+core-ios-test-ksp = []
+
 # Deps for Multiplatform Mobile (Common, Android & iOS)
 mobile-common = [
     "arrow",
-    "coroutines",
     "koin",
     "korge-foundation",
     "kotlin",
-    "kotlin-immutable",
+    "kotlinx-coroutines",
+    "kotlinx-immutable",
     "kermit",
 ]
 mobile-android = [
@@ -242,11 +245,11 @@ mobile-android-ksp = []
 mobile-ios-ksp = []
 
 mobile-common-test = [
-    "coroutines-test",
     "koin-test",
     "kotest-assertions-core",
     "kotest-engine",
     "kotest-property",
+    "kotlinx-coroutines-test",
     "turbine",
 ]
 mobile-android-test = [
@@ -255,22 +258,34 @@ mobile-android-test = [
 ]
 mobile-ios-test = []
 
+mobile-common-test-ksp = []
+mobile-android-test-ksp = []
+mobile-ios-test-ksp = []
+
 # Deps for Data Preferences
 data-preferences-common = [
     "datastore",
     "datastore-okio",
-    "kotlin-serialization",
+    "kotlinx-serialization",
 ]
 data-preferences-android = [
     "tink",
 ]
 data-preferences-ios = []
 
+data-preferences-common-ksp = []
+data-preferences-android-ksp = []
+data-preferences-ios-ksp = []
+
 data-preferences-common-test = [
     "okio-fakefilesystem",
 ]
 data-preferences-android-test = []
 data-preferences-ios-test = []
+
+data-preferences-common-test-ksp = []
+data-preferences-android-test-ksp = []
+data-preferences-ios-test-ksp = []
 
 # Deps for Data Remote
 data-remote-common = [
@@ -280,6 +295,10 @@ data-remote-common = [
 data-remote-android = []
 data-remote-ios = []
 
+data-remote-common-ksp = []
+data-remote-android-ksp = []
+data-remote-ios-ksp = []
+
 data-remote-common-test = [
     "apollo-test",
 ]
@@ -287,6 +306,10 @@ data-remote-android-test = [
     "apollo-mockserver",
 ]
 data-remote-ios-test = []
+
+data-remote-common-test-ksp = []
+data-remote-android-test-ksp = []
+data-remote-ios-test-ksp = []
 
 # Deps for UI
 ui-common = [
@@ -314,6 +337,10 @@ ui-common-test = [
 ]
 ui-android-test = []
 ui-ios-test = []
+
+ui-common-test-ksp = []
+ui-android-test-ksp = []
+ui-ios-test-ksp = []
 
 app-common = []
 app-android = [

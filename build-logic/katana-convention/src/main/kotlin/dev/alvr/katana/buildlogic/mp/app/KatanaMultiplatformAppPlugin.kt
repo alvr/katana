@@ -30,8 +30,9 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
         extensions.configure<SentryPluginExtension> { configureSentry() }
     }
 
-    override fun ExtensionContainer.configureAndroid(project: Project) {
-        configure<BaseAppModuleExtension> { configureApp(project) }
+    context(Project)
+    override fun ExtensionContainer.configureAndroid() {
+        configure<BaseAppModuleExtension> { configureApp() }
     }
 
     override fun NamedDomainObjectContainer<KotlinSourceSet>.configureSourceSets() {
@@ -52,10 +53,10 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
         }
     }
 
+    context(Project)
     @Suppress("StringLiteralDuplication")
-    private fun BaseAppModuleExtension.configureApp(project: Project) {
+    private fun BaseAppModuleExtension.configureApp() {
         configureAndroid(KatanaConfiguration.PackageName)
-        val rootProject = project.rootProject
 
         defaultConfig.applicationId = KatanaConfiguration.PackageName
         lint.abortOnError = false
