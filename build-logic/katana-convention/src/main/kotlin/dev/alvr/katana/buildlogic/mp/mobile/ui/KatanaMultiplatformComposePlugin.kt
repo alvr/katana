@@ -4,6 +4,7 @@ import dev.alvr.katana.buildlogic.ResourcesDir
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.fullPackageName
+import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.androidUnitTest
 import dev.alvr.katana.buildlogic.mp.configureSourceSets
 import dev.alvr.katana.buildlogic.mp.tasks.GenerateResourcesFileTask
@@ -13,7 +14,6 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.registering
@@ -28,12 +28,16 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
         apply(plugin = "org.jetbrains.compose")
 
         with(extensions) {
-            configure<KotlinMultiplatformExtension> { configureSourceSets() }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
             configure<ComposeExtension> { configureComposeMultiplatform(project) }
         }
 
         generateResourcesTask()
-        kspDependencies()
+    }
+
+    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
+        configureSourceSets()
+        project.kspDependencies("ui")
     }
 
     @OptIn(ExperimentalComposeLibrary::class)
@@ -92,16 +96,6 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
                 }
             },
         )
-    }
-
-    private fun Project.kspDependencies() {
-        dependencies {
-            addProvider("kspCommonMainMetadata", catalogBundle("ui-common-ksp"))
-            addProvider("kspAndroid", catalogBundle("ui-android-ksp"))
-            addProvider("kspIosArm64", catalogBundle(UI_IOS_KSP))
-            addProvider("kspIosSimulatorArm64", catalogBundle(UI_IOS_KSP))
-            addProvider("kspIosX64", catalogBundle(UI_IOS_KSP))
-        }
     }
 
     private fun Project.generateResourcesTask() {

@@ -1,5 +1,6 @@
 package dev.alvr.katana.buildlogic.mp
 
+import dev.alvr.katana.buildlogic.configureKotlin
 import java.util.Locale
 import kotlinx.kover.gradle.plugin.dsl.KoverVerifyReportConfig
 import kotlinx.kover.gradle.plugin.dsl.MetricType
@@ -34,6 +35,16 @@ internal fun KotlinMultiplatformExtension.configureIos() {
         ios.binaries.framework {
             baseName = project.frameworkIdentifier
             isStatic = true
+        }
+    }
+}
+
+internal fun KotlinMultiplatformExtension.configureKotlin() {
+    targets.configureEach {
+        compilations.configureEach {
+            compilerOptions.configure {
+                configureKotlin()
+            }
         }
     }
 }

@@ -3,8 +3,10 @@ package dev.alvr.katana.buildlogic.mp.core
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
+import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.KATANA_MULTIPLATFORM_EXTENSION
 import dev.alvr.katana.buildlogic.mp.configureIos
+import dev.alvr.katana.buildlogic.mp.configureKotlin
 import dev.alvr.katana.buildlogic.mp.configureSourceSets
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -30,7 +32,7 @@ internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
             create<KatanaMultiplatformCoreExtension>(KATANA_MULTIPLATFORM_EXTENSION)
 
             commonExtensions()
-            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
             configure<MocKMPGradlePlugin.Extension> { installWorkaround() }
         }
 
@@ -40,21 +42,20 @@ internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
         }
     }
 
-    private fun KotlinMultiplatformExtension.configureMultiplatform() {
+    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
         applyDefaultHierarchyTemplate()
         jvm { testRuns["test"].executionTask.configure { useJUnitPlatform() } }
         configureIos()
         configureSourceSets()
+
+        configureKotlin()
+        project.kspDependencies("core")
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
-            commonMain {
-                kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-
-                dependencies {
-                    implementation(catalogBundle("core-common"))
-                }
+            commonMain.dependencies {
+                implementation(catalogBundle("core-common"))
             }
             jvmMain.dependencies {
                 implementation(catalogBundle("core-jvm"))
