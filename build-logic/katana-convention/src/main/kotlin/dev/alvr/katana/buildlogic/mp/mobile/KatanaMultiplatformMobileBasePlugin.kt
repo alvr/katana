@@ -5,8 +5,10 @@ import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.fullPackageName
+import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.KATANA_MULTIPLATFORM_EXTENSION
 import dev.alvr.katana.buildlogic.mp.configureIos
+import dev.alvr.katana.buildlogic.mp.configureKotlin
 import dev.alvr.katana.buildlogic.mp.configureSourceSets
 import dev.alvr.katana.buildlogic.mp.katanaBuildConfig
 import org.gradle.api.NamedDomainObjectContainer
@@ -16,7 +18,6 @@ import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -43,26 +44,28 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
             commonExtensions()
             configureAndroid(project)
             configure<BuildConfigExtension> { configureBuildConfig(project) }
-            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform(target) }
             configure<MocKMPGradlePlugin.Extension> { installWorkaround() }
         }
 
         tasks.commonTasks()
     }
 
-    private fun KotlinMultiplatformExtension.configureMultiplatform() {
+    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
         applyDefaultHierarchyTemplate()
         androidTarget()
         configureIos()
         configureSourceSets()
+
+        configureKotlin()
+
+        project.kspDependencies("mobile")
     }
 
     @Suppress("UNUSED_VARIABLE")
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
             val commonMain by getting {
-                kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-
                 dependencies {
                     implementation(catalogBundle("mobile-common"))
                 }

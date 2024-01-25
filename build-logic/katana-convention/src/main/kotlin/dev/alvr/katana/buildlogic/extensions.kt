@@ -1,6 +1,7 @@
 package dev.alvr.katana.buildlogic
 
 import com.android.build.gradle.BaseExtension
+import com.apollographql.apollo3.compiler.capitalizeFirstLetter
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -14,14 +15,21 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.project
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.KotlinCommonCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.androidJvm
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.common
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.native
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.konan.util.visibleName
 
 private val Project.libs get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
@@ -52,6 +60,12 @@ internal fun DependencyHandlerScope.implementation(
 
 internal fun DependencyHandlerScope.detekt(provider: Provider<*>) {
     "detektPlugins"(provider)
+}
+
+context(KotlinMultiplatformExtension)
+internal fun Project.kspDependencies(catalogPrefix: String) {
+    kspDependencies("", catalogPrefix)
+    kspDependencies("Test", catalogPrefix)
 }
 
 internal fun BaseExtension.configureAndroid(packageName: String) {
@@ -118,16 +132,52 @@ internal fun TaskContainer.commonTasks() {
     }
 }
 
-private fun KotlinJvmCompilerOptions.configureKotlin() {
-    jvmTarget.set(KatanaConfiguration.JvmTarget)
+internal fun KotlinCommonCompilerOptions.configureKotlin() {
     apiVersion.set(KatanaConfiguration.KotlinVersion)
     languageVersion.set(KatanaConfiguration.KotlinVersion)
-    freeCompilerArgs.set(
-        freeCompilerArgs.get() + listOf(
-            "-opt-in=kotlin.RequiresOptIn",
-            "-Xcontext-receivers",
-            "-Xlambdas=indy",
-            "-Xexpect-actual-classes",
-        ),
+    freeCompilerArgs.addAll(
+        "-opt-in=kotlin.RequiresOptIn",
+        "-Xcontext-receivers",
+        "-Xlambdas=indy",
+        "-Xexpect-actual-classes",
     )
 }
+
+private fun KotlinJvmCompilerOptions.configureKotlin() {
+    jvmTarget.set(KatanaConfiguration.JvmTarget)
+    (this as KotlinCommonCompilerOptions).configureKotlin()
+}
+
+context(KotlinMultiplatformExtension)
+private fun Project.kspDependencies(
+    configurationNameSuffix: String,
+    catalogPrefix: String,
+) {
+    dependencies {
+        targets
+            .asSequence()
+            .forEach { target ->
+                val configurationName = if (target.platformType == common) {
+                    "CommonMainMetadata"
+                } else {
+                    "${target.targetName.capitalizeFirstLetter()}$configurationNameSuffix"
+                }.let { "ksp$it" }
+
+                val groupName = if (target.platformType == native && target.targetName.contains(IOS_TARGET)) {
+                    IOS_TARGET
+                } else if (target.platformType == androidJvm) {
+                    ANDROID_TARGET
+                } else {
+                    target.platformType.visibleName
+                }
+
+                add(
+                    configurationName,
+                    catalogBundle("$catalogPrefix-$groupName-ksp"),
+                )
+            }
+    }
+}
+
+private const val ANDROID_TARGET = "android"
+private const val IOS_TARGET = "ios"
