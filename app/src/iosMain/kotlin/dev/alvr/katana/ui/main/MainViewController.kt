@@ -19,6 +19,7 @@ fun MainViewController() = ComposeUIViewController(
         componentContext = DefaultComponentContext(
             lifecycle = ApplicationLifecycle(),
         ).asAppComponent(),
+        token = TODO(),
     )
 
     KatanaApp(katanaComponent)

@@ -13,13 +13,14 @@ import dev.alvr.katana.ui.home.component.HomeComponent.Child.ExploreChild
 import dev.alvr.katana.ui.home.component.HomeComponent.Child.MangaListChild
 import dev.alvr.katana.ui.home.component.HomeComponent.Child.SocialChild
 import dev.alvr.katana.ui.home.navigation.HomeNavigationBar
-import dev.alvr.katana.ui.lists.component.anime.createAnimeListComponent
-import dev.alvr.katana.ui.lists.component.manga.createMangaListComponent
+import dev.alvr.katana.ui.lists.component.createAnimeListComponent
+import dev.alvr.katana.ui.lists.component.createMangaListComponent
 import dev.alvr.katana.ui.social.component.createSocialComponent
 import kotlinx.serialization.Serializable
 
 internal class DefaultHomeComponent(
     componentContext: AppComponentContext,
+    private val navigateToLogin: () -> Unit,
 ) : HomeComponent, AppComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
 
@@ -64,7 +65,11 @@ internal class DefaultHomeComponent(
         SocialChild(createSocialComponent())
 
     private fun AppComponentContext.accountChildFactory() =
-        AccountChild(createAccountComponent())
+        AccountChild(
+            createAccountComponent(
+                navigateToLogin = navigateToLogin,
+            )
+        )
 
     private fun onAnimeListItemClicked() {
         navigation.bringToFront(Config.AnimeList)

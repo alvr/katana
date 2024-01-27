@@ -1,7 +1,7 @@
 package dev.alvr.katana.ui.lists.entities.mappers
 
 import dev.alvr.katana.ui.lists.entities.ListsCollection
-import dev.alvr.katana.ui.lists.entities.MediaListItem
+import dev.alvr.katana.ui.lists.entities.item.MediaListItem
 import dev.alvr.katana.ui.lists.entities.UserList
 
 internal fun <I : MediaListItem> ListsCollection<I>.toUserList() = Array(size) { position ->

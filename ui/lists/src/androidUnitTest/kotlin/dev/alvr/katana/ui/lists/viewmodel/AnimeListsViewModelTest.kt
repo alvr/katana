@@ -11,7 +11,7 @@ import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.domain.lists.usecases.ObserveAnimeListUseCase
 import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
-import dev.alvr.katana.ui.lists.entities.MediaListItem
+import dev.alvr.katana.ui.lists.entities.item.MediaListItem
 import dev.alvr.katana.ui.lists.entities.UserList
 import dev.alvr.katana.ui.lists.entities.mappers.toMediaList
 import io.kotest.assertions.throwables.shouldThrowExactlyUnit

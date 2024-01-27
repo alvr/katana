@@ -9,8 +9,8 @@ import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
 import dev.alvr.katana.domain.lists.usecases.UpdateListUseCase
 import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.lists.entities.ListsCollection
-import dev.alvr.katana.ui.lists.entities.MediaListItem
 import dev.alvr.katana.ui.lists.entities.UserList
+import dev.alvr.katana.ui.lists.entities.item.MediaListItem
 import dev.alvr.katana.ui.lists.entities.mappers.toMediaList
 import dev.alvr.katana.ui.lists.entities.mappers.toUserList
 import kotlinx.collections.immutable.toImmutableList

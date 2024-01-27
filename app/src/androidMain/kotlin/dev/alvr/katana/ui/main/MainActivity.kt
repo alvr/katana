@@ -18,6 +18,7 @@ internal class MainActivity : ComponentActivity() {
 
         val katanaComponent = DefaultKatanaComponent(
             componentContext = defaultComponentContext().asAppComponent(),
+            token = intent.dataString,
         )
         setContent { KatanaApp(katanaComponent) }
     }

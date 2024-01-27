@@ -1,6 +1,7 @@
 package dev.alvr.katana.ui.main.component
 
 import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.replaceAll
 import dev.alvr.katana.ui.base.decompose.AppComponentContext
 import dev.alvr.katana.ui.base.decompose.extensions.appChildStack
 import dev.alvr.katana.ui.home.component.createHomeComponent
@@ -13,6 +14,7 @@ import org.koin.core.component.inject
 
 internal class DefaultKatanaComponent(
     componentContext: AppComponentContext,
+    private val token: String?,
 ) : KatanaComponent, AppComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
     private val viewModel by inject<MainViewModel>()
@@ -34,10 +36,19 @@ internal class DefaultKatanaComponent(
     }
 
     private fun AppComponentContext.loginChildFactory() =
-        LoginChild(createLoginComponent())
+        LoginChild(
+            createLoginComponent(
+                token = token,
+                navigateToHome = { navigation.replaceAll(Config.Home) },
+            ),
+        )
 
     private fun AppComponentContext.homeChildFactory() =
-        HomeChild(createHomeComponent())
+        HomeChild(
+            createHomeComponent(
+                navigateToLogin = { navigation.replaceAll(Config.Login) },
+            )
+        )
 
     @Serializable
     internal sealed interface Config {

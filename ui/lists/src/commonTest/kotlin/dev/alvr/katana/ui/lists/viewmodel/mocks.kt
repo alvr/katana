@@ -6,7 +6,7 @@ import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaList
 import dev.alvr.katana.domain.lists.models.lists.MediaListEntry
-import dev.alvr.katana.ui.lists.entities.MediaListItem
+import dev.alvr.katana.ui.lists.entities.item.MediaListItem
 import korlibs.time.Date
 import korlibs.time.DateTime
 import korlibs.time.DateTimeTz

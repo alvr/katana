@@ -4,12 +4,12 @@ import dev.alvr.katana.common.core.orZero
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaListEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
-import dev.alvr.katana.ui.lists.entities.MediaListItem
+import dev.alvr.katana.ui.lists.entities.item.MangaListItem
 
 internal fun List<MediaListGroup<MediaEntry.Manga>>.toMediaItems() =
     flatMap { list -> list.entries.map(MediaListEntry<MediaEntry.Manga>::toMediaItem) }
 
-private fun MediaListEntry<MediaEntry.Manga>.toMediaItem() = MediaListItem.MangaListItem(
+private fun MediaListEntry<MediaEntry.Manga>.toMediaItem() = MangaListItem(
     entryId = list.id,
     mediaId = entry.id,
     title = entry.title,

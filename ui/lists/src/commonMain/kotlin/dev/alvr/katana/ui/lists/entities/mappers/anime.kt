@@ -3,12 +3,12 @@ package dev.alvr.katana.ui.lists.entities.mappers
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaListEntry
 import dev.alvr.katana.domain.lists.models.lists.MediaListGroup
-import dev.alvr.katana.ui.lists.entities.MediaListItem
+import dev.alvr.katana.ui.lists.entities.item.AnimeListItem
 
 internal fun List<MediaListGroup<MediaEntry.Anime>>.toMediaItems() =
     flatMap { list -> list.entries.map(MediaListEntry<MediaEntry.Anime>::toMediaItem) }
 
-private fun MediaListEntry<MediaEntry.Anime>.toMediaItem() = MediaListItem.AnimeListItem(
+private fun MediaListEntry<MediaEntry.Anime>.toMediaItem() = AnimeListItem(
     entryId = list.id,
     mediaId = entry.id,
     title = entry.title,
@@ -28,7 +28,7 @@ private fun MediaListEntry<MediaEntry.Anime>.toMediaItem() = MediaListItem.Anime
 )
 
 private fun MediaEntry.Anime.NextEpisode?.nextEpisode() = this?.let { next ->
-    MediaListItem.AnimeListItem.NextEpisode(
+    AnimeListItem.NextEpisode(
         number = next.number,
         date = next.at,
     )

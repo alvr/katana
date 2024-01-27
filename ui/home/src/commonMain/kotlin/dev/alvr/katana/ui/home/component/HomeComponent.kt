@@ -6,8 +6,8 @@ import dev.alvr.katana.ui.account.component.AccountComponent
 import dev.alvr.katana.ui.base.components.navigation.KatanaNavigationBarItem
 import dev.alvr.katana.ui.base.decompose.AppComponentContext
 import dev.alvr.katana.ui.explore.component.ExploreComponent
-import dev.alvr.katana.ui.lists.component.anime.AnimeListComponent
-import dev.alvr.katana.ui.lists.component.manga.MangaListComponent
+import dev.alvr.katana.ui.lists.component.AnimeListComponent
+import dev.alvr.katana.ui.lists.component.MangaListComponent
 import dev.alvr.katana.ui.social.component.SocialComponent
 
 sealed interface HomeComponent {
@@ -24,6 +24,9 @@ sealed interface HomeComponent {
     }
 }
 
-fun AppComponentContext.createHomeComponent(): HomeComponent = DefaultHomeComponent(
+fun AppComponentContext.createHomeComponent(
+    navigateToLogin: () -> Unit,
+): HomeComponent = DefaultHomeComponent(
     componentContext = this,
+    navigateToLogin = navigateToLogin,
 )

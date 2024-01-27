@@ -26,8 +26,8 @@ import dev.alvr.katana.ui.home.component.HomeComponent.Child.ExploreChild
 import dev.alvr.katana.ui.home.component.HomeComponent.Child.MangaListChild
 import dev.alvr.katana.ui.home.component.HomeComponent.Child.SocialChild
 import dev.alvr.katana.ui.home.navigation.HomeNavigationBar
-import dev.alvr.katana.ui.lists.content.anime.AnimeListContent
-import dev.alvr.katana.ui.lists.content.manga.MangaListContent
+import dev.alvr.katana.ui.lists.content.AnimeListContent
+import dev.alvr.katana.ui.lists.content.MangaListContent
 import dev.alvr.katana.ui.social.content.SocialContent
 import kotlinx.collections.immutable.toImmutableList
 

@@ -1,4 +1,4 @@
-package dev.alvr.katana.ui.lists.view.components
+package dev.alvr.katana.ui.lists.content.modules
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -51,20 +51,17 @@ import dev.alvr.katana.ui.base.components.KatanaPullRefresh
 import dev.alvr.katana.ui.base.modifiers.katanaPlaceholder
 import dev.alvr.katana.ui.lists.entities.item.AnimeListItem
 import dev.alvr.katana.ui.lists.entities.item.ItemMediaFormat
-import dev.alvr.katana.ui.lists.entities.MediaListItem
-import dev.alvr.katana.ui.lists.lists.generated.resources.Res
-import dev.alvr.katana.ui.lists.lists.generated.resources.default_cover
+import dev.alvr.katana.ui.lists.entities.item.MediaListItem
+import dev.alvr.katana.ui.lists.resources.KatanaResources
 import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.viewmodel.ListState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import kotlinx.collections.immutable.ImmutableList
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun MediaList(
-    listState: ListState<out MediaListItem>,
+    listState: ListState<MediaListItem>,
     onRefresh: () -> Unit,
     onAddPlusOne: (Int) -> Unit,
     onEditEntry: (Int) -> Unit,
@@ -253,7 +250,6 @@ private fun CoverAndScore(
 }
 
 @Composable
-@OptIn(ExperimentalResourceApi::class)
 private fun Cover(
     cover: String,
     title: String,
@@ -268,7 +264,7 @@ private fun Cover(
         onFailure = {
             Image(
                 modifier = Modifier.align(Alignment.Center),
-                painter = painterResource(Res.drawable.default_cover),
+                painter = KatanaResources.defaultCover.asPainter,
                 contentDescription = LocalListsStrings.current.errorCover,
             )
         },
@@ -394,7 +390,7 @@ private fun Progress(
     }
 
     LinearProgressIndicator(
-        progress = { currentProgress },
+        progress = currentProgress,
         modifier = modifier,
     )
 }

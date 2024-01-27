@@ -8,24 +8,26 @@ import dev.alvr.katana.ui.base.viewmodel.BaseViewModel
 import dev.alvr.katana.ui.login.viewmodel.LoginState.ErrorType
 import org.orbitmvi.orbit.container
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 
 internal class LoginViewModel(
     private val token: String?,
     private val saveSessionUseCase: SaveSessionUseCase,
     private val saveUserIdUseCase: SaveUserIdUseCase,
-) : BaseViewModel<LoginState, Nothing>() {
-    override val container = coroutineScope.container<LoginState, Nothing>(LoginState()) {
+) : BaseViewModel<LoginState, LoginEvent>() {
+    private val jwtRegex by lazy { "[A-Za-z0-9_-]{2,}(?:\\.[A-Za-z0-9_-]{2,}){2}".toRegex() }
+
+    override val container = coroutineScope.container<LoginState, LoginEvent>(LoginState()) {
         saveAnilistToken(token)
     }
 
     private fun saveAnilistToken(token: String?) {
         if (token.isNullOrBlank()) return
+        val parsedToken = jwtRegex.find(token)?.value ?: return
 
         intent {
             reduce { state.copy(loading = true) }
-
-            val parsedToken = token.substringBefore(TOKEN_SEPARATOR)
             saveToken(parsedToken)
         }
     }
@@ -46,11 +48,8 @@ internal class LoginViewModel(
             },
             ifRight = {
                 updateState { copy(saved = true, loading = false, errorType = null) }
+                intent { postSideEffect(LoginEvent.LoginSuccessful) }
             },
         )
-    }
-
-    companion object {
-        private const val TOKEN_SEPARATOR = '&'
     }
 }
