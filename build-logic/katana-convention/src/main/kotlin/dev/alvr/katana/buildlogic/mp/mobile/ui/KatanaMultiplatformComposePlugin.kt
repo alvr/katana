@@ -1,22 +1,16 @@
 package dev.alvr.katana.buildlogic.mp.mobile.ui
 
-import dev.alvr.katana.buildlogic.ResourcesDir
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
-import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.androidUnitTest
 import dev.alvr.katana.buildlogic.mp.configureSourceSets
-import dev.alvr.katana.buildlogic.mp.tasks.GenerateResourcesFileTask
 import java.io.File
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.provideDelegate
-import org.gradle.kotlin.dsl.registering
 import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.compose.ExperimentalComposeLibrary
@@ -31,8 +25,6 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
             configure<ComposeExtension> { configureComposeMultiplatform() }
         }
-
-        generateResourcesTask()
     }
 
     context(Project)
@@ -48,8 +40,6 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
 
         configureSourceSets {
             commonMain {
-                kotlin.srcDirs("build/$GeneratedResourcesDir")
-
                 dependencies {
                     implementation(compose.animation)
                     implementation(compose.components.resources)
@@ -100,27 +90,9 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
         )
     }
 
-    private fun Project.generateResourcesTask() {
-        val generateResourcesFile by tasks.registering(GenerateResourcesFileTask::class) {
-            packageName.set(fullPackageName)
-            inputFiles.from(
-                layout.projectDirectory.dir(ResourcesDir).asFileTree.matching {
-                    include("**/*.webp", "**/*.xml")
-                },
-            )
-            outputDir.set(layout.buildDirectory.dir(GeneratedResourcesDir))
-        }
-
-        tasks.named("preBuild").configure { dependsOn(generateResourcesFile) }
-    }
-
     private fun Project.composePluginEnabled(property: String) =
         providers.gradleProperty(property).orNull == "true"
 
     private fun Project.composePluginDir(directory: String) =
         File(layout.buildDirectory.asFile.get(), directory).absolutePath
-
-    private companion object {
-        const val GeneratedResourcesDir = "generated/sources/katana/main"
-    }
 }
