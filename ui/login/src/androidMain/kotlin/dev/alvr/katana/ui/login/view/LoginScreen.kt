@@ -82,13 +82,24 @@ import dev.alvr.katana.ui.login.login.generated.resources.background_chihiro
 import dev.alvr.katana.ui.login.login.generated.resources.background_howl
 import dev.alvr.katana.ui.login.login.generated.resources.background_mononoke
 import dev.alvr.katana.ui.login.login.generated.resources.background_totoro
+import dev.alvr.katana.ui.login.login.generated.resources.begin_description
+import dev.alvr.katana.ui.login.login.generated.resources.begin_login_button
+import dev.alvr.katana.ui.login.login.generated.resources.begin_register_button
+import dev.alvr.katana.ui.login.login.generated.resources.content_description_background
+import dev.alvr.katana.ui.login.login.generated.resources.content_description_get_started_arrow
+import dev.alvr.katana.ui.login.login.generated.resources.content_description_katana_logo
+import dev.alvr.katana.ui.login.login.generated.resources.fetch_user_id_error
+import dev.alvr.katana.ui.login.login.generated.resources.get_started_button
+import dev.alvr.katana.ui.login.login.generated.resources.get_started_description
+import dev.alvr.katana.ui.login.login.generated.resources.header_katana_description
 import dev.alvr.katana.ui.login.login.generated.resources.ic_katana_logo
+import dev.alvr.katana.ui.login.login.generated.resources.save_token_error
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
-import dev.alvr.katana.ui.login.strings.LocalLoginStrings
 import dev.alvr.katana.ui.login.viewmodel.LoginState
 import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -114,8 +125,6 @@ internal fun LoginScreen(
 @Composable
 @OptIn(ExperimentalResourceApi::class)
 private fun Login(state: LoginState, onLogin: () -> Unit) {
-    val strings = LocalLoginStrings.current
-
     val background = remember {
         listOf(
             Res.drawable.background_chihiro,
@@ -131,9 +140,9 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
         state.saved -> onLogin()
         state.errorType != null -> {
             val message = when (state.errorType) {
-                LoginState.ErrorType.SaveToken -> strings.saveTokenError
-                LoginState.ErrorType.SaveUserId -> strings.fetchUserIdError
-            }
+                LoginState.ErrorType.SaveToken -> Res.string.save_token_error
+                LoginState.ErrorType.SaveUserId -> Res.string.fetch_user_id_error
+            }.let { res -> stringResource(res) }
             LaunchedEffect(state.errorType) {
                 scaffoldState.snackbarHostState.showSnackbar(message)
             }
@@ -154,7 +163,7 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
             } else {
                 Image(
                     painter = painterResource(background),
-                    contentDescription = strings.contentDescriptionBackground,
+                    contentDescription = stringResource(Res.string.content_description_background),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
@@ -203,7 +212,7 @@ private fun KatanaLogo() {
 
     Image(
         painter = painterResource(Res.drawable.ic_katana_logo),
-        contentDescription = LocalLoginStrings.current.contentDescriptionKatanaLogo,
+        contentDescription = stringResource(Res.string.content_description_katana_logo),
         modifier = Modifier
             .padding(top = 8.dp)
             .fillMaxWidth(fraction = sizeFraction),
@@ -211,9 +220,10 @@ private fun KatanaLogo() {
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun Description() {
     Text(
-        text = LocalLoginStrings.current.headerKatanaDescription,
+        text = stringResource(Res.string.header_katana_description),
         style = MaterialTheme.typography.headlineSmall,
     )
 }
@@ -253,9 +263,10 @@ private fun GetStarted(onStartedClick: (State) -> Unit) {
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun GetStartedDescription() {
     Text(
-        text = LocalLoginStrings.current.getStartedDescription,
+        text = stringResource(Res.string.get_started_description),
         textAlign = TextAlign.Justify,
     )
 }
@@ -264,7 +275,7 @@ private fun GetStartedDescription() {
 private fun GetStartedButton(onStartedClick: (State) -> Unit) {
     val inlineArrow = "inlineArrowContent"
     val text = buildAnnotatedString {
-        append(LocalLoginStrings.current.getStartedButton)
+        append(stringResource(Res.string.get_started_button))
         append(' ')
         appendInlineContent(inlineArrow)
     }
@@ -294,8 +305,8 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
             ),
         ) {
             Icon(
-                contentDescription = LocalLoginStrings.current.contentDescriptionGetStartedArrow,
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = stringResource(Res.string.content_description_get_started_arrow),
                 modifier = Modifier.offset(x = translation),
                 tint = MaterialTheme.colorScheme.onSurface,
             )
@@ -343,14 +354,16 @@ private fun Begin() {
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun BeginText() {
     Text(
-        text = LocalLoginStrings.current.beginDescription,
+        text = stringResource(Res.string.begin_description),
         textAlign = TextAlign.Justify,
     )
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun BeginRegisterButton(modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
 
@@ -359,12 +372,13 @@ private fun BeginRegisterButton(modifier: Modifier = Modifier) {
         onClick = { uriHandler.openUri(ANILIST_REGISTER) },
     ) {
         Text(
-            text = LocalLoginStrings.current.beginRegisterButton,
+            text = stringResource(Res.string.begin_register_button),
         )
     }
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun BeginLoginButton(modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
 
@@ -373,7 +387,7 @@ private fun BeginLoginButton(modifier: Modifier = Modifier) {
         onClick = { uriHandler.openUri(ANILIST_LOGIN) },
     ) {
         Text(
-            text = LocalLoginStrings.current.beginLoginButton,
+            text = stringResource(Res.string.begin_login_button),
         )
     }
 }

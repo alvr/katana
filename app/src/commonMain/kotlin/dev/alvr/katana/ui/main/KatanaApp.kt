@@ -1,26 +1,13 @@
 package dev.alvr.katana.ui.main
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import co.touchlab.kermit.DefaultFormatter
 import co.touchlab.kermit.LogWriter
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import co.touchlab.kermit.platformLogWriter
 import dev.alvr.katana.KatanaBuildConfig
-import dev.alvr.katana.ui.account.strings.LocalAccountStrings
-import dev.alvr.katana.ui.account.strings.rememberAccountStrings
 import dev.alvr.katana.ui.base.design.KatanaTheme
-import dev.alvr.katana.ui.base.strings.LocalBaseStrings
-import dev.alvr.katana.ui.base.strings.rememberBaseStrings
-import dev.alvr.katana.ui.explore.strings.LocalExploreStrings
-import dev.alvr.katana.ui.explore.strings.rememberExploreStrings
-import dev.alvr.katana.ui.lists.strings.LocalListsStrings
-import dev.alvr.katana.ui.lists.strings.rememberListsStrings
-import dev.alvr.katana.ui.login.strings.LocalLoginStrings
-import dev.alvr.katana.ui.login.strings.rememberLoginStrings
-import dev.alvr.katana.ui.social.strings.LocalSocialStrings
-import dev.alvr.katana.ui.social.strings.rememberSocialStrings
 import io.sentry.kotlin.multiplatform.Sentry
 import io.sentry.kotlin.multiplatform.SentryLevel
 import io.sentry.kotlin.multiplatform.protocol.Breadcrumb
@@ -33,25 +20,8 @@ internal fun KatanaApp() {
     initApp()
 
     KatanaTheme {
-        KatanaStrings {
-            KatanaContent()
-        }
+        KatanaContent()
     }
-}
-
-@Composable
-private fun KatanaStrings(
-    content: @Composable () -> Unit,
-) {
-    CompositionLocalProvider(
-        LocalAccountStrings provides rememberAccountStrings(),
-        LocalBaseStrings provides rememberBaseStrings(),
-        LocalExploreStrings provides rememberExploreStrings(),
-        LocalListsStrings provides rememberListsStrings(),
-        LocalLoginStrings provides rememberLoginStrings(),
-        LocalSocialStrings provides rememberSocialStrings(),
-        content = content,
-    )
 }
 
 private fun initApp() {

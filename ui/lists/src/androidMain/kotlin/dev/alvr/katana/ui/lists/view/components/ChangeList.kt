@@ -26,7 +26,10 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyleBottomSheet
 import dev.alvr.katana.ui.lists.entities.UserList
-import dev.alvr.katana.ui.lists.strings.LocalListsStrings
+import dev.alvr.katana.ui.lists.lists.generated.resources.Res
+import dev.alvr.katana.ui.lists.lists.generated.resources.change_list_button
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 @Destination(style = DestinationStyleBottomSheet::class)
@@ -67,6 +70,7 @@ internal fun ChangeListSheet(
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 internal fun ChangeListButton(
     visible: Boolean,
     onClick: () -> Unit,
@@ -74,8 +78,8 @@ internal fun ChangeListButton(
     if (visible) {
         FloatingActionButton(onClick = onClick) {
             Icon(
-                contentDescription = LocalListsStrings.current.changeListButton,
                 imageVector = Icons.AutoMirrored.TwoTone.List,
+                contentDescription = stringResource(Res.string.change_list_button),
             )
         }
     }
