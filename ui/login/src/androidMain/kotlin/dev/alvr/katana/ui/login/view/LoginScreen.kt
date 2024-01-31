@@ -29,7 +29,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -256,6 +256,7 @@ private fun GetStartedDescription() {
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun GetStartedButton(onStartedClick: (State) -> Unit) {
     val inlineArrow = "inlineArrowContent"
     val text = buildAnnotatedString {
@@ -289,8 +290,8 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
             ),
         ) {
             Icon(
-                imageVector = Icons.Filled.ArrowForward,
                 contentDescription = LocalLoginStrings.current.contentDescriptionGetStartedArrow,
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 modifier = Modifier.offset(x = translation),
                 tint = MaterialTheme.colorScheme.onSurface,
             )
@@ -376,8 +377,8 @@ private fun BeginLoginButton(modifier: Modifier = Modifier) {
 @Composable
 private fun Animate(
     delayMillis: Int,
+    durationMillis: Int,
     modifier: Modifier = Modifier,
-    durationMillis: Int = BOTTOM_ANIM_DURATION,
     content: @Composable () -> Unit,
 ) {
     var animationFinished by rememberSaveable { mutableStateOf(false) }

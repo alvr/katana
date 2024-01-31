@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,8 +28,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.ui.base.strings.LocalBaseStrings
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 fun KatanaSearchTopAppBar(
     searchPlaceholder: String,
     onValueChange: (String) -> Unit,
@@ -66,8 +68,8 @@ fun KatanaSearchTopAppBar(
         leadingIcon = {
             IconButton(onClick = onBack) {
                 Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
                     contentDescription = strings.toolbarSearchClose,
+                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                 )
             }
         },
