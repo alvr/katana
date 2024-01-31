@@ -51,8 +51,10 @@ jobs:
           fetch-depth: 0
       - name: Common Steps
         uses: ./.github/actions/common-steps
+        with:
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Assemble Katana
-        run: ./gradlew assembleDebug --no-daemon --scan --stacktrace
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
       - name: Upload compose reports artifact
         uses: actions/upload-artifact@v4.3.0
         if: always()
@@ -94,6 +96,8 @@ jobs:
           fetch-depth: 0
       - name: Common Steps
         uses: ./.github/actions/common-steps
+        with:
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Run detekt
         run: ./gradlew detektAll lintDebug --no-daemon --stacktrace
       - name: Upload static reports artifact
@@ -120,8 +124,10 @@ jobs:
           fetch-depth: 0
       - name: Common Steps
         uses: ./.github/actions/common-steps
+        with:
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Run unit tests
-        run: ./gradlew :koverXmlReport :koverVerify --no-daemon --scan --stacktrace
+        run: ./gradlew :koverXmlReport :koverVerify --no-daemon --stacktrace
       - name: Upload tests reports artifact
         uses: actions/upload-artifact@v4.3.0
         with:
@@ -150,6 +156,8 @@ jobs:
           fetch-depth: 0
       - name: Common Steps
         uses: ./.github/actions/common-steps
+        with:
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Decode keystore
         uses: timheuer/base64-to-file@v1.2.4
         with:
@@ -170,7 +178,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_BETA_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew assembleBeta -Pkatana.flavor=beta --no-daemon --scan --stacktrace
+        run: ./gradlew assembleBeta -Pkatana.flavor=beta --no-daemon --stacktrace
       - name: Publish beta APK to TestApp.io
         uses: testappio/github-action@v5
         with:
@@ -212,6 +220,8 @@ jobs:
           fetch-depth: 0
       - name: Common Steps
         uses: ./.github/actions/common-steps
+        with:
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Decode keystore
         uses: timheuer/base64-to-file@v1.2.4
         with:
@@ -227,7 +237,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_RELEASE_PROJECT }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: ./gradlew assembleRelease bundleRelease -Pkatana.flavor=release --no-daemon --scan --stacktrace
+        run: ./gradlew assembleRelease bundleRelease -Pkatana.flavor=release --no-daemon --stacktrace
       - name: Publish production AAB to Google Play
         uses: r0adkll/upload-google-play@v1.1.2
         with:
