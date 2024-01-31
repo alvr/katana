@@ -1,7 +1,6 @@
 package dev.alvr.katana.ui.lists.view.components
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -21,17 +20,21 @@ import dev.alvr.katana.ui.base.components.home.KatanaHomeScaffold
 import dev.alvr.katana.ui.base.components.home.rememberKatanaHomeScaffoldState
 import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.lists.navigation.ListsNavigator
-import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.ui.lists.viewmodel.AnimeListsViewModel
 import dev.alvr.katana.ui.lists.viewmodel.ListsViewModel
 import dev.alvr.katana.ui.lists.viewmodel.MangaListsViewModel
+import katana.ui.lists.generated.resources.Res
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
-@ExperimentalFoundationApi
+@OptIn(
+    ExperimentalMaterialApi::class,
+    ExperimentalResourceApi::class,
+    ExperimentalAnimationApi::class,
+)
 internal fun ListScreen(
     vm: ListsViewModel<*, *>,
     navigator: ListsNavigator,
@@ -45,7 +48,6 @@ internal fun ListScreen(
     val katanaScaffoldState = rememberKatanaHomeScaffoldState()
     val lazyGridState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
-    val strings = LocalListsStrings.current
 
     resultRecipient.OnNavValue { result ->
         vm.selectList(result).also {
@@ -55,9 +57,9 @@ internal fun ListScreen(
     }
 
     val searchPlaceholder = when (vm) {
-        is AnimeListsViewModel -> strings.animeToolbarSearchPlaceholder
-        is MangaListsViewModel -> strings.mangaToolbarSearchPlaceholder
-    }
+        is AnimeListsViewModel -> Res.string.anime_toolbar_search_placeholder
+        is MangaListsViewModel -> Res.string.manga_toolbar_search_placeholder
+    }.let { res -> stringResource(res) }
 
     val buttonsVisible by remember(state.isError) {
         derivedStateOf(structuralEqualityPolicy()) { !state.isError }
@@ -81,12 +83,12 @@ internal fun ListScreen(
             when {
                 isError -> KatanaErrorState(
                     modifier = modifier.padding(paddingValues),
-                    text = strings.errorMessage,
+                    text = stringResource(Res.string.error_message),
                     onRetry = {
                         vm.refreshList()
                         katanaScaffoldState.resetToolbar()
                     },
-                    buttonText = strings.errorRetryButton,
+                    buttonText = stringResource(Res.string.error_retry_button),
                     loading = state.isLoading,
                 )
                 isEmpty && !isLoading -> KatanaEmptyState(

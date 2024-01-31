@@ -5,9 +5,11 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
-import dev.alvr.katana.ui.lists.strings.LocalListsStrings
+import katana.ui.lists.generated.resources.Res
 import korlibs.time.Date
 import korlibs.time.DateTimeTz
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Immutable
 @Suppress("ComplexInterface")
@@ -90,21 +92,22 @@ internal sealed interface MediaListItem : Parcelable {
         OneShot,
         Unknown;
 
+        @OptIn(ExperimentalResourceApi::class)
         val value
-            @Composable get() = with(LocalListsStrings.current) {
+            @Composable get() = with(Res.string) {
                 when (this@Format) {
-                    Tv -> entryFormatTv
-                    TvShort -> entryFormatTvShort
-                    Movie -> entryFormatMovie
-                    Special -> entryFormatSpecial
-                    Ova -> entryFormatOva
-                    Ona -> entryFormatOna
-                    Music -> entryFormatMusic
-                    Manga -> entryFormatManga
-                    Novel -> entryFormatNovel
-                    OneShot -> entryFormatOneShot
-                    Unknown -> entryFormatUnknown
-                }
+                    Tv -> entry_format_tv
+                    TvShort -> entry_format_tv_short
+                    Movie -> entry_format_movie
+                    Special -> entry_format_special
+                    Ova -> entry_format_ova
+                    Ona -> entry_format_ona
+                    Music -> entry_format_music
+                    Manga -> manga_toolbar
+                    Novel -> entry_format_novel
+                    OneShot -> entry_format_one_shot
+                    Unknown -> entry_format_unknown
+                }.let { res -> stringResource(res) }
             }
     }
 }

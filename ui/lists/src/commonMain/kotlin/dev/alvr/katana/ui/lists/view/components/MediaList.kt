@@ -50,7 +50,6 @@ import dev.alvr.katana.common.core.zero
 import dev.alvr.katana.ui.base.components.KatanaPullRefresh
 import dev.alvr.katana.ui.base.modifiers.katanaPlaceholder
 import dev.alvr.katana.ui.lists.entities.MediaListItem
-import dev.alvr.katana.ui.lists.strings.LocalListsStrings
 import dev.alvr.katana.ui.lists.viewmodel.ListState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -58,6 +57,7 @@ import katana.ui.lists.generated.resources.Res
 import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun MediaList(
@@ -266,7 +266,7 @@ private fun Cover(
             Image(
                 modifier = Modifier.align(Alignment.Center),
                 painter = painterResource(Res.drawable.default_cover),
-                contentDescription = LocalListsStrings.current.errorCover,
+                contentDescription = stringResource(Res.string.error_cover),
             )
         },
     )
@@ -288,19 +288,20 @@ private fun Title(
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun Subtitle(
     format: MediaListItem.Format,
     modifier: Modifier = Modifier,
     nextEpisode: MediaListItem.AnimeListItem.NextEpisode? = null,
 ) {
-    val strings = LocalListsStrings.current
     val text = buildAnnotatedString {
         append(format.value)
 
         if (nextEpisode != null) {
-            append(" ${strings.entryNextEpisodeSeparator} ")
+            append(" ${stringResource(Res.string.entry_next_episode_separator)} ")
             append(
-                strings.entryNextEpisode(
+                stringResource(
+                    Res.string.entry_next_episode,
                     nextEpisode.number,
                     KatanaDateFormatter.DateWithTime(nextEpisode.date),
                 ),
@@ -338,6 +339,7 @@ private fun Score(
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun PlusOne(
     progress: Int,
     total: Int?,
@@ -348,7 +350,7 @@ private fun PlusOne(
     // Episodes - Chapters (Anime & Manga)
     if (progress != total) {
         PlusOneButton(
-            progress = LocalListsStrings.current.entryProgress(progress, total ?: String.unknown),
+            progress = stringResource(Res.string.entry_progress, progress, total ?: String.unknown),
             itemLoading = itemLoading,
             onAddPlusOne = onAddPlusOne,
             modifier = modifier,
@@ -357,6 +359,7 @@ private fun PlusOne(
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun PlusOneButton(
     progress: String,
     itemLoading: Boolean,
@@ -370,7 +373,7 @@ private fun PlusOneButton(
     ) {
         Text(
             modifier = Modifier.katanaPlaceholder(visible = itemLoading),
-            text = LocalListsStrings.current.entryPlusOne(progress),
+            text = stringResource(Res.string.entry_plus_one, progress),
         )
     }
 }

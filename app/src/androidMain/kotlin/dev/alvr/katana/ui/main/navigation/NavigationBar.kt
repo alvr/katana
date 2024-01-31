@@ -19,7 +19,6 @@ import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
@@ -33,6 +32,8 @@ import dev.alvr.katana.ui.main.navigation.items.HomeNavigationBarItem
 import dev.alvr.katana.ui.main.navigation.items.NavigationBarItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun NavigationBar(
@@ -160,6 +161,7 @@ private fun RailNavigationBar(
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun NavigationBarIcon(destination: NavigationBarItem) {
     Icon(
         imageVector = destination.icon,
@@ -168,6 +170,7 @@ private fun NavigationBarIcon(destination: NavigationBarItem) {
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun NavigationBarLabel(destination: NavigationBarItem) {
     Text(text = stringResource(destination.label))
 }

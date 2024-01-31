@@ -4,11 +4,13 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
-import dev.alvr.katana.R
+import katana.app.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 internal fun SessionExpiredDialog(
     visible: Boolean,
     onAccept: () -> Unit,
@@ -20,11 +22,11 @@ internal fun SessionExpiredDialog(
             },
             confirmButton = {
                 TextButton(onClick = onAccept) {
-                    Text(text = stringResource(R.string.session_expired_error_confirm_button))
+                    Text(text = stringResource(Res.string.session_expired_error_confirm_button))
                 }
             },
-            title = { Text(text = stringResource(R.string.session_expired_error_title)) },
-            text = { Text(text = stringResource(R.string.session_expired_error_message)) },
+            title = { Text(text = stringResource(Res.string.session_expired_error_title)) },
+            text = { Text(text = stringResource(Res.string.session_expired_error_message)) },
             properties = DialogProperties(
                 dismissOnBackPress = false,
                 dismissOnClickOutside = false,

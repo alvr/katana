@@ -27,8 +27,9 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import dev.alvr.katana.common.core.empty
-import dev.alvr.katana.ui.base.strings.LocalBaseStrings
+import katana.ui.base.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 @OptIn(ExperimentalResourceApi::class)
@@ -44,8 +45,6 @@ fun KatanaSearchTopAppBar(
 
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
-
-    val strings = LocalBaseStrings.current
 
     // Request focus only the first time
     if (!focusRequested) {
@@ -68,8 +67,8 @@ fun KatanaSearchTopAppBar(
         leadingIcon = {
             IconButton(onClick = onBack) {
                 Icon(
-                    contentDescription = strings.toolbarSearchClose,
                     imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                    contentDescription = stringResource(Res.string.toolbar_search_close),
                 )
             }
         },
@@ -82,7 +81,7 @@ fun KatanaSearchTopAppBar(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Clear,
-                    contentDescription = strings.toolbarSearchClear,
+                    contentDescription = stringResource(Res.string.toolbar_search_clear),
                 )
             }
         },

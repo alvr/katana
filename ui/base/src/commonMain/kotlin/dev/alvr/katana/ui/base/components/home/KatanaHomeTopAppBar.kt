@@ -12,10 +12,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import dev.alvr.katana.ui.base.strings.LocalBaseStrings
+import katana.ui.base.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalResourceApi::class,
+)
 fun KatanaHomeTopAppBar(
     title: String,
     subtitle: String?,
@@ -23,8 +28,6 @@ fun KatanaHomeTopAppBar(
     onSearch: (() -> Unit)? = null,
     onFilter: (() -> Unit)? = null,
 ) {
-    val strings = LocalBaseStrings.current
-
     TopAppBar(
         modifier = modifier,
         title = {
@@ -40,7 +43,7 @@ fun KatanaHomeTopAppBar(
                 IconButton(onClick = onSearch) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
-                        contentDescription = strings.toolbarMenuSearch,
+                        contentDescription = stringResource(Res.string.toolbar_menu_search),
                     )
                 }
             }
@@ -49,7 +52,7 @@ fun KatanaHomeTopAppBar(
                 IconButton(onClick = onFilter) {
                     Icon(
                         imageVector = Icons.Outlined.FilterAlt,
-                        contentDescription = strings.toolbarMenuFilter,
+                        contentDescription = stringResource(Res.string.toolbar_menu_filter),
                     )
                 }
             }
