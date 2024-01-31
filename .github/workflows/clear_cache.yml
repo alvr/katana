@@ -1,4 +1,4 @@
-name: Clear all Github actions caches on sundays
+name: Clear Cache
 
 on:
   schedule:
