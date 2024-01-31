@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.List
+import androidx.compose.material.icons.automirrored.twotone.List
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -67,6 +67,7 @@ internal fun ChangeListSheet(
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 internal fun ChangeListButton(
     visible: Boolean,
     onClick: () -> Unit,
@@ -74,8 +75,8 @@ internal fun ChangeListButton(
     if (visible) {
         FloatingActionButton(onClick = onClick) {
             Icon(
-                imageVector = Icons.TwoTone.List,
                 contentDescription = LocalListsStrings.current.changeListButton,
+                imageVector = Icons.AutoMirrored.TwoTone.List,
             )
         }
     }
