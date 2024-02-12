@@ -7,7 +7,7 @@ initscript {
         }
     }
     dependencies {
-        classpath("org.gradle:github-dependency-graph-gradle-plugin:1.2.0")
+        classpath("org.gradle:github-dependency-graph-gradle-plugin:1.2.1")
     }
 }
 
