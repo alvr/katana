@@ -67,7 +67,6 @@ internal fun ChangeListSheet(
 }
 
 @Composable
-@OptIn(ExperimentalResourceApi::class)
 internal fun ChangeListButton(
     visible: Boolean,
     onClick: () -> Unit,

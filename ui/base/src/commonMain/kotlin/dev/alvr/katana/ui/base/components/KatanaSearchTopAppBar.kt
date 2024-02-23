@@ -28,10 +28,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import dev.alvr.katana.common.core.empty
 import dev.alvr.katana.ui.base.strings.LocalBaseStrings
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @Composable
-@OptIn(ExperimentalResourceApi::class)
 fun KatanaSearchTopAppBar(
     searchPlaceholder: String,
     onValueChange: (String) -> Unit,

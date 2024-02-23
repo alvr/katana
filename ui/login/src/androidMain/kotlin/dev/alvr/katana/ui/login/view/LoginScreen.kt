@@ -77,11 +77,16 @@ import dev.alvr.katana.ui.login.HEADER_ANIMATION_DURATION
 import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK
 import dev.alvr.katana.ui.login.LOGO_FULL_SIZE
 import dev.alvr.katana.ui.login.LOGO_RESIZED
+import dev.alvr.katana.ui.login.login.generated.resources.Res
+import dev.alvr.katana.ui.login.login.generated.resources.background_chihiro
+import dev.alvr.katana.ui.login.login.generated.resources.background_howl
+import dev.alvr.katana.ui.login.login.generated.resources.background_mononoke
+import dev.alvr.katana.ui.login.login.generated.resources.background_totoro
+import dev.alvr.katana.ui.login.login.generated.resources.ic_katana_logo
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
 import dev.alvr.katana.ui.login.strings.LocalLoginStrings
 import dev.alvr.katana.ui.login.viewmodel.LoginState
 import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
-import katana.ui.login.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.androidx.compose.koinViewModel
@@ -256,7 +261,6 @@ private fun GetStartedDescription() {
 }
 
 @Composable
-@OptIn(ExperimentalResourceApi::class)
 private fun GetStartedButton(onStartedClick: (State) -> Unit) {
     val inlineArrow = "inlineArrowContent"
     val text = buildAnnotatedString {

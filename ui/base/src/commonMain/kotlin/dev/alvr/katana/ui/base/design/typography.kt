@@ -5,7 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import katana.ui.base.generated.resources.Res
+import dev.alvr.katana.ui.base.base.generated.resources.Res
+import dev.alvr.katana.ui.base.base.generated.resources.barlow_bold
+import dev.alvr.katana.ui.base.base.generated.resources.barlow_light
+import dev.alvr.katana.ui.base.base.generated.resources.barlow_medium
+import dev.alvr.katana.ui.base.base.generated.resources.barlow_normal
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 
