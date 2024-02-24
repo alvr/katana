@@ -1,8 +1,8 @@
 package dev.alvr.katana.buildlogic.common
 
-import dev.alvr.katana.buildlogic.ANDROID_APPLICATION_PLUGIN
-import dev.alvr.katana.buildlogic.ANDROID_LIBRARY_PLUGIN
-import dev.alvr.katana.buildlogic.isRelease
+import dev.alvr.katana.buildlogic.utils.ANDROID_APPLICATION_PLUGIN
+import dev.alvr.katana.buildlogic.utils.ANDROID_LIBRARY_PLUGIN
+import dev.alvr.katana.buildlogic.utils.isRelease
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverReportFilters

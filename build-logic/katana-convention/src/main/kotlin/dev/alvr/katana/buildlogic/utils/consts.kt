@@ -1,4 +1,4 @@
-package dev.alvr.katana.buildlogic
+package dev.alvr.katana.buildlogic.utils
 
 internal const val AndroidDir = "src/androidMain"
 internal const val ResourcesDir = "src/commonMain/resources"

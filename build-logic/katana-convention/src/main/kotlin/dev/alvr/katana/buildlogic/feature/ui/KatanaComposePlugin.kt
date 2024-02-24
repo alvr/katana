@@ -1,13 +1,13 @@
-package dev.alvr.katana.buildlogic.mp.mobile.ui
+package dev.alvr.katana.buildlogic.feature.ui
 
-import dev.alvr.katana.buildlogic.ResourcesDir
-import dev.alvr.katana.buildlogic.catalogBundle
-import dev.alvr.katana.buildlogic.catalogLib
-import dev.alvr.katana.buildlogic.fullPackageName
-import dev.alvr.katana.buildlogic.kspDependencies
-import dev.alvr.katana.buildlogic.mp.androidUnitTest
-import dev.alvr.katana.buildlogic.mp.configureSourceSets
-import dev.alvr.katana.buildlogic.mp.tasks.GenerateResourcesFileTask
+import dev.alvr.katana.buildlogic.tasks.GenerateResourcesFileTask
+import dev.alvr.katana.buildlogic.utils.ResourcesDir
+import dev.alvr.katana.buildlogic.utils.androidUnitTest
+import dev.alvr.katana.buildlogic.utils.catalogBundle
+import dev.alvr.katana.buildlogic.utils.catalogLib
+import dev.alvr.katana.buildlogic.utils.fullPackageName
+import dev.alvr.katana.buildlogic.utils.kspDependencies
+import dev.alvr.katana.buildlogic.utils.sourceSets
 import java.io.File
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -22,7 +22,7 @@ import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
+internal class KatanaComposePlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = "org.jetbrains.compose")
@@ -46,18 +46,20 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
         val compose = (this as ExtensionAware).extensions
             .getByName("compose") as ComposePlugin.Dependencies
 
-        configureSourceSets {
+        sourceSets {
             commonMain {
                 kotlin.srcDirs("build/$GeneratedResourcesDir")
 
                 dependencies {
                     implementation(compose.animation)
+                    implementation(compose.animationGraphics)
                     implementation(compose.components.resources)
                     implementation(compose.foundation)
                     implementation(compose.material)
                     implementation(compose.material3)
                     implementation(compose.materialIconsExtended)
                     implementation(compose.runtime)
+                    implementation(compose.runtimeSaveable)
                     implementation(compose.ui)
                     implementation(catalogBundle("ui-common"))
                 }

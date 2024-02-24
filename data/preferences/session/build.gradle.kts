@@ -1,16 +1,12 @@
 plugins {
-    id("katana.multiplatform.data.preferences")
+    id("katana.feature.data.preferences")
     alias(libs.plugins.serialization)
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.common.core)
-        implementation(projects.data.preferences.base)
-        implementation(projects.domain.session)
-    }
+dependencies {
+    implementation(projects.common.core)
+    implementation(projects.data.preferences.base)
+    implementation(projects.domain.session)
 
-    commonTestDependencies {
-        implementation(projects.common.tests)
-    }
+    testImplementation(projects.common.tests)
 }

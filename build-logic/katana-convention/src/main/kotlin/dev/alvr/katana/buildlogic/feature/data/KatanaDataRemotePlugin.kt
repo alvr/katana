@@ -1,21 +1,21 @@
-package dev.alvr.katana.buildlogic.mp.mobile.data
+package dev.alvr.katana.buildlogic.feature.data
 
 import com.apollographql.apollo3.gradle.api.ApolloExtension
-import dev.alvr.katana.buildlogic.catalogBundle
-import dev.alvr.katana.buildlogic.fullPackageName
-import dev.alvr.katana.buildlogic.kspDependencies
-import dev.alvr.katana.buildlogic.mp.androidUnitTest
-import dev.alvr.katana.buildlogic.mp.configureSourceSets
+import dev.alvr.katana.buildlogic.utils.androidUnitTest
+import dev.alvr.katana.buildlogic.utils.catalogBundle
+import dev.alvr.katana.buildlogic.utils.fullPackageName
+import dev.alvr.katana.buildlogic.utils.kspDependencies
+import dev.alvr.katana.buildlogic.utils.sourceSets
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
+internal class KatanaDataRemotePlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
-        apply(plugin = "katana.multiplatform.mobile")
+        apply(plugin = "katana.feature")
         apply(plugin = "com.apollographql.apollo3")
 
         with(extensions) {
@@ -31,7 +31,7 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
-        configureSourceSets {
+        sourceSets {
             commonMain.dependencies {
                 implementation(catalogBundle("data-remote-common"))
             }

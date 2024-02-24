@@ -1,9 +1,7 @@
-package dev.alvr.katana.buildlogic
+package dev.alvr.katana.buildlogic.utils
 
-import com.android.build.gradle.BaseExtension
-import dev.alvr.katana.buildlogic.mp.capitalize
+import dev.alvr.katana.buildlogic.KatanaConfiguration
 import org.gradle.api.Project
-import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.plugins.JavaPluginExtension
@@ -16,7 +14,6 @@ import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonCompilerOptions
@@ -44,67 +41,14 @@ internal fun KotlinDependencyHandler.catalogVersion(alias: String) = project.cat
 internal fun KotlinDependencyHandler.catalogLib(alias: String) = project.catalogLib(alias)
 internal fun KotlinDependencyHandler.catalogBundle(alias: String) = project.catalogBundle(alias)
 
-internal fun KotlinDependencyHandler.implementation(
-    dependencyNotation: Provider<*>,
-    configure: ExternalModuleDependency.() -> Unit
-) {
-    implementation(dependencyNotation.get().toString(), configure)
-}
-
-@Suppress("UnstableApiUsage")
-internal fun DependencyHandlerScope.implementation(
-    provider: Provider<*>,
-    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
-) {
-    "implementation"(provider, dependencyConfiguration)
-}
-
 internal fun DependencyHandlerScope.detekt(provider: Provider<*>) {
     "detektPlugins"(provider)
 }
 
 context(KotlinMultiplatformExtension)
 internal fun Project.kspDependencies(catalogPrefix: String) {
-    kspDependencies("", catalogPrefix)
-    kspDependencies("Test", catalogPrefix)
-}
-
-internal fun BaseExtension.configureAndroid(packageName: String) {
-    compileSdkVersion(KatanaConfiguration.CompileSdk)
-    buildToolsVersion(KatanaConfiguration.BuildTools)
-
-    buildFeatures.buildConfig = false
-    namespace = packageName
-
-    defaultConfig {
-        minSdk = KatanaConfiguration.MinSdk
-        targetSdk = KatanaConfiguration.TargetSdk
-        versionCode = KatanaConfiguration.VersionCode
-        versionName = KatanaConfiguration.VersionName
-
-        vectorDrawables.useSupportLibrary = true
-    }
-
-    compileOptions {
-        sourceCompatibility = KatanaConfiguration.UseJavaVersion
-        targetCompatibility = KatanaConfiguration.UseJavaVersion
-    }
-
-    with(sourceSets["main"]) {
-        res.srcDirs("$AndroidDir/res", ResourcesDir)
-        resources.srcDirs(ResourcesDir)
-    }
-
-    testOptions {
-        animationsDisabled = true
-        unitTests {
-            isIncludeAndroidResources = true
-            all { test ->
-                test.useJUnitPlatform()
-                test.enabled = !test.isRelease
-            }
-        }
-    }
+    kspDependencies(catalogPrefix, "")
+    kspDependencies(catalogPrefix, "Test")
 }
 
 internal fun ExtensionContainer.commonExtensions() {
@@ -149,8 +93,8 @@ internal fun KotlinCommonCompilerOptions.configureKotlinCompiler() {
 
 context(KotlinMultiplatformExtension)
 private fun Project.kspDependencies(
-    configurationNameSuffix: String,
     catalogPrefix: String,
+    configurationNameSuffix: String,
 ) {
     dependencies {
         targets.forEach { target ->

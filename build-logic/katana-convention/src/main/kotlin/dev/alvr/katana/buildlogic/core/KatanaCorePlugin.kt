@@ -1,25 +1,23 @@
-package dev.alvr.katana.buildlogic.mp.core
+package dev.alvr.katana.buildlogic.core
 
-import dev.alvr.katana.buildlogic.catalogBundle
-import dev.alvr.katana.buildlogic.commonExtensions
-import dev.alvr.katana.buildlogic.commonTasks
-import dev.alvr.katana.buildlogic.kspDependencies
-import dev.alvr.katana.buildlogic.mp.KATANA_MULTIPLATFORM_EXTENSION
-import dev.alvr.katana.buildlogic.mp.configureIos
-import dev.alvr.katana.buildlogic.mp.configureKotlin
-import dev.alvr.katana.buildlogic.mp.configureSourceSets
+import dev.alvr.katana.buildlogic.utils.catalogBundle
+import dev.alvr.katana.buildlogic.utils.commonExtensions
+import dev.alvr.katana.buildlogic.utils.commonTasks
+import dev.alvr.katana.buildlogic.utils.configureIos
+import dev.alvr.katana.buildlogic.utils.configureKotlin
+import dev.alvr.katana.buildlogic.utils.kspDependencies
+import dev.alvr.katana.buildlogic.utils.sourceSets
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.kodein.mock.gradle.MocKMPGradlePlugin
 
-internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
+internal class KatanaCorePlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
@@ -29,8 +27,6 @@ internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
         apply(plugin = "org.kodein.mock.mockmp")
 
         with(extensions) {
-            create<KatanaMultiplatformCoreExtension>(KATANA_MULTIPLATFORM_EXTENSION)
-
             commonExtensions()
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
             configure<MocKMPGradlePlugin.Extension> { installWorkaround() }
@@ -54,7 +50,7 @@ internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
-        configureSourceSets {
+        sourceSets {
             commonMain.dependencies {
                 implementation(catalogBundle("core-common"))
             }
