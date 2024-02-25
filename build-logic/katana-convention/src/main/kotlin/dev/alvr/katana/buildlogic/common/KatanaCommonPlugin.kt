@@ -1,6 +1,6 @@
 package dev.alvr.katana.buildlogic.common
 
-import dev.alvr.katana.buildlogic.isRelease
+import dev.alvr.katana.buildlogic.utils.isRelease
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete

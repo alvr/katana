@@ -1,12 +1,10 @@
 plugins {
-    id("katana.multiplatform.tests")
+    id("katana.test")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(libs.arrow)
-        implementation(libs.koin)
-        implementation(libs.koin.test.get().toString()) { exclude(group = "junit", module = "junit") }
-        implementation(libs.mockmp)
-    }
+dependencies {
+    implementation(libs.arrow)
+    implementation(libs.koin)
+    implementation(libs.koin.test) { exclude(group = "junit", module = "junit") }
+    implementation(libs.mockmp)
 }

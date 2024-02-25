@@ -1,14 +1,14 @@
-package dev.alvr.katana.buildlogic.mp.app
+package dev.alvr.katana.buildlogic.app
 
 import com.android.build.api.dsl.ApplicationBuildType
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import dev.alvr.katana.buildlogic.ANDROID_APPLICATION_PLUGIN
-import dev.alvr.katana.buildlogic.AndroidDir
 import dev.alvr.katana.buildlogic.KatanaConfiguration
-import dev.alvr.katana.buildlogic.ResourcesDir
-import dev.alvr.katana.buildlogic.catalogBundle
-import dev.alvr.katana.buildlogic.configureAndroid
-import dev.alvr.katana.buildlogic.mp.mobile.KatanaMultiplatformMobileBasePlugin
+import dev.alvr.katana.buildlogic.feature.KatanaFeatureBasePlugin
+import dev.alvr.katana.buildlogic.utils.ANDROID_APPLICATION_PLUGIN
+import dev.alvr.katana.buildlogic.utils.AndroidDir
+import dev.alvr.katana.buildlogic.utils.ResourcesDir
+import dev.alvr.katana.buildlogic.utils.catalogBundle
+import dev.alvr.katana.buildlogic.utils.configureAndroid
 import io.sentry.android.gradle.extensions.SentryPluginExtension
 import java.io.FileInputStream
 import java.util.Properties
@@ -20,11 +20,11 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
-internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugin(ANDROID_APPLICATION_PLUGIN) {
+internal class KatanaAppAndroidPlugin : KatanaFeatureBasePlugin(ANDROID_APPLICATION_PLUGIN) {
 
     override fun apply(target: Project) = with(target) {
         super.apply(this)
-        apply(plugin = "katana.multiplatform.compose")
+        apply(plugin = "katana.feature.ui.compose")
         apply(plugin = "io.sentry.android.gradle")
 
         extensions.configure<SentryPluginExtension> { configureSentry() }

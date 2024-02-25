@@ -1,33 +1,28 @@
-package dev.alvr.katana.buildlogic.mp.core
+package dev.alvr.katana.buildlogic.core
 
 import com.android.build.gradle.LibraryExtension
-import dev.alvr.katana.buildlogic.catalogBundle
-import dev.alvr.katana.buildlogic.commonTasks
-import dev.alvr.katana.buildlogic.configureAndroid
-import dev.alvr.katana.buildlogic.fullPackageName
-import dev.alvr.katana.buildlogic.mp.KATANA_MULTIPLATFORM_EXTENSION
-import dev.alvr.katana.buildlogic.mp.configureIos
-import dev.alvr.katana.buildlogic.mp.configureSourceSets
-import dev.alvr.katana.buildlogic.mp.mobile.KatanaMultiplatformMobileExtension
+import dev.alvr.katana.buildlogic.utils.catalogBundle
+import dev.alvr.katana.buildlogic.utils.commonTasks
+import dev.alvr.katana.buildlogic.utils.configureAndroid
+import dev.alvr.katana.buildlogic.utils.configureIos
+import dev.alvr.katana.buildlogic.utils.fullPackageName
+import dev.alvr.katana.buildlogic.utils.sourceSets
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
+internal class KatanaTestPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = "com.android.library")
 
         with(extensions) {
-            create<KatanaMultiplatformMobileExtension>(KATANA_MULTIPLATFORM_EXTENSION)
-
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
             configure<LibraryExtension> { configureAndroid(project.fullPackageName) }
         }
@@ -45,7 +40,7 @@ internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
 
     @Suppress("UnusedPrivateProperty")
     private fun KotlinMultiplatformExtension.configureSourceSets() {
-        configureSourceSets {
+        sourceSets {
             val commonMain by getting {
                 dependencies {
                     implementation(catalogBundle("core-common-test"))

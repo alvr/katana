@@ -1,5 +1,5 @@
 plugins {
-    id("katana.multiplatform.ui")
+    id("katana.feature.ui")
     id("kotlin-parcelize")
     alias(libs.plugins.parcelize)
 }
@@ -9,16 +9,12 @@ ksp {
     arg("compose-destinations.moduleName", "lists")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(libs.parcelable)
+dependencies {
+    implementation(projects.common.core)
+    implementation(projects.domain.lists)
+    implementation(projects.ui.base)
 
-        implementation(projects.common.core)
-        implementation(projects.domain.lists)
-        implementation(projects.ui.base)
-    }
+    implementation(libs.parcelable)
 
-    commonTestDependencies {
-        implementation(projects.common.tests)
-    }
+    testImplementation(projects.common.tests)
 }

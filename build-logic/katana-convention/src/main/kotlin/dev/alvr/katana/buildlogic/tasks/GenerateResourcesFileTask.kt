@@ -1,4 +1,4 @@
-package dev.alvr.katana.buildlogic.mp.tasks
+package dev.alvr.katana.buildlogic.tasks
 
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
@@ -6,8 +6,8 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
-import dev.alvr.katana.buildlogic.ResourcesDir
-import dev.alvr.katana.buildlogic.mp.identifier
+import dev.alvr.katana.buildlogic.utils.ResourcesDir
+import dev.alvr.katana.buildlogic.utils.identifier
 import java.io.File
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection

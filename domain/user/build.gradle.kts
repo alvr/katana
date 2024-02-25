@@ -1,12 +1,10 @@
 plugins {
-    id("katana.multiplatform.core")
+    id("katana.core")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.common.core)
-        api(projects.domain.base)
-    }
+dependencies {
+    commonMainImplementation(projects.common.core)
+    commonMainApi(projects.domain.base)
 
-    commonTestDependencies { implementation(projects.common.tests) }
+    commonTestImplementation(projects.common.tests)
 }

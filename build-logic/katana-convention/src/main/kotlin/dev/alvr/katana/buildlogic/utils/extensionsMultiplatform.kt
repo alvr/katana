@@ -1,29 +1,22 @@
-package dev.alvr.katana.buildlogic.mp
+package dev.alvr.katana.buildlogic.utils
 
-import dev.alvr.katana.buildlogic.configureKotlinCompiler
 import java.util.Locale
 import kotlinx.kover.gradle.plugin.dsl.KoverVerifyReportConfig
 import kotlinx.kover.gradle.plugin.dsl.MetricType
+import org.gradle.api.Action
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.NamedDomainObjectProvider
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
-import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinSourceSetConvention
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
-internal fun KotlinMultiplatformExtension.configureSourceSets(
-    block: NamedDomainObjectContainer<KotlinSourceSet>.() -> Unit
+internal fun KotlinMultiplatformExtension.sourceSets(
+    action: Action<NamedDomainObjectContainer<KotlinSourceSet>>
 ) {
-    configureExtension(block)
-}
-
-internal inline fun <reified T : Any> KotlinMultiplatformExtension.configureExtension(
-    noinline block: T.() -> Unit
-) {
-    (this as ExtensionAware).extensions.configure(block)
+    (this as ExtensionAware).extensions.configure("sourceSets", action)
 }
 
 internal fun KotlinMultiplatformExtension.configureIos() {
@@ -75,6 +68,10 @@ internal val List<String>.identifier
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
 internal val NamedDomainObjectContainer<KotlinSourceSet>.androidUnitTest:
+    NamedDomainObjectProvider<KotlinSourceSet> by KotlinSourceSetConvention
+
+@OptIn(ExperimentalKotlinGradlePluginApi::class)
+internal val NamedDomainObjectContainer<KotlinSourceSet>.jvmAndroidMain:
     NamedDomainObjectProvider<KotlinSourceSet> by KotlinSourceSetConvention
 
 internal fun String.capitalize() =

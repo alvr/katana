@@ -1,30 +1,27 @@
-package dev.alvr.katana.buildlogic.mp.mobile
+package dev.alvr.katana.buildlogic.feature
 
 import com.github.gmazzo.buildconfig.BuildConfigExtension
-import dev.alvr.katana.buildlogic.catalogBundle
-import dev.alvr.katana.buildlogic.commonExtensions
-import dev.alvr.katana.buildlogic.commonTasks
-import dev.alvr.katana.buildlogic.fullPackageName
-import dev.alvr.katana.buildlogic.kspDependencies
-import dev.alvr.katana.buildlogic.mp.KATANA_MULTIPLATFORM_EXTENSION
-import dev.alvr.katana.buildlogic.mp.configureIos
-import dev.alvr.katana.buildlogic.mp.configureKotlin
-import dev.alvr.katana.buildlogic.mp.configureSourceSets
-import dev.alvr.katana.buildlogic.mp.katanaBuildConfig
+import dev.alvr.katana.buildlogic.utils.androidUnitTest
+import dev.alvr.katana.buildlogic.utils.catalogBundle
+import dev.alvr.katana.buildlogic.utils.commonExtensions
+import dev.alvr.katana.buildlogic.utils.commonTasks
+import dev.alvr.katana.buildlogic.utils.configureIos
+import dev.alvr.katana.buildlogic.utils.configureKotlin
+import dev.alvr.katana.buildlogic.utils.fullPackageName
+import dev.alvr.katana.buildlogic.utils.katanaBuildConfig
+import dev.alvr.katana.buildlogic.utils.kspDependencies
+import dev.alvr.katana.buildlogic.utils.sourceSets
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.kodein.mock.gradle.MocKMPGradlePlugin
 
-internal abstract class KatanaMultiplatformMobileBasePlugin(
+internal abstract class KatanaFeatureBasePlugin(
     private val androidPlugin: String,
 ) : Plugin<Project> {
     context(Project)
@@ -40,8 +37,6 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
         apply(plugin = "org.kodein.mock.mockmp")
 
         with(extensions) {
-            create<KatanaMultiplatformMobileExtension>(KATANA_MULTIPLATFORM_EXTENSION)
-
             commonExtensions()
             configureAndroid()
             configure<BuildConfigExtension> { configureBuildConfig() }
@@ -63,46 +58,27 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
         kspDependencies("mobile")
     }
 
-    @Suppress("UNUSED_VARIABLE")
     private fun KotlinMultiplatformExtension.configureSourceSets() {
-        configureSourceSets {
-            val commonMain by getting {
-                dependencies {
-                    implementation(catalogBundle("mobile-common"))
-                }
+        sourceSets {
+            commonMain.dependencies {
+                implementation(catalogBundle("mobile-common"))
             }
-            val androidMain by getting {
-                dependsOn(commonMain)
-                dependencies {
-                    implementation(catalogBundle("mobile-android"))
-                }
+            androidMain.dependencies {
+                implementation(catalogBundle("mobile-android"))
             }
-            val iosMain by getting {
-                dependsOn(commonMain)
-                dependencies {
-                    implementation(catalogBundle("mobile-ios"))
-                }
+            iosMain.dependencies {
+                implementation(catalogBundle("mobile-ios"))
             }
-            val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
-            val commonTest by getting {
-                dependencies {
-                    implementation(catalogBundle("mobile-common-test"))
-                }
+            commonTest.dependencies {
+                implementation(catalogBundle("mobile-common-test"))
             }
-            val androidUnitTest by getting {
-                dependsOn(commonTest)
-                dependencies {
-                    implementation(catalogBundle("mobile-android-test"))
-                }
+            androidUnitTest.dependencies {
+                implementation(catalogBundle("mobile-android-test"))
             }
-            val iosTest by getting {
-                dependsOn(commonTest)
-                dependencies {
-                    implementation(catalogBundle("mobile-ios-test"))
-                }
+            iosTest.dependencies {
+                implementation(catalogBundle("mobile-ios-test"))
             }
-            val iosSimulatorArm64Test by getting { dependsOn(iosTest) }
 
             configureSourceSets()
         }

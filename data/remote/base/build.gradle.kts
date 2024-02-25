@@ -1,18 +1,12 @@
 plugins {
-    id("katana.multiplatform.data.remote")
+    id("katana.feature.data.remote")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.common.core)
-        implementation(projects.domain.session)
-    }
+dependencies {
+    implementation(projects.common.core)
+    implementation(projects.domain.session)
 
-    androidMainDependencies {
-        implementation(libs.sentry.apollo)
-    }
+    implementation(libs.sentry.apollo)
 
-    commonTestDependencies {
-        implementation(projects.common.tests)
-    }
+    testImplementation(projects.common.tests)
 }

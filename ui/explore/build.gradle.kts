@@ -1,5 +1,5 @@
 plugins {
-    id("katana.multiplatform.ui")
+    id("katana.feature.ui")
 }
 
 ksp {
@@ -7,14 +7,10 @@ ksp {
     arg("compose-destinations.moduleName", "explore")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.common.core)
-        implementation(projects.domain.explore)
-        implementation(projects.ui.base)
-    }
+dependencies {
+    implementation(projects.common.core)
+    implementation(projects.domain.explore)
+    implementation(projects.ui.base)
 
-    commonTestDependencies {
-        implementation(projects.common.tests)
-    }
+    testImplementation(projects.common.tests)
 }

@@ -1,8 +1,8 @@
 package dev.alvr.katana.buildlogic.analysis
 
 import dev.alvr.katana.buildlogic.KatanaConfiguration
-import dev.alvr.katana.buildlogic.catalogLib
-import dev.alvr.katana.buildlogic.detekt
+import dev.alvr.katana.buildlogic.utils.catalogLib
+import dev.alvr.katana.buildlogic.utils.detekt
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.Plugin
 import org.gradle.api.Project

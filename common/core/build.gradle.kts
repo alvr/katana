@@ -1,3 +1,3 @@
 plugins {
-    id("katana.multiplatform.core")
+    id("katana.core")
 }
