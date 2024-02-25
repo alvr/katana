@@ -22,7 +22,6 @@ import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.getting
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
-import org.kodein.mock.gradle.MocKMPGradlePlugin
 
 internal abstract class KatanaMultiplatformMobileBasePlugin(
     private val androidPlugin: String,
@@ -37,7 +36,7 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
         apply(plugin = "com.google.devtools.ksp")
         apply(plugin = "io.kotest.multiplatform")
         apply(plugin = "org.jetbrains.kotlinx.kover")
-        apply(plugin = "org.kodein.mock.mockmp")
+        apply(plugin = "dev.mokkery")
 
         with(extensions) {
             create<KatanaMultiplatformMobileExtension>(KATANA_MULTIPLATFORM_EXTENSION)
@@ -46,7 +45,6 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
             configureAndroid()
             configure<BuildConfigExtension> { configureBuildConfig() }
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
-            configure<MocKMPGradlePlugin.Extension> { installWorkaround() }
         }
 
         tasks.commonTasks()

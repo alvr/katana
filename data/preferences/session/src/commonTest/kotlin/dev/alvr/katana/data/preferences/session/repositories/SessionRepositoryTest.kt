@@ -5,34 +5,33 @@ import arrow.core.left
 import arrow.core.none
 import arrow.core.right
 import arrow.core.some
-import dev.alvr.katana.common.tests.invoke
 import dev.alvr.katana.common.tests.shouldBeLeft
 import dev.alvr.katana.common.tests.shouldBeNone
 import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.common.tests.shouldBeSome
-import dev.alvr.katana.data.preferences.session.sources.MockSessionLocalSource
+import dev.alvr.katana.data.preferences.session.mocks.anilistTokenMock
 import dev.alvr.katana.data.preferences.session.sources.SessionLocalSource
 import dev.alvr.katana.domain.session.failures.SessionFailure
-import dev.alvr.katana.domain.session.models.AnilistToken
 import dev.alvr.katana.domain.session.repositories.SessionRepository
+import dev.mokkery.answering.returns
+import dev.mokkery.every
+import dev.mokkery.everySuspend
+import dev.mokkery.mock
+import dev.mokkery.verify
+import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.flowOf
-import org.kodein.mock.Mocker
-import org.kodein.mock.UsesMocks
 
-@UsesMocks(SessionLocalSource::class)
 internal class SessionRepositoryTest : FreeSpec() {
-    private val mocker = Mocker()
-    private val source: SessionLocalSource = MockSessionLocalSource(mocker)
-    private val repo: SessionRepository = SessionRepositoryImpl(source)
+    private val source: SessionLocalSource = mock<SessionLocalSource>()
 
-    private val anilistToken = AnilistToken("TOKEN")
+    private val repo: SessionRepository = SessionRepositoryImpl(source)
 
     init {
         "observing" - {
             "observing if the session is active" {
-                mocker.every { source.sessionActive } returns flowOf(
+                every { source.sessionActive } returns flowOf(
                     true.right(),
                     true.right(),
                     false.right(),
@@ -45,80 +44,78 @@ internal class SessionRepositoryTest : FreeSpec() {
                     awaitComplete()
                 }
 
-                mocker.verify { source.sessionActive }
+                verify { source.sessionActive }
             }
         }
 
         "getting" - {
             "getting a non-existing token" {
-                mocker.everySuspending { source.getAnilistToken() } returns none()
+                everySuspend { source.getAnilistToken() } returns none()
                 repo.getAnilistToken().shouldBeNone()
-                mocker.verifyWithSuspend { source.getAnilistToken() }
+                verifySuspend { source.getAnilistToken() }
             }
 
             "getting an existing token" {
-                mocker.everySuspending { source.getAnilistToken() } returns anilistToken.some()
-                repo.getAnilistToken().shouldBeSome(anilistToken)
-                mocker.verifyWithSuspend { source.getAnilistToken() }
+                everySuspend { source.getAnilistToken() } returns anilistTokenMock.some()
+                repo.getAnilistToken().shouldBeSome(anilistTokenMock)
+                verifySuspend { source.getAnilistToken() }
             }
         }
 
         "saving" - {
             "saving a session without error" {
-                mocker.everySuspending { source.saveSession(isAny()) } returns Unit.right()
-                repo.saveSession(anilistToken).shouldBeRight(Unit)
-                mocker.verifyWithSuspend { source.saveSession(anilistToken) }
+                everySuspend { source.saveSession(anilistTokenMock) } returns Unit.right()
+                repo.saveSession(anilistTokenMock).shouldBeRight(Unit)
+                verifySuspend { source.saveSession(anilistTokenMock) }
             }
 
             "saving a session with an error" {
-                mocker.everySuspending { source.saveSession(isAny()) } returns SessionFailure.SavingSession.left()
-                repo.saveSession(anilistToken).shouldBeLeft(SessionFailure.SavingSession)
-                mocker.verifyWithSuspend { source.saveSession(anilistToken) }
+                everySuspend { source.saveSession(anilistTokenMock) } returns SessionFailure.SavingSession.left()
+                repo.saveSession(anilistTokenMock).shouldBeLeft(SessionFailure.SavingSession)
+                verifySuspend { source.saveSession(anilistTokenMock) }
             }
         }
 
         "deleting" - {
             "deleting a session without error" {
-                mocker.everySuspending { source.deleteAnilistToken() } returns Unit.right()
+                everySuspend { source.deleteAnilistToken() } returns Unit.right()
                 repo.deleteAnilistToken().shouldBeRight(Unit)
-                mocker.verifyWithSuspend { source.deleteAnilistToken() }
+                verifySuspend { source.deleteAnilistToken() }
             }
 
             "deleting a session with an error" {
-                mocker.everySuspending { source.deleteAnilistToken() } returns SessionFailure.DeletingToken.left()
+                everySuspend { source.deleteAnilistToken() } returns SessionFailure.DeletingToken.left()
                 repo.deleteAnilistToken().shouldBeLeft(SessionFailure.DeletingToken)
-                mocker.verifyWithSuspend { source.deleteAnilistToken() }
+                verifySuspend { source.deleteAnilistToken() }
             }
         }
 
         "clearing" - {
             "clearing a session without error" {
-                mocker.everySuspending { source.clearActiveSession() } returns Unit.right()
+                everySuspend { source.clearActiveSession() } returns Unit.right()
                 repo.clearActiveSession().shouldBeRight(Unit)
-                mocker.verifyWithSuspend { source.clearActiveSession() }
+                verifySuspend { source.clearActiveSession() }
             }
 
             "clearing a session with an error" {
-                mocker.everySuspending { source.clearActiveSession() } returns SessionFailure.ClearingSession.left()
+                everySuspend { source.clearActiveSession() } returns SessionFailure.ClearingSession.left()
                 repo.clearActiveSession().shouldBeLeft(SessionFailure.ClearingSession)
-                mocker.verifyWithSuspend { source.clearActiveSession() }
+                verifySuspend { source.clearActiveSession() }
             }
         }
 
         "logging out" - {
             "logging out without error" {
-                mocker.everySuspending { source.logout() } returns Unit.right()
+                everySuspend { source.logout() } returns Unit.right()
                 repo.logout().shouldBeRight(Unit)
-                mocker.verifyWithSuspend { source.logout() }
+                verifySuspend { source.logout() }
             }
 
             "logging out with an error" {
-                mocker.everySuspending { source.logout() } returns SessionFailure.LoggingOut.left()
+                everySuspend { source.logout() } returns SessionFailure.LoggingOut.left()
                 repo.logout().shouldBeLeft(SessionFailure.LoggingOut)
-                mocker.verifyWithSuspend { source.logout() }
+                verifySuspend { source.logout() }
             }
         }
     }
-
-    override fun extensions() = listOf(mocker())
 }

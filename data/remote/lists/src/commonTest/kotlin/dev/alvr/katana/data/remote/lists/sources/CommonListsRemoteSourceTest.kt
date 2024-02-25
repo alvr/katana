@@ -5,50 +5,37 @@ import arrow.core.right
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.apollographql.apollo3.api.ApolloResponse
-import com.apollographql.apollo3.api.Error
-import com.apollographql.apollo3.api.fakeError
 import com.apollographql.apollo3.interceptor.ApolloInterceptor
-import com.apollographql.apollo3.interceptor.MockApolloInterceptor
 import com.apollographql.apollo3.mockserver.MockResponse
 import com.apollographql.apollo3.mockserver.MockServer
 import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
 import com.benasher44.uuid.uuid4
-import dev.alvr.katana.common.tests.invoke
 import dev.alvr.katana.common.tests.shouldBeLeft
 import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.data.remote.base.type.MediaType
 import dev.alvr.katana.data.remote.base.type.buildMediaListCollection
 import dev.alvr.katana.data.remote.lists.MediaListCollectionQuery
-import dev.alvr.katana.data.remote.lists.MediaListEntriesMutation
+import dev.alvr.katana.data.remote.lists.apolloErrorMock
 import dev.alvr.katana.data.remote.lists.enqueueResponse
-import dev.alvr.katana.data.remote.lists.fakeMediaListCollectionQuery
-import dev.alvr.katana.data.remote.lists.fakeMediaListEntriesMutation
+import dev.alvr.katana.data.remote.lists.mediaListCollectionQueryMock
+import dev.alvr.katana.data.remote.lists.mediaListEntriesMutationMock
+import dev.alvr.katana.data.remote.lists.mediaListMock
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
-import dev.alvr.katana.domain.lists.models.lists.MediaList
-import dev.alvr.katana.domain.lists.models.lists.fakeMediaList
-import dev.alvr.katana.domain.user.managers.MockUserIdManager
 import dev.alvr.katana.domain.user.managers.UserIdManager
+import dev.mokkery.answering.returns
+import dev.mokkery.everySuspend
+import dev.mokkery.mock
+import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
 import kotlin.time.Duration.Companion.seconds
-import org.kodein.mock.Mocker
-import org.kodein.mock.UsesFakes
-import org.kodein.mock.UsesMocks
 
-@UsesFakes(
-    Error::class,
-    MediaList::class,
-    MediaListCollectionQuery::class,
-    MediaListEntriesMutation::class,
-)
-@UsesMocks(UserIdManager::class, ApolloInterceptor::class)
 @OptIn(ApolloExperimental::class)
 internal class CommonListsRemoteSourceTest : FreeSpec() {
-    private val mocker = Mocker()
-    private val userIdManager = MockUserIdManager(mocker)
-    private val reloadInterceptor = MockApolloInterceptor(mocker)
+    private val userIdManager = mock<UserIdManager>()
+    private val reloadInterceptor = mock<ApolloInterceptor>()
 
     private val client =
         ApolloClient.Builder().networkTransport(QueueTestNetworkTransport()).build()
@@ -58,9 +45,9 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
         "querying" - {
             queryList().forEach { (data, type) ->
                 "the server responded with data or not ($data, $type)" {
-                    mocker.everySuspending { userIdManager.getId() } returns 37_384.right()
+                    everySuspend { userIdManager.getId() } returns 37_384.right()
                     val response = ApolloResponse.Builder(
-                        operation = fakeMediaListCollectionQuery(),
+                        operation = mediaListCollectionQueryMock,
                         requestUuid = uuid4(),
                         data = data,
                     ).build()
@@ -70,31 +57,31 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
                         awaitItem().shouldBeRight(MediaCollection(emptyList()))
                         cancelAndIgnoreRemainingEvents()
                     }
-                    mocker.verifyWithSuspend { userIdManager.getId() }
+                    verifySuspend { userIdManager.getId() }
                 }
 
                 "a HTTP error occurs ($data, $type)" {
-                    mocker.everySuspending { userIdManager.getId() } returns 37_384.right()
+                    everySuspend { userIdManager.getId() } returns 37_384.right()
                     val response = ApolloResponse.Builder(
-                        operation = fakeMediaListCollectionQuery(),
+                        operation = mediaListCollectionQueryMock,
                         requestUuid = uuid4(),
                         data = data,
-                    ).errors(listOf(fakeError())).build()
+                    ).errors(listOf(apolloErrorMock)).build()
                     client.enqueueTestResponse(response)
 
                     source.getMediaCollection<MediaEntry>(type).test(5.seconds) {
                         awaitItem().shouldBeRight(MediaCollection(emptyList()))
                         cancelAndIgnoreRemainingEvents()
                     }
-                    mocker.verifyWithSuspend { userIdManager.getId() }
+                    verifySuspend { userIdManager.getId() }
                 }
             }
         }
 
         "updating" - {
             "the server returns some data" {
-                client.enqueueTestResponse(fakeMediaListEntriesMutation())
-                source.updateList(fakeMediaList()).shouldBeRight()
+                client.enqueueTestResponse(mediaListEntriesMutationMock)
+                source.updateList(mediaListMock).shouldBeRight()
             }
         }
 
@@ -111,20 +98,18 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
 
             badClient().forEach { (type, action) ->
                 "a HTTP error occurs" {
-                    mocker.everySuspending { userIdManager.getId() } returns 37_384.right()
+                    everySuspend { userIdManager.getId() } returns 37_384.right()
                     mockServer.enqueueResponse(action)
 
                     source.getMediaCollection<MediaEntry>(type).test(5.seconds) {
                         awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                         cancelAndIgnoreRemainingEvents()
                     }
-                    mocker.verifyWithSuspend { userIdManager.getId() }
+                    verifySuspend { userIdManager.getId() }
                 }
             }
         }
     }
-
-    override fun extensions() = listOf(mocker())
 
     private fun queryList(): List<Pair<MediaListCollectionQuery.Data?, MediaType>> {
         val empty = MediaListCollectionQuery.Data {

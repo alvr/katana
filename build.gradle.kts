@@ -14,6 +14,6 @@ plugins {
     alias(libs.plugins.kotlin) apply false
     alias(libs.plugins.kover) apply false
     alias(libs.plugins.ksp) apply false
-    alias(libs.plugins.mockmp) apply false
+    alias(libs.plugins.mokkery) apply false
     alias(libs.plugins.sentry) apply false
 }

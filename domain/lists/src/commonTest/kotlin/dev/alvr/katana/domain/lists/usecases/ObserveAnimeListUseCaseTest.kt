@@ -3,7 +3,6 @@ package dev.alvr.katana.domain.lists.usecases
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
-import dev.alvr.katana.common.tests.invoke
 import dev.alvr.katana.common.tests.shouldBeLeft
 import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.domain.base.usecases.invoke
@@ -11,23 +10,22 @@ import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.MediaCollection
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
 import dev.alvr.katana.domain.lists.repositories.ListsRepository
-import dev.alvr.katana.domain.lists.repositories.MockListsRepository
+import dev.mokkery.answering.returns
+import dev.mokkery.every
+import dev.mokkery.mock
+import dev.mokkery.verify
 import io.kotest.core.spec.style.FreeSpec
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.flowOf
-import org.kodein.mock.Mocker
-import org.kodein.mock.UsesMocks
 
-@UsesMocks(ListsRepository::class)
 internal class ObserveAnimeListUseCaseTest : FreeSpec() {
-    private val mocker = Mocker()
-    private val repo = MockListsRepository(mocker)
+    private val repo = mock<ListsRepository>()
 
     private val useCase = ObserveAnimeListUseCase(repo)
 
     init {
         "successfully observe the anime lists" {
-            mocker.every { repo.animeCollection } returns flowOf(
+            every { repo.animeCollection } returns flowOf(
                 MediaCollection<MediaEntry.Anime>(emptyList()).right(),
             )
 
@@ -38,11 +36,11 @@ internal class ObserveAnimeListUseCaseTest : FreeSpec() {
                 cancelAndConsumeRemainingEvents()
             }
 
-            mocker.verify { repo.animeCollection }
+            verify { repo.animeCollection }
         }
 
         "failure observe the anime lists" {
-            mocker.every { repo.animeCollection } returns flowOf(
+            every { repo.animeCollection } returns flowOf(
                 ListsFailure.GetMediaCollection.left(),
             )
 
@@ -53,9 +51,7 @@ internal class ObserveAnimeListUseCaseTest : FreeSpec() {
                 cancelAndConsumeRemainingEvents()
             }
 
-            mocker.verify { repo.animeCollection }
+            verify { repo.animeCollection }
         }
     }
-
-    override fun extensions() = listOf(mocker())
 }

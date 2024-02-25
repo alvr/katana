@@ -18,7 +18,7 @@ dependencies {
     implementation(libs.gradle.kotlin)
     implementation(libs.gradle.kover)
     implementation(libs.gradle.ksp)
-    implementation(libs.gradle.mockmp)
+    implementation(libs.gradle.mokkery)
     implementation(libs.gradle.sentry)
     implementation(libs.kotlinpoet)
     implementation(libs.yamlbeans)

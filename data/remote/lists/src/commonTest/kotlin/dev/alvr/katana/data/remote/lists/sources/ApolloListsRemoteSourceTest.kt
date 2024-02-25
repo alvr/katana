@@ -5,12 +5,10 @@ import arrow.core.right
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.apollographql.apollo3.interceptor.ApolloInterceptor
-import com.apollographql.apollo3.interceptor.MockApolloInterceptor
 import com.apollographql.apollo3.testing.MapTestNetworkTransport
 import com.apollographql.apollo3.testing.registerTestNetworkError
 import com.apollographql.apollo3.testing.registerTestResponse
 import dev.alvr.katana.common.core.zero
-import dev.alvr.katana.common.tests.invoke
 import dev.alvr.katana.common.tests.shouldBeLeft
 import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.data.remote.base.optional
@@ -35,8 +33,11 @@ import dev.alvr.katana.data.remote.lists.sources.manga.MangaListsRemoteSourceImp
 import dev.alvr.katana.domain.lists.failures.ListsFailure
 import dev.alvr.katana.domain.lists.models.entries.CommonMediaEntry
 import dev.alvr.katana.domain.lists.models.entries.MediaEntry
-import dev.alvr.katana.domain.user.managers.MockUserIdManager
 import dev.alvr.katana.domain.user.managers.UserIdManager
+import dev.mokkery.answering.returns
+import dev.mokkery.everySuspend
+import dev.mokkery.mock
+import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -54,18 +55,11 @@ import korlibs.time.DateTime
 import korlibs.time.DateTimeTz
 import korlibs.time.TimezoneOffset
 import kotlin.time.Duration.Companion.seconds
-import org.kodein.mock.Mocker
-import org.kodein.mock.UsesMocks
 
-@UsesMocks(
-    UserIdManager::class,
-    ApolloInterceptor::class,
-)
 @ApolloExperimental
 internal class ApolloListsRemoteSourceTest : FreeSpec() {
-    private val mocker = Mocker()
-    private val userIdManager = MockUserIdManager(mocker)
-    private val reloadInterceptor = MockApolloInterceptor(mocker)
+    private val userIdManager = mock<UserIdManager>()
+    private val reloadInterceptor = mock<ApolloInterceptor>()
 
     private val client = ApolloClient.Builder().networkTransport(MapTestNetworkTransport()).build()
     private val userId = 37_384.right()
@@ -77,7 +71,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
 
     init {
         beforeEach {
-            mocker.everySuspending { userIdManager.getId() } returns userId
+            everySuspend { userIdManager.getId() } returns userId
         }
 
         "anime" - {
@@ -97,7 +91,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     awaitItem().shouldBeRight().lists.shouldBeEmpty()
                     awaitComplete()
                 }
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
 
             "the entries are empty" {
@@ -147,7 +141,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         }
                     awaitComplete()
                 }
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
 
             "the entry has null values" {
@@ -220,7 +214,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     }
                     awaitComplete()
                 }
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
 
             "the entry has values" {
@@ -314,7 +308,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     }
                     awaitComplete()
                 }
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
 
             "the returned data is null" {
@@ -328,7 +322,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     awaitComplete()
                 }
 
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
 
             "an error occurs" {
@@ -344,7 +338,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     awaitComplete()
                 }
 
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
         }
 
@@ -366,7 +360,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     awaitComplete()
                 }
 
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
 
             "the entries are empty" {
@@ -416,7 +410,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         }
                     awaitComplete()
                 }
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
 
             "the entry has null values" {
@@ -490,7 +484,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     }
                     awaitComplete()
                 }
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
 
             "the entry has values" {
@@ -576,7 +570,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     }
                     awaitComplete()
                 }
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
 
             "the returned data is null" {
@@ -590,7 +584,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     awaitComplete()
                 }
 
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
 
             "an error occurs" {
@@ -606,10 +600,8 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     awaitComplete()
                 }
 
-                mocker.verifyWithSuspend { userIdManager.getId() }
+                verifySuspend { userIdManager.getId() }
             }
         }
     }
-
-    override fun extensions() = listOf(mocker())
 }

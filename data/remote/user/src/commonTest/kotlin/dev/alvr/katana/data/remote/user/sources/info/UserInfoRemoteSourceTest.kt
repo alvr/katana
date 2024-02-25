@@ -3,7 +3,6 @@ package dev.alvr.katana.data.remote.user.sources.info
 import app.cash.turbine.test
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
-import com.apollographql.apollo3.api.Error
 import com.apollographql.apollo3.testing.MapTestNetworkTransport
 import com.apollographql.apollo3.testing.registerTestNetworkError
 import com.apollographql.apollo3.testing.registerTestResponse
@@ -17,9 +16,7 @@ import dev.alvr.katana.domain.user.failures.UserFailure
 import dev.alvr.katana.domain.user.models.UserInfo
 import io.kotest.core.spec.style.FreeSpec
 import kotlin.time.Duration.Companion.seconds
-import org.kodein.mock.UsesFakes
 
-@UsesFakes(Error::class)
 @OptIn(ApolloExperimental::class)
 internal class UserInfoRemoteSourceTest : FreeSpec() {
     private val client = ApolloClient.Builder().networkTransport(MapTestNetworkTransport()).build()
