@@ -16,12 +16,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import dev.alvr.katana.ui.account.account.generated.resources.Res
+import dev.alvr.katana.ui.account.account.generated.resources.logout_button
 import dev.alvr.katana.ui.account.entities.UserInfoUi
-import dev.alvr.katana.ui.account.strings.LocalAccountStrings
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 internal fun UserInfo(
     userInfo: UserInfoUi,
     onLogoutClick: () -> Unit,
@@ -38,7 +42,7 @@ internal fun UserInfo(
         )
 
         Button(onClick = onLogoutClick) {
-            Text(text = LocalAccountStrings.current.logoutButton)
+            Text(text = stringResource(Res.string.logout_button))
         }
     }
 }

@@ -25,9 +25,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.alvr.katana.ui.base.strings.LocalBaseStrings
+import dev.alvr.katana.ui.base.base.generated.resources.Res
+import dev.alvr.katana.ui.base.base.generated.resources.component_empty_state
+import dev.alvr.katana.ui.base.base.generated.resources.component_error_state
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 fun KatanaEmptyState(
     text: String,
     modifier: Modifier = Modifier,
@@ -36,11 +41,12 @@ fun KatanaEmptyState(
         modifier = modifier,
         text = text,
         imageVector = Icons.TwoTone.Inbox,
-        contentDescription = LocalBaseStrings.current.componentEmptyState,
+        contentDescription = stringResource(Res.string.component_empty_state),
     )
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 fun KatanaErrorState(
     text: String,
     loading: Boolean,
@@ -52,7 +58,7 @@ fun KatanaErrorState(
         modifier = modifier,
         text = text,
         imageVector = Icons.TwoTone.Error,
-        contentDescription = LocalBaseStrings.current.componentErrorState,
+        contentDescription = stringResource(Res.string.component_error_state),
     ) {
         Spacer(Modifier.height(16.dp))
 

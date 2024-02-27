@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="component_empty_state">No se han encontrado datos.</string>
+    <string name="component_error_state">Ha ocurrido un error.</string>
+    <string name="component_error_state_retry_button">Intentar de nuevo.</string>
+
+    <string name="toolbar_menu_search">Menú de búsqueda</string>
+    <string name="toolbar_menu_filter">Menú de filtrado</string>
+
+    <string name="toolbar_search_close">Cerrar búsqueda</string>
+    <string name="toolbar_search_clear">Limpiar búsqueda</string>
+</resources>

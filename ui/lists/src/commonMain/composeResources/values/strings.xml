@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="anime_toolbar">Anime</string>
+    <string name="manga_toolbar">Manga</string>
+    <string name="entry_progress">%d/%d</string>
+    <string name="entry_next_episode">Ep. %d: %s</string>
+    <string name="entry_next_episode_separator">›</string>
+    <string name="entry_plus_one">%d +</string>
+
+    <string name="anime_toolbar_search_placeholder">Search Anime…</string>
+    <string name="manga_toolbar_search_placeholder">Search Manga…</string>
+
+    <string name="entry_format_tv">TV</string>
+    <string name="entry_format_tv_short">TV Short</string>
+    <string name="entry_format_movie">Movie</string>
+    <string name="entry_format_special">Special</string>
+    <string name="entry_format_ova">OVA</string>
+    <string name="entry_format_ona">ONA</string>
+    <string name="entry_format_music">Music</string>
+    <string name="entry_format_manga">Manga</string>
+    <string name="entry_format_novel">Light Novel</string>
+    <string name="entry_format_one_shot">One Shot</string>
+    <string name="entry_format_unknown">Unknown</string>
+
+    <string name="empty_anime_list">This Anime list is empty</string>
+    <string name="empty_manga_list">This Manga list is empty</string>
+
+    <string name="error_message">Something has happened when getting the information from the selected list</string>
+    <string name="error_cover">Cover not found</string>
+    <string name="error_retry_button">Try again</string>
+
+    <string name="change_list_button">Change list</string>
+</resources>

@@ -8,24 +8,32 @@ import androidx.compose.material.icons.twotone.Explore
 import androidx.compose.material.icons.twotone.VideoLibrary
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ramcosta.composedestinations.spec.NavGraphSpec
-import dev.alvr.katana.R
+import dev.alvr.katana.app.app.generated.resources.Res
+import dev.alvr.katana.app.app.generated.resources.navigation_bar_destination_account
+import dev.alvr.katana.app.app.generated.resources.navigation_bar_destination_anime_lists
+import dev.alvr.katana.app.app.generated.resources.navigation_bar_destination_explore
+import dev.alvr.katana.app.app.generated.resources.navigation_bar_destination_manga_lists
+import dev.alvr.katana.app.app.generated.resources.navigation_bar_destination_social
 import dev.alvr.katana.ui.account.navigation.AccountNavGraph
 import dev.alvr.katana.ui.explore.navigation.ExploreNavGraph
 import dev.alvr.katana.ui.lists.navigation.AnimeNavGraph
 import dev.alvr.katana.ui.lists.navigation.MangaNavGraph
 import dev.alvr.katana.ui.social.navigation.SocialNavGraph
 import kotlinx.collections.immutable.persistentListOf
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
 
+@OptIn(ExperimentalResourceApi::class)
 internal enum class HomeNavigationBarItem(
     override val direction: NavGraphSpec,
     override val icon: ImageVector,
-    override val label: Int,
+    override val label: StringResource,
 ) : NavigationBarItem {
-    Anime(AnimeNavGraph, Icons.TwoTone.VideoLibrary, R.string.navigation_bar_destination_anime_lists),
-    Manga(MangaNavGraph, Icons.AutoMirrored.TwoTone.LibraryBooks, R.string.navigation_bar_destination_manga_lists),
-    Explore(ExploreNavGraph, Icons.TwoTone.Explore, R.string.navigation_bar_destination_explore),
-    Social(SocialNavGraph, Icons.TwoTone.Dashboard, R.string.navigation_bar_destination_social),
-    Account(AccountNavGraph, Icons.TwoTone.AccountCircle, R.string.navigation_bar_destination_account);
+    Anime(AnimeNavGraph, Icons.TwoTone.VideoLibrary, Res.string.navigation_bar_destination_anime_lists),
+    Manga(MangaNavGraph, Icons.AutoMirrored.TwoTone.LibraryBooks, Res.string.navigation_bar_destination_manga_lists),
+    Explore(ExploreNavGraph, Icons.TwoTone.Explore, Res.string.navigation_bar_destination_explore),
+    Social(SocialNavGraph, Icons.TwoTone.Dashboard, Res.string.navigation_bar_destination_social),
+    Account(AccountNavGraph, Icons.TwoTone.AccountCircle, Res.string.navigation_bar_destination_account);
 
     companion object {
         @JvmField
