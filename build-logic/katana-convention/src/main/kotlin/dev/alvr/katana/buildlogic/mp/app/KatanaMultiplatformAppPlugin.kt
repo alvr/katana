@@ -5,7 +5,6 @@ import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import dev.alvr.katana.buildlogic.ANDROID_APPLICATION_PLUGIN
 import dev.alvr.katana.buildlogic.AndroidDir
 import dev.alvr.katana.buildlogic.KatanaConfiguration
-import dev.alvr.katana.buildlogic.ResourcesDir
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.configureAndroid
 import dev.alvr.katana.buildlogic.mp.mobile.KatanaMultiplatformMobileBasePlugin
@@ -118,7 +117,6 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
 
         sourceSets["main"].manifest.srcFile("$AndroidDir/AndroidManifest.xml")
         sourceSets["main"].res.srcDirs("$AndroidDir/res")
-        sourceSets["main"].resources.srcDirs(ResourcesDir)
     }
 
     private fun SentryPluginExtension.configureSentry() {

@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -66,8 +66,8 @@ fun KatanaSearchTopAppBar(
         leadingIcon = {
             IconButton(onClick = onBack) {
                 Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
                     contentDescription = strings.toolbarSearchClose,
+                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                 )
             }
         },

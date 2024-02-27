@@ -2,18 +2,25 @@ package dev.alvr.katana.ui.base.design
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import dev.alvr.katana.ui.base.base.generated.resources.Res
+import dev.alvr.katana.ui.base.base.generated.resources.barlow_bold
+import dev.alvr.katana.ui.base.base.generated.resources.barlow_light
+import dev.alvr.katana.ui.base.base.generated.resources.barlow_medium
+import dev.alvr.katana.ui.base.base.generated.resources.barlow_normal
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.Font
 
+@OptIn(ExperimentalResourceApi::class)
 internal val KatanaTypography
     @Composable get() = Typography().apply {
         val fontFamily = FontFamily(
-            font("barlow_light", FontWeight.Light, FontStyle.Normal),
-            font("barlow_normal", FontWeight.Normal, FontStyle.Normal),
-            font("barlow_medium", FontWeight.Medium, FontStyle.Normal),
-            font("barlow_bold", FontWeight.Bold, FontStyle.Normal),
+            Font(Res.font.barlow_light, FontWeight.Light, FontStyle.Normal),
+            Font(Res.font.barlow_normal, FontWeight.Normal, FontStyle.Normal),
+            Font(Res.font.barlow_medium, FontWeight.Medium, FontStyle.Normal),
+            Font(Res.font.barlow_bold, FontWeight.Bold, FontStyle.Normal),
         )
 
         copy(
@@ -34,6 +41,3 @@ internal val KatanaTypography
             labelSmall = labelSmall.copy(fontFamily = fontFamily),
         )
     }
-
-@Composable
-internal expect fun font(font: String, weight: FontWeight, style: FontStyle): Font

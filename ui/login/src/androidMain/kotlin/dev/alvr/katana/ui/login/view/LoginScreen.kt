@@ -17,7 +17,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -30,7 +29,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -64,7 +63,6 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import dev.alvr.katana.common.core.zero
-import dev.alvr.katana.ui.base.resources.KatanaResource
 import dev.alvr.katana.ui.base.viewmodel.collectAsState
 import dev.alvr.katana.ui.login.ANILIST_LOGIN
 import dev.alvr.katana.ui.login.ANILIST_REGISTER
@@ -79,11 +77,18 @@ import dev.alvr.katana.ui.login.HEADER_ANIMATION_DURATION
 import dev.alvr.katana.ui.login.LOGIN_DEEP_LINK
 import dev.alvr.katana.ui.login.LOGO_FULL_SIZE
 import dev.alvr.katana.ui.login.LOGO_RESIZED
+import dev.alvr.katana.ui.login.login.generated.resources.Res
+import dev.alvr.katana.ui.login.login.generated.resources.background_chihiro
+import dev.alvr.katana.ui.login.login.generated.resources.background_howl
+import dev.alvr.katana.ui.login.login.generated.resources.background_mononoke
+import dev.alvr.katana.ui.login.login.generated.resources.background_totoro
+import dev.alvr.katana.ui.login.login.generated.resources.ic_katana_logo
 import dev.alvr.katana.ui.login.navigation.LoginNavigator
-import dev.alvr.katana.ui.login.resources.KatanaResources
 import dev.alvr.katana.ui.login.strings.LocalLoginStrings
 import dev.alvr.katana.ui.login.viewmodel.LoginState
 import dev.alvr.katana.ui.login.viewmodel.LoginViewModel
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -107,17 +112,16 @@ internal fun LoginScreen(
 }
 
 @Composable
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalResourceApi::class)
 private fun Login(state: LoginState, onLogin: () -> Unit) {
     val strings = LocalLoginStrings.current
-    var loading by remember { mutableStateOf(false) }
 
-    val background = rememberSaveable(saver = KatanaResource.saver) {
+    val background = remember {
         listOf(
-            KatanaResources.backgroundChihiro,
-            KatanaResources.backgroundHowl,
-            KatanaResources.backgroundMononoke,
-            KatanaResources.backgroundTotoro,
+            Res.drawable.background_chihiro,
+            Res.drawable.background_howl,
+            Res.drawable.background_mononoke,
+            Res.drawable.background_totoro,
         ).random()
     }
 
@@ -125,9 +129,7 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
 
     when {
         state.saved -> onLogin()
-        state.loading -> loading = true
         state.errorType != null -> {
-            loading = false
             val message = when (state.errorType) {
                 LoginState.ErrorType.SaveToken -> strings.saveTokenError
                 LoginState.ErrorType.SaveUserId -> strings.fetchUserIdError
@@ -147,11 +149,11 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
                 .padding(padding)
                 .consumeWindowInsets(padding),
         ) {
-            if (loading) {
+            if (state.loading) {
                 Loading()
             } else {
                 Image(
-                    painter = background.asPainter,
+                    painter = painterResource(background),
                     contentDescription = strings.contentDescriptionBackground,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -190,6 +192,7 @@ internal fun Header(modifier: Modifier = Modifier) {
 }
 
 @Composable
+@OptIn(ExperimentalResourceApi::class)
 private fun KatanaLogo() {
     val configuration = LocalConfiguration.current
     val sizeFraction = if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -199,7 +202,7 @@ private fun KatanaLogo() {
     }
 
     Image(
-        painter = KatanaResources.icKatanaLogo.asPainter,
+        painter = painterResource(Res.drawable.ic_katana_logo),
         contentDescription = LocalLoginStrings.current.contentDescriptionKatanaLogo,
         modifier = Modifier
             .padding(top = 8.dp)
@@ -291,8 +294,8 @@ private fun GetStartedButton(onStartedClick: (State) -> Unit) {
             ),
         ) {
             Icon(
-                imageVector = Icons.Filled.ArrowForward,
                 contentDescription = LocalLoginStrings.current.contentDescriptionGetStartedArrow,
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 modifier = Modifier.offset(x = translation),
                 tint = MaterialTheme.colorScheme.onSurface,
             )
@@ -378,8 +381,8 @@ private fun BeginLoginButton(modifier: Modifier = Modifier) {
 @Composable
 private fun Animate(
     delayMillis: Int,
+    durationMillis: Int,
     modifier: Modifier = Modifier,
-    durationMillis: Int = BOTTOM_ANIM_DURATION,
     content: @Composable () -> Unit,
 ) {
     var animationFinished by rememberSaveable { mutableStateOf(false) }
