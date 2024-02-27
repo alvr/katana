@@ -2,7 +2,7 @@
 activity = "1.8.2"
 android = "8.2.2"
 apollo = "3.8.2"
-arrow = "1.2.1"
+arrow = "1.2.2"
 buildconfig = "5.3.5"
 complete-kotlin = "1.1.0"
 compose = "1.5.12"
