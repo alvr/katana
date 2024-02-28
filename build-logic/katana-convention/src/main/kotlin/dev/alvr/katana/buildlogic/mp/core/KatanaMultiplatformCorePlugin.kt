@@ -17,7 +17,6 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.kodein.mock.gradle.MocKMPGradlePlugin
 
 internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
 
@@ -26,14 +25,13 @@ internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
         apply(plugin = "com.google.devtools.ksp")
         apply(plugin = "io.kotest.multiplatform")
         apply(plugin = "org.jetbrains.kotlinx.kover")
-        apply(plugin = "org.kodein.mock.mockmp")
+        apply(plugin = "dev.mokkery")
 
         with(extensions) {
             create<KatanaMultiplatformCoreExtension>(KATANA_MULTIPLATFORM_EXTENSION)
 
             commonExtensions()
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
-            configure<MocKMPGradlePlugin.Extension> { installWorkaround() }
         }
 
         with(tasks) {

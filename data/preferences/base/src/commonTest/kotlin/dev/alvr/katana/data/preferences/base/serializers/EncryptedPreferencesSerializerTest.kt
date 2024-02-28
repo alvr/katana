@@ -1,9 +1,13 @@
 package dev.alvr.katana.data.preferences.base.serializers
 
 import androidx.datastore.core.CorruptionException
-import dev.alvr.katana.common.tests.invoke
-import dev.alvr.katana.data.preferences.base.encrypt.MockPreferencesEncrypt
 import dev.alvr.katana.data.preferences.base.encrypt.PreferencesEncrypt
+import dev.mokkery.answering.calls
+import dev.mokkery.answering.returns
+import dev.mokkery.every
+import dev.mokkery.matcher.any
+import dev.mokkery.mock
+import dev.mokkery.verify
 import io.kotest.assertions.throwables.shouldThrowExactlyUnit
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -15,13 +19,9 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import okio.Buffer
-import org.kodein.mock.Mocker
-import org.kodein.mock.UsesMocks
 
-@UsesMocks(PreferencesEncrypt::class)
 internal class EncryptedPreferencesSerializerTest : FreeSpec() {
-    private val mocker = Mocker()
-    private val encrypt = MockPreferencesEncrypt(mocker)
+    private val encrypt = mock<PreferencesEncrypt>()
 
     private val serializer = EncryptedPreferencesSerializer(
         encrypt = encrypt,
@@ -33,73 +33,69 @@ internal class EncryptedPreferencesSerializerTest : FreeSpec() {
         "writing and reading from the buffer" {
             val source = Buffer()
 
-            mocker.every { encrypt.encrypt(isAny()) } runs { it.first() as ByteArray }
-            mocker.every { encrypt.decrypt(isAny()) } runs { it.first() as ByteArray }
+            every { encrypt.encrypt(any()) } calls { it.arg(0) as ByteArray }
+            every { encrypt.decrypt(any()) } calls { it.arg(0) as ByteArray }
 
             serializer.writeTo(Color(0x123456), source)
             serializer.readFrom(source) shouldBe Color(0x123456)
 
-            mocker.verify {
-                encrypt.encrypt(isAny())
-                encrypt.decrypt(isAny())
+            verify {
+                encrypt.encrypt(any())
+                encrypt.decrypt(any())
             }
         }
 
         "reading from an empty buffer" {
             val source = Buffer()
 
-            mocker.every { encrypt.encrypt(isAny()) } returns byteArrayOf()
-            mocker.every { encrypt.decrypt(isAny()) } returns byteArrayOf()
+            every { encrypt.encrypt(any()) } returns byteArrayOf()
+            every { encrypt.decrypt(any()) } returns byteArrayOf()
 
             shouldThrowExactlyUnit<CorruptionException> {
                 serializer.readFrom(source)
             }.message shouldBe "secured read"
 
-            mocker.verify { encrypt.decrypt(isAny()) }
+            verify { encrypt.decrypt(any()) }
         }
 
         "reading an invalid data" {
             val source = Buffer()
             source.write(byteArrayOf())
 
-            mocker.every { encrypt.encrypt(isAny()) } returns byteArrayOf()
-            mocker.every { encrypt.decrypt(isAny()) } returns byteArrayOf()
+            every { encrypt.encrypt(any()) } returns byteArrayOf()
+            every { encrypt.decrypt(any()) } returns byteArrayOf()
 
             shouldThrowExactlyUnit<CorruptionException> {
                 serializer.readFrom(source)
             }.message shouldBe "secured read"
 
-            mocker.verify { encrypt.decrypt(isAny()) }
+            verify { encrypt.decrypt(any()) }
         }
 
         "error when writing secure data" {
             val source = Buffer()
 
-            mocker.every { encrypt.encrypt(isAny()) } runs { error("oops") }
-            mocker.every { encrypt.decrypt(isAny()) } returns byteArrayOf()
+            every { encrypt.encrypt(any()) } calls { error("oops") }
+            every { encrypt.decrypt(any()) } returns byteArrayOf()
 
             shouldThrowExactlyUnit<CorruptionException> {
                 serializer.writeTo(Color(0x123456), source)
             }.message shouldBe "secured write"
 
-            mocker.verify {
-                threw<IllegalStateException> { encrypt.encrypt(isAny()) }
-            }
+            verify { encrypt.encrypt(any()) }
         }
 
         "error when reading secure data" {
             val source = Buffer()
 
-            mocker.every { encrypt.encrypt(isAny()) } returns byteArrayOf()
-            mocker.every { encrypt.decrypt(isAny()) } runs { error("oops") }
+            every { encrypt.encrypt(any()) } returns byteArrayOf()
+            every { encrypt.decrypt(any()) } calls { error("oops") }
 
             shouldThrowExactlyUnit<CorruptionException> {
                 serializer.readFrom(source)
             }.message shouldBe "secured read"
 
-            mocker.verify {
-                threw<IllegalStateException> { encrypt.decrypt(isAny()) }
-            }
+            verify { encrypt.decrypt(any()) }
         }
     }
 
@@ -120,6 +116,4 @@ internal class EncryptedPreferencesSerializerTest : FreeSpec() {
             return Color(string.toInt(16))
         }
     }
-
-    override fun extensions() = listOf(mocker())
 }

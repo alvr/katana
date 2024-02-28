@@ -31,7 +31,7 @@ lifecycle = "2.7.0"
 lyricist = "1.6.2-1.8.20"
 materialkolor = "1.4.0"
 mockk = "1.13.10"
-mockmp = "1.17.0"
+mokkery = "1.9.22-1.4.0"
 okio = "3.8.0"
 orbit = "6.1.0"
 parcelable = "1.3.0"
@@ -58,7 +58,7 @@ kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
 kotlin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-mockmp = { id = "org.kodein.mock.mockmp", version.ref = "mockmp" }
+mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
 parcelize = { id = "com.arkivanov.parcelize.darwin", version.ref = "parcelize" }
 sentry = { id = "io.sentry.android.gradle", version.ref = "sentry-plugin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
@@ -106,7 +106,7 @@ gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-grad
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
-gradle-mockmp = { module = "org.kodein.mock:mockmp-gradle-plugin", version.ref = "mockmp" }
+gradle-mokkery = { module = "dev.mokkery:mokkery-gradle", version.ref = "mokkery" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version.ref = "sentry-plugin" }
 
 # Kamel
@@ -180,9 +180,6 @@ kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest"
 
 ## MockK
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
-
-## MocKMP
-mockmp = { module = "org.kodein.mock:mockmp-runtime", version.ref = "mockmp" }
 
 ## Turbine
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }

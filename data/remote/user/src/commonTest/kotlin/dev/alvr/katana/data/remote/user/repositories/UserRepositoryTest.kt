@@ -3,38 +3,27 @@ package dev.alvr.katana.data.remote.user.repositories
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
-import dev.alvr.katana.common.tests.invoke
 import dev.alvr.katana.common.tests.shouldBeLeft
 import dev.alvr.katana.common.tests.shouldBeRight
-import dev.alvr.katana.data.remote.user.sources.id.MockUserIdRemoteSource
 import dev.alvr.katana.data.remote.user.sources.id.UserIdRemoteSource
-import dev.alvr.katana.data.remote.user.sources.info.MockUserInfoRemoteSource
 import dev.alvr.katana.data.remote.user.sources.info.UserInfoRemoteSource
+import dev.alvr.katana.data.remote.user.userIdMock
 import dev.alvr.katana.domain.base.failures.Failure
 import dev.alvr.katana.domain.user.failures.UserFailure
-import dev.alvr.katana.domain.user.models.UserId
-import dev.alvr.katana.domain.user.models.UserInfo
-import dev.alvr.katana.domain.user.models.fakeUserId
 import dev.alvr.katana.domain.user.repositories.UserRepository
+import dev.mokkery.answering.returns
+import dev.mokkery.every
+import dev.mokkery.everySuspend
+import dev.mokkery.mock
+import dev.mokkery.verify
+import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.emptyFlow
-import org.kodein.mock.Mocker
-import org.kodein.mock.UsesFakes
-import org.kodein.mock.UsesMocks
 
-@UsesFakes(
-    UserId::class,
-    UserInfo::class,
-)
-@UsesMocks(
-    UserIdRemoteSource::class,
-    UserInfoRemoteSource::class,
-)
 internal class UserRepositoryTest : FreeSpec() {
-    private val mocker = Mocker()
-    private val userIdSource = MockUserIdRemoteSource(mocker)
-    private val userInfoSource = MockUserInfoRemoteSource(mocker)
+    private val userIdSource = mock<UserIdRemoteSource>()
+    private val userInfoSource = mock<UserInfoRemoteSource>()
 
     private val repo: UserRepository = UserRepositoryImpl(userIdSource, userInfoSource)
 
@@ -42,23 +31,23 @@ internal class UserRepositoryTest : FreeSpec() {
         "userId" - {
             "getting the user id" - {
                 "the server returns no data" {
-                    mocker.everySuspending { userIdSource.getUserId() } returns fakeUserId().right()
-                    repo.getUserId().shouldBeRight(fakeUserId())
-                    mocker.verifyWithSuspend { userIdSource.getUserId() }
+                    everySuspend { userIdSource.getUserId() } returns userIdMock.right()
+                    repo.getUserId().shouldBeRight(userIdMock)
+                    verifySuspend { userIdSource.getUserId() }
                 }
 
                 "the server returns an empty userId" {
-                    mocker.everySuspending { userIdSource.getUserId() } returns UserFailure.GettingUserId.left()
+                    everySuspend { userIdSource.getUserId() } returns UserFailure.GettingUserId.left()
                     repo.getUserId().shouldBeLeft(UserFailure.GettingUserId)
-                    mocker.verifyWithSuspend { userIdSource.getUserId() }
+                    verifySuspend { userIdSource.getUserId() }
                 }
             }
 
             "saving the user id" - {
                 "is successful" {
-                    mocker.everySuspending { userIdSource.saveUserId() } returns Unit.right()
+                    everySuspend { userIdSource.saveUserId() } returns Unit.right()
                     repo.saveUserId().shouldBeRight()
-                    mocker.verifyWithSuspend { userIdSource.saveUserId() }
+                    verifySuspend { userIdSource.saveUserId() }
                 }
 
                 listOf(
@@ -67,9 +56,9 @@ internal class UserRepositoryTest : FreeSpec() {
                     Failure.Unknown to Failure.Unknown.left(),
                 ).forEach { (expected, failure) ->
                     "failure getting the user id ($expected)" {
-                        mocker.everySuspending { userIdSource.saveUserId() } returns failure
+                        everySuspend { userIdSource.saveUserId() } returns failure
                         repo.saveUserId().shouldBeLeft(expected)
-                        mocker.verifyWithSuspend { userIdSource.saveUserId() }
+                        verifySuspend { userIdSource.saveUserId() }
                     }
                 }
             }
@@ -78,13 +67,11 @@ internal class UserRepositoryTest : FreeSpec() {
         "userInfo" - {
             "observing userInfo" - {
                 "the server returns no data" {
-                    mocker.every { userInfoSource.userInfo } returns emptyFlow()
+                    every { userInfoSource.userInfo } returns emptyFlow()
                     repo.userInfo.test(5.seconds) { awaitComplete() }
-                    mocker.verify { userInfoSource.userInfo }
+                    verify { userInfoSource.userInfo }
                 }
             }
         }
     }
-
-    override fun extensions() = listOf(mocker())
 }

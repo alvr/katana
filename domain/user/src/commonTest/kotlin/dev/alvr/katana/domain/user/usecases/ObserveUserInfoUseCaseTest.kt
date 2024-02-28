@@ -3,46 +3,41 @@ package dev.alvr.katana.domain.user.usecases
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
-import dev.alvr.katana.common.tests.invoke
 import dev.alvr.katana.common.tests.shouldBeLeft
 import dev.alvr.katana.common.tests.shouldBeRight
 import dev.alvr.katana.domain.base.usecases.invoke
 import dev.alvr.katana.domain.user.failures.UserFailure
-import dev.alvr.katana.domain.user.models.UserInfo
-import dev.alvr.katana.domain.user.models.fakeUserInfo
-import dev.alvr.katana.domain.user.repositories.MockUserRepository
 import dev.alvr.katana.domain.user.repositories.UserRepository
+import dev.alvr.katana.domain.user.userInfoMock
+import dev.mokkery.answering.returns
+import dev.mokkery.every
+import dev.mokkery.mock
+import dev.mokkery.verify
 import io.kotest.core.spec.style.FreeSpec
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.flowOf
-import org.kodein.mock.Mocker
-import org.kodein.mock.UsesFakes
-import org.kodein.mock.UsesMocks
 
-@UsesFakes(UserInfo::class)
-@UsesMocks(UserRepository::class)
 internal class ObserveUserInfoUseCaseTest : FreeSpec() {
-    private val mocker = Mocker()
-    private val repo = MockUserRepository(mocker)
+    private val repo = mock<UserRepository>()
 
     private val useCase = ObserveUserInfoUseCase(repo)
 
     init {
         "successfully observing user info" {
-            mocker.every { repo.userInfo } returns flowOf(fakeUserInfo().right())
+            every { repo.userInfo } returns flowOf(userInfoMock.right())
 
             useCase()
 
             useCase.flow.test(5.seconds) {
-                awaitItem().shouldBeRight(fakeUserInfo())
+                awaitItem().shouldBeRight(userInfoMock)
                 cancelAndConsumeRemainingEvents()
             }
 
-            mocker.verify { repo.userInfo }
+            verify { repo.userInfo }
         }
 
         "failure observe user info" {
-            mocker.every { repo.userInfo } returns flowOf(UserFailure.GettingUserInfo.left())
+            every { repo.userInfo } returns flowOf(UserFailure.GettingUserInfo.left())
 
             useCase()
 
@@ -51,9 +46,7 @@ internal class ObserveUserInfoUseCaseTest : FreeSpec() {
                 cancelAndConsumeRemainingEvents()
             }
 
-            mocker.verify { repo.userInfo }
+            verify { repo.userInfo }
         }
     }
-
-    override fun extensions() = listOf(mocker())
 }
