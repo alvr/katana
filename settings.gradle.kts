@@ -39,6 +39,24 @@ gradleEnterprise {
 
 include(":app")
 
+include(":features:account:data")
+include(":features:account:domain")
+include(":features:account:ui")
+
+include(":features:explore:data")
+include(":features:explore:domain")
+include(":features:explore:ui")
+
+include(":features:lists:data")
+include(":features:lists:domain")
+include(":features:lists:ui")
+
+include(":features:login:ui")
+
+include(":features:social:data")
+include(":features:social:domain")
+include(":features:social:ui")
+
 // Include all modules in these directories
 listOf("common", "data/preferences", "data/remote", "domain", "ui").forEach { topDir ->
     rootDir.resolve(topDir)
