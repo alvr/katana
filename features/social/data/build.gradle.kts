@@ -3,16 +3,16 @@ plugins {
 }
 
 dependencies {
-    apolloMetadata(projects.data.remote.base)
+    apolloMetadata(projects.core.remote)
 }
 
 katanaMultiplatform {
     commonMainDependencies {
-        implementation(projects.data.remote.base)
+        implementation(projects.core.remote)
         implementation(projects.features.social.domain)
     }
 
     commonTestDependencies {
-        implementation(projects.common.tests)
+        implementation(projects.core.tests)
     }
 }

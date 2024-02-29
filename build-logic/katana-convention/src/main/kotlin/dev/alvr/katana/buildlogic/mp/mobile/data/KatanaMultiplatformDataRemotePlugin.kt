@@ -75,6 +75,6 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
     }
 
     private companion object {
-        const val BASE_PACKAGE = ".base"
+        const val BASE_PACKAGE = ".remote"
     }
 }

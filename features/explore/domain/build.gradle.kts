@@ -4,9 +4,9 @@ plugins {
 
 katanaMultiplatform {
     commonMainDependencies {
-        implementation(projects.common.core)
-        api(projects.domain.base)
+        implementation(projects.core.common)
+        api(projects.core.domain)
     }
 
-    commonTestDependencies { implementation(projects.common.tests) }
+    commonTestDependencies { implementation(projects.core.tests) }
 }

@@ -9,13 +9,12 @@ ksp {
 
 katanaMultiplatform {
     commonMainDependencies {
-        implementation(projects.common.core)
-        implementation(projects.domain.session)
-        implementation(projects.domain.user)
-        implementation(projects.ui.base)
+        implementation(projects.core.common)
+        implementation(projects.common.session.domain)
+        implementation(projects.common.user.domain)
     }
 
     commonTestDependencies {
-        implementation(projects.common.tests)
+        implementation(projects.core.tests)
     }
 }

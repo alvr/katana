@@ -13,12 +13,11 @@ katanaMultiplatform {
     commonMainDependencies {
         implementation(libs.parcelable)
 
-        implementation(projects.common.core)
+        implementation(projects.core.common)
         implementation(projects.features.lists.domain)
-        implementation(projects.ui.base)
     }
 
     commonTestDependencies {
-        implementation(projects.common.tests)
+        implementation(projects.core.tests)
     }
 }
