@@ -8,5 +8,7 @@ katanaMultiplatform {
         api(projects.core.domain)
     }
 
-    commonTestDependencies { implementation(projects.core.tests) }
+    commonTestDependencies {
+        implementation(projects.core.tests)
+    }
 }

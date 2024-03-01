@@ -11,10 +11,12 @@ ksp {
 
 katanaMultiplatform {
     commonMainDependencies {
-        implementation(libs.parcelable)
-
         implementation(projects.core.common)
+        implementation(projects.core.ui)
+
         implementation(projects.features.lists.domain)
+
+        implementation(libs.parcelable)
     }
 
     commonTestDependencies {

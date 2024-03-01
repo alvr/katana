@@ -25,7 +25,7 @@ internal fun Project.katanaBuildConfig(
 ) {
     val flavor = providers.gradleProperty("katana.flavor").getOrElse("dev")
     val (androidConfig, iosConfig) = ymlMap.getOrPut(flavor) {
-        val yml = YamlReader(rootProject.file("config/build_config.yml").reader()).parse<YamlBuildConfig>()
+        val yml = YamlReader(rootProject.file("gradle/config/build_config.yml").reader()).parse<YamlBuildConfig>()
         yml["android"].map(flavor) to yml["ios"].map(flavor)
     }
 

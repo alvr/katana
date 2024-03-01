@@ -2,6 +2,7 @@ package dev.alvr.katana.buildlogic.mp.mobile.ui
 
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.catalogLib
+import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.androidUnitTest
 import dev.alvr.katana.buildlogic.mp.configureSourceSets
@@ -20,6 +21,8 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = "org.jetbrains.compose")
+
+        group = fullPackageName.substringBeforeLast('.')
 
         with(extensions) {
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }

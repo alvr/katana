@@ -8,10 +8,12 @@ dependencies {
 
 katanaMultiplatform {
     commonMainDependencies {
+        implementation(projects.common.user.domain)
+
         implementation(projects.core.common)
         implementation(projects.core.remote)
+
         implementation(projects.features.lists.domain)
-        implementation(projects.common.user.domain)
     }
 
     commonTestDependencies {

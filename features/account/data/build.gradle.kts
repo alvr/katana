@@ -9,6 +9,7 @@ dependencies {
 katanaMultiplatform {
     commonMainDependencies {
         implementation(projects.core.remote)
+
         implementation(projects.features.account.domain)
     }
 

@@ -10,6 +10,8 @@ ksp {
 katanaMultiplatform {
     commonMainDependencies {
         implementation(projects.core.common)
+        implementation(projects.core.ui)
+
         implementation(projects.features.explore.domain)
     }
 
