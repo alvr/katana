@@ -1,7 +1,5 @@
 package dev.alvr.katana.buildlogic.common
 
-import dev.alvr.katana.buildlogic.KatanaConfiguration
-import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.isRelease
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -17,11 +15,6 @@ internal class KatanaCommonPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = "com.louiscad.complete-kotlin")
-
-            subprojects {
-                group = fullPackageName
-                version = KatanaConfiguration.VersionCode
-            }
 
             with(tasks) {
                 register<Delete>("clean") {

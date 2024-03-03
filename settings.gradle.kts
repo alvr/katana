@@ -37,18 +37,20 @@ gradleEnterprise {
     }
 }
 
-include(":app")
+include(":app-android", ":shared")
+includes("common", "core", "features", maxDepth = 2)
 
-// Include all modules in these directories
-listOf("common", "data/preferences", "data/remote", "domain", "ui").forEach { topDir ->
-    rootDir.resolve(topDir)
-        .walkTopDown()
-        .maxDepth(1)
-        .filter { file ->
-            file.isDirectory && file.resolve("build.gradle.kts").exists()
-        }.forEach { module ->
-            include(":${topDir.replace('/', ':')}:${module.name}")
-        }
+fun includes(vararg directories: String, maxDepth: Int = 1) {
+    directories.forEach { topDir ->
+        rootDir.resolve(topDir)
+            .walkTopDown()
+            .maxDepth(maxDepth)
+            .filter { file ->
+                file.isDirectory && file.resolve("build.gradle.kts").exists()
+            }.forEach { module ->
+                include(":${module.relativeTo(rootDir).path.replace(File.separatorChar, ':')}")
+            }
+    }
 }
 
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")

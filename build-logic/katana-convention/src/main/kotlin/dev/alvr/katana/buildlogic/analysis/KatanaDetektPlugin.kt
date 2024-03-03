@@ -24,7 +24,7 @@ internal class KatanaDetektPlugin : Plugin<Project> {
             buildUponDefaultConfig = true
             jvmTarget = KatanaConfiguration.JvmTargetStr
             setSource(files(projectDir))
-            config.setFrom(files("$rootDir/config/detekt.yml"))
+            config.setFrom(files("$rootDir/gradle/config/detekt.yml"))
             include("**/*.kt", "**/*.kts")
             exclude("**/resources/**", "**/build/**")
 

@@ -26,6 +26,8 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
         apply(plugin = "katana.multiplatform.compose")
         apply(plugin = "io.sentry.android.gradle")
 
+        group = KatanaConfiguration.PackageName
+
         extensions.configure<SentryPluginExtension> { configureSentry() }
     }
 

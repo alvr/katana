@@ -23,14 +23,19 @@ ignore:
   - '**/*Fragment'
 
   # Packages
-  ## Base
-  - '**/base/**'
+  ## Core
+  - '**/core/**'
 
   ## DI
   - '**/di/**'
 
   # UI
-  - '**/ui/**/navigation/**'
-  - '**/ui/**/resources/**'
-  - '**/ui/**/strings/**'
-  - '**/ui/**/view/**'
+  - '**/generated/resources/**'
+  - '**/shared/navigation/**'
+  - '**/shared/resources/**'
+  - '**/shared/strings/**'
+  - '**/shared/view/**'
+  - '**/ui/navigation/**'
+  - '**/ui/resources/**'
+  - '**/ui/strings/**'
+  - '**/ui/view/**'

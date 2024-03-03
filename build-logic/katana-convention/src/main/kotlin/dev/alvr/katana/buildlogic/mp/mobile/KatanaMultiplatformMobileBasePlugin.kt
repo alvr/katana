@@ -108,7 +108,13 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
 
     context(Project)
     private fun BuildConfigExtension.configureBuildConfig() {
-        packageName.set(fullPackageName.removeSuffix(APP_PACKAGE))
+        val pkgName = if (path == ANDROID_APP_PATH) {
+            fullPackageName.substringBeforeLast('.')
+        } else {
+            fullPackageName
+        }
+
+        packageName.set(pkgName)
 
         afterEvaluate {
             katanaBuildConfig(
@@ -136,6 +142,6 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
 
     private companion object {
         const val BUILD_CONFIG_FILE = "KatanaBuildConfig"
-        const val APP_PACKAGE = ".app"
+        const val ANDROID_APP_PATH = ":app-android"
     }
 }

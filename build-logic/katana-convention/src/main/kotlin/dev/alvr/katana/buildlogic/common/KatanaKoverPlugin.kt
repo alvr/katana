@@ -27,8 +27,8 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         "*.*Fragment",
 
         // Apollo
-        "*.remote.*.*Mutation*",
-        "*.remote.*.*Query*",
+        "*.data.*Mutation*",
+        "*.data.*Query*",
 
         // Compose
         "*.*ComposableSingletons*",
@@ -40,35 +40,41 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         "*.SentryLogger",
     )
     private val packagesExcludes = listOf(
-        // Base
-        "*.base",
-
-        // Common
-        "*.common.tests",
+        // Core
+        "*.core.*",
 
         // DI
         "*.di",
 
         // Remote
-        "*.remote.*.adapter",
-        "*.remote.*.fragment",
-        "*.remote.*.selections",
-        "*.remote.*.type",
+        "*.data.adapter",
+        "*.data.fragment",
+        "*.data.selections",
+        "*.data.type",
 
         // UI
-        "*.ui.*.navigation",
-        "*.ui.*.resources",
-        "*.ui.*.strings",
-        "*.ui.*.view",
+        "*.generated.resources",
+        "*.shared.navigation",
+        "*.shared.resources",
+        "*.shared.strings",
+        "*.shared.view",
+        "*.ui.navigation",
+        "*.ui.resources",
+        "*.ui.strings",
+        "*.ui.view",
     )
 
     private val containerModules = listOf(
+        ":core",
         ":common",
-        ":data",
-        ":data:preferences",
-        ":data:remote",
-        ":domain",
-        ":ui",
+        ":common:session",
+        ":common:user",
+        ":features",
+        ":features:account",
+        ":features:explore",
+        ":features:lists",
+        ":features:login",
+        ":features:social",
     )
 
     override fun apply(target: Project) = with(target) {
