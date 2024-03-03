@@ -12,7 +12,7 @@ import dev.alvr.katana.features.account.ui.navigation.AccountNavGraph
 import dev.alvr.katana.features.explore.ui.navigation.ExploreNavGraph
 import dev.alvr.katana.features.lists.ui.navigation.AnimeNavGraph
 import dev.alvr.katana.features.lists.ui.navigation.MangaNavGraph
-import dev.alvr.katana.features.social.ui.SocialNavGraph
+import dev.alvr.katana.features.social.ui.navigation.SocialNavGraph
 import dev.alvr.katana.shared.R
 import kotlinx.collections.immutable.persistentListOf
 

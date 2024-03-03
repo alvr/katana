@@ -2,8 +2,8 @@ package dev.alvr.katana.features.lists.data.sources
 
 import app.cash.turbine.test
 import arrow.core.right
-import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.core.remote.type.MediaType
+import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.lists.data.sources.anime.AnimeListsRemoteSource
 import dev.alvr.katana.features.lists.data.sources.anime.AnimeListsRemoteSourceImpl
 import dev.alvr.katana.features.lists.data.sources.manga.MangaListsRemoteSource

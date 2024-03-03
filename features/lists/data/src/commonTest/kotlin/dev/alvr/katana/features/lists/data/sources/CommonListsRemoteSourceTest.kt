@@ -12,10 +12,10 @@ import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
 import com.benasher44.uuid.uuid4
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
-import dev.alvr.katana.core.tests.shouldBeLeft
-import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.core.remote.type.buildMediaListCollection
+import dev.alvr.katana.core.tests.shouldBeLeft
+import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
 import dev.alvr.katana.features.lists.data.apolloErrorMock
 import dev.alvr.katana.features.lists.data.enqueueResponse

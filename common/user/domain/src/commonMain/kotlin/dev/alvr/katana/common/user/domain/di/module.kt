@@ -1,4 +1,4 @@
-package dev.alvr.katana.common.user.domain
+package dev.alvr.katana.common.user.domain.di
 
 import dev.alvr.katana.common.user.domain.usecases.GetUserIdUseCase
 import dev.alvr.katana.common.user.domain.usecases.ObserveUserInfoUseCase

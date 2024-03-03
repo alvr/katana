@@ -11,8 +11,6 @@ import com.apollographql.apollo3.testing.registerTestResponse
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.remote.optional
-import dev.alvr.katana.core.tests.shouldBeLeft
-import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.core.remote.type.MediaFormat
 import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.core.remote.type.buildAiringSchedule
@@ -26,6 +24,8 @@ import dev.alvr.katana.core.remote.type.buildMediaListOptions
 import dev.alvr.katana.core.remote.type.buildMediaListTypeOptions
 import dev.alvr.katana.core.remote.type.buildMediaTitle
 import dev.alvr.katana.core.remote.type.buildUser
+import dev.alvr.katana.core.tests.shouldBeLeft
+import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
 import dev.alvr.katana.features.lists.data.sources.anime.AnimeListsRemoteSource
 import dev.alvr.katana.features.lists.data.sources.anime.AnimeListsRemoteSourceImpl

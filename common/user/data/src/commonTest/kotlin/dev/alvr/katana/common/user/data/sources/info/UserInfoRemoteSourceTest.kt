@@ -6,14 +6,14 @@ import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.apollographql.apollo3.testing.MapTestNetworkTransport
 import com.apollographql.apollo3.testing.registerTestNetworkError
 import com.apollographql.apollo3.testing.registerTestResponse
+import dev.alvr.katana.common.user.data.UserInfoQuery
 import dev.alvr.katana.common.user.domain.failures.UserFailure
 import dev.alvr.katana.common.user.domain.models.UserInfo
 import dev.alvr.katana.core.common.empty
-import dev.alvr.katana.core.tests.shouldBeLeft
-import dev.alvr.katana.core.tests.shouldBeRight
-import dev.alvr.katana.common.user.data.UserInfoQuery
 import dev.alvr.katana.core.remote.type.buildUser
 import dev.alvr.katana.core.remote.type.buildUserAvatar
+import dev.alvr.katana.core.tests.shouldBeLeft
+import dev.alvr.katana.core.tests.shouldBeRight
 import io.kotest.core.spec.style.FreeSpec
 import kotlin.time.Duration.Companion.seconds
 

@@ -69,7 +69,7 @@ jobs:
         id: diawi_android
         with:
           token: ${{ secrets.DIAWI_TOKEN }}
-          file: app/build/outputs/apk/debug/app-debug.apk
+          file: ${{ vars.ANDROID_DEBUG_APK }}
       - name: Post comment with Diawi link
         uses: peter-evans/create-or-update-comment@v4.0.0
         with:
@@ -175,8 +175,8 @@ jobs:
           SIGNING_ALIAS_PASS: ${{ secrets.SIGNING_ALIAS_PASS }}
           SIGNING_FILE: ${{ secrets.SIGNING_FILE }}
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_BETA_PROJECT }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_ANDROID_BETA_PROJECT }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew assembleBeta -Pkatana.flavor=beta --no-daemon --stacktrace
       - name: Publish beta APK to TestApp.io
@@ -184,7 +184,7 @@ jobs:
         with:
           api_token: ${{ secrets.TESTAPPIO_API_TOKEN }}
           app_id: ${{ secrets.TESTAPPIO_APP_ID }}
-          file: app/build/outputs/apk/beta/app-beta.apk
+          file: ${{ vars.ANDROID_BETA_APK }}
           git_release_notes: true
           include_git_commit_id: true
           notify: true
@@ -194,15 +194,15 @@ jobs:
           appName: KatanaApp/Katana-Android
           token: ${{ secrets.APPCENTER_TOKEN }}
           group: Testers
-          file: app/build/outputs/apk/beta/app-beta.apk
+          file: ${{ vars.ANDROID_BETA_APK }}
           notifyTesters: true
           gitReleaseNotes: true
           debug: false
       - name: Create Sentry release
         uses: getsentry/action-release@v1.7.0
         env:
-          SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_BETA_PROJECT }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_ANDROID_BETA_PROJECT }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
           environment: beta
@@ -234,8 +234,8 @@ jobs:
           SIGNING_ALIAS_PASS: ${{ secrets.SIGNING_ALIAS_PASS }}
           SIGNING_FILE: ${{ secrets.SIGNING_FILE }}
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_RELEASE_PROJECT }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_ANDROID_RELEASE_PROJECT }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew assembleRelease bundleRelease -Pkatana.flavor=release --no-daemon --stacktrace
       - name: Publish production AAB to Google Play
@@ -250,8 +250,8 @@ jobs:
       - name: Create Sentry release
         uses: getsentry/action-release@v1.7.0
         env:
-          SENTRY_PROJECT: ${{ secrets.SENTRY_ANDROID_RELEASE_PROJECT }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_ANDROID_RELEASE_PROJECT }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         with:
           environment: production
@@ -264,6 +264,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Katana ${{ github.ref_name }}
           files: |
-            app/build/outputs/apk/release/app-release.apk
+            ${{ vars.ANDROID_RELEASE_APK }}
           draft: true
           prerelease: false

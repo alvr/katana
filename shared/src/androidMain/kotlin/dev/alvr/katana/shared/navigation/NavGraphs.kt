@@ -7,7 +7,7 @@ import dev.alvr.katana.features.explore.ui.navigation.ExploreNavGraph
 import dev.alvr.katana.features.lists.ui.navigation.AnimeNavGraph
 import dev.alvr.katana.features.lists.ui.navigation.MangaNavGraph
 import dev.alvr.katana.features.login.ui.navigation.LoginNavGraph
-import dev.alvr.katana.features.social.ui.SocialNavGraph
+import dev.alvr.katana.features.social.ui.navigation.SocialNavGraph
 
 internal object NavGraphs {
     internal val home = object : NavGraphSpec {

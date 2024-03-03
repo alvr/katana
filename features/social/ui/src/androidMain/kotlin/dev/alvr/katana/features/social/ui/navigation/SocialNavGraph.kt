@@ -1,4 +1,4 @@
-package dev.alvr.katana.features.social.ui
+package dev.alvr.katana.features.social.ui.navigation
 
 import com.ramcosta.composedestinations.dynamic.routedIn
 import com.ramcosta.composedestinations.spec.NavGraphSpec

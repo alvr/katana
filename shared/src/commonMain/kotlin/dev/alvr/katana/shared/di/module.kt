@@ -3,7 +3,7 @@ package dev.alvr.katana.shared.di
 import dev.alvr.katana.common.session.data.di.dataPreferencesSessionModule
 import dev.alvr.katana.common.session.domain.di.domainSessionModule
 import dev.alvr.katana.common.user.data.di.dataRemoteUserModule
-import dev.alvr.katana.common.user.domain.domainUserModule
+import dev.alvr.katana.common.user.domain.di.domainUserModule
 import dev.alvr.katana.core.preferences.di.dataPreferencesBaseModule
 import dev.alvr.katana.core.remote.di.dataRemoteBaseModule
 import dev.alvr.katana.features.account.data.di.dataRemoteAccountModule
