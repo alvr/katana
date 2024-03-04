@@ -16,6 +16,7 @@ import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonCompilerOptions
@@ -87,6 +88,11 @@ internal fun BaseExtension.configureAndroid(packageName: String) {
     compileOptions {
         sourceCompatibility = KatanaConfiguration.UseJavaVersion
         targetCompatibility = KatanaConfiguration.UseJavaVersion
+    }
+
+    with(sourceSets["main"]) {
+        res.srcDirs("$AndroidDir/res", ResourcesDir)
+        resources.srcDirs(ResourcesDir)
     }
 
     testOptions {
