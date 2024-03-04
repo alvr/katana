@@ -77,18 +77,12 @@ import dev.alvr.katana.features.login.ui.HEADER_ANIMATION_DURATION
 import dev.alvr.katana.features.login.ui.LOGIN_DEEP_LINK
 import dev.alvr.katana.features.login.ui.LOGO_FULL_SIZE
 import dev.alvr.katana.features.login.ui.LOGO_RESIZED
-import dev.alvr.katana.features.login.ui.generated.resources.Res
-import dev.alvr.katana.features.login.ui.generated.resources.background_chihiro
-import dev.alvr.katana.features.login.ui.generated.resources.background_howl
-import dev.alvr.katana.features.login.ui.generated.resources.background_mononoke
-import dev.alvr.katana.features.login.ui.generated.resources.background_totoro
-import dev.alvr.katana.features.login.ui.generated.resources.ic_katana_logo
 import dev.alvr.katana.features.login.ui.navigation.LoginNavigator
+import dev.alvr.katana.features.login.ui.resources.KatanaResources
 import dev.alvr.katana.features.login.ui.strings.LocalLoginStrings
 import dev.alvr.katana.features.login.ui.viewmodel.LoginState
 import dev.alvr.katana.features.login.ui.viewmodel.LoginViewModel
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -118,10 +112,10 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
 
     val background = remember {
         listOf(
-            Res.drawable.background_chihiro,
-            Res.drawable.background_howl,
-            Res.drawable.background_mononoke,
-            Res.drawable.background_totoro,
+            KatanaResources.backgroundChihiro,
+            KatanaResources.backgroundHowl,
+            KatanaResources.backgroundMononoke,
+            KatanaResources.backgroundTotoro,
         ).random()
     }
 
@@ -153,7 +147,7 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
                 Loading()
             } else {
                 Image(
-                    painter = painterResource(background),
+                    painter = background.asPainter,
                     contentDescription = strings.contentDescriptionBackground,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -202,7 +196,7 @@ private fun KatanaLogo() {
     }
 
     Image(
-        painter = painterResource(Res.drawable.ic_katana_logo),
+        painter = KatanaResources.icKatanaLogo.asPainter,
         contentDescription = LocalLoginStrings.current.contentDescriptionKatanaLogo,
         modifier = Modifier
             .padding(top = 8.dp)

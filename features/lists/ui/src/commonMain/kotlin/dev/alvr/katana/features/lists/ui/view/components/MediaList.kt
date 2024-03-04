@@ -50,15 +50,13 @@ import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.ui.components.KatanaPullRefresh
 import dev.alvr.katana.core.ui.modifiers.katanaPlaceholder
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
-import dev.alvr.katana.features.lists.ui.generated.resources.Res
-import dev.alvr.katana.features.lists.ui.generated.resources.default_cover
+import dev.alvr.katana.features.lists.ui.resources.KatanaResources
 import dev.alvr.katana.features.lists.ui.strings.LocalListsStrings
 import dev.alvr.katana.features.lists.ui.viewmodel.ListState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun MediaList(
@@ -266,7 +264,7 @@ private fun Cover(
         onFailure = {
             Image(
                 modifier = Modifier.align(Alignment.Center),
-                painter = painterResource(Res.drawable.default_cover),
+                painter = KatanaResources.defaultCover.asPainter,
                 contentDescription = LocalListsStrings.current.errorCover,
             )
         },
