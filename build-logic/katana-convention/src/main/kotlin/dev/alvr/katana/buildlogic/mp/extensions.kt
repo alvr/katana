@@ -1,5 +1,6 @@
 package dev.alvr.katana.buildlogic.mp
 
+import com.google.devtools.ksp.gradle.KspExtension
 import dev.alvr.katana.buildlogic.configureKotlinCompiler
 import java.util.Locale
 import kotlinx.kover.gradle.plugin.dsl.KoverVerifyReportConfig
@@ -64,6 +65,11 @@ internal fun KoverVerifyReportConfig.configure() {
             minValue = MIN_COVERED_PERCENTAGE
         }
     }
+}
+
+internal fun KspExtension.configureKotlinInject() {
+    arg("me.tatarka.inject.generateCompanionExtensions", "true")
+    arg("me.tatarka.inject.dumpGraph", "true")
 }
 
 private val Project.frameworkIdentifier

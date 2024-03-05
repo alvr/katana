@@ -5,9 +5,9 @@ import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import dev.alvr.katana.buildlogic.ANDROID_APPLICATION_PLUGIN
 import dev.alvr.katana.buildlogic.AndroidDir
 import dev.alvr.katana.buildlogic.KatanaConfiguration
-import dev.alvr.katana.buildlogic.ResourcesDir
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.configureAndroid
+import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.mobile.KatanaMultiplatformMobileBasePlugin
 import io.sentry.android.gradle.extensions.SentryPluginExtension
 import java.io.FileInputStream
@@ -18,6 +18,7 @@ import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugin(ANDROID_APPLICATION_PLUGIN) {
@@ -27,14 +28,20 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
         apply(plugin = "katana.multiplatform.compose")
         apply(plugin = "io.sentry.android.gradle")
 
-        group = KatanaConfiguration.PackageName
-
-        extensions.configure<SentryPluginExtension> { configureSentry() }
+        with(extensions) {
+            configure<SentryPluginExtension> { configureSentry() }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+        }
     }
 
     context(Project)
     override fun ExtensionContainer.configureAndroid() {
         configure<BaseAppModuleExtension> { configureApp() }
+    }
+
+    context(Project)
+    private fun KotlinMultiplatformExtension.configureMultiplatform() {
+        kspDependencies("app")
     }
 
     override fun NamedDomainObjectContainer<KotlinSourceSet>.configureSourceSets() {
@@ -120,7 +127,6 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
 
         sourceSets["main"].manifest.srcFile("$AndroidDir/AndroidManifest.xml")
         sourceSets["main"].res.srcDirs("$AndroidDir/res")
-        sourceSets["main"].resources.srcDirs(ResourcesDir)
     }
 
     private fun SentryPluginExtension.configureSentry() {

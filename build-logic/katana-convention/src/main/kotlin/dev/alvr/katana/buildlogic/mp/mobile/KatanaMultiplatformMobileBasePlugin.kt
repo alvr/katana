@@ -1,6 +1,7 @@
 package dev.alvr.katana.buildlogic.mp.mobile
 
 import com.github.gmazzo.buildconfig.BuildConfigExtension
+import com.google.devtools.ksp.gradle.KspExtension
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
@@ -9,6 +10,7 @@ import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.KATANA_MULTIPLATFORM_EXTENSION
 import dev.alvr.katana.buildlogic.mp.configureIos
 import dev.alvr.katana.buildlogic.mp.configureKotlin
+import dev.alvr.katana.buildlogic.mp.configureKotlinInject
 import dev.alvr.katana.buildlogic.mp.configureSourceSets
 import dev.alvr.katana.buildlogic.mp.katanaBuildConfig
 import org.gradle.api.NamedDomainObjectContainer
@@ -45,6 +47,7 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
             configureAndroid()
             configure<BuildConfigExtension> { configureBuildConfig() }
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<KspExtension> { configureKotlinInject() }
         }
 
         tasks.commonTasks()

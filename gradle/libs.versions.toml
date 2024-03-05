@@ -20,6 +20,7 @@ koin-test = "3.5.3"
 korge-foundation = "5.3.2"
 kotest = "5.8.0"
 kotlin = "1.9.22"
+kotlin-inject = "0.6.3"
 kotlinpoet = "1.16.0"
 kotlinx-coroutines = "1.8.0"
 kotlinx-immutable = "0.3.7"
@@ -132,6 +133,11 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 kotlinx-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-immutable" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "kotlinx-serialization" }
 
+# Kotlin Inject
+kotlin-inject = { module = "me.tatarka.inject:kotlin-inject-runtime", version.ref = "kotlin-inject" }
+kotlin-inject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "kotlin-inject" }
+
+
 # KotlinPoet
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 
@@ -191,13 +197,16 @@ core-common = [
     "koin",
     "korge-foundation",
     "kotlin",
+    "kotlin-inject",
     "kotlinx-coroutines",
     "kotlinx-immutable",
 ]
 core-jvm = []
 core-ios = []
 
-core-common-ksp = []
+core-common-ksp = [
+    "kotlin-inject-compiler",
+]
 core-jvm-ksp = []
 core-ios-ksp = []
 
@@ -225,6 +234,7 @@ mobile-common = [
     "koin",
     "korge-foundation",
     "kotlin",
+    "kotlin-inject",
     "kotlinx-coroutines",
     "kotlinx-immutable",
     "kermit",
@@ -237,9 +247,15 @@ mobile-ios = [
     "ktor-ios",
 ]
 
-mobile-common-ksp = []
-mobile-android-ksp = []
-mobile-ios-ksp = []
+mobile-common-ksp = [
+    "kotlin-inject-compiler",
+]
+mobile-android-ksp = [
+    "kotlin-inject-compiler",
+]
+mobile-ios-ksp = [
+    "kotlin-inject-compiler",
+]
 
 mobile-common-test = [
     "koin-test",
@@ -346,3 +362,17 @@ app-android = [
     "sentry",
 ]
 app-ios = []
+
+app-common-ksp = [
+    "kotlin-inject-compiler",
+]
+app-android-ksp = [
+    "kotlin-inject-compiler",
+]
+app-ios-ksp = [
+    "kotlin-inject-compiler",
+]
+
+app-common-test-ksp = []
+app-android-test-ksp = []
+app-ios-test-ksp = []

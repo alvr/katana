@@ -1,5 +1,6 @@
 package dev.alvr.katana.buildlogic.mp.core
 
+import com.google.devtools.ksp.gradle.KspExtension
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
@@ -7,6 +8,7 @@ import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.KATANA_MULTIPLATFORM_EXTENSION
 import dev.alvr.katana.buildlogic.mp.configureIos
 import dev.alvr.katana.buildlogic.mp.configureKotlin
+import dev.alvr.katana.buildlogic.mp.configureKotlinInject
 import dev.alvr.katana.buildlogic.mp.configureSourceSets
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -32,6 +34,7 @@ internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
 
             commonExtensions()
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<KspExtension> { configureKotlinInject() }
         }
 
         with(tasks) {
