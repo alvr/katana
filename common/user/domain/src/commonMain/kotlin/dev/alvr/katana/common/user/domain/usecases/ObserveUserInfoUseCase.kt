@@ -3,7 +3,9 @@ package dev.alvr.katana.common.user.domain.usecases
 import dev.alvr.katana.common.user.domain.models.UserInfo
 import dev.alvr.katana.common.user.domain.repositories.UserRepository
 import dev.alvr.katana.core.domain.usecases.FlowEitherUseCase
+import me.tatarka.inject.annotations.Inject
 
+@Inject
 class ObserveUserInfoUseCase(
     private val repository: UserRepository,
 ) : FlowEitherUseCase<Unit, UserInfo>() {
