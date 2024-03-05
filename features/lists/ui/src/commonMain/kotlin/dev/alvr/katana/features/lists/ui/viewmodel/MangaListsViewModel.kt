@@ -1,5 +1,6 @@
 package dev.alvr.katana.features.lists.ui.viewmodel
 
+import dev.alvr.katana.core.common.di.ScreenScope
 import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
@@ -7,7 +8,10 @@ import dev.alvr.katana.features.lists.domain.usecases.ObserveMangaListUseCase
 import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCase
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.entities.mappers.toMediaItems
+import me.tatarka.inject.annotations.Inject
 
+@Inject
+@ScreenScope
 internal class MangaListsViewModel(
     updateListUseCase: UpdateListUseCase,
     private val observeMangaListUseCase: ObserveMangaListUseCase,

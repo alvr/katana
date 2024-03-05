@@ -3,8 +3,10 @@ package dev.alvr.katana.core.preferences.encrypt
 import androidx.datastore.core.CorruptionException
 import com.google.crypto.tink.Aead
 import java.security.GeneralSecurityException
+import me.tatarka.inject.annotations.Inject
 
-internal class AndroidPreferencesEncrypt(
+@Inject
+class AndroidPreferencesEncrypt internal constructor(
     private val aead: Aead,
 ) : PreferencesEncrypt {
     override fun decrypt(input: ByteArray): ByteArray = operation("Aead decrypt") {

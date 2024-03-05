@@ -6,7 +6,7 @@ import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.core.domain.failures.Failure
 import kotlinx.coroutines.flow.Flow
 
-internal interface SessionLocalSource {
+sealed interface SessionLocalSource {
     val sessionActive: Flow<Either<Failure, Boolean>>
 
     suspend fun clearActiveSession(): Either<Failure, Unit>

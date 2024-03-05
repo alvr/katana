@@ -3,8 +3,10 @@ package dev.alvr.katana.common.session.data.repositories
 import dev.alvr.katana.common.session.data.sources.SessionLocalSource
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.repositories.SessionRepository
+import me.tatarka.inject.annotations.Inject
 
-internal class SessionRepositoryImpl(
+@Inject
+class SessionRepositoryImpl internal constructor(
     private val source: SessionLocalSource,
 ) : SessionRepository {
     override val sessionActive get() = source.sessionActive

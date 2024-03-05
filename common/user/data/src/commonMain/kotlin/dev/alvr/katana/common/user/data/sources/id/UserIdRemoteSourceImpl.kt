@@ -10,8 +10,10 @@ import dev.alvr.katana.common.user.data.mappers.responses.invoke
 import dev.alvr.katana.common.user.domain.failures.UserFailure
 import dev.alvr.katana.core.common.catchUnit
 import dev.alvr.katana.core.remote.toFailure
+import me.tatarka.inject.annotations.Inject
 
-internal class UserIdRemoteSourceImpl(
+@Inject
+class UserIdRemoteSourceImpl internal constructor(
     private val client: ApolloClient,
 ) : UserIdRemoteSource {
     override suspend fun getUserId() = Either.catch {

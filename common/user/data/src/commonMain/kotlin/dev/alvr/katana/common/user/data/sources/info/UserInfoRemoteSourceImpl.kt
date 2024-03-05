@@ -17,8 +17,10 @@ import dev.alvr.katana.core.remote.toFailure
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import me.tatarka.inject.annotations.Inject
 
-internal class UserInfoRemoteSourceImpl(
+@Inject
+class UserInfoRemoteSourceImpl internal constructor(
     client: ApolloClient,
 ) : UserInfoRemoteSource {
     @Suppress("USELESS_CAST")

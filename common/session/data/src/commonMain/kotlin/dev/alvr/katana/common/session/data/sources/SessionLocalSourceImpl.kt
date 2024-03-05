@@ -14,8 +14,10 @@ import dev.alvr.katana.core.domain.failures.Failure
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import me.tatarka.inject.annotations.Inject
 
-internal class SessionLocalSourceImpl(
+@Inject
+class SessionLocalSourceImpl internal constructor(
     private val store: DataStore<Session>,
 ) : SessionLocalSource {
     @Suppress("USELESS_CAST")

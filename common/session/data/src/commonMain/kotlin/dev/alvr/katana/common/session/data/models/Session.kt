@@ -8,7 +8,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class Session(
+data class Session internal constructor(
     @SerialName("at")
     @Serializable(with = AnilistTokenSerializer::class)
     val anilistToken: AnilistToken? = null,

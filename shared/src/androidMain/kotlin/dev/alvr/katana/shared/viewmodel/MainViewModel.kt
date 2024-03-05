@@ -3,15 +3,19 @@ package dev.alvr.katana.shared.viewmodel
 import dev.alvr.katana.common.session.domain.usecases.ClearActiveSessionUseCase
 import dev.alvr.katana.common.session.domain.usecases.GetAnilistTokenUseCase
 import dev.alvr.katana.common.session.domain.usecases.ObserveActiveSessionUseCase
+import dev.alvr.katana.core.common.di.ScreenScope
 import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.domain.usecases.sync
 import dev.alvr.katana.core.ui.viewmodel.BaseViewModel
 import dev.alvr.katana.features.login.ui.navigation.LoginNavGraph
 import dev.alvr.katana.shared.navigation.NavGraphs
+import me.tatarka.inject.annotations.Inject
 import org.orbitmvi.orbit.container
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 
+@Inject
+@ScreenScope
 internal class MainViewModel(
     private val clearActiveSessionUseCase: ClearActiveSessionUseCase,
     private val getAnilistTokenUseCase: GetAnilistTokenUseCase,

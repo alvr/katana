@@ -82,10 +82,14 @@ import dev.alvr.katana.features.login.ui.resources.KatanaResources
 import dev.alvr.katana.features.login.ui.strings.LocalLoginStrings
 import dev.alvr.katana.features.login.ui.viewmodel.LoginState
 import dev.alvr.katana.features.login.ui.viewmodel.LoginViewModel
+import me.tatarka.inject.annotations.Inject
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
+internal typealias LoginScreen = @Composable (String?) -> Unit
+
+@Inject
 @Composable
 @Destination(
     deepLinks = [

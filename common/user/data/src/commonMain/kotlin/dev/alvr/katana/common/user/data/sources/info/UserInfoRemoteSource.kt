@@ -5,6 +5,6 @@ import dev.alvr.katana.common.user.domain.models.UserInfo
 import dev.alvr.katana.core.domain.failures.Failure
 import kotlinx.coroutines.flow.Flow
 
-internal interface UserInfoRemoteSource {
+sealed interface UserInfoRemoteSource {
     val userInfo: Flow<Either<Failure, UserInfo>>
 }

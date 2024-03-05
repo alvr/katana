@@ -3,15 +3,20 @@ package dev.alvr.katana.features.login.ui.viewmodel
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.usecases.SaveSessionUseCase
 import dev.alvr.katana.common.user.domain.usecases.SaveUserIdUseCase
+import dev.alvr.katana.core.common.di.ScreenScope
 import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.ui.viewmodel.BaseViewModel
 import dev.alvr.katana.features.login.ui.viewmodel.LoginState.ErrorType
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
 import org.orbitmvi.orbit.container
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 
+@Inject
+@ScreenScope
 internal class LoginViewModel(
-    private val token: String?,
+    @Assisted private val token: String?,
     private val saveSessionUseCase: SaveSessionUseCase,
     private val saveUserIdUseCase: SaveUserIdUseCase,
 ) : BaseViewModel<LoginState, Nothing>() {

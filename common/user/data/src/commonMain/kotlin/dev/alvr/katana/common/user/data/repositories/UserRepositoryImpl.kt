@@ -3,8 +3,10 @@ package dev.alvr.katana.common.user.data.repositories
 import dev.alvr.katana.common.user.data.sources.id.UserIdRemoteSource
 import dev.alvr.katana.common.user.data.sources.info.UserInfoRemoteSource
 import dev.alvr.katana.common.user.domain.repositories.UserRepository
+import me.tatarka.inject.annotations.Inject
 
-internal class UserRepositoryImpl(
+@Inject
+class UserRepositoryImpl internal constructor(
     private val idSource: UserIdRemoteSource,
     private val infoSource: UserInfoRemoteSource,
 ) : UserRepository {
