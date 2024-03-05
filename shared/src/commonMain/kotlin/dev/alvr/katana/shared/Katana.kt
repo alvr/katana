@@ -23,12 +23,16 @@ import dev.alvr.katana.features.social.ui.strings.rememberSocialStrings
 import io.sentry.kotlin.multiplatform.Sentry
 import io.sentry.kotlin.multiplatform.SentryLevel
 import io.sentry.kotlin.multiplatform.protocol.Breadcrumb
+import me.tatarka.inject.annotations.Inject
+
+internal typealias Katana = @Composable () -> Unit
 
 @Composable
 internal expect fun KatanaContent()
 
+@Inject
 @Composable
-fun Katana() {
+internal fun Katana() {
     initApp()
 
     KatanaTheme {
