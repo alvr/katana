@@ -42,7 +42,7 @@ sentry-multiplatform = "0.5.0"
 sentry-plugin = "4.3.1"
 splashscreen = "1.0.1"
 tink = "1.12.0"
-turbine = "1.0.0"
+turbine = "1.1.0"
 window-size = "0.5.0"
 yamlbeans = "1.17"
 
