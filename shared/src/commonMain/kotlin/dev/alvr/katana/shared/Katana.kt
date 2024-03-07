@@ -20,12 +20,25 @@ import dev.alvr.katana.features.login.ui.strings.LocalLoginStrings
 import dev.alvr.katana.features.login.ui.strings.rememberLoginStrings
 import dev.alvr.katana.features.social.ui.strings.LocalSocialStrings
 import dev.alvr.katana.features.social.ui.strings.rememberSocialStrings
+import dev.alvr.katana.shared.component.KatanaComponent
+import dev.alvr.katana.shared.content.KatanaContent
 import io.sentry.kotlin.multiplatform.Sentry
 import io.sentry.kotlin.multiplatform.SentryLevel
 import io.sentry.kotlin.multiplatform.protocol.Breadcrumb
 
 @Composable
 internal expect fun KatanaContent()
+
+@Composable
+fun Katana(component: KatanaComponent) {
+    initApp()
+
+    KatanaTheme {
+        KatanaStrings {
+            KatanaContent(component)
+        }
+    }
+}
 
 @Composable
 fun Katana() {

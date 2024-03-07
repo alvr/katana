@@ -26,6 +26,7 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = "org.jetbrains.compose")
+        apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
         group = fullPackageName.substringBeforeLast('.')
 

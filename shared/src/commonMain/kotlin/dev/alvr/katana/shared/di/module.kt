@@ -29,6 +29,14 @@ private val sharedModule = module {
     factoryOf(::MainViewModel)
 }
 
+private val uiSharedModule = module {
+    factory<KatanaComponent> { (componentContext: AppComponentContext) ->
+        DefaultKatanaComponent(
+            componentContext = componentContext,
+        )
+    }
+}
+
 val katanaModule = module {
     includes(
         // Core
@@ -62,9 +70,19 @@ val katanaModule = module {
         featuresListsDomainModule,
         featuresListsUiModule,
 
+        // Data Preferences
+        dataPreferencesBaseModule,
+        dataPreferencesSessionModule,
         // Feature Login
         featuresLoginUiModule,
 
+        // Data Remote
+        dataRemoteAccountModule,
+        dataRemoteExploreModule,
+        dataRemoteBaseModule,
+        dataRemoteListsModule,
+        dataRemoteSocialModule,
+        dataRemoteUserModule,
         // Feature Social
         featuresSocialDataModule,
         featuresSocialDomainModule,
