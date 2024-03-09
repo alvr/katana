@@ -7,6 +7,7 @@ import dev.alvr.katana.common.user.domain.di.commonUserDomainModule
 import dev.alvr.katana.core.common.di.coreCommonModule
 import dev.alvr.katana.core.preferences.di.corePreferencesModule
 import dev.alvr.katana.core.remote.di.coreRemoteModule
+import dev.alvr.katana.core.ui.decompose.AppComponentContext
 import dev.alvr.katana.features.account.data.di.featuresAccountDataModule
 import dev.alvr.katana.features.account.domain.di.featuresAccountDomainModule
 import dev.alvr.katana.features.account.ui.di.featuresAccountUiModule
@@ -21,15 +22,15 @@ import dev.alvr.katana.features.login.ui.di.featuresLoginUiModule
 import dev.alvr.katana.features.social.data.di.featuresSocialDataModule
 import dev.alvr.katana.features.social.domain.di.featuresSocialDomainModule
 import dev.alvr.katana.features.social.ui.di.featuresSocialUiModule
+import dev.alvr.katana.shared.component.DefaultKatanaComponent
+import dev.alvr.katana.shared.component.KatanaComponent
 import dev.alvr.katana.shared.viewmodel.MainViewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 private val sharedModule = module {
     factoryOf(::MainViewModel)
-}
 
-private val uiSharedModule = module {
     factory<KatanaComponent> { (componentContext: AppComponentContext) ->
         DefaultKatanaComponent(
             componentContext = componentContext,
@@ -70,19 +71,9 @@ val katanaModule = module {
         featuresListsDomainModule,
         featuresListsUiModule,
 
-        // Data Preferences
-        dataPreferencesBaseModule,
-        dataPreferencesSessionModule,
         // Feature Login
         featuresLoginUiModule,
 
-        // Data Remote
-        dataRemoteAccountModule,
-        dataRemoteExploreModule,
-        dataRemoteBaseModule,
-        dataRemoteListsModule,
-        dataRemoteSocialModule,
-        dataRemoteUserModule,
         // Feature Social
         featuresSocialDataModule,
         featuresSocialDomainModule,
