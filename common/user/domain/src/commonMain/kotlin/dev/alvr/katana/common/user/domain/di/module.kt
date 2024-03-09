@@ -12,6 +12,6 @@ private val useCasesModule = module {
     factoryOf(::ObserveUserInfoUseCase)
 }
 
-val domainUserModule = module {
+val commonUserDomainModule = module {
     includes(useCasesModule)
 }

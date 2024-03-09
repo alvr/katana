@@ -25,6 +25,6 @@ private val sourcesModule = module {
     singleOf(::UserInfoRemoteSourceImpl).bind<UserInfoRemoteSource>()
 }
 
-val dataRemoteUserModule = module {
+val commonUserDataModule = module {
     includes(managersModule, repositoriesModule, sourcesModule)
 }
