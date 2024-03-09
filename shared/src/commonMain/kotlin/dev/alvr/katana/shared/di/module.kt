@@ -34,6 +34,7 @@ private val sharedModule = module {
     factory<KatanaComponent> { (componentContext: AppComponentContext) ->
         DefaultKatanaComponent(
             componentContext = componentContext,
+            homeComponentFactory = get(),
         )
     }
 }

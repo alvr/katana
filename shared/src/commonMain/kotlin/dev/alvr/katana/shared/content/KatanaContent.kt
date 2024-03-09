@@ -15,6 +15,7 @@ import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.stack.ChildStack
 import dev.alvr.katana.core.ui.theme.noInsets
+import dev.alvr.katana.features.home.ui.content.HomeContent
 import dev.alvr.katana.shared.component.KatanaComponent
 import dev.alvr.katana.shared.component.KatanaComponent.Child
 
@@ -51,7 +52,7 @@ private fun KatanaChildren(
     ) { (_, instance) ->
         when (instance) {
             is Child.LoginChild -> Text("Login")
-            is Child.HomeChild -> Text("Home")
+            is Child.HomeChild -> HomeContent(component = instance.component)
         }
     }
 }
