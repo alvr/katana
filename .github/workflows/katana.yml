@@ -55,6 +55,13 @@ jobs:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Assemble Katana
         run: ./gradlew assembleDebug --no-daemon --stacktrace
+      - name: Upload debug artifacts
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: Katana v${{ github.run_number }}
+          path: |
+            ${{ vars.ANDROID_DEBUG_APK }}
+          retention-days: 7
       - name: Upload compose reports artifact
         uses: actions/upload-artifact@v4.3.1
         if: always()
@@ -64,24 +71,6 @@ jobs:
             **/build/compose-metrics
             **/build/compose-reports
           retention-days: 7
-      - name: Upload Android APK
-        uses: rnkdsh/action-upload-diawi@v1.5.5
-        id: diawi_android
-        with:
-          token: ${{ secrets.DIAWI_TOKEN }}
-          file: ${{ vars.ANDROID_DEBUG_APK }}
-      - name: Post comment with Diawi link
-        uses: peter-evans/create-or-update-comment@v4.0.0
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            | Android                                       | iOS      |
-            |:---------------------------------------------:|:--------:|
-            | [Download APK (v${{ github.run_number }})][1] | Not yet. |
-            | ![2]                                          | Not yet. |
-
-            [1]: ${{ steps.diawi_android.outputs.url }}
-            [2]: https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${{ steps.diawi_android.outputs.url }}
 
   static-analysis:
     name: Static analysis
