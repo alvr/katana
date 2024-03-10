@@ -1,10 +1,10 @@
 package dev.alvr.katana.features.lists.data.mappers.responses
 
-import korlibs.time.Date
+import kotlinx.datetime.LocalDate
 
 internal fun dateMapper(day: Int?, month: Int?, year: Int?) =
     if (day != null && month != null && year != null) {
-        Date(year, month, day)
+        LocalDate(year = year, monthNumber = month, dayOfMonth = day)
     } else {
         null
     }

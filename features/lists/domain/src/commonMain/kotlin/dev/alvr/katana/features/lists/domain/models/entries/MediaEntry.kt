@@ -1,6 +1,6 @@
 package dev.alvr.katana.features.lists.domain.models.entries
 
-import korlibs.time.DateTimeTz
+import kotlinx.datetime.LocalDateTime
 
 sealed class MediaEntry(
     val id: Int,
@@ -22,7 +22,7 @@ sealed class MediaEntry(
     ) : MediaEntry(entry) {
         data class NextEpisode(
             val number: Int,
-            val at: DateTimeTz,
+            val at: LocalDateTime,
         )
     }
 

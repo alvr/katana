@@ -1,7 +1,7 @@
 package dev.alvr.katana.features.lists.domain.models.lists
 
-import korlibs.time.Date
-import korlibs.time.DateTimeTz
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 
 data class MediaList(
     val id: Int,
@@ -12,7 +12,7 @@ data class MediaList(
     val private: Boolean,
     val notes: String,
     val hiddenFromStatusLists: Boolean,
-    val startedAt: Date?,
-    val completedAt: Date?,
-    val updatedAt: DateTimeTz?,
+    val startedAt: LocalDate?,
+    val completedAt: LocalDate?,
+    val updatedAt: LocalDateTime?,
 )

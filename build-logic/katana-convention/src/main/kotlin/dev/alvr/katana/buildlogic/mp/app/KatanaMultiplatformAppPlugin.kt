@@ -60,6 +60,7 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
     private fun BaseAppModuleExtension.configureApp() {
         configureAndroid(KatanaConfiguration.PackageName)
 
+        compileOptions.isCoreLibraryDesugaringEnabled = true
         defaultConfig.applicationId = KatanaConfiguration.PackageName
         lint.abortOnError = false
 

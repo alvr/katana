@@ -7,3 +7,7 @@ katanaMultiplatform {
         implementation(projects.shared)
     }
 }
+
+dependencies {
+    coreLibraryDesugaring(libs.desugaring)
+}

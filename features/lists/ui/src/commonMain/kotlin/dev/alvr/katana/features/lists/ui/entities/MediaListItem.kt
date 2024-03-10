@@ -2,16 +2,13 @@ package dev.alvr.katana.features.lists.ui.entities
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
-import com.arkivanov.essenty.parcelable.Parcelable
-import com.arkivanov.essenty.parcelable.Parcelize
 import dev.alvr.katana.features.lists.ui.strings.LocalListsStrings
-import korlibs.time.Date
-import korlibs.time.DateTimeTz
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 
 @Immutable
 @Suppress("ComplexInterface")
-internal sealed interface MediaListItem : Parcelable {
+internal sealed interface MediaListItem {
     val entryId: Int
     val mediaId: Int
     val title: String
@@ -24,11 +21,10 @@ internal sealed interface MediaListItem : Parcelable {
     val private: Boolean
     val notes: String
     val hiddenFromStatusLists: Boolean
-    val startedAt: Date?
-    val completedAt: Date?
-    val updatedAt: DateTimeTz?
+    val startedAt: LocalDate?
+    val completedAt: LocalDate?
+    val updatedAt: LocalDateTime?
 
-    @Parcelize
     data class AnimeListItem(
         override val entryId: Int,
         override val mediaId: Int,
@@ -42,20 +38,17 @@ internal sealed interface MediaListItem : Parcelable {
         override val private: Boolean,
         override val notes: String,
         override val hiddenFromStatusLists: Boolean,
-        override val startedAt: Date?,
-        override val completedAt: Date?,
-        override val updatedAt: DateTimeTz?,
+        override val startedAt: LocalDate?,
+        override val completedAt: LocalDate?,
+        override val updatedAt: LocalDateTime?,
         val nextEpisode: NextEpisode?,
     ) : MediaListItem {
-        @Stable
-        @Parcelize
         data class NextEpisode(
             val number: Int,
-            val date: DateTimeTz,
-        ) : Parcelable
+            val date: LocalDateTime,
+        )
     }
 
-    @Parcelize
     data class MangaListItem(
         override val entryId: Int,
         override val mediaId: Int,
@@ -69,9 +62,9 @@ internal sealed interface MediaListItem : Parcelable {
         override val private: Boolean,
         override val notes: String,
         override val hiddenFromStatusLists: Boolean,
-        override val startedAt: Date?,
-        override val completedAt: Date?,
-        override val updatedAt: DateTimeTz?,
+        override val startedAt: LocalDate?,
+        override val completedAt: LocalDate?,
+        override val updatedAt: LocalDateTime?,
         val volumesProgress: Int,
         val volumesTotal: Int?,
     ) : MediaListItem
@@ -93,17 +86,17 @@ internal sealed interface MediaListItem : Parcelable {
         val value
             @Composable get() = with(LocalListsStrings.current) {
                 when (this@Format) {
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Tv -> entryFormatTv
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.TvShort -> entryFormatTvShort
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Movie -> entryFormatMovie
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Special -> entryFormatSpecial
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Ova -> entryFormatOva
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Ona -> entryFormatOna
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Music -> entryFormatMusic
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Manga -> entryFormatManga
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Novel -> entryFormatNovel
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.OneShot -> entryFormatOneShot
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Unknown -> entryFormatUnknown
+                    Tv -> entryFormatTv
+                    TvShort -> entryFormatTvShort
+                    Movie -> entryFormatMovie
+                    Special -> entryFormatSpecial
+                    Ova -> entryFormatOva
+                    Ona -> entryFormatOna
+                    Music -> entryFormatMusic
+                    Manga -> entryFormatManga
+                    Novel -> entryFormatNovel
+                    OneShot -> entryFormatOneShot
+                    Unknown -> entryFormatUnknown
                 }
             }
     }
