@@ -16,4 +16,5 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.mokkery) apply false
     alias(libs.plugins.sentry) apply false
+    alias(libs.plugins.serialization) apply false
 }

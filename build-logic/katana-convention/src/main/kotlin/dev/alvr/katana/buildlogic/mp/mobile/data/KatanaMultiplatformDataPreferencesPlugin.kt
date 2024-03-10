@@ -14,6 +14,7 @@ internal class KatanaMultiplatformDataPreferencesPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
         apply(plugin = "katana.multiplatform.mobile")
+        apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
         with(extensions) {
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }

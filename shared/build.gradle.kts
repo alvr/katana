@@ -35,8 +35,7 @@ katanaMultiplatform {
         api(projects.features.social.domain)
         api(projects.features.social.ui)
 
-        api(libs.compose.material3.windowsize)
-        api(libs.sentry.multiplatform)
+        implementation(libs.sentry.multiplatform)
     }
 
     androidMainDependencies {
