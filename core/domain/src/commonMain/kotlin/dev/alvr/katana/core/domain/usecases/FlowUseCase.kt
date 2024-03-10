@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 
 @OptIn(ExperimentalCoroutinesApi::class)
-sealed class FlowUseCase<in P, out R>(dispatcher: KatanaDispatcher) {
+abstract class FlowUseCase<in P, out R> internal constructor(dispatcher: KatanaDispatcher) {
     private val paramState = MutableSharedFlow<P>(
         replay = 1,
         extraBufferCapacity = 1,

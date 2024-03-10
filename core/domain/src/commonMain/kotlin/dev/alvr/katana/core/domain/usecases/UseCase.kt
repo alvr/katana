@@ -7,7 +7,7 @@ import dev.alvr.katana.core.domain.failures.Failure
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-sealed class UseCase<in P, out R>(private val dispatcher: KatanaDispatcher) {
+abstract class UseCase<in P, out R> internal constructor(private val dispatcher: KatanaDispatcher) {
 
     abstract suspend fun run(params: P): R
 

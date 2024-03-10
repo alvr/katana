@@ -3,7 +3,10 @@ package dev.alvr.katana.features.lists.domain.usecases
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.domain.usecases.invoke
+import dev.alvr.katana.core.tests.di.coreTestsModule
+import dev.alvr.katana.core.tests.koinExtension
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.lists.domain.failures.ListsFailure
@@ -15,13 +18,17 @@ import dev.mokkery.every
 import dev.mokkery.mock
 import dev.mokkery.verify
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.core.test.TestCase
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.flowOf
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class ObserveMangaListUseCaseTest : FreeSpec() {
+internal class ObserveMangaListUseCaseTest : FreeSpec(), KoinTest {
+    private val dispatcher by inject<KatanaDispatcher>()
     private val repo = mock<ListsRepository>()
 
-    private val useCase = ObserveMangaListUseCase(repo)
+    private lateinit var useCase: ObserveMangaListUseCase
 
     init {
         "successfully observe the manga lists" {
@@ -54,4 +61,10 @@ internal class ObserveMangaListUseCaseTest : FreeSpec() {
             verify { repo.mangaCollection }
         }
     }
+
+    override suspend fun beforeEach(testCase: TestCase) {
+        useCase = ObserveMangaListUseCase(dispatcher, repo)
+    }
+
+    override fun extensions() = listOf(koinExtension(coreTestsModule))
 }

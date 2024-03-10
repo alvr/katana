@@ -8,7 +8,7 @@ import dev.alvr.katana.common.session.data.di.deleteDataStoreFiles
 import dev.alvr.katana.common.session.data.di.testDataStoreModule
 import dev.alvr.katana.common.session.data.models.Session
 import dev.alvr.katana.common.session.domain.models.AnilistToken
-import dev.alvr.katana.core.tests.KoinExtension
+import dev.alvr.katana.core.tests.koinExtension
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.equals.shouldBeEqual
@@ -55,9 +55,9 @@ internal class SessionDataStoreTest : FreeSpec(), KoinTest {
         }
     }
 
-    override fun extensions() = listOf(KoinExtension(testDataStoreModule()))
-
     override suspend fun beforeEach(testCase: TestCase) {
         deleteDataStoreFiles()
     }
+
+    override fun extensions() = listOf(koinExtension(testDataStoreModule()))
 }

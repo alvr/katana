@@ -1,15 +1,15 @@
-package dev.alvr.katana.core.common.di
+package dev.alvr.katana.core.tests.di
 
-import dev.alvr.katana.core.common.coroutines.AppKatanaDispatcher
 import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
+import dev.alvr.katana.core.tests.coroutines.TestKatanaDispatcher
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 private val dispatcherModule = module {
-    singleOf(::AppKatanaDispatcher) bind KatanaDispatcher::class
+    singleOf(::TestKatanaDispatcher) bind KatanaDispatcher::class
 }
 
-val coreCommonModule = module {
+val coreTestsModule = module {
     includes(dispatcherModule)
 }
