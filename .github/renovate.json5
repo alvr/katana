@@ -16,11 +16,12 @@
     ],
     "packageRules": [
         {
-            "groupName": "Kotlin, KSP and Compose",
+            "groupName": "Kotlin Dependants",
             "groupSlug": "kotlin",
             "matchPackagePrefixes": [
                 "com.google.devtools.ksp",
                 "org.jetbrains.compose",
+                "dev.mokkery",
             ],
             "matchPackagePatterns": [
                 "org.jetbrains.kotlin.*",
