@@ -8,6 +8,6 @@ private val viewModelsModule = module {
     factoryOf(::AccountViewModel)
 }
 
-val uiAccountModule = module {
+val featuresAccountUiModule = module {
     includes(viewModelsModule)
 }

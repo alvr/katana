@@ -12,6 +12,6 @@ private val useCasesModule = module {
     factoryOf(::UpdateListUseCase)
 }
 
-val domainListsModule = module {
+val featuresListsDomainModule = module {
     includes(useCasesModule)
 }

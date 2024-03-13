@@ -11,18 +11,17 @@ import org.koin.core.module.Module
 import org.koin.test.mock.MockProvider
 import org.koin.test.mock.Provider
 
-class KoinExtension(
+fun koinExtension(
+    vararg modules: Module,
+    mockProvider: Provider<*>? = null,
+    mode: KoinLifecycleMode = KoinLifecycleMode.Test,
+): TestCaseExtension = KoinExtensionImpl(modules.toList(), mockProvider, mode)
+
+private class KoinExtensionImpl(
     private val modules: List<Module>,
     private val mockProvider: Provider<*>? = null,
     private val mode: KoinLifecycleMode = KoinLifecycleMode.Test,
 ) : TestCaseExtension {
-
-    constructor(
-        module: Module,
-        mockProvider: Provider<*>? = null,
-        mode: KoinLifecycleMode = KoinLifecycleMode.Test,
-    ) : this(listOf(module), mockProvider, mode)
-
     @Suppress("TooGenericExceptionCaught")
     override suspend fun intercept(testCase: TestCase, execute: suspend (TestCase) -> TestResult): TestResult {
         return if (testCase.isApplicable()) {
@@ -46,8 +45,8 @@ class KoinExtension(
     private fun TestCase.isApplicable() =
         mode == KoinLifecycleMode.Root && isRootTest() ||
             mode == KoinLifecycleMode.Test && type == TestType.Test
+}
 
-    enum class KoinLifecycleMode {
-        Root, Test
-    }
+enum class KoinLifecycleMode {
+    Root, Test
 }

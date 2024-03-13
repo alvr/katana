@@ -1,6 +1,5 @@
 plugins {
     id("katana.multiplatform.data.preferences")
-    alias(libs.plugins.serialization)
 }
 
 katanaMultiplatform {

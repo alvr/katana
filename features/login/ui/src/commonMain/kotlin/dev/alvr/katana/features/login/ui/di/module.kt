@@ -7,6 +7,6 @@ private val viewModelsModule = module {
     factory { params -> LoginViewModel(params[0], get(), get()) }
 }
 
-val uiLoginModule = module {
+val featuresLoginUiModule = module {
     includes(viewModelsModule)
 }

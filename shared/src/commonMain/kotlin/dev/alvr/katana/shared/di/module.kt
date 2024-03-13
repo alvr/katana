@@ -1,60 +1,76 @@
 package dev.alvr.katana.shared.di
 
-import dev.alvr.katana.common.session.data.di.dataPreferencesSessionModule
-import dev.alvr.katana.common.session.domain.di.domainSessionModule
-import dev.alvr.katana.common.user.data.di.dataRemoteUserModule
-import dev.alvr.katana.common.user.domain.di.domainUserModule
-import dev.alvr.katana.core.preferences.di.dataPreferencesBaseModule
-import dev.alvr.katana.core.remote.di.dataRemoteBaseModule
-import dev.alvr.katana.features.account.data.di.dataRemoteAccountModule
-import dev.alvr.katana.features.account.domain.di.domainAccountModule
-import dev.alvr.katana.features.account.ui.di.uiAccountModule
-import dev.alvr.katana.features.explore.data.di.dataRemoteExploreModule
-import dev.alvr.katana.features.explore.domain.di.domainExploreModule
-import dev.alvr.katana.features.explore.ui.di.uiExploreModule
-import dev.alvr.katana.features.lists.data.di.dataRemoteListsModule
-import dev.alvr.katana.features.lists.domain.di.domainListsModule
-import dev.alvr.katana.features.lists.ui.di.uiListsModule
-import dev.alvr.katana.features.login.ui.di.uiLoginModule
-import dev.alvr.katana.features.social.data.di.dataRemoteSocialModule
-import dev.alvr.katana.features.social.domain.di.domainSocialModule
-import dev.alvr.katana.features.social.ui.di.uiSocialModule
+import dev.alvr.katana.common.session.data.di.commonSessionDataModule
+import dev.alvr.katana.common.session.domain.di.commonSessionDomainModule
+import dev.alvr.katana.common.user.data.di.commonUserDataModule
+import dev.alvr.katana.common.user.domain.di.commonUserDomainModule
+import dev.alvr.katana.core.common.di.coreCommonModule
+import dev.alvr.katana.core.preferences.di.corePreferencesModule
+import dev.alvr.katana.core.remote.di.coreRemoteModule
+import dev.alvr.katana.features.account.data.di.featuresAccountDataModule
+import dev.alvr.katana.features.account.domain.di.featuresAccountDomainModule
+import dev.alvr.katana.features.account.ui.di.featuresAccountUiModule
+import dev.alvr.katana.features.explore.data.di.featuresExploreDataModule
+import dev.alvr.katana.features.explore.domain.di.featuresExploreDomainModule
+import dev.alvr.katana.features.explore.ui.di.featuresExploreUiModule
+import dev.alvr.katana.features.home.ui.di.featuresHomeUiModule
+import dev.alvr.katana.features.lists.data.di.featuresListsDataModule
+import dev.alvr.katana.features.lists.domain.di.featuresListsDomainModule
+import dev.alvr.katana.features.lists.ui.di.featuresListsUiModule
+import dev.alvr.katana.features.login.ui.di.featuresLoginUiModule
+import dev.alvr.katana.features.social.data.di.featuresSocialDataModule
+import dev.alvr.katana.features.social.domain.di.featuresSocialDomainModule
+import dev.alvr.katana.features.social.ui.di.featuresSocialUiModule
 import dev.alvr.katana.shared.viewmodel.MainViewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
-private val uiMainModule = module {
+private val sharedModule = module {
     factoryOf(::MainViewModel)
 }
 
 val katanaModule = module {
     includes(
-        // Domain
-        domainAccountModule,
-        domainExploreModule,
-        domainListsModule,
-        domainSessionModule,
-        domainSocialModule,
-        domainUserModule,
+        // Core
+        coreCommonModule,
+        corePreferencesModule,
+        coreRemoteModule,
 
-        // Data Preferences
-        dataPreferencesBaseModule,
-        dataPreferencesSessionModule,
+        // Common Session
+        commonSessionDataModule,
+        commonSessionDomainModule,
 
-        // Data Remote
-        dataRemoteAccountModule,
-        dataRemoteExploreModule,
-        dataRemoteBaseModule,
-        dataRemoteListsModule,
-        dataRemoteSocialModule,
-        dataRemoteUserModule,
+        // Common User
+        commonUserDataModule,
+        commonUserDomainModule,
 
-        // Ui
-        uiAccountModule,
-        uiExploreModule,
-        uiListsModule,
-        uiLoginModule,
-        uiMainModule,
-        uiSocialModule,
+        // Feature Account
+        featuresAccountDataModule,
+        featuresAccountDomainModule,
+        featuresAccountUiModule,
+
+        // Feature Explore
+        featuresExploreDataModule,
+        featuresExploreDomainModule,
+        featuresExploreUiModule,
+
+        // Feature Home
+        featuresHomeUiModule,
+
+        // Feature Lists
+        featuresListsDataModule,
+        featuresListsDomainModule,
+        featuresListsUiModule,
+
+        // Feature Login
+        featuresLoginUiModule,
+
+        // Feature Social
+        featuresSocialDataModule,
+        featuresSocialDomainModule,
+        featuresSocialUiModule,
+
+        // Shared
+        sharedModule,
     )
 }

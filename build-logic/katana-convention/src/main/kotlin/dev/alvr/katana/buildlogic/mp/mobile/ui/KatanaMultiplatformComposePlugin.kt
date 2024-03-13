@@ -91,6 +91,8 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
 
         kotlinCompilerPluginArgs.set(
             buildList {
+                add("experimentalStrongSkipping=${composePluginEnabled("katana.strongSkipping")}")
+
                 if (composePluginEnabled("katana.enableComposeCompilerMetrics")) {
                     add("metricsDestination=${composePluginDir("compose-metrics")}")
                 }

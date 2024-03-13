@@ -112,7 +112,7 @@ private val apolloInterceptorsModule = module {
     factoryOf(::ReloadInterceptor).bind<ApolloInterceptor>()
 }
 
-val dataRemoteBaseModule = module {
+val coreRemoteModule = module {
     includes(apolloClientModule, apolloDatabaseModule, apolloInterceptorsModule)
 }
 

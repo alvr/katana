@@ -10,6 +10,6 @@ private val viewModelsModule = module {
     factoryOf(::MangaListsViewModel)
 }
 
-val uiListsModule = module {
+val featuresListsUiModule = module {
     includes(viewModelsModule)
 }

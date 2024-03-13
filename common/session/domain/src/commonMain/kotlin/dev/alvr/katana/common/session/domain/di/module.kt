@@ -18,6 +18,6 @@ private val useCasesModule = module {
     factoryOf(::SaveSessionUseCase)
 }
 
-val domainSessionModule = module {
+val commonSessionDomainModule = module {
     includes(useCasesModule)
 }

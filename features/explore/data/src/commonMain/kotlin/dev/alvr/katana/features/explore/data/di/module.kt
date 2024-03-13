@@ -2,4 +2,4 @@ package dev.alvr.katana.features.explore.data.di
 
 import org.koin.dsl.module
 
-val dataRemoteExploreModule = module { }
+val featuresExploreDataModule = module { }

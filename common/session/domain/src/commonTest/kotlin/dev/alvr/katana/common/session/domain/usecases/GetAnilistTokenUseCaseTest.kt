@@ -4,7 +4,10 @@ import arrow.core.none
 import arrow.core.some
 import dev.alvr.katana.common.session.domain.anilistTokenMock
 import dev.alvr.katana.common.session.domain.repositories.SessionRepository
+import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.domain.usecases.invoke
+import dev.alvr.katana.core.tests.di.coreTestsModule
+import dev.alvr.katana.core.tests.koinExtension
 import dev.alvr.katana.core.tests.shouldBeNone
 import dev.alvr.katana.core.tests.shouldBeSome
 import dev.mokkery.answering.returns
@@ -12,11 +15,15 @@ import dev.mokkery.everySuspend
 import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.core.test.TestCase
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class GetAnilistTokenUseCaseTest : FreeSpec() {
+internal class GetAnilistTokenUseCaseTest : FreeSpec(), KoinTest {
+    private val dispatcher by inject<KatanaDispatcher>()
     private val repo = mock<SessionRepository>()
 
-    private val useCase = GetAnilistTokenUseCase(repo)
+    private lateinit var useCase: GetAnilistTokenUseCase
 
     init {
         "successfully getting the token" {
@@ -31,4 +38,10 @@ internal class GetAnilistTokenUseCaseTest : FreeSpec() {
             verifySuspend { repo.getAnilistToken() }
         }
     }
+
+    override suspend fun beforeEach(testCase: TestCase) {
+        useCase = GetAnilistTokenUseCase(dispatcher, repo)
+    }
+
+    override fun extensions() = listOf(koinExtension(coreTestsModule))
 }

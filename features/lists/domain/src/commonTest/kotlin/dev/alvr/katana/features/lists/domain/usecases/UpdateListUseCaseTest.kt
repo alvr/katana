@@ -2,7 +2,10 @@ package dev.alvr.katana.features.lists.domain.usecases
 
 import arrow.core.left
 import arrow.core.right
+import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.domain.failures.Failure
+import dev.alvr.katana.core.tests.di.coreTestsModule
+import dev.alvr.katana.core.tests.koinExtension
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.lists.domain.failures.ListsFailure
@@ -14,11 +17,15 @@ import dev.mokkery.matcher.any
 import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.core.test.TestCase
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class UpdateListUseCaseTest : FreeSpec() {
+internal class UpdateListUseCaseTest : FreeSpec(), KoinTest {
+    private val dispatcher by inject<KatanaDispatcher>()
     private val repo = mock<ListsRepository>()
 
-    private val useCase = UpdateListUseCase(repo)
+    private lateinit var useCase: UpdateListUseCase
 
     init {
         "successfully updating the list" {
@@ -38,4 +45,10 @@ internal class UpdateListUseCaseTest : FreeSpec() {
             }
         }
     }
+
+    override suspend fun beforeEach(testCase: TestCase) {
+        useCase = UpdateListUseCase(dispatcher, repo)
+    }
+
+    override fun extensions() = listOf(koinExtension(coreTestsModule))
 }
