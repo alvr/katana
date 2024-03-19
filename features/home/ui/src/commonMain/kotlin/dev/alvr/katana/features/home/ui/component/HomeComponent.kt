@@ -1,5 +1,7 @@
 package dev.alvr.katana.features.home.ui.component
 
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.GenericComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import dev.alvr.katana.core.ui.components.navigation.KatanaNavigationBarItem
@@ -19,8 +21,8 @@ sealed interface HomeComponent {
         data object AccountChild : Child
     }
 
-    fun interface Factory {
-        fun create(
+    interface Factory {
+        operator fun invoke(
             componentContext: AppComponentContext,
             navigateToLogin: () -> Unit,
         ): HomeComponent

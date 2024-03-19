@@ -1,6 +1,6 @@
 package dev.alvr.katana.core.ui.decompose
 
-import com.arkivanov.decompose.ComponentContext
-import org.koin.core.component.KoinComponent
+import com.arkivanov.decompose.GenericComponentContext
+import org.koin.core.component.KoinScopeComponent
 
-interface AppComponentContext : ComponentContext, KoinComponent
+interface AppComponentContext : GenericComponentContext<AppComponentContext>, KoinScopeComponent

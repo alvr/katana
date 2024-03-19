@@ -1,9 +1,12 @@
 package dev.alvr.katana.shared.component
 
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.GenericComponentContext
+import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceAll
 import dev.alvr.katana.core.ui.decompose.AppComponentContext
-import dev.alvr.katana.core.ui.decompose.appChildStack
 import dev.alvr.katana.features.home.ui.component.HomeComponent
 import kotlinx.serialization.Serializable
 
@@ -13,21 +16,24 @@ internal class DefaultKatanaComponent(
 ) : KatanaComponent, AppComponentContext by componentContext {
     private val navigation = StackNavigation<Config>()
 
-    override val stack = appChildStack(
+    override val stack = childStack(
         source = navigation,
         serializer = Config.serializer(),
         initialConfiguration = Config.Home,
         childFactory = ::childFactory,
     )
 
-    private fun childFactory(config: Config, componentContext: AppComponentContext) =
+    private fun childFactory(
+        config: Config,
+        componentContext: AppComponentContext,
+    ) =
         when (config) {
             Config.Login -> KatanaComponent.Child.LoginChild
             Config.Home -> componentContext.homeFactory()
         }
 
     private fun AppComponentContext.homeFactory() = KatanaComponent.Child.HomeChild(
-        homeComponentFactory.create(
+        homeComponentFactory(
             componentContext = this,
             navigateToLogin = { navigation.replaceAll(Config.Login) },
         ),
