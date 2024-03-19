@@ -9,7 +9,7 @@ import io.kotest.matchers.shouldNotBe
 import dev.alvr.katana.features.lists.data.fragment.MediaEntry as MediaEntryFragment
 
 internal class MediaEntryMapperTest : FreeSpec({
-    MediaFormat.knownValues()
+    MediaFormat.knownEntries
         .forEach { format ->
             "MediaFormat $format should not be ${CommonMediaEntry.Format.UNKNOWN}" {
                 MediaEntryFragment(

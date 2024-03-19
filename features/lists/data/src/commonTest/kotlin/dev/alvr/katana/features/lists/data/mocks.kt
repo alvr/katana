@@ -49,13 +49,7 @@ internal val mediaListMock = MediaList(
     updatedAt = Arb.dateTimeTz().orNull().next(),
 )
 
-internal val apolloErrorMock = Error(
-    message = Arb.string().next(),
-    locations = emptyList(),
-    path = emptyList(),
-    extensions = emptyMap(),
-    nonStandardFields = emptyMap(),
-)
+internal val apolloErrorMock = Error.Builder(Arb.string().next()).build()
 
 private fun Arb.Companion.date() = arbitrary {
     Date(
