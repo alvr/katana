@@ -10,8 +10,8 @@ coverage-error.log
 katana.jks
 local.properties
 sentry.properties
-iosApp/Podfile.lock
-iosApp/Pods/*
-iosApp/iosApp.xcworkspace/*
-iosApp/iosApp.xcodeproj/*
-!iosApp/iosApp.xcodeproj/project.pbxproj
+app-ios/Podfile.lock
+app-ios/Pods/*
+app-ios/iosApp.xcworkspace/*
+app-ios/iosApp.xcodeproj/*
+!app-ios/iosApp.xcodeproj/project.pbxproj

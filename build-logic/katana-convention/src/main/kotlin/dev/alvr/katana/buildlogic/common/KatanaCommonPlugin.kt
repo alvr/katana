@@ -1,3 +1,5 @@
+@file:Suppress("NoUnusedImports", "UnusedImports")
+
 package dev.alvr.katana.buildlogic.common
 
 import dev.alvr.katana.buildlogic.isRelease
@@ -7,6 +9,7 @@ import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestReport
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 
@@ -27,7 +30,7 @@ internal class KatanaCommonPlugin : Plugin<Project> {
                     }
 
                     mustRunAfter(testTasks)
-                    destinationDirectory.set(file("${layout.buildDirectory.asFile.get()}/reports/allTests"))
+                    destinationDirectory = file("${layout.buildDirectory.asFile.get()}/reports/allTests")
                     testResults.setFrom(testTasks)
                 }
             }

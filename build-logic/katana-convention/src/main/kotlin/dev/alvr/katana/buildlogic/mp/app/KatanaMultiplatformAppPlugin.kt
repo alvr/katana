@@ -1,3 +1,5 @@
+@file:Suppress("NoUnusedImports", "UnusedImports")
+
 package dev.alvr.katana.buildlogic.mp.app
 
 import com.android.build.api.dsl.ApplicationBuildType
@@ -16,6 +18,7 @@ import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
@@ -124,14 +127,14 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
     }
 
     private fun SentryPluginExtension.configureSentry() {
-        includeProguardMapping.set(true)
-        autoUploadProguardMapping.set(true)
-        dexguardEnabled.set(false)
-        uploadNativeSymbols.set(false)
-        includeNativeSources.set(false)
-        tracingInstrumentation.enabled.set(false)
-        autoInstallation.enabled.set(false)
-        ignoredBuildTypes.set(setOf("debug"))
+        includeProguardMapping = true
+        autoUploadProguardMapping = true
+        dexguardEnabled = false
+        uploadNativeSymbols = false
+        includeNativeSources = false
+        tracingInstrumentation.enabled = false
+        autoInstallation.enabled = false
+        ignoredBuildTypes = setOf("debug")
     }
 
     private fun ApplicationBuildType.configure(isDebug: Boolean) {

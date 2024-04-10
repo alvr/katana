@@ -1,3 +1,5 @@
+@file:Suppress("NoUnusedImports", "UnusedImports")
+
 package dev.alvr.katana.buildlogic.mp.mobile
 
 import com.github.gmazzo.buildconfig.BuildConfigExtension
@@ -16,6 +18,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getValue
@@ -114,13 +117,13 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
             fullPackageName
         }
 
-        packageName.set(pkgName)
+        packageName = pkgName
 
         afterEvaluate {
             katanaBuildConfig(
                 android = { androidConfig ->
                     sourceSets.getByName("androidMain") {
-                        className.set(BUILD_CONFIG_FILE)
+                        className = BUILD_CONFIG_FILE
                         androidConfig.forEach { config ->
                             buildConfigField(config.type, config.name, config.value)
                         }
@@ -128,7 +131,7 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
                 },
                 ios = { iosConfig ->
                     sourceSets.getByName("iosMain") {
-                        className.set(BUILD_CONFIG_FILE)
+                        className = BUILD_CONFIG_FILE
                         iosConfig.forEach { config ->
                             buildConfigField(config.type, config.name, config.value)
                         }
