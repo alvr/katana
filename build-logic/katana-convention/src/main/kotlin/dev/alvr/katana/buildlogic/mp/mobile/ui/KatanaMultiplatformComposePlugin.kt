@@ -1,3 +1,5 @@
+@file:Suppress("NoUnusedImports", "UnusedImports")
+
 package dev.alvr.katana.buildlogic.mp.mobile.ui
 
 import dev.alvr.katana.buildlogic.ResourcesDir

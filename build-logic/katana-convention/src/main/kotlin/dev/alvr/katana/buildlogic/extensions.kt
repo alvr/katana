@@ -1,3 +1,5 @@
+@file:Suppress("NoUnusedImports", "UnusedImports")
+
 package dev.alvr.katana.buildlogic
 
 import com.android.build.gradle.BaseExtension

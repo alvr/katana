@@ -1,3 +1,5 @@
+@file:Suppress("NoUnusedImports", "UnusedImports")
+
 package dev.alvr.katana.buildlogic.mp.app
 
 import com.android.build.api.dsl.ApplicationBuildType

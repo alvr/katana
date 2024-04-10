@@ -1,3 +1,5 @@
+@file:Suppress("NoUnusedImports", "UnusedImports")
+
 package dev.alvr.katana.buildlogic.mp.mobile
 
 import com.github.gmazzo.buildconfig.BuildConfigExtension

@@ -1,3 +1,5 @@
+@file:Suppress("NoUnusedImports", "UnusedImports")
+
 package dev.alvr.katana.buildlogic.analysis
 
 import dev.alvr.katana.buildlogic.KatanaConfiguration

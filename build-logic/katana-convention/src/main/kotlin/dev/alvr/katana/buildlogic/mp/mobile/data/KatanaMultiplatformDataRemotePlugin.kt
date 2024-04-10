@@ -1,3 +1,5 @@
+@file:Suppress("NoUnusedImports", "UnusedImports")
+
 package dev.alvr.katana.buildlogic.mp.mobile.data
 
 import com.apollographql.apollo3.gradle.api.ApolloExtension
