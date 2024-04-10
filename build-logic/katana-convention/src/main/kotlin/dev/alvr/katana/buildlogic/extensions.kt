@@ -14,6 +14,7 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
@@ -110,15 +111,15 @@ internal fun BaseExtension.configureAndroid(packageName: String) {
 internal fun ExtensionContainer.commonExtensions() {
     configure<JavaPluginExtension> {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr))
-            vendor.set(JvmVendorSpec.AZUL)
+            languageVersion = JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr)
+            vendor = JvmVendorSpec.AZUL
         }
     }
 
     configure<KotlinProjectExtension> {
         jvmToolchain {
-            languageVersion.set(JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr))
-            vendor.set(JvmVendorSpec.AZUL)
+            languageVersion = JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr)
+            vendor = JvmVendorSpec.AZUL
         }
     }
 }
@@ -135,10 +136,10 @@ internal fun TaskContainer.commonTasks() {
 
 internal fun KotlinCommonCompilerOptions.configureKotlinCompiler() {
     if (this is KotlinJvmCompilerOptions) {
-        jvmTarget.set(KatanaConfiguration.JvmTarget)
+        jvmTarget = KatanaConfiguration.JvmTarget
     }
-    apiVersion.set(KatanaConfiguration.KotlinVersion)
-    languageVersion.set(KatanaConfiguration.KotlinVersion)
+    apiVersion = KatanaConfiguration.KotlinVersion
+    languageVersion = KatanaConfiguration.KotlinVersion
     freeCompilerArgs.addAll(
         "-opt-in=kotlin.RequiresOptIn",
         "-Xcontext-receivers",

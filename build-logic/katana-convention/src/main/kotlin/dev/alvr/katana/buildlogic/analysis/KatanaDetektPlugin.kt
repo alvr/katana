@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.register
 
@@ -29,10 +30,10 @@ internal class KatanaDetektPlugin : Plugin<Project> {
             exclude("**/resources/**", "**/build/**")
 
             reports {
-                html.required.set(true)
-                sarif.required.set(true)
-                txt.required.set(false)
-                xml.required.set(true)
+                html.required = true
+                sarif.required = true
+                txt.required = false
+                xml.required = true
             }
         }
 

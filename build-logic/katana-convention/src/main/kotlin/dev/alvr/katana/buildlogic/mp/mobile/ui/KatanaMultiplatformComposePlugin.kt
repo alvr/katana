@@ -13,6 +13,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.provideDelegate
@@ -87,32 +88,30 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
 
     context(Project)
     private fun ComposeExtension.configureComposeMultiplatform() {
-        kotlinCompilerPlugin.set(catalogLib("compose-compiler").get().toString())
+        kotlinCompilerPlugin = catalogLib("compose-compiler").get().toString()
 
-        kotlinCompilerPluginArgs.set(
-            buildList {
-                add("experimentalStrongSkipping=${composePluginEnabled("katana.strongSkipping")}")
+        kotlinCompilerPluginArgs = buildList {
+            add("experimentalStrongSkipping=${composePluginEnabled("katana.strongSkipping")}")
 
-                if (composePluginEnabled("katana.enableComposeCompilerMetrics")) {
-                    add("metricsDestination=${composePluginDir("compose-metrics")}")
-                }
+            if (composePluginEnabled("katana.enableComposeCompilerMetrics")) {
+                add("metricsDestination=${composePluginDir("compose-metrics")}")
+            }
 
-                if (composePluginEnabled("katana.enableComposeCompilerReports")) {
-                    add("reportsDestination=${composePluginDir("compose-reports")}")
-                }
-            },
-        )
+            if (composePluginEnabled("katana.enableComposeCompilerReports")) {
+                add("reportsDestination=${composePluginDir("compose-reports")}")
+            }
+        }
     }
 
     private fun Project.generateResourcesTask() {
         val generateResourcesFile by tasks.registering(GenerateResourcesFileTask::class) {
-            packageName.set(fullPackageName)
+            packageName = fullPackageName
             inputFiles.from(
                 layout.projectDirectory.dir(ResourcesDir).asFileTree.matching {
                     include("**/*.webp", "**/*.xml")
                 },
             )
-            outputDir.set(layout.buildDirectory.dir(GeneratedResourcesDir))
+            outputDir = layout.buildDirectory.dir(GeneratedResourcesDir)
         }
 
         tasks.named("preBuild").configure { dependsOn(generateResourcesFile) }

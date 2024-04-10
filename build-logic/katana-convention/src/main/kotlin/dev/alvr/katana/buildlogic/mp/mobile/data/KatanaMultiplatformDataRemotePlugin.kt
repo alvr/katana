@@ -9,6 +9,7 @@ import dev.alvr.katana.buildlogic.mp.configureSourceSets
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
@@ -57,18 +58,18 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
     context(Project)
     private fun ApolloExtension.configureApollo() {
         service("anilist") {
-            generateAsInternal.set(true)
-            generateDataBuilders.set(true)
-            packageName.set(fullPackageName)
+            generateAsInternal = true
+            generateDataBuilders = true
+            packageName = fullPackageName
 
             if (fullPackageName.contains(BASE_PACKAGE)) {
-                alwaysGenerateTypesMatching.set(listOf("Query", "User"))
-                generateApolloMetadata.set(true)
-                generateAsInternal.set(false)
+                alwaysGenerateTypesMatching = listOf("Query", "User")
+                generateApolloMetadata = true
+                generateAsInternal = false
 
                 introspection {
-                    endpointUrl.set("https://graphql.anilist.co")
-                    schemaFile.set(project.file("src/commonMain/graphql/schema.graphqls"))
+                    endpointUrl = "https://graphql.anilist.co"
+                    schemaFile = project.file("src/commonMain/graphql/schema.graphqls")
                 }
             }
         }
