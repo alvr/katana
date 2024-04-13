@@ -987,9 +987,15 @@ Compose:
     active: true
   DefaultsVisibility:
     active: true
+  LambdaParameterInRestartableEffect:
+    active: true
+  Material2:
+    active: false
   ModifierClickableOrder:
     active: true
   ModifierComposable:
+    active: true
+  ModifierComposed:
     active: true
   ModifierMissing:
     active: true
@@ -1005,6 +1011,8 @@ Compose:
   MultipleEmitters:
     active: true
   MutableParams:
+    active: true
+  MutableStateAutoboxing:
     active: true
   MutableStateParam:
     active: true

@@ -30,6 +30,7 @@ import dev.mokkery.everySuspend
 import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ApolloExperimental::class)
@@ -53,7 +54,7 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
                     ).build()
                     client.enqueueTestResponse(response)
 
-                    source.getMediaCollection<MediaEntry>(type).test(5.seconds) {
+                    source.getMediaCollection<MediaEntry>(type).test(100.milliseconds) {
                         awaitItem().shouldBeRight(MediaCollection(emptyList()))
                         cancelAndIgnoreRemainingEvents()
                     }
@@ -69,7 +70,7 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
                     ).errors(listOf(apolloErrorMock)).build()
                     client.enqueueTestResponse(response)
 
-                    source.getMediaCollection<MediaEntry>(type).test(5.seconds) {
+                    source.getMediaCollection<MediaEntry>(type).test(100.milliseconds) {
                         awaitItem().shouldBeRight(MediaCollection(emptyList()))
                         cancelAndIgnoreRemainingEvents()
                     }

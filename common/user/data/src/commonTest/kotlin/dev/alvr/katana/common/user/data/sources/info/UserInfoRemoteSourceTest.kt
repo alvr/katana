@@ -15,7 +15,7 @@ import dev.alvr.katana.core.remote.type.buildUserAvatar
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import io.kotest.core.spec.style.FreeSpec
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ApolloExperimental::class)
 internal class UserInfoRemoteSourceTest : FreeSpec() {
@@ -26,7 +26,7 @@ internal class UserInfoRemoteSourceTest : FreeSpec() {
         "observing the user info" - {
             "the server returns no data" {
                 client.registerTestResponse(UserInfoQuery())
-                source.userInfo.test(5.seconds) {
+                source.userInfo.test(100.milliseconds) {
                     awaitItem().shouldBeRight(userInfoNoData)
                     cancelAndIgnoreRemainingEvents()
                 }
@@ -35,7 +35,7 @@ internal class UserInfoRemoteSourceTest : FreeSpec() {
             "the server returns an empty user" {
                 val query = UserInfoQuery.Data { this["user"] = null }
                 client.registerTestResponse(UserInfoQuery(), query)
-                source.userInfo.test(5.seconds) {
+                source.userInfo.test(100.milliseconds) {
                     awaitItem().shouldBeRight(userInfoNoData)
                     cancelAndIgnoreRemainingEvents()
                 }
@@ -44,7 +44,7 @@ internal class UserInfoRemoteSourceTest : FreeSpec() {
             validUserInfoData.map { (query, userInfo) ->
                 "the server returns valid user info ($query)" {
                     client.registerTestResponse(UserInfoQuery(), query)
-                    source.userInfo.test(5.seconds) {
+                    source.userInfo.test(100.milliseconds) {
                         awaitItem().shouldBeRight(userInfo)
                         cancelAndIgnoreRemainingEvents()
                     }
@@ -53,7 +53,7 @@ internal class UserInfoRemoteSourceTest : FreeSpec() {
 
             "there is a problem with the server" {
                 client.registerTestNetworkError(UserInfoQuery())
-                source.userInfo.test(5.seconds) {
+                source.userInfo.test(100.milliseconds) {
                     awaitItem().shouldBeLeft(UserFailure.GettingUserInfo)
                     cancelAndIgnoreRemainingEvents()
                 }
