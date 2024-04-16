@@ -15,7 +15,7 @@ import dev.mokkery.every
 import dev.mokkery.mock
 import dev.mokkery.verify
 import io.kotest.core.spec.style.FreeSpec
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.flow.flowOf
 
 internal class ListsRemoteSourceTest : FreeSpec() {
@@ -33,12 +33,12 @@ internal class ListsRemoteSourceTest : FreeSpec() {
                 MediaCollection<MediaEntry.Manga>(emptyList()).right(),
             )
 
-            animeSource.animeCollection.test(5.seconds) {
+            animeSource.animeCollection.test(100.milliseconds) {
                 awaitItem().shouldBeRight(MediaCollection(emptyList()))
                 cancelAndIgnoreRemainingEvents()
             }
 
-            mangaSource.mangaCollection.test(5.seconds) {
+            mangaSource.mangaCollection.test(100.milliseconds) {
                 awaitItem().shouldBeRight(MediaCollection(emptyList()))
                 cancelAndIgnoreRemainingEvents()
             }

@@ -22,7 +22,7 @@ import dev.mokkery.mock
 import dev.mokkery.verify
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.flow.flowOf
 
 internal class ListsRepositoryTest : FreeSpec() {
@@ -37,7 +37,7 @@ internal class ListsRepositoryTest : FreeSpec() {
             val collection = MediaCollection<MediaEntry.Anime>(emptyList())
             every { animeSource.animeCollection } returns flowOf(collection.right())
 
-            repo.animeCollection.test(5.seconds) {
+            repo.animeCollection.test(100.milliseconds) {
                 awaitItem().shouldBeRight(collection)
                 awaitComplete()
             }
@@ -49,7 +49,7 @@ internal class ListsRepositoryTest : FreeSpec() {
             val collection = MediaCollection<MediaEntry.Manga>(emptyList())
             every { mangaSource.mangaCollection } returns flowOf(collection.right())
 
-            repo.mangaCollection.test(5.seconds) {
+            repo.mangaCollection.test(100.milliseconds) {
                 awaitItem().shouldBeRight(collection)
                 awaitComplete()
             }

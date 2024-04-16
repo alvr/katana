@@ -54,7 +54,7 @@ import korlibs.time.Date
 import korlibs.time.DateTime
 import korlibs.time.DateTimeTz
 import korlibs.time.TimezoneOffset
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.milliseconds
 
 @ApolloExperimental
 internal class ApolloListsRemoteSourceTest : FreeSpec() {
@@ -87,7 +87,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                animeSource.animeCollection.test(5.seconds) {
+                animeSource.animeCollection.test(100.milliseconds) {
                     awaitItem().shouldBeRight().lists.shouldBeEmpty()
                     awaitComplete()
                 }
@@ -130,7 +130,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                animeSource.animeCollection.test(5.seconds) {
+                animeSource.animeCollection.test(100.milliseconds) {
                     awaitItem().shouldBeRight().lists
                         .shouldHaveSize(4)
                         .also { lists ->
@@ -182,7 +182,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                animeSource.animeCollection.test(5.seconds) {
+                animeSource.animeCollection.test(100.milliseconds) {
                     awaitItem().shouldBeRight().lists.also { lists ->
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -270,7 +270,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                animeSource.animeCollection.test(5.seconds) {
+                animeSource.animeCollection.test(100.milliseconds) {
                     awaitItem().shouldBeRight().lists.also { lists ->
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -317,7 +317,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     null,
                 )
 
-                animeSource.animeCollection.test(5.seconds) {
+                animeSource.animeCollection.test(100.milliseconds) {
                     awaitItem().shouldBeRight().lists.shouldBeEmpty()
                     awaitComplete()
                 }
@@ -333,7 +333,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     ),
                 )
 
-                animeSource.animeCollection.test(5.seconds) {
+                animeSource.animeCollection.test(100.milliseconds) {
                     awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                     awaitComplete()
                 }
@@ -355,7 +355,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                mangaSource.mangaCollection.test(5.seconds) {
+                mangaSource.mangaCollection.test(100.milliseconds) {
                     awaitItem().shouldBeRight().lists.shouldBeEmpty()
                     awaitComplete()
                 }
@@ -399,7 +399,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                mangaSource.mangaCollection.test(5.seconds) {
+                mangaSource.mangaCollection.test(100.milliseconds) {
                     awaitItem().shouldBeRight().lists
                         .shouldHaveSize(4)
                         .also { lists ->
@@ -452,7 +452,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                mangaSource.mangaCollection.test(5.seconds) {
+                mangaSource.mangaCollection.test(100.milliseconds) {
                     awaitItem().shouldBeRight().lists.also { lists ->
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -538,7 +538,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                mangaSource.mangaCollection.test(5.seconds) {
+                mangaSource.mangaCollection.test(100.milliseconds) {
                     awaitItem().shouldBeRight().lists.also { lists ->
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -579,7 +579,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     null,
                 )
 
-                mangaSource.mangaCollection.test(5.seconds) {
+                mangaSource.mangaCollection.test(100.milliseconds) {
                     awaitItem().shouldBeRight().lists.shouldBeEmpty()
                     awaitComplete()
                 }
@@ -595,7 +595,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     ),
                 )
 
-                mangaSource.mangaCollection.test(5.seconds) {
+                mangaSource.mangaCollection.test(100.milliseconds) {
                     awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                     awaitComplete()
                 }
