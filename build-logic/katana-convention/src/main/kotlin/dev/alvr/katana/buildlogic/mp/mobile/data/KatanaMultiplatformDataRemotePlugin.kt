@@ -60,9 +60,12 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
     context(Project)
     private fun ApolloExtension.configureApollo() {
         service("anilist") {
+            decapitalizeFields = true
             generateAsInternal = true
-            packageName = fullPackageName
             generateMethods = listOf("equalsHashCode")
+            generateOptionalOperationVariables = false
+            packageName = fullPackageName
+            warnOnDeprecatedUsages = true
 
             if (path == CORE_PROJECT) {
                 generateApolloMetadata = true

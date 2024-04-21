@@ -1,6 +1,7 @@
 package dev.alvr.katana.features.lists.data.mappers.responses
 
 import dev.alvr.katana.core.common.orZero
+import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
@@ -9,40 +10,35 @@ import dev.alvr.katana.features.lists.domain.models.lists.MediaListEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
 import dev.alvr.katana.features.lists.data.fragment.MediaEntry as MediaEntryFragment
 
-internal fun <T : MediaEntry> MediaListCollectionQuery.Data.mediaList(type: MediaType): List<MediaListGroup<T>> =
-    collection.lists.asSequence().map { list ->
-        val entries = list?.entries.orEmpty().asSequence().mapNotNull { entry ->
-            entry?.toModel<T>(type)
-        }.toList()
-
+internal operator fun <T : MediaEntry> MediaListCollectionQuery.Data.invoke(type: MediaType): List<MediaListGroup<T>> =
+    mediaListCollection.listsFilterNotNull().map { list ->
         MediaListGroup(
-            name = list?.name.orEmpty(),
-            entries = entries,
+            name = list.name,
+            entries = list.entriesFilterNotNull().map { entry -> entry.toModel<T>(type) }.toList(),
         )
-    }.sortedBy { sortLists(type, it.name) }.toList()
+    }.sortedBy { sortLists(type, it.name) }
 
 @Suppress("UNCHECKED_CAST")
 private fun <T : MediaEntry> MediaListCollectionQuery.Entry.toModel(type: MediaType) =
-    mediaListEntry.let { entry ->
-        val list = MediaList(
-            id = entry.id,
-            score = entry.score.orZero(),
-            progress = entry.progress.orZero(),
-            progressVolumes = entry.progressVolumes,
-            repeat = entry.repeat.orZero(),
-            private = entry.private ?: false,
-            notes = entry.notes.orEmpty(),
-            hiddenFromStatusLists = entry.hiddenFromStatusLists ?: false,
-            startedAt = entry.startedAt?.let { date ->
-                dateMapper(date.day, date.month, date.year)
-            },
-            completedAt = entry.completedAt?.let { date ->
-                dateMapper(date.day, date.month, date.year)
-            },
-            updatedAt = entry.updatedAt?.toLocalDateTime(),
-        )
+    with(mediaListEntry) {
         MediaListEntry(
-            list = list,
+            list = MediaList(
+                id = id,
+                score = score,
+                progress = progress.orZero(),
+                progressVolumes = progressVolumes,
+                repeat = repeat.orZero(),
+                private = private ?: false,
+                notes = notes.orEmpty(),
+                hiddenFromStatusLists = hiddenFromStatusLists ?: false,
+                startedAt = startedAt?.let { date ->
+                    dateMapper(date.day, date.month, date.year)
+                },
+                completedAt = completedAt?.let { date ->
+                    dateMapper(date.day, date.month, date.year)
+                },
+                updatedAt = updatedAt?.toLocalDateTime(),
+            ),
             entry = media.mediaEntry.toMedia(type) as T,
         )
     }
@@ -53,15 +49,12 @@ private fun MediaEntryFragment.toMedia(type: MediaType) = type.onMediaEntry(
 )
 
 private fun MediaListCollectionQuery.Data.sortLists(type: MediaType, listName: String) =
-    with(collection.user?.mediaListOptions) {
+    with(mediaListCollection.user.mediaListOptions) {
         type.onMediaEntry(
-            anime = { this?.animeList?.sectionOrder.orEmpty().listPosition(listName) },
-            manga = { this?.mangaList?.sectionOrder.orEmpty().listPosition(listName) },
+            anime = { animeList.sectionOrder.listPosition(listName) },
+            manga = { mangaList.sectionOrder.listPosition(listName) },
         )
     }
 
-private fun List<String?>.listPosition(listName: String) = if (listName.isEmpty()) {
-    size
-} else {
-    indexOf(listName)
-}
+private fun List<String?>.listPosition(listName: String) =
+    indexOf(listName).takeIf { it >= Int.zero } ?: size

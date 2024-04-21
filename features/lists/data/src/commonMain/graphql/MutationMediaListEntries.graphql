@@ -21,7 +21,7 @@ mutation MediaListEntries(
         hiddenFromStatusLists: $hiddenFromStatusLists,
         startedAt: $startedAt,
         completedAt: $completedAt,
-    ) {
-        ...MediaListEntry
+    ) @nonnull {
+        ...mediaListEntry
     }
 }

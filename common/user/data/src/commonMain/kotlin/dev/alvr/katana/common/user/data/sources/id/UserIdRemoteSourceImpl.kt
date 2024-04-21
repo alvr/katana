@@ -37,5 +37,5 @@ internal class UserIdRemoteSourceImpl(
         .query(UserIdQuery())
         .fetchPolicy(policy)
         .execute()
-        .data()
+        .dataAssertNoErrors()
 }

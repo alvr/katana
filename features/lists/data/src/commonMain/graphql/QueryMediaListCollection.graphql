@@ -1,21 +1,18 @@
 query MediaListCollection($user: Int, $type: MediaType!) {
-    collection: MediaListCollection(userId: $user, type: $type) @nonnull {
+    MediaListCollection(userId: $user, type: $type) @nonnull {
         lists @nonnull {
+            name @nonnull
             entries @nonnull {
-                ...MediaListEntry
-                media @nonnull {
-                    ...MediaEntry
-                }
+                ...mediaListEntry
             }
-            name
         }
-        user {
-            mediaListOptions {
-                animeList {
-                    sectionOrder
+        user @nonnull {
+            mediaListOptions @nonnull {
+                animeList @nonnull {
+                    sectionOrder @nonnull
                 }
-                mangaList {
-                    sectionOrder
+                mangaList @nonnull {
+                    sectionOrder @nonnull
                 }
             }
         }

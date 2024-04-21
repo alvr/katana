@@ -1,16 +1,15 @@
 package dev.alvr.katana.features.lists.data.mappers.responses
 
-import dev.alvr.katana.core.common.orZero
 import dev.alvr.katana.core.remote.type.MediaFormat
 import dev.alvr.katana.features.lists.domain.models.entries.CommonMediaEntry
 import dev.alvr.katana.features.lists.data.fragment.MediaEntry as MediaEntryFragment
 
-internal fun MediaEntryFragment?.mediaEntry() = let { entry ->
+internal fun MediaEntryFragment.mediaEntry() = let { entry ->
     CommonMediaEntry(
-        id = entry?.id.orZero(),
-        title = entry?.title?.userPreferred.orEmpty(),
-        coverImage = entry?.coverImage?.large.orEmpty(),
-        format = entry?.format.toFormat(),
+        id = entry.id,
+        title = entry.title.userPreferred,
+        coverImage = entry.coverImage.large,
+        format = entry.format.toFormat(),
     )
 }
 

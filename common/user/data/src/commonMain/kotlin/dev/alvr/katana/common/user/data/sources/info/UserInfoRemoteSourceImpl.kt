@@ -26,7 +26,7 @@ internal class UserInfoRemoteSourceImpl(
         client.query(UserInfoQuery())
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch()
-            .map { res -> res.data().right() as Either<Failure, UserInfo> }
+            .map { res -> res.dataAssertNoErrors().right() as Either<Failure, UserInfo> }
             .catch { error ->
                 Logger.e(error) { "Was not possible to get the user info" }
 
