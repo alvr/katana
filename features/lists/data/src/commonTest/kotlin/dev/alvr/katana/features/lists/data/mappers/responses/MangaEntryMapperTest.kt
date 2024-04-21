@@ -10,36 +10,15 @@ import io.kotest.matchers.equals.shouldBeEqual
 import dev.alvr.katana.features.lists.data.fragment.MediaEntry as MediaEntryFragment
 
 internal class MangaEntryMapperTest : FreeSpec({
-    "a null entry" {
-        val entry: MediaEntryFragment? = null
-        entry.mangaEntry().also { result ->
-            result shouldBeEqual MediaEntry.Manga(
-                entry = CommonMediaEntry(
-                    id = Int.zero,
-                    title = String.empty,
-                    coverImage = String.empty,
-                    format = CommonMediaEntry.Format.UNKNOWN,
-                ),
-                chapters = null,
-                volumes = null,
-            )
-            result shouldBeEqual MediaEntry.Manga(
-                entry = entry.mediaEntry(),
-                chapters = null,
-                volumes = null,
-            )
-        }
-    }
-
     "an entry with null values" {
         val entry = MediaEntryFragment(
             id = Int.zero,
-            title = null,
+            title = MediaEntryFragment.Title(String.empty),
             episodes = null,
             chapters = null,
             volumes = null,
             format = null,
-            coverImage = null,
+            coverImage = MediaEntryFragment.CoverImage(String.empty),
             nextAiringEpisode = null,
         )
         entry.mangaEntry().also { result ->
@@ -64,12 +43,12 @@ internal class MangaEntryMapperTest : FreeSpec({
     "an entry with null values but data classes with null" {
         val entry = MediaEntryFragment(
             id = Int.zero,
-            title = MediaEntryFragment.Title(null),
+            title = MediaEntryFragment.Title(String.empty),
             episodes = null,
             chapters = null,
             volumes = null,
             format = null,
-            coverImage = MediaEntryFragment.CoverImage(null),
+            coverImage = MediaEntryFragment.CoverImage(String.empty),
             nextAiringEpisode = null,
         )
 

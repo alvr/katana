@@ -9,13 +9,11 @@ import com.apollographql.apollo3.testing.registerTestResponse
 import dev.alvr.katana.common.user.data.UserInfoQuery
 import dev.alvr.katana.common.user.domain.failures.UserFailure
 import dev.alvr.katana.common.user.domain.models.UserInfo
-import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.remote.type.buildUser
 import dev.alvr.katana.core.remote.type.buildUserAvatar
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import io.kotest.core.spec.style.FreeSpec
-import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ApolloExperimental::class)
 internal class UserInfoRemoteSourceTest : FreeSpec() {
@@ -26,17 +24,8 @@ internal class UserInfoRemoteSourceTest : FreeSpec() {
         "observing the user info" - {
             "the server returns no data" {
                 client.registerTestResponse(UserInfoQuery())
-                source.userInfo.test(100.milliseconds) {
-                    awaitItem().shouldBeRight(userInfoNoData)
-                    cancelAndIgnoreRemainingEvents()
-                }
-            }
-
-            "the server returns an empty user" {
-                val query = UserInfoQuery.Data { this["user"] = null }
-                client.registerTestResponse(UserInfoQuery(), query)
-                source.userInfo.test(100.milliseconds) {
-                    awaitItem().shouldBeRight(userInfoNoData)
+                source.userInfo.test {
+                    awaitItem().shouldBeLeft(UserFailure.GettingUserInfo)
                     cancelAndIgnoreRemainingEvents()
                 }
             }
@@ -44,7 +33,7 @@ internal class UserInfoRemoteSourceTest : FreeSpec() {
             validUserInfoData.map { (query, userInfo) ->
                 "the server returns valid user info ($query)" {
                     client.registerTestResponse(UserInfoQuery(), query)
-                    source.userInfo.test(100.milliseconds) {
+                    source.userInfo.test {
                         awaitItem().shouldBeRight(userInfo)
                         cancelAndIgnoreRemainingEvents()
                     }
@@ -53,7 +42,7 @@ internal class UserInfoRemoteSourceTest : FreeSpec() {
 
             "there is a problem with the server" {
                 client.registerTestNetworkError(UserInfoQuery())
-                source.userInfo.test(100.milliseconds) {
+                source.userInfo.test {
                     awaitItem().shouldBeLeft(UserFailure.GettingUserInfo)
                     cancelAndIgnoreRemainingEvents()
                 }
@@ -66,34 +55,21 @@ internal class UserInfoRemoteSourceTest : FreeSpec() {
         const val AVATAR = "https://s4.anilist.co/file/anilistcdn/user/avatar/large/b37384-xJE9aA4X20Yr.png"
         const val BANNER = "https://s4.anilist.co/file/anilistcdn/user/banner/37384-jtds8dpQIGVG.jpg"
 
-        val userInfoNoData = UserInfo(
-            username = String.empty,
-            avatar = String.empty,
-            banner = String.empty,
-        )
-
         val validUserInfoData = listOf(
             UserInfoQuery.Data {
-                this["user"] = buildUser {
-                    this["name"] = USER_NAME
-                    this["avatar"] = buildUserAvatar { this["medium"] = AVATAR }
-                    this["bannerImage"] = BANNER
+                this["Viewer"] = buildUser {
+                    name = USER_NAME
+                    avatar = buildUserAvatar { large = AVATAR }
+                    bannerImage = BANNER
                 }
             } to UserInfo(username = USER_NAME, avatar = AVATAR, banner = BANNER),
             UserInfoQuery.Data {
-                this["user"] = buildUser {
-                    this["name"] = USER_NAME
-                    this["avatar"] = buildUserAvatar { this["medium"] = null }
-                    this["bannerImage"] = BANNER
+                this["Viewer"] = buildUser {
+                    name = USER_NAME
+                    avatar = buildUserAvatar { large = AVATAR }
+                    bannerImage = null
                 }
-            } to UserInfo(username = USER_NAME, avatar = String.empty, banner = BANNER),
-            UserInfoQuery.Data {
-                this["user"] = buildUser {
-                    this["name"] = USER_NAME
-                    this["avatar"] = null
-                    this["bannerImage"] = BANNER
-                }
-            } to UserInfo(username = USER_NAME, avatar = String.empty, banner = BANNER),
+            } to UserInfo(username = USER_NAME, avatar = AVATAR, banner = null),
         )
     }
 }

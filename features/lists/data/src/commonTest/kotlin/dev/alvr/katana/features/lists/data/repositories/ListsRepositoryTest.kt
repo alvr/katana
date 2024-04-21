@@ -22,7 +22,6 @@ import dev.mokkery.mock
 import dev.mokkery.verify
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.flow.flowOf
 
 internal class ListsRepositoryTest : FreeSpec() {
@@ -37,7 +36,7 @@ internal class ListsRepositoryTest : FreeSpec() {
             val collection = MediaCollection<MediaEntry.Anime>(emptyList())
             every { animeSource.animeCollection } returns flowOf(collection.right())
 
-            repo.animeCollection.test(100.milliseconds) {
+            repo.animeCollection.test {
                 awaitItem().shouldBeRight(collection)
                 awaitComplete()
             }
@@ -49,7 +48,7 @@ internal class ListsRepositoryTest : FreeSpec() {
             val collection = MediaCollection<MediaEntry.Manga>(emptyList())
             every { mangaSource.mangaCollection } returns flowOf(collection.right())
 
-            repo.mangaCollection.test(100.milliseconds) {
+            repo.mangaCollection.test {
                 awaitItem().shouldBeRight(collection)
                 awaitComplete()
             }
@@ -73,17 +72,5 @@ internal class ListsRepositoryTest : FreeSpec() {
                 verifySuspend { commonSource.updateList(mediaListMock) }
             }
         }
-
-//        "failure updating the list" {
-//            everySuspend { commonSource.updateList(any()) } sequentially {
-//                returns(ListsFailure.UpdatingList.left())
-//                returns(Failure.Unknown.left())
-//            }
-//
-//            repo.updateList(mediaListMock).shouldBeLeft(ListsFailure.UpdatingList)
-//            repo.updateList(mediaListMock).shouldBeLeft(Failure.Unknown)
-//
-//            verifySuspend { repo.updateList(mediaListMock) }
-//        }
     }
 }

@@ -19,20 +19,21 @@ import korlibs.time.Date
 import korlibs.time.DateTimeTz
 
 internal val mediaListCollectionQueryMock = MediaListCollectionQuery(
+    user = null,
     type = Arb.enum<MediaType>().next(),
 )
 
 internal val mediaListEntriesMutationMock = MediaListEntriesMutation(
     id = Arb.int().next(),
-    score = Optional.presentIfNotNull(Arb.positiveDouble().orNull().next()),
-    progress = Optional.presentIfNotNull(Arb.positiveInt().orNull().next()),
-    progressVolumes = Optional.presentIfNotNull(Arb.positiveInt().orNull().next()),
-    repeat = Optional.presentIfNotNull(Arb.positiveInt().orNull().next()),
-    private = Optional.presentIfNotNull(Arb.boolean().orNull().next()),
-    notes = Optional.presentIfNotNull(Arb.string().orNull().next()),
-    hiddenFromStatusLists = Optional.presentIfNotNull(Arb.boolean().orNull().next()),
-    startedAt = Optional.presentIfNotNull(Arb.fuzzyDate().orNull().next()),
-    completedAt = Optional.presentIfNotNull(Arb.fuzzyDate().orNull().next()),
+    score = Arb.positiveDouble().orNull().next(),
+    progress = Arb.positiveInt().orNull().next(),
+    progressVolumes = Arb.positiveInt().orNull().next(),
+    repeat = Arb.positiveInt().orNull().next(),
+    private = Arb.boolean().orNull().next(),
+    notes = Arb.string().orNull().next(),
+    hiddenFromStatusLists = Arb.boolean().orNull().next(),
+    startedAt = Arb.fuzzyDate().orNull().next(),
+    completedAt = Arb.fuzzyDate().orNull().next(),
 )
 
 internal val mediaListMock = MediaList(
@@ -49,13 +50,7 @@ internal val mediaListMock = MediaList(
     updatedAt = Arb.dateTimeTz().orNull().next(),
 )
 
-internal val apolloErrorMock = Error(
-    message = Arb.string().next(),
-    locations = emptyList(),
-    path = emptyList(),
-    extensions = emptyMap(),
-    nonStandardFields = emptyMap(),
-)
+internal val apolloErrorMock = Error.Builder(Arb.string().next()).build()
 
 private fun Arb.Companion.date() = arbitrary {
     Date(

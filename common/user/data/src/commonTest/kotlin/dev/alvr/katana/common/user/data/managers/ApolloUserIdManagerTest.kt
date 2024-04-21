@@ -25,8 +25,8 @@ internal class ApolloUserIdManagerTest : FreeSpec() {
         "retrieving the authenticated user" - {
             "the first time should make a HTTP request" {
                 val query = UserIdQuery.Data {
-                    this["viewer"] = buildUser {
-                        this["id"] = 12345
+                    viewer = buildUser {
+                        id = 12345
                     }
                 }
 
@@ -39,8 +39,8 @@ internal class ApolloUserIdManagerTest : FreeSpec() {
 
             "the second onwards it should be read from cache" {
                 val query = UserIdQuery.Data {
-                    this["viewer"] = buildUser {
-                        this["id"] = 12345
+                    viewer = buildUser {
+                        id = 12345
                     }
                 }
 
@@ -55,8 +55,8 @@ internal class ApolloUserIdManagerTest : FreeSpec() {
 
         "clearing the database" {
             val query = UserIdQuery.Data {
-                this["viewer"] = buildUser {
-                    this["id"] = 12345
+                viewer = buildUser {
+                    id = 12345
                 }
             }
 

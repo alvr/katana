@@ -27,26 +27,22 @@ internal class MediaListMapperTest : FreeSpec({
             updatedAt = DateTimeTz.nowLocal(),
         ).toMutation() shouldBeEqual MediaListEntriesMutation(
             id = Int.zero,
-            score = Optional.Present(Double.zero),
-            progress = Optional.Present(Int.zero),
-            progressVolumes = Optional.Present(Int.zero),
-            repeat = Optional.Present(Int.zero),
-            private = Optional.Present(false),
-            notes = Optional.Present(String.empty),
-            hiddenFromStatusLists = Optional.Present(false),
-            startedAt = Optional.Present(
-                FuzzyDateInput(
-                    year = Optional.Present(2022),
-                    month = Optional.Present(7),
-                    day = Optional.Present(20),
-                ),
+            score = Double.zero,
+            progress = Int.zero,
+            progressVolumes = Int.zero,
+            repeat = Int.zero,
+            private = false,
+            notes = String.empty,
+            hiddenFromStatusLists = false,
+            startedAt = FuzzyDateInput(
+                year = Optional.Present(2022),
+                month = Optional.Present(7),
+                day = Optional.Present(20),
             ),
-            completedAt = Optional.Present(
-                FuzzyDateInput(
-                    year = Optional.Present(2022),
-                    month = Optional.Present(7),
-                    day = Optional.Present(20),
-                ),
+            completedAt = FuzzyDateInput(
+                year = Optional.Present(2022),
+                month = Optional.Present(7),
+                day = Optional.Present(20),
             ),
         )
     }
@@ -66,15 +62,15 @@ internal class MediaListMapperTest : FreeSpec({
             updatedAt = null,
         ).toMutation() shouldBeEqual MediaListEntriesMutation(
             id = Int.zero,
-            score = Optional.Present(Double.zero),
-            progress = Optional.Present(Int.zero),
-            progressVolumes = Optional.Absent,
-            repeat = Optional.Present(Int.zero),
-            private = Optional.Present(false),
-            notes = Optional.Present(String.empty),
-            hiddenFromStatusLists = Optional.Present(false),
-            startedAt = Optional.Absent,
-            completedAt = Optional.Absent,
+            score = Double.zero,
+            progress = Int.zero,
+            progressVolumes = null,
+            repeat = Int.zero,
+            private = false,
+            notes = String.empty,
+            hiddenFromStatusLists = false,
+            startedAt = null,
+            completedAt = null,
         )
     }
 })

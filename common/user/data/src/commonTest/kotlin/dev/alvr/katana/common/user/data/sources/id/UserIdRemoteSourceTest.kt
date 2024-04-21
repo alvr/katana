@@ -2,6 +2,7 @@ package dev.alvr.katana.common.user.data.sources.id
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
+import com.apollographql.apollo3.exception.JsonDataException
 import com.apollographql.apollo3.testing.QueueTestNetworkTransport
 import com.apollographql.apollo3.testing.enqueueTestResponse
 import dev.alvr.katana.common.user.data.UserIdQuery
@@ -10,6 +11,7 @@ import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.remote.type.buildUser
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
+import io.kotest.assertions.throwables.shouldThrowExactlyUnit
 import io.kotest.core.spec.style.FreeSpec
 
 @OptIn(ApolloExperimental::class)
@@ -25,13 +27,15 @@ internal class UserIdRemoteSourceTest : FreeSpec() {
             }
 
             "the server returns an empty userId" {
-                val query = UserIdQuery.Data { this["viewer"] = null }
-                client.enqueueTestResponse(UserIdQuery(), query)
-                source.getUserId().shouldBeLeft(Failure.Unknown)
+                shouldThrowExactlyUnit<JsonDataException> {
+                    val query = UserIdQuery.Data { this["Viewer"] = null }
+                    client.enqueueTestResponse(UserIdQuery(), query)
+                    source.getUserId()
+                }
             }
 
             "the server returns a valid id" {
-                val query = UserIdQuery.Data { this["viewer"] = buildUser { this["id"] = 37_384 } }
+                val query = UserIdQuery.Data { this["Viewer"] = buildUser { id = 37_384 } }
                 client.enqueueTestResponse(UserIdQuery(), query)
                 source.getUserId().shouldBeRight(UserId(37_384))
             }
@@ -39,7 +43,7 @@ internal class UserIdRemoteSourceTest : FreeSpec() {
 
         "saving" - {
             "is successful" {
-                val query = UserIdQuery.Data { this["viewer"] = buildUser { this["id"] = 37_384 } }
+                val query = UserIdQuery.Data { this["viewer"] = buildUser { id = 37_384 } }
                 client.enqueueTestResponse(UserIdQuery(), query)
                 source.saveUserId().shouldBeRight()
             }
