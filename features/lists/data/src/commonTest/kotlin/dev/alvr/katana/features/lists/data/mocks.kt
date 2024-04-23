@@ -19,7 +19,7 @@ import korlibs.time.Date
 import korlibs.time.DateTimeTz
 
 internal val mediaListCollectionQueryMock = MediaListCollectionQuery(
-    user = null,
+    user = Arb.positiveInt().orNull().next(),
     type = Arb.enum<MediaType>().next(),
 )
 

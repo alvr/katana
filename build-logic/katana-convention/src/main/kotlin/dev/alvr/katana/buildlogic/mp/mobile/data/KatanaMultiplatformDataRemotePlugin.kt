@@ -78,7 +78,7 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
 
                 introspection {
                     endpointUrl = "https://graphql.anilist.co"
-                    schemaFiles.from(file("src/commonMain/graphql/schema.graphqls"))
+                    schemaFile = file("src/commonMain/graphql/schema.graphqls")
                 }
             } else {
                 dependsOn(project(CORE_PROJECT))
