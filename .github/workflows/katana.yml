@@ -38,7 +38,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@v3.3.1
+        uses: gradle/actions/wrapper-validation@v3.3.2
 
   assemble:
     name: Assembling
