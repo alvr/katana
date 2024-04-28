@@ -26,7 +26,7 @@ private val aeadModule = module {
 }
 
 private val securerModule = module {
-    factoryOf(::AndroidPreferencesEncrypt).bind<PreferencesEncrypt>()
+    factoryOf(::AndroidPreferencesEncrypt) bind PreferencesEncrypt::class
 }
 
 internal actual fun encryptionModule() = module {

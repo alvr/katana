@@ -7,7 +7,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 private val securerModule = module {
-    factoryOf(::IosPreferencesEncrypt).bind<PreferencesEncrypt>()
+    factoryOf(::IosPreferencesEncrypt) bind PreferencesEncrypt::class
 }
 
 internal actual fun encryptionModule() = module {

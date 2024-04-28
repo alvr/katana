@@ -7,6 +7,7 @@ import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.api.CacheKey
 import com.apollographql.apollo3.cache.normalized.api.CacheKeyGenerator
 import com.apollographql.apollo3.cache.normalized.api.CacheKeyGeneratorContext
+import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
 import com.apollographql.apollo3.cache.normalized.api.NormalizedCacheFactory
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.normalizedCache
@@ -28,9 +29,11 @@ import org.koin.dsl.module
 
 internal expect fun ApolloClient.Builder.sentryInterceptor(): ApolloClient.Builder
 
-private val getAnilistTokenInterceptor = named("getAnilistTokenInterceptor")
-private val deleteAnilistTokenInterceptor = named("deleteAnilistTokenInterceptor")
-private val loggingInterceptor = named("loggingInterceptor")
+private enum class Interceptor {
+    GET_TOKEN,
+    DELETE_TOKEN,
+    LOGGING,
+}
 
 private val apolloClientModule = module {
     single {
@@ -50,9 +53,9 @@ private val apolloClientModule = module {
 
         ApolloClient.Builder()
             .serverUrl(ANILIST_BASE_URL)
-            .addHttpInterceptor(get(getAnilistTokenInterceptor))
-            .addHttpInterceptor(get(deleteAnilistTokenInterceptor))
-            .addHttpInterceptor(get(loggingInterceptor))
+            .addHttpInterceptor(get(named(Interceptor.GET_TOKEN)))
+            .addHttpInterceptor(get(named(Interceptor.DELETE_TOKEN)))
+            .addHttpInterceptor(get(named(Interceptor.LOGGING)))
             .sentryInterceptor()
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .normalizedCache(
@@ -69,10 +72,10 @@ private val apolloDatabaseModule: Module = module {
 }
 
 private val apolloInterceptorsModule = module {
-    single<HttpInterceptor>(getAnilistTokenInterceptor) {
-        object : HttpInterceptor {
-            val useCase = get<GetAnilistTokenUseCase>()
+    single<HttpInterceptor>(named(Interceptor.GET_TOKEN)) {
+        val useCase = get<GetAnilistTokenUseCase>()
 
+        object : HttpInterceptor {
             override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain) =
                 request.newBuilder()
                     .addHeader("Authorization", "Bearer ${useCase().getOrNull()?.token}")
@@ -82,10 +85,10 @@ private val apolloInterceptorsModule = module {
         }
     }
 
-    single<HttpInterceptor>(deleteAnilistTokenInterceptor) {
-        object : HttpInterceptor {
-            val useCase = get<DeleteAnilistTokenUseCase>()
+    single<HttpInterceptor>(named(Interceptor.DELETE_TOKEN)) {
+        val useCase = get<DeleteAnilistTokenUseCase>()
 
+        object : HttpInterceptor {
             override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain) =
                 chain.proceed(request).also { response ->
                     if (
@@ -98,7 +101,7 @@ private val apolloInterceptorsModule = module {
         }
     }
 
-    single<HttpInterceptor>(loggingInterceptor) {
+    single<HttpInterceptor>(named(Interceptor.LOGGING)) {
         LoggingInterceptor(
             log = { Logger.i("ApolloLoggingInterceptor") { it } },
             level = if (KatanaBuildConfig.DEBUG) {
@@ -109,7 +112,7 @@ private val apolloInterceptorsModule = module {
         )
     }
 
-    factoryOf(::ReloadInterceptor).bind<ApolloInterceptor>()
+    factoryOf(::ReloadInterceptor) bind ApolloInterceptor::class
 }
 
 val coreRemoteModule = module {

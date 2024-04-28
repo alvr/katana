@@ -13,13 +13,13 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 private val repositoriesModule = module {
-    singleOf(::ListsRepositoryImpl).bind<ListsRepository>()
+    singleOf(::ListsRepositoryImpl) bind ListsRepository::class
 }
 
 private val sourcesModule = module {
-    singleOf(::CommonListsRemoteSourceImpl).bind<CommonListsRemoteSource>()
-    singleOf(::AnimeListsRemoteSourceImpl).bind<AnimeListsRemoteSource>()
-    singleOf(::MangaListsRemoteSourceImpl).bind<MangaListsRemoteSource>()
+    singleOf(::CommonListsRemoteSourceImpl) bind CommonListsRemoteSource::class
+    singleOf(::AnimeListsRemoteSourceImpl) bind AnimeListsRemoteSource::class
+    singleOf(::MangaListsRemoteSourceImpl) bind MangaListsRemoteSource::class
 }
 
 val featuresListsDataModule = module {
