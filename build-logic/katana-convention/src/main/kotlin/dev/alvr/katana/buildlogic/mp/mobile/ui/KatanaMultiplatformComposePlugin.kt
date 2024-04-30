@@ -23,18 +23,21 @@ import org.gradle.kotlin.dsl.registering
 import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.compose.ExperimentalComposeLibrary
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = "org.jetbrains.compose")
+        apply(plugin = "org.jetbrains.kotlin.plugin.compose")
 
         group = fullPackageName.substringBeforeLast('.')
 
         with(extensions) {
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
             configure<ComposeExtension> { configureComposeMultiplatform() }
+            configure<ComposeCompilerGradlePluginExtension> { configureComposeCompiler() }
         }
 
         generateResourcesTask()
@@ -91,18 +94,16 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
     context(Project)
     private fun ComposeExtension.configureComposeMultiplatform() {
         kotlinCompilerPlugin = catalogLib("compose-compiler").get().toString()
+    }
 
-        kotlinCompilerPluginArgs = buildList {
-            add("experimentalStrongSkipping=${composePluginEnabled("katana.strongSkipping")}")
+    context(Project)
+    private fun ComposeCompilerGradlePluginExtension.configureComposeCompiler() {
+        enableIntrinsicRemember = true
+        enableNonSkippingGroupOptimization = true
+        enableStrongSkippingMode = true
 
-            if (composePluginEnabled("katana.enableComposeCompilerMetrics")) {
-                add("metricsDestination=${composePluginDir("compose-metrics")}")
-            }
-
-            if (composePluginEnabled("katana.enableComposeCompilerReports")) {
-                add("reportsDestination=${composePluginDir("compose-reports")}")
-            }
-        }
+        metricsDestination = file(composePluginDir("compose-metrics"))
+        reportsDestination = file(composePluginDir("compose-reports"))
     }
 
     private fun Project.generateResourcesTask() {
@@ -118,9 +119,6 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
 
         tasks.named("preBuild").configure { dependsOn(generateResourcesFile) }
     }
-
-    private fun Project.composePluginEnabled(property: String) =
-        providers.gradleProperty(property).orNull == "true"
 
     private fun Project.composePluginDir(directory: String) =
         File(layout.buildDirectory.asFile.get(), directory).absolutePath

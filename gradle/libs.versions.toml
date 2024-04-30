@@ -6,9 +6,8 @@ androidx-splashscreen = "1.0.1"
 apollo = "3.8.4"
 arrow = "1.2.4"
 buildconfig = "5.3.5"
-complete-kotlin = "1.1.0"
 compose = "1.6.2"
-compose-compiler = "1.5.11-kt-2.0.0-RC1"
+compose-compiler = "2.0.0-RC2"
 compose-placeholder = "1.0.8"
 compose-windowsize = "0.5.0"
 datastore = "1.1.1"
@@ -23,13 +22,13 @@ koin-compose = "1.1.5"
 koin-test = "3.5.6"
 korge-foundation = "5.4.0"
 kotest = "5.9.0"
-kotlin = "2.0.0-RC1"
+kotlin = "2.0.0-RC2"
 kotlinpoet = "1.16.0"
 kotlinx-coroutines = "1.8.1"
 kotlinx-immutable = "0.3.7"
 kotlinx-serialization = "1.6.3"
 kover = "0.7.6"
-ksp = "2.0.0-RC1-1.0.20"
+ksp = "2.0.0-RC2-1.0.20"
 ktor = "2.3.11"
 lyricist = "1.7.0"
 materialkolor = "1.5.1"
@@ -51,8 +50,8 @@ android-application = { id = "com.android.application", version.ref = "android" 
 android-library = { id = "com.android.library", version.ref = "android" }
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
-complete-kotlin = { id = "com.louiscad.complete-kotlin", version.ref = "complete-kotlin" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
 kotlin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -80,7 +79,7 @@ apollo-test = { module = "com.apollographql.apollo3:apollo-testing-support", ver
 arrow = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 
 # Compose
-compose-compiler = { module = "org.jetbrains.compose.compiler:compiler", version.ref = "compose-compiler" }
+compose-compiler = { module = "org.jetbrains.kotlin:kotlin-compose-compiler-plugin-embeddable", version.ref = "compose-compiler" }
 compose-placeholder = { module = "com.eygraber:compose-placeholder-material3", version.ref = "compose-placeholder" }
 compose-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "compose-windowsize" }
 
@@ -101,8 +100,8 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 gradle-android = { module = "com.android.tools.build:gradle", version.ref = "android" }
 gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
 gradle-buildconfig = { module = "com.github.gmazzo.buildconfig:plugin", version.ref = "buildconfig" }
-gradle-complete-kotlin = { module = "com.louiscad.complete-kotlin:plugin", version.ref = "complete-kotlin" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
+gradle-compose-compiler = { module = "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin", version.ref = "kotlin" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
