@@ -126,7 +126,7 @@ jobs:
             **/build/reports/tests/testDebugUnitTest
           retention-days: 7
       - name: Upload report to Codecov
-        uses: codecov/codecov-action@v4.3.0
+        uses: codecov/codecov-action@v4.3.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build/reports/kover/report.xml
