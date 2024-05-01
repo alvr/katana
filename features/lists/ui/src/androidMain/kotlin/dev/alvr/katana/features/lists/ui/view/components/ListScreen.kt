@@ -19,9 +19,13 @@ import dev.alvr.katana.core.ui.components.KatanaEmptyState
 import dev.alvr.katana.core.ui.components.KatanaErrorState
 import dev.alvr.katana.core.ui.components.home.KatanaHomeScaffold
 import dev.alvr.katana.core.ui.components.home.rememberKatanaHomeScaffoldState
+import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.lists.ui.navigation.ListsNavigator
-import dev.alvr.katana.features.lists.ui.strings.LocalListsStrings
+import dev.alvr.katana.features.lists.ui.resources.Res
+import dev.alvr.katana.features.lists.ui.resources.anime_toolbar_search_placeholder
+import dev.alvr.katana.features.lists.ui.resources.error_message
+import dev.alvr.katana.features.lists.ui.resources.manga_toolbar_search_placeholder
 import dev.alvr.katana.features.lists.ui.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.features.lists.ui.viewmodel.AnimeListsViewModel
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsViewModel
@@ -45,7 +49,6 @@ internal fun ListScreen(
     val katanaScaffoldState = rememberKatanaHomeScaffoldState()
     val lazyGridState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
-    val strings = LocalListsStrings.current
 
     resultRecipient.OnNavValue { result ->
         vm.selectList(result).also {
@@ -55,9 +58,9 @@ internal fun ListScreen(
     }
 
     val searchPlaceholder = when (vm) {
-        is AnimeListsViewModel -> strings.animeToolbarSearchPlaceholder
-        is MangaListsViewModel -> strings.mangaToolbarSearchPlaceholder
-    }
+        is AnimeListsViewModel -> Res.string.anime_toolbar_search_placeholder
+        is MangaListsViewModel -> Res.string.manga_toolbar_search_placeholder
+    }.value
 
     val buttonsVisible by remember(state.isError) {
         derivedStateOf(structuralEqualityPolicy()) { !state.isError }
@@ -81,12 +84,11 @@ internal fun ListScreen(
             when {
                 isError -> KatanaErrorState(
                     modifier = modifier.padding(paddingValues),
-                    text = strings.errorMessage,
+                    text = Res.string.error_message.value,
                     onRetry = {
                         vm.refreshList()
                         katanaScaffoldState.resetToolbar()
                     },
-                    buttonText = strings.errorRetryButton,
                     loading = state.isLoading,
                 )
                 isEmpty && !isLoading -> KatanaEmptyState(

@@ -67,24 +67,40 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
-            commonMain.dependencies {
-                implementation(catalogBundle("mobile-common"))
+            commonMain {
+                dependencies {
+                    implementation(catalogBundle("mobile-common"))
+                }
             }
-            androidMain.dependencies {
-                implementation(catalogBundle("mobile-android"))
+            androidMain {
+                dependsOn(commonMain.get())
+                dependencies {
+                    implementation(catalogBundle("mobile-android"))
+                }
             }
-            iosMain.dependencies {
-                implementation(catalogBundle("mobile-ios"))
+            iosMain {
+                dependsOn(commonMain.get())
+                dependencies {
+                    implementation(catalogBundle("mobile-ios"))
+                }
             }
 
-            commonTest.dependencies {
-                implementation(catalogBundle("mobile-common-test"))
+            commonTest {
+                dependencies {
+                    implementation(catalogBundle("mobile-common-test"))
+                }
             }
-            androidUnitTest.dependencies {
-                implementation(catalogBundle("mobile-android-test"))
+            androidUnitTest {
+                dependsOn(commonTest.get())
+                dependencies {
+                    implementation(catalogBundle("mobile-android-test"))
+                }
             }
-            iosTest.dependencies {
-                implementation(catalogBundle("mobile-ios-test"))
+            iosTest {
+                dependsOn(commonTest.get())
+                dependencies {
+                    implementation(catalogBundle("mobile-ios-test"))
+                }
             }
 
             configureSourceSets()

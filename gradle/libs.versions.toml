@@ -6,8 +6,7 @@ androidx-splashscreen = "1.0.1"
 apollo = "3.8.4"
 arrow = "1.2.4"
 buildconfig = "5.3.5"
-compose = "1.6.2"
-compose-compiler = "2.0.0-RC2"
+compose = "1.6.10-beta03"
 compose-placeholder = "1.0.8"
 compose-windowsize = "0.5.0"
 datastore = "1.1.1"
@@ -30,7 +29,6 @@ kotlinx-serialization = "1.6.3"
 kover = "0.7.6"
 ksp = "2.0.0-RC2-1.0.20"
 ktor = "2.3.11"
-lyricist = "1.7.0"
 materialkolor = "1.5.1"
 mockk = "1.13.11"
 mokkery = "2.0.0-RC1"
@@ -79,7 +77,6 @@ apollo-test = { module = "com.apollographql.apollo3:apollo-testing-support", ver
 arrow = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 
 # Compose
-compose-compiler = { module = "org.jetbrains.kotlin:kotlin-compose-compiler-plugin-embeddable", version.ref = "compose-compiler" }
 compose-placeholder = { module = "com.eygraber:compose-placeholder-material3", version.ref = "compose-placeholder" }
 compose-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "compose-windowsize" }
 
@@ -139,9 +136,6 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 # Ktor
 ktor-android = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
-
-# Lyricist
-lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
 
 # MaterialKolor
 materialkolor = { module = "com.materialkolor:material-kolor", version.ref = "materialkolor" }
@@ -309,7 +303,6 @@ data-remote-ios-test-ksp = []
 ui-common = [
     "kamel",
     "koin-compose",
-    "lyricist",
     "orbit",
 ]
 ui-android = [

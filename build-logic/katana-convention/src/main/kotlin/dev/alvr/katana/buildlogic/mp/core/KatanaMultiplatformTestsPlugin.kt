@@ -14,7 +14,6 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getValue
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -45,27 +44,31 @@ internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         configureSourceSets {
-            commonMain.dependencies {
-                implementation(catalogBundle("core-common-test"))
-                implementation(catalogBundle("mobile-common-test"))
+            commonMain {
+                dependencies {
+                    implementation(catalogBundle("core-common-test"))
+                    implementation(catalogBundle("mobile-common-test"))
+                }
             }
-            val jvmBased by creating {
+            jvmMain {
                 dependsOn(commonMain.get())
                 dependencies {
                     implementation(catalogBundle("core-jvm-test"))
                 }
             }
-            jvmMain.get().dependsOn(jvmBased)
             androidMain {
-                dependsOn(jvmBased)
+                dependsOn(jvmMain.get())
                 dependencies {
                     implementation(catalogBundle("mobile-android-test"))
                     implementation(catalogBundle("ui-android-test"))
                 }
             }
-            iosMain.dependencies {
-                implementation(catalogBundle("mobile-ios-test"))
-                implementation(catalogBundle("ui-ios-test"))
+            iosMain {
+                dependsOn(commonMain.get())
+                dependencies {
+                    implementation(catalogBundle("mobile-ios-test"))
+                    implementation(catalogBundle("ui-ios-test"))
+                }
             }
         }
     }

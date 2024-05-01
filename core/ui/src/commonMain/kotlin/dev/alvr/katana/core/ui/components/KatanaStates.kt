@@ -25,18 +25,23 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.alvr.katana.core.ui.strings.LocalBaseStrings
+import dev.alvr.katana.core.ui.resources.Res
+import dev.alvr.katana.core.ui.resources.component_empty_state
+import dev.alvr.katana.core.ui.resources.component_error_state
+import dev.alvr.katana.core.ui.resources.component_error_state_try_button
+import dev.alvr.katana.core.ui.resources.value
 
 @Composable
 fun KatanaEmptyState(
     text: String,
     modifier: Modifier = Modifier,
+    contentDescription: String = Res.string.component_empty_state.value,
 ) {
     KatanaState(
         modifier = modifier,
         text = text,
         imageVector = Icons.TwoTone.Inbox,
-        contentDescription = LocalBaseStrings.current.componentEmptyState,
+        contentDescription = contentDescription,
     )
 }
 
@@ -44,15 +49,16 @@ fun KatanaEmptyState(
 fun KatanaErrorState(
     text: String,
     loading: Boolean,
-    buttonText: String,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
+    buttonText: String = Res.string.component_error_state_try_button.value,
+    contentDescription: String = Res.string.component_error_state.value,
 ) {
     KatanaState(
         modifier = modifier,
         text = text,
         imageVector = Icons.TwoTone.Error,
-        contentDescription = LocalBaseStrings.current.componentErrorState,
+        contentDescription = contentDescription,
     ) {
         Spacer(Modifier.height(16.dp))
 

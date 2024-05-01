@@ -980,7 +980,7 @@ Compose:
     active: true
   CompositionLocalAllowlist:
     active: true
-    allowedCompositionLocals: LocalAccountStrings,LocalBaseStrings,LocalExploreStrings,LocalListsStrings,LocalLoginStrings,LocalSocialStrings
+    allowedCompositionLocals:
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

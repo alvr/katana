@@ -49,9 +49,17 @@ import dev.alvr.katana.core.common.unknown
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.ui.components.KatanaPullRefresh
 import dev.alvr.katana.core.ui.modifiers.katanaPlaceholder
+import dev.alvr.katana.core.ui.resources.asPainter
+import dev.alvr.katana.core.ui.resources.format
+import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
-import dev.alvr.katana.features.lists.ui.resources.KatanaResources
-import dev.alvr.katana.features.lists.ui.strings.LocalListsStrings
+import dev.alvr.katana.features.lists.ui.resources.Res
+import dev.alvr.katana.features.lists.ui.resources.default_cover
+import dev.alvr.katana.features.lists.ui.resources.entry_next_episode
+import dev.alvr.katana.features.lists.ui.resources.entry_next_episode_separator
+import dev.alvr.katana.features.lists.ui.resources.entry_plus_one
+import dev.alvr.katana.features.lists.ui.resources.entry_progress
+import dev.alvr.katana.features.lists.ui.resources.error_cover
 import dev.alvr.katana.features.lists.ui.viewmodel.ListState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -264,8 +272,8 @@ private fun Cover(
         onFailure = {
             Image(
                 modifier = Modifier.align(Alignment.Center),
-                painter = KatanaResources.defaultCover.asPainter,
-                contentDescription = LocalListsStrings.current.errorCover,
+                painter = Res.drawable.default_cover.asPainter,
+                contentDescription = Res.string.error_cover.value,
             )
         },
     )
@@ -292,14 +300,13 @@ private fun Subtitle(
     modifier: Modifier = Modifier,
     nextEpisode: MediaListItem.AnimeListItem.NextEpisode? = null,
 ) {
-    val strings = LocalListsStrings.current
     val text = buildAnnotatedString {
-        append(format.value)
+        append(format.text)
 
         if (nextEpisode != null) {
-            append(" ${strings.entryNextEpisodeSeparator} ")
+            append(Res.string.entry_next_episode_separator.value)
             append(
-                strings.entryNextEpisode(
+                Res.string.entry_next_episode.format(
                     nextEpisode.number,
                     KatanaDateFormatter.DateWithTime(nextEpisode.date),
                 ),
@@ -347,7 +354,7 @@ private fun PlusOne(
     // Episodes - Chapters (Anime & Manga)
     if (progress != total) {
         PlusOneButton(
-            progress = LocalListsStrings.current.entryProgress(progress, total ?: String.unknown),
+            progress = Res.string.entry_progress.format(progress, total ?: String.unknown),
             itemLoading = itemLoading,
             onAddPlusOne = onAddPlusOne,
             modifier = modifier,
@@ -369,7 +376,7 @@ private fun PlusOneButton(
     ) {
         Text(
             modifier = Modifier.katanaPlaceholder(visible = itemLoading),
-            text = LocalListsStrings.current.entryPlusOne(progress),
+            text = Res.string.entry_plus_one.format(progress),
         )
     }
 }

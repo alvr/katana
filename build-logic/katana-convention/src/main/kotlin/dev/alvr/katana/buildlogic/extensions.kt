@@ -93,11 +93,6 @@ internal fun BaseExtension.configureAndroid(packageName: String) {
         targetCompatibility = KatanaConfiguration.UseJavaVersion
     }
 
-    with(sourceSets["main"]) {
-        res.srcDirs("$AndroidDir/res", ResourcesDir)
-        resources.srcDirs(ResourcesDir)
-    }
-
     testOptions {
         animationsDisabled = true
         unitTests {

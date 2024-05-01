@@ -34,6 +34,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.ui.components.KatanaSearchTopAppBar
+import dev.alvr.katana.core.ui.resources.Res
+import dev.alvr.katana.core.ui.resources.toolbar_menu_filter
+import dev.alvr.katana.core.ui.resources.toolbar_menu_search
+import dev.alvr.katana.core.ui.resources.toolbar_search_clear
+import dev.alvr.katana.core.ui.resources.toolbar_search_close
+import dev.alvr.katana.core.ui.resources.value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -49,6 +55,10 @@ fun KatanaHomeScaffold(
     katanaScaffoldState: KatanaHomeScaffoldState = rememberKatanaHomeScaffoldState(),
     scaffoldState: BackdropScaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed),
     subtitle: String? = null,
+    searchContentDescription: String = Res.string.toolbar_menu_search.value,
+    filterContentDescription: String = Res.string.toolbar_menu_filter.value,
+    closeContentDescription: String = Res.string.toolbar_search_close.value,
+    clearContentDescription: String = Res.string.toolbar_search_clear.value,
     fab: @Composable (() -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit,
 ) {
@@ -64,6 +74,10 @@ fun KatanaHomeScaffold(
                 subtitle = subtitle,
                 onSearch = onSearch,
                 searchPlaceholder = searchPlaceholder,
+                searchContentDescription = searchContentDescription,
+                filterContentDescription = filterContentDescription,
+                closeContentDescription = closeContentDescription,
+                clearContentDescription = clearContentDescription,
             )
         },
         backLayerBackgroundColor = MaterialTheme.colorScheme.primary,
@@ -91,6 +105,10 @@ private fun KatanaTopAppBar(
     scaffoldState: BackdropScaffoldState,
     title: String,
     searchPlaceholder: String,
+    searchContentDescription: String,
+    filterContentDescription: String,
+    closeContentDescription: String,
+    clearContentDescription: String,
     onSearch: (String) -> Unit,
     subtitle: String? = null,
 ) {
@@ -115,6 +133,8 @@ private fun KatanaTopAppBar(
                 TopAppBarStyle.Normal -> KatanaHomeTopAppBar(
                     title = title,
                     subtitle = subtitle,
+                    searchContentDescription = searchContentDescription,
+                    filterContentDescription = filterContentDescription,
                     onSearch = { katanaScaffoldState.searchToolbar() }.takeIf {
                         katanaScaffoldState.showTopAppBarActions
                     },
@@ -125,6 +145,8 @@ private fun KatanaTopAppBar(
                 TopAppBarStyle.Search -> KatanaSearchTopAppBar(
                     onValueChange = onSearch,
                     searchPlaceholder = searchPlaceholder,
+                    closeContentDescription = closeContentDescription,
+                    clearContentDescription = clearContentDescription,
                     onBack = {
                         katanaScaffoldState.resetToolbar()
                         onSearch(String.empty)

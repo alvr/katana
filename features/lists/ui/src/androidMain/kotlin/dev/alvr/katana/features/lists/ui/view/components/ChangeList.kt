@@ -25,8 +25,10 @@ import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyleBottomSheet
+import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.features.lists.ui.entities.UserList
-import dev.alvr.katana.features.lists.ui.strings.LocalListsStrings
+import dev.alvr.katana.features.lists.ui.resources.Res
+import dev.alvr.katana.features.lists.ui.resources.change_list_button
 
 @Composable
 @Destination(style = DestinationStyleBottomSheet::class)
@@ -74,7 +76,7 @@ internal fun ChangeListButton(
     if (visible) {
         FloatingActionButton(onClick = onClick) {
             Icon(
-                contentDescription = LocalListsStrings.current.changeListButton,
+                contentDescription = Res.string.change_list_button.value,
                 imageVector = Icons.AutoMirrored.TwoTone.List,
             )
         }

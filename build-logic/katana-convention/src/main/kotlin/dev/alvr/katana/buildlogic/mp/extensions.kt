@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinSourceSetConvention
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 internal fun KotlinMultiplatformExtension.configureSourceSets(
     block: NamedDomainObjectContainer<KotlinSourceSet>.() -> Unit
@@ -42,7 +43,7 @@ internal fun KotlinMultiplatformExtension.configureIos() {
 internal fun KotlinMultiplatformExtension.configureKotlin() {
     targets.configureEach {
         compilations.configureEach {
-            compilerOptions.configure {
+            compileTaskProvider.configure {
                 configureKotlinCompiler()
             }
         }
@@ -64,6 +65,10 @@ internal fun KoverVerifyReportConfig.configure() {
             minValue = MIN_COVERED_PERCENTAGE
         }
     }
+}
+
+private fun KotlinCompilationTask<*>.configureKotlinCompiler() {
+    compilerOptions.configureKotlinCompiler()
 }
 
 private val Project.frameworkIdentifier

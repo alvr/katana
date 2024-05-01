@@ -19,7 +19,6 @@ import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
@@ -28,6 +27,7 @@ import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.utils.destination
 import com.ramcosta.composedestinations.utils.isRouteOnBackStack
+import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.features.login.ui.navigation.LoginNavGraph
 import dev.alvr.katana.shared.navigation.items.HomeNavigationBarItem
 import dev.alvr.katana.shared.navigation.items.NavigationBarItem
@@ -163,13 +163,13 @@ private fun RailNavigationBar(
 private fun NavigationBarIcon(destination: NavigationBarItem) {
     Icon(
         imageVector = destination.icon,
-        contentDescription = stringResource(destination.label),
+        contentDescription = destination.label.value,
     )
 }
 
 @Composable
 private fun NavigationBarLabel(destination: NavigationBarItem) {
-    Text(text = stringResource(destination.label))
+    Text(text = destination.label.value)
 }
 
 private fun NavController.navigate(destination: NavigationBarItem) {
