@@ -2,18 +2,24 @@ package dev.alvr.katana.core.ui.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import kotlinx.coroutines.CoroutineScope
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.annotation.OrbitDsl
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.reduce
 
-expect abstract class BaseViewModel<S : Any, E : Any>() : ContainerHost<S, E> {
-    protected val coroutineScope: CoroutineScope
-
+abstract class BaseViewModel<S : Any, E : Any> : ViewModel(), ContainerHost<S, E> {
     @OrbitDsl
-    protected fun updateState(block: S.() -> S)
-
-    protected fun onCleared()
+    protected fun updateState(block: S.() -> S) {
+        intent {
+            reduce { block(state) }
+        }
+    }
 }
 
 @Composable
-expect fun <S : Any, E : Any> ContainerHost<S, E>.collectAsState(): State<S>
+fun <S : Any, E : Any> BaseViewModel<S, E>.collectAsState(): State<S> = container.stateFlow.collectAsStateWithLifecycle(
+    lifecycleOwner = LocalLifecycleOwner.current,
+)

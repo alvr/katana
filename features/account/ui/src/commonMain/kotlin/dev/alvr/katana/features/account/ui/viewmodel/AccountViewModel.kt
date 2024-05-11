@@ -1,5 +1,6 @@
 package dev.alvr.katana.features.account.ui.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import dev.alvr.katana.common.session.domain.usecases.LogOutUseCase
 import dev.alvr.katana.common.user.domain.usecases.ObserveUserInfoUseCase
 import dev.alvr.katana.core.domain.usecases.invoke
@@ -12,7 +13,7 @@ internal class AccountViewModel(
     private val observeUserInfoUseCase: ObserveUserInfoUseCase,
     private val logOutUseCase: LogOutUseCase,
 ) : BaseViewModel<AccountState, Nothing>() {
-    override val container = coroutineScope.container<AccountState, Nothing>(AccountState()) {
+    override val container = viewModelScope.container<AccountState, Nothing>(AccountState()) {
         collectUserInfo()
     }
 
