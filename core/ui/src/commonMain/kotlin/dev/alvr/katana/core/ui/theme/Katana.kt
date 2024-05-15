@@ -1,22 +1,23 @@
 package dev.alvr.katana.core.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.materialkolor.DynamicMaterialTheme
 import com.materialkolor.PaletteStyle.Vibrant
-import com.materialkolor.dynamicColorScheme
+import com.materialkolor.rememberDynamicMaterialThemeState
 
 @Composable
 fun KatanaTheme(
     content: @Composable () -> Unit,
 ) {
-    MaterialTheme(
-        colorScheme = dynamicColorScheme(
+    DynamicMaterialTheme(
+        state = rememberDynamicMaterialThemeState(
             seedColor = Color(ColorSeed),
             isDark = isSystemInDarkTheme(),
             style = Vibrant,
         ),
+        animate = true,
         typography = KatanaTypography,
         content = content,
     )
