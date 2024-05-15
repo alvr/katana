@@ -50,7 +50,7 @@
             ],
         },
         {
-            "automerge": true,
+            "automerge": false,
             "matchUpdateTypes": [
                 "minor",
                 "patch",

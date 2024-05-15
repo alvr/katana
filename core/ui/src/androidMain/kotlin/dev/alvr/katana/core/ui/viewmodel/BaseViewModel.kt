@@ -1,6 +1,7 @@
 package dev.alvr.katana.core.ui.viewmodel
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
@@ -26,4 +27,4 @@ actual abstract class BaseViewModel<S : Any, E : Any> : ViewModel(), ContainerHo
 
 @Composable
 actual fun <S : Any, E : Any> ContainerHost<S, E>.collectAsState() =
-    container.stateFlow.collectAsStateWithLifecycle()
+    container.stateFlow.collectAsStateWithLifecycle(LocalLifecycleOwner.current)
