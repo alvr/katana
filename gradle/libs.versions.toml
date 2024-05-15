@@ -1,7 +1,7 @@
 [versions]
 android = "8.4.0"
 androidx-activity = "1.9.0"
-androidx-lifecycle = "2.7.0"
+androidx-lifecycle = "2.8.0"
 androidx-splashscreen = "1.0.1"
 apollo = "3.8.4"
 arrow = "1.2.4"
