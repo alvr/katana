@@ -20,12 +20,15 @@ import dev.alvr.katana.features.login.ui.strings.LocalLoginStrings
 import dev.alvr.katana.features.login.ui.strings.rememberLoginStrings
 import dev.alvr.katana.features.social.ui.strings.LocalSocialStrings
 import dev.alvr.katana.features.social.ui.strings.rememberSocialStrings
+import io.sentry.kotlin.multiplatform.PlatformOptionsConfiguration
 import io.sentry.kotlin.multiplatform.Sentry
 import io.sentry.kotlin.multiplatform.SentryLevel
 import io.sentry.kotlin.multiplatform.protocol.Breadcrumb
 
 @Composable
 internal expect fun KatanaContent()
+
+internal expect fun sentryOptionsConfiguration(): PlatformOptionsConfiguration
 
 @Composable
 fun Katana() {
@@ -67,10 +70,7 @@ private fun initNapier() {
 }
 
 private fun initSentry() {
-    Sentry.init { options ->
-        options.debug = KatanaBuildConfig.DEBUG
-        options.dsn = KatanaBuildConfig.SENTRY_DSN
-    }
+    Sentry.initWithPlatformOptions(sentryOptionsConfiguration())
 }
 
 private class SentryLogger(private val minSeverity: Severity) : LogWriter() {
