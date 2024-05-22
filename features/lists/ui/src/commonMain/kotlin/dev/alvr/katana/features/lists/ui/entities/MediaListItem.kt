@@ -3,8 +3,6 @@ package dev.alvr.katana.features.lists.ui.entities
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import com.arkivanov.essenty.parcelable.Parcelable
-import com.arkivanov.essenty.parcelable.Parcelize
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.entry_format_manga
@@ -23,7 +21,7 @@ import korlibs.time.DateTimeTz
 
 @Immutable
 @Suppress("ComplexInterface")
-internal sealed interface MediaListItem : Parcelable {
+internal sealed interface MediaListItem {
     val entryId: Int
     val mediaId: Int
     val title: String
@@ -40,7 +38,6 @@ internal sealed interface MediaListItem : Parcelable {
     val completedAt: Date?
     val updatedAt: DateTimeTz?
 
-    @Parcelize
     data class AnimeListItem(
         override val entryId: Int,
         override val mediaId: Int,
@@ -60,14 +57,12 @@ internal sealed interface MediaListItem : Parcelable {
         val nextEpisode: NextEpisode?,
     ) : MediaListItem {
         @Stable
-        @Parcelize
         data class NextEpisode(
             val number: Int,
             val date: DateTimeTz,
-        ) : Parcelable
+        )
     }
 
-    @Parcelize
     data class MangaListItem(
         override val entryId: Int,
         override val mediaId: Int,

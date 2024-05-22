@@ -1,7 +1,5 @@
 plugins {
     id("katana.multiplatform.ui")
-    id("kotlin-parcelize")
-    alias(libs.plugins.parcelize)
 }
 
 ksp {
@@ -16,8 +14,6 @@ kotlin {
             implementation(projects.core.ui)
 
             implementation(projects.features.lists.domain)
-
-            implementation(libs.parcelable)
         }
 
         commonTest.dependencies {
