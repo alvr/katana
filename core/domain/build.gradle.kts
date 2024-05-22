@@ -2,7 +2,9 @@ plugins {
     id("katana.multiplatform.core")
 }
 
-katanaMultiplatform {
-    commonMainDependencies { implementation(projects.core.common) }
-    commonTestDependencies { implementation(projects.core.tests) }
+kotlin {
+    sourceSets {
+        commonMain.dependencies { implementation(projects.core.common) }
+        commonTest.dependencies { implementation(projects.core.tests) }
+    }
 }

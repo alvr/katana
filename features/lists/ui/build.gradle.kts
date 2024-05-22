@@ -9,17 +9,19 @@ ksp {
     arg("compose-destinations.moduleName", "lists")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.core.common)
-        implementation(projects.core.ui)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.core.common)
+            implementation(projects.core.ui)
 
-        implementation(projects.features.lists.domain)
+            implementation(projects.features.lists.domain)
 
-        implementation(libs.parcelable)
-    }
+            implementation(libs.parcelable)
+        }
 
-    commonTestDependencies {
-        implementation(projects.core.tests)
+        commonTest.dependencies {
+            implementation(projects.core.tests)
+        }
     }
 }

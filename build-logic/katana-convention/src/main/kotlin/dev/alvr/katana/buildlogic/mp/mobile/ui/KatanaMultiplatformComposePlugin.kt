@@ -6,7 +6,6 @@ import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.androidUnitTest
-import dev.alvr.katana.buildlogic.mp.configureSourceSets
 import java.io.File
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,6 +14,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.compose.resources.ResourcesExtension
@@ -43,7 +43,7 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         val compose = (this as ExtensionAware).extensions.getByType<ComposePlugin.Dependencies>()
 
-        configureSourceSets {
+        sourceSets {
             commonMain.dependencies {
                 implementation(compose.animation)
                 implementation(compose.components.resources)

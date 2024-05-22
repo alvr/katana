@@ -3,11 +3,11 @@ package dev.alvr.katana.buildlogic.mp.mobile.data
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.androidUnitTest
-import dev.alvr.katana.buildlogic.mp.configureSourceSets
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformDataPreferencesPlugin : Plugin<Project> {
@@ -28,7 +28,7 @@ internal class KatanaMultiplatformDataPreferencesPlugin : Plugin<Project> {
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
-        configureSourceSets {
+        sourceSets {
             commonMain.dependencies {
                 implementation(catalogBundle("data-preferences-common"))
             }

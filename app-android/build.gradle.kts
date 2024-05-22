@@ -2,8 +2,8 @@ plugins {
     id("katana.multiplatform.app")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.shared)
+kotlin {
+    sourceSets {
+        commonMain.dependencies { implementation(projects.shared) }
     }
 }

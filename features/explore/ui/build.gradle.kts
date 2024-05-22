@@ -7,15 +7,17 @@ ksp {
     arg("compose-destinations.moduleName", "explore")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.core.common)
-        implementation(projects.core.ui)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.core.common)
+            implementation(projects.core.ui)
 
-        implementation(projects.features.explore.domain)
-    }
+            implementation(projects.features.explore.domain)
+        }
 
-    commonTestDependencies {
-        implementation(projects.core.tests)
+        commonTest.dependencies {
+            implementation(projects.core.tests)
+        }
     }
 }

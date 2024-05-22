@@ -7,16 +7,18 @@ ksp {
     arg("compose-destinations.moduleName", "login")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.core.common)
-        implementation(projects.core.ui)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.core.common)
+            implementation(projects.core.ui)
 
-        implementation(projects.common.session.domain)
-        implementation(projects.common.user.domain)
-    }
+            implementation(projects.common.session.domain)
+            implementation(projects.common.user.domain)
+        }
 
-    commonTestDependencies {
-        implementation(projects.core.tests)
+        commonTest.dependencies {
+            implementation(projects.core.tests)
+        }
     }
 }
