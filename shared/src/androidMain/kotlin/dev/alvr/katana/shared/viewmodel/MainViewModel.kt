@@ -1,5 +1,6 @@
 package dev.alvr.katana.shared.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import dev.alvr.katana.common.session.domain.usecases.ClearActiveSessionUseCase
 import dev.alvr.katana.common.session.domain.usecases.GetAnilistTokenUseCase
 import dev.alvr.katana.common.session.domain.usecases.ObserveActiveSessionUseCase
@@ -17,7 +18,7 @@ internal class MainViewModel(
     private val getAnilistTokenUseCase: GetAnilistTokenUseCase,
     private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,
 ) : BaseViewModel<MainState, Nothing>() {
-    override val container = coroutineScope.container<MainState, Nothing>(
+    override val container = viewModelScope.container<MainState, Nothing>(
         MainState(initialNavGraph = initialNavGraph),
     ) {
         observeSession()

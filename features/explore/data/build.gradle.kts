@@ -6,14 +6,16 @@ dependencies {
     apolloMetadata(projects.core.remote)
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.core.remote)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.core.remote)
 
-        implementation(projects.features.explore.domain)
-    }
+            implementation(projects.features.explore.domain)
+        }
 
-    commonTestDependencies {
-        implementation(projects.core.tests)
+        commonTest.dependencies {
+            implementation(projects.core.tests)
+        }
     }
 }

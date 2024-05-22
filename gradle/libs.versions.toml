@@ -1,14 +1,11 @@
 [versions]
 android = "8.4.1"
 androidx-activity = "1.9.0"
-androidx-lifecycle = "2.8.0"
 androidx-splashscreen = "1.0.1"
 apollo = "3.8.4"
 arrow = "1.2.4"
 buildconfig = "5.3.5"
-complete-kotlin = "1.1.0"
-compose = "1.6.2"
-compose-compiler = "1.5.13.3"
+compose = "1.6.10"
 compose-placeholder = "1.0.8"
 compose-windowsize = "0.5.0"
 datastore = "1.1.1"
@@ -23,22 +20,21 @@ koin-compose = "1.1.5"
 koin-test = "3.5.6"
 korge-foundation = "5.4.0"
 kotest = "5.9.0"
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 kotlinpoet = "1.16.0"
 kotlinx-coroutines = "1.8.1"
 kotlinx-immutable = "0.3.7"
-kotlinx-serialization = "1.6.3"
+kotlinx-serialization = "1.7.0-RC"
 kover = "0.7.6"
-ksp = "1.9.24-1.0.20"
+ksp = "2.0.0-1.0.21"
 ktor = "2.3.11"
-lyricist = "1.7.0"
+lifecycle = "2.8.0"
 materialkolor = "1.5.1"
 mockk = "1.13.11"
-mokkery = "1.9.24-1.7.0"
+mokkery = "2.0.0-RC1"
+navigation = "2.7.0-alpha07"
 okio = "3.9.0"
 orbit = "7.2.0"
-parcelable = "1.3.0"
-parcelize = "0.2.4"
 sentry = "7.9.0"
 sentry-multiplatform = "0.7.1"
 sentry-plugin = "4.6.0"
@@ -51,23 +47,20 @@ android-application = { id = "com.android.application", version.ref = "android" 
 android-library = { id = "com.android.library", version.ref = "android" }
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
-complete-kotlin = { id = "com.louiscad.complete-kotlin", version.ref = "complete-kotlin" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
 kotlin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
-parcelize = { id = "com.arkivanov.parcelize.darwin", version.ref = "parcelize" }
 sentry = { id = "io.sentry.android.gradle", version.ref = "sentry-plugin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
-androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
 
 # Apollo
@@ -80,7 +73,6 @@ apollo-test = { module = "com.apollographql.apollo3:apollo-testing-support", ver
 arrow = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 
 # Compose
-compose-compiler = { module = "org.jetbrains.compose.compiler:compiler", version.ref = "compose-compiler" }
 compose-placeholder = { module = "com.eygraber:compose-placeholder-material3", version.ref = "compose-placeholder" }
 compose-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "compose-windowsize" }
 
@@ -101,8 +93,8 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 gradle-android = { module = "com.android.tools.build:gradle", version.ref = "android" }
 gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
 gradle-buildconfig = { module = "com.github.gmazzo.buildconfig:plugin", version.ref = "buildconfig" }
-gradle-complete-kotlin = { module = "com.louiscad.complete-kotlin:plugin", version.ref = "complete-kotlin" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
+gradle-compose-compiler = { module = "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin", version.ref = "kotlin" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotest = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -132,7 +124,8 @@ kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin"
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-immutable" }
-kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "kotlinx-serialization" }
 
 # KotlinPoet
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
@@ -141,11 +134,15 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 ktor-android = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 
-# Lyricist
-lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
+# Lifecycle
+lifecycle-runtime = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 
 # MaterialKolor
 materialkolor = { module = "com.materialkolor:material-kolor", version.ref = "materialkolor" }
+
+# Navigation
+navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
 
 # Okio
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
@@ -153,9 +150,6 @@ okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", versio
 # Orbit
 orbit = { module = "org.orbit-mvi:orbit-core", version.ref = "orbit" }
 orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
-
-# Parcelable
-parcelable = { module = "com.arkivanov.essenty:parcelable", version.ref = "parcelable" }
 
 # Sentry
 sentry = { module = "io.sentry:sentry-android-core", version.ref = "sentry" }
@@ -261,7 +255,7 @@ mobile-ios-test-ksp = []
 data-preferences-common = [
     "datastore",
     "datastore-okio",
-    "kotlinx-serialization",
+    "kotlinx-serialization-protobuf",
 ]
 data-preferences-android = [
     "tink",
@@ -308,16 +302,17 @@ data-remote-ios-test-ksp = []
 
 # Deps for UI
 ui-common = [
+    "lifecycle-runtime",
+    "lifecycle-viewmodel",
     "kamel",
     "koin-compose",
-    "lyricist",
+    "kotlinx-serialization-json",
+    "navigation",
     "orbit",
 ]
 ui-android = [
     "destinations",
     "koin-compose-android",
-    "androidx-lifecycle-runtime",
-    "androidx-lifecycle-viewmodel",
 ]
 ui-ios = []
 

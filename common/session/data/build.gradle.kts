@@ -2,14 +2,16 @@ plugins {
     id("katana.multiplatform.data.preferences")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.core.common)
-        implementation(projects.core.preferences)
-        implementation(projects.common.session.domain)
-    }
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.core.common)
+            implementation(projects.core.preferences)
+            implementation(projects.common.session.domain)
+        }
 
-    commonTestDependencies {
-        implementation(projects.core.tests)
+        commonTest.dependencies {
+            implementation(projects.core.tests)
+        }
     }
 }

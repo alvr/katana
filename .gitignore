@@ -1,7 +1,7 @@
 /.gradle
 /.idea/*
 !/.idea/runConfigurations/
-/app/jacoco.exec
+/.kotlin
 /build
 /captures
 *.iml

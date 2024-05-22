@@ -7,18 +7,20 @@ ksp {
     arg("compose-destinations.moduleName", "account")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.common.session.domain)
-        implementation(projects.common.user.domain)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.common.session.domain)
+            implementation(projects.common.user.domain)
 
-        implementation(projects.core.common)
-        implementation(projects.core.ui)
+            implementation(projects.core.common)
+            implementation(projects.core.ui)
 
-        implementation(projects.features.account.domain)
-    }
+            implementation(projects.features.account.domain)
+        }
 
-    commonTestDependencies {
-        implementation(projects.core.tests)
+        commonTest.dependencies {
+            implementation(projects.core.tests)
+        }
     }
 }

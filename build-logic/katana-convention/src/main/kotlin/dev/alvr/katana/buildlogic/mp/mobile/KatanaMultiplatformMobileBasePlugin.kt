@@ -8,10 +8,9 @@ import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
-import dev.alvr.katana.buildlogic.mp.KATANA_MULTIPLATFORM_EXTENSION
+import dev.alvr.katana.buildlogic.mp.androidUnitTest
 import dev.alvr.katana.buildlogic.mp.configureIos
 import dev.alvr.katana.buildlogic.mp.configureKotlin
-import dev.alvr.katana.buildlogic.mp.configureSourceSets
 import dev.alvr.katana.buildlogic.mp.katanaBuildConfig
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
@@ -20,9 +19,7 @@ import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
+import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
@@ -42,8 +39,6 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
         apply(plugin = "dev.mokkery")
 
         with(extensions) {
-            create<KatanaMultiplatformMobileExtension>(KATANA_MULTIPLATFORM_EXTENSION)
-
             commonExtensions()
             configureAndroid()
             configure<BuildConfigExtension> { configureBuildConfig() }
@@ -55,55 +50,51 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
 
     context(Project)
     private fun KotlinMultiplatformExtension.configureMultiplatform() {
-        applyDefaultHierarchyTemplate()
         androidTarget()
         configureIos()
         configureSourceSets()
+
+        applyDefaultHierarchyTemplate()
 
         configureKotlin()
         kspDependencies("mobile")
     }
 
-    @Suppress("UNUSED_VARIABLE")
     private fun KotlinMultiplatformExtension.configureSourceSets() {
-        configureSourceSets {
-            val commonMain by getting {
-                dependencies {
-                    implementation(catalogBundle("mobile-common"))
-                }
+        sourceSets {
+            commonMain.dependencies {
+                implementation(catalogBundle("mobile-common"))
             }
-            val androidMain by getting {
-                dependsOn(commonMain)
+            androidMain {
+                dependsOn(commonMain.get())
                 dependencies {
                     implementation(catalogBundle("mobile-android"))
                 }
             }
-            val iosMain by getting {
-                dependsOn(commonMain)
+            iosMain {
+                dependsOn(commonMain.get())
                 dependencies {
                     implementation(catalogBundle("mobile-ios"))
                 }
             }
-            val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
 
-            val commonTest by getting {
+            commonTest {
                 dependencies {
                     implementation(catalogBundle("mobile-common-test"))
                 }
             }
-            val androidUnitTest by getting {
-                dependsOn(commonTest)
+            androidUnitTest {
+                dependsOn(commonTest.get())
                 dependencies {
                     implementation(catalogBundle("mobile-android-test"))
                 }
             }
-            val iosTest by getting {
-                dependsOn(commonTest)
+            iosTest {
+                dependsOn(commonTest.get())
                 dependencies {
                     implementation(catalogBundle("mobile-ios-test"))
                 }
             }
-            val iosSimulatorArm64Test by getting { dependsOn(iosTest) }
 
             configureSourceSets()
         }

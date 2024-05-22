@@ -3,15 +3,25 @@ package dev.alvr.katana.features.lists.ui.entities
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import com.arkivanov.essenty.parcelable.Parcelable
-import com.arkivanov.essenty.parcelable.Parcelize
-import dev.alvr.katana.features.lists.ui.strings.LocalListsStrings
+import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.features.lists.ui.resources.Res
+import dev.alvr.katana.features.lists.ui.resources.entry_format_manga
+import dev.alvr.katana.features.lists.ui.resources.entry_format_movie
+import dev.alvr.katana.features.lists.ui.resources.entry_format_music
+import dev.alvr.katana.features.lists.ui.resources.entry_format_novel
+import dev.alvr.katana.features.lists.ui.resources.entry_format_ona
+import dev.alvr.katana.features.lists.ui.resources.entry_format_one_shot
+import dev.alvr.katana.features.lists.ui.resources.entry_format_ova
+import dev.alvr.katana.features.lists.ui.resources.entry_format_special
+import dev.alvr.katana.features.lists.ui.resources.entry_format_tv
+import dev.alvr.katana.features.lists.ui.resources.entry_format_tv_short
+import dev.alvr.katana.features.lists.ui.resources.entry_format_unknown
 import korlibs.time.Date
 import korlibs.time.DateTimeTz
 
 @Immutable
 @Suppress("ComplexInterface")
-internal sealed interface MediaListItem : Parcelable {
+internal sealed interface MediaListItem {
     val entryId: Int
     val mediaId: Int
     val title: String
@@ -28,7 +38,6 @@ internal sealed interface MediaListItem : Parcelable {
     val completedAt: Date?
     val updatedAt: DateTimeTz?
 
-    @Parcelize
     data class AnimeListItem(
         override val entryId: Int,
         override val mediaId: Int,
@@ -48,14 +57,12 @@ internal sealed interface MediaListItem : Parcelable {
         val nextEpisode: NextEpisode?,
     ) : MediaListItem {
         @Stable
-        @Parcelize
         data class NextEpisode(
             val number: Int,
             val date: DateTimeTz,
-        ) : Parcelable
+        )
     }
 
-    @Parcelize
     data class MangaListItem(
         override val entryId: Int,
         override val mediaId: Int,
@@ -90,21 +97,19 @@ internal sealed interface MediaListItem : Parcelable {
         OneShot,
         Unknown;
 
-        val value
-            @Composable get() = with(LocalListsStrings.current) {
-                when (this@Format) {
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Tv -> entryFormatTv
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.TvShort -> entryFormatTvShort
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Movie -> entryFormatMovie
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Special -> entryFormatSpecial
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Ova -> entryFormatOva
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Ona -> entryFormatOna
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Music -> entryFormatMusic
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Manga -> entryFormatManga
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Novel -> entryFormatNovel
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.OneShot -> entryFormatOneShot
-                    dev.alvr.katana.features.lists.ui.entities.MediaListItem.Format.Unknown -> entryFormatUnknown
-                }
-            }
+        val text
+            @Composable get() = when (this) {
+                Tv -> Res.string.entry_format_tv
+                TvShort -> Res.string.entry_format_tv_short
+                Movie -> Res.string.entry_format_movie
+                Special -> Res.string.entry_format_special
+                Ova -> Res.string.entry_format_ova
+                Ona -> Res.string.entry_format_ona
+                Music -> Res.string.entry_format_music
+                Manga -> Res.string.entry_format_manga
+                Novel -> Res.string.entry_format_novel
+                OneShot -> Res.string.entry_format_one_shot
+                Unknown -> Res.string.entry_format_unknown
+            }.value
     }
 }

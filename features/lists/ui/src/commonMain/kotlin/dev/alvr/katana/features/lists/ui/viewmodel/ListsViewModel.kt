@@ -1,5 +1,6 @@
 package dev.alvr.katana.features.lists.ui.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import dev.alvr.katana.core.common.orEmpty
 import dev.alvr.katana.core.domain.failures.Failure
@@ -24,7 +25,7 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
 ) : BaseViewModel<ListState<I>, Nothing>() {
     protected abstract val collectionFlow: Flow<Either<Failure, MediaCollection<E>>>
 
-    override val container = coroutineScope.container<ListState<I>, Nothing>(ListState()) {
+    override val container = viewModelScope.container<ListState<I>, Nothing>(ListState()) {
         observeLists()
     }
 

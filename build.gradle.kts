@@ -7,8 +7,8 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.apollo) apply false
     alias(libs.plugins.buildconfig) apply false
-    alias(libs.plugins.complete.kotlin) apply false
     alias(libs.plugins.compose) apply false
+    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.kotest) apply false
     alias(libs.plugins.kotlin) apply false

@@ -93,11 +93,6 @@ internal fun BaseExtension.configureAndroid(packageName: String) {
         targetCompatibility = KatanaConfiguration.UseJavaVersion
     }
 
-    with(sourceSets["main"]) {
-        res.srcDirs("$AndroidDir/res", ResourcesDir)
-        resources.srcDirs(ResourcesDir)
-    }
-
     testOptions {
         animationsDisabled = true
         unitTests {
@@ -144,7 +139,6 @@ internal fun KotlinCommonCompilerOptions.configureKotlinCompiler() {
     languageVersion = KatanaConfiguration.KotlinVersion
     freeCompilerArgs.addAll(
         "-opt-in=kotlin.RequiresOptIn",
-        "-opt-in=kotlinx.cinterop.ExperimentalForeignApi",
         "-Xcontext-receivers",
         "-Xlambdas=indy",
         "-Xexpect-actual-classes",

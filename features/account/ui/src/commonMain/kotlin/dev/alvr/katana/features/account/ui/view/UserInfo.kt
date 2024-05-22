@@ -16,8 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.features.account.ui.entities.UserInfoUi
-import dev.alvr.katana.features.account.ui.strings.LocalAccountStrings
+import dev.alvr.katana.features.account.ui.resources.Res
+import dev.alvr.katana.features.account.ui.resources.logout_button
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
@@ -38,7 +40,7 @@ internal fun UserInfo(
         )
 
         Button(onClick = onLogoutClick) {
-            Text(text = LocalAccountStrings.current.logoutButton)
+            Text(text = Res.string.logout_button.value)
         }
     }
 }

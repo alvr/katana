@@ -7,10 +7,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import dev.alvr.katana.core.ui.components.home.KatanaHomeTopAppBar
 import dev.alvr.katana.core.ui.navigation.Destination
+import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.account.ui.entities.UserInfoUi
 import dev.alvr.katana.features.account.ui.navigation.AccountNavigator
-import dev.alvr.katana.features.account.ui.strings.LocalAccountStrings
+import dev.alvr.katana.features.account.ui.resources.Res
+import dev.alvr.katana.features.account.ui.resources.title
 import dev.alvr.katana.features.account.ui.viewmodel.AccountViewModel
 import org.koin.compose.koinInject
 
@@ -39,7 +41,7 @@ private fun AccountScreen(
     Scaffold(
         topBar = {
             KatanaHomeTopAppBar(
-                title = LocalAccountStrings.current.title,
+                title = Res.string.title.value,
                 subtitle = null,
             )
         },

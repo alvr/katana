@@ -1,5 +1,6 @@
 package dev.alvr.katana.features.login.ui.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.usecases.SaveSessionUseCase
 import dev.alvr.katana.common.user.domain.usecases.SaveUserIdUseCase
@@ -15,7 +16,7 @@ internal class LoginViewModel(
     private val saveSessionUseCase: SaveSessionUseCase,
     private val saveUserIdUseCase: SaveUserIdUseCase,
 ) : BaseViewModel<LoginState, Nothing>() {
-    override val container = coroutineScope.container<LoginState, Nothing>(LoginState()) {
+    override val container = viewModelScope.container<LoginState, Nothing>(LoginState()) {
         saveAnilistToken(token)
     }
 

@@ -72,6 +72,7 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         ":features",
         ":features:account",
         ":features:explore",
+        ":features:home",
         ":features:lists",
         ":features:login",
         ":features:social",

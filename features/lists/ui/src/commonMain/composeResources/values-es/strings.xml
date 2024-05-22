@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="anime_toolbar">Anime</string>
+    <string name="manga_toolbar">Manga</string>
+    <string name="entry_progress">%1$d/%2$s</string>
+    <string name="entry_next_episode">Ep. %1$d: %2$s</string>
+    <string name="entry_next_episode_separator"> › </string>
+    <string name="entry_plus_one">%1$d +</string>
+
+    <string name="anime_toolbar_search_placeholder">Buscar Anime…</string>
+    <string name="manga_toolbar_search_placeholder">Buscar Manga…</string>
+
+    <string name="entry_format_tv">TV</string>
+    <string name="entry_format_tv_short">Corto TV</string>
+    <string name="entry_format_movie">Película</string>
+    <string name="entry_format_special">Especial</string>
+    <string name="entry_format_ova">OVA</string>
+    <string name="entry_format_ona">ONA</string>
+    <string name="entry_format_music">Música</string>
+    <string name="entry_format_manga">Manga</string>
+    <string name="entry_format_novel">Novela Ligera</string>
+    <string name="entry_format_one_shot">One Shot</string>
+    <string name="entry_format_unknown">Desconocido</string>
+
+    <string name="empty_anime_list">Esta lista de Anime está vacía</string>
+    <string name="empty_manga_list">Esta lista de Manga está vacía</string>
+
+    <string name="error_message">Algo ha ocurrido al obtener la información de la lista seleccionada</string>
+    <string name="error_cover">Carátula no encontrada</string>
+    <string name="error_retry_button">Intentar de nuevo</string>
+
+    <string name="change_list_button">Cambiar lista</string>
+</resources>

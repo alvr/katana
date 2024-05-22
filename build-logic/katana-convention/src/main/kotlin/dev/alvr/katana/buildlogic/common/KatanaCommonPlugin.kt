@@ -17,8 +17,6 @@ internal class KatanaCommonPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = "com.louiscad.complete-kotlin")
-
             with(tasks) {
                 register<Delete>("clean") {
                     allprojects { delete(layout.buildDirectory.asFile.get()) }

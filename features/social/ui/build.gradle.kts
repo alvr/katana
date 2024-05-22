@@ -7,15 +7,17 @@ ksp {
     arg("compose-destinations.moduleName", "social")
 }
 
-katanaMultiplatform {
-    commonMainDependencies {
-        implementation(projects.core.common)
-        implementation(projects.core.ui)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.core.common)
+            implementation(projects.core.ui)
 
-        implementation(projects.features.social.domain)
-    }
+            implementation(projects.features.social.domain)
+        }
 
-    commonTestDependencies {
-        implementation(projects.core.tests)
+        commonTest.dependencies {
+            implementation(projects.core.tests)
+        }
     }
 }
