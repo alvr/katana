@@ -1,8 +1,7 @@
 package dev.alvr.katana.features.lists.data
 
 import com.apollographql.apollo3.api.Error
-import com.apollographql.apollo3.api.Optional
-import dev.alvr.katana.core.remote.type.FuzzyDateInput
+import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import io.kotest.property.Arb
@@ -19,21 +18,8 @@ import korlibs.time.Date
 import korlibs.time.DateTimeTz
 
 internal val mediaListCollectionQueryMock = MediaListCollectionQuery(
-    user = Arb.positiveInt().orNull().next(),
+    user = Arb.positiveInt().orNull().next().optional,
     type = Arb.enum<MediaType>().next(),
-)
-
-internal val mediaListEntriesMutationMock = MediaListEntriesMutation(
-    id = Arb.int().next(),
-    score = Arb.positiveDouble().orNull().next(),
-    progress = Arb.positiveInt().orNull().next(),
-    progressVolumes = Arb.positiveInt().orNull().next(),
-    repeat = Arb.positiveInt().orNull().next(),
-    private = Arb.boolean().orNull().next(),
-    notes = Arb.string().orNull().next(),
-    hiddenFromStatusLists = Arb.boolean().orNull().next(),
-    startedAt = Arb.fuzzyDate().orNull().next(),
-    completedAt = Arb.fuzzyDate().orNull().next(),
 )
 
 internal val mediaListMock = MediaList(
@@ -62,12 +48,4 @@ private fun Arb.Companion.date() = arbitrary {
 
 private fun Arb.Companion.dateTimeTz() = arbitrary {
     DateTimeTz.nowLocal()
-}
-
-private fun Arb.Companion.fuzzyDate() = arbitrary {
-    FuzzyDateInput(
-        year = Optional.presentIfNotNull(Arb.int().orNull().next()),
-        month = Optional.presentIfNotNull(Arb.int().orNull().next()),
-        day = Optional.presentIfNotNull(Arb.int().orNull().next()),
-    )
 }

@@ -53,7 +53,7 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         "*.data.type",
 
         // UI
-        "*.generated.resources",
+        "*.resources",
         "*.shared.navigation",
         "*.shared.resources",
         "*.shared.strings",

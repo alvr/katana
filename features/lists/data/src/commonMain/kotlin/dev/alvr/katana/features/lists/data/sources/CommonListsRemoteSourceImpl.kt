@@ -11,6 +11,8 @@ import com.apollographql.apollo3.exception.CacheMissException
 import com.apollographql.apollo3.interceptor.ApolloInterceptor
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.core.common.catchUnit
+import dev.alvr.katana.core.remote.executeOrThrow
+import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.toFailure
 import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
@@ -33,7 +35,7 @@ internal class CommonListsRemoteSourceImpl(
     private val reloadInterceptor: ApolloInterceptor,
 ) : CommonListsRemoteSource {
     override suspend fun updateList(entry: MediaList) = Either.catchUnit {
-        client.mutation(entry.toMutation()).execute()
+        client.mutation(entry.toMutation()).executeOrThrow()
     }.mapLeft { error ->
         Logger.e(error) { "There was an error updating the entry" }
 
@@ -45,7 +47,7 @@ internal class CommonListsRemoteSourceImpl(
 
     override fun <T : MediaEntry> getMediaCollection(type: MediaType) = flow {
         val response = client
-            .query(MediaListCollectionQuery(userId.getId().getOrNull(), type))
+            .query(MediaListCollectionQuery(userId.getId().optional, type))
             .fetchPolicyInterceptor(reloadInterceptor)
             .watch()
             .filterNot { it.exception is CacheMissException }

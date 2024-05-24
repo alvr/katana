@@ -63,7 +63,6 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
             decapitalizeFields = true
             generateAsInternal = true
             generateMethods = listOf("equalsHashCode")
-            generateOptionalOperationVariables = false
             packageName = fullPackageName
             warnOnDeprecatedUsages = true
 

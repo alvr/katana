@@ -4,6 +4,7 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.apollographql.apollo3.exception.JsonDataException
 import com.apollographql.apollo3.testing.QueueTestNetworkTransport
+import com.apollographql.apollo3.testing.enqueueTestNetworkError
 import com.apollographql.apollo3.testing.enqueueTestResponse
 import dev.alvr.katana.common.user.data.UserIdQuery
 import dev.alvr.katana.common.user.domain.models.UserId
@@ -46,6 +47,11 @@ internal class UserIdRemoteSourceTest : FreeSpec() {
                 val query = UserIdQuery.Data { this["viewer"] = buildUser { id = 37_384 } }
                 client.enqueueTestResponse(UserIdQuery(), query)
                 source.saveUserId().shouldBeRight()
+            }
+
+            "is error" {
+                client.enqueueTestNetworkError()
+                source.saveUserId().shouldBeLeft()
             }
         }
     }

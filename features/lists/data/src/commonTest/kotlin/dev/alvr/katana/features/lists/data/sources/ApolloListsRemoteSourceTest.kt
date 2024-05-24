@@ -11,6 +11,7 @@ import com.apollographql.apollo3.testing.registerTestResponse
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
+import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.type.MediaFormat
 import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.core.remote.type.buildAiringSchedule
@@ -62,7 +63,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
 
     private val client = ApolloClient.Builder().networkTransport(MapTestNetworkTransport()).build()
     private val userId = 37_384.right()
-    private val userIdOpt = userId.getOrNull()
+    private val userIdOpt = userId.getOrNull().optional
 
     private val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
     private val animeSource: AnimeListsRemoteSource = AnimeListsRemoteSourceImpl(source)

@@ -9,11 +9,13 @@ import com.apollographql.apollo3.interceptor.ApolloInterceptor
 import com.apollographql.apollo3.mockserver.MockServer
 import com.apollographql.apollo3.mockserver.enqueueError
 import com.apollographql.apollo3.mockserver.enqueueString
-import com.apollographql.apollo3.testing.QueueTestNetworkTransport
-import com.apollographql.apollo3.testing.enqueueTestResponse
+import com.apollographql.apollo3.testing.MapTestNetworkTransport
+import com.apollographql.apollo3.testing.registerTestNetworkError
+import com.apollographql.apollo3.testing.registerTestResponse
 import com.benasher44.uuid.uuid4
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.core.domain.failures.Failure
+import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.core.remote.type.buildMediaListCollection
 import dev.alvr.katana.core.remote.type.buildUser
@@ -21,8 +23,8 @@ import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
 import dev.alvr.katana.features.lists.data.apolloErrorMock
+import dev.alvr.katana.features.lists.data.mappers.requests.toMutation
 import dev.alvr.katana.features.lists.data.mediaListCollectionQueryMock
-import dev.alvr.katana.features.lists.data.mediaListEntriesMutationMock
 import dev.alvr.katana.features.lists.data.mediaListMock
 import dev.alvr.katana.features.lists.domain.failures.ListsFailure
 import dev.alvr.katana.features.lists.domain.models.MediaCollection
@@ -38,20 +40,23 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
     private val userIdManager = mock<UserIdManager>()
     private val reloadInterceptor = mock<ApolloInterceptor>()
 
-    private val client =
-        ApolloClient.Builder().networkTransport(QueueTestNetworkTransport()).build()
-    private val source = CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
+    private val client = ApolloClient.Builder().networkTransport(MapTestNetworkTransport()).build()
+    private val source: CommonListsRemoteSource =
+        CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
 
     init {
         "querying" - {
             queryList().forEach { (data, type) ->
                 "the server responded with data or not ($data, $type)" {
-                    everySuspend { userIdManager.getId() } returns 37_384.right()
+                    everySuspend { userIdManager.getId() } returns USER_ID.right()
                     val response = ApolloResponse.Builder(
                         operation = mediaListCollectionQueryMock,
                         requestUuid = uuid4(),
                     ).data(data).build()
-                    client.enqueueTestResponse(response)
+                    client.registerTestResponse(
+                        MediaListCollectionQuery(USER_ID.optional, type),
+                        response,
+                    )
 
                     source.getMediaCollection<MediaEntry>(type).test {
                         if (data == null) {
@@ -62,16 +67,20 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
 
                         cancelAndIgnoreRemainingEvents()
                     }
+
                     verifySuspend { userIdManager.getId() }
                 }
 
                 "a HTTP error occurs ($data, $type)" {
-                    everySuspend { userIdManager.getId() } returns 37_384.right()
+                    everySuspend { userIdManager.getId() } returns USER_ID.right()
                     val response = ApolloResponse.Builder(
                         operation = mediaListCollectionQueryMock,
                         requestUuid = uuid4(),
                     ).data(data).errors(listOf(apolloErrorMock)).build()
-                    client.enqueueTestResponse(response)
+                    client.registerTestResponse(
+                        MediaListCollectionQuery(USER_ID.optional, type),
+                        response,
+                    )
 
                     source.getMediaCollection<MediaEntry>(type).test {
                         awaitItem().shouldBeLeft(Failure.Unknown)
@@ -80,37 +89,42 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
                     verifySuspend { userIdManager.getId() }
                 }
             }
+
+            "with errors" - {
+                val mockServer = MockServer()
+                val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
+                val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(
+                    badClient,
+                    userIdManager,
+                    reloadInterceptor,
+                )
+
+                afterSpec { mockServer.close() }
+
+                mockServer.badClient().forEach { (type, enqueueAction) ->
+                    "a HTTP error occurs" {
+                        everySuspend { userIdManager.getId() } returns USER_ID.right()
+                        enqueueAction()
+
+                        source.getMediaCollection<MediaEntry>(type).test {
+                            awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                            cancelAndIgnoreRemainingEvents()
+                        }
+                        verifySuspend { userIdManager.getId() }
+                    }
+                }
+            }
         }
 
         "updating" - {
             "the server returns some data" {
-                client.enqueueTestResponse(mediaListEntriesMutationMock)
+                client.registerTestResponse(mediaListMock.toMutation())
                 source.updateList(mediaListMock).shouldBeRight()
             }
-        }
 
-        "with errors" - {
-            val mockServer = MockServer()
-            val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
-            val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(
-                badClient,
-                userIdManager,
-                reloadInterceptor,
-            )
-
-            afterSpec { mockServer.close() }
-
-            mockServer.badClient().forEach { (type, enqueueAction) ->
-                "a HTTP error occurs" {
-                    everySuspend { userIdManager.getId() } returns 37_384.right()
-                    enqueueAction()
-
-                    source.getMediaCollection<MediaEntry>(type).test {
-                        awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                        cancelAndIgnoreRemainingEvents()
-                    }
-                    verifySuspend { userIdManager.getId() }
-                }
+            "with errors" - {
+                client.registerTestNetworkError(mediaListMock.toMutation())
+                source.updateList(mediaListMock).shouldBeLeft()
             }
         }
     }
@@ -145,5 +159,9 @@ internal class CommonListsRemoteSourceTest : FreeSpec() {
         return buildList {
             commands.forEach { c -> types.forEach { t -> add(t to c) } }
         }
+    }
+
+    private companion object {
+        const val USER_ID = 37_384
     }
 }
