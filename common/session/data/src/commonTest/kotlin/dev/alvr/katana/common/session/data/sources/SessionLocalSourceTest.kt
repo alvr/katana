@@ -20,7 +20,6 @@ import dev.mokkery.mock
 import dev.mokkery.verify
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.flow.flowOf
 
 internal class SessionLocalSourceTest : FreeSpec() {
@@ -80,7 +79,7 @@ internal class SessionLocalSourceTest : FreeSpec() {
                 "checking session active for ${session.anilistToken} and ${session.isSessionActive}" {
                     every { store.data } returns flowOf(session)
 
-                    source.sessionActive.test(100.milliseconds) {
+                    source.sessionActive.test {
                         awaitItem().shouldBeRight((session.anilistToken == null && session.isSessionActive).not())
                         cancelAndIgnoreRemainingEvents()
                     }

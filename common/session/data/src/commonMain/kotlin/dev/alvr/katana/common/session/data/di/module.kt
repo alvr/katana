@@ -12,11 +12,11 @@ import org.koin.dsl.module
 internal expect fun dataStoreModule(): Module
 
 private val repositoriesModule = module {
-    singleOf(::SessionRepositoryImpl).bind<SessionRepository>()
+    singleOf(::SessionRepositoryImpl) bind SessionRepository::class
 }
 
 private val sourcesModule = module {
-    singleOf(::SessionLocalSourceImpl).bind<SessionLocalSource>()
+    singleOf(::SessionLocalSourceImpl) bind SessionLocalSource::class
 }
 
 val commonSessionDataModule = module {

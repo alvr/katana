@@ -20,7 +20,6 @@ import dev.mokkery.mock
 import dev.mokkery.verify
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.flow.flowOf
 
 internal class SessionRepositoryTest : FreeSpec() {
@@ -37,7 +36,7 @@ internal class SessionRepositoryTest : FreeSpec() {
                     false.right(),
                 )
 
-                repo.sessionActive.test(100.milliseconds) {
+                repo.sessionActive.test {
                     awaitItem().shouldBeRight(true)
                     awaitItem().shouldBeRight(true)
                     awaitItem().shouldBeRight(false)

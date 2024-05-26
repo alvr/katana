@@ -1,14 +1,14 @@
-fragment MediaEntry on Media {
-    id
-    title {
-        userPreferred
+fragment mediaEntry on Media {
+    id @nonnull
+    title @nonnull {
+        userPreferred @nonnull
     }
     episodes
     chapters
     volumes
     format
-    coverImage {
-        large
+    coverImage @nonnull {
+        large @nonnull
     }
     nextAiringEpisode {
         airingAt

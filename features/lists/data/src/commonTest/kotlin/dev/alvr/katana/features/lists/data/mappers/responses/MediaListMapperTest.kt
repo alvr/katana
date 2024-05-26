@@ -40,38 +40,33 @@ import korlibs.time.TimezoneOffset
 internal class MediaListMapperTest : FreeSpec({
     "a null response from server" {
         val data: MediaListCollectionQuery.Data? = null
-        data?.mediaList<MediaEntry.Anime>(MediaType.ANIME).shouldBeNull()
-        data?.mediaList<MediaEntry.Manga>(MediaType.MANGA).shouldBeNull()
+        data?.invoke<MediaEntry.Anime>(MediaType.ANIME).shouldBeNull()
+        data?.invoke<MediaEntry.Manga>(MediaType.MANGA).shouldBeNull()
     }
 
     "a collection without lists" {
         MediaListCollectionQuery.Data {
-            this["collection"] = buildMediaListCollection {
+            this["MediaListCollection"] = buildMediaListCollection {
                 lists = emptyList()
-                user = null
+                user = buildUser { }
             }
         }.run {
-            mediaList<MediaEntry.Anime>(MediaType.ANIME).shouldBeEmpty()
-            mediaList<MediaEntry.Manga>(MediaType.MANGA).shouldBeEmpty()
+            this<MediaEntry.Anime>(MediaType.ANIME).shouldBeEmpty()
+            this<MediaEntry.Manga>(MediaType.MANGA).shouldBeEmpty()
         }
     }
 
     "a list without name" {
         MediaListCollectionQuery.Data {
-            this["collection"] = buildMediaListCollection {
+            this["MediaListCollection"] = buildMediaListCollection {
                 lists = listOf(
-                    buildMediaListGroup {
-                        name = null
-                        entries = emptyList()
-                    },
                     buildMediaListGroup {
                         name = String.empty
                         entries = emptyList()
                     },
-                    null,
                 )
                 user = buildUser {
-                    this["mediaListOptions"] = buildMediaListOptions {
+                    mediaListOptions = buildMediaListOptions {
                         animeList = buildMediaListTypeOptions {
                             sectionOrder = emptyList()
                         }
@@ -82,15 +77,15 @@ internal class MediaListMapperTest : FreeSpec({
                 }
             }
         }.run {
-            mediaList<MediaEntry.Anime>(MediaType.ANIME).forAll { list -> list.name.shouldBeEmpty() }
-            mediaList<MediaEntry.Manga>(MediaType.MANGA).forAll { list -> list.name.shouldBeEmpty() }
+            this<MediaEntry.Anime>(MediaType.ANIME).forAll { list -> list.name.shouldBeEmpty() }
+            this<MediaEntry.Manga>(MediaType.MANGA).forAll { list -> list.name.shouldBeEmpty() }
         }
     }
 
     "anime" - {
         "a collection of animes without entries" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Rewatching"
@@ -110,7 +105,7 @@ internal class MediaListMapperTest : FreeSpec({
                         },
                     )
                     user = buildUser {
-                        this["mediaListOptions"] = buildMediaListOptions {
+                        mediaListOptions = buildMediaListOptions {
                             animeList = buildMediaListTypeOptions {
                                 sectionOrder =
                                     listOf("Watching", "Rewatching", "Completed TV", "Paused")
@@ -118,7 +113,7 @@ internal class MediaListMapperTest : FreeSpec({
                         }
                     }
                 }
-            }.mediaList<MediaEntry.Anime>(MediaType.ANIME).also { list ->
+            }.invoke<MediaEntry.Anime>(MediaType.ANIME).also { list ->
                 list[0].name shouldBe "Watching"
                 list[1].name shouldBe "Rewatching"
                 list[2].name shouldBe "Completed TV"
@@ -128,7 +123,7 @@ internal class MediaListMapperTest : FreeSpec({
 
         "a collection of animes without entries and sectionOrder" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Rewatching"
@@ -148,14 +143,14 @@ internal class MediaListMapperTest : FreeSpec({
                         },
                     )
                     user = buildUser {
-                        this["mediaListOptions"] = buildMediaListOptions {
+                        mediaListOptions = buildMediaListOptions {
                             animeList = buildMediaListTypeOptions {
-                                sectionOrder = null
+                                sectionOrder = emptyList()
                             }
                         }
                     }
                 }
-            }.mediaList<MediaEntry.Anime>(MediaType.ANIME).also { list ->
+            }.invoke<MediaEntry.Anime>(MediaType.ANIME).also { list ->
                 list[0].name shouldBe "Rewatching"
                 list[1].name shouldBe "Watching"
                 list[2].name shouldBe "Paused"
@@ -165,7 +160,7 @@ internal class MediaListMapperTest : FreeSpec({
 
         "a collection of animes without entries and mediaListOptions" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Rewatching"
@@ -184,11 +179,9 @@ internal class MediaListMapperTest : FreeSpec({
                             entries = emptyList()
                         },
                     )
-                    user = buildUser {
-                        this["mediaListOptions"] = null
-                    }
+                    user = buildUser { mediaListOptions = buildMediaListOptions { } }
                 }
-            }.mediaList<MediaEntry.Anime>(MediaType.ANIME).also { list ->
+            }.invoke<MediaEntry.Anime>(MediaType.ANIME).also { list ->
                 list[0].name shouldBe "Rewatching"
                 list[1].name shouldBe "Watching"
                 list[2].name shouldBe "Paused"
@@ -198,7 +191,7 @@ internal class MediaListMapperTest : FreeSpec({
 
         "a collection of animes without entries and animeListSorting" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Rewatching"
@@ -218,12 +211,12 @@ internal class MediaListMapperTest : FreeSpec({
                         },
                     )
                     user = buildUser {
-                        this["mediaListOptions"] = buildMediaListOptions {
-                            animeList = null
+                        mediaListOptions = buildMediaListOptions {
+                            animeList = buildMediaListTypeOptions { }
                         }
                     }
                 }
-            }.mediaList<MediaEntry.Anime>(MediaType.ANIME).also { list ->
+            }.invoke<MediaEntry.Anime>(MediaType.ANIME).also { list ->
                 list[0].name shouldBe "Rewatching"
                 list[1].name shouldBe "Watching"
                 list[2].name shouldBe "Paused"
@@ -233,7 +226,7 @@ internal class MediaListMapperTest : FreeSpec({
 
         "a collection of animes with valid entries" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Watching"
@@ -278,7 +271,7 @@ internal class MediaListMapperTest : FreeSpec({
                         },
                     )
                 }
-            }.mediaList<MediaEntry.Anime>(MediaType.ANIME).forAll { list ->
+            }.invoke<MediaEntry.Anime>(MediaType.ANIME).forAll { list ->
                 list.entries.forAll { entry ->
                     with(entry.list) {
                         id shouldBe 100
@@ -321,14 +314,14 @@ internal class MediaListMapperTest : FreeSpec({
 
         "a collection of animes with invalid entries" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Watching"
                             entries = listOf(
                                 buildMediaList {
                                     id = Int.zero
-                                    score = null
+                                    score = Double.zero
                                     progress = null
                                     progressVolumes = null
                                     repeat = null
@@ -340,10 +333,10 @@ internal class MediaListMapperTest : FreeSpec({
                                     updatedAt = null
                                     media = buildMedia {
                                         id = Int.zero
-                                        title = null
+                                        title = buildMediaTitle { userPreferred = String.empty }
                                         episodes = null
                                         format = null
-                                        coverImage = null
+                                        coverImage = buildMediaCoverImage { large = String.empty }
                                         nextAiringEpisode = null
                                     }
                                 },
@@ -351,7 +344,7 @@ internal class MediaListMapperTest : FreeSpec({
                         },
                     )
                 }
-            }.mediaList<MediaEntry.Anime>(MediaType.ANIME).forAll { list ->
+            }.invoke<MediaEntry.Anime>(MediaType.ANIME).forAll { list ->
                 list.entries.forAll { entry ->
                     with(entry.list) {
                         id shouldBe Int.zero
@@ -387,7 +380,7 @@ internal class MediaListMapperTest : FreeSpec({
     "manga" - {
         "a collection of mangas without entries" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Rereading"
@@ -407,15 +400,14 @@ internal class MediaListMapperTest : FreeSpec({
                         },
                     )
                     user = buildUser {
-                        this["mediaListOptions"] = buildMediaListOptions {
+                        mediaListOptions = buildMediaListOptions {
                             mangaList = buildMediaListTypeOptions {
-                                sectionOrder =
-                                    listOf("Reading", "Rereading", "Completed Novel", "Paused")
+                                sectionOrder = listOf("Reading", "Rereading", "Completed Novel", "Paused")
                             }
                         }
                     }
                 }
-            }.mediaList<MediaEntry.Manga>(MediaType.MANGA).also { list ->
+            }.invoke<MediaEntry.Manga>(MediaType.MANGA).also { list ->
                 list[0].name shouldBe "Reading"
                 list[1].name shouldBe "Rereading"
                 list[2].name shouldBe "Completed Novel"
@@ -425,7 +417,7 @@ internal class MediaListMapperTest : FreeSpec({
 
         "a collection of mangas without entries and sectionOrder" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Rereading"
@@ -445,14 +437,14 @@ internal class MediaListMapperTest : FreeSpec({
                         },
                     )
                     user = buildUser {
-                        this["mediaListOptions"] = buildMediaListOptions {
+                        mediaListOptions = buildMediaListOptions {
                             mangaList = buildMediaListTypeOptions {
-                                sectionOrder = null
+                                sectionOrder = emptyList()
                             }
                         }
                     }
                 }
-            }.mediaList<MediaEntry.Manga>(MediaType.MANGA).also { list ->
+            }.invoke<MediaEntry.Manga>(MediaType.MANGA).also { list ->
                 list[0].name shouldBe "Rereading"
                 list[1].name shouldBe "Reading"
                 list[2].name shouldBe "Paused"
@@ -462,7 +454,7 @@ internal class MediaListMapperTest : FreeSpec({
 
         "a collection of mangas without entries and mediaListOptions" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Rereading"
@@ -481,11 +473,9 @@ internal class MediaListMapperTest : FreeSpec({
                             entries = emptyList()
                         },
                     )
-                    user = buildUser {
-                        this["mediaListOptions"] = null
-                    }
+                    user = buildUser { mediaListOptions = buildMediaListOptions { } }
                 }
-            }.mediaList<MediaEntry.Manga>(MediaType.MANGA).also { list ->
+            }.invoke<MediaEntry.Manga>(MediaType.MANGA).also { list ->
                 list[0].name shouldBe "Rereading"
                 list[1].name shouldBe "Reading"
                 list[2].name shouldBe "Paused"
@@ -495,7 +485,7 @@ internal class MediaListMapperTest : FreeSpec({
 
         "a collection of mangas without entries and mangaListSorting" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Rereading"
@@ -515,12 +505,12 @@ internal class MediaListMapperTest : FreeSpec({
                         },
                     )
                     user = buildUser {
-                        this["mediaListOptions"] = buildMediaListOptions {
-                            mangaList = null
+                        mediaListOptions = buildMediaListOptions {
+                            mangaList = buildMediaListTypeOptions { }
                         }
                     }
                 }
-            }.mediaList<MediaEntry.Manga>(MediaType.MANGA).also { list ->
+            }.invoke<MediaEntry.Manga>(MediaType.MANGA).also { list ->
                 list[0].name shouldBe "Rereading"
                 list[1].name shouldBe "Reading"
                 list[2].name shouldBe "Paused"
@@ -530,7 +520,7 @@ internal class MediaListMapperTest : FreeSpec({
 
         "a collection of mangas with valid entries" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Reading"
@@ -573,7 +563,7 @@ internal class MediaListMapperTest : FreeSpec({
                         },
                     )
                 }
-            }.mediaList<MediaEntry.Manga>(MediaType.MANGA).forAll { list ->
+            }.invoke<MediaEntry.Manga>(MediaType.MANGA).forAll { list ->
                 list.entries.forAll { entry ->
                     with(entry.list) {
                         id shouldBe 100
@@ -610,14 +600,14 @@ internal class MediaListMapperTest : FreeSpec({
 
         "a collection of mangas with invalid entries" {
             MediaListCollectionQuery.Data {
-                this["collection"] = buildMediaListCollection {
+                this["MediaListCollection"] = buildMediaListCollection {
                     lists = listOf(
                         buildMediaListGroup {
                             name = "Reading"
                             entries = listOf(
                                 buildMediaList {
                                     id = Int.zero
-                                    score = null
+                                    score = Double.zero
                                     progress = null
                                     progressVolumes = null
                                     repeat = null
@@ -629,11 +619,11 @@ internal class MediaListMapperTest : FreeSpec({
                                     updatedAt = null
                                     media = buildMedia {
                                         id = Int.zero
-                                        title = null
+                                        title = buildMediaTitle { userPreferred = String.empty }
                                         chapters = null
                                         volumes = null
                                         format = null
-                                        coverImage = null
+                                        coverImage = buildMediaCoverImage { large = String.empty }
                                         nextAiringEpisode = null
                                     }
                                 },
@@ -641,7 +631,7 @@ internal class MediaListMapperTest : FreeSpec({
                         },
                     )
                 }
-            }.mediaList<MediaEntry.Manga>(MediaType.MANGA).forAll { list ->
+            }.invoke<MediaEntry.Manga>(MediaType.MANGA).forAll { list ->
                 list.entries.forAll { entry ->
                     with(entry.list) {
                         id shouldBe Int.zero

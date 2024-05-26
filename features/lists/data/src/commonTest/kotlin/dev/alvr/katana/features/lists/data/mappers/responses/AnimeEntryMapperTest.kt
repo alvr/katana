@@ -13,36 +13,15 @@ import korlibs.time.TimezoneOffset
 import dev.alvr.katana.features.lists.data.fragment.MediaEntry as MediaEntryFragment
 
 internal class AnimeEntryMapperTest : FreeSpec({
-    "a null entry" {
-        val entry: MediaEntryFragment? = null
-        entry.animeEntry().also { result ->
-            result shouldBeEqual MediaEntry.Anime(
-                entry = CommonMediaEntry(
-                    id = Int.zero,
-                    title = String.empty,
-                    coverImage = String.empty,
-                    format = CommonMediaEntry.Format.UNKNOWN,
-                ),
-                episodes = null,
-                nextEpisode = null,
-            )
-            result shouldBeEqual MediaEntry.Anime(
-                entry = entry.mediaEntry(),
-                episodes = null,
-                nextEpisode = null,
-            )
-        }
-    }
-
     "an entry with null values" {
         val entry = MediaEntryFragment(
             id = Int.zero,
-            title = null,
+            title = MediaEntryFragment.Title(String.empty),
             episodes = null,
             chapters = null,
             volumes = null,
             format = null,
-            coverImage = null,
+            coverImage = MediaEntryFragment.CoverImage(String.empty),
             nextAiringEpisode = null,
         )
         entry.animeEntry().also { result ->
@@ -67,12 +46,12 @@ internal class AnimeEntryMapperTest : FreeSpec({
     "an entry with null values but data classes with null" {
         val entry = MediaEntryFragment(
             id = Int.zero,
-            title = MediaEntryFragment.Title(null),
+            title = MediaEntryFragment.Title(String.empty),
             episodes = null,
             chapters = null,
             volumes = null,
             format = null,
-            coverImage = MediaEntryFragment.CoverImage(null),
+            coverImage = MediaEntryFragment.CoverImage(String.empty),
             nextAiringEpisode = null,
         )
 

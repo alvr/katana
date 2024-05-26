@@ -9,6 +9,7 @@ import com.apollographql.apollo3.testing.MapTestNetworkTransport
 import com.apollographql.apollo3.testing.registerTestNetworkError
 import com.apollographql.apollo3.testing.registerTestResponse
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
+import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.type.MediaFormat
@@ -54,7 +55,6 @@ import korlibs.time.Date
 import korlibs.time.DateTime
 import korlibs.time.DateTimeTz
 import korlibs.time.TimezoneOffset
-import kotlin.time.Duration.Companion.milliseconds
 
 @ApolloExperimental
 internal class ApolloListsRemoteSourceTest : FreeSpec() {
@@ -63,7 +63,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
 
     private val client = ApolloClient.Builder().networkTransport(MapTestNetworkTransport()).build()
     private val userId = 37_384.right()
-    private val userIdOpt = userId.optional()
+    private val userIdOpt = userId.getOrNull().optional
 
     private val source: CommonListsRemoteSource = CommonListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
     private val animeSource: AnimeListsRemoteSource = AnimeListsRemoteSourceImpl(source)
@@ -77,7 +77,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
         "anime" - {
             "the collection has no lists" {
                 val query = MediaListCollectionQuery.Data {
-                    this["collection"] = buildMediaListCollection {
+                    this["MediaListCollection"] = buildMediaListCollection {
                         lists = emptyList()
                     }
                 }
@@ -87,7 +87,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                animeSource.animeCollection.test(100.milliseconds) {
+                animeSource.animeCollection.test {
                     awaitItem().shouldBeRight().lists.shouldBeEmpty()
                     awaitComplete()
                 }
@@ -96,7 +96,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
 
             "the entries are empty" {
                 val query = MediaListCollectionQuery.Data {
-                    this["collection"] = buildMediaListCollection {
+                    this["MediaListCollection"] = buildMediaListCollection {
                         lists = listOf(
                             buildMediaListGroup {
                                 name = "Watching"
@@ -110,13 +110,9 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                 name = "Custom List"
                                 entries = emptyList()
                             },
-                            buildMediaListGroup {
-                                name = null
-                                entries = emptyList()
-                            },
                         )
                         user = buildUser {
-                            this["mediaListOptions"] = buildMediaListOptions {
+                            mediaListOptions = buildMediaListOptions {
                                 animeList = buildMediaListTypeOptions {
                                     sectionOrder = listOf("Watching", "Completed TV", "Custom List")
                                 }
@@ -130,9 +126,9 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                animeSource.animeCollection.test(100.milliseconds) {
+                animeSource.animeCollection.test {
                     awaitItem().shouldBeRight().lists
-                        .shouldHaveSize(4)
+                        .shouldHaveSize(3)
                         .also { lists ->
                             with(lists.first()) {
                                 entries.shouldBeEmpty()
@@ -146,14 +142,14 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
 
             "the entry has null values" {
                 val query = MediaListCollectionQuery.Data {
-                    this["collection"] = buildMediaListCollection {
+                    this["MediaListCollection"] = buildMediaListCollection {
                         lists = listOf(
                             buildMediaListGroup {
                                 name = "Watching"
                                 entries = listOf(
                                     buildMediaList {
                                         id = Int.zero
-                                        score = null
+                                        score = Double.zero
                                         progress = null
                                         progressVolumes = null
                                         repeat = null
@@ -164,10 +160,10 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                         completedAt = null
                                         media = buildMedia {
                                             id = Int.zero
-                                            title = null
+                                            title = buildMediaTitle { userPreferred = String.empty }
                                             episodes = null
                                             format = null
-                                            coverImage = null
+                                            coverImage = buildMediaCoverImage { large = String.empty }
                                             nextAiringEpisode = null
                                         }
                                     },
@@ -182,7 +178,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                animeSource.animeCollection.test(100.milliseconds) {
+                animeSource.animeCollection.test {
                     awaitItem().shouldBeRight().lists.also { lists ->
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -219,7 +215,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
 
             "the entry has values" {
                 val query = MediaListCollectionQuery.Data {
-                    this["collection"] = buildMediaListCollection {
+                    this["MediaListCollection"] = buildMediaListCollection {
                         lists = listOf(
                             buildMediaListGroup {
                                 name = "Watching"
@@ -270,7 +266,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                animeSource.animeCollection.test(100.milliseconds) {
+                animeSource.animeCollection.test {
                     awaitItem().shouldBeRight().lists.also { lists ->
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -317,8 +313,8 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     null,
                 )
 
-                animeSource.animeCollection.test(100.milliseconds) {
-                    awaitItem().shouldBeRight().lists.shouldBeEmpty()
+                animeSource.animeCollection.test {
+                    awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                     awaitComplete()
                 }
 
@@ -333,7 +329,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     ),
                 )
 
-                animeSource.animeCollection.test(100.milliseconds) {
+                animeSource.animeCollection.test {
                     awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                     awaitComplete()
                 }
@@ -345,7 +341,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
         "manga" - {
             "the collection has no lists" {
                 val query = MediaListCollectionQuery.Data {
-                    this["collection"] = buildMediaListCollection {
+                    this["MediaListCollection"] = buildMediaListCollection {
                         lists = emptyList()
                     }
                 }
@@ -355,7 +351,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                mangaSource.mangaCollection.test(100.milliseconds) {
+                mangaSource.mangaCollection.test {
                     awaitItem().shouldBeRight().lists.shouldBeEmpty()
                     awaitComplete()
                 }
@@ -365,7 +361,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
 
             "the entries are empty" {
                 val query = MediaListCollectionQuery.Data {
-                    this["collection"] = buildMediaListCollection {
+                    this["MediaListCollection"] = buildMediaListCollection {
                         lists = listOf(
                             buildMediaListGroup {
                                 name = "Rereading"
@@ -379,13 +375,9 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                 name = "Custom List"
                                 entries = emptyList()
                             },
-                            buildMediaListGroup {
-                                name = null
-                                entries = emptyList()
-                            },
                         )
                         user = buildUser {
-                            this["mediaListOptions"] = buildMediaListOptions {
+                            mediaListOptions = buildMediaListOptions {
                                 mangaList = buildMediaListTypeOptions {
                                     sectionOrder = listOf("Custom List", "Reading", "Rereading")
                                 }
@@ -399,9 +391,9 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                mangaSource.mangaCollection.test(100.milliseconds) {
+                mangaSource.mangaCollection.test {
                     awaitItem().shouldBeRight().lists
-                        .shouldHaveSize(4)
+                        .shouldHaveSize(3)
                         .also { lists ->
                             with(lists.first()) {
                                 entries.shouldBeEmpty()
@@ -415,14 +407,14 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
 
             "the entry has null values" {
                 val query = MediaListCollectionQuery.Data {
-                    this["collection"] = buildMediaListCollection {
+                    this["MediaListCollection"] = buildMediaListCollection {
                         lists = listOf(
                             buildMediaListGroup {
                                 name = "Reading"
                                 entries = listOf(
                                     buildMediaList {
                                         id = Int.zero
-                                        score = null
+                                        score = Double.zero
                                         progress = null
                                         progressVolumes = null
                                         repeat = null
@@ -433,11 +425,11 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                         completedAt = null
                                         media = buildMedia {
                                             id = Int.zero
-                                            title = null
+                                            title = buildMediaTitle { userPreferred = String.empty }
                                             chapters = null
                                             volumes = null
                                             format = null
-                                            coverImage = null
+                                            coverImage = buildMediaCoverImage { large = String.empty }
                                             nextAiringEpisode = null
                                         }
                                     },
@@ -452,7 +444,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                mangaSource.mangaCollection.test(100.milliseconds) {
+                mangaSource.mangaCollection.test {
                     awaitItem().shouldBeRight().lists.also { lists ->
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -489,7 +481,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
 
             "the entry has values" {
                 val query = MediaListCollectionQuery.Data {
-                    this["collection"] = buildMediaListCollection {
+                    this["MediaListCollection"] = buildMediaListCollection {
                         lists = listOf(
                             buildMediaListGroup {
                                 name = "Reading"
@@ -538,7 +530,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     query,
                 )
 
-                mangaSource.mangaCollection.test(100.milliseconds) {
+                mangaSource.mangaCollection.test {
                     awaitItem().shouldBeRight().lists.also { lists ->
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
@@ -579,8 +571,8 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     null,
                 )
 
-                mangaSource.mangaCollection.test(100.milliseconds) {
-                    awaitItem().shouldBeRight().lists.shouldBeEmpty()
+                mangaSource.mangaCollection.test {
+                    awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                     awaitComplete()
                 }
 
@@ -595,7 +587,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                     ),
                 )
 
-                mangaSource.mangaCollection.test(100.milliseconds) {
+                mangaSource.mangaCollection.test {
                     awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                     awaitComplete()
                 }

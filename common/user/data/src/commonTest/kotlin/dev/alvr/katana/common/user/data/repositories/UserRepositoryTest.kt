@@ -18,7 +18,6 @@ import dev.mokkery.mock
 import dev.mokkery.verify
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.flow.emptyFlow
 
 internal class UserRepositoryTest : FreeSpec() {
@@ -68,7 +67,7 @@ internal class UserRepositoryTest : FreeSpec() {
             "observing userInfo" - {
                 "the server returns no data" {
                     every { userInfoSource.userInfo } returns emptyFlow()
-                    repo.userInfo.test(100.milliseconds) { awaitComplete() }
+                    repo.userInfo.test { awaitComplete() }
                     verify { userInfoSource.userInfo }
                 }
             }

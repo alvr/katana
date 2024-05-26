@@ -12,7 +12,6 @@ import dev.alvr.katana.core.tests.koinExtension
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.equals.shouldBeEqual
-import kotlin.time.Duration.Companion.milliseconds
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
@@ -22,7 +21,7 @@ internal class SessionDataStoreTest : FreeSpec(), KoinTest {
 
     init {
         "initial session should equal to the Session class" {
-            dataStore.data.test(100.milliseconds) {
+            dataStore.data.test {
                 awaitItem() shouldBeEqual Session()
                 cancelAndConsumeRemainingEvents()
             }
@@ -37,7 +36,7 @@ internal class SessionDataStoreTest : FreeSpec(), KoinTest {
                     )
                 }
 
-                data.test(100.milliseconds) {
+                data.test {
                     awaitItem() shouldBeEqual Session(
                         anilistToken = AnilistToken("token"),
                         isSessionActive = true,
@@ -48,7 +47,7 @@ internal class SessionDataStoreTest : FreeSpec(), KoinTest {
         }
 
         "corrupted dataStore should recreate again the file with initial values" {
-            corruptedDataStore.data.test(100.milliseconds) {
+            corruptedDataStore.data.test {
                 awaitItem() shouldBeEqual Session(anilistToken = AnilistToken("recreated"))
                 cancelAndConsumeRemainingEvents()
             }

@@ -1,12 +1,13 @@
-fragment MediaListEntry on MediaList {
-    id
-    score
+fragment mediaListEntry on MediaList {
+    id @nonnull
+    score @nonnull
     progress
     progressVolumes
     repeat
     private
     notes
     hiddenFromStatusLists
+    updatedAt
     startedAt {
         year
         month
@@ -17,5 +18,7 @@ fragment MediaListEntry on MediaList {
         month
         day
     }
-    updatedAt
+    media @nonnull {
+        ...mediaEntry
+    }
 }

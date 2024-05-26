@@ -9,6 +9,7 @@ import dev.alvr.katana.common.user.data.UserIdQuery
 import dev.alvr.katana.common.user.data.mappers.responses.invoke
 import dev.alvr.katana.common.user.domain.failures.UserFailure
 import dev.alvr.katana.core.common.catchUnit
+import dev.alvr.katana.core.remote.executeOrThrow
 import dev.alvr.katana.core.remote.toFailure
 
 internal class UserIdRemoteSourceImpl(
@@ -36,6 +37,6 @@ internal class UserIdRemoteSourceImpl(
     private suspend fun userIdHandler(policy: FetchPolicy) = client
         .query(UserIdQuery())
         .fetchPolicy(policy)
-        .execute()
-        .data()
+        .executeOrThrow()
+        .dataAssertNoErrors()
 }

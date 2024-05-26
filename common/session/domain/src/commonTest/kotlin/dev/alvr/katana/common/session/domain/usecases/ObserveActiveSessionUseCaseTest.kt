@@ -17,7 +17,6 @@ import dev.mokkery.mock
 import dev.mokkery.verify
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.flow.flowOf
 import org.koin.test.KoinTest
 import org.koin.test.inject
@@ -41,7 +40,7 @@ internal class ObserveActiveSessionUseCaseTest : FreeSpec(), KoinTest {
 
             useCase()
 
-            useCase.flow.test(100.milliseconds) {
+            useCase.flow.test {
                 awaitItem().shouldBeRight(false)
                 awaitItem().shouldBeRight(true)
                 awaitItem().shouldBeRight(false)
@@ -58,7 +57,7 @@ internal class ObserveActiveSessionUseCaseTest : FreeSpec(), KoinTest {
 
             useCase()
 
-            useCase.flow.test(100.milliseconds) {
+            useCase.flow.test {
                 awaitItem().shouldBeLeft(SessionFailure.CheckingActiveSession)
                 cancelAndConsumeRemainingEvents()
             }

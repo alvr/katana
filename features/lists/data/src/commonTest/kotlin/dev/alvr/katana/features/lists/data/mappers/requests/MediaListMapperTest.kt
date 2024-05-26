@@ -3,6 +3,8 @@ package dev.alvr.katana.features.lists.data.mappers.requests
 import com.apollographql.apollo3.api.Optional
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
+import dev.alvr.katana.core.remote.optional
+import dev.alvr.katana.core.remote.present
 import dev.alvr.katana.core.remote.type.FuzzyDateInput
 import dev.alvr.katana.features.lists.data.MediaListEntriesMutation
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
@@ -27,27 +29,23 @@ internal class MediaListMapperTest : FreeSpec({
             updatedAt = DateTimeTz.nowLocal(),
         ).toMutation() shouldBeEqual MediaListEntriesMutation(
             id = Int.zero,
-            score = Optional.Present(Double.zero),
-            progress = Optional.Present(Int.zero),
-            progressVolumes = Optional.Present(Int.zero),
-            repeat = Optional.Present(Int.zero),
-            private = Optional.Present(false),
-            notes = Optional.Present(String.empty),
-            hiddenFromStatusLists = Optional.Present(false),
-            startedAt = Optional.Present(
-                FuzzyDateInput(
-                    year = Optional.Present(2022),
-                    month = Optional.Present(7),
-                    day = Optional.Present(20),
-                ),
-            ),
-            completedAt = Optional.Present(
-                FuzzyDateInput(
-                    year = Optional.Present(2022),
-                    month = Optional.Present(7),
-                    day = Optional.Present(20),
-                ),
-            ),
+            score = Double.zero.present,
+            progress = Int.zero.present,
+            progressVolumes = Int.zero.present,
+            repeat = Int.zero.present,
+            private = false.present,
+            notes = String.empty.present,
+            hiddenFromStatusLists = false.optional,
+            startedAt = FuzzyDateInput(
+                year = Optional.Present(2022),
+                month = Optional.Present(7),
+                day = Optional.Present(20),
+            ).present,
+            completedAt = FuzzyDateInput(
+                year = 2022.present,
+                month = 7.present,
+                day = 20.present,
+            ).present,
         )
     }
 
@@ -66,15 +64,15 @@ internal class MediaListMapperTest : FreeSpec({
             updatedAt = null,
         ).toMutation() shouldBeEqual MediaListEntriesMutation(
             id = Int.zero,
-            score = Optional.Present(Double.zero),
-            progress = Optional.Present(Int.zero),
-            progressVolumes = Optional.Absent,
-            repeat = Optional.Present(Int.zero),
-            private = Optional.Present(false),
-            notes = Optional.Present(String.empty),
-            hiddenFromStatusLists = Optional.Present(false),
-            startedAt = Optional.Absent,
-            completedAt = Optional.Absent,
+            score = Double.zero.present,
+            progress = Int.zero.present,
+            progressVolumes = null.optional,
+            repeat = Int.zero.present,
+            private = false.present,
+            notes = String.empty.present,
+            hiddenFromStatusLists = false.present,
+            startedAt = null.optional,
+            completedAt = null.optional,
         )
     }
 })
