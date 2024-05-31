@@ -5,6 +5,7 @@ import arrow.core.Either
 import dev.alvr.katana.core.common.orEmpty
 import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.ui.viewmodel.BaseViewModel
+import dev.alvr.katana.core.ui.viewmodel.EmptyEffect
 import dev.alvr.katana.features.lists.domain.models.MediaCollection
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
@@ -22,10 +23,10 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 
 internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     private val updateListUseCase: UpdateListUseCase,
-) : BaseViewModel<ListState<I>, Nothing>() {
+) : BaseViewModel<ListState<I>, EmptyEffect>() {
     protected abstract val collectionFlow: Flow<Either<Failure, MediaCollection<E>>>
 
-    override val container = viewModelScope.container<ListState<I>, Nothing>(ListState()) {
+    override val container = viewModelScope.container<ListState<I>, EmptyEffect>(ListState()) {
         observeLists()
     }
 

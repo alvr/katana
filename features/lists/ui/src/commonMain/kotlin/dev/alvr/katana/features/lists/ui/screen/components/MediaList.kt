@@ -1,4 +1,4 @@
-package dev.alvr.katana.features.lists.ui.view.components
+package dev.alvr.katana.features.lists.ui.screen.components
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -64,7 +64,6 @@ import dev.alvr.katana.features.lists.ui.viewmodel.ListState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import kotlinx.collections.immutable.ImmutableList
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @Composable
 internal fun MediaList(
@@ -257,7 +256,6 @@ private fun CoverAndScore(
 }
 
 @Composable
-@OptIn(ExperimentalResourceApi::class)
 private fun Cover(
     cover: String,
     title: String,

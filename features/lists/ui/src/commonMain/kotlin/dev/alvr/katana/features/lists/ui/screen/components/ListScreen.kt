@@ -1,20 +1,15 @@
-package dev.alvr.katana.features.lists.ui.view.components
+package dev.alvr.katana.features.lists.ui.screen.components
 
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.structuralEqualityPolicy
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.ramcosta.composedestinations.result.ResultRecipient
 import dev.alvr.katana.core.common.zero
-import dev.alvr.katana.core.ui.OnNavValue
 import dev.alvr.katana.core.ui.components.KatanaEmptyState
 import dev.alvr.katana.core.ui.components.KatanaErrorState
 import dev.alvr.katana.core.ui.components.home.KatanaHomeScaffold
@@ -26,45 +21,46 @@ import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.anime_toolbar_search_placeholder
 import dev.alvr.katana.features.lists.ui.resources.error_message
 import dev.alvr.katana.features.lists.ui.resources.manga_toolbar_search_placeholder
-import dev.alvr.katana.features.lists.ui.view.destinations.ChangeListSheetDestination
 import dev.alvr.katana.features.lists.ui.viewmodel.AnimeListsViewModel
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsViewModel
 import dev.alvr.katana.features.lists.ui.viewmodel.MangaListsViewModel
-import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
-@ExperimentalFoundationApi
 internal fun ListScreen(
-    vm: ListsViewModel<*, *>,
+    viewModel: ListsViewModel<*, *>,
     navigator: ListsNavigator,
-    resultRecipient: ResultRecipient<ChangeListSheetDestination, String>,
     title: String,
     emptyStateRes: String,
     backContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val state by vm.collectAsState()
+    val state by viewModel.collectAsState()
     val katanaScaffoldState = rememberKatanaHomeScaffoldState()
     val lazyGridState = rememberLazyGridState()
-    val coroutineScope = rememberCoroutineScope()
 
-    resultRecipient.OnNavValue { result ->
-        vm.selectList(result).also {
-            coroutineScope.launch { lazyGridState.scrollToItem(Int.zero) }
-            katanaScaffoldState.resetToolbar()
-        }
-    }
+    var showListSelector by remember { mutableStateOf(false) }
 
-    val searchPlaceholder = when (vm) {
+    ChangeListSheet(
+        isVisible = showListSelector,
+        lists = viewModel.userLists,
+        selectedList = state.name.orEmpty(),
+        onDismissRequest = { showListSelector = false },
+        onClick = { name ->
+            showListSelector = false
+            viewModel.selectList(name).also {
+                lazyGridState.scrollToItem(Int.zero)
+                katanaScaffoldState.resetToolbar()
+            }
+        },
+    )
+
+    val searchPlaceholder = when (viewModel) {
         is AnimeListsViewModel -> Res.string.anime_toolbar_search_placeholder
         is MangaListsViewModel -> Res.string.manga_toolbar_search_placeholder
     }.value
 
-    val buttonsVisible by remember(state.isError) {
-        derivedStateOf(structuralEqualityPolicy()) { !state.isError }
-    }
+    val buttonsVisible = !state.isError
     katanaScaffoldState.showTopAppBarActions = buttonsVisible
 
     KatanaHomeScaffold(
@@ -72,11 +68,11 @@ internal fun ListScreen(
         title = title,
         subtitle = state.name,
         searchPlaceholder = searchPlaceholder,
-        onSearch = vm::search,
+        onSearch = viewModel::search,
         backContent = backContent,
         fab = {
-            ChangeListButton(visible = buttonsVisible && vm.userLists.isNotEmpty()) {
-                navigator.listSelector(vm.userLists, state.name.orEmpty())
+            ChangeListButton(visible = buttonsVisible && viewModel.userLists.isNotEmpty()) {
+                showListSelector = true
             }
         },
     ) { paddingValues ->
@@ -86,7 +82,7 @@ internal fun ListScreen(
                     modifier = modifier.padding(paddingValues),
                     text = Res.string.error_message.value,
                     onRetry = {
-                        vm.refreshList()
+                        viewModel.refreshList()
                         katanaScaffoldState.resetToolbar()
                     },
                     loading = state.isLoading,
@@ -99,10 +95,10 @@ internal fun ListScreen(
                     lazyGridState = lazyGridState,
                     modifier = modifier.padding(paddingValues),
                     listState = state,
-                    onRefresh = vm::refreshList,
-                    onAddPlusOne = vm::addPlusOne,
-                    onEditEntry = navigator::editEntry,
-                    onEntryDetails = navigator::entryDetails,
+                    onRefresh = viewModel::refreshList,
+                    onAddPlusOne = viewModel::addPlusOne,
+                    onEditEntry = navigator::showEditEntry,
+                    onEntryDetails = navigator::navigateToEntryDetails,
                 )
             }
         }

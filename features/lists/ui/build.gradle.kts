@@ -2,11 +2,6 @@ plugins {
     id("katana.multiplatform.ui")
 }
 
-ksp {
-    arg("compose-destinations.mode", "destinations")
-    arg("compose-destinations.moduleName", "lists")
-}
-
 kotlin {
     sourceSets {
         commonMain.dependencies {
