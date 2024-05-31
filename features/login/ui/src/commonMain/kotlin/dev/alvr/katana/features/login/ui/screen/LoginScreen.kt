@@ -1,6 +1,5 @@
-package dev.alvr.katana.features.login.ui.view
+package dev.alvr.katana.features.login.ui.screen
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearEasing
@@ -19,12 +18,13 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -51,7 +51,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.Placeholder
@@ -60,11 +59,18 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ramcosta.composedestinations.annotation.DeepLink
-import com.ramcosta.composedestinations.annotation.Destination
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import androidx.navigation.navigation
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.screens.KatanaScreen
+import dev.alvr.katana.core.ui.utils.isLandscape
+import dev.alvr.katana.core.ui.utils.navDeepLink
+import dev.alvr.katana.core.ui.utils.noInsets
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.login.ui.ANILIST_LOGIN
 import dev.alvr.katana.features.login.ui.ANILIST_REGISTER
@@ -77,6 +83,7 @@ import dev.alvr.katana.features.login.ui.GET_STARTED_BUTTON_TAG
 import dev.alvr.katana.features.login.ui.HEADER_ANIMATION_DELAY
 import dev.alvr.katana.features.login.ui.HEADER_ANIMATION_DURATION
 import dev.alvr.katana.features.login.ui.LOGIN_DEEP_LINK
+import dev.alvr.katana.features.login.ui.LOGIN_DEEP_LINK_TOKEN
 import dev.alvr.katana.features.login.ui.LOGO_FULL_SIZE
 import dev.alvr.katana.features.login.ui.LOGO_RESIZED
 import dev.alvr.katana.features.login.ui.navigation.LoginNavigator
@@ -99,30 +106,47 @@ import dev.alvr.katana.features.login.ui.resources.ic_katana_logo
 import dev.alvr.katana.features.login.ui.resources.save_token_error
 import dev.alvr.katana.features.login.ui.viewmodel.LoginState
 import dev.alvr.katana.features.login.ui.viewmodel.LoginViewModel
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
 
-@Composable
-@Destination(
-    deepLinks = [
-        DeepLink(uriPattern = LOGIN_DEEP_LINK),
-    ],
-)
-internal fun LoginScreen(
-    token: String?,
-    navigator: LoginNavigator,
-    vm: LoginViewModel = koinViewModel { parametersOf(token) },
+fun NavGraphBuilder.login(
+    loginNavigator: LoginNavigator,
 ) {
-    val state by vm.collectAsState()
+    navigation(
+        route = KatanaScreen.Auth.name,
+        startDestination = KatanaScreen.Login.name,
+    ) {
+        composable(
+            route = KatanaScreen.Login.name,
+            arguments = listOf(navArgument(LOGIN_DEEP_LINK_TOKEN) { type = NavType.StringType }),
+            deepLinks = listOf(navDeepLink { setUriPattern(LOGIN_DEEP_LINK) }),
+        ) {
+            LoginScreen(
+                token = it.arguments?.getString(LOGIN_DEEP_LINK_TOKEN),
+                loginNavigator = loginNavigator,
+            )
+        }
+    }
+}
+
+@Composable
+@OptIn(KoinExperimentalAPI::class)
+private fun LoginScreen(
+    token: String?,
+    loginNavigator: LoginNavigator,
+    viewModel: LoginViewModel = koinViewModel { parametersOf(token) },
+) {
+    val state by viewModel.collectAsState()
 
     Login(
         state = state,
-        onLogin = navigator::toHome,
+        onNavigateToHome = loginNavigator::navigateToHome,
     )
 }
 
 @Composable
-private fun Login(state: LoginState, onLogin: () -> Unit) {
+private fun Login(state: LoginState, onNavigateToHome: () -> Unit) {
     val background = remember {
         listOf(
             Res.drawable.background_chihiro,
@@ -135,7 +159,7 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
     val scaffoldState = rememberScaffoldState()
 
     when {
-        state.saved -> onLogin()
+        state.saved -> onNavigateToHome()
         state.errorType != null -> {
             val message = when (state.errorType) {
                 LoginState.ErrorType.SaveToken -> Res.string.save_token_error
@@ -148,13 +172,12 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
     }
 
     Scaffold(
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        contentWindowInsets = WindowInsets.noInsets,
     ) { padding ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .consumeWindowInsets(padding),
+                .padding(padding),
         ) {
             if (state.loading) {
                 Loading()
@@ -168,7 +191,11 @@ private fun Login(state: LoginState, onLogin: () -> Unit) {
                         .alpha(BACKGROUND_ALPHA),
                 )
 
-                Box(modifier = Modifier.padding(24.dp)) {
+                Box(
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                        .systemBarsPadding()
+                        .displayCutoutPadding(),
+                ) {
                     Header(modifier = Modifier.align(Alignment.TopCenter))
                     Bottom(modifier = Modifier.align(Alignment.BottomCenter))
                 }
@@ -200,8 +227,7 @@ internal fun Header(modifier: Modifier = Modifier) {
 
 @Composable
 private fun KatanaLogo() {
-    val configuration = LocalConfiguration.current
-    val sizeFraction = if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    val sizeFraction = if (isLandscape()) {
         LOGO_RESIZED
     } else {
         LOGO_FULL_SIZE
