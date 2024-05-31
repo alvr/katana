@@ -1,4 +1,4 @@
-package dev.alvr.katana.features.account.ui.view
+package dev.alvr.katana.features.account.ui.screen.components
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.utils.doNavigation
 import dev.alvr.katana.features.account.ui.entities.UserInfoUi
 import dev.alvr.katana.features.account.ui.resources.Res
 import dev.alvr.katana.features.account.ui.resources.logout_button
@@ -39,7 +40,9 @@ internal fun UserInfo(
             username = userInfo.username,
         )
 
-        Button(onClick = onLogoutClick) {
+        Button(
+            onClick = doNavigation(onLogoutClick),
+        ) {
             Text(text = Res.string.logout_button.value)
         }
     }
