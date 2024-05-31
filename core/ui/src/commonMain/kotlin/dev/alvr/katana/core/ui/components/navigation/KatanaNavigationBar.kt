@@ -9,6 +9,7 @@ import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.utils.isLandscape
 import kotlinx.collections.immutable.ImmutableList
 
@@ -92,13 +93,13 @@ private fun NavigationBarIcon(
 ) {
     Icon(
         imageVector = if (selected) destination.selectedIcon else destination.unselectedIcon,
-        contentDescription = destination.label,
+        contentDescription = destination.label.value,
     )
 }
 
 @Composable
 private fun NavigationBarLabel(destination: KatanaNavigationBarItem) {
-    Text(text = destination.label)
+    Text(text = destination.label.value)
 }
 
 enum class KatanaNavigationBarType {
