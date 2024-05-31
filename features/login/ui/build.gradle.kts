@@ -17,8 +17,6 @@ kotlin {
             implementation(projects.common.user.domain)
         }
 
-        commonTest.dependencies {
-            implementation(projects.core.tests)
-        }
+        commonTest.dependencies { implementation(projects.core.tests) }
     }
 }

@@ -1,7 +1,6 @@
 package dev.alvr.katana.core.ui.components.home
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseInOut
@@ -44,8 +43,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
+@OptIn(ExperimentalMaterialApi::class)
 fun KatanaHomeScaffold(
     title: String,
     searchPlaceholder: String,
@@ -98,8 +96,7 @@ fun KatanaHomeScaffold(
 }
 
 @Composable
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
+@OptIn(ExperimentalMaterialApi::class)
 private fun KatanaTopAppBar(
     katanaScaffoldState: KatanaHomeScaffoldState,
     scaffoldState: BackdropScaffoldState,
@@ -160,7 +157,7 @@ private fun KatanaTopAppBar(
     }
 }
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 private fun BackdropScaffoldState.toggleBackdrop(scope: CoroutineScope) {
     scope.launch {
         if (isConcealed) {

@@ -5,6 +5,8 @@ import arrow.core.Option
 import com.apollographql.apollo3.ApolloCall
 import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.api.Query
+import com.apollographql.apollo3.cache.normalized.watch
 import com.apollographql.apollo3.exception.ApolloHttpException
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.apollographql.apollo3.exception.CacheMissException
@@ -14,6 +16,7 @@ import com.apollographql.apollo3.exception.JsonDataException
 import com.apollographql.apollo3.exception.JsonEncodingException
 import com.apollographql.apollo3.exception.NoDataException
 import dev.alvr.katana.core.domain.failures.Failure
+import kotlinx.coroutines.flow.filterNot
 
 fun Throwable.toFailure(
     network: Failure = Failure.Unknown,
@@ -38,6 +41,9 @@ fun Throwable.toFailure(
 suspend fun <D : Operation.Data> ApolloCall<D>.executeOrThrow() = execute().also { response ->
     response.exception?.let { throw it }
 }
+
+fun <D : Query.Data> ApolloCall<D>.watchFiltered() = watch()
+    .filterNot { it.exception is CacheMissException }
 
 val <V> V?.optional get(): Optional<V?> = Optional.presentIfNotNull(this)
 
