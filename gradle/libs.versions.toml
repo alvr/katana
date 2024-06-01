@@ -9,7 +9,6 @@ compose = "1.6.10"
 compose-placeholder = "1.0.8"
 compose-windowsize = "0.5.0"
 datastore = "1.1.1"
-destinations = "1.10.2"
 detekt = "1.23.6"
 detekt-compose = "0.4.3"
 detekt-compose2 = "1.3.0"
@@ -78,10 +77,6 @@ compose-windowsize = { module = "dev.chrisbanes.material3:material3-window-size-
 # Datastore
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastore-okio = { module = "androidx.datastore:datastore-core-okio", version.ref = "datastore" }
-
-# Destiantions
-destinations = { module = "io.github.raamcosta.compose-destinations:animations-core", version.ref = "destinations" }
-destinations-compiler = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "destinations" }
 
 # Detekt
 detekt-compose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detekt-compose" }
@@ -310,16 +305,11 @@ ui-common = [
     "navigation",
     "orbit",
 ]
-ui-android = [
-    "destinations",
-    "koin-compose-android",
-]
+ui-android = []
 ui-ios = []
 
 ui-common-ksp = []
-ui-android-ksp = [
-    "destinations-compiler",
-]
+ui-android-ksp = []
 ui-ios-ksp = []
 
 ui-common-test = [
