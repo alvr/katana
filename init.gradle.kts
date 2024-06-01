@@ -11,4 +11,11 @@ initscript {
     }
 }
 
+beforeSettings {
+    caches {
+        cleanup = Cleanup.ALWAYS
+        buildCache.setRemoveUnusedEntriesAfterDays(30)
+    }
+}
+
 apply<GitHubDependencyGraphPlugin>()
