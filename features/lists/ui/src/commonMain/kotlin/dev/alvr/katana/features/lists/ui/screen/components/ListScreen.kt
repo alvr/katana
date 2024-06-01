@@ -76,31 +76,29 @@ internal fun ListScreen(
             }
         },
     ) { paddingValues ->
-        with(state) {
-            when {
-                isError -> KatanaErrorState(
-                    modifier = modifier.padding(paddingValues),
-                    text = Res.string.error_message.value,
-                    onRetry = {
-                        viewModel.refreshList()
-                        katanaScaffoldState.resetToolbar()
-                    },
-                    loading = state.isLoading,
-                )
-                isEmpty && !isLoading -> KatanaEmptyState(
-                    modifier = modifier.padding(paddingValues),
-                    text = emptyStateRes,
-                )
-                else -> MediaList(
-                    lazyGridState = lazyGridState,
-                    modifier = modifier.padding(paddingValues),
-                    listState = state,
-                    onRefresh = viewModel::refreshList,
-                    onAddPlusOne = viewModel::addPlusOne,
-                    onEditEntry = navigator::showEditEntry,
-                    onEntryDetails = navigator::navigateToEntryDetails,
-                )
-            }
+        when {
+            state.isError -> KatanaErrorState(
+                modifier = modifier.padding(paddingValues),
+                text = Res.string.error_message.value,
+                onRetry = {
+                    viewModel.refreshList()
+                    katanaScaffoldState.resetToolbar()
+                },
+                loading = state.isLoading,
+            )
+            state.isEmpty && !state.isLoading -> KatanaEmptyState(
+                modifier = modifier.padding(paddingValues),
+                text = emptyStateRes,
+            )
+            else -> MediaList(
+                lazyGridState = lazyGridState,
+                modifier = modifier.padding(paddingValues),
+                listState = state,
+                onRefresh = viewModel::refreshList,
+                onAddPlusOne = viewModel::addPlusOne,
+                onEditEntry = navigator::showEditEntry,
+                onEntryDetails = navigator::navigateToEntryDetails,
+            )
         }
     }
 }

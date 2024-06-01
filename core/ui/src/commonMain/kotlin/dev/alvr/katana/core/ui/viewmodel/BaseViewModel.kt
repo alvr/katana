@@ -36,6 +36,7 @@ abstract class BaseViewModel<S : UiState, E : UiEffect> : ViewModel(), Container
 
     @OrbitDsl
     @OptIn(OrbitExperimental::class)
+    @Suppress("UnusedReceiverParameter")
     protected suspend fun SimpleSyntax<S, E>.updateState(block: S.() -> S) {
         subIntent {
             reduce { block(state) }

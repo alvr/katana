@@ -46,7 +46,7 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     }
 
     fun addPlusOne(id: Int) {
-        val entry = with(currentList.first { it.entryId == id }.toMediaList()) {
+        val entry = currentList.first { it.entryId == id }.toMediaList().run {
             copy(progress = progress.inc())
         }
         intent { updateListUseCase(entry) }
