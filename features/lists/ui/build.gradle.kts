@@ -2,11 +2,6 @@ plugins {
     id("katana.multiplatform.ui")
 }
 
-ksp {
-    arg("compose-destinations.mode", "destinations")
-    arg("compose-destinations.moduleName", "lists")
-}
-
 kotlin {
     sourceSets {
         commonMain.dependencies {
@@ -16,8 +11,6 @@ kotlin {
             implementation(projects.features.lists.domain)
         }
 
-        commonTest.dependencies {
-            implementation(projects.core.tests)
-        }
+        commonTest.dependencies { implementation(projects.core.tests) }
     }
 }

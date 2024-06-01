@@ -1,7 +1,7 @@
 package dev.alvr.katana.features.account.ui.navigation
 
-import dev.alvr.katana.core.ui.navigation.BaseNavigator
+import dev.alvr.katana.core.ui.navigation.KatanaNavigator
 
-interface AccountNavigator : BaseNavigator {
-    fun logout()
+interface AccountNavigator : KatanaNavigator {
+    fun navigateToLogin()
 }

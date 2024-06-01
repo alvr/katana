@@ -6,6 +6,7 @@ import dev.alvr.katana.common.session.domain.usecases.SaveSessionUseCase
 import dev.alvr.katana.common.user.domain.usecases.SaveUserIdUseCase
 import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.ui.viewmodel.BaseViewModel
+import dev.alvr.katana.core.ui.viewmodel.EmptyEffect
 import dev.alvr.katana.features.login.ui.viewmodel.LoginState.ErrorType
 import org.orbitmvi.orbit.container
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -15,8 +16,8 @@ internal class LoginViewModel(
     private val token: String?,
     private val saveSessionUseCase: SaveSessionUseCase,
     private val saveUserIdUseCase: SaveUserIdUseCase,
-) : BaseViewModel<LoginState, Nothing>() {
-    override val container = viewModelScope.container<LoginState, Nothing>(LoginState()) {
+) : BaseViewModel<LoginState, EmptyEffect>() {
+    override val container = viewModelScope.container<LoginState, EmptyEffect>(LoginState()) {
         saveAnilistToken(token)
     }
 

@@ -13,8 +13,6 @@ kotlin {
             implementation(libs.sentry.apollo)
         }
 
-        commonTest.dependencies {
-            implementation(projects.core.tests)
-        }
+        commonTest.dependencies { implementation(projects.core.tests) }
     }
 }

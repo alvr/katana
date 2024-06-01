@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package dev.alvr.katana.core.common
 
 val Double.Companion.zero inline get() = 0.0

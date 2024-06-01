@@ -1,11 +1,12 @@
 package dev.alvr.katana.core.ui.components.navigation
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import dev.alvr.katana.core.ui.screens.KatanaScreen
+import org.jetbrains.compose.resources.StringResource
 
 interface KatanaNavigationBarItem {
-    val key: Any
+    val screen: KatanaScreen
     val selectedIcon: ImageVector
     val unselectedIcon: ImageVector
-    @get:Composable val label: String
+    val label: StringResource
 }

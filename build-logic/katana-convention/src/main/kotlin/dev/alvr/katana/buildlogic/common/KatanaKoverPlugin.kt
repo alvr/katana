@@ -53,15 +53,9 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         "*.data.type",
 
         // UI
+        "*.navigation",
         "*.resources",
-        "*.shared.navigation",
-        "*.shared.resources",
-        "*.shared.strings",
-        "*.shared.view",
-        "*.ui.navigation",
-        "*.ui.resources",
-        "*.ui.strings",
-        "*.ui.view",
+        "*.screen",
     )
 
     private val containerModules = listOf(

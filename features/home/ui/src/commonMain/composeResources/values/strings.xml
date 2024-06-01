@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_bar_anime">Anime</string>
+    <string name="navigation_bar_manga">Manga</string>
+    <string name="navigation_bar_explore">Explore</string>
+    <string name="navigation_bar_social">Social</string>
+    <string name="navigation_bar_account">Account</string>
+
+    <string name="session_expired_error_title">Session expired</string>
+    <string name="session_expired_error_message">Anilist\'s session has expired. To continue using Katana you need to log in again.</string>
+    <string name="session_expired_error_confirm_button">Log in</string>
+</resources>

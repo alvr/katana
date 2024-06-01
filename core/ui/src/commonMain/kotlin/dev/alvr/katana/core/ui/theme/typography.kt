@@ -10,10 +10,8 @@ import dev.alvr.katana.core.ui.resources.barlow_bold
 import dev.alvr.katana.core.ui.resources.barlow_light
 import dev.alvr.katana.core.ui.resources.barlow_medium
 import dev.alvr.katana.core.ui.resources.barlow_normal
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 
-@OptIn(ExperimentalResourceApi::class)
 internal val KatanaTypography
     @Composable get() = Typography().apply {
         val fontFamily = FontFamily(

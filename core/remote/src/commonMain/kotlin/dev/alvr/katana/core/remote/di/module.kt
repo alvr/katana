@@ -1,8 +1,11 @@
 package dev.alvr.katana.core.remote.di
 
+import arrow.core.None
+import arrow.core.Option
 import co.touchlab.kermit.Logger
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.http.HttpRequest
+import com.apollographql.apollo3.api.http.HttpResponse
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.api.CacheKey
 import com.apollographql.apollo3.cache.normalized.api.CacheKeyGenerator
@@ -15,6 +18,7 @@ import com.apollographql.apollo3.interceptor.ApolloInterceptor
 import com.apollographql.apollo3.network.http.HttpInterceptor
 import com.apollographql.apollo3.network.http.HttpInterceptorChain
 import com.apollographql.apollo3.network.http.LoggingInterceptor
+import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.usecases.DeleteAnilistTokenUseCase
 import dev.alvr.katana.common.session.domain.usecases.GetAnilistTokenUseCase
 import dev.alvr.katana.core.domain.usecases.invoke
@@ -23,6 +27,8 @@ import dev.alvr.katana.core.remote.interceptors.ReloadInterceptor
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
+import org.koin.core.scope.ScopeCallback
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -72,15 +78,28 @@ private val apolloDatabaseModule: Module = module {
 
 private val apolloInterceptorsModule = module {
     single<HttpInterceptor>(named(Interceptor.GET_TOKEN)) {
+        var token: Option<AnilistToken> = None
         val useCase = get<GetAnilistTokenUseCase>()
 
+        registerCallback(object : ScopeCallback {
+            override fun onScopeClose(scope: Scope) {
+                token = None
+            }
+        })
+
         object : HttpInterceptor {
-            override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain) =
-                request.newBuilder()
-                    .addHeader("Authorization", "Bearer ${useCase().getOrNull()?.token}")
+            override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain): HttpResponse {
+                val bearer = token.fold(
+                    ifEmpty = { useCase().also { token = it }.getOrNull() },
+                    ifSome = { it },
+                )?.token
+
+                return request.newBuilder()
+                    .addHeader("Authorization", "Bearer $bearer")
                     .addHeader("Accept", "application/json")
                     .addHeader("Content-Type", "application/json")
                     .build().let { chain.proceed(it) }
+            }
         }
     }
 

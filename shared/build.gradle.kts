@@ -5,46 +5,40 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            api(projects.common.session.data)
-            api(projects.common.session.domain)
-            api(projects.common.user.data)
-            api(projects.common.user.domain)
+            implementation(projects.common.session.data)
+            implementation(projects.common.session.domain)
+            implementation(projects.common.user.data)
+            implementation(projects.common.user.domain)
 
-            api(projects.core.common)
-            api(projects.core.domain)
-            api(projects.core.preferences)
-            api(projects.core.remote)
-            api(projects.core.ui)
+            implementation(projects.core.common)
+            implementation(projects.core.domain)
+            implementation(projects.core.preferences)
+            implementation(projects.core.remote)
+            implementation(projects.core.ui)
 
-            api(projects.features.account.data)
-            api(projects.features.account.domain)
-            api(projects.features.account.ui)
+            implementation(projects.features.account.data)
+            implementation(projects.features.account.domain)
+            implementation(projects.features.account.ui)
 
-            api(projects.features.explore.data)
-            api(projects.features.explore.domain)
-            api(projects.features.explore.ui)
+            implementation(projects.features.explore.data)
+            implementation(projects.features.explore.domain)
+            implementation(projects.features.explore.ui)
 
-            api(projects.features.home.ui)
+            implementation(projects.features.home.ui)
 
-            api(projects.features.lists.data)
-            api(projects.features.lists.domain)
-            api(projects.features.lists.ui)
+            implementation(projects.features.lists.data)
+            implementation(projects.features.lists.domain)
+            implementation(projects.features.lists.ui)
 
-            api(projects.features.login.ui)
+            implementation(projects.features.login.ui)
 
-            api(projects.features.social.data)
-            api(projects.features.social.domain)
-            api(projects.features.social.ui)
+            implementation(projects.features.social.data)
+            implementation(projects.features.social.domain)
+            implementation(projects.features.social.ui)
 
             implementation(libs.sentry.multiplatform)
         }
 
-        androidMain.dependencies {
-            api(libs.sentry.compose)
-        }
-
-        commonTest.dependencies {
-            implementation(projects.core.tests)
-        }
+        commonTest.dependencies { implementation(projects.core.tests) }
     }
 }

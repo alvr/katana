@@ -1,19 +1,32 @@
 package dev.alvr.katana.shared
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
 import co.touchlab.kermit.DefaultFormatter
 import co.touchlab.kermit.LogWriter
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import co.touchlab.kermit.platformLogWriter
 import dev.alvr.katana.core.ui.theme.KatanaTheme
+import dev.alvr.katana.core.ui.utils.noInsets
+import dev.alvr.katana.core.ui.viewmodel.collectAsState
+import dev.alvr.katana.features.home.ui.screen.home
+import dev.alvr.katana.features.login.ui.screen.login
+import dev.alvr.katana.shared.navigation.KatanaRootNavigator
+import dev.alvr.katana.shared.navigation.rememberKatanaRootNavigator
+import dev.alvr.katana.shared.viewmodel.MainViewModel
 import io.sentry.kotlin.multiplatform.PlatformOptionsConfiguration
 import io.sentry.kotlin.multiplatform.Sentry
 import io.sentry.kotlin.multiplatform.SentryLevel
 import io.sentry.kotlin.multiplatform.protocol.Breadcrumb
-
-@Composable
-internal expect fun KatanaContent()
+import org.koin.compose.viewmodel.koinNavViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
 internal expect fun sentryOptionsConfiguration(): PlatformOptionsConfiguration
 
@@ -22,7 +35,31 @@ fun Katana() {
     initApp()
 
     KatanaTheme {
-        KatanaContent()
+        KatanaApp()
+    }
+}
+
+@Composable
+@OptIn(KoinExperimentalAPI::class)
+private fun KatanaApp(
+    modifier: Modifier = Modifier,
+    navigator: KatanaRootNavigator = rememberKatanaRootNavigator(),
+    vm: MainViewModel = koinNavViewModel()
+) {
+    val state by vm.collectAsState()
+
+    Scaffold(
+        modifier = modifier,
+        contentWindowInsets = WindowInsets.noInsets,
+    ) { paddingValues ->
+        NavHost(
+            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            navController = navigator.navController,
+            startDestination = state.initialScreen.name,
+        ) {
+            login(loginNavigator = navigator)
+            home(homeNavigator = navigator)
+        }
     }
 }
 
