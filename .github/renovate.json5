@@ -11,6 +11,7 @@
         ":disableDependencyDashboard",
     ],
     "rebaseWhen": "behind-base-branch",
+    "recreateWhen": "never",
     "reviewers": [
         "alvr",
     ],
