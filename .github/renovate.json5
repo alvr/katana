@@ -51,13 +51,19 @@
             ],
         },
         {
+            "groupName": "GitHub Actions",
+            "matchManagers": [
+                "github-actions",
+            ],
+        },
+        {
             "automerge": false,
             "matchUpdateTypes": [
                 "minor",
                 "patch",
                 "pin",
                 "digest",
-            ]
+            ],
         },
     ],
 }
