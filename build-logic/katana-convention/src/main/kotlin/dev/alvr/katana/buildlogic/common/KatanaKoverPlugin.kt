@@ -1,18 +1,18 @@
+@file:Suppress("NoUnusedImports", "UnusedImports")
+
 package dev.alvr.katana.buildlogic.common
 
-import dev.alvr.katana.buildlogic.ANDROID_APPLICATION_PLUGIN
-import dev.alvr.katana.buildlogic.ANDROID_LIBRARY_PLUGIN
-import dev.alvr.katana.buildlogic.isRelease
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
-import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
-import kotlinx.kover.gradle.plugin.dsl.KoverReportFilters
-import kotlinx.kover.gradle.plugin.dsl.MetricType
+import kotlinx.kover.gradle.plugin.dsl.KoverReportFiltersConfig
+import kotlinx.kover.gradle.plugin.dsl.KoverReportSetConfig
+import kotlinx.kover.gradle.plugin.dsl.KoverVerificationRulesConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.withType
+import org.gradle.kotlin.dsl.dependencies
 
 internal class KatanaKoverPlugin : Plugin<Project> {
 
@@ -75,69 +75,54 @@ internal class KatanaKoverPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlinx.kover")
 
-        extensions.configure<KoverProjectExtension> { configure(rootProject) }
-        subprojects.configureKover()
-        extensions.configure<KoverReportExtension> { configureMergedReport() }
+        extensions.configure<KoverProjectExtension> { configureRoot() }
     }
 
-    private fun Iterable<Project>.configureKover() {
-        forEach { project ->
-            with(project) {
-                if (path !in containerModules) {
-                    apply(plugin = "org.jetbrains.kotlinx.kover")
-                    extensions.configure<KoverReportExtension> { configure(project) }
-                    rootProject.dependencies.add("kover", this)
-                }
-            }
+    context(KoverProjectExtension)
+    private fun Project.configureRoot() {
+        project.subprojects
+            .filterNot { it.path in containerModules }
+            .forEach { it.configureSubproject() }
+
+        configureCommon()
+    }
+
+    context(KoverProjectExtension)
+    private fun Project.configureSubproject() {
+        apply(plugin = "org.jetbrains.kotlinx.kover")
+        rootProject.dependencies { add("kover", project) }
+
+        configureCommon()
+    }
+
+    private fun KoverProjectExtension.configureCommon() {
+        reports {
+            filters.configure()
+            total.configure()
+            verify.configure()
         }
     }
 
-    private fun KoverProjectExtension.configure(project: Project) {
-        project.allprojects {
-            tasks.withType<Test> {
-                if (isRelease) disable()
-            }
-        }
-
-        excludeJavaCode()
-    }
-
-    private fun KoverReportExtension.configure(project: Project) {
-        with(project) {
-            pluginManager.withPlugin(ANDROID_APPLICATION_PLUGIN) { configureAndroidReport() }
-            pluginManager.withPlugin(ANDROID_LIBRARY_PLUGIN) { configureAndroidReport() }
-        }
-    }
-
-    private fun KoverReportExtension.configureMergedReport() {
-        filters { configureFilters() }
+    private fun KoverReportSetConfig.configure() {
+        filters.configure()
 
         verify {
             rule("Minimal instruction coverage rate in percent") {
                 bound {
-                    metric = MetricType.INSTRUCTION
+                    coverageUnits = CoverageUnit.INSTRUCTION
                     minValue = MIN_COVERED_PERCENTAGE
                 }
             }
             rule("Minimal line coverage rate in percent") {
                 bound {
-                    metric = MetricType.LINE
+                    coverageUnits = CoverageUnit.LINE
                     minValue = MIN_COVERED_PERCENTAGE
                 }
             }
         }
     }
 
-    private fun KoverReportExtension.configureAndroidReport() {
-        configureMergedReport()
-
-        defaults {
-            mergeWith(ANDROID_VARIANT)
-            filters { configureFilters() }
-        }
-    }
-
-    private fun KoverReportFilters.configureFilters() {
+    private fun KoverReportFiltersConfig.configure() {
         excludes {
             annotatedBy(
                 "androidx.compose.runtime.Composable",
@@ -148,8 +133,22 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         }
     }
 
+    private fun KoverVerificationRulesConfig.configure() {
+        rule("Minimal instruction coverage rate in percent") {
+            bound {
+                coverageUnits = CoverageUnit.INSTRUCTION
+                minValue = MIN_COVERED_PERCENTAGE
+            }
+        }
+        rule("Minimal line coverage rate in percent") {
+            bound {
+                coverageUnits = CoverageUnit.LINE
+                minValue = MIN_COVERED_PERCENTAGE
+            }
+        }
+    }
+
     private companion object {
-        const val ANDROID_VARIANT = "debug"
         const val MIN_COVERED_PERCENTAGE = 80
     }
 }
