@@ -26,16 +26,11 @@ ignore:
   ## Core
   - '**/core/**'
 
-  ## DI
-  - '**/di/**'
-
   # UI
   - '**/generated/resources/**'
   - '**/shared/navigation/**'
   - '**/shared/resources/**'
-  - '**/shared/strings/**'
-  - '**/shared/view/**'
+  - '**/shared/screen/**'
   - '**/ui/navigation/**'
   - '**/ui/resources/**'
-  - '**/ui/strings/**'
-  - '**/ui/view/**'
+  - '**/ui/screen/**'

@@ -33,6 +33,9 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         // Compose
         "*.*ComposableSingletons*",
 
+        // DI
+        "*.Module_*Kt",
+
         // Serializers
         "*.*$\$serializer",
 
@@ -42,9 +45,6 @@ internal class KatanaKoverPlugin : Plugin<Project> {
     private val packagesExcludes = listOf(
         // Core
         "*.core.*",
-
-        // DI
-        "*.di",
 
         // Remote
         "*.data.adapter",
