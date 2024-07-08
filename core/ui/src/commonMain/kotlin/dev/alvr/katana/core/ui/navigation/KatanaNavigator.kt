@@ -10,9 +10,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
 
-@Composable
-internal expect fun NavHostController.sentryObserver(): NavHostController
-
 @Immutable
 interface KatanaNavigator {
     fun navigateBack()
@@ -27,6 +24,9 @@ fun <T : KatanaNavigator> rememberKatanaNavigator(factory: (NavHostController) -
     val navigator = rememberNavController().sentryObserver().loggerObserver()
     return remember(navigator) { factory(navigator) }
 }
+
+@Composable
+internal expect fun NavHostController.sentryObserver(): NavHostController
 
 @Composable
 private fun NavHostController.loggerObserver() = apply {

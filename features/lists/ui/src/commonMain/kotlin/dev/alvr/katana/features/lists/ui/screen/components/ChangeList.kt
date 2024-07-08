@@ -1,11 +1,15 @@
 package dev.alvr.katana.features.lists.ui.screen.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.twotone.List
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,7 +17,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -55,38 +58,40 @@ internal fun ChangeListSheet(
             }
         },
     ) {
-        Surface {
-            Column(
-                modifier = Modifier.navigationBarsPadding(),
-            ) {
-                lists.forEach { (name, count) ->
-                    Text(
-                        text = buildAnnotatedString {
-                            append(name)
-                            withStyle(
-                                SpanStyle(
-                                    baselineShift = BaselineShift.Superscript,
-                                    fontSize = 12.sp,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                ),
-                            ) {
-                                append(" $count")
+        Column(
+            modifier = Modifier
+                .navigationBarsPadding()
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            lists.forEach { (name, count) ->
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            coroutineScope.launch {
+                                sheetState.hide()
+                                onClick(name)
                             }
-                        },
-                        fontWeight = if (selectedList == name) FontWeight.SemiBold else FontWeight.Normal,
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                coroutineScope.launch {
-                                    sheetState.hide()
-                                    onClick(name)
-                                }
-                            }
-                            .height(48.dp)
-                            .padding(all = 8.dp),
-                    )
-                }
+                        }
+                        .defaultMinSize(minHeight = 48.dp)
+                        .padding(all = 8.dp)
+                        .wrapContentHeight(),
+                    text = buildAnnotatedString {
+                        append(name)
+                        withStyle(
+                            SpanStyle(
+                                baselineShift = BaselineShift.Superscript,
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            ),
+                        ) {
+                            append(" $count")
+                        }
+                    },
+                    fontWeight = if (selectedList == name) FontWeight.SemiBold else FontWeight.Normal,
+                    style = MaterialTheme.typography.titleLarge,
+                )
             }
         }
     }

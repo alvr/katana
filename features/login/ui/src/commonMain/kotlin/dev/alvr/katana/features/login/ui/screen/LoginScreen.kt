@@ -60,14 +60,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.core.ui.screens.KatanaScreen
+import dev.alvr.katana.core.ui.screens.AuthScreen
+import dev.alvr.katana.core.ui.screens.RootScreen
 import dev.alvr.katana.core.ui.utils.isLandscape
 import dev.alvr.katana.core.ui.utils.navDeepLink
 import dev.alvr.katana.core.ui.utils.noInsets
@@ -83,7 +83,6 @@ import dev.alvr.katana.features.login.ui.GET_STARTED_BUTTON_TAG
 import dev.alvr.katana.features.login.ui.HEADER_ANIMATION_DELAY
 import dev.alvr.katana.features.login.ui.HEADER_ANIMATION_DURATION
 import dev.alvr.katana.features.login.ui.LOGIN_DEEP_LINK
-import dev.alvr.katana.features.login.ui.LOGIN_DEEP_LINK_TOKEN
 import dev.alvr.katana.features.login.ui.LOGO_FULL_SIZE
 import dev.alvr.katana.features.login.ui.LOGO_RESIZED
 import dev.alvr.katana.features.login.ui.navigation.LoginNavigator
@@ -113,17 +112,16 @@ import org.koin.core.parameter.parametersOf
 fun NavGraphBuilder.login(
     loginNavigator: LoginNavigator,
 ) {
-    navigation(
-        route = KatanaScreen.Auth.name,
-        startDestination = KatanaScreen.Login.name,
+    navigation<RootScreen.Auth>(
+        startDestination = AuthScreen.Login(),
     ) {
-        composable(
-            route = KatanaScreen.Login.name,
-            arguments = listOf(navArgument(LOGIN_DEEP_LINK_TOKEN) { type = NavType.StringType }),
+        composable<AuthScreen.Login>(
             deepLinks = listOf(navDeepLink { setUriPattern(LOGIN_DEEP_LINK) }),
-        ) {
+        ) { backStackEntry ->
+            val route = backStackEntry.toRoute<AuthScreen.Login>()
+
             LoginScreen(
-                token = it.arguments?.getString(LOGIN_DEEP_LINK_TOKEN),
+                token = route.token,
                 loginNavigator = loginNavigator,
             )
         }
