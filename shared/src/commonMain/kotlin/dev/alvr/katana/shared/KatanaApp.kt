@@ -56,7 +56,7 @@ private fun KatanaApp(
         NavHost(
             modifier = Modifier.fillMaxSize().padding(paddingValues),
             navController = navigator.navController,
-            startDestination = state.initialScreen.name,
+            startDestination = state.initialScreen,
         ) {
             login(loginNavigator = navigator)
             home(homeNavigator = navigator)

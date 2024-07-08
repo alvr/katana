@@ -11,51 +11,69 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.VideoLibrary
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavBackStackEntry
 import dev.alvr.katana.core.ui.components.navigation.KatanaNavigationBarItem
-import dev.alvr.katana.core.ui.screens.KatanaScreen
+import dev.alvr.katana.core.ui.screens.HomeScreen
+import dev.alvr.katana.core.ui.utils.hasRoute
 import dev.alvr.katana.features.home.ui.resources.Res
 import dev.alvr.katana.features.home.ui.resources.navigation_bar_account
 import dev.alvr.katana.features.home.ui.resources.navigation_bar_anime
 import dev.alvr.katana.features.home.ui.resources.navigation_bar_explore
 import dev.alvr.katana.features.home.ui.resources.navigation_bar_manga
 import dev.alvr.katana.features.home.ui.resources.navigation_bar_social
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.StringResource
 
-internal enum class HomeNavigationBar(
-    override val screen: KatanaScreen,
+@Immutable
+@Suppress("UseDataClass")
+private class HomeNavigationBar(
+    override val screen: HomeScreen,
     override val selectedIcon: ImageVector,
     override val unselectedIcon: ImageVector,
     override val label: StringResource,
-) : KatanaNavigationBarItem {
-    AnimeList(
-        screen = KatanaScreen.AnimeLists,
+) : HomeNavigationBarItem
+
+interface HomeNavigationBarItem : KatanaNavigationBarItem {
+    override val screen: HomeScreen
+
+    companion object {
+        fun <T : HomeNavigationBarItem> NavBackStackEntry?.hasRoute(screen: T) =
+            hasRoute(screen.screen::class)
+    }
+}
+
+internal val homeNavigationBarItems: ImmutableList<HomeNavigationBarItem> = persistentListOf(
+    HomeNavigationBar(
+        screen = HomeScreen.AnimeLists,
         selectedIcon = Icons.Filled.VideoLibrary,
         unselectedIcon = Icons.Outlined.VideoLibrary,
         label = Res.string.navigation_bar_anime,
     ),
-    MangaList(
-        screen = KatanaScreen.MangaLists,
+    HomeNavigationBar(
+        screen = HomeScreen.MangaLists,
         selectedIcon = Icons.AutoMirrored.Filled.LibraryBooks,
         unselectedIcon = Icons.AutoMirrored.Outlined.LibraryBooks,
         label = Res.string.navigation_bar_manga,
     ),
-    Explore(
-        screen = KatanaScreen.Explore,
+    HomeNavigationBar(
+        screen = HomeScreen.Explore,
         selectedIcon = Icons.Filled.Explore,
         unselectedIcon = Icons.Outlined.Explore,
         label = Res.string.navigation_bar_explore,
     ),
-    Social(
-        screen = KatanaScreen.Social,
+    HomeNavigationBar(
+        screen = HomeScreen.Social,
         selectedIcon = Icons.Filled.Dashboard,
         unselectedIcon = Icons.Outlined.Dashboard,
         label = Res.string.navigation_bar_social,
     ),
-    Account(
-        screen = KatanaScreen.Account,
+    HomeNavigationBar(
+        screen = HomeScreen.Account,
         selectedIcon = Icons.Filled.AccountCircle,
         unselectedIcon = Icons.Outlined.AccountCircle,
         label = Res.string.navigation_bar_account,
     ),
-}
+)

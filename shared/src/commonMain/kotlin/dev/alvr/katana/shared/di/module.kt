@@ -22,7 +22,7 @@ import dev.alvr.katana.features.social.data.di.featuresSocialDataModule
 import dev.alvr.katana.features.social.domain.di.featuresSocialDomainModule
 import dev.alvr.katana.features.social.ui.di.featuresSocialUiModule
 import dev.alvr.katana.shared.viewmodel.MainViewModel
-import org.koin.compose.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 private val viewModelsModule = module {

@@ -43,9 +43,7 @@ abstract class BaseViewModel<S : UiState, E : UiEffect> : ViewModel(), Container
 
 @Composable
 fun <S : UiState, E : UiEffect> BaseViewModel<S, E>.collectAsState(): State<S> =
-    container.refCountStateFlow.collectAsStateWithLifecycle(
-        lifecycleOwner = LocalLifecycleOwner.current,
-    )
+    container.refCountStateFlow.collectAsStateWithLifecycle()
 
 @Composable
 @Suppress("ComposableFunctionName", "LambdaParameterInRestartableEffect")

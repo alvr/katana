@@ -9,7 +9,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import dev.alvr.katana.core.ui.components.home.KatanaHomeScaffold
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.core.ui.screens.KatanaScreen
+import dev.alvr.katana.core.ui.screens.HomeScreen
 import dev.alvr.katana.features.explore.ui.navigation.ExploreNavigator
 import dev.alvr.katana.features.explore.ui.resources.Res
 import dev.alvr.katana.features.explore.ui.resources.explore_toolbar_search_placeholder
@@ -19,7 +19,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
 fun NavGraphBuilder.explore(exploreNavigator: ExploreNavigator) {
-    composable(KatanaScreen.Explore.name) {
+    composable<HomeScreen.Explore> {
         ExploreScreen(exploreNavigator)
     }
 }
