@@ -9,8 +9,6 @@ import dev.alvr.katana.core.ui.viewmodel.BaseViewModel
 import dev.alvr.katana.core.ui.viewmodel.EmptyEffect
 import dev.alvr.katana.features.login.ui.viewmodel.LoginState.ErrorType
 import org.orbitmvi.orbit.container
-import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.reduce
 
 internal class LoginViewModel(
     private val token: String?,
