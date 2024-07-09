@@ -18,8 +18,6 @@ import dev.alvr.katana.features.lists.ui.entities.mappers.toUserList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import org.orbitmvi.orbit.container
-import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.reduce
 
 internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     private val updateListUseCase: UpdateListUseCase,

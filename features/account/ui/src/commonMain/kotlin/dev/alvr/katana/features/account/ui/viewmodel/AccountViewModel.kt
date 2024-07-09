@@ -8,7 +8,6 @@ import dev.alvr.katana.core.ui.viewmodel.BaseViewModel
 import dev.alvr.katana.core.ui.viewmodel.EmptyEffect
 import dev.alvr.katana.features.account.ui.entities.mappers.toEntity
 import org.orbitmvi.orbit.container
-import org.orbitmvi.orbit.syntax.simple.intent
 
 internal class AccountViewModel(
     private val observeUserInfoUseCase: ObserveUserInfoUseCase,

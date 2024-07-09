@@ -7,8 +7,6 @@ import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.ui.viewmodel.BaseViewModel
 import dev.alvr.katana.core.ui.viewmodel.EmptyState
 import org.orbitmvi.orbit.container
-import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.postSideEffect
 
 internal class HomeViewModel(
     private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,

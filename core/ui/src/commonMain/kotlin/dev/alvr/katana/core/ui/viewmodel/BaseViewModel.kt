@@ -13,10 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.annotation.OrbitDsl
 import org.orbitmvi.orbit.annotation.OrbitExperimental
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
-import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.reduce
-import org.orbitmvi.orbit.syntax.simple.subIntent
+import org.orbitmvi.orbit.syntax.Syntax
 
 interface UiState
 
@@ -37,7 +34,7 @@ abstract class BaseViewModel<S : UiState, E : UiEffect> : ViewModel(), Container
     @OrbitDsl
     @OptIn(OrbitExperimental::class)
     @Suppress("UnusedReceiverParameter")
-    protected suspend fun SimpleSyntax<S, E>.updateState(block: S.() -> S) {
+    protected suspend fun Syntax<S, E>.updateState(block: S.() -> S) {
         subIntent {
             reduce { block(state) }
         }
