@@ -1,11 +1,11 @@
 package dev.alvr.katana.common.user.data.sources.id
 
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.annotations.ApolloExperimental
-import com.apollographql.apollo3.exception.JsonDataException
-import com.apollographql.apollo3.testing.QueueTestNetworkTransport
-import com.apollographql.apollo3.testing.enqueueTestNetworkError
-import com.apollographql.apollo3.testing.enqueueTestResponse
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.annotations.ApolloExperimental
+import com.apollographql.apollo.exception.JsonDataException
+import com.apollographql.apollo.testing.QueueTestNetworkTransport
+import com.apollographql.apollo.testing.enqueueTestNetworkError
+import com.apollographql.apollo.testing.enqueueTestResponse
 import dev.alvr.katana.common.user.data.UserIdQuery
 import dev.alvr.katana.common.user.domain.models.UserId
 import dev.alvr.katana.core.domain.failures.Failure

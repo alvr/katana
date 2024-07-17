@@ -1,6 +1,6 @@
 package dev.alvr.katana.features.lists.data.mappers.requests
 
-import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo.api.Optional
 import dev.alvr.katana.core.remote.type.FuzzyDateInput
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.equals.shouldBeEqual

@@ -2,7 +2,8 @@
 android = "8.5.1"
 androidx-activity = "1.9.0"
 androidx-splashscreen = "1.0.1"
-apollo = "4.0.0-beta.7"
+apollo = "4.0.0-rc.1"
+apollo-mockserver = "0.0.3"
 arrow = "1.2.4"
 buildconfig = "5.4.0"
 compose = "1.6.11"
@@ -43,7 +44,7 @@ yamlbeans = "1.17"
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
 android-library = { id = "com.android.library", version.ref = "android" }
-apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
+apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -62,10 +63,10 @@ androidx-activity = { module = "androidx.activity:activity-compose", version.ref
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
 
 # Apollo
-apollo = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo" }
-apollo-cache = { module = "com.apollographql.apollo3:apollo-normalized-cache-sqlite", version.ref = "apollo" }
-apollo-mockserver = { module = "com.apollographql.apollo3:apollo-mockserver", version.ref = "apollo" }
-apollo-test = { module = "com.apollographql.apollo3:apollo-testing-support", version.ref = "apollo" }
+apollo = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo" }
+apollo-cache = { module = "com.apollographql.apollo:apollo-normalized-cache-sqlite", version.ref = "apollo" }
+apollo-mockserver = { module = "com.apollographql.mockserver:apollo-mockserver", version.ref = "apollo-mockserver" }
+apollo-test = { module = "com.apollographql.apollo:apollo-testing-support", version.ref = "apollo" }
 
 # Arrow
 arrow = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
@@ -85,7 +86,7 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version.ref = "android" }
-gradle-apollo = { module = "com.apollographql.apollo3:apollo-gradle-plugin", version.ref = "apollo" }
+gradle-apollo = { module = "com.apollographql.apollo:apollo-gradle-plugin", version.ref = "apollo" }
 gradle-buildconfig = { module = "com.github.gmazzo.buildconfig:plugin", version.ref = "buildconfig" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
 gradle-compose-compiler = { module = "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin", version.ref = "kotlin" }
@@ -283,11 +284,10 @@ data-remote-android-ksp = []
 data-remote-ios-ksp = []
 
 data-remote-common-test = [
+    "apollo-mockserver",
     "apollo-test",
 ]
-data-remote-android-test = [
-    "apollo-mockserver",
-]
+data-remote-android-test = []
 data-remote-ios-test = []
 
 data-remote-common-test-ksp = []

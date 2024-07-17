@@ -1,6 +1,6 @@
 package dev.alvr.katana.features.lists.data
 
-import com.apollographql.apollo3.api.Error
+import com.apollographql.apollo.api.Error
 import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList

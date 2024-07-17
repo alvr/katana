@@ -1,7 +1,7 @@
 package dev.alvr.katana.features.lists.data.di
 
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.interceptor.ApolloInterceptor
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.interceptor.ApolloInterceptor
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import io.kotest.core.spec.style.FreeSpec
 import io.mockk.mockkClass

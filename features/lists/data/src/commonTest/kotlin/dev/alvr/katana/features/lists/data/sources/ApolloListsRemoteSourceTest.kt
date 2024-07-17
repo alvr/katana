@@ -2,12 +2,12 @@ package dev.alvr.katana.features.lists.data.sources
 
 import app.cash.turbine.test
 import arrow.core.right
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.annotations.ApolloExperimental
-import com.apollographql.apollo3.interceptor.ApolloInterceptor
-import com.apollographql.apollo3.testing.MapTestNetworkTransport
-import com.apollographql.apollo3.testing.registerTestNetworkError
-import com.apollographql.apollo3.testing.registerTestResponse
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.annotations.ApolloExperimental
+import com.apollographql.apollo.interceptor.ApolloInterceptor
+import com.apollographql.apollo.testing.MapTestNetworkTransport
+import com.apollographql.apollo.testing.registerTestNetworkError
+import com.apollographql.apollo.testing.registerTestResponse
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero

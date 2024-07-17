@@ -2,19 +2,19 @@ package dev.alvr.katana.core.remote
 
 import arrow.core.Either
 import arrow.core.Option
-import com.apollographql.apollo3.ApolloCall
-import com.apollographql.apollo3.api.Operation
-import com.apollographql.apollo3.api.Optional
-import com.apollographql.apollo3.api.Query
-import com.apollographql.apollo3.cache.normalized.watch
-import com.apollographql.apollo3.exception.ApolloHttpException
-import com.apollographql.apollo3.exception.ApolloNetworkException
-import com.apollographql.apollo3.exception.CacheMissException
-import com.apollographql.apollo3.exception.DefaultApolloException
-import com.apollographql.apollo3.exception.HttpCacheMissException
-import com.apollographql.apollo3.exception.JsonDataException
-import com.apollographql.apollo3.exception.JsonEncodingException
-import com.apollographql.apollo3.exception.NoDataException
+import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.api.Operation
+import com.apollographql.apollo.api.Optional
+import com.apollographql.apollo.api.Query
+import com.apollographql.apollo.cache.normalized.watch
+import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo.exception.ApolloNetworkException
+import com.apollographql.apollo.exception.CacheMissException
+import com.apollographql.apollo.exception.DefaultApolloException
+import com.apollographql.apollo.exception.HttpCacheMissException
+import com.apollographql.apollo.exception.JsonDataException
+import com.apollographql.apollo.exception.JsonEncodingException
+import com.apollographql.apollo.exception.NoDataException
 import dev.alvr.katana.core.domain.failures.Failure
 import kotlinx.coroutines.flow.filterNot
 
