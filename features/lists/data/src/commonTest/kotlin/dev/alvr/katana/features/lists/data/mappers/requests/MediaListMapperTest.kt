@@ -1,6 +1,6 @@
 package dev.alvr.katana.features.lists.data.mappers.requests
 
-import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo.api.Optional
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.remote.optional

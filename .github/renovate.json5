@@ -51,7 +51,15 @@
             ],
         },
         {
+            "groupName": "Apollo",
+            "groupSlug": "apollo",
+            "matchPackagePatterns": [
+                "com.apollographql.*",
+            ],
+        },
+        {
             "groupName": "GitHub Actions",
+            "groupSlug": "actions",
             "matchManagers": [
                 "github-actions",
             ],

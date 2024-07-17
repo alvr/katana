@@ -2,16 +2,16 @@ package dev.alvr.katana.features.lists.data.sources
 
 import app.cash.turbine.test
 import arrow.core.right
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.annotations.ApolloExperimental
-import com.apollographql.apollo3.api.ApolloResponse
-import com.apollographql.apollo3.interceptor.ApolloInterceptor
-import com.apollographql.apollo3.mockserver.MockServer
-import com.apollographql.apollo3.mockserver.enqueueError
-import com.apollographql.apollo3.mockserver.enqueueString
-import com.apollographql.apollo3.testing.MapTestNetworkTransport
-import com.apollographql.apollo3.testing.registerTestNetworkError
-import com.apollographql.apollo3.testing.registerTestResponse
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.annotations.ApolloExperimental
+import com.apollographql.apollo.api.ApolloResponse
+import com.apollographql.apollo.interceptor.ApolloInterceptor
+import com.apollographql.apollo.testing.MapTestNetworkTransport
+import com.apollographql.apollo.testing.registerTestNetworkError
+import com.apollographql.apollo.testing.registerTestResponse
+import com.apollographql.mockserver.MockServer
+import com.apollographql.mockserver.enqueueError
+import com.apollographql.mockserver.enqueueString
 import com.benasher44.uuid.uuid4
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.core.domain.failures.Failure

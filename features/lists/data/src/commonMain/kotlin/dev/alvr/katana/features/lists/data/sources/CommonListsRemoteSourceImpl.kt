@@ -4,9 +4,9 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import co.touchlab.kermit.Logger
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.cache.normalized.fetchPolicyInterceptor
-import com.apollographql.apollo3.interceptor.ApolloInterceptor
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.cache.normalized.fetchPolicyInterceptor
+import com.apollographql.apollo.interceptor.ApolloInterceptor
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.core.common.catchUnit
 import dev.alvr.katana.core.remote.executeOrThrow

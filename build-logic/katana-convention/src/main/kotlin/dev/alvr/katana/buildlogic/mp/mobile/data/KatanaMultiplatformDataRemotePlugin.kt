@@ -2,7 +2,7 @@
 
 package dev.alvr.katana.buildlogic.mp.mobile.data
 
-import com.apollographql.apollo3.gradle.api.ApolloExtension
+import com.apollographql.apollo.gradle.api.ApolloExtension
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
@@ -19,7 +19,7 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
         apply(plugin = "katana.multiplatform.mobile")
-        apply(plugin = "com.apollographql.apollo3")
+        apply(plugin = "com.apollographql.apollo")
 
         with(extensions) {
             configure<KotlinMultiplatformExtension> { configureMultiplatform() }
