@@ -2,7 +2,7 @@
 android = "8.5.1"
 androidx-activity = "1.9.0"
 androidx-splashscreen = "1.0.1"
-apollo = "4.0.0-rc.1"
+apollo = "4.0.0-rc.2"
 apollo-mockserver = "0.0.3"
 arrow = "1.2.4"
 buildconfig = "5.4.0"
