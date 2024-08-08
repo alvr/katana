@@ -16,13 +16,13 @@ runs:
         distribution: zulu
         java-version: 17
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3.5.0
+      uses: gradle/actions/setup-gradle@v4.0.0
       with:
         add-job-summary-as-pr-comment: on-failure
         artifact-retention-days: 7
         build-scan-publish: true
         build-scan-terms-of-use-url: https://gradle.com/help/legal-terms-of-use
         build-scan-terms-of-use-agree: yes
+        cache-cleanup: true
         cache-encryption-key: ${{ inputs.gradle-encryption-key }}
         dependency-graph: generate-and-submit
-        gradle-home-cache-cleanup: true
