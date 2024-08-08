@@ -37,7 +37,7 @@ orbit = "9.0.0"
 sentry = "7.13.0"
 sentry-multiplatform = "0.7.1"
 sentry-plugin = "4.10.0"
-tink = "1.14.0"
+tink = "1.14.1"
 turbine = "1.1.0"
 yamlbeans = "1.17"
 
