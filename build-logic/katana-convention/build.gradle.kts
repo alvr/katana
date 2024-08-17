@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `kotlin-dsl`
 }
@@ -69,14 +67,6 @@ gradlePlugin {
         register("multiplatform-ui") {
             id = "katana.multiplatform.ui"
             implementationClass = "dev.alvr.katana.buildlogic.mp.mobile.ui.KatanaMultiplatformUiPlugin"
-        }
-    }
-}
-
-tasks {
-    withType<KotlinCompile>().configureEach {
-        compilerOptions {
-            freeCompilerArgs.addAll("-Xcontext-receivers")
         }
     }
 }

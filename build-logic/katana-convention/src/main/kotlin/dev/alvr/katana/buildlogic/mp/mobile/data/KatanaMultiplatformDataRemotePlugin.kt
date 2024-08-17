@@ -6,7 +6,6 @@ import com.apollographql.apollo.gradle.api.ApolloExtension
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
-import dev.alvr.katana.buildlogic.mp.androidUnitTest
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -22,15 +21,14 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
         apply(plugin = "com.apollographql.apollo")
 
         with(extensions) {
-            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
-            configure<ApolloExtension> { configureApollo() }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
+            configure<ApolloExtension> { configureApollo(project) }
         }
     }
 
-    context(Project)
-    private fun KotlinMultiplatformExtension.configureMultiplatform() {
+    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
         configureSourceSets()
-        kspDependencies("mobile")
+        kspDependencies(project, "mobile")
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
@@ -57,35 +55,32 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
         }
     }
 
-    context(Project)
-    private fun ApolloExtension.configureApollo() {
+    private fun ApolloExtension.configureApollo(project: Project) {
         service("anilist") {
             decapitalizeFields = true
             generateAsInternal = true
             generateMethods = listOf("equalsHashCode")
-            packageName = fullPackageName
+            packageName = project.fullPackageName
             warnOnDeprecatedUsages = true
 
-            if (path == CORE_PROJECT) {
+            if (project.path == CORE_PROJECT) {
                 generateApolloMetadata = true
                 generateAsInternal = false
                 generateDataBuilders = true
                 schemaFiles.from(
-                    file("src/commonMain/graphql/schema.graphqls"),
-                    file("src/commonMain/graphql/extra.graphqls"),
+                    project.file("src/commonMain/graphql/schema.graphqls"),
+                    project.file("src/commonMain/graphql/extra.graphqls"),
                 )
 
                 introspection {
                     endpointUrl = "https://graphql.anilist.co"
-                    schemaFile = file("src/commonMain/graphql/schema.graphqls")
+                    schemaFile = project.file("src/commonMain/graphql/schema.graphqls")
                 }
             } else {
-                dependsOn(project(CORE_PROJECT))
+                dependsOn(project.project(CORE_PROJECT))
             }
         }
     }
-
-    private companion object {
-        const val CORE_PROJECT = ":core:remote"
-    }
 }
+
+private const val CORE_PROJECT = ":core:remote"

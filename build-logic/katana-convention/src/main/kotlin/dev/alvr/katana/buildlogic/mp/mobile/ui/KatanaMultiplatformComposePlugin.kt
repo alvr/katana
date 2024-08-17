@@ -5,7 +5,6 @@ package dev.alvr.katana.buildlogic.mp.mobile.ui
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
-import dev.alvr.katana.buildlogic.mp.androidUnitTest
 import java.io.File
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -19,6 +18,9 @@ import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.compose.resources.ResourcesExtension
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag.Companion.IntrinsicRemember
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag.Companion.OptimizeNonSkippingGroups
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag.Companion.StrongSkipping
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
@@ -28,16 +30,15 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
         apply(plugin = "org.jetbrains.kotlin.plugin.compose")
 
         with(extensions) {
-            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
-            configure<ComposeExtension> { configureComposeResources() }
-            configure<ComposeCompilerGradlePluginExtension> { configureComposeCompiler() }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
+            configure<ComposeExtension> { configureComposeResources(project) }
+            configure<ComposeCompilerGradlePluginExtension> { configureComposeCompiler(project) }
         }
     }
 
-    context(Project)
-    private fun KotlinMultiplatformExtension.configureMultiplatform() {
+    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
         configureSourceSets()
-        kspDependencies("ui")
+        kspDependencies(project, "ui")
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
@@ -76,20 +77,20 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
         }
     }
 
-    context(Project)
-    private fun ComposeExtension.configureComposeResources() {
-        val resources = (this as ExtensionAware).extensions.getByType<ResourcesExtension>()
-        resources.packageOfResClass = "$fullPackageName.resources"
+    private fun ComposeCompilerGradlePluginExtension.configureComposeCompiler(project: Project) {
+        featureFlags = setOf(
+            IntrinsicRemember,
+            OptimizeNonSkippingGroups,
+            StrongSkipping,
+        )
+
+        metricsDestination = project.file(project.composePluginDir("compose-metrics"))
+        reportsDestination = project.file(project.composePluginDir("compose-reports"))
     }
 
-    context(Project)
-    private fun ComposeCompilerGradlePluginExtension.configureComposeCompiler() {
-        enableIntrinsicRemember = true
-        enableNonSkippingGroupOptimization = true
-        enableStrongSkippingMode = true
-
-        metricsDestination = file(composePluginDir("compose-metrics"))
-        reportsDestination = file(composePluginDir("compose-reports"))
+    private fun ComposeExtension.configureComposeResources(project: Project) {
+        val resources = (this as ExtensionAware).extensions.getByType<ResourcesExtension>()
+        resources.packageOfResClass = "${project.fullPackageName}.resources"
     }
 
     private fun Project.composePluginDir(directory: String) =

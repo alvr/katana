@@ -8,7 +8,6 @@ import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
-import dev.alvr.katana.buildlogic.mp.androidUnitTest
 import dev.alvr.katana.buildlogic.mp.configureIos
 import dev.alvr.katana.buildlogic.mp.configureKotlin
 import dev.alvr.katana.buildlogic.mp.katanaBuildConfig
@@ -26,8 +25,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 internal abstract class KatanaMultiplatformMobileBasePlugin(
     private val androidPlugin: String,
 ) : Plugin<Project> {
-    context(Project)
-    abstract fun ExtensionContainer.configureAndroid()
+    abstract fun ExtensionContainer.configureAndroid(project: Project)
 
     override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
@@ -38,18 +36,15 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
         apply(plugin = "org.jetbrains.kotlinx.kover")
         apply(plugin = "dev.mokkery")
 
-        with(extensions) {
-            commonExtensions()
-            configureAndroid()
-            configure<BuildConfigExtension> { configureBuildConfig() }
-            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
-        }
+        extensions.commonExtensions()
+        extensions.configureAndroid(this)
+        extensions.configure<BuildConfigExtension> { configureBuildConfig(project) }
+        extensions.configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
 
         tasks.commonTasks()
     }
 
-    context(Project)
-    private fun KotlinMultiplatformExtension.configureMultiplatform() {
+    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
         androidTarget()
         configureIos()
         configureSourceSets()
@@ -57,7 +52,8 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
         applyDefaultHierarchyTemplate()
 
         configureKotlin()
-        kspDependencies("mobile")
+
+        kspDependencies(project, "mobile")
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
@@ -100,18 +96,17 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
         }
     }
 
-    context(Project)
-    private fun BuildConfigExtension.configureBuildConfig() {
-        val pkgName = if (path == ANDROID_APP_PATH) {
-            fullPackageName.substringBeforeLast('.')
+    private fun BuildConfigExtension.configureBuildConfig(project: Project) {
+        val pkgName = if (project.path == ANDROID_APP_PATH) {
+            project.fullPackageName.substringBeforeLast('.')
         } else {
-            fullPackageName
+            project.fullPackageName
         }
 
         packageName = pkgName
 
-        afterEvaluate {
-            katanaBuildConfig(
+        project.afterEvaluate {
+            project.katanaBuildConfig(
                 android = { androidConfig ->
                     sourceSets.getByName("androidMain") {
                         className = BUILD_CONFIG_FILE

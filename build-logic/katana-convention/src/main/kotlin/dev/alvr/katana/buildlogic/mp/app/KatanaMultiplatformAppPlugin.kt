@@ -34,9 +34,8 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
         extensions.configure<SentryPluginExtension> { configureSentry() }
     }
 
-    context(Project)
-    override fun ExtensionContainer.configureAndroid() {
-        configure<BaseAppModuleExtension> { configureApp() }
+    override fun ExtensionContainer.configureAndroid(project: Project) {
+        configure<BaseAppModuleExtension> { configureApp(project) }
     }
 
     override fun NamedDomainObjectContainer<KotlinSourceSet>.configureSourceSets() {
@@ -57,9 +56,8 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
         }
     }
 
-    context(Project)
     @Suppress("StringLiteralDuplication")
-    private fun BaseAppModuleExtension.configureApp() {
+    private fun BaseAppModuleExtension.configureApp(project: Project) {
         configureAndroid(KatanaConfiguration.PackageName)
 
         defaultConfig.applicationId = KatanaConfiguration.PackageName
@@ -74,7 +72,7 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
             register("release") {
                 val props = Properties().also { p ->
                     runCatching {
-                        FileInputStream(rootProject.file("local.properties")).use { f ->
+                        FileInputStream(project.rootProject.file("local.properties")).use { f ->
                             p.load(f)
                         }
                     }
@@ -86,7 +84,7 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
                 keyAlias = props.getValue("signingAlias", "SIGNING_ALIAS")
                 keyPassword = props.getValue("signingAliasPass", "SIGNING_ALIAS_PASS")
                 storeFile = props.getValue("signingFile", "SIGNING_FILE")?.let {
-                    rootProject.file(it)
+                    project.rootProject.file(it)
                 }
                 storePassword = props.getValue("signingFilePass", "SIGNING_FILE_PASS")
             }

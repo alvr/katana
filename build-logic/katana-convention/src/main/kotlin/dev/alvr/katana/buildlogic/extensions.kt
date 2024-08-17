@@ -66,10 +66,9 @@ internal fun DependencyHandlerScope.detekt(provider: Provider<*>) {
     "detektPlugins"(provider)
 }
 
-context(KotlinMultiplatformExtension)
-internal fun Project.kspDependencies(catalogPrefix: String) {
-    kspDependencies("", catalogPrefix)
-    kspDependencies("Test", catalogPrefix)
+internal fun KotlinMultiplatformExtension.kspDependencies(project: Project, catalogPrefix: String) {
+    kspDependencies(project, "", catalogPrefix)
+    kspDependencies(project, "Test", catalogPrefix)
 }
 
 internal fun BaseExtension.configureAndroid(packageName: String) {
@@ -139,24 +138,23 @@ internal fun KotlinCommonCompilerOptions.configureKotlinCompiler() {
     languageVersion = KatanaConfiguration.KotlinVersion
     freeCompilerArgs.addAll(
         "-opt-in=kotlin.RequiresOptIn",
-        "-Xcontext-receivers",
         "-Xlambdas=indy",
         "-Xexpect-actual-classes",
     )
 }
 
-context(KotlinMultiplatformExtension)
-private fun Project.kspDependencies(
+private fun KotlinMultiplatformExtension.kspDependencies(
+    project: Project,
     configurationNameSuffix: String,
     catalogPrefix: String,
 ) {
-    dependencies {
+    project.dependencies {
         targets.forEach { target ->
             val configurationName = "ksp${target.configurationName(configurationNameSuffix)}"
             val groupName = "${target.groupName}${configurationNameSuffix.suffix}"
             val catalogAlias = "$catalogPrefix-$groupName-ksp".lowercase()
 
-            add(configurationName, catalogBundle(catalogAlias))
+            add(configurationName, project.catalogBundle(catalogAlias))
         }
     }
 }

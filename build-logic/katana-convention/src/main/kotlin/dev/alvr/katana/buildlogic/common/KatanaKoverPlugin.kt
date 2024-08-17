@@ -58,39 +58,23 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         "*.screen",
     )
 
-    private val containerModules = listOf(
-        ":core",
-        ":common",
-        ":common:session",
-        ":common:user",
-        ":features",
-        ":features:account",
-        ":features:explore",
-        ":features:home",
-        ":features:lists",
-        ":features:login",
-        ":features:social",
-    )
-
     override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlinx.kover")
 
-        extensions.configure<KoverProjectExtension> { configureRoot() }
+        extensions.configure<KoverProjectExtension> { configureRoot(project) }
     }
 
-    context(KoverProjectExtension)
-    private fun Project.configureRoot() {
+    private fun KoverProjectExtension.configureRoot(project: Project) {
         project.subprojects
-            .filterNot { it.path in containerModules }
-            .forEach { it.configureSubproject() }
+            .filterNot { it.childProjects.isEmpty() }
+            .forEach { configureSubproject(it) }
 
         configureCommon()
     }
 
-    context(KoverProjectExtension)
-    private fun Project.configureSubproject() {
-        apply(plugin = "org.jetbrains.kotlinx.kover")
-        rootProject.dependencies { add("kover", project) }
+    private fun KoverProjectExtension.configureSubproject(project: Project) {
+        project.apply(plugin = "org.jetbrains.kotlinx.kover")
+        project.rootProject.dependencies { add("kover", project) }
 
         configureCommon()
     }

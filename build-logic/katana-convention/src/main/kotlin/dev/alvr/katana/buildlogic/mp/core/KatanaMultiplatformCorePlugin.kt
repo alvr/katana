@@ -27,7 +27,7 @@ internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
 
         with(extensions) {
             commonExtensions()
-            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
         }
 
         with(tasks) {
@@ -36,15 +36,14 @@ internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
         }
     }
 
-    context(Project)
-    private fun KotlinMultiplatformExtension.configureMultiplatform() {
+    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
         applyDefaultHierarchyTemplate()
         jvm { testRuns["test"].executionTask.configure { useJUnitPlatform() } }
         configureIos()
         configureSourceSets()
 
         configureKotlin()
-        kspDependencies("core")
+        kspDependencies(project, "core")
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
