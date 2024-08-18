@@ -20,6 +20,8 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.invoke
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugin(ANDROID_APPLICATION_PLUGIN) {
@@ -29,29 +31,34 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
         apply(plugin = "katana.multiplatform.compose")
         apply(plugin = "io.sentry.android.gradle")
 
-        group = KatanaConfiguration.PackageName
-
-        extensions.configure<SentryPluginExtension> { configureSentry() }
+        with(extensions) {
+            configure<SentryPluginExtension> { configureSentry() }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+        }
     }
 
     override fun ExtensionContainer.configureAndroid(project: Project) {
         configure<BaseAppModuleExtension> { configureApp(project) }
     }
 
-    override fun NamedDomainObjectContainer<KotlinSourceSet>.configureSourceSets() {
-        getByName("commonMain") {
-            dependencies {
+    private fun KotlinMultiplatformExtension.configureMultiplatform() {
+        configureSourceSets()
+    }
+
+    private fun KotlinMultiplatformExtension.configureSourceSets() {
+        sourceSets {
+            commonMain.dependencies {
                 implementation(catalogBundle("app-common"))
             }
-        }
-        getByName("androidMain") {
-            dependencies {
-                implementation(catalogBundle("app-android"))
+            androidMain {
+                dependencies {
+                    implementation(catalogBundle("app-android"))
+                }
             }
-        }
-        getByName("iosMain") {
-            dependencies {
-                implementation(catalogBundle("app-ios"))
+            iosMain {
+                dependencies {
+                    implementation(catalogBundle("app-ios"))
+                }
             }
         }
     }
@@ -81,12 +88,12 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
                 enableV3Signing = true
                 enableV4Signing = true
 
-                keyAlias = props.getValue("signingAlias", "SIGNING_ALIAS")
-                keyPassword = props.getValue("signingAliasPass", "SIGNING_ALIAS_PASS")
-                storeFile = props.getValue("signingFile", "SIGNING_FILE")?.let {
+                keyAlias = props["signingAlias", "SIGNING_ALIAS"]
+                keyPassword = props["signingAliasPass", "SIGNING_ALIAS_PASS"]
+                storeFile = props["signingFile", "SIGNING_FILE"]?.let {
                     project.rootProject.file(it)
                 }
-                storePassword = props.getValue("signingFilePass", "SIGNING_FILE_PASS")
+                storePassword = props["signingFilePass", "SIGNING_FILE_PASS"]
             }
         }
 
@@ -140,6 +147,6 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
         enableUnitTestCoverage = isDebug
     }
 
-    private fun Properties.getValue(key: String, env: String) =
+    private operator fun Properties.get(key: String, env: String) =
         getOrElse(key) { System.getenv(env) } as? String
 }

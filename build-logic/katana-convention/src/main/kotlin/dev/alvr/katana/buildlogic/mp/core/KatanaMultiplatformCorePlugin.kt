@@ -4,6 +4,7 @@ import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.kspDependencies
+import dev.alvr.katana.buildlogic.mp.configureCommonLanguageSettings
 import dev.alvr.katana.buildlogic.mp.configureIos
 import dev.alvr.katana.buildlogic.mp.configureKotlin
 import org.gradle.api.Plugin
@@ -48,8 +49,11 @@ internal class KatanaMultiplatformCorePlugin : Plugin<Project> {
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         sourceSets {
-            commonMain.dependencies {
-                implementation(catalogBundle("core-common"))
+            commonMain {
+                configureCommonLanguageSettings()
+                dependencies {
+                    implementation(catalogBundle("core-common"))
+                }
             }
             jvmMain.dependencies {
                 implementation(catalogBundle("core-jvm"))

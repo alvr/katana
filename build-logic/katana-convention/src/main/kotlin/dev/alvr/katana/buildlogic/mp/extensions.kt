@@ -1,9 +1,11 @@
 package dev.alvr.katana.buildlogic.mp
 
+import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.configureKotlinCompiler
 import java.util.Locale
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 internal fun KotlinMultiplatformExtension.configureIos() {
@@ -26,6 +28,14 @@ internal fun KotlinMultiplatformExtension.configureKotlin() {
                 configureKotlinCompiler()
             }
         }
+    }
+}
+
+internal fun KotlinSourceSet.configureCommonLanguageSettings() {
+    languageSettings {
+        apiVersion = KatanaConfiguration.KotlinVersion.version
+        languageVersion = KatanaConfiguration.KotlinVersion.version
+        progressiveMode = true
     }
 }
 

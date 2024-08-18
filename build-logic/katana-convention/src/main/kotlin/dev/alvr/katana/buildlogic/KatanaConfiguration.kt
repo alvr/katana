@@ -5,11 +5,11 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget as KtJvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion as KtVersion
 
 internal object KatanaConfiguration {
-    const val CompileSdk = 34
-    const val BuildTools = "34.0.0"
+    const val CompileSdk = 35
+    const val BuildTools = "35.0.0"
     const val PackageName = "dev.alvr.katana"
     const val MinSdk = 21
-    const val TargetSdk = 34
+    const val TargetSdk = 35
     const val VersionName = "0.0.1"
     const val VersionCode = 1
 

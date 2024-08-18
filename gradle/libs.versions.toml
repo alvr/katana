@@ -5,7 +5,6 @@ androidx-splashscreen = "1.0.1"
 apollo = "4.0.0"
 apollo-mockserver = "0.0.3"
 arrow = "1.2.4"
-buildconfig = "5.4.0"
 compose = "1.6.11"
 compose-placeholder = "1.0.8"
 compose-windowsize = "0.5.0"
@@ -15,6 +14,7 @@ detekt-compose = "0.4.10"
 detekt-compose2 = "1.4.0"
 kamel = "0.9.5"
 kermit = "2.0.4"
+kaml = { strictly = "0.59.0" }
 koin = "3.6.0-Beta4"
 koin-compose = "1.2.0-Beta4"
 korge-foundation = "5.4.0"
@@ -39,13 +39,11 @@ sentry-multiplatform = "0.7.1"
 sentry-plugin = "4.11.0"
 tink = "1.14.1"
 turbine = "1.1.0"
-yamlbeans = "1.17"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
 android-library = { id = "com.android.library", version.ref = "android" }
 apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
-buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
@@ -87,7 +85,6 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version.ref = "android" }
 gradle-apollo = { module = "com.apollographql.apollo:apollo-gradle-plugin", version.ref = "apollo" }
-gradle-buildconfig = { module = "com.github.gmazzo.buildconfig:plugin", version.ref = "buildconfig" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
 gradle-compose-compiler = { module = "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin", version.ref = "kotlin" }
 gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
@@ -103,6 +100,9 @@ kamel = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 
 # Kermit
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+
+# Kmal
+kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
 
 # Koin
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -154,9 +154,6 @@ sentry-multiplatform = { module = "io.sentry:sentry-kotlin-multiplatform", versi
 
 # Tink
 tink = { module = "com.google.crypto.tink:tink-android", version.ref = "tink" }
-
-# YAML
-yamlbeans = { module = "com.esotericsoftware.yamlbeans:yamlbeans", version.ref = "yamlbeans" }
 
 # Tests
 ## Kotest
@@ -329,3 +326,17 @@ app-android = [
     "sentry",
 ]
 app-ios = []
+
+gradle = [
+    "gradle-android",
+    "gradle-apollo",
+    "gradle-compose",
+    "gradle-compose-compiler",
+    "gradle-detekt",
+    "gradle-kotest",
+    "gradle-kotlin",
+    "gradle-kover",
+    "gradle-ksp",
+    "gradle-mokkery",
+    "gradle-sentry",
+]

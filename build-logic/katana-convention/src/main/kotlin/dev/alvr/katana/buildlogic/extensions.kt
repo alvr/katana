@@ -138,7 +138,6 @@ internal fun KotlinCommonCompilerOptions.configureKotlinCompiler() {
     languageVersion = KatanaConfiguration.KotlinVersion
     freeCompilerArgs.addAll(
         "-opt-in=kotlin.RequiresOptIn",
-        "-Xlambdas=indy",
         "-Xexpect-actual-classes",
     )
 }

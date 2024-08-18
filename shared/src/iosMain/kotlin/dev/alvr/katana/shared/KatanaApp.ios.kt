@@ -1,5 +1,6 @@
 package dev.alvr.katana.shared
 
+import dev.alvr.katana.core.common.KatanaBuildConfig
 import io.sentry.kotlin.multiplatform.PlatformOptionsConfiguration
 import platform.Foundation.NSNumber
 

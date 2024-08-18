@@ -21,8 +21,8 @@ import com.apollographql.apollo.network.http.LoggingInterceptor
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.usecases.DeleteAnilistTokenUseCase
 import dev.alvr.katana.common.session.domain.usecases.GetAnilistTokenUseCase
+import dev.alvr.katana.core.common.KatanaBuildConfig
 import dev.alvr.katana.core.domain.usecases.invoke
-import dev.alvr.katana.core.remote.KatanaBuildConfig
 import dev.alvr.katana.core.remote.interceptors.ReloadInterceptor
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf

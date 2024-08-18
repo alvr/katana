@@ -18,9 +18,7 @@ import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.compose.resources.ResourcesExtension
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag.Companion.IntrinsicRemember
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag.Companion.OptimizeNonSkippingGroups
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag.Companion.StrongSkipping
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
@@ -78,11 +76,7 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
     }
 
     private fun ComposeCompilerGradlePluginExtension.configureComposeCompiler(project: Project) {
-        featureFlags = setOf(
-            IntrinsicRemember,
-            OptimizeNonSkippingGroups,
-            StrongSkipping,
-        )
+        featureFlags = setOf(OptimizeNonSkippingGroups)
 
         metricsDestination = project.file(project.composePluginDir("compose-metrics"))
         reportsDestination = project.file(project.composePluginDir("compose-reports"))

@@ -66,7 +66,7 @@ internal class KatanaKoverPlugin : Plugin<Project> {
 
     private fun KoverProjectExtension.configureRoot(project: Project) {
         project.subprojects
-            .filterNot { it.childProjects.isEmpty() }
+            .filter { it.childProjects.isEmpty() }
             .forEach { configureSubproject(it) }
 
         configureCommon()
