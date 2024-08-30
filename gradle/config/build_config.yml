@@ -1,44 +1,44 @@
 android:
   dev:
-    - type: boolean
+    - type: Boolean
       name: DEBUG
-      value: 'true'
+      value: true
     - type: String
       name: SENTRY_DSN
       value: '""'
   beta:
-    - type: boolean
+    - type: Boolean
       name: DEBUG
-      value: 'false'
+      value: false
     - type: String
       name: SENTRY_DSN
       value: '"https://8144916afab84ceba1da1443079b1809@o387687.ingest.sentry.io/4504198472007680"'
   release:
-    - type: boolean
+    - type: Boolean
       name: DEBUG
-      value: 'false'
+      value: false
     - type: String
       name: SENTRY_DSN
       value: '"https://a6546827e74f47b499b4f818f01dd49d@o387687.ingest.sentry.io/4504198475284480"'
 ios:
   dev:
-    - type: boolean
+    - type: Boolean
       name: DEBUG
-      value: 'true'
+      value: true
     - type: String
       name: SENTRY_DSN
       value: '""'
   beta:
-    - type: boolean
+    - type: Boolean
       name: DEBUG
-      value: 'false'
+      value: false
     - type: String
       name: SENTRY_DSN
       value: '"https://14c5cd3a9ea04a839428140a69c16a23@o387687.ingest.sentry.io/4505596148318208"'
   release:
-    - type: boolean
+    - type: Boolean
       name: DEBUG
-      value: 'false'
+      value: false
     - type: String
       name: SENTRY_DSN
       value: '"https://3dface7cff194a87af8c131c42fa60db@o387687.ingest.sentry.io/4505596155265024"'

@@ -2,9 +2,7 @@ import org.gradle.github.GitHubDependencyGraphPlugin
 
 initscript {
     repositories {
-        maven {
-            url = uri("https://plugins.gradle.org/m2/")
-        }
+        gradlePluginPortal()
     }
     dependencies {
         classpath("org.gradle:github-dependency-graph-gradle-plugin:1.3.1")

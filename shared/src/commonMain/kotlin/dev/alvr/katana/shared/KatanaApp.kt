@@ -13,6 +13,7 @@ import co.touchlab.kermit.LogWriter
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import co.touchlab.kermit.platformLogWriter
+import dev.alvr.katana.core.common.KatanaBuildConfig
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.utils.noInsets
 import dev.alvr.katana.core.ui.viewmodel.collectAsState

@@ -10,7 +10,7 @@ kotlin {
             implementation(projects.common.user.data)
             implementation(projects.common.user.domain)
 
-            implementation(projects.core.common)
+            api(projects.core.common)
             implementation(projects.core.domain)
             implementation(projects.core.preferences)
             implementation(projects.core.remote)

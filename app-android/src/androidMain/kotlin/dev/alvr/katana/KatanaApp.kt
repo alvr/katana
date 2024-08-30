@@ -1,6 +1,7 @@
 package dev.alvr.katana
 
 import android.app.Application
+import dev.alvr.katana.core.common.KatanaBuildConfig
 import dev.alvr.katana.shared.di.katanaModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger

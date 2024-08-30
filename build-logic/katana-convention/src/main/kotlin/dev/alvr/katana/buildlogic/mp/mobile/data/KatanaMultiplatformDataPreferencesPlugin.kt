@@ -2,7 +2,6 @@ package dev.alvr.katana.buildlogic.mp.mobile.data
 
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.kspDependencies
-import dev.alvr.katana.buildlogic.mp.androidUnitTest
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -17,14 +16,13 @@ internal class KatanaMultiplatformDataPreferencesPlugin : Plugin<Project> {
         apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
         with(extensions) {
-            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
         }
     }
 
-    context(Project)
-    private fun KotlinMultiplatformExtension.configureMultiplatform() {
+    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
         configureSourceSets()
-        kspDependencies("mobile")
+        kspDependencies(project, "mobile")
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {

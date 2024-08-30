@@ -1,27 +1,15 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `kotlin-dsl`
+    kotlin("plugin.serialization")
 }
 
 group = "dev.alvr.katana.buildlogic"
 version = extra["katana.plugins.version"].toString()
 
 dependencies {
-    implementation(libs.gradle.android)
-    implementation(libs.gradle.apollo)
-    implementation(libs.gradle.buildconfig)
-    implementation(libs.gradle.compose)
-    implementation(libs.gradle.compose.compiler)
-    implementation(libs.gradle.detekt)
-    implementation(libs.gradle.kotest)
-    implementation(libs.gradle.kotlin)
-    implementation(libs.gradle.kover)
-    implementation(libs.gradle.ksp)
-    implementation(libs.gradle.mokkery)
-    implementation(libs.gradle.sentry)
+    implementation(libs.bundles.gradle)
     implementation(libs.kotlinpoet)
-    implementation(libs.yamlbeans)
+    implementation(libs.kaml)
 }
 
 gradlePlugin {
@@ -29,6 +17,10 @@ gradlePlugin {
         register("common") {
             id = "katana.common"
             implementationClass = "dev.alvr.katana.buildlogic.common.KatanaCommonPlugin"
+        }
+        register("build-config") {
+            id = "katana.build-config"
+            implementationClass = "dev.alvr.katana.buildlogic.common.KatanaBuildConfigPlugin"
         }
         register("detekt") {
             id = "katana.detekt"
@@ -69,14 +61,6 @@ gradlePlugin {
         register("multiplatform-ui") {
             id = "katana.multiplatform.ui"
             implementationClass = "dev.alvr.katana.buildlogic.mp.mobile.ui.KatanaMultiplatformUiPlugin"
-        }
-    }
-}
-
-tasks {
-    withType<KotlinCompile>().configureEach {
-        compilerOptions {
-            freeCompilerArgs.addAll("-Xcontext-receivers")
         }
     }
 }
