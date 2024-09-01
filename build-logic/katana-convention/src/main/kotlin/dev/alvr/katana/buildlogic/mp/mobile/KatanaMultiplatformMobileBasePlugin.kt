@@ -30,6 +30,7 @@ internal abstract class KatanaMultiplatformMobileBasePlugin(
         apply(plugin = "io.kotest.multiplatform")
         apply(plugin = "org.jetbrains.kotlinx.kover")
         apply(plugin = "dev.mokkery")
+        apply(plugin = "io.sentry.kotlin.multiplatform.gradle")
 
         with(extensions) {
             commonExtensions()

@@ -94,6 +94,7 @@ gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.r
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 gradle-mokkery = { module = "dev.mokkery:mokkery-gradle", version.ref = "mokkery" }
 gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version.ref = "sentry-plugin" }
+gradle-sentry-multiplatform = { module = "io.sentry.kotlin.multiplatform.gradle:io.sentry.kotlin.multiplatform.gradle.gradle.plugin", version.ref = "sentry-multiplatform" }
 
 # Kamel
 kamel = { module = "media.kamel:kamel-image", version.ref = "kamel" }
@@ -339,4 +340,5 @@ gradle = [
     "gradle-ksp",
     "gradle-mokkery",
     "gradle-sentry",
+    "gradle-sentry-multiplatform",
 ]
