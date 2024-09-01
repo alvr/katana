@@ -19,7 +19,6 @@ import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonCompilerOptions
@@ -60,6 +59,14 @@ internal fun DependencyHandlerScope.implementation(
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
 ) {
     "implementation"(provider, dependencyConfiguration)
+}
+
+@Suppress("UnstableApiUsage")
+internal fun DependencyHandlerScope.testImplementation(
+    provider: Provider<*>,
+    dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
+) {
+    "testImplementation"(provider, dependencyConfiguration)
 }
 
 internal fun DependencyHandlerScope.detekt(provider: Provider<*>) {

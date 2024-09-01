@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag.Companion
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
+
     override fun apply(target: Project) = with(target) {
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
         apply(plugin = "org.jetbrains.compose")

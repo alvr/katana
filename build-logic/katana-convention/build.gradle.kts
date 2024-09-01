@@ -14,6 +14,10 @@ dependencies {
 
 gradlePlugin {
     plugins {
+        register("app-android") {
+            id = "katana.app.android"
+            implementationClass = "dev.alvr.katana.buildlogic.app.KatanaAppAndroidPlugin"
+        }
         register("common") {
             id = "katana.common"
             implementationClass = "dev.alvr.katana.buildlogic.common.KatanaCommonPlugin"
@@ -29,10 +33,6 @@ gradlePlugin {
         register("kover") {
             id = "katana.kover"
             implementationClass = "dev.alvr.katana.buildlogic.common.KatanaKoverPlugin"
-        }
-        register("multiplatform-app") {
-            id = "katana.multiplatform.app"
-            implementationClass = "dev.alvr.katana.buildlogic.mp.app.KatanaMultiplatformAppPlugin"
         }
         register("multiplatform-compose") {
             id = "katana.multiplatform.compose"
