@@ -8,8 +8,11 @@ import dev.alvr.katana.buildlogic.configureAndroid
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.configureCommonLanguageSettings
+import dev.alvr.katana.buildlogic.mp.configureDesktop
 import dev.alvr.katana.buildlogic.mp.configureIos
 import dev.alvr.katana.buildlogic.mp.configureKotlin
+import dev.alvr.katana.buildlogic.mp.desktopMain
+import dev.alvr.katana.buildlogic.mp.desktopTest
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -39,6 +42,7 @@ internal class KatanaMultiplatformMobilePlugin : Plugin<Project> {
 
     private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
         androidTarget()
+        configureDesktop()
         configureIos()
         configureSourceSets()
 
@@ -63,6 +67,9 @@ internal class KatanaMultiplatformMobilePlugin : Plugin<Project> {
             iosMain.dependencies {
                 implementation(catalogBundle("mobile-ios"))
             }
+            desktopMain.dependencies {
+                implementation(catalogBundle("mobile-jvm"))
+            }
 
             commonTest.dependencies {
                 implementation(catalogBundle("mobile-common-test"))
@@ -72,6 +79,9 @@ internal class KatanaMultiplatformMobilePlugin : Plugin<Project> {
             }
             iosTest.dependencies {
                 implementation(catalogBundle("mobile-ios-test"))
+            }
+            desktopTest.dependencies {
+                implementation(catalogBundle("mobile-jvm-test"))
             }
         }
     }

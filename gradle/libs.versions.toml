@@ -118,6 +118,7 @@ korge-foundation = { module = "com.soywiz.korge:korge-foundation", version.ref =
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-immutable" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
@@ -127,8 +128,8 @@ kotlinx-serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-seria
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 
 # Ktor
-ktor-android = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-jvm = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 
 # Lifecycle
 lifecycle-runtime = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
@@ -179,12 +180,12 @@ core-common = [
     "kotlinx-coroutines",
     "kotlinx-immutable",
 ]
-core-jvm = []
 core-ios = []
+core-jvm = []
 
 core-common-ksp = []
-core-jvm-ksp = []
 core-ios-ksp = []
+core-jvm-ksp = []
 
 core-common-test = [
     "koin-test",
@@ -194,15 +195,15 @@ core-common-test = [
     "kotlinx-coroutines-test",
     "turbine",
 ]
+core-ios-test = []
 core-jvm-test = [
     "kotest-junit5",
     "mockk",
 ]
-core-ios-test = []
 
 core-common-test-ksp = []
-core-jvm-test-ksp = []
 core-ios-test-ksp = []
+core-jvm-test-ksp = []
 
 # Deps for Multiplatform Mobile (Common, Android & iOS)
 mobile-common = [
@@ -216,15 +217,19 @@ mobile-common = [
 ]
 mobile-android = [
     "koin-android",
-    "ktor-android",
+    "ktor-jvm",
 ]
 mobile-ios = [
     "ktor-ios",
+]
+mobile-jvm = [
+    "ktor-jvm",
 ]
 
 mobile-common-ksp = []
 mobile-android-ksp = []
 mobile-ios-ksp = []
+mobile-jvm-ksp = []
 
 mobile-common-test = [
     "koin-test",
@@ -239,10 +244,12 @@ mobile-android-test = [
     "mockk",
 ]
 mobile-ios-test = []
+mobile-jvm-test = []
 
 mobile-common-test-ksp = []
 mobile-android-test-ksp = []
 mobile-ios-test-ksp = []
+mobile-jvm-test-ksp = []
 
 # Deps for Data Preferences
 data-preferences-common = [
@@ -254,20 +261,24 @@ data-preferences-android = [
     "tink",
 ]
 data-preferences-ios = []
+data-preferences-jvm = []
 
 data-preferences-common-ksp = []
 data-preferences-android-ksp = []
 data-preferences-ios-ksp = []
+data-preferences-jvm-ksp = []
 
 data-preferences-common-test = [
     "okio-fakefilesystem",
 ]
 data-preferences-android-test = []
 data-preferences-ios-test = []
+data-preferences-jvm-test = []
 
 data-preferences-common-test-ksp = []
 data-preferences-android-test-ksp = []
 data-preferences-ios-test-ksp = []
+data-preferences-jvm-test-ksp = []
 
 # Deps for Data Remote
 data-remote-common = [
@@ -276,10 +287,12 @@ data-remote-common = [
 ]
 data-remote-android = []
 data-remote-ios = []
+data-remote-jvm = []
 
 data-remote-common-ksp = []
 data-remote-android-ksp = []
 data-remote-ios-ksp = []
+data-remote-jvm-ksp = []
 
 data-remote-common-test = [
     "apollo-mockserver",
@@ -287,10 +300,12 @@ data-remote-common-test = [
 ]
 data-remote-android-test = []
 data-remote-ios-test = []
+data-remote-jvm-test = []
 
 data-remote-common-test-ksp = []
 data-remote-android-test-ksp = []
 data-remote-ios-test-ksp = []
+data-remote-jvm-test-ksp = []
 
 # Deps for UI
 ui-common = [
@@ -305,20 +320,26 @@ ui-common = [
 ]
 ui-android = []
 ui-ios = []
+ui-jvm = [
+    "kotlinx-coroutines-swing",
+]
 
 ui-common-ksp = []
 ui-android-ksp = []
 ui-ios-ksp = []
+ui-jvm-ksp = []
 
 ui-common-test = [
     "orbit-test",
 ]
 ui-android-test = []
 ui-ios-test = []
+ui-jvm-test = []
 
 ui-common-test-ksp = []
 ui-android-test-ksp = []
 ui-ios-test-ksp = []
+ui-jvm-test-ksp = []
 
 app-common = []
 app-android = [
@@ -327,6 +348,7 @@ app-android = [
     "sentry",
 ]
 app-ios = []
+app-jvm = []
 
 gradle = [
     "gradle-android",

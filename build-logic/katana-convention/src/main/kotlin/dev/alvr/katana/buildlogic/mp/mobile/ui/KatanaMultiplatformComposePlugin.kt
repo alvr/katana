@@ -5,6 +5,8 @@ package dev.alvr.katana.buildlogic.mp.mobile.ui
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
+import dev.alvr.katana.buildlogic.mp.desktopMain
+import dev.alvr.katana.buildlogic.mp.desktopTest
 import java.io.File
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -63,6 +65,9 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
             iosMain.dependencies {
                 implementation(catalogBundle("ui-ios"))
             }
+            desktopMain.dependencies {
+                implementation(catalogBundle("ui-jvm"))
+            }
 
             commonTest.dependencies {
                 implementation(catalogBundle("ui-common-test"))
@@ -72,6 +77,9 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
             }
             iosTest.dependencies {
                 implementation(catalogBundle("ui-ios-test"))
+            }
+            desktopTest.dependencies {
+                implementation(catalogBundle("ui-jvm-test"))
             }
         }
     }

@@ -2,6 +2,8 @@ package dev.alvr.katana.buildlogic.mp.mobile.data
 
 import dev.alvr.katana.buildlogic.catalogBundle
 import dev.alvr.katana.buildlogic.kspDependencies
+import dev.alvr.katana.buildlogic.mp.desktopMain
+import dev.alvr.katana.buildlogic.mp.desktopTest
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -36,6 +38,9 @@ internal class KatanaMultiplatformDataPreferencesPlugin : Plugin<Project> {
             iosMain.dependencies {
                 implementation(catalogBundle("data-preferences-ios"))
             }
+            desktopMain.dependencies {
+                implementation(catalogBundle("data-preferences-jvm"))
+            }
 
             commonTest.dependencies {
                 implementation(catalogBundle("data-preferences-common-test"))
@@ -45,6 +50,9 @@ internal class KatanaMultiplatformDataPreferencesPlugin : Plugin<Project> {
             }
             iosTest.dependencies {
                 implementation(catalogBundle("data-preferences-ios-test"))
+            }
+            desktopTest.dependencies {
+                implementation(catalogBundle("data-preferences-jvm-test"))
             }
         }
     }

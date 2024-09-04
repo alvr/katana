@@ -6,6 +6,7 @@ import com.android.build.gradle.BaseExtension
 import dev.alvr.katana.buildlogic.mp.capitalize
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
+import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.plugins.JavaPluginExtension

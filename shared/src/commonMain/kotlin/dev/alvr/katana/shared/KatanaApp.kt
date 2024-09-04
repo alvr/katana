@@ -19,6 +19,7 @@ import dev.alvr.katana.core.ui.utils.noInsets
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.home.ui.screen.home
 import dev.alvr.katana.features.login.ui.screen.login
+import dev.alvr.katana.shared.di.katanaModule
 import dev.alvr.katana.shared.navigation.KatanaRootNavigator
 import dev.alvr.katana.shared.navigation.rememberKatanaRootNavigator
 import dev.alvr.katana.shared.viewmodel.MainViewModel
@@ -26,8 +27,10 @@ import io.sentry.kotlin.multiplatform.PlatformOptionsConfiguration
 import io.sentry.kotlin.multiplatform.Sentry
 import io.sentry.kotlin.multiplatform.SentryLevel
 import io.sentry.kotlin.multiplatform.protocol.Breadcrumb
+import org.koin.compose.KoinApplication
 import org.koin.compose.viewmodel.koinNavViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.dsl.KoinAppDeclaration
 
 internal expect fun sentryOptionsConfiguration(): PlatformOptionsConfiguration
 
@@ -35,10 +38,22 @@ internal expect fun sentryOptionsConfiguration(): PlatformOptionsConfiguration
 fun Katana() {
     initApp()
 
-    KatanaTheme {
-        KatanaApp()
+    KatanaDI {
+        KatanaTheme {
+            KatanaApp()
+        }
     }
 }
+
+@Composable
+private fun KatanaDI(
+    content: @Composable () -> Unit
+) = KoinApplication(
+    application = {
+        modules(katanaModule)
+    },
+    content = content
+)
 
 @Composable
 @OptIn(KoinExperimentalAPI::class)

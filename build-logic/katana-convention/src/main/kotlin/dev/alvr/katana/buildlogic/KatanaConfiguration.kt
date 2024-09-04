@@ -10,7 +10,7 @@ internal object KatanaConfiguration {
     const val PackageName = "dev.alvr.katana"
     const val MinSdk = 21
     const val TargetSdk = 35
-    const val VersionName = "0.0.1"
+    const val VersionName = "1.0.1"
     const val VersionCode = 1
 
     val UseJavaVersion = JavaVersion.VERSION_17
