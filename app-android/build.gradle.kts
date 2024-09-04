@@ -1,9 +1,5 @@
 plugins {
-    id("katana.multiplatform.app")
+    id("katana.app.android")
 }
 
-kotlin {
-    sourceSets {
-        commonMain.dependencies { implementation(projects.shared) }
-    }
-}
+dependencies { implementation(projects.shared) }

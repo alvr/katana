@@ -1,66 +1,56 @@
 @file:Suppress("NoUnusedImports", "UnusedImports")
 
-package dev.alvr.katana.buildlogic.mp.app
+package dev.alvr.katana.buildlogic.app
 
 import com.android.build.api.dsl.ApplicationBuildType
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import dev.alvr.katana.buildlogic.ANDROID_APPLICATION_PLUGIN
-import dev.alvr.katana.buildlogic.AndroidDir
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogBundle
+import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.configureAndroid
-import dev.alvr.katana.buildlogic.mp.mobile.KatanaMultiplatformMobileBasePlugin
+import dev.alvr.katana.buildlogic.configureKotlinCompiler
+import dev.alvr.katana.buildlogic.implementation
+import dev.alvr.katana.buildlogic.testImplementation
 import io.sentry.android.gradle.extensions.SentryPluginExtension
 import java.io.FileInputStream
 import java.util.Properties
-import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.invoke
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.gradle.kotlin.dsl.dependencies
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
-internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugin(ANDROID_APPLICATION_PLUGIN) {
+internal class KatanaAppAndroidPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
-        super.apply(this)
-        apply(plugin = "katana.multiplatform.compose")
+        apply(plugin = "com.android.application")
+        apply(plugin = "org.jetbrains.kotlin.android")
+        apply(plugin = "org.jetbrains.compose")
+        apply(plugin = "org.jetbrains.kotlin.plugin.compose")
         apply(plugin = "io.sentry.android.gradle")
 
         with(extensions) {
+            configure<BaseAppModuleExtension> { configureApp(project) }
             configure<SentryPluginExtension> { configureSentry() }
-            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            configure<KotlinAndroidProjectExtension> { configureKotlin() }
         }
-    }
 
-    override fun ExtensionContainer.configureAndroid(project: Project) {
-        configure<BaseAppModuleExtension> { configureApp(project) }
-    }
+        dependencies {
+            implementation(catalogBundle("app-android"))
+            implementation(catalogBundle("mobile-common"))
+            implementation(catalogBundle("mobile-android"))
 
-    private fun KotlinMultiplatformExtension.configureMultiplatform() {
-        configureSourceSets()
-    }
-
-    private fun KotlinMultiplatformExtension.configureSourceSets() {
-        sourceSets {
-            commonMain.dependencies {
-                implementation(catalogBundle("app-common"))
-            }
-            androidMain {
-                dependencies {
-                    implementation(catalogBundle("app-android"))
-                }
-            }
-            iosMain {
-                dependencies {
-                    implementation(catalogBundle("app-ios"))
-                }
-            }
+            testImplementation(catalogBundle("mobile-common-test"))
+            testImplementation(catalogBundle("mobile-android-test"))
         }
+
+        tasks.commonTasks()
+    }
+
+    private fun KotlinAndroidProjectExtension.configureKotlin() {
+        compilerOptions.configureKotlinCompiler()
     }
 
     @Suppress("StringLiteralDuplication")
@@ -110,7 +100,7 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
 
                 proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "$AndroidDir/proguard-rules.pro",
+                    "proguard-rules.pro",
                 )
 
                 signingConfig = signingConfigs.getByName("release")
@@ -124,8 +114,6 @@ internal class KatanaMultiplatformAppPlugin : KatanaMultiplatformMobileBasePlugi
                 versionNameSuffix = "-beta"
             }
         }
-
-        sourceSets["main"].manifest.srcFile("$AndroidDir/AndroidManifest.xml")
     }
 
     private fun SentryPluginExtension.configureSentry() {
