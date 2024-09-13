@@ -13,7 +13,6 @@ import dev.alvr.katana.features.lists.ui.resources.empty_anime_list
 import dev.alvr.katana.features.lists.ui.screen.components.ListScreen
 import dev.alvr.katana.features.lists.ui.viewmodel.AnimeListsViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
 internal fun NavGraphBuilder.animeLists(navigator: ListsNavigator) {
     composable<HomeScreen.AnimeLists> {
@@ -22,7 +21,6 @@ internal fun NavGraphBuilder.animeLists(navigator: ListsNavigator) {
 }
 
 @Composable
-@OptIn(KoinExperimentalAPI::class)
 private fun AnimeScreen(
     navigator: ListsNavigator,
 ) {

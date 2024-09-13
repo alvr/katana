@@ -2,7 +2,6 @@ package dev.alvr.katana.features.lists.ui.screen.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,7 +24,6 @@ import dev.alvr.katana.features.lists.ui.viewmodel.AnimeListsViewModel
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsViewModel
 import dev.alvr.katana.features.lists.ui.viewmodel.MangaListsViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun ListScreen(
     viewModel: ListsViewModel<*, *>,

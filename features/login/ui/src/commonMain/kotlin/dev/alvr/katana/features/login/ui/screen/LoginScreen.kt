@@ -106,7 +106,6 @@ import dev.alvr.katana.features.login.ui.resources.save_token_error
 import dev.alvr.katana.features.login.ui.viewmodel.LoginState
 import dev.alvr.katana.features.login.ui.viewmodel.LoginViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.parametersOf
 
 fun NavGraphBuilder.login(
@@ -129,7 +128,6 @@ fun NavGraphBuilder.login(
 }
 
 @Composable
-@OptIn(KoinExperimentalAPI::class)
 private fun LoginScreen(
     token: String?,
     loginNavigator: LoginNavigator,

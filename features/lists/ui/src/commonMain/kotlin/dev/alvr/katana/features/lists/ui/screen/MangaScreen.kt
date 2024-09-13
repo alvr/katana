@@ -13,7 +13,6 @@ import dev.alvr.katana.features.lists.ui.resources.manga_toolbar
 import dev.alvr.katana.features.lists.ui.screen.components.ListScreen
 import dev.alvr.katana.features.lists.ui.viewmodel.MangaListsViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
 internal fun NavGraphBuilder.mangaLists(navigator: ListsNavigator) {
     composable<HomeScreen.MangaLists> {
@@ -22,7 +21,6 @@ internal fun NavGraphBuilder.mangaLists(navigator: ListsNavigator) {
 }
 
 @Composable
-@OptIn(KoinExperimentalAPI::class)
 internal fun MangaScreen(
     navigator: ListsNavigator,
 ) {

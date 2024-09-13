@@ -1,7 +1,6 @@
 package dev.alvr.katana.features.explore.ui.screen
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +15,6 @@ import dev.alvr.katana.features.explore.ui.resources.explore_toolbar_search_plac
 import dev.alvr.katana.features.explore.ui.resources.explore_toolbar_title
 import dev.alvr.katana.features.explore.ui.viewmodel.ExploreViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
 fun NavGraphBuilder.explore(exploreNavigator: ExploreNavigator) {
     composable<HomeScreen.Explore> {
@@ -25,10 +23,6 @@ fun NavGraphBuilder.explore(exploreNavigator: ExploreNavigator) {
 }
 
 @Composable
-@OptIn(
-    KoinExperimentalAPI::class,
-    ExperimentalMaterialApi::class,
-)
 @Suppress("UNUSED_PARAMETER")
 private fun ExploreScreen(
     navigator: ExploreNavigator,
