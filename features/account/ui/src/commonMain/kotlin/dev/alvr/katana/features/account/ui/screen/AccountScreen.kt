@@ -18,7 +18,6 @@ import dev.alvr.katana.features.account.ui.resources.title
 import dev.alvr.katana.features.account.ui.screen.components.UserInfo
 import dev.alvr.katana.features.account.ui.viewmodel.AccountViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
 fun NavGraphBuilder.account(accountNavigator: AccountNavigator) {
     composable<HomeScreen.Account> {
@@ -27,7 +26,6 @@ fun NavGraphBuilder.account(accountNavigator: AccountNavigator) {
 }
 
 @Composable
-@OptIn(KoinExperimentalAPI::class)
 private fun AccountScreen(
     navigator: AccountNavigator,
     viewModel: AccountViewModel = koinViewModel(),

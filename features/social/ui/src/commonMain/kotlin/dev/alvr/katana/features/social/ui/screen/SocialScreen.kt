@@ -1,7 +1,6 @@
 package dev.alvr.katana.features.social.ui.screen
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +15,6 @@ import dev.alvr.katana.features.social.ui.resources.social_toolbar_search_placeh
 import dev.alvr.katana.features.social.ui.resources.social_toolbar_title
 import dev.alvr.katana.features.social.ui.viewmodel.SocialViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
 fun NavGraphBuilder.social(socialNavigator: SocialNavigator) {
     composable<HomeScreen.Social> {
@@ -25,10 +23,6 @@ fun NavGraphBuilder.social(socialNavigator: SocialNavigator) {
 }
 
 @Composable
-@OptIn(
-    KoinExperimentalAPI::class,
-    ExperimentalMaterialApi::class,
-)
 @Suppress("UNUSED_PARAMETER")
 private fun SocialScreen(
     navigator: SocialNavigator,

@@ -5,11 +5,9 @@ import com.apollographql.apollo.interceptor.ApolloInterceptor
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import io.kotest.core.spec.style.FreeSpec
 import io.mockk.mockkClass
-import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
-@OptIn(KoinExperimentalAPI::class)
 internal class FeaturesListsDataModuleTest : FreeSpec({
     beforeSpec {
         MockProvider.register { clazz -> mockkClass(clazz) }
