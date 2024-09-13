@@ -38,7 +38,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@v4.0.1
+        uses: gradle/actions/wrapper-validation@v4.1.0
 
   assemble:
     name: Assembling
@@ -98,7 +98,7 @@ jobs:
             **/build/reports/lint-results-debug.xml
           retention-days: 1
       - name: Analyze detekt report
-        uses: github/codeql-action/upload-sarif@v3.26.6
+        uses: github/codeql-action/upload-sarif@v3.26.7
         with:
           sarif_file: build/reports/detekt/detekt.sarif
           checkout_path: ${{ github.workspace }}
