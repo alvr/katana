@@ -6,7 +6,7 @@ import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.usecases.GetAnilistTokenUseCase
 import dev.alvr.katana.core.domain.usecases.sync
 import dev.alvr.katana.core.tests.orbitTestScope
-import dev.alvr.katana.core.ui.screens.RootScreen
+import dev.alvr.katana.core.ui.destinations.RootDestination
 import io.kotest.core.NamedTag
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
@@ -27,7 +27,7 @@ internal class MainViewModelTest : BehaviorSpec() {
                 then("the initial navGraph should be `RootScreen.Home`") {
                     viewModel.test(orbitTestScope) {
                         runOnCreate()
-                        expectState(MainState(initialScreen = RootScreen.Home))
+                        expectState(MainState(initialScreen = RootDestination.Home))
                     }
 
                     verify(exactly = 1) { getAnilistToken.sync() }
@@ -40,7 +40,7 @@ internal class MainViewModelTest : BehaviorSpec() {
                 then("the initial screen should be `RootScreen.Auth`").config(tags = setOf(LOGGED_OUT_TEST)) {
                     viewModel.test(orbitTestScope) {
                         runOnCreate()
-                        expectState(MainState(initialScreen = RootScreen.Auth))
+                        expectState(MainState(initialScreen = RootDestination.Auth))
                     }
 
                     verify(exactly = 1) { getAnilistToken.sync() }

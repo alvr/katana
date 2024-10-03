@@ -1,17 +1,24 @@
 package dev.alvr.katana.features.home.ui.navigation
 
+import androidx.compose.material.navigation.BottomSheetNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavHostController
+import androidx.navigation.get
 import co.touchlab.kermit.Logger
+import dev.alvr.katana.core.ui.destinations.HomeDestination
+import dev.alvr.katana.core.ui.navigation.KatanaNavigator
 import dev.alvr.katana.core.ui.navigation.rememberKatanaNavigator
-import dev.alvr.katana.core.ui.screens.HomeScreen
 import dev.alvr.katana.features.account.ui.navigation.AccountNavigator
 import dev.alvr.katana.features.explore.ui.navigation.ExploreNavigator
 import dev.alvr.katana.features.home.ui.navigation.HomeNavigationBarItem.Companion.hasRoute
+import dev.alvr.katana.features.lists.ui.destinations.ListsDestination
 import dev.alvr.katana.features.lists.ui.entities.UserList
 import dev.alvr.katana.features.lists.ui.navigation.AnimeListsNavigator
 import dev.alvr.katana.features.lists.ui.navigation.MangaListsNavigator
 import dev.alvr.katana.features.social.ui.navigation.SocialNavigator
+import kotlinx.coroutines.flow.emptyFlow
 
 interface HomeNavigator :
     AnimeListsNavigator,
@@ -41,15 +48,13 @@ private class KatanaHomeNavigator(
         homeNavController.popBackStack()
     }
 
-    override fun <T> getNavigationResult(onResult: (T) -> Unit) {
-        homeNavController.currentBackStackEntry?.savedStateHandle?.run {
-            get<T>(NAV_RESULT)?.let(onResult)
-            remove<T>(NAV_RESULT)
-        }
+    @Composable
+    override fun <T> getNavigationResult(onResult: (T) -> Unit): State<T?> {
+        return (homeNavController.currentBackStackEntry?.savedStateHandle?.getStateFlow<T?>(NAV_RESULT, null) ?: emptyFlow<T>()).collectAsState(null)
     }
 
     override fun onSessionExpired() {
-        homeNavController.navigate(HomeScreen.ExpiredSessionDialog)
+        homeNavController.navigate(HomeDestination.ExpiredSessionDialog)
     }
 
     override fun onHomeNavigationBarItemClicked(item: HomeNavigationBarItem) {
@@ -76,8 +81,8 @@ private class KatanaHomeNavigator(
         Logger.d { "Edit entry $id" }
     }
 
-    override fun showListSelector(lists: Array<UserList>, selectedList: String) {
-        Logger.d { "Showing list selector bottom sheet" }
+    override fun showListSelector(lists: List<UserList>, selectedList: String) {
+        homeNavController.navigate(ListsDestination.ChangeList.createRoute(lists, selectedList))
     }
 
     private companion object {

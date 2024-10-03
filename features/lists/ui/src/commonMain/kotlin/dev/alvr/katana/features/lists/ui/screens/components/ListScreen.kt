@@ -1,11 +1,10 @@
-package dev.alvr.katana.features.lists.ui.screen.components
+package dev.alvr.katana.features.lists.ui.screens.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import dev.alvr.katana.core.common.zero
@@ -20,9 +19,11 @@ import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.anime_toolbar_search_placeholder
 import dev.alvr.katana.features.lists.ui.resources.error_message
 import dev.alvr.katana.features.lists.ui.resources.manga_toolbar_search_placeholder
+import dev.alvr.katana.features.lists.ui.screens.ChangeListButton
 import dev.alvr.katana.features.lists.ui.viewmodel.AnimeListsViewModel
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsViewModel
 import dev.alvr.katana.features.lists.ui.viewmodel.MangaListsViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun ListScreen(
@@ -36,22 +37,7 @@ internal fun ListScreen(
     val state by viewModel.collectAsState()
     val katanaScaffoldState = rememberKatanaHomeScaffoldState()
     val lazyGridState = rememberLazyGridState()
-
-    var showListSelector by remember { mutableStateOf(false) }
-
-    ChangeListSheet(
-        isVisible = showListSelector,
-        lists = viewModel.userLists,
-        selectedList = state.name.orEmpty(),
-        onDismissRequest = { showListSelector = false },
-        onClick = { name ->
-            showListSelector = false
-            viewModel.selectList(name).also {
-                lazyGridState.scrollToItem(Int.zero)
-                katanaScaffoldState.resetToolbar()
-            }
-        },
-    )
+    val coroutineScope = rememberCoroutineScope()
 
     val searchPlaceholder = when (viewModel) {
         is AnimeListsViewModel -> Res.string.anime_toolbar_search_placeholder
@@ -60,6 +46,14 @@ internal fun ListScreen(
 
     val buttonsVisible = !state.isError
     katanaScaffoldState.showTopAppBarActions = buttonsVisible
+
+    navigator.getNavigationResult<String> { name ->
+        viewModel.selectList(name).also {
+            coroutineScope
+                .launch { lazyGridState.animateScrollToItem(Int.zero) }
+                .invokeOnCompletion { katanaScaffoldState.resetToolbar() }
+        }
+    }
 
     KatanaHomeScaffold(
         katanaScaffoldState = katanaScaffoldState,
@@ -70,7 +64,7 @@ internal fun ListScreen(
         backContent = backContent,
         fab = {
             ChangeListButton(visible = buttonsVisible && viewModel.userLists.isNotEmpty()) {
-                showListSelector = true
+                navigator.showListSelector(viewModel.userLists.toList(), state.name.orEmpty())
             }
         },
     ) { paddingValues ->

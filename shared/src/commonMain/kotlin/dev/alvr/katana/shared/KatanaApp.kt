@@ -17,8 +17,8 @@ import dev.alvr.katana.core.common.KatanaBuildConfig
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.utils.noInsets
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
-import dev.alvr.katana.features.home.ui.screen.home
-import dev.alvr.katana.features.login.ui.screen.login
+import dev.alvr.katana.features.home.ui.screens.home
+import dev.alvr.katana.features.login.ui.screens.login
 import dev.alvr.katana.shared.navigation.RootNavigator
 import dev.alvr.katana.shared.navigation.rememberKatanaRootNavigator
 import dev.alvr.katana.shared.viewmodel.MainViewModel

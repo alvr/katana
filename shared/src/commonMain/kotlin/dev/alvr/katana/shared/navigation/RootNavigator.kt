@@ -2,8 +2,8 @@ package dev.alvr.katana.shared.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import dev.alvr.katana.core.ui.destinations.RootDestination
 import dev.alvr.katana.core.ui.navigation.rememberKatanaNavigator
-import dev.alvr.katana.core.ui.screens.RootScreen
 import dev.alvr.katana.features.home.ui.navigation.HomeNavigator
 import dev.alvr.katana.features.home.ui.navigation.rememberKatanaHomeNavigator
 import dev.alvr.katana.features.login.ui.navigation.LoginNavigator
@@ -19,16 +19,16 @@ private class KatanaRootNavigator(
     HomeNavigator by homeNavigator {
 
     override fun navigateToHome() {
-        navController.navigate(RootScreen.Home) {
-            popUpTo(RootScreen.Auth) {
+        navController.navigate(RootDestination.Home) {
+            popUpTo(RootDestination.Auth) {
                 inclusive = true
             }
         }
     }
 
     override fun navigateToLogin() {
-        navController.navigate(RootScreen.Auth) {
-            popUpTo(RootScreen.Home) {
+        navController.navigate(RootDestination.Auth) {
+            popUpTo(RootDestination.Home) {
                 inclusive = true
             }
         }

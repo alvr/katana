@@ -1,8 +1,10 @@
 package dev.alvr.katana.core.ui.navigation
 
+import androidx.compose.material.navigation.rememberBottomSheetNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
@@ -16,12 +18,18 @@ interface KatanaNavigator {
 
     fun <T> popBackStackWithResult(result: T)
 
-    fun <T> getNavigationResult(onResult: (T) -> Unit)
+    @Composable
+    fun <T> getNavigationResult(onResult: (T) -> Unit): State<T?>
 }
 
 @Composable
 fun <T : KatanaNavigator> rememberKatanaNavigator(factory: (NavHostController) -> T): T {
-    val navigator = rememberNavController().sentryObserver().loggerObserver()
+    val navigator = rememberNavController(
+        rememberBottomSheetNavigator(),
+    )
+        .sentryObserver()
+        .loggerObserver()
+
     return remember(navigator) { factory(navigator) }
 }
 

@@ -1,4 +1,4 @@
-package dev.alvr.katana.features.login.ui.screen
+package dev.alvr.katana.features.login.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -64,10 +64,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import dev.alvr.katana.core.common.zero
+import dev.alvr.katana.core.ui.destinations.RootDestination
 import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.core.ui.screens.AuthScreen
-import dev.alvr.katana.core.ui.screens.RootScreen
 import dev.alvr.katana.core.ui.utils.isLandscape
 import dev.alvr.katana.core.ui.utils.navDeepLink
 import dev.alvr.katana.core.ui.utils.noInsets
@@ -85,6 +84,7 @@ import dev.alvr.katana.features.login.ui.HEADER_ANIMATION_DURATION
 import dev.alvr.katana.features.login.ui.LOGIN_DEEP_LINK
 import dev.alvr.katana.features.login.ui.LOGO_FULL_SIZE
 import dev.alvr.katana.features.login.ui.LOGO_RESIZED
+import dev.alvr.katana.features.login.ui.destinations.LoginDestination
 import dev.alvr.katana.features.login.ui.navigation.LoginNavigator
 import dev.alvr.katana.features.login.ui.resources.Res
 import dev.alvr.katana.features.login.ui.resources.background_chihiro
@@ -111,13 +111,13 @@ import org.koin.core.parameter.parametersOf
 fun NavGraphBuilder.login(
     loginNavigator: LoginNavigator,
 ) {
-    navigation<RootScreen.Auth>(
-        startDestination = AuthScreen.Login(),
+    navigation<RootDestination.Auth>(
+        startDestination = LoginDestination.Login(),
     ) {
-        composable<AuthScreen.Login>(
+        composable<LoginDestination.Login>(
             deepLinks = listOf(navDeepLink { setUriPattern(LOGIN_DEEP_LINK) }),
         ) { backStackEntry ->
-            val route = backStackEntry.toRoute<AuthScreen.Login>()
+            val route = backStackEntry.toRoute<LoginDestination.Login>()
 
             LoginScreen(
                 token = route.token,

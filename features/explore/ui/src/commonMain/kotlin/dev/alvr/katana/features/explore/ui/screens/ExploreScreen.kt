@@ -1,4 +1,4 @@
-package dev.alvr.katana.features.explore.ui.screen
+package dev.alvr.katana.features.explore.ui.screens
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import dev.alvr.katana.core.ui.components.home.KatanaHomeScaffold
+import dev.alvr.katana.core.ui.destinations.HomeDestination
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.core.ui.screens.HomeScreen
 import dev.alvr.katana.features.explore.ui.navigation.ExploreNavigator
 import dev.alvr.katana.features.explore.ui.resources.Res
 import dev.alvr.katana.features.explore.ui.resources.explore_toolbar_search_placeholder
@@ -16,15 +16,11 @@ import dev.alvr.katana.features.explore.ui.resources.explore_toolbar_title
 import dev.alvr.katana.features.explore.ui.viewmodel.ExploreViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
-fun NavGraphBuilder.explore(exploreNavigator: ExploreNavigator) {
-    composable<HomeScreen.Explore> {
-        ExploreScreen(exploreNavigator)
-    }
-}
+
 
 @Composable
 @Suppress("UNUSED_PARAMETER")
-private fun ExploreScreen(
+internal fun ExploreScreen(
     navigator: ExploreNavigator,
     viewModel: ExploreViewModel = koinViewModel(),
 ) {

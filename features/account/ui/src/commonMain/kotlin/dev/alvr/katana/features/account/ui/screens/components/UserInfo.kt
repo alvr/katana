@@ -1,4 +1,4 @@
-package dev.alvr.katana.features.account.ui.screen.components
+package dev.alvr.katana.features.account.ui.screens.components
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
