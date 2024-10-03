@@ -18,7 +18,7 @@ kaml = { strictly = "0.59.0" }
 koin = "3.6.0-Beta4"
 koin-compose = "1.2.0-Beta4"
 korge-foundation = "5.4.0"
-kotest = "5.9.1"
+kotest = "6.0.0-LOCAL"
 kotlin = "2.0.20"
 kotlinpoet = "1.18.1"
 kotlinx-coroutines = "1.9.0"
