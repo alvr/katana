@@ -985,7 +985,11 @@ Compose:
     active: true
   ContentEmitterReturningValues:
     active: true
+  ContentSlotReused:
+    active: true
   DefaultsVisibility:
+    active: true
+  LambdaParameterEventTrailing:
     active: true
   LambdaParameterInRestartableEffect:
     active: true
@@ -1017,6 +1021,8 @@ Compose:
   MutableStateParam:
     active: true
   PreviewAnnotationNaming:
+    active: true
+  PreviewNaming:
     active: true
   PreviewPublic:
     active: true
