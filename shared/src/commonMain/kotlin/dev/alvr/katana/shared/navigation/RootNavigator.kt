@@ -8,14 +8,14 @@ import dev.alvr.katana.features.home.ui.navigation.HomeNavigator
 import dev.alvr.katana.features.home.ui.navigation.rememberKatanaHomeNavigator
 import dev.alvr.katana.features.login.ui.navigation.LoginNavigator
 
-internal sealed interface KatanaRootNavigator : LoginNavigator, HomeNavigator {
+internal sealed interface RootNavigator : LoginNavigator, HomeNavigator {
     val navController: NavHostController
 }
 
-private class DefaultKatanaRootNavigator(
+private class KatanaRootNavigator(
     override val navController: NavHostController,
     homeNavigator: HomeNavigator,
-) : KatanaRootNavigator,
+) : RootNavigator,
     HomeNavigator by homeNavigator {
 
     override fun navigateToHome() {
@@ -40,11 +40,11 @@ private class DefaultKatanaRootNavigator(
 }
 
 @Composable
-internal fun rememberKatanaRootNavigator(): KatanaRootNavigator {
+internal fun rememberKatanaRootNavigator(): RootNavigator {
     val homeNavigator = rememberKatanaHomeNavigator()
 
     return rememberKatanaNavigator { navController ->
-        DefaultKatanaRootNavigator(
+        KatanaRootNavigator(
             navController = navController,
             homeNavigator = homeNavigator,
         )

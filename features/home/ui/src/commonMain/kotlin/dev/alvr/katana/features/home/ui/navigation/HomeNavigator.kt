@@ -9,10 +9,16 @@ import dev.alvr.katana.features.account.ui.navigation.AccountNavigator
 import dev.alvr.katana.features.explore.ui.navigation.ExploreNavigator
 import dev.alvr.katana.features.home.ui.navigation.HomeNavigationBarItem.Companion.hasRoute
 import dev.alvr.katana.features.lists.ui.entities.UserList
-import dev.alvr.katana.features.lists.ui.navigation.ListsNavigator
+import dev.alvr.katana.features.lists.ui.navigation.AnimeListsNavigator
+import dev.alvr.katana.features.lists.ui.navigation.MangaListsNavigator
 import dev.alvr.katana.features.social.ui.navigation.SocialNavigator
 
-interface HomeNavigator : AccountNavigator, ExploreNavigator, ListsNavigator, SocialNavigator {
+interface HomeNavigator :
+    AnimeListsNavigator,
+    MangaListsNavigator,
+    ExploreNavigator,
+    SocialNavigator,
+    AccountNavigator {
     val homeNavController: NavHostController
 
     override fun navigateToLogin()
@@ -22,7 +28,7 @@ interface HomeNavigator : AccountNavigator, ExploreNavigator, ListsNavigator, So
     fun onHomeNavigationBarItemClicked(item: HomeNavigationBarItem)
 }
 
-private class DefaultKatanaHomeNavigator(
+private class KatanaHomeNavigator(
     override val homeNavController: NavHostController,
 ) : HomeNavigator {
 
@@ -81,5 +87,5 @@ private class DefaultKatanaHomeNavigator(
 
 @Composable
 fun rememberKatanaHomeNavigator(): HomeNavigator = rememberKatanaNavigator { navController ->
-    DefaultKatanaHomeNavigator(homeNavController = navController)
+    KatanaHomeNavigator(homeNavController = navController)
 }
