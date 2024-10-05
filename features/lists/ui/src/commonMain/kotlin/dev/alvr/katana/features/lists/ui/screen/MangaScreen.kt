@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.core.ui.screens.KatanaScreen
+import dev.alvr.katana.core.ui.screens.HomeScreen
 import dev.alvr.katana.features.lists.ui.navigation.ListsNavigator
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.empty_manga_list
@@ -13,16 +13,14 @@ import dev.alvr.katana.features.lists.ui.resources.manga_toolbar
 import dev.alvr.katana.features.lists.ui.screen.components.ListScreen
 import dev.alvr.katana.features.lists.ui.viewmodel.MangaListsViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
 internal fun NavGraphBuilder.mangaLists(navigator: ListsNavigator) {
-    composable(KatanaScreen.MangaLists.name) {
+    composable<HomeScreen.MangaLists> {
         MangaScreen(navigator)
     }
 }
 
 @Composable
-@OptIn(KoinExperimentalAPI::class)
 internal fun MangaScreen(
     navigator: ListsNavigator,
 ) {

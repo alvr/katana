@@ -5,11 +5,9 @@ import dev.alvr.katana.features.lists.domain.usecases.ObserveMangaListUseCase
 import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCase
 import io.kotest.core.spec.style.FreeSpec
 import io.mockk.mockkClass
-import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
-@OptIn(KoinExperimentalAPI::class)
 internal class FeaturesListsUiModuleTest : FreeSpec({
     beforeSpec {
         MockProvider.register { clazz -> mockkClass(clazz) }

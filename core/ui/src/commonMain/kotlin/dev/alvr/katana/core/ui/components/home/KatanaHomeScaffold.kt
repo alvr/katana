@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.BackdropScaffold
 import androidx.compose.material.BackdropScaffoldState
 import androidx.compose.material.BackdropValue
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBackdropScaffoldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -43,7 +42,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-@OptIn(ExperimentalMaterialApi::class)
 fun KatanaHomeScaffold(
     title: String,
     searchPlaceholder: String,
@@ -96,7 +94,6 @@ fun KatanaHomeScaffold(
 }
 
 @Composable
-@OptIn(ExperimentalMaterialApi::class)
 private fun KatanaTopAppBar(
     katanaScaffoldState: KatanaHomeScaffoldState,
     scaffoldState: BackdropScaffoldState,
@@ -157,7 +154,6 @@ private fun KatanaTopAppBar(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 private fun BackdropScaffoldState.toggleBackdrop(scope: CoroutineScope) {
     scope.launch {
         if (isConcealed) {

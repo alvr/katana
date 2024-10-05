@@ -9,7 +9,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import dev.alvr.katana.core.ui.components.home.KatanaHomeTopAppBar
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.core.ui.screens.KatanaScreen
+import dev.alvr.katana.core.ui.screens.HomeScreen
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.account.ui.entities.UserInfoUi
 import dev.alvr.katana.features.account.ui.navigation.AccountNavigator
@@ -18,16 +18,14 @@ import dev.alvr.katana.features.account.ui.resources.title
 import dev.alvr.katana.features.account.ui.screen.components.UserInfo
 import dev.alvr.katana.features.account.ui.viewmodel.AccountViewModel
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 
 fun NavGraphBuilder.account(accountNavigator: AccountNavigator) {
-    composable(KatanaScreen.Account.name) {
+    composable<HomeScreen.Account> {
         AccountScreen(accountNavigator)
     }
 }
 
 @Composable
-@OptIn(KoinExperimentalAPI::class)
 private fun AccountScreen(
     navigator: AccountNavigator,
     viewModel: AccountViewModel = koinViewModel(),
