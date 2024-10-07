@@ -26,6 +26,7 @@ import io.sentry.kotlin.multiplatform.PlatformOptionsConfiguration
 import io.sentry.kotlin.multiplatform.Sentry
 import io.sentry.kotlin.multiplatform.SentryLevel
 import io.sentry.kotlin.multiplatform.protocol.Breadcrumb
+import org.koin.compose.KoinContext
 import org.koin.compose.viewmodel.koinNavViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -35,8 +36,10 @@ internal expect fun sentryOptionsConfiguration(): PlatformOptionsConfiguration
 fun Katana() {
     initApp()
 
-    KatanaTheme {
-        KatanaApp()
+    KoinContext {
+        KatanaTheme {
+            KatanaApp()
+        }
     }
 }
 

@@ -5,7 +5,7 @@ androidx-splashscreen = "1.0.1"
 apollo = "4.0.1"
 apollo-mockserver = "0.0.3"
 arrow = "1.2.4"
-compose = "1.7.0-alpha03"
+compose = "1.7.0-rc01"
 compose-placeholder = "1.0.8"
 datastore = "1.1.1"
 detekt = "1.23.7"
@@ -14,7 +14,7 @@ detekt-compose2 = "1.4.0"
 kamel = "0.9.5"
 kermit = "2.0.4"
 kaml = { strictly = "0.59.0" }
-koin = "4.0.0-RC1"
+koin = "4.0.0"
 korge-foundation = "5.4.0"
 kotest = "5.9.1"
 kotlin = "2.0.20"
@@ -29,7 +29,8 @@ lifecycle = "2.8.2"
 materialkolor = "2.0.0"
 mockk = "1.13.13"
 mokkery = "2.4.0"
-navigation = "2.8.0-alpha09"
+navigation = "2.8.0-alpha10"
+navigation-material = "1.7.0-beta02"
 okio = "3.9.1"
 orbit = "9.0.0"
 sentry = "7.14.0"
@@ -109,6 +110,7 @@ koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 
 # KorGE Foundation
@@ -138,6 +140,7 @@ materialkolor = { module = "com.materialkolor:material-kolor", version.ref = "ma
 
 # Navigation
 navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
+navigation-material = { module = "org.jetbrains.compose.material:material-navigation", version.ref = "navigation-material" }
 
 # Okio
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
@@ -299,8 +302,10 @@ ui-common = [
     "kamel",
     "koin-compose",
     "koin-compose-viewmodel",
+    "koin-compose-viewmodel-navigation",
     "kotlinx-serialization-json",
     "navigation",
+    "navigation-material",
     "orbit",
 ]
 ui-android = []
