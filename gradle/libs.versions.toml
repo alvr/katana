@@ -12,7 +12,7 @@ datastore = "1.1.1"
 detekt = "1.23.7"
 detekt-compose = "0.4.16"
 detekt-compose2 = "1.4.0"
-kamel = "0.9.5"
+kamel = "1.0.0"
 kermit = "2.0.4"
 kaml = { strictly = "0.59.0" }
 koin = "3.6.0-Beta4"
