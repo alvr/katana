@@ -36,7 +36,7 @@ okio = "3.9.1"
 orbit = "9.0.0"
 sentry = "7.15.0"
 sentry-multiplatform = "0.9.0"
-sentry-plugin = "4.11.0"
+sentry-plugin = "4.12.0"
 tink = "1.15.0"
 turbine = "1.2.0"
 
