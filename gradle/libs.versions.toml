@@ -1,6 +1,6 @@
 [versions]
 android = "8.7.1"
-androidx-activity = "1.9.2"
+androidx-activity = "1.9.3"
 androidx-splashscreen = "1.0.1"
 apollo = "4.0.1"
 apollo-mockserver = "0.0.3"
