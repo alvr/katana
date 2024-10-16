@@ -98,7 +98,7 @@ gradle-sentry = { module = "io.sentry:sentry-android-gradle-plugin", version.ref
 gradle-sentry-multiplatform = { module = "io.sentry.kotlin.multiplatform.gradle:io.sentry.kotlin.multiplatform.gradle.gradle.plugin", version.ref = "sentry-multiplatform" }
 
 # Kamel
-kamel = { module = "media.kamel:kamel-image", version.ref = "kamel" }
+kamel = { module = "media.kamel:kamel-image-default", version.ref = "kamel" }
 
 # Kermit
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
