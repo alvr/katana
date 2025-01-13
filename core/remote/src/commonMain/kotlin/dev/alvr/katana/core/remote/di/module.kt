@@ -32,8 +32,6 @@ import org.koin.dsl.module
 
 internal expect fun apolloDatabaseModule(): Module
 
-internal expect fun ApolloClient.Builder.sentryInterceptor(): ApolloClient.Builder
-
 private enum class Interceptor {
     GET_TOKEN,
     DELETE_TOKEN,
@@ -61,7 +59,6 @@ private val apolloClientModule = module {
             .addHttpInterceptor(get(named(Interceptor.GET_TOKEN)))
             .addHttpInterceptor(get(named(Interceptor.DELETE_TOKEN)))
             .addHttpInterceptor(get(named(Interceptor.LOGGING)))
-            .sentryInterceptor()
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .normalizedCache(
                 normalizedCacheFactory = get(),

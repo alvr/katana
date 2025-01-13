@@ -38,9 +38,6 @@ internal class KatanaKoverPlugin : Plugin<Project> {
 
         // Serializers
         "*.*$\$serializer",
-
-        // Sentry
-        "*.SentryLogger",
     )
     private val packagesExcludes = listOf(
         // Core

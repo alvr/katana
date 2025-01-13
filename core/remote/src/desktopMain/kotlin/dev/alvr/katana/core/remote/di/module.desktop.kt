@@ -1,6 +1,5 @@
 package dev.alvr.katana.core.remote.di
 
-import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.cache.normalized.api.NormalizedCacheFactory
 import com.apollographql.apollo.cache.normalized.sql.SqlNormalizedCacheFactory
 import dev.alvr.katana.core.common.configDirectory
@@ -12,5 +11,3 @@ private val cacheDatabasePath = configDirectory() / CACHE_DATABASE
 internal actual fun apolloDatabaseModule(): Module = module {
     single<NormalizedCacheFactory> { SqlNormalizedCacheFactory("jdbc:sqlite:$cacheDatabasePath") }
 }
-
-internal actual fun ApolloClient.Builder.sentryInterceptor() = this

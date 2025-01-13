@@ -9,7 +9,6 @@
 coverage-error.log
 katana.jks
 local.properties
-sentry.properties
 app-ios/Podfile.lock
 app-ios/Pods/*
 app-ios/iosApp.xcworkspace/*

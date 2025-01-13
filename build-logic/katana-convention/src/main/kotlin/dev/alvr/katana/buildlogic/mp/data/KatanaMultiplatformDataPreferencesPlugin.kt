@@ -6,6 +6,7 @@ import dev.alvr.katana.buildlogic.mp.desktopMain
 import dev.alvr.katana.buildlogic.mp.desktopTest
 import dev.alvr.katana.buildlogic.mp.jvmBasedMain
 import dev.alvr.katana.buildlogic.mp.jvmBasedTest
+import dev.alvr.katana.buildlogic.mp.webBasedMain
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -45,6 +46,9 @@ internal class KatanaMultiplatformDataPreferencesPlugin : Plugin<Project> {
             }
             jvmBasedMain.dependencies {
                 implementation(catalogBundle("data-preferences-jvm"))
+            }
+            webBasedMain.dependencies {
+                implementation(catalogBundle("data-preferences-web"))
             }
 
             commonTest.dependencies {

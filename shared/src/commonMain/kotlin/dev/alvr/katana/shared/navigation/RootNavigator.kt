@@ -104,7 +104,7 @@ private class KatanaRootNavigator(
 
 @Composable
 internal fun rememberKatanaNavigator(): RootNavigator {
-    val navController = rememberNavController().sentryObserver().loggerObserver()
+    val navController = rememberNavController().loggerObserver()
 
     return remember {
         KatanaRootNavigator(
@@ -117,9 +117,6 @@ internal fun rememberKatanaNavigator(): RootNavigator {
         )
     }
 }
-
-@Composable
-internal expect fun NavHostController.sentryObserver(): NavHostController
 
 @Composable
 private fun NavHostController.loggerObserver() = apply {

@@ -51,6 +51,9 @@ private fun KotlinMultiplatformExtension.configureSourceSets() {
         jvmBasedMain.dependencies {
             implementation(catalogBundle("core-jvm"))
         }
+        webBasedMain.dependencies {
+            implementation(catalogBundle("core-web"))
+        }
 
         commonTest.dependencies {
             implementation(catalogBundle("core-common-test"))

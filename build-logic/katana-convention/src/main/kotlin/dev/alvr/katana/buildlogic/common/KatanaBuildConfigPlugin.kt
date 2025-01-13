@@ -10,12 +10,9 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import dev.alvr.katana.buildlogic.common.Config.Environment.BuildConfig
 import dev.alvr.katana.buildlogic.fullPackageName
-import dev.alvr.katana.buildlogic.mp.desktopMain
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.gradle.api.DefaultTask
-import org.gradle.api.NamedDomainObjectContainer
-import org.gradle.api.NamedDomainObjectProvider
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.Directory
@@ -38,7 +35,6 @@ import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.registering
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal class KatanaBuildConfigPlugin : Plugin<Project> {
@@ -92,16 +88,19 @@ internal abstract class GenerateBuildConfigTask : DefaultTask() {
         val android = config.android.fromFlavor(flavor.get())
         val ios = config.ios.fromFlavor(flavor.get())
         val desktop = config.desktop.fromFlavor(flavor.get())
-        val common = (android + ios + desktop).distinctBy { it.name }.toSet()
+        val web = config.web.fromFlavor(flavor.get())
+        val common = (android + ios + desktop + web).distinctBy { it.name }.toSet()
 
         require(android.size == common.size) { "Android build config is missing some values: ${common - android}" }
         require(ios.size == common.size) { "iOS build config is missing some values: ${common - ios}" }
         require(desktop.size == common.size) { "Desktop build config is missing some values: ${common - desktop}" }
+        require(web.size == common.size) { "Web build config is missing some values: ${common - web}" }
 
         common.generateExpect()
         android.generateActual(OutputDir.android)
         ios.generateActual(OutputDir.ios)
         desktop.generateActual(OutputDir.desktop)
+        web.generateActual(OutputDir.web)
     }
 
     private fun Set<BuildConfig>.generateExpect() {
@@ -143,6 +142,7 @@ private data class Config(
     @SerialName("android") val android: Environment,
     @SerialName("ios") val ios: Environment,
     @SerialName("desktop") val desktop: Environment,
+    @SerialName("web") val web: Environment,
 ) {
     @Serializable
     data class Environment(
@@ -161,7 +161,7 @@ private data class Config(
             "dev" -> dev
             "beta" -> beta
             "release" -> release
-            else -> throw IllegalArgumentException("Unknown flavor: $flavor")
+            else -> dev
         }
     }
 }
@@ -175,6 +175,7 @@ internal enum class OutputDir(
     android(".android", "androidMain"),
     ios(".ios", "iosMain"),
     desktop(".desktop", "desktopMain"),
+    web(".webBased", "webBasedMain"),
 }
 
 private const val FILENAME = "KatanaBuildConfig"

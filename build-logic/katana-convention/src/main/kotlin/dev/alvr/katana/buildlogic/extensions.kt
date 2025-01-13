@@ -42,6 +42,7 @@ internal val Project.fullPackageName get() = KatanaConfiguration.PackageName + p
 internal fun Project.catalogVersion(alias: String) = libs.findVersion(alias).get().toString()
 internal fun Project.catalogLib(alias: String) = libs.findLibrary(alias).get()
 internal fun Project.catalogBundle(alias: String) = libs.findBundle(alias).get()
+internal fun Project.optionalCatalogBundle(alias: String) = libs.findBundle(alias)
 
 internal fun KotlinDependencyHandler.catalogVersion(alias: String) = project.catalogVersion(alias)
 internal fun KotlinDependencyHandler.catalogLib(alias: String) = project.catalogLib(alias)
@@ -161,8 +162,7 @@ private fun KotlinMultiplatformExtension.kspDependencies(
             val groupName = "${target.groupName}${configurationNameSuffix.suffix}"
             val catalogAlias = "$catalogPrefix-$groupName-ksp".lowercase()
 
-            val bundle = project.catalogBundle(catalogAlias).orNull
-            if (bundle != null) {
+            if (project.optionalCatalogBundle(catalogAlias).isPresent) {
                 add(configurationName, project.catalogBundle(catalogAlias))
             }
         }
