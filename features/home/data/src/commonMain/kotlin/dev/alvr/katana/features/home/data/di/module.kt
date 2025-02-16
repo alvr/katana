@@ -1,6 +1,8 @@
 package dev.alvr.katana.features.home.data.di
 
-import dev.alvr.katana.core.preferences.datastore.dataStoreFactory
+import dev.alvr.katana.core.common.KatanaFilesPath
+import dev.alvr.katana.core.preferences.di.store.KatanaStore
+import dev.alvr.katana.core.preferences.di.store.katanaStoreOf
 import dev.alvr.katana.features.home.data.datastore.homePreferencesDataStore
 import dev.alvr.katana.features.home.data.entities.HomePreferences
 import dev.alvr.katana.features.home.data.repositories.HomeRepositoryImpl
@@ -14,12 +16,8 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 private val dataStoreModule = module {
-    single(homePreferencesDataStore) {
-        dataStoreFactory(
-            name = "home_preferences",
-            serializer = HomePreferences.preferencesSerializer(),
-            create = { HomePreferences() },
-        )
+    single<KatanaStore<HomePreferences>>(homePreferencesDataStore) {
+        katanaStoreOf(get<KatanaFilesPath>(), "home", HomePreferences())
     }
 }
 

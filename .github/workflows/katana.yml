@@ -148,7 +148,7 @@ jobs:
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Decode keystore
-        uses: timheuer/base64-to-file@784a1a4a994315802b7d8e2084e116e783d157b
+        uses: timheuer/base64-to-file@784a1a4a994315802b7d8e2084e116e783d157be
         with:
           fileDir: .
           fileName: ${{ secrets.SIGNING_FILE }}
@@ -174,16 +174,6 @@ jobs:
           git_release_notes: true
           include_git_commit_id: true
           notify: true
-      - name: Publish beta APK to AppCenter
-        uses: wzieba/AppCenter-Github-Action@70e33d4842b97b381833ad5c9c93a562b39d5d9f
-        with:
-          appName: KatanaApp/Katana-Android
-          token: ${{ secrets.APPCENTER_TOKEN }}
-          group: Testers
-          file: ${{ vars.ANDROID_BETA_APK }}
-          notifyTesters: true
-          gitReleaseNotes: true
-          debug: false
 
   deploy-production:
     name: Production deployment

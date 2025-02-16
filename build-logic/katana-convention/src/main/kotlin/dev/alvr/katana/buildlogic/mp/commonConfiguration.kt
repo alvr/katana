@@ -2,7 +2,7 @@
 
 package dev.alvr.katana.buildlogic.mp
 
-import dev.alvr.katana.buildlogic.catalogBundle
+import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.kspDependencies
@@ -11,8 +11,19 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsTargetDsl
+import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinWasmJsTargetDsl
+import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
-internal fun Project.commonConfiguration() {
+internal fun Project.commonConfiguration(
+    configureAndroid: KotlinAndroidTarget.() -> Unit = { },
+    configureApple: KotlinNativeTarget.() -> Unit = { },
+    configureDesktop: KotlinJvmTarget.() -> Unit = { },
+    configureJs: KotlinJsTargetDsl.() -> Unit = { browser() },
+    configureWasmJs: KotlinWasmJsTargetDsl.() -> Unit = { browser() },
+) {
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
     apply(plugin = "com.google.devtools.ksp")
     apply(plugin = "io.kotest.multiplatform")
@@ -21,14 +32,36 @@ internal fun Project.commonConfiguration() {
 
     with(extensions) {
         commonExtensions()
-        configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
+        configure<KotlinMultiplatformExtension> {
+            configureMultiplatform(
+                project = project,
+                configureAndroid = configureAndroid,
+                configureApple = configureApple,
+                configureDesktop = configureDesktop,
+                configureJs = configureJs,
+                configureWasmJs = configureWasmJs,
+            )
+        }
     }
 
     tasks.commonTasks()
 }
 
-private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
-    hierarchy()
+private fun KotlinMultiplatformExtension.configureMultiplatform(
+    project: Project,
+    configureAndroid: KotlinAndroidTarget.() -> Unit = { },
+    configureApple: KotlinNativeTarget.() -> Unit = { },
+    configureDesktop: KotlinJvmTarget.() -> Unit = { },
+    configureJs: KotlinJsTargetDsl.() -> Unit = { },
+    configureWasmJs: KotlinWasmJsTargetDsl.() -> Unit = { },
+) {
+    hierarchy(
+        configureAndroid = configureAndroid,
+        configureApple = configureApple,
+        configureDesktop = configureDesktop,
+        configureJs = configureJs,
+        configureWasmJs = configureWasmJs,
+    )
     configureSourceSets()
 
     kspDependencies(project, "core")
@@ -37,38 +70,41 @@ private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project
 private fun KotlinMultiplatformExtension.configureSourceSets() {
     sourceSets {
         commonMain.dependencies {
-            implementation(catalogBundle("core-common"))
+            bundleImplementation("core-common")
         }
         androidMain.dependencies {
-            implementation(catalogBundle("core-android"))
+            bundleImplementation("core-android")
         }
         iosMain.dependencies {
-            implementation(catalogBundle("core-ios"))
+            bundleImplementation("core-ios")
         }
         desktopMain.dependencies {
-            implementation(catalogBundle("core-desktop"))
+            bundleImplementation("core-desktop")
         }
-        jvmBasedMain.dependencies {
-            implementation(catalogBundle("core-jvm"))
+        jsMain.dependencies {
+            bundleImplementation("core-js")
         }
-        webBasedMain.dependencies {
-            implementation(catalogBundle("core-web"))
+        wasmJsMain.dependencies {
+            bundleImplementation("core-wasm")
         }
 
         commonTest.dependencies {
-            implementation(catalogBundle("core-common-test"))
+            bundleImplementation("core-common-test")
         }
         androidUnitTest.dependencies {
-            implementation(catalogBundle("core-android-test"))
+            bundleImplementation("core-android-test")
         }
         iosTest.dependencies {
-            implementation(catalogBundle("core-ios-test"))
+            bundleImplementation("core-ios-test")
         }
         desktopTest.dependencies {
-            implementation(catalogBundle("core-desktop-test"))
+            bundleImplementation("core-desktop-test")
         }
-        jvmBasedTest.dependencies {
-            implementation(catalogBundle("core-jvm-test"))
+        jsTest.dependencies {
+            bundleImplementation("core-js-test")
+        }
+        wasmJsTest.dependencies {
+            bundleImplementation("core-wasm-test")
         }
     }
 }

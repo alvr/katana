@@ -1,13 +1,12 @@
 package dev.alvr.katana.buildlogic.mp.core
 
 import com.android.build.gradle.LibraryExtension
-import dev.alvr.katana.buildlogic.catalogBundle
+import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.commonTasks
 import dev.alvr.katana.buildlogic.configureAndroid
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.mp.desktopMain
 import dev.alvr.katana.buildlogic.mp.hierarchy
-import dev.alvr.katana.buildlogic.mp.jvmBasedMain
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -37,34 +36,40 @@ internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         sourceSets {
             commonMain.dependencies {
-                implementation(catalogBundle("core-common-test"))
-                implementation(catalogBundle("data-preferences-common-test"))
-                implementation(catalogBundle("data-remote-common-test"))
-                implementation(catalogBundle("ui-common-test"))
+                bundleImplementation("core-common-test")
+                bundleImplementation("data-preferences-common-test")
+                bundleImplementation("data-remote-common-test")
+                bundleImplementation("ui-common-test")
             }
             androidMain.dependencies {
-                implementation(catalogBundle("core-android-test"))
-                implementation(catalogBundle("data-preferences-android-test"))
-                implementation(catalogBundle("data-remote-android-test"))
-                implementation(catalogBundle("ui-android-test"))
+                bundleImplementation("core-android-test")
+                bundleImplementation("data-preferences-android-test")
+                bundleImplementation("data-remote-android-test")
+                bundleImplementation("ui-android-test")
             }
             iosMain.dependencies {
-                implementation(catalogBundle("core-ios-test"))
-                implementation(catalogBundle("data-preferences-ios-test"))
-                implementation(catalogBundle("data-remote-ios-test"))
-                implementation(catalogBundle("ui-ios-test"))
+                bundleImplementation("core-ios-test")
+                bundleImplementation("data-preferences-ios-test")
+                bundleImplementation("data-remote-ios-test")
+                bundleImplementation("ui-ios-test")
             }
             desktopMain.dependencies {
-                implementation(catalogBundle("core-desktop-test"))
-                implementation(catalogBundle("data-preferences-desktop-test"))
-                implementation(catalogBundle("data-remote-desktop-test"))
-                implementation(catalogBundle("ui-desktop-test"))
+                bundleImplementation("core-desktop-test")
+                bundleImplementation("data-preferences-desktop-test")
+                bundleImplementation("data-remote-desktop-test")
+                bundleImplementation("ui-desktop-test")
             }
-            jvmBasedMain.dependencies {
-                implementation(catalogBundle("core-jvm-test"))
-                implementation(catalogBundle("data-preferences-jvm-test"))
-                implementation(catalogBundle("data-remote-jvm-test"))
-                implementation(catalogBundle("ui-jvm-test"))
+            jsMain.dependencies {
+                bundleImplementation("core-js-test")
+                bundleImplementation("data-preferences-js-test")
+                bundleImplementation("data-remote-js-test")
+                bundleImplementation("ui-js-test")
+            }
+            wasmJsMain.dependencies {
+                bundleImplementation("core-wasm-test")
+                bundleImplementation("data-preferences-wasm-test")
+                bundleImplementation("data-remote-wasm-test")
+                bundleImplementation("ui-wasm-test")
             }
         }
     }

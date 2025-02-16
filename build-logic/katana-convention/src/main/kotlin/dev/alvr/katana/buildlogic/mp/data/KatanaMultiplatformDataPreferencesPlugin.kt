@@ -1,12 +1,9 @@
 package dev.alvr.katana.buildlogic.mp.data
 
-import dev.alvr.katana.buildlogic.catalogBundle
+import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.desktopMain
 import dev.alvr.katana.buildlogic.mp.desktopTest
-import dev.alvr.katana.buildlogic.mp.jvmBasedMain
-import dev.alvr.katana.buildlogic.mp.jvmBasedTest
-import dev.alvr.katana.buildlogic.mp.webBasedMain
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -33,38 +30,41 @@ internal class KatanaMultiplatformDataPreferencesPlugin : Plugin<Project> {
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         sourceSets {
             commonMain.dependencies {
-                implementation(catalogBundle("data-preferences-common"))
+                bundleImplementation("data-preferences-common")
             }
             androidMain.dependencies {
-                implementation(catalogBundle("data-preferences-android"))
+                bundleImplementation("data-preferences-android")
             }
             iosMain.dependencies {
-                implementation(catalogBundle("data-preferences-ios"))
+                bundleImplementation("data-preferences-ios")
             }
             desktopMain.dependencies {
-                implementation(catalogBundle("data-preferences-desktop"))
+                bundleImplementation("data-preferences-desktop")
             }
-            jvmBasedMain.dependencies {
-                implementation(catalogBundle("data-preferences-jvm"))
+            jsMain.dependencies {
+                bundleImplementation("data-preferences-js")
             }
-            webBasedMain.dependencies {
-                implementation(catalogBundle("data-preferences-web"))
+            wasmJsMain.dependencies {
+                bundleImplementation("data-preferences-wasm")
             }
 
             commonTest.dependencies {
-                implementation(catalogBundle("data-preferences-common-test"))
+                bundleImplementation("data-preferences-common-test")
             }
             androidUnitTest.dependencies {
-                implementation(catalogBundle("data-preferences-android-test"))
+                bundleImplementation("data-preferences-android-test")
             }
             iosTest.dependencies {
-                implementation(catalogBundle("data-preferences-ios-test"))
+                bundleImplementation("data-preferences-ios-test")
             }
             desktopTest.dependencies {
-                implementation(catalogBundle("data-preferences-desktop-test"))
+                bundleImplementation("data-preferences-desktop-test")
             }
-            jvmBasedTest.dependencies {
-                implementation(catalogBundle("data-preferences-jvm-test"))
+            jsTest.dependencies {
+                bundleImplementation("data-preferences-js-test")
+            }
+            wasmJsTest.dependencies {
+                bundleImplementation("data-preferences-wasm-test")
             }
         }
     }

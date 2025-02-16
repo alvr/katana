@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.Option
 import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.domain.failures.Failure
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 abstract class UseCase<in P, out R> internal constructor(private val dispatcher: KatanaDispatcher) {
@@ -13,10 +12,6 @@ abstract class UseCase<in P, out R> internal constructor(private val dispatcher:
 
     suspend operator fun invoke(params: P): R = withContext(dispatcher.io) {
         run(params)
-    }
-
-    fun execute(params: P): R = runBlocking(dispatcher.io) {
-        invoke(params)
     }
 }
 
@@ -27,4 +22,3 @@ abstract class OptionUseCase<in P, out R>(dispatcher: KatanaDispatcher) :
     UseCase<P, Option<R>>(dispatcher)
 
 suspend operator fun <R> UseCase<Unit, R>.invoke(): R = invoke(Unit)
-fun <R> UseCase<Unit, R>.execute(): R = execute(Unit)

@@ -5,7 +5,7 @@ package dev.alvr.katana.buildlogic.mp
 import com.android.build.api.dsl.ApplicationBuildType
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import dev.alvr.katana.buildlogic.KatanaConfiguration
-import dev.alvr.katana.buildlogic.catalogBundle
+import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.configureAndroid
 import java.io.FileInputStream
 import java.time.Year
@@ -24,12 +24,19 @@ import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.compose.desktop.DesktopExtension
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsTargetDsl
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 internal class KatanaAppPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
         apply(plugin = "com.android.application")
-        commonConfiguration()
+
+        commonConfiguration(
+            configureJs = { configure() },
+            configureWasmJs = { configure() },
+        )
+
         apply(plugin = "katana.multiplatform.compose")
 
         with(extensions) {
@@ -44,6 +51,25 @@ internal class KatanaAppPlugin : Plugin<Project> {
         }
     }
 
+    private fun KotlinJsTargetDsl.configure() {
+        moduleName = "katana"
+        browser {
+            val rootDirPath = project.rootDir.path
+            val projectDirPath = project.projectDir.path
+            commonWebpackConfig {
+                outputFileName = "katana.js"
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        // Serve sources to debug inside browser
+                        add(rootDirPath)
+                        add(projectDirPath)
+                    }
+                }
+            }
+        }
+        binaries.executable()
+    }
+
     private fun KotlinMultiplatformExtension.configureMultiplatform() {
         configureSourceSets()
     }
@@ -53,58 +79,34 @@ internal class KatanaAppPlugin : Plugin<Project> {
 
         sourceSets {
             androidMain.dependencies {
-                implementation(catalogBundle("app-android"))
+                bundleImplementation("app-android")
             }
-
+            iosMain.dependencies {
+                bundleImplementation("app-ios")
+            }
             desktopMain.dependencies {
                 implementation(compose.desktop.currentOs)
-                implementation(catalogBundle("app-desktop"))
+                bundleImplementation("app-desktop")
             }
-        }
-    }
-
-    private fun DesktopExtension.configureDesktop(project: Project) {
-        application {
-            mainClass = "dev.alvr.katana.KatanaKt"
-
-            buildTypes {
-                release {
-                    proguard {
-                        isEnabled = true
-                        obfuscate = true
-                    }
-                }
+            jsMain.dependencies {
+                bundleImplementation("app-js")
             }
-
-            nativeDistributions {
-                linux {
-                }
-
-                macOS {
-                    dmgPackageVersion = "1"
-                }
-
-                windows {
-                }
-
-                targetFormats(
-                    TargetFormat.Deb,
-                    TargetFormat.Rpm,
-                    TargetFormat.Dmg,
-                    TargetFormat.Exe,
-                )
-
-                packageName = "Katana"
-                packageVersion = KatanaConfiguration.VersionName
-                copyright = "2022 - ${Year.now()} Alvaro Salcedo Garcia (alvr). Licensed under the Apache License."
-                vendor = "Alvaro Salcedo Garcia (alvr)"
-                licenseFile.set(project.rootProject.file("LICENSE"))
+            wasmJsMain.dependencies {
+                bundleImplementation("app-wasm")
             }
         }
     }
 
     @Suppress("StringLiteralDuplication")
     private fun BaseAppModuleExtension.configureAndroid(project: Project) {
+        fun ApplicationBuildType.configure(isDebug: Boolean) {
+            isDebuggable = isDebug
+            isDefault = isDebug
+            isMinifyEnabled = !isDebug
+            isShrinkResources = !isDebug
+            enableUnitTestCoverage = isDebug
+        }
+
         configureAndroid(KatanaConfiguration.PackageName)
 
         compileOptions.isCoreLibraryDesugaringEnabled = true
@@ -173,12 +175,44 @@ internal class KatanaAppPlugin : Plugin<Project> {
         sourceSets["main"].res.srcDirs("$AndroidDir/res")
     }
 
-    private fun ApplicationBuildType.configure(isDebug: Boolean) {
-        isDebuggable = isDebug
-        isDefault = isDebug
-        isMinifyEnabled = !isDebug
-        isShrinkResources = !isDebug
-        enableUnitTestCoverage = isDebug
+    private fun DesktopExtension.configureDesktop(project: Project) {
+        application {
+            mainClass = "dev.alvr.katana.KatanaKt"
+
+            buildTypes {
+                release {
+                    proguard {
+                        isEnabled = true
+                        obfuscate = true
+                    }
+                }
+            }
+
+            nativeDistributions {
+                linux {
+                }
+
+                macOS {
+                    dmgPackageVersion = "1"
+                }
+
+                windows {
+                }
+
+                targetFormats(
+                    TargetFormat.Deb,
+                    TargetFormat.Rpm,
+                    TargetFormat.Dmg,
+                    TargetFormat.Exe,
+                )
+
+                packageName = "Katana"
+                packageVersion = KatanaConfiguration.VersionName
+                copyright = "2022 - ${Year.now()} Alvaro Salcedo Garcia (alvr). Licensed under the Apache License."
+                vendor = "Alvaro Salcedo Garcia (alvr)"
+                licenseFile.set(project.rootProject.file("LICENSE"))
+            }
+        }
     }
 
     private operator fun Properties.get(key: String, env: String) =

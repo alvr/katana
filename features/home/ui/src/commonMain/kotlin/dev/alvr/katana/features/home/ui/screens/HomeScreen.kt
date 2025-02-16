@@ -88,7 +88,7 @@ internal fun HomeScreen(
                             contentDescription = Res.string.katana_logo_a11y.value,
                         )
                     },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                     scrollBehavior = scrollBehavior,
                 )
 

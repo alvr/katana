@@ -9,10 +9,11 @@ import coil3.compose.setSingletonImageLoaderFactory
 import coil3.disk.DiskCache
 import coil3.request.crossfade
 import dev.alvr.katana.core.common.KatanaBuildConfig
+import dev.alvr.katana.core.common.KatanaCachePath
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.shared.screens.Katana
-import dev.alvr.katana.shared.utils.coilDiskCache
 import org.koin.compose.KoinContext
+import org.koin.compose.koinInject
 
 @Composable
 fun Katana() {
@@ -33,12 +34,14 @@ private fun InitApp() {
 
 @Composable
 private fun InitCoil() {
+    val diskCacheDir = koinInject<KatanaCachePath>().resolve(CoilImagesPath).path
+
     setSingletonImageLoaderFactory { context ->
         ImageLoader.Builder(context)
             .crossfade(true)
             .diskCache {
                 DiskCache.Builder()
-                    .directory(context.coilDiskCache())
+                    .directory(diskCacheDir)
                     .maxSizePercent(CoilMaxSizePercent)
                     .build()
             }
@@ -53,3 +56,4 @@ private fun initNapier() {
 }
 
 private const val CoilMaxSizePercent = 0.02
+private const val CoilImagesPath = "images_cache"
