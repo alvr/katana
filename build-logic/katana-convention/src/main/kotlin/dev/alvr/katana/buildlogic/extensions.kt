@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.common
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.jvm
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.native
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
+import org.jetbrains.kotlin.gradle.targets.js.npm.buildNpmVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.konan.util.visibleName
 
@@ -39,13 +40,12 @@ private val Project.libs get() = extensions.getByType<VersionCatalogsExtension>(
 internal val Test.isRelease get() = name.contains("""beta|release""".toRegex(RegexOption.IGNORE_CASE))
 
 internal val Project.fullPackageName get() = KatanaConfiguration.PackageName + path.replace(':', '.')
-internal fun Project.catalogVersion(alias: String) = libs.findVersion(alias).get().toString()
 internal fun Project.catalogLib(alias: String) = libs.findLibrary(alias).get()
-internal fun Project.catalogBundle(alias: String) = libs.findBundle(alias).get()
 
-internal fun KotlinDependencyHandler.catalogVersion(alias: String) = project.catalogVersion(alias)
-internal fun KotlinDependencyHandler.catalogLib(alias: String) = project.catalogLib(alias)
-internal fun KotlinDependencyHandler.catalogBundle(alias: String) = project.catalogBundle(alias)
+private fun Project.optionalCatalogBundle(alias: String) = libs.findBundle(alias)
+internal fun KotlinDependencyHandler.bundleImplementation(alias: String) {
+    project.optionalCatalogBundle(alias).ifPresent { bundle -> implementation(bundle) }
+}
 
 internal fun KotlinDependencyHandler.implementation(
     dependencyNotation: Provider<*>,
@@ -161,9 +161,8 @@ private fun KotlinMultiplatformExtension.kspDependencies(
             val groupName = "${target.groupName}${configurationNameSuffix.suffix}"
             val catalogAlias = "$catalogPrefix-$groupName-ksp".lowercase()
 
-            val bundle = project.catalogBundle(catalogAlias).orNull
-            if (bundle != null) {
-                add(configurationName, project.catalogBundle(catalogAlias))
+            project.optionalCatalogBundle(catalogAlias).ifPresent { bundle ->
+                add(configurationName, bundle)
             }
         }
     }

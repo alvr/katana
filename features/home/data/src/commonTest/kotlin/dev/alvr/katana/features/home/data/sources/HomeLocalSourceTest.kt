@@ -1,8 +1,7 @@
 package dev.alvr.katana.features.home.data.sources
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.core.IOException
 import app.cash.turbine.test
+import dev.alvr.katana.core.preferences.di.store.KatanaStore
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.home.data.entities.HomePreferences
@@ -19,9 +18,10 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.io.IOException
 
 internal class HomeLocalSourceTest : FreeSpec() {
-    private val store = mock<DataStore<HomePreferences>> {
+    private val store = mock<KatanaStore<HomePreferences>> {
         every { data } returns emptyFlow()
     }
 
@@ -47,23 +47,23 @@ internal class HomeLocalSourceTest : FreeSpec() {
             }
 
             "hiding the welcome card" {
-                everySuspend { store.updateData(any()) } returns HomePreferences()
+                everySuspend { store.update(any()) } returns HomePreferences()
                 source.hideWelcomeCard().shouldBeRight()
-                verifySuspend { store.updateData(any()) }
+                verifySuspend { store.update(any()) }
             }
         }
 
         "failure" - {
             "hiding the welcome card fails AND it's a common Exception" {
-                everySuspend { store.updateData(any()) } throws Exception()
+                everySuspend { store.update(any()) } throws Exception()
                 source.hideWelcomeCard().shouldBeLeft(HomeFailure.HidingWelcomeCard)
-                verifySuspend { store.updateData(any()) }
+                verifySuspend { store.update(any()) }
             }
 
             "hiding the welcome card fails AND it's a writing Exception" {
-                everySuspend { store.updateData(any()) } throws IOException("Oops.")
+                everySuspend { store.update(any()) } throws IOException("Oops.")
                 source.hideWelcomeCard().shouldBeLeft(HomeFailure.HidingWelcomeCard)
-                verifySuspend { store.updateData(any()) }
+                verifySuspend { store.update(any()) }
             }
         }
     }

@@ -2,15 +2,12 @@
 
 package dev.alvr.katana.buildlogic.mp.data
 
-import com.apollographql.apollo.annotations.ApolloExperimental
 import com.apollographql.apollo.gradle.api.ApolloExtension
-import dev.alvr.katana.buildlogic.catalogBundle
+import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.desktopMain
 import dev.alvr.katana.buildlogic.mp.desktopTest
-import dev.alvr.katana.buildlogic.mp.jvmBasedMain
-import dev.alvr.katana.buildlogic.mp.jvmBasedTest
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -39,35 +36,41 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         sourceSets {
             commonMain.dependencies {
-                implementation(catalogBundle("data-remote-common"))
+                bundleImplementation("data-remote-common")
             }
             androidMain.dependencies {
-                implementation(catalogBundle("data-remote-android"))
+                bundleImplementation("data-remote-android")
             }
             iosMain.dependencies {
-                implementation(catalogBundle("data-remote-ios"))
+                bundleImplementation("data-remote-ios")
             }
             desktopMain.dependencies {
-                implementation(catalogBundle("data-remote-desktop"))
+                bundleImplementation("data-remote-desktop")
             }
-            jvmBasedMain.dependencies {
-                implementation(catalogBundle("data-remote-jvm"))
+            jsMain.dependencies {
+                bundleImplementation("data-remote-js")
+            }
+            wasmJsMain.dependencies {
+                bundleImplementation("data-remote-wasm")
             }
 
             commonTest.dependencies {
-                implementation(catalogBundle("data-remote-common-test"))
+                bundleImplementation("data-remote-common-test")
             }
             androidUnitTest.dependencies {
-                implementation(catalogBundle("data-remote-android-test"))
+                bundleImplementation("data-remote-android-test")
             }
             iosTest.dependencies {
-                implementation(catalogBundle("data-remote-ios-test"))
+                bundleImplementation("data-remote-ios-test")
             }
             desktopTest.dependencies {
-                implementation(catalogBundle("data-remote-desktop-test"))
+                bundleImplementation("data-remote-desktop-test")
             }
-            jvmBasedTest.dependencies {
-                implementation(catalogBundle("data-remote-jvm-test"))
+            jsTest.dependencies {
+                bundleImplementation("data-remote-js-test")
+            }
+            wasmJsTest.dependencies {
+                bundleImplementation("data-remote-wasm-test")
             }
         }
     }

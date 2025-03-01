@@ -9,8 +9,6 @@
   <a href="https://app.codecov.io/gh/alvr/katana"><img alt="Code coverage" src="https://img.shields.io/codecov/c/gh/alvr/katana?logo=codecov&logoColor=white"></a>
   <br />
   <a href="https://portal.testapp.io/apps/install/nvbRLRmegznkO"><img alt="Download latest beta" src="https://img.shields.io/badge/%F0%9F%A5%BC%F0%9F%A7%AA-download%20latest%20beta-%230F4C75"/></a>
-  <a href="https://install.appcenter.ms/orgs/KatanaApp/apps/Katana-Android/distribution_groups/testers"><img alt="Android beta archive" src="https://img.shields.io/badge/%F0%9F%A5%BC%F0%9F%A7%AA-Android%20beta%20archive-%233DDB85"/></a>
-  <a href="https://install.appcenter.ms/orgs/KatanaApp/apps/Katana-iOS/distribution_groups/testers"><img alt="iOS beta archive" src="https://img.shields.io/badge/%F0%9F%A5%BC%F0%9F%A7%AA-iOS%20beta%20archive-%238E8E93"/></a>
 </p>
 
 ---

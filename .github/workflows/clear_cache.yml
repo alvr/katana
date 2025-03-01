@@ -11,4 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clear cache
-        uses: easimon/wipe-cache@5f305e3ee1b681c44328cdf11eaedf943b60edff # pin@main
+        uses: easimon/wipe-cache@5f305e3ee1b681c44328cdf11eaedf943b60edff

@@ -6,6 +6,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.core.common)
             implementation(projects.common.user.domain)
 
             implementation(projects.core.preferences)

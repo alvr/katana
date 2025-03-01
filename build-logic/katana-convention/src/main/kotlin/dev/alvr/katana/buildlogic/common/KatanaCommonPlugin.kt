@@ -18,10 +18,6 @@ internal class KatanaCommonPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(tasks) {
-                register<Delete>("clean") {
-                    allprojects { delete(layout.buildDirectory.asFile.get()) }
-                }
-
                 register<TestReport>("unitTests") {
                     val testTasks = subprojects.map { p ->
                         p.tasks.withType<Test>().matching { t -> !t.isRelease }

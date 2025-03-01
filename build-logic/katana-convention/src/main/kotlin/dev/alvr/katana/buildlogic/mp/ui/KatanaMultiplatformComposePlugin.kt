@@ -2,14 +2,11 @@
 
 package dev.alvr.katana.buildlogic.mp.ui
 
-import dev.alvr.katana.buildlogic.catalogBundle
+import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.desktopMain
 import dev.alvr.katana.buildlogic.mp.desktopTest
-import dev.alvr.katana.buildlogic.mp.hierarchy
-import dev.alvr.katana.buildlogic.mp.jvmBasedMain
-import dev.alvr.katana.buildlogic.mp.jvmBasedTest
 import java.io.File
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -60,37 +57,43 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
                 implementation(compose.runtime)
                 implementation(compose.runtimeSaveable)
                 implementation(compose.ui)
-                implementation(catalogBundle("ui-common"))
+                bundleImplementation("ui-common")
             }
             androidMain.dependencies {
                 implementation(compose.preview)
                 implementation(compose.uiTooling)
-                implementation(catalogBundle("ui-android"))
+                bundleImplementation("ui-android")
             }
             iosMain.dependencies {
-                implementation(catalogBundle("ui-ios"))
+                bundleImplementation("ui-ios")
             }
             desktopMain.dependencies {
-                implementation(catalogBundle("ui-desktop"))
+                bundleImplementation("ui-desktop")
             }
-            jvmBasedMain.dependencies {
-                implementation(catalogBundle("ui-jvm"))
+            jsMain.dependencies {
+                bundleImplementation("ui-js")
+            }
+            wasmJsMain.dependencies {
+                bundleImplementation("ui-wasm")
             }
 
             commonTest.dependencies {
-                implementation(catalogBundle("ui-common-test"))
+                bundleImplementation("ui-common-test")
             }
             androidUnitTest.dependencies {
-                implementation(catalogBundle("ui-android-test"))
+                bundleImplementation("ui-android-test")
             }
             iosTest.dependencies {
-                implementation(catalogBundle("ui-ios-test"))
+                bundleImplementation("ui-ios-test")
             }
             desktopTest.dependencies {
-                implementation(catalogBundle("ui-desktop-test"))
+                bundleImplementation("ui-desktop-test")
             }
-            jvmBasedTest.dependencies {
-                implementation(catalogBundle("ui-jvm-test"))
+            jsTest.dependencies {
+                bundleImplementation("ui-js-test")
+            }
+            wasmJsTest.dependencies {
+                bundleImplementation("ui-wasm-test")
             }
         }
     }

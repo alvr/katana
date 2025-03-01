@@ -9,6 +9,7 @@
     "extends": [
         "config:base",
         ":disableDependencyDashboard",
+        "helpers:pinGitHubActionDigests",
     ],
     "rebaseWhen": "behind-base-branch",
     "recreateWhen": "never",
@@ -55,10 +56,12 @@
             "groupName": "GitHub Actions",
             "groupSlug": "actions",
             "matchManagers": [
-                "github-actions",
+                "github-actions"
             ],
-            "updateTypes": ["pin", "digest"],
-            "pinDigests": true,
+            matchUpdateTypes: [
+                "digest",
+                "pinDigest",
+            ],
         },
         {
             "automerge": false,
