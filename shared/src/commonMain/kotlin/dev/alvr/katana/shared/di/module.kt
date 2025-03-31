@@ -27,7 +27,7 @@ private val viewModelsModule = module {
     viewModelOf(::KatanaViewModel)
 }
 
-val katanaModule = module {
+internal val katanaModule = module {
     includes(
         // Core
         coreCommonModule,

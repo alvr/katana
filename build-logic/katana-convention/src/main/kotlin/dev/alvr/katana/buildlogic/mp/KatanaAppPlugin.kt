@@ -52,7 +52,7 @@ internal class KatanaAppPlugin : Plugin<Project> {
     }
 
     private fun KotlinJsTargetDsl.configure() {
-        moduleName = "katana"
+        outputModuleName = "katana"
         browser {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path

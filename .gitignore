@@ -4,6 +4,7 @@
 /.kotlin
 /build
 /captures
+/kotlin-js-store
 *.iml
 .DS_Store
 coverage-error.log
