@@ -11,25 +11,24 @@ import coil3.request.crossfade
 import dev.alvr.katana.core.common.KatanaBuildConfig
 import dev.alvr.katana.core.common.KatanaCachePath
 import dev.alvr.katana.core.ui.theme.KatanaTheme
+import dev.alvr.katana.shared.di.katanaModule
 import dev.alvr.katana.shared.screens.Katana
-import org.koin.compose.KoinContext
+import org.koin.compose.KoinMultiplatformApplication
 import org.koin.compose.koinInject
+import org.koin.core.logger.Level
+import org.koin.dsl.KoinConfiguration
 
 @Composable
 fun Katana() {
-    InitApp()
-
-    KoinContext {
-        KatanaTheme {
-            Katana()
-        }
-    }
-}
-
-@Composable
-private fun InitApp() {
-    InitCoil()
     initNapier()
+
+    KoinMultiplatformApplication(
+        config = KoinConfiguration { modules(katanaModule) },
+        logLevel = if (KatanaBuildConfig.DEBUG) Level.DEBUG else Level.NONE,
+    ) {
+        InitCoil()
+        KatanaTheme { Katana() }
+    }
 }
 
 @Composable
