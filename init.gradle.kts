@@ -5,7 +5,7 @@ initscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("org.gradle:github-dependency-graph-gradle-plugin:1.3.2")
+        classpath("org.gradle:github-dependency-graph-gradle-plugin:1.4.0")
     }
 }
 
