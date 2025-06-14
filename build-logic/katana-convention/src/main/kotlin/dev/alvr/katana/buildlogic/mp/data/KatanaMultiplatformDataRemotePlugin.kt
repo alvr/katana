@@ -2,6 +2,7 @@
 
 package dev.alvr.katana.buildlogic.mp.data
 
+import com.apollographql.apollo.annotations.ApolloExperimental
 import com.apollographql.apollo.gradle.api.ApolloExtension
 import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.fullPackageName
@@ -75,6 +76,7 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
         }
     }
 
+    @OptIn(ApolloExperimental::class)
     private fun ApolloExtension.configureApollo(project: Project) {
         service("anilist") {
             decapitalizeFields = true
