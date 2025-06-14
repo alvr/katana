@@ -15,10 +15,12 @@ import dev.alvr.katana.shared.di.katanaModule
 import dev.alvr.katana.shared.screens.Katana
 import org.koin.compose.KoinMultiplatformApplication
 import org.koin.compose.koinInject
+import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.logger.Level
 import org.koin.dsl.KoinConfiguration
 
 @Composable
+@OptIn(KoinExperimentalAPI::class)
 fun Katana() {
     initNapier()
 
