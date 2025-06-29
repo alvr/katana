@@ -10,11 +10,13 @@ import dev.alvr.katana.features.lists.data.MediaListEntriesMutation
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.equals.shouldBeEqual
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
+@OptIn(ExperimentalTime::class)
 internal class MediaListMapperTest : FreeSpec({
     "a MediaList with all values present" {
         MediaList(

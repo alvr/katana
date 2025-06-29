@@ -54,7 +54,6 @@ internal fun KotlinDependencyHandler.implementation(
     implementation(dependencyNotation.get().toString(), configure)
 }
 
-@Suppress("UnstableApiUsage")
 internal fun DependencyHandlerScope.implementation(
     provider: Provider<*>,
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
@@ -62,7 +61,6 @@ internal fun DependencyHandlerScope.implementation(
     "implementation"(provider, dependencyConfiguration)
 }
 
-@Suppress("UnstableApiUsage")
 internal fun DependencyHandlerScope.testImplementation(
     provider: Provider<*>,
     dependencyConfiguration: ExternalModuleDependency.() -> Unit = {},
@@ -135,6 +133,9 @@ internal fun TaskContainer.commonTasks() {
     }
     withType<KotlinCompile>().configureEach {
         compilerOptions.configureKotlinCompiler()
+    }
+    withType<Test>().configureEach {
+        failOnNoDiscoveredTests = false
     }
 }
 

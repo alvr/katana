@@ -16,5 +16,5 @@ internal object KatanaConfiguration {
     val UseJavaVersion = JavaVersion.VERSION_21
     val JvmTarget = KtJvmTarget.fromTarget(UseJavaVersion.toString())
     val JvmTargetStr = JvmTarget.target
-    val KotlinVersion = KtVersion.KOTLIN_2_1
+    val KotlinVersion = KtVersion.KOTLIN_2_2
 }
