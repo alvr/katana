@@ -99,8 +99,6 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
     }
 
     private fun ComposeCompilerGradlePluginExtension.configureComposeCompiler(project: Project) {
-        featureFlags = setOf(OptimizeNonSkippingGroups)
-
         metricsDestination = project.file(project.composePluginDir("compose-metrics"))
         reportsDestination = project.file(project.composePluginDir("compose-reports"))
     }

@@ -1,10 +1,12 @@
 package dev.alvr.katana.features.lists.data.mappers.responses
 
 import dev.alvr.katana.core.remote.type.MediaType
-import kotlinx.datetime.Instant
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
+@OptIn(ExperimentalTime::class)
 internal fun Number.toLocalDateTime() = Instant
     .fromEpochMilliseconds(toLong() * TO_UNIX)
     .toLocalDateTime(TimeZone.UTC)
