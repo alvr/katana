@@ -11,7 +11,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.PrimaryTabRow
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -30,8 +29,9 @@ import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.showSnackbar
 import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.core.ui.utils.contentPadding
-import dev.alvr.katana.core.ui.utils.noInsets
+import dev.alvr.katana.core.ui.theme.contentPaddingMedium
+import dev.alvr.katana.core.ui.theme.noInsets
+import dev.alvr.katana.core.ui.utils.rememberSnackbarHostState
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.home.ui.navigation.HomeNavigator
@@ -56,7 +56,7 @@ internal fun HomeScreen(
 ) {
     val tabs = remember { HomeTab.entries.toImmutableList() }
     val pagerState = rememberPagerState { HomeTab.entries.size }
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = rememberSnackbarHostState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val currentTab by remember { derivedStateOf { pagerState.currentPage } }
 
@@ -111,7 +111,7 @@ internal fun HomeScreen(
                 .padding(paddingValues),
             state = pagerState,
             verticalAlignment = Alignment.Top,
-            contentPadding = WindowInsets.contentPadding.asPaddingValues(),
+            contentPadding = WindowInsets.contentPaddingMedium.asPaddingValues(),
             pageSpacing = 12.dp,
         ) { page ->
             when (page) {

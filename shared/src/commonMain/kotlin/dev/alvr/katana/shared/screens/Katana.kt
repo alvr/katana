@@ -19,7 +19,7 @@ import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.navigation.KatanaNavigationBar
 import dev.alvr.katana.core.ui.components.navigation.KatanaNavigationBarType
 import dev.alvr.katana.core.ui.navigation.KatanaNavigationBarItem.Companion.hasRoute
-import dev.alvr.katana.core.ui.utils.noInsets
+import dev.alvr.katana.core.ui.theme.noInsets
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.account.ui.navigation.account
 import dev.alvr.katana.features.explore.ui.navigation.explore
