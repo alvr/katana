@@ -8,6 +8,7 @@ import com.eygraber.compose.placeholder.PlaceholderHighlight
 import com.eygraber.compose.placeholder.material3.placeholder
 import com.eygraber.compose.placeholder.material3.shimmerHighlightColor
 import com.eygraber.compose.placeholder.shimmer
+import dev.alvr.katana.core.ui.theme.KatanaTheme
 
 @Composable
 @Suppress("ModifierComposable")
@@ -19,7 +20,7 @@ fun Modifier.katanaPlaceholder(
     shape = shape,
     highlight = PlaceholderHighlight.shimmer(
         highlightColor = PlaceholderDefaults.shimmerHighlightColor(
-            alpha = 0.33f,
+            alpha = KatanaTheme.alpha.alpha33,
         ),
     ),
 )

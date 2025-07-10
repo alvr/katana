@@ -33,26 +33,40 @@ fun KatanaTheme(
 
 object KatanaTheme {
     val alpha: Alpha
-        @Composable @ReadOnlyComposable get() = LocalAlpha.current
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAlpha.current
 
     val colorScheme: ColorScheme
-        @Composable @ReadOnlyComposable get() = MaterialTheme.colorScheme
+        @Composable
+        @ReadOnlyComposable
+        get() = MaterialTheme.colorScheme
 
     val dimensions: Dimensions
-        @Composable @ReadOnlyComposable get() = LocalDimensions.current
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalDimensions.current
 
     @OptIn(ExperimentalMaterial3ExpressiveApi::class)
     val motionScheme
-        @Composable @ReadOnlyComposable get() = MaterialTheme.motionScheme
+        @Composable
+        @ReadOnlyComposable
+        get() = MaterialTheme.motionScheme
 
     val shapes: Shapes
-        @Composable @ReadOnlyComposable get() = MaterialTheme.shapes
+        @Composable
+        @ReadOnlyComposable
+        get() = MaterialTheme.shapes
 
     val sizes: Sizes
-        @Composable @ReadOnlyComposable get() = LocalSizes.current
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalSizes.current
 
     val typography: Typography
-        @Composable @ReadOnlyComposable get() = MaterialTheme.typography
+        @Composable
+        @ReadOnlyComposable
+        get() = MaterialTheme.typography
 }
 
 private const val ColorSeed = 0xFF333941 // Same as Android's windowSplashScreenBackground attr

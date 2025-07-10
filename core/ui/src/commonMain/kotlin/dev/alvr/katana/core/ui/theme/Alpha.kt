@@ -1,8 +1,11 @@
 package dev.alvr.katana.core.ui.theme
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 
-data class Alpha internal constructor(
+@Immutable
+@Suppress("UseDataClass")
+class Alpha internal constructor(
     val alpha0: Float = 0f,
     val alpha15: Float = 0.15f,
     val alpha25: Float = 0.25f,

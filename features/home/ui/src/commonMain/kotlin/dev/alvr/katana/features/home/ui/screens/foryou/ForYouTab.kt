@@ -1,11 +1,14 @@
 package dev.alvr.katana.features.home.ui.screens.foryou
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import dev.alvr.katana.core.ui.theme.KatanaTheme
+import dev.alvr.katana.core.ui.theme.contentPaddingMedium
 import dev.alvr.katana.features.home.ui.screens.foryou.sections.Popular
 import dev.alvr.katana.features.home.ui.screens.foryou.sections.Reading
 import dev.alvr.katana.features.home.ui.screens.foryou.sections.Trending
@@ -24,7 +27,8 @@ internal fun ForYouTabContent(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = WindowInsets.contentPaddingMedium.asPaddingValues(),
+        verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
     ) {
         if (!sessionActive && uiState.showWelcomeCard) {
             item(key = "welcome_card") {

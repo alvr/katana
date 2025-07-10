@@ -7,7 +7,6 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -16,6 +15,7 @@ import dev.alvr.katana.core.ui.resources.Res
 import dev.alvr.katana.core.ui.resources.toolbar_menu_filter
 import dev.alvr.katana.core.ui.resources.toolbar_menu_search
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.theme.KatanaTheme
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +34,7 @@ fun KatanaHomeTopAppBar(
             Column {
                 Text(text = title)
                 if (!subtitle.isNullOrBlank()) {
-                    Text(text = subtitle, style = MaterialTheme.typography.titleSmall)
+                    Text(text = subtitle, style = KatanaTheme.typography.titleSmall)
                 }
             }
         },

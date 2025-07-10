@@ -12,12 +12,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import dev.alvr.katana.core.ui.theme.KatanaTheme
 
 @Composable
 internal fun Lists(
@@ -30,14 +29,14 @@ internal fun Lists(
 
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.spacing2),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.headlineSmall,
+                style = KatanaTheme.typography.headlineSmall,
             )
 
             Spacer(Modifier.weight(1f))
@@ -53,7 +52,7 @@ internal fun Lists(
         LazyRow(
             state = lazyListState,
             flingBehavior = rememberSnapFlingBehavior(lazyListState, SnapPosition.Start),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
         ) {
         }
     }

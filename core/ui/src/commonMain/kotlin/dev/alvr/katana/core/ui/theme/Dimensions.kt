@@ -1,10 +1,13 @@
 package dev.alvr.katana.core.ui.theme
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-data class Dimensions internal constructor(
+@Immutable
+@Suppress("UseDataClass")
+class Dimensions internal constructor(
     val spacing1: Dp = 4.dp,
     val spacing2: Dp = 8.dp,
     val spacing3: Dp = 12.dp,

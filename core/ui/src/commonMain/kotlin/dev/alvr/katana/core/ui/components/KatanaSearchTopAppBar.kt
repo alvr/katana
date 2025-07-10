@@ -8,7 +8,6 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -27,6 +26,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import dev.alvr.katana.core.common.empty
+import dev.alvr.katana.core.ui.theme.KatanaTheme
 
 @Composable
 fun KatanaSearchTopAppBar(
@@ -88,11 +88,9 @@ fun KatanaSearchTopAppBar(
         keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
         colors = TextFieldDefaults.colors(
-            cursorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = BackgroundOpacity),
+            cursorColor = KatanaTheme.colorScheme.onSurface.copy(alpha = KatanaTheme.alpha.alpha15),
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
         ),
     )
 }
-
-private const val BackgroundOpacity = 0.12f

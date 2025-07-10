@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -19,6 +18,7 @@ import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.navigation.KatanaNavigationBar
 import dev.alvr.katana.core.ui.components.navigation.KatanaNavigationBarType
 import dev.alvr.katana.core.ui.navigation.KatanaNavigationBarItem.Companion.hasRoute
+import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.noInsets
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.account.ui.navigation.account
@@ -80,7 +80,7 @@ internal fun Katana(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background),
+                    .background(KatanaTheme.colorScheme.background),
             )
         }
     }
