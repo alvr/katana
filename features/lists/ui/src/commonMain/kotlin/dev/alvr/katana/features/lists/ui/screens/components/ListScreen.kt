@@ -15,8 +15,8 @@ import dev.alvr.katana.core.ui.components.KatanaErrorState
 import dev.alvr.katana.core.ui.components.home.KatanaHomeScaffold
 import dev.alvr.katana.core.ui.components.home.rememberKatanaHomeScaffoldState
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.viewmodel.CollectEffect
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
-import dev.alvr.katana.core.ui.viewmodel.collectEffect
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.resources.Res
@@ -45,7 +45,7 @@ internal fun ListScreen(
 
     val state by viewModel.collectAsState()
     val onIntent by rememberUpdatedState(viewModel::intent)
-    viewModel.collectEffect { effect ->
+    viewModel.CollectEffect { effect ->
         when (effect) {
             ListsEffect.AddPlusOneFailure -> TODO()
             ListsEffect.LoadingListsFailure -> TODO()
