@@ -1,21 +1,29 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "assignees": [
-        "alvr",
-    ],
-    "baseBranches": [
-        "develop",
-    ],
     "extends": [
         "config:base",
         ":disableDependencyDashboard",
         "helpers:pinGitHubActionDigests",
     ],
-    "rebaseWhen": "behind-base-branch",
-    "recreateWhen": "never",
+    "baseBranches": [
+        "develop",
+    ],
+    "assignees": [
+        "alvr",
+    ],
     "reviewers": [
         "alvr",
     ],
+    "logLevel": "warn",
+    "onboarding": false,
+    "prConcurrentLimit": 5,
+    "prHourlyLimit": 3,
+    "enabledManagers": [
+        "gradle",
+        "github-actions",
+    ],
+    "rebaseWhen": "behind-base-branch",
+    "recreateWhen": "never",
     "packageRules": [
         {
             "groupName": "Kotlin Dependants",
@@ -29,6 +37,7 @@
             "matchPackagePatterns": [
                 "org.jetbrains.kotlin.*",
             ],
+            "matchManagers": ["gradle"],
         },
         {
             "groupName": "Koin",
@@ -36,6 +45,7 @@
             "matchPackagePrefixes": [
                 "io.insert-koin",
             ],
+            "matchManagers": ["gradle"],
         },
         {
             "groupName": "Kotest",
@@ -44,6 +54,7 @@
                 "io.kotest",
                 "io.kotest.extensions",
             ],
+            "matchManagers": ["gradle"],
         },
         {
             "groupName": "Apollo",
@@ -51,6 +62,7 @@
             "matchPackagePatterns": [
                 "com.apollographql.*",
             ],
+            "matchManagers": ["gradle"]
         },
         {
             "groupName": "GitHub Actions",
@@ -73,4 +85,7 @@
             ],
         },
     ],
+    "gradle": {
+        "ignoreGradleLockFiles": true,
+    },
 }
