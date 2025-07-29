@@ -14,7 +14,6 @@
     "reviewers": [
         "alvr",
     ],
-    "logLevel": "warn",
     "onboarding": false,
     "prConcurrentLimit": 5,
     "prHourlyLimit": 3,
@@ -85,7 +84,4 @@
             ],
         },
     ],
-    "gradle": {
-        "ignoreGradleLockFiles": true,
-    },
 }
