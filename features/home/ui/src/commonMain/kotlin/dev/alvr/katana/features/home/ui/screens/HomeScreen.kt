@@ -32,8 +32,8 @@ import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.utils.contentPadding
 import dev.alvr.katana.core.ui.utils.noInsets
+import dev.alvr.katana.core.ui.viewmodel.CollectEffect
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
-import dev.alvr.katana.core.ui.viewmodel.collectEffect
 import dev.alvr.katana.features.home.ui.navigation.HomeNavigator
 import dev.alvr.katana.features.home.ui.resources.Res
 import dev.alvr.katana.features.home.ui.resources.error_fetch_user_id
@@ -61,7 +61,7 @@ internal fun HomeScreen(
     val currentTab by remember { derivedStateOf { pagerState.currentPage } }
 
     val uiState by viewModel.collectAsState()
-    viewModel.collectEffect { effect ->
+    viewModel.CollectEffect { effect ->
         when (effect) {
             HomeEffect.SaveTokenFailure -> snackbarHostState.showSnackbar(Res.string.error_save_token)
             HomeEffect.SaveUserIdFailure -> snackbarHostState.showSnackbar(Res.string.error_fetch_user_id)
