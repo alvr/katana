@@ -11,12 +11,12 @@ runs:
   using: composite
   steps:
     - name: Setup Java
-      uses: actions/setup-java@e9343db97e09d87a3c50e544105d99fe912c204b
+      uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
       with:
         distribution: zulu
         java-version: 21
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3
+      uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
       with:
         add-job-summary-as-pr-comment: on-failure
         artifact-retention-days: 7

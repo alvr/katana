@@ -14,7 +14,6 @@
     "reviewers": [
         "alvr",
     ],
-    "onboarding": false,
     "prConcurrentLimit": 5,
     "prHourlyLimit": 3,
     "enabledManagers": [
@@ -61,18 +60,7 @@
             "matchPackagePatterns": [
                 "com.apollographql.*",
             ],
-            "matchManagers": ["gradle"]
-        },
-        {
-            "groupName": "GitHub Actions",
-            "groupSlug": "actions",
-            "matchManagers": [
-                "github-actions"
-            ],
-            matchUpdateTypes: [
-                "digest",
-                "pinDigest",
-            ],
+            "matchManagers": ["gradle"],
         },
         {
             "automerge": false,
