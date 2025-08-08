@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Stale Jobs
-        uses: styfle/cancel-workflow-action@85880fa0301c86cca9da44039ee3bb12d3bedbfa
+        uses: styfle/cancel-workflow-action@bdaa46e4662006504ca6b0cfb7488010126dc98c
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -34,11 +34,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
         with:
           fetch-depth: 0
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@0bdd871935719febd78681f197cd39af5b6e16a6
+        uses: gradle/actions/wrapper-validation@017a9effdb900e5b5b2fddfb590a105619dca3c3
 
   assemble:
     name: Assembling
@@ -46,7 +46,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -56,14 +56,14 @@ jobs:
       - name: Assemble Katana
         run: ./gradlew :app:assembleDebug --no-daemon --stacktrace
       - name: Upload debug artifacts
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b
+        uses: actions/upload-artifact@de65e23aa2b7e23d713bb51fbfcb6d502f8667d8
         with:
           name: Katana v${{ github.run_number }}
           path: |
             ${{ vars.ANDROID_DEBUG_APK }}
           retention-days: 7
       - name: Upload compose reports artifact
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b
+        uses: actions/upload-artifact@de65e23aa2b7e23d713bb51fbfcb6d502f8667d8
         if: always()
         with:
           name: compose-reports
@@ -80,7 +80,7 @@ jobs:
       security-events: write
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -90,7 +90,7 @@ jobs:
       - name: Run detekt
         run: ./gradlew detektAll lintDebug --no-daemon --stacktrace
       - name: Upload static reports artifact
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b
+        uses: actions/upload-artifact@de65e23aa2b7e23d713bb51fbfcb6d502f8667d8
         with:
           name: static-report
           path: |
@@ -98,7 +98,7 @@ jobs:
             **/build/reports/lint-results-debug.xml
           retention-days: 1
       - name: Analyze detekt report
-        uses: github/codeql-action/upload-sarif@48ab28a6f5dbc2a99bf1e0131198dd8f1df78169
+        uses: github/codeql-action/upload-sarif@4474150eef8c855ab74a7f19f3ae525e469d2de6
         with:
           sarif_file: build/reports/detekt/detekt.sarif
           checkout_path: ${{ github.workspace }}
@@ -108,7 +108,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -118,7 +118,7 @@ jobs:
       - name: Run unit tests
         run: ./gradlew :koverXmlReport :koverVerify --no-daemon --stacktrace
       - name: Upload tests reports artifact
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b
+        uses: actions/upload-artifact@de65e23aa2b7e23d713bb51fbfcb6d502f8667d8
         with:
           name: tests-reports
           path: |
@@ -126,7 +126,7 @@ jobs:
             **/build/reports/tests/testDebugUnitTest
           retention-days: 7
       - name: Upload report to Codecov
-        uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303
+        uses: codecov/codecov-action@2db07e317924c76f654a414629d71c65876882e2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build/reports/kover/report.xml
@@ -140,7 +140,7 @@ jobs:
     needs: [ static-analysis, unit-tests ]
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -148,7 +148,7 @@ jobs:
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Decode keystore
-        uses: timheuer/base64-to-file@784a1a4a994315802b7d8e2084e116e783d157be
+        uses: timheuer/base64-to-file@604a8926a81a2da120d09b06bb76da9bba5aee6e
         with:
           fileDir: .
           fileName: ${{ secrets.SIGNING_FILE }}
@@ -166,7 +166,7 @@ jobs:
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
         run: ./gradlew :app:assembleBeta -Pkatana.flavor=beta --no-daemon --stacktrace
       - name: Publish beta APK to TestApp.io
-        uses: testappio/github-action@57d81be5051e10ea7c07da5730b2eaae1b9b1fa1
+        uses: testappio/github-action@8fa3853470e3c8c278f928c04d0691400d25fd4a
         with:
           api_token: ${{ secrets.TESTAPPIO_API_TOKEN }}
           app_id: ${{ secrets.TESTAPPIO_APP_ID }}
@@ -182,7 +182,7 @@ jobs:
     needs: [ static-analysis, unit-tests ]
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
         with:
           fetch-depth: 0
       - name: Common Steps
@@ -190,7 +190,7 @@ jobs:
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Decode keystore
-        uses: timheuer/base64-to-file@784a1a4a994315802b7d8e2084e116e783d157be
+        uses: timheuer/base64-to-file@604a8926a81a2da120d09b06bb76da9bba5aee6e
         with:
           fileDir: .
           fileName: ${{ secrets.SIGNING_FILE }}
@@ -203,7 +203,7 @@ jobs:
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
         run: ./gradlew :app:assembleRelease :app:bundleRelease -Pkatana.flavor=release --no-daemon --stacktrace
       - name: Publish production AAB to Google Play
-        uses: r0adkll/upload-google-play@935ef9c68bb393a8e6116b1575626a7f5be3a7fb
+        uses: r0adkll/upload-google-play@7b366af2a4b130cb9c435a692fc093e138a2523d
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
           packageName: dev.alvr.katana
@@ -212,7 +212,7 @@ jobs:
           status: completed
           mappingFile: app/build/outputs/mapping/release/mapping.txt
       - name: Create Release
-        uses: softprops/action-gh-release@7b4da11513bf3f43f9999e90eabced41ab8bb048
+        uses: softprops/action-gh-release@f82d31e53e61a962573dd0c5fcd6b446ca78871f
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
