@@ -1,6 +1,7 @@
 package dev.alvr.katana.features.lists.ui.viewmodel
 
 import androidx.compose.runtime.Stable
+import androidx.lifecycle.viewModelScope
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.domain.usecases.FlowEitherUseCase
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
@@ -14,6 +15,11 @@ import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.entities.mappers.toMediaList
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 @Stable
 internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
@@ -22,10 +28,13 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
 ) : KatanaViewModel<ListsState<I>, ListsEffect, ListsIntent>(ListsState(type)) {
     protected abstract val observeListUseCase: FlowEitherUseCase<Unit, MediaCollection<E>>
 
+    private val searchFlow = MutableStateFlow(String.empty)
+
     protected abstract fun List<MediaListGroup<E>>.entryMap(): ListEntries<I>
 
     override fun init() {
         observeLists()
+        observeSearch()
     }
 
     override fun handleIntent(intent: ListsIntent) {
@@ -74,6 +83,17 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
         )
     }
 
+    @OptIn(FlowPreview::class)
+    private fun observeSearch() {
+        viewModelScope.launch {
+            searchFlow
+                .debounce(SEARCH_DEBOUNCE)
+                .collect { query ->
+                    state { copy(searchQuery = query) }
+                }
+        }
+    }
+
     private fun addPlusOne(id: ItemEntryId) {
         val listItem = currentState.entries[id] ?: return
         val entry = listItem.toMediaList().copy(progress = listItem.progress.inc())
@@ -95,8 +115,8 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     }
 
     private fun search(search: String) {
-        state {
-            copy(searchQuery = search)
-        }
+        searchFlow.update { search }
     }
 }
+
+private const val SEARCH_DEBOUNCE = 250L

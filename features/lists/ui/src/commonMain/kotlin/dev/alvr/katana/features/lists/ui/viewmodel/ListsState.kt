@@ -14,14 +14,14 @@ import kotlinx.collections.immutable.toImmutableMap
 internal data class ListsState<T : MediaListItem>(
     val type: ListType,
     val selectedList: String = String.empty,
-    private val collection: ListsCollection<T> = persistentMapOf(),
-    private val searchQuery: String = String.empty,
     val error: Boolean = false,
     val loading: Boolean = true,
+    private val collection: ListsCollection<T> = persistentMapOf(),
+    private val searchQuery: String = String.empty,
 ) : UiState {
-    private val originalEntries get() = collection.getOrElse(selectedList) { persistentMapOf() }
+    private val originalEntries = collection.getOrElse(selectedList) { persistentMapOf() }
 
-    val entries get() = if (searchQuery.isEmpty()) {
+    val entries = if (searchQuery.isEmpty()) {
         originalEntries
     } else {
         originalEntries.filter { (_, item) ->
@@ -29,12 +29,38 @@ internal data class ListsState<T : MediaListItem>(
         }.toImmutableMap()
     }
 
-    val items get() = entries.values.toImmutableList()
-    val empty get() = entries.isEmpty()
-    val lists get() = collection.toUserList()
+    val items = entries.values.toImmutableList()
+    val empty = items.isEmpty()
+    val lists = collection.toUserList()
 
     enum class ListType {
         Anime,
         Manga,
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as ListsState<*>
+
+        if (error != other.error) return false
+        if (loading != other.loading) return false
+        if (type != other.type) return false
+        if (selectedList != other.selectedList) return false
+        if (collection != other.collection) return false
+        if (items != other.items) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = error.hashCode()
+        result = 31 * result + loading.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + selectedList.hashCode()
+        result = 31 * result + collection.hashCode()
+        result = 31 * result + items.hashCode()
+        return result
     }
 }

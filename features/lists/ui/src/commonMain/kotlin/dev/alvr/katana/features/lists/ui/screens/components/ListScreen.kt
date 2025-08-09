@@ -110,7 +110,8 @@ internal fun ListScreen(
             else -> MediaList(
                 lazyGridState = lazyGridState,
                 modifier = modifier.padding(paddingValues),
-                listsState = state,
+                items = state.items,
+                loading = state.loading,
                 onRefresh = { onIntent(ListsIntent.Refresh) },
                 onAddPlusOne = { entryId -> onIntent(ListsIntent.AddPlusOne(entryId)) },
                 onEditEntry = onEditEntry,
