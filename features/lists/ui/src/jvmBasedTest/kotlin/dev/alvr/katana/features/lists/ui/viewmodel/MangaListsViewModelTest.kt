@@ -3,12 +3,14 @@ package dev.alvr.katana.features.lists.ui.viewmodel
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.core.common.empty
+import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.tests.coEitherJustRun
 import dev.alvr.katana.core.tests.ui.FinalizationType
 import dev.alvr.katana.core.tests.ui.TestKatanaBaseViewModelScope
 import dev.alvr.katana.core.tests.ui.test
 import dev.alvr.katana.features.lists.domain.failures.ListsFailure
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.MediaCollection
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
@@ -21,8 +23,10 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -54,11 +58,9 @@ internal class MangaListsViewModelTest : FreeSpec() {
                     viewModel.test {
                         expectState {
                             empty.shouldBeTrue()
+                            items.shouldBeEmpty()
 
-                            copy(
-                                loading = false,
-                                items = persistentListOf(),
-                            )
+                            copy(loading = false)
                         }
                     }
 
@@ -124,6 +126,7 @@ internal class MangaListsViewModelTest : FreeSpec() {
                 viewModel.test {
                     expectState { currentState }
                     intent(ListsIntent.AddPlusOne(mangaListItem1.entryId))
+                    expectEffect(ListsEffect.AddPlusOneSuccess)
                 }
 
                 coVerify(exactly = 1) { observeManga() }
@@ -154,7 +157,7 @@ internal class MangaListsViewModelTest : FreeSpec() {
 
                 viewModel.test {
                     skipItems(1)
-                    intent(ListsIntent.AddPlusOne(1))
+                    intent(ListsIntent.AddPlusOne(ItemEntryId(1)))
                 }
 
                 coVerify(exactly = 1) { observeManga() }
@@ -172,10 +175,9 @@ internal class MangaListsViewModelTest : FreeSpec() {
                     currentState.empty.shouldBeFalse()
                     intent(ListsIntent.SelectList("MyCustomMangaList2"))
                     expectState {
-                        copy(
-                            selectedList = "MyCustomMangaList2",
-                            items = persistentListOf(mangaListItem2),
-                        )
+                        items shouldBe persistentListOf(mangaListItem2)
+
+                        copy(selectedList = "MyCustomMangaList2")
                     }
                 }
 
@@ -192,10 +194,11 @@ internal class MangaListsViewModelTest : FreeSpec() {
 
                     expectState {
                         empty.shouldBeTrue()
+                        items.shouldBeEmpty()
+
                         copy(
                             loading = false,
                             selectedList = "NonExistent Manga List",
-                            items = persistentListOf(),
                         )
                     }
                 }
@@ -215,10 +218,11 @@ internal class MangaListsViewModelTest : FreeSpec() {
                         intent(ListsIntent.Search(text))
                         expectState {
                             empty.shouldBeTrue()
+                            items shouldBe result
 
                             copy(
                                 loading = false,
-                                items = result,
+                                searchQuery = text,
                             )
                         }
                     }
@@ -271,10 +275,11 @@ internal class MangaListsViewModelTest : FreeSpec() {
 
                     expectState { copy(loading = true) }
                     expectState {
+                        empty.shouldBeTrue()
+                        items.shouldBeEmpty()
 
                         copy(
                             collection = persistentMapOf(),
-                            items = persistentListOf(),
                             selectedList = String.empty,
                             error = true,
                             loading = false,
@@ -315,10 +320,15 @@ internal class MangaListsViewModelTest : FreeSpec() {
 
     private suspend fun TestKatanaBaseViewModelScope<MangaState, *, *>.expectStateWithLists() {
         expectState {
+            items shouldBe persistentListOf(mangaListItem1)
+
             copy(
                 loading = false,
                 selectedList = "MyCustomMangaList",
-                items = persistentListOf(mangaListItem1),
+                collection = persistentMapOf(
+                    "MyCustomMangaList" to persistentMapOf(ItemEntryId(Int.zero) to mangaListItem1),
+                    "MyCustomMangaList2" to persistentMapOf(ItemEntryId(Int.zero) to mangaListItem2),
+                ),
                 error = false,
             )
         }

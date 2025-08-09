@@ -1,20 +1,18 @@
 package dev.alvr.katana.features.lists.ui.viewmodel
 
 import androidx.compose.runtime.Stable
-import co.touchlab.kermit.Logger
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.domain.usecases.FlowEitherUseCase
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.MediaCollection
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
 import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCase
+import dev.alvr.katana.features.lists.ui.entities.ListEntries
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.entities.mappers.toMediaList
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 
 @Stable
@@ -24,7 +22,7 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
 ) : KatanaViewModel<ListsState<I>, ListsEffect, ListsIntent>(ListsState(type)) {
     protected abstract val observeListUseCase: FlowEitherUseCase<Unit, MediaCollection<E>>
 
-    protected abstract fun List<MediaListGroup<E>>.entryMap(): ImmutableList<I>
+    protected abstract fun List<MediaListGroup<E>>.entryMap(): ListEntries<I>
 
     override fun init() {
         observeLists()
@@ -40,10 +38,8 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     }
 
     private fun observeLists() {
-        state {
-            Logger.d("Loading lists")
-            copy(loading = true)
-        }
+        state { copy(loading = true) }
+
         execute(
             useCase = observeListUseCase,
             params = Unit,
@@ -51,7 +47,6 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
                 state {
                     copy(
                         collection = persistentMapOf(),
-                        items = persistentListOf(),
                         selectedList = String.empty,
                         error = true,
                         loading = false,
@@ -70,7 +65,6 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
 
                     copy(
                         collection = collection,
-                        items = collection.getOrElse(selectedList) { persistentListOf() },
                         selectedList = selectedList,
                         error = false,
                         loading = false,
@@ -80,14 +74,14 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
         )
     }
 
-    private fun addPlusOne(id: Int) {
-        val listItem = currentState.items.firstOrNull { it.entryId == id } ?: return
+    private fun addPlusOne(id: ItemEntryId) {
+        val listItem = currentState.entries[id] ?: return
         val entry = listItem.toMediaList().copy(progress = listItem.progress.inc())
 
         execute(
             useCase = updateListUseCase,
             params = entry,
-            onSuccess = { /* no-op */ },
+            onSuccess = { effect(ListsEffect.AddPlusOneSuccess) },
             onFailure = { effect(ListsEffect.AddPlusOneFailure) },
         )
     }
@@ -95,7 +89,6 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     private fun selectList(name: String) {
         state {
             copy(
-                items = collection.getOrElse(name) { persistentListOf() },
                 selectedList = name,
             )
         }
@@ -103,11 +96,7 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
 
     private fun search(search: String) {
         state {
-            val filtered = entries.filter { item ->
-                item.title.contains(search, ignoreCase = true)
-            }.toImmutableList()
-
-            copy(items = filtered)
+            copy(searchQuery = search)
         }
     }
 }

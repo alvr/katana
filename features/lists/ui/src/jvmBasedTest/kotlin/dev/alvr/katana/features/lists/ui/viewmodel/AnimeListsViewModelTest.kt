@@ -3,12 +3,14 @@ package dev.alvr.katana.features.lists.ui.viewmodel
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.core.common.empty
+import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.tests.coEitherJustRun
 import dev.alvr.katana.core.tests.ui.FinalizationType
 import dev.alvr.katana.core.tests.ui.TestKatanaBaseViewModelScope
 import dev.alvr.katana.core.tests.ui.test
 import dev.alvr.katana.features.lists.domain.failures.ListsFailure
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.MediaCollection
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
@@ -21,8 +23,10 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -54,11 +58,9 @@ internal class AnimeListsViewModelTest : FreeSpec() {
                     viewModel.test {
                         expectState {
                             empty.shouldBeTrue()
+                            items.shouldBeEmpty()
 
-                            copy(
-                                loading = false,
-                                items = persistentListOf(),
-                            )
+                            copy(loading = false)
                         }
                     }
 
@@ -124,6 +126,7 @@ internal class AnimeListsViewModelTest : FreeSpec() {
                 viewModel.test {
                     skipItems(1)
                     intent(ListsIntent.AddPlusOne(animeListItem1.entryId))
+                    expectEffect(ListsEffect.AddPlusOneSuccess)
                 }
 
                 coVerify(exactly = 1) { observeAnime() }
@@ -154,7 +157,7 @@ internal class AnimeListsViewModelTest : FreeSpec() {
 
                 viewModel.test {
                     skipItems(1)
-                    intent(ListsIntent.AddPlusOne(1))
+                    intent(ListsIntent.AddPlusOne(ItemEntryId(1)))
                 }
 
                 coVerify(exactly = 1) { observeAnime() }
@@ -172,10 +175,9 @@ internal class AnimeListsViewModelTest : FreeSpec() {
                     currentState.empty.shouldBeFalse()
                     intent(ListsIntent.SelectList("MyCustomAnimeList2"))
                     expectState {
-                        copy(
-                            selectedList = "MyCustomAnimeList2",
-                            items = persistentListOf(animeListItem2),
-                        )
+                        items shouldBe persistentListOf(animeListItem2)
+
+                        copy(selectedList = "MyCustomAnimeList2")
                     }
                 }
 
@@ -192,10 +194,11 @@ internal class AnimeListsViewModelTest : FreeSpec() {
 
                     expectState {
                         empty.shouldBeTrue()
+                        items.shouldBeEmpty()
+
                         copy(
                             loading = false,
                             selectedList = "NonExistent Anime List",
-                            items = persistentListOf(),
                         )
                     }
                 }
@@ -215,10 +218,11 @@ internal class AnimeListsViewModelTest : FreeSpec() {
                         intent(ListsIntent.Search(text))
                         expectState {
                             empty.shouldBeTrue()
+                            items shouldBe result
 
                             copy(
                                 loading = false,
-                                items = result,
+                                searchQuery = text,
                             )
                         }
                     }
@@ -271,10 +275,11 @@ internal class AnimeListsViewModelTest : FreeSpec() {
 
                     expectState { copy(loading = true) }
                     expectState {
+                        empty.shouldBeTrue()
+                        items.shouldBeEmpty()
 
                         copy(
                             collection = persistentMapOf(),
-                            items = persistentListOf(),
                             selectedList = String.empty,
                             error = true,
                             loading = false,
@@ -315,10 +320,15 @@ internal class AnimeListsViewModelTest : FreeSpec() {
 
     private suspend fun TestKatanaBaseViewModelScope<AnimeState, *, *>.expectStateWithLists() {
         expectState {
+            items shouldBe persistentListOf(animeListItem1)
+
             copy(
                 loading = false,
                 selectedList = "MyCustomAnimeList",
-                items = persistentListOf(animeListItem1),
+                collection = persistentMapOf(
+                    "MyCustomAnimeList" to persistentMapOf(ItemEntryId(Int.zero) to animeListItem1),
+                    "MyCustomAnimeList2" to persistentMapOf(ItemEntryId(Int.zero) to animeListItem2),
+                ),
                 error = false,
             )
         }
