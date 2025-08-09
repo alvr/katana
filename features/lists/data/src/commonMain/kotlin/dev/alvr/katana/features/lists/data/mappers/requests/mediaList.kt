@@ -5,7 +5,7 @@ import dev.alvr.katana.features.lists.data.MediaListEntriesMutation
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 
 internal fun MediaList.toMutation() = MediaListEntriesMutation(
-    id = id,
+    id = id.value,
     score = score.optional,
     progress = progress.optional,
     progressVolumes = progressVolumes.optional,

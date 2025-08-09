@@ -14,7 +14,6 @@ import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
-import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
@@ -31,7 +30,6 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.common
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.jvm
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.native
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
-import org.jetbrains.kotlin.gradle.targets.js.npm.buildNpmVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.konan.util.visibleName
 
@@ -114,14 +112,12 @@ internal fun ExtensionContainer.commonExtensions() {
     configure<JavaPluginExtension> {
         toolchain {
             languageVersion = JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr)
-            vendor = JvmVendorSpec.AZUL
         }
     }
 
     configure<KotlinProjectExtension> {
         jvmToolchain {
             languageVersion = JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr)
-            vendor = JvmVendorSpec.AZUL
         }
     }
 }

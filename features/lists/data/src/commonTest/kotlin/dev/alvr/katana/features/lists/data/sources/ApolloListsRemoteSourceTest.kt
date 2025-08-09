@@ -29,6 +29,8 @@ import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
 import dev.alvr.katana.features.lists.domain.failures.ListsFailure
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
+import dev.alvr.katana.features.lists.domain.models.ItemMediaId
 import dev.alvr.katana.features.lists.domain.models.entries.CommonMediaEntry
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.mokkery.answering.returns
@@ -176,7 +178,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
                         with(entry.list) {
-                            id shouldBe Int.zero
+                            id shouldBe ItemEntryId(Int.zero)
                             score shouldBe Double.zero
                             progress shouldBe Int.zero
                             progressVolumes.shouldBeNull()
@@ -193,7 +195,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                             shouldNotBeTypeOf<MediaEntry>()
                             shouldNotBeTypeOf<MediaEntry.Manga>()
 
-                            id shouldBe Int.zero
+                            id shouldBe ItemMediaId(Int.zero)
                             title.shouldBeEmpty()
                             coverImage.shouldBeEmpty()
                             format shouldBe CommonMediaEntry.Format.UNKNOWN
@@ -264,7 +266,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
                         with(entry.list) {
-                            id shouldBe 100
+                            id shouldBe ItemEntryId(100)
                             score shouldBe 7.3
                             progress shouldBe 12
                             progressVolumes.shouldBeNull()
@@ -281,7 +283,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                             shouldNotBeTypeOf<MediaEntry>()
                             shouldNotBeTypeOf<MediaEntry.Manga>()
 
-                            id shouldBe 100
+                            id shouldBe ItemMediaId(100)
                             title shouldBe "My anime entry"
                             coverImage shouldBe "https://placehold.co/128x256"
                             format shouldBe CommonMediaEntry.Format.TV
@@ -439,7 +441,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
                         with(entry.list) {
-                            id shouldBe Int.zero
+                            id shouldBe ItemEntryId(Int.zero)
                             score shouldBe Double.zero
                             progress shouldBe Int.zero
                             progressVolumes.shouldBeNull()
@@ -456,7 +458,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                             shouldNotBeTypeOf<MediaEntry>()
                             shouldNotBeTypeOf<MediaEntry.Anime>()
 
-                            id shouldBe Int.zero
+                            id shouldBe ItemMediaId(Int.zero)
                             title.shouldBeEmpty()
                             coverImage.shouldBeEmpty()
                             format shouldBe CommonMediaEntry.Format.UNKNOWN
@@ -525,7 +527,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         val entry = lists.first().entries.shouldHaveSize(1).first()
 
                         with(entry.list) {
-                            id shouldBe 100
+                            id shouldBe ItemEntryId(100)
                             score shouldBe 7.3
                             progress shouldBe 12
                             progressVolumes shouldBe 1
@@ -542,7 +544,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                             shouldNotBeTypeOf<MediaEntry>()
                             shouldNotBeTypeOf<MediaEntry.Anime>()
 
-                            id shouldBe 100
+                            id shouldBe ItemMediaId(100)
                             title shouldBe "My manga entry"
                             coverImage shouldBe "https://placehold.co/128x256"
                             format shouldBe CommonMediaEntry.Format.NOVEL

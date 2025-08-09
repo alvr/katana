@@ -5,10 +5,8 @@ package dev.alvr.katana.buildlogic.common
 import dev.alvr.katana.buildlogic.isRelease
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestReport
-import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType

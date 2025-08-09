@@ -16,6 +16,8 @@ import dev.alvr.katana.core.remote.type.buildMediaListTypeOptions
 import dev.alvr.katana.core.remote.type.buildMediaTitle
 import dev.alvr.katana.core.remote.type.buildUser
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
+import dev.alvr.katana.features.lists.domain.models.ItemMediaId
 import dev.alvr.katana.features.lists.domain.models.entries.CommonMediaEntry
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import io.kotest.core.spec.style.FreeSpec
@@ -272,7 +274,7 @@ internal class MediaListMapperTest : FreeSpec({
             }.invoke<MediaEntry.Anime>(MediaType.ANIME).forAll { list ->
                 list.entries.forAll { entry ->
                     with(entry.list) {
-                        id shouldBe 100
+                        id shouldBe ItemEntryId(100)
                         score shouldBe 7.3
                         progress shouldBe 12
                         progressVolumes.shouldBeNull()
@@ -290,7 +292,7 @@ internal class MediaListMapperTest : FreeSpec({
                         shouldNotBeTypeOf<MediaEntry>()
                         shouldNotBeTypeOf<MediaEntry.Manga>()
 
-                        id shouldBe 100
+                        id shouldBe ItemMediaId(100)
                         title shouldBe "My anime entry"
                         coverImage shouldBe "https://placehold.co/128x256"
                         format shouldBe CommonMediaEntry.Format.TV
@@ -339,7 +341,7 @@ internal class MediaListMapperTest : FreeSpec({
             }.invoke<MediaEntry.Anime>(MediaType.ANIME).forAll { list ->
                 list.entries.forAll { entry ->
                     with(entry.list) {
-                        id shouldBe Int.zero
+                        id shouldBe ItemEntryId(Int.zero)
                         score shouldBe Double.zero
                         progress shouldBe Int.zero
                         progressVolumes.shouldBeNull()
@@ -357,7 +359,7 @@ internal class MediaListMapperTest : FreeSpec({
                         shouldNotBeTypeOf<MediaEntry>()
                         shouldNotBeTypeOf<MediaEntry.Manga>()
 
-                        id shouldBe Int.zero
+                        id shouldBe ItemMediaId(Int.zero)
                         title.shouldBeEmpty()
                         coverImage.shouldBeEmpty()
                         format shouldBe CommonMediaEntry.Format.UNKNOWN
@@ -558,7 +560,7 @@ internal class MediaListMapperTest : FreeSpec({
             }.invoke<MediaEntry.Manga>(MediaType.MANGA).forAll { list ->
                 list.entries.forAll { entry ->
                     with(entry.list) {
-                        id shouldBe 100
+                        id shouldBe ItemEntryId(100)
                         score shouldBe 7.3
                         progress shouldBe 12
                         progressVolumes shouldBe 1
@@ -576,7 +578,7 @@ internal class MediaListMapperTest : FreeSpec({
                         shouldNotBeTypeOf<MediaEntry>()
                         shouldNotBeTypeOf<MediaEntry.Anime>()
 
-                        id shouldBe 100
+                        id shouldBe ItemMediaId(100)
                         title shouldBe "My manga entry"
                         coverImage shouldBe "https://placehold.co/128x256"
                         format shouldBe CommonMediaEntry.Format.NOVEL
@@ -623,7 +625,7 @@ internal class MediaListMapperTest : FreeSpec({
             }.invoke<MediaEntry.Manga>(MediaType.MANGA).forAll { list ->
                 list.entries.forAll { entry ->
                     with(entry.list) {
-                        id shouldBe Int.zero
+                        id shouldBe ItemEntryId(Int.zero)
                         score shouldBe Double.zero
                         progress shouldBe Int.zero
                         progressVolumes.shouldBeNull()
@@ -641,7 +643,7 @@ internal class MediaListMapperTest : FreeSpec({
                         shouldNotBeTypeOf<MediaEntry>()
                         shouldNotBeTypeOf<MediaEntry.Anime>()
 
-                        id shouldBe Int.zero
+                        id shouldBe ItemMediaId(Int.zero)
                         title.shouldBeEmpty()
                         coverImage.shouldBeEmpty()
                         format shouldBe CommonMediaEntry.Format.UNKNOWN

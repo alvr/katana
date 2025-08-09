@@ -4,10 +4,11 @@ import androidx.navigation.NavHostController
 import co.touchlab.kermit.Logger
 import dev.alvr.katana.core.ui.navigation.KatanaNavigator
 import dev.alvr.katana.core.ui.navigation.overridden
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 
 interface MangaListsNavigator : KatanaNavigator {
-    fun mangaEntryDetails(id: Int)
-    fun editMangaEntry(id: Int)
+    fun mangaEntryDetails(id: ItemEntryId)
+    fun editMangaEntry(id: ItemEntryId)
 }
 
 private class KatanaMangaListsNavigator(
@@ -17,12 +18,12 @@ private class KatanaMangaListsNavigator(
         overridden()
     }
 
-    override fun mangaEntryDetails(id: Int) {
-        Logger.d(LogTag) { "Entry details $id" }
+    override fun mangaEntryDetails(id: ItemEntryId) {
+        Logger.d(LogTag) { "Entry details ${id.value}" }
     }
 
-    override fun editMangaEntry(id: Int) {
-        Logger.d(LogTag) { "Edit entry $id" }
+    override fun editMangaEntry(id: ItemEntryId) {
+        Logger.d(LogTag) { "Edit entry ${id.value}" }
     }
 }
 

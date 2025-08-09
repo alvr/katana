@@ -4,6 +4,7 @@ import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.remote.type.MediaFormat
 import dev.alvr.katana.core.tests.random
+import dev.alvr.katana.features.lists.domain.models.ItemMediaId
 import dev.alvr.katana.features.lists.domain.models.entries.CommonMediaEntry
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import io.kotest.core.spec.style.FreeSpec
@@ -27,7 +28,7 @@ internal class AnimeEntryMapperTest : FreeSpec({
         entry.animeEntry().also { result ->
             result shouldBeEqual MediaEntry.Anime(
                 entry = CommonMediaEntry(
-                    id = Int.zero,
+                    id = ItemMediaId(Int.zero),
                     title = String.empty,
                     coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
@@ -59,7 +60,7 @@ internal class AnimeEntryMapperTest : FreeSpec({
         entry.animeEntry().also { result ->
             result shouldBeEqual MediaEntry.Anime(
                 entry = CommonMediaEntry(
-                    id = Int.zero,
+                    id = ItemMediaId(Int.zero),
                     title = String.empty,
                     coverImage = String.empty,
                     format = CommonMediaEntry.Format.UNKNOWN,
@@ -91,7 +92,7 @@ internal class AnimeEntryMapperTest : FreeSpec({
         entry.animeEntry().also { result ->
             result shouldBeEqual MediaEntry.Anime(
                 entry = CommonMediaEntry(
-                    id = Int.zero,
+                    id = ItemMediaId(Int.zero),
                     title = "One Piece",
                     coverImage = "https://placehold.co/128x256",
                     format = CommonMediaEntry.Format.ONA,

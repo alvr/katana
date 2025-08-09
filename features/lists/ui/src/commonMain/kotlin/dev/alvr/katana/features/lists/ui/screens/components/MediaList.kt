@@ -54,6 +54,7 @@ import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.format
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.utils.imageRequest
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.default_cover
@@ -68,9 +69,9 @@ import kotlinx.collections.immutable.ImmutableList
 internal fun MediaList(
     listsState: ListsState<out MediaListItem>,
     onRefresh: () -> Unit,
-    onAddPlusOne: (Int) -> Unit,
-    onEditEntry: (Int) -> Unit,
-    onEntryDetails: (Int) -> Unit,
+    onAddPlusOne: (ItemEntryId) -> Unit,
+    onEditEntry: (ItemEntryId) -> Unit,
+    onEntryDetails: (ItemEntryId) -> Unit,
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState = rememberLazyGridState(),
 ) {
@@ -96,9 +97,9 @@ private fun MediaList(
     lazyGridState: LazyGridState,
     items: ImmutableList<MediaListItem>,
     itemLoading: Boolean,
-    onAddPlusOne: (Int) -> Unit,
-    onEditEntry: (Int) -> Unit,
-    onEntryDetails: (Int) -> Unit,
+    onAddPlusOne: (ItemEntryId) -> Unit,
+    onEditEntry: (ItemEntryId) -> Unit,
+    onEntryDetails: (ItemEntryId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -111,7 +112,7 @@ private fun MediaList(
     ) {
         items(
             items = items,
-            key = { it.mediaId },
+            key = { it.mediaId.value },
         ) { item ->
             MediaListItem(
                 item = item,

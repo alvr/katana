@@ -1,10 +1,11 @@
 package dev.alvr.katana.features.lists.domain.models.lists
 
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 
 data class MediaList(
-    val id: Int,
+    val id: ItemEntryId,
     val score: Double,
     val progress: Int,
     val progressVolumes: Int?,

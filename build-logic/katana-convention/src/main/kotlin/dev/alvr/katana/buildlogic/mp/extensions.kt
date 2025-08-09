@@ -7,7 +7,6 @@ import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.NamedDomainObjectProvider
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl

@@ -1,5 +1,7 @@
 package dev.alvr.katana.features.lists.ui
 
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
+import dev.alvr.katana.features.lists.domain.models.ItemMediaId
 import dev.alvr.katana.features.lists.domain.models.entries.CommonMediaEntry
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
@@ -38,7 +40,7 @@ internal inline fun <reified T : MediaEntry> randomCollection(): List<MediaListG
 
 private val mediaListArb = arbitrary {
     MediaList(
-        id = Arb.int().next(),
+        id = ItemEntryId(Arb.int().next()),
         score = 0.0,
         progress = Arb.int().next(),
         progressVolumes = null,
@@ -54,7 +56,7 @@ private val mediaListArb = arbitrary {
 
 private val commonMediaEntryArb = arbitrary {
     CommonMediaEntry(
-        id = Arb.int().next(),
+        id = ItemMediaId(Arb.int().next()),
         title = Arb.string(minSize = 10).next(),
         coverImage = Arb.string().next(),
         format = Arb.enum<CommonMediaEntry.Format>().next(),
