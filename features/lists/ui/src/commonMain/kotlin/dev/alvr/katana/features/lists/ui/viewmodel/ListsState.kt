@@ -1,6 +1,7 @@
 package dev.alvr.katana.features.lists.ui.viewmodel
 
 import androidx.compose.runtime.Immutable
+import dev.alvr.katana.core.common.annotations.CoverageExcluded
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.ui.viewmodel.UiState
 import dev.alvr.katana.features.lists.ui.entities.ListsCollection
@@ -38,6 +39,7 @@ internal data class ListsState<T : MediaListItem>(
         Manga,
     }
 
+    @CoverageExcluded
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false
@@ -54,6 +56,7 @@ internal data class ListsState<T : MediaListItem>(
         return true
     }
 
+    @CoverageExcluded
     override fun hashCode(): Int {
         var result = error.hashCode()
         result = 31 * result + loading.hashCode()

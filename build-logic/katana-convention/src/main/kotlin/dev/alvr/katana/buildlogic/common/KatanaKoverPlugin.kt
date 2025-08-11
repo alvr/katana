@@ -111,6 +111,7 @@ internal class KatanaKoverPlugin : Plugin<Project> {
             annotatedBy(
                 "androidx.compose.runtime.Composable",
                 "androidx.compose.ui.tooling.preview.Preview",
+                "dev.alvr.katana.core.common.annotations.CoverageExcluded",
             )
             classes(classesExcludes)
             packages(packagesExcludes)
