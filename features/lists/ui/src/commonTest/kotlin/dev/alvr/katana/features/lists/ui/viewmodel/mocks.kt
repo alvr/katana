@@ -2,6 +2,8 @@ package dev.alvr.katana.features.lists.ui.viewmodel
 
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
+import dev.alvr.katana.features.lists.domain.models.ItemMediaId
 import dev.alvr.katana.features.lists.domain.models.entries.CommonMediaEntry
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
@@ -12,8 +14,8 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 
 internal val animeListItem1 = MediaListItem.AnimeListItem(
-    entryId = Int.zero,
-    mediaId = Int.zero,
+    entryId = ItemEntryId(Int.zero),
+    mediaId = ItemMediaId(Int.zero),
     title = "One Piece",
     score = Double.zero,
     format = MediaListItem.Format.OneShot,
@@ -31,8 +33,8 @@ internal val animeListItem1 = MediaListItem.AnimeListItem(
 )
 
 internal val animeListItem2 = MediaListItem.AnimeListItem(
-    entryId = Int.zero,
-    mediaId = Int.zero,
+    entryId = ItemEntryId(Int.zero),
+    mediaId = ItemMediaId(Int.zero),
     title = String.empty,
     score = Double.zero,
     format = MediaListItem.Format.OneShot,
@@ -53,8 +55,8 @@ internal val animeListItem2 = MediaListItem.AnimeListItem(
 )
 
 internal val mangaListItem1 = MediaListItem.MangaListItem(
-    entryId = Int.zero,
-    mediaId = Int.zero,
+    entryId = ItemEntryId(Int.zero),
+    mediaId = ItemMediaId(Int.zero),
     title = "One Piece",
     score = Double.zero,
     format = MediaListItem.Format.OneShot,
@@ -73,8 +75,8 @@ internal val mangaListItem1 = MediaListItem.MangaListItem(
 )
 
 internal val mangaListItem2 = MediaListItem.MangaListItem(
-    entryId = Int.zero,
-    mediaId = Int.zero,
+    entryId = ItemEntryId(Int.zero),
+    mediaId = ItemMediaId(Int.zero),
     title = String.empty,
     score = Double.zero,
     format = MediaListItem.Format.OneShot,
@@ -94,7 +96,7 @@ internal val mangaListItem2 = MediaListItem.MangaListItem(
 
 internal val animeMediaEntry1 = MediaListEntry(
     list = MediaList(
-        id = Int.zero,
+        id = ItemEntryId(Int.zero),
         score = Double.zero,
         progress = 233,
         progressVolumes = Int.zero,
@@ -108,7 +110,7 @@ internal val animeMediaEntry1 = MediaListEntry(
     ),
     entry = MediaEntry.Anime(
         entry = CommonMediaEntry(
-            id = Int.zero,
+            id = ItemMediaId(Int.zero),
             title = "One Piece",
             coverImage = String.empty,
             format = CommonMediaEntry.Format.ONE_SHOT,
@@ -120,7 +122,7 @@ internal val animeMediaEntry1 = MediaListEntry(
 
 internal val animeMediaEntry2 = MediaListEntry(
     list = MediaList(
-        id = Int.zero,
+        id = ItemEntryId(Int.zero),
         score = Double.zero,
         progress = 234,
         progressVolumes = Int.zero,
@@ -134,7 +136,7 @@ internal val animeMediaEntry2 = MediaListEntry(
     ),
     entry = MediaEntry.Anime(
         entry = CommonMediaEntry(
-            id = Int.zero,
+            id = ItemMediaId(Int.zero),
             title = String.empty,
             coverImage = String.empty,
             format = CommonMediaEntry.Format.ONE_SHOT,
@@ -149,7 +151,7 @@ internal val animeMediaEntry2 = MediaListEntry(
 
 internal val mangaMediaEntry1 = MediaListEntry(
     list = MediaList(
-        id = Int.zero,
+        id = ItemEntryId(Int.zero),
         score = Double.zero,
         progress = 233,
         progressVolumes = Int.zero,
@@ -163,7 +165,7 @@ internal val mangaMediaEntry1 = MediaListEntry(
     ),
     entry = MediaEntry.Manga(
         entry = CommonMediaEntry(
-            id = Int.zero,
+            id = ItemMediaId(Int.zero),
             title = "One Piece",
             coverImage = String.empty,
             format = CommonMediaEntry.Format.ONE_SHOT,
@@ -175,7 +177,7 @@ internal val mangaMediaEntry1 = MediaListEntry(
 
 internal val mangaMediaEntry2 = MediaListEntry(
     list = MediaList(
-        id = Int.zero,
+        id = ItemEntryId(Int.zero),
         score = Double.zero,
         progress = 234,
         progressVolumes = Int.zero,
@@ -189,7 +191,7 @@ internal val mangaMediaEntry2 = MediaListEntry(
     ),
     entry = MediaEntry.Manga(
         entry = CommonMediaEntry(
-            id = Int.zero,
+            id = ItemMediaId(Int.zero),
             title = String.empty,
             coverImage = String.empty,
             format = CommonMediaEntry.Format.ONE_SHOT,

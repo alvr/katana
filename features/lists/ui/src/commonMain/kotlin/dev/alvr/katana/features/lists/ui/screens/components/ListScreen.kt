@@ -9,6 +9,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.ui.components.KatanaEmptyState
 import dev.alvr.katana.core.ui.components.KatanaErrorState
@@ -17,6 +19,7 @@ import dev.alvr.katana.core.ui.components.home.rememberKatanaHomeScaffoldState
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.resources.Res
@@ -35,19 +38,21 @@ internal fun ListScreen(
     viewModel: ListsViewModel<out MediaEntry, out MediaListItem>,
     title: String,
     emptyStateRes: String,
-    onEditEntry: (Int) -> Unit,
-    onEntryDetails: (Int) -> Unit,
+    onEditEntry: (ItemEntryId) -> Unit,
+    onEntryDetails: (ItemEntryId) -> Unit,
     backContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val katanaScaffoldState = rememberKatanaHomeScaffoldState()
     val lazyGridState = rememberLazyGridState()
+    val haptics = LocalHapticFeedback.current
 
     val state by viewModel.collectAsState()
     val onIntent by rememberUpdatedState(viewModel::intent)
     viewModel.CollectEffect { effect ->
         when (effect) {
             ListsEffect.AddPlusOneFailure -> TODO()
+            ListsEffect.AddPlusOneSuccess -> haptics.performHapticFeedback(HapticFeedbackType.Confirm)
             ListsEffect.LoadingListsFailure -> TODO()
         }
     }
@@ -105,7 +110,8 @@ internal fun ListScreen(
             else -> MediaList(
                 lazyGridState = lazyGridState,
                 modifier = modifier.padding(paddingValues),
-                listsState = state,
+                items = state.items,
+                loading = state.loading,
                 onRefresh = { onIntent(ListsIntent.Refresh) },
                 onAddPlusOne = { entryId -> onIntent(ListsIntent.AddPlusOne(entryId)) },
                 onEditEntry = onEditEntry,

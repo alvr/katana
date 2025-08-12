@@ -4,6 +4,7 @@ import dev.alvr.katana.core.common.orZero
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListEntry
@@ -23,7 +24,7 @@ private fun <T : MediaEntry> MediaListCollectionQuery.Entry.toModel(type: MediaT
     with(mediaListEntry) {
         MediaListEntry(
             list = MediaList(
-                id = id,
+                id = ItemEntryId(id),
                 score = score,
                 progress = progress.orZero(),
                 progressVolumes = progressVolumes,

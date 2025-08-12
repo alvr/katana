@@ -2,6 +2,8 @@ package dev.alvr.katana.features.lists.ui.entities.mappers
 
 import dev.alvr.katana.core.common.noData
 import dev.alvr.katana.core.common.zero
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
+import dev.alvr.katana.features.lists.domain.models.ItemMediaId
 import dev.alvr.katana.features.lists.domain.models.entries.CommonMediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
@@ -18,8 +20,8 @@ import kotlinx.datetime.LocalDateTime
 internal class CommonListItemMapperTest : FreeSpec() {
 
     private val animeListItem = MediaListItem.AnimeListItem(
-        entryId = 1234,
-        mediaId = Arb.int().next(),
+        entryId = ItemEntryId(1234),
+        mediaId = ItemMediaId(Arb.int().next()),
         title = Arb.string().next(),
         score = 9.8,
         format = MediaListItem.Format.Tv,
@@ -36,8 +38,8 @@ internal class CommonListItemMapperTest : FreeSpec() {
         nextEpisode = null,
     )
     private val mangaListItem = MediaListItem.MangaListItem(
-        entryId = 5678,
-        mediaId = Arb.int().next(),
+        entryId = ItemEntryId(5678),
+        mediaId = ItemMediaId(Arb.int().next()),
         title = Arb.string().next(),
         score = 6.9,
         format = MediaListItem.Format.Manga,
@@ -56,7 +58,7 @@ internal class CommonListItemMapperTest : FreeSpec() {
     )
 
     private val animeMediaList = MediaList(
-        id = 1234,
+        id = ItemEntryId(1234),
         score = 9.8,
         progress = 132,
         progressVolumes = null,
@@ -69,7 +71,7 @@ internal class CommonListItemMapperTest : FreeSpec() {
         updatedAt = LocalDateTime(2022, 8, 14, 9, 0),
     )
     private val mangaMediaList = MediaList(
-        id = 5678,
+        id = ItemEntryId(5678),
         score = 6.9,
         progress = 46,
         progressVolumes = 12,

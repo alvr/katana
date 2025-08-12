@@ -7,6 +7,7 @@ import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.present
 import dev.alvr.katana.core.remote.type.FuzzyDateInput
 import dev.alvr.katana.features.lists.data.MediaListEntriesMutation
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.equals.shouldBeEqual
@@ -20,7 +21,7 @@ import kotlinx.datetime.toLocalDateTime
 internal class MediaListMapperTest : FreeSpec({
     "a MediaList with all values present" {
         MediaList(
-            id = Int.zero,
+            id = ItemEntryId(Int.zero),
             score = Double.zero,
             progress = Int.zero,
             progressVolumes = Int.zero,
@@ -55,7 +56,7 @@ internal class MediaListMapperTest : FreeSpec({
 
     "a MediaList with nullable values" {
         MediaList(
-            id = Int.zero,
+            id = ItemEntryId(Int.zero),
             score = Double.zero,
             progress = Int.zero,
             progressVolumes = null,

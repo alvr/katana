@@ -1,5 +1,6 @@
 package dev.alvr.katana.features.lists.domain
 
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.boolean
@@ -11,7 +12,7 @@ import io.kotest.property.kotlinx.datetime.date
 import io.kotest.property.kotlinx.datetime.datetime
 
 internal val mediaListMock = MediaList(
-    id = Arb.int().next(),
+    id = ItemEntryId(Arb.int().next()),
     score = Arb.double().next(),
     progress = Arb.int().next(),
     progressVolumes = Arb.int().next(),

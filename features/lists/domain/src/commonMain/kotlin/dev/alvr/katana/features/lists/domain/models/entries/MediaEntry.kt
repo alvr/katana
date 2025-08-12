@@ -1,9 +1,10 @@
 package dev.alvr.katana.features.lists.domain.models.entries
 
+import dev.alvr.katana.features.lists.domain.models.ItemMediaId
 import kotlinx.datetime.LocalDateTime
 
 sealed class MediaEntry(
-    val id: Int,
+    val id: ItemMediaId,
     val title: String,
     val coverImage: String,
     val format: CommonMediaEntry.Format,

@@ -3,6 +3,7 @@ package dev.alvr.katana.features.lists.data
 import com.apollographql.apollo.api.Error
 import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.type.MediaType
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.boolean
@@ -22,7 +23,7 @@ internal val mediaListCollectionQueryMock = MediaListCollectionQuery(
 )
 
 internal val mediaListMock = MediaList(
-    id = Arb.int().next(),
+    id = ItemEntryId(Arb.int().next()),
     score = Arb.positiveDouble().next(),
     progress = Arb.positiveInt().next(),
     progressVolumes = Arb.positiveInt().orNull().next(),

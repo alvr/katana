@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
+import dev.alvr.katana.features.lists.domain.models.ItemMediaId
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.entry_format_manga
 import dev.alvr.katana.features.lists.ui.resources.entry_format_movie
@@ -22,8 +24,8 @@ import kotlinx.datetime.LocalDateTime
 @Immutable
 @Suppress("ComplexInterface")
 internal sealed interface MediaListItem {
-    val entryId: Int
-    val mediaId: Int
+    val entryId: ItemEntryId
+    val mediaId: ItemMediaId
     val title: String
     val score: Double
     val format: Format
@@ -39,8 +41,8 @@ internal sealed interface MediaListItem {
     val updatedAt: LocalDateTime?
 
     data class AnimeListItem(
-        override val entryId: Int,
-        override val mediaId: Int,
+        override val entryId: ItemEntryId,
+        override val mediaId: ItemMediaId,
         override val title: String,
         override val score: Double,
         override val format: Format,
@@ -64,8 +66,8 @@ internal sealed interface MediaListItem {
     }
 
     data class MangaListItem(
-        override val entryId: Int,
-        override val mediaId: Int,
+        override val entryId: ItemEntryId,
+        override val mediaId: ItemMediaId,
         override val title: String,
         override val score: Double,
         override val format: Format,

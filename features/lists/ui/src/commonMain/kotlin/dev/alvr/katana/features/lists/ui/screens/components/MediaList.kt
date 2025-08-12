@@ -54,6 +54,7 @@ import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.format
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.utils.imageRequest
+import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.default_cover
@@ -61,29 +62,29 @@ import dev.alvr.katana.features.lists.ui.resources.entry_next_episode
 import dev.alvr.katana.features.lists.ui.resources.entry_next_episode_separator
 import dev.alvr.katana.features.lists.ui.resources.entry_plus_one
 import dev.alvr.katana.features.lists.ui.resources.entry_progress
-import dev.alvr.katana.features.lists.ui.viewmodel.ListsState
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun MediaList(
-    listsState: ListsState<out MediaListItem>,
+    items: ImmutableList<MediaListItem>,
+    loading: Boolean,
     onRefresh: () -> Unit,
-    onAddPlusOne: (Int) -> Unit,
-    onEditEntry: (Int) -> Unit,
-    onEntryDetails: (Int) -> Unit,
+    onAddPlusOne: (ItemEntryId) -> Unit,
+    onEditEntry: (ItemEntryId) -> Unit,
+    onEntryDetails: (ItemEntryId) -> Unit,
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState = rememberLazyGridState(),
 ) {
     KatanaPullRefresh(
         modifier = modifier,
-        loading = listsState.loading,
+        loading = loading,
         onRefresh = onRefresh,
     ) {
         MediaList(
-            lazyGridState = lazyGridState,
-            items = listsState.items,
-            itemLoading = listsState.loading,
             modifier = Modifier.fillMaxSize(),
+            lazyGridState = lazyGridState,
+            items = items,
+            itemLoading = loading,
             onAddPlusOne = onAddPlusOne,
             onEditEntry = onEditEntry,
             onEntryDetails = onEntryDetails,
@@ -96,14 +97,14 @@ private fun MediaList(
     lazyGridState: LazyGridState,
     items: ImmutableList<MediaListItem>,
     itemLoading: Boolean,
-    onAddPlusOne: (Int) -> Unit,
-    onEditEntry: (Int) -> Unit,
-    onEntryDetails: (Int) -> Unit,
+    onAddPlusOne: (ItemEntryId) -> Unit,
+    onEditEntry: (ItemEntryId) -> Unit,
+    onEntryDetails: (ItemEntryId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
-        state = lazyGridState,
         modifier = modifier,
+        state = lazyGridState,
         columns = GridCells.Adaptive(CARD_WIDTH),
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(ARRANGEMENT_SPACING),
@@ -111,13 +112,13 @@ private fun MediaList(
     ) {
         items(
             items = items,
-            key = { it.mediaId },
+            key = { it.mediaId.value },
         ) { item ->
             MediaListItem(
-                item = item,
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateItem(),
+                item = item,
                 itemLoading = itemLoading,
                 onAddPlusOne = { onAddPlusOne(item.entryId) },
                 onEditEntry = { onEditEntry(item.entryId) },
