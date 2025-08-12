@@ -15,7 +15,6 @@ import androidx.compose.material.BackdropScaffold
 import androidx.compose.material.BackdropScaffoldState
 import androidx.compose.material.BackdropValue
 import androidx.compose.material.rememberBackdropScaffoldState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.contentColorFor
@@ -38,6 +37,7 @@ import dev.alvr.katana.core.ui.resources.toolbar_menu_search
 import dev.alvr.katana.core.ui.resources.toolbar_search_clear
 import dev.alvr.katana.core.ui.resources.toolbar_search_close
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.theme.KatanaTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -76,13 +76,13 @@ fun KatanaHomeScaffold(
                 clearContentDescription = clearContentDescription,
             )
         },
-        backLayerBackgroundColor = MaterialTheme.colorScheme.primary,
-        backLayerContentColor = contentColorFor(MaterialTheme.colorScheme.primary),
+        backLayerBackgroundColor = KatanaTheme.colorScheme.primary,
+        backLayerContentColor = contentColorFor(KatanaTheme.colorScheme.primary),
         backLayerContent = backContent,
         frontLayerShape = RectangleShape,
-        frontLayerBackgroundColor = MaterialTheme.colorScheme.surface,
-        frontLayerContentColor = contentColorFor(MaterialTheme.colorScheme.surface),
-        frontLayerScrimColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.60f),
+        frontLayerBackgroundColor = KatanaTheme.colorScheme.surface,
+        frontLayerContentColor = contentColorFor(KatanaTheme.colorScheme.surface),
+        frontLayerScrimColor = KatanaTheme.colorScheme.surface.copy(alpha = KatanaTheme.alpha.alpha66),
         frontLayerContent = {
             Scaffold(
                 floatingActionButton = { fab?.invoke() },

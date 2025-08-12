@@ -13,11 +13,10 @@ import kotlinx.coroutines.launch
 @Composable
 @OptIn(KatanaInternalApi::class)
 fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.collectAsState() =
-    uiState.collectAsStateWithLifecycle(context = dispatcher.main)
+    uiState.collectAsStateWithLifecycle(context = dispatcher.immediate)
 
 @Composable
 @OptIn(KatanaInternalApi::class)
-@Suppress("ComposableFunctionName")
 fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.CollectEffect(
     onEffect: @DisallowComposableCalls suspend (E) -> Unit,
 ) {

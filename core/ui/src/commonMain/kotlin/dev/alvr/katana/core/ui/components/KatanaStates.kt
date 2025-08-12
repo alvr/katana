@@ -13,7 +13,6 @@ import androidx.compose.material.icons.twotone.Error
 import androidx.compose.material.icons.twotone.Inbox
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
@@ -24,12 +23,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import dev.alvr.katana.core.ui.resources.Res
 import dev.alvr.katana.core.ui.resources.component_empty_state
 import dev.alvr.katana.core.ui.resources.component_error_state
 import dev.alvr.katana.core.ui.resources.component_error_state_try_button
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.theme.KatanaTheme
 
 @Composable
 fun KatanaEmptyState(
@@ -60,15 +59,21 @@ fun KatanaErrorState(
         imageVector = Icons.TwoTone.Error,
         contentDescription = contentDescription,
     ) {
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(KatanaTheme.sizes.size4))
 
         OutlinedButton(
-            modifier = Modifier.alpha(if (loading) RETRY_BUTTON_DISABLED_ALPHA else 1f),
+            modifier = Modifier.alpha(
+                if (loading) {
+                    KatanaTheme.alpha.alpha66
+                } else {
+                    KatanaTheme.alpha.alpha100
+                },
+            ),
             onClick = onRetry,
             enabled = !loading,
             colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = contentColorFor(MaterialTheme.colorScheme.primary),
+                containerColor = KatanaTheme.colorScheme.secondary,
+                contentColor = contentColorFor(KatanaTheme.colorScheme.primary),
             ),
         ) {
             Text(text = buttonText, fontWeight = FontWeight.Bold)
@@ -95,7 +100,7 @@ private fun KatanaState(
         ) {
             Icon(
                 imageVector = imageVector,
-                modifier = Modifier.size(160.dp),
+                modifier = Modifier.size(KatanaTheme.sizes.size40),
                 contentDescription = contentDescription,
             )
             Text(
@@ -110,4 +115,3 @@ private fun KatanaState(
 }
 
 private const val STATE_CONTENT_FRACTION = .9f
-private const val RETRY_BUTTON_DISABLED_ALPHA = .6f

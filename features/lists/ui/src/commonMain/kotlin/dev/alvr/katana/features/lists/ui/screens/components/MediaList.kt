@@ -6,9 +6,10 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,14 +26,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
@@ -41,7 +40,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import dev.alvr.katana.core.common.formatters.KatanaDateFormats
@@ -53,6 +51,8 @@ import dev.alvr.katana.core.ui.modifiers.katanaPlaceholder
 import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.format
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.theme.KatanaTheme
+import dev.alvr.katana.core.ui.theme.contentPaddingSmall
 import dev.alvr.katana.core.ui.utils.imageRequest
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
@@ -77,7 +77,7 @@ internal fun MediaList(
 ) {
     KatanaPullRefresh(
         modifier = modifier,
-        loading = loading,
+        refreshing = loading,
         onRefresh = onRefresh,
     ) {
         MediaList(
@@ -105,10 +105,10 @@ private fun MediaList(
     LazyVerticalGrid(
         modifier = modifier,
         state = lazyGridState,
-        columns = GridCells.Adaptive(CARD_WIDTH),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(ARRANGEMENT_SPACING),
-        horizontalArrangement = Arrangement.spacedBy(ARRANGEMENT_SPACING),
+        columns = GridCells.Adaptive(KatanaTheme.sizes.cardWidth),
+        contentPadding = WindowInsets.contentPaddingSmall.asPaddingValues(),
+        verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
+        horizontalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
     ) {
         items(
             items = items,
@@ -127,7 +127,7 @@ private fun MediaList(
         }
 
         item {
-            Spacer(modifier = Modifier.height(72.dp)) // 56.dp FAB + 16.dp spacing bottom
+            Spacer(modifier = Modifier.height(KatanaTheme.sizes.lastItemListHeight))
         }
     }
 }
@@ -144,7 +144,7 @@ private fun MediaListItem(
 ) {
     ElevatedCard(
         modifier = modifier
-            .height(144.dp)
+            .height(KatanaTheme.sizes.cardHeight)
             .combinedClickable(
                 onClick = onEntryDetails,
                 onDoubleClick = onAddPlusOne,
@@ -182,13 +182,13 @@ private fun CardContent(
 
         Column(
             modifier = Modifier
-                .padding(top = CONTENT_TOP_PADDING)
+                .padding(top = KatanaTheme.dimensions.spacing1)
                 .fillMaxHeight(),
         ) {
             Title(
                 title = item.title,
                 modifier = Modifier
-                    .padding(start = CONTENT_HORIZONTAL_PADDING)
+                    .padding(start = KatanaTheme.dimensions.spacing2)
                     .testTag(ITEM_TITLE_TAG)
                     .katanaPlaceholder(visible = itemLoading),
             )
@@ -198,8 +198,8 @@ private fun CardContent(
                 nextEpisode = (item as? MediaListItem.AnimeListItem)?.nextEpisode,
                 modifier = Modifier
                     .padding(
-                        start = CONTENT_HORIZONTAL_PADDING,
-                        top = CONTENT_TOP_PADDING,
+                        start = KatanaTheme.dimensions.spacing2,
+                        top = KatanaTheme.dimensions.spacing1,
                     )
                     .testTag(ITEM_SUBTITLE_TAG)
                     .katanaPlaceholder(visible = itemLoading),
@@ -213,7 +213,7 @@ private fun CardContent(
                 itemLoading = itemLoading,
                 onAddPlusOne = onAddPlusOne,
                 modifier = Modifier
-                    .padding(end = CONTENT_HORIZONTAL_PADDING)
+                    .padding(end = KatanaTheme.dimensions.spacing2)
                     .align(Alignment.End)
                     .testTag(ITEM_PLUSONE_TAG),
             )
@@ -240,7 +240,7 @@ private fun CoverAndScore(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.width(COVER_MAX_WIDTH),
+        modifier = modifier.width(KatanaTheme.sizes.coverWidth),
     ) {
         Cover(
             cover = cover,
@@ -310,7 +310,7 @@ private fun Subtitle(
     Text(
         text = text,
         modifier = modifier,
-        style = MaterialTheme.typography.bodySmall,
+        style = KatanaTheme.typography.bodySmall,
     )
 }
 
@@ -322,10 +322,12 @@ private fun Score(
     if (score != Double.zero) {
         Box(
             modifier = modifier
-                .clip(RoundedCornerShape(topEnd = 4.dp))
-                .background(MaterialTheme.colorScheme.surface.copy(alpha = .6f))
-                .padding(4.dp)
-                .defaultMinSize(minWidth = 18.dp),
+                .background(
+                    color = KatanaTheme.colorScheme.surface.copy(alpha = KatanaTheme.alpha.alpha66),
+                    shape = RoundedCornerShape(topEnd = KatanaTheme.sizes.size1),
+                )
+                .padding(KatanaTheme.dimensions.spacing1)
+                .defaultMinSize(minWidth = KatanaTheme.sizes.size5),
         ) {
             Text(
                 text = KatanaNumberFormatter.Score(score),
@@ -397,12 +399,6 @@ private fun Progress(
         drawStopIndicator = {},
     )
 }
-
-private val CARD_WIDTH = 320.dp
-private val COVER_MAX_WIDTH = 96.dp
-private val ARRANGEMENT_SPACING = 8.dp
-private val CONTENT_TOP_PADDING = 4.dp
-private val CONTENT_HORIZONTAL_PADDING = 8.dp
 
 private const val PROGRESS_IF_UNKNOWN = .1f
 

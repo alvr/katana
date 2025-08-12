@@ -3,15 +3,14 @@ package dev.alvr.katana.features.home.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.PrimaryTabRow
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -24,14 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.showSnackbar
 import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.core.ui.utils.contentPadding
-import dev.alvr.katana.core.ui.utils.noInsets
+import dev.alvr.katana.core.ui.theme.KatanaTheme
+import dev.alvr.katana.core.ui.theme.noInsets
+import dev.alvr.katana.core.ui.utils.rememberSnackbarHostState
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.home.ui.navigation.HomeNavigator
@@ -48,7 +47,7 @@ import dev.alvr.katana.features.home.ui.viewmodel.HomeViewModel
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 internal fun HomeScreen(
     homeNavigator: HomeNavigator,
     viewModel: HomeViewModel,
@@ -56,7 +55,7 @@ internal fun HomeScreen(
 ) {
     val tabs = remember { HomeTab.entries.toImmutableList() }
     val pagerState = rememberPagerState { HomeTab.entries.size }
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = rememberSnackbarHostState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val currentTab by remember { derivedStateOf { pagerState.currentPage } }
 
@@ -83,7 +82,7 @@ internal fun HomeScreen(
                 CenterAlignedTopAppBar(
                     title = {
                         Image(
-                            modifier = Modifier.padding(vertical = 12.dp),
+                            modifier = Modifier.padding(vertical = KatanaTheme.dimensions.spacing3),
                             painter = Res.drawable.katana_logo.asPainter,
                             contentDescription = Res.string.katana_logo_a11y.value,
                         )
@@ -111,8 +110,7 @@ internal fun HomeScreen(
                 .padding(paddingValues),
             state = pagerState,
             verticalAlignment = Alignment.Top,
-            contentPadding = WindowInsets.contentPadding.asPaddingValues(),
-            pageSpacing = 12.dp,
+            pageSpacing = KatanaTheme.dimensions.pageSpacing,
         ) { page ->
             when (page) {
                 HomeTab.ForYou.ordinal -> ForYouTabContent(

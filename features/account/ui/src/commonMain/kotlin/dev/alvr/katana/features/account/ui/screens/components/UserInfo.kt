@@ -13,9 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.utils.imageRequest
 import dev.alvr.katana.features.account.ui.entities.UserInfoUi
 import dev.alvr.katana.features.account.ui.resources.Res
@@ -53,10 +53,12 @@ private fun UsernameAvatar(
 ) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         AsyncImage(
+            modifier = Modifier
+                .size(KatanaTheme.sizes.size18)
+                .clip(CircleShape),
             model = imageRequest { data(avatar) },
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.size(72.dp).clip(CircleShape),
         )
 
         Text(text = username)

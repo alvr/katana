@@ -14,7 +14,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,8 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.features.home.ui.ANILIST_LOGIN
 import dev.alvr.katana.features.home.ui.ANILIST_REGISTER
 import dev.alvr.katana.features.home.ui.resources.Res
@@ -54,10 +53,10 @@ internal fun WelcomeCard(
         ElevatedCard {
             Column(
                 modifier = Modifier.padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 8.dp,
-                    bottom = 16.dp,
+                    start = KatanaTheme.dimensions.spacing4,
+                    end = KatanaTheme.dimensions.spacing4,
+                    top = KatanaTheme.dimensions.spacing2,
+                    bottom = KatanaTheme.dimensions.spacing4,
                 ),
             ) {
                 WelcomeCardHeader(
@@ -87,7 +86,7 @@ private fun WelcomeCardHeader(
     ) {
         Text(
             text = Res.string.welcome_card_title.value,
-            style = MaterialTheme.typography.titleLarge,
+            style = KatanaTheme.typography.titleLarge,
             fontWeight = FontWeight.Medium,
         )
 
@@ -105,7 +104,7 @@ private fun WelcomeCardBody(
     onIntent: (HomeIntent) -> Unit,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.spacing2),
     ) {
         Text(
             text = Res.string.welcome_card_message.value,
@@ -113,7 +112,7 @@ private fun WelcomeCardBody(
         )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.spacing3),
         ) {
             WelcomeCardRegisterButton(Modifier.weight(1f))
             WelcomeCardLoginButton(

@@ -980,7 +980,7 @@ Compose:
     active: true
   CompositionLocalAllowlist:
     active: true
-    allowedCompositionLocals:
+    allowedCompositionLocals: LocalAlpha,LocalDimensions,LocalSizes
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

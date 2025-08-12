@@ -3,7 +3,7 @@ package dev.alvr.katana.features.lists.ui.screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -11,7 +11,6 @@ import androidx.compose.material.icons.automirrored.twotone.List
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -23,9 +22,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.features.lists.ui.entities.UserList
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.change_list_button
@@ -66,14 +65,14 @@ internal fun ChangeListSheet(
                             SpanStyle(
                                 baselineShift = BaselineShift.Superscript,
                                 fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                color = KatanaTheme.colorScheme.onSurfaceVariant,
                             ),
                         ) {
                             append(" $count")
                         }
                     },
                     fontWeight = if (selectedList == name) FontWeight.SemiBold else FontWeight.Normal,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = KatanaTheme.typography.titleLarge,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
@@ -82,8 +81,8 @@ internal fun ChangeListSheet(
                                 onClick(name)
                             }
                         }
-                        .height(48.dp)
-                        .padding(all = 8.dp),
+                        .heightIn(min = KatanaTheme.dimensions.spacing12)
+                        .padding(all = KatanaTheme.dimensions.spacing2),
                 )
             }
         }
