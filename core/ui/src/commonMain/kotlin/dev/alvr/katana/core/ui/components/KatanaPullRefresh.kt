@@ -1,10 +1,11 @@
 package dev.alvr.katana.core.ui.components
 
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.LoadingIndicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -12,8 +13,8 @@ import androidx.compose.ui.Modifier
 
 @Composable
 @OptIn(
+    ExperimentalMaterialApi::class,
     ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3ExpressiveApi::class,
 )
 fun KatanaPullRefresh(
     refreshing: Boolean,
@@ -21,19 +22,23 @@ fun KatanaPullRefresh(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    val state = rememberPullToRefreshState()
+    val stateM2 = rememberPullRefreshState(refreshing, onRefresh)
+    val stateM3 = rememberPullToRefreshState()
 
     PullToRefreshBox(
         modifier = modifier,
-        state = state,
+        state = stateM3,
         isRefreshing = refreshing,
         onRefresh = onRefresh,
         indicator = {
-            LoadingIndicator(
-                modifier = Modifier.align(Alignment.TopCenter),
-                state = state,
-                isRefreshing = refreshing,
-            )
+            PullRefreshIndicator(refreshing, stateM2, Modifier.align(Alignment.TopCenter))
+
+            // TODO: Restore when stable version of M3 Expressive is released
+            // LoadingIndicator(
+            //     modifier = Modifier.align(Alignment.TopCenter),
+            //     state = state,
+            //     isRefreshing = refreshing,
+            // )
         },
         content = content,
     )
