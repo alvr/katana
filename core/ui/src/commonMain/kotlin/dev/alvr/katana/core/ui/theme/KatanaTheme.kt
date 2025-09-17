@@ -1,24 +1,24 @@
 package dev.alvr.katana.core.ui.theme
 
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
-import com.materialkolor.DynamicMaterialExpressiveTheme
+import com.materialkolor.DynamicMaterialTheme
 import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamiccolor.ColorSpec
 import com.materialkolor.rememberDynamicMaterialThemeState
 
 @Composable
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 fun KatanaTheme(
     content: @Composable () -> Unit,
 ) {
-    DynamicMaterialExpressiveTheme(
+    // TODO: Restore when stable version of M3 Expressive is released
+    // DynamicMaterialExpressiveTheme
+    DynamicMaterialTheme(
         state = rememberDynamicMaterialThemeState(
             seedColor = Color(ColorSeed),
             isDark = true,
@@ -47,11 +47,12 @@ object KatanaTheme {
         @ReadOnlyComposable
         get() = LocalDimensions.current
 
-    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
-    val motionScheme
-        @Composable
-        @ReadOnlyComposable
-        get() = MaterialTheme.motionScheme
+    // TODO: Restore when stable version of M3 Expressive is released
+    // @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    // val motionScheme
+    //     @Composable
+    //     @ReadOnlyComposable
+    //     get() = MaterialTheme.motionScheme
 
     val shapes: Shapes
         @Composable
