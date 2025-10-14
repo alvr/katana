@@ -37,7 +37,7 @@ mockk = "1.14.6"
 mokkery = "2.10.1"
 navigation = "2.9.0"
 navigation-material = "1.9.0"
-okio = "3.16.0"
+okio = "3.16.2"
 turbine = "1.2.1"
 
 [plugins]
