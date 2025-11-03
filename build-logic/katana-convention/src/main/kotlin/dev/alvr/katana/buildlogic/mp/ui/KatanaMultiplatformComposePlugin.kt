@@ -3,7 +3,6 @@
 package dev.alvr.katana.buildlogic.mp.ui
 
 import dev.alvr.katana.buildlogic.bundleImplementation
-import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.desktopMain
@@ -51,8 +50,6 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
                 implementation(compose.animation)
                 implementation(compose.components.resources)
                 implementation(compose.foundation)
-                implementation(compose.material)
-                implementation(project.catalogLib("compose-material3"))
                 implementation(compose.materialIconsExtended)
                 implementation(compose.runtime)
                 implementation(compose.runtimeSaveable)

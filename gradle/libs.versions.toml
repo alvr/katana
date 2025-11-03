@@ -6,7 +6,7 @@ apollo = "4.3.3"
 apollo-mockserver = "0.3.0"
 arrow = "2.2.0"
 coil = "3.3.0"
-compose = "1.9.2"
+compose = "1.10.0-alpha03"
 compose-placeholder = "1.0.12"
 desugaring = "2.1.5"
 detekt = "1.23.8"
@@ -30,12 +30,14 @@ kover = "0.9.3"
 ksp = "2.3.0"
 kstore = "1.0.0"
 ktor = "3.3.1"
-lifecycle = "2.9.5"
-material3 = "1.9.0"
-materialkolor = "4.0.3"
+lifecycle = "2.10.0-alpha03"
+material3 = "1.10.0-alpha03"
+material3-adaptive = "1.2.0"
+materialkolor = "5.0.0-alpha02"
 mockk = "1.14.6"
 mokkery = "2.10.2"
 navigation = "2.9.1"
+navigation3 = "1.0.0-alpha03"
 navigation-material = "1.9.2"
 okio = "3.16.2"
 turbine = "1.2.1"
@@ -75,6 +77,7 @@ coil-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coi
 
 # Compose
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
+compose-material3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "material3-adaptive" }
 compose-placeholder = { module = "com.eygraber:compose-placeholder-material3", version.ref = "compose-placeholder" }
 compose-windowsize = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "material3" }
 
@@ -147,6 +150,7 @@ materialkolor = { module = "com.materialkolor:material-kolor", version.ref = "ma
 # Navigation
 navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
 navigation-material = { module = "org.jetbrains.compose.material:material-navigation", version.ref = "navigation-material" }
+navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 
 # Okio
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
@@ -325,6 +329,8 @@ data-remote-wasm-test-ksp = []
 # Deps for UI
 ui-common = [
     "coil",
+    "compose-material3",
+    "compose-material3-adaptive",
     "lifecycle-runtime",
     "lifecycle-viewmodel",
     "koin-compose",
@@ -333,6 +339,7 @@ ui-common = [
     "kotlinx-serialization-json",
     "navigation",
     "navigation-material",
+    "navigation3-ui",
 ]
 ui-android = []
 ui-ios = []
