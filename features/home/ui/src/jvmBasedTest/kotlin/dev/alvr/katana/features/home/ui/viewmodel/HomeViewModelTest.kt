@@ -18,7 +18,7 @@ import dev.alvr.katana.features.home.domain.usecases.HideWelcomeCardUseCase
 import dev.alvr.katana.features.home.domain.usecases.ObserveWelcomeCardVisibilityUseCase
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coJustRun

@@ -7,7 +7,6 @@ import dev.alvr.katana.common.user.domain.failures.UserFailure
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.common.user.domain.models.UserId
 import dev.alvr.katana.common.user.domain.repositories.UserRepository
-import dev.alvr.katana.core.tests.koinExtension
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import dev.mokkery.answering.returns
@@ -15,6 +14,7 @@ import dev.mokkery.everySuspend
 import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.koin.KoinExtension
 import org.koin.core.parameter.parametersOf
 import org.koin.test.KoinTest
 import org.koin.test.inject
@@ -38,5 +38,5 @@ internal class UserIdManagerTest : FreeSpec(), KoinTest {
         }
     }
 
-    override fun extensions() = listOf(koinExtension(fakeCommonUserDataModule))
+    override val extensions = listOf(KoinExtension(fakeCommonUserDataModule))
 }
