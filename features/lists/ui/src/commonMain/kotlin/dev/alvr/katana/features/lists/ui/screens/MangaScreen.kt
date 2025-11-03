@@ -1,6 +1,5 @@
 package dev.alvr.katana.features.lists.ui.screens
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.features.lists.ui.navigation.MangaListsNavigator
@@ -21,11 +20,5 @@ internal fun MangaScreen(
         emptyStateRes = Res.string.empty_manga_list.value,
         onEditEntry = navigator::editMangaEntry,
         onEntryDetails = navigator::mangaEntryDetails,
-        backContent = { Filter() },
     )
-}
-
-@Composable
-private fun Filter() {
-    Text(text = "Manga Filter")
 }

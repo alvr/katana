@@ -40,7 +40,6 @@ internal fun ListScreen(
     emptyStateRes: String,
     onEditEntry: (ItemEntryId) -> Unit,
     onEntryDetails: (ItemEntryId) -> Unit,
-    backContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val katanaScaffoldState = rememberKatanaHomeScaffoldState()
@@ -86,7 +85,6 @@ internal fun ListScreen(
         subtitle = state.selectedList,
         searchPlaceholder = searchPlaceholder,
         onSearch = { search -> onIntent(ListsIntent.Search(search)) },
-        backContent = backContent,
         fab = {
             ChangeListButton(visible = buttonsVisible && state.lists.isNotEmpty()) {
                 showListSelector = true

@@ -1,6 +1,5 @@
 package dev.alvr.katana.features.lists.ui.screens
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.features.lists.ui.navigation.AnimeListsNavigator
@@ -19,13 +18,7 @@ internal fun AnimeScreen(
         viewModel = koinViewModel<AnimeListsViewModel>(),
         title = Res.string.anime_toolbar.value,
         emptyStateRes = Res.string.empty_anime_list.value,
-        backContent = { Filter() },
         onEditEntry = navigator::editAnimeEntry,
         onEntryDetails = navigator::animeEntryDetails,
     )
-}
-
-@Composable
-private fun Filter() {
-    Text(text = "Anime Filter")
 }

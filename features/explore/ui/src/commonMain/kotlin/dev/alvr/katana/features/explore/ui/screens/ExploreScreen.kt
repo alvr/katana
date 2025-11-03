@@ -23,16 +23,10 @@ internal fun ExploreScreen(
         title = Res.string.explore_toolbar_title.value,
         searchPlaceholder = Res.string.explore_toolbar_search_placeholder.value,
         onSearch = {},
-        backContent = { Filter() },
     ) { paddingValues ->
         Text(
             modifier = Modifier.padding(paddingValues),
             text = Res.string.explore_toolbar_title.value,
         )
     }
-}
-
-@Composable
-private fun Filter() {
-    Text(text = "Explore Filter")
 }

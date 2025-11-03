@@ -11,25 +11,18 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.material.BackdropScaffold
-import androidx.compose.material.BackdropScaffoldState
-import androidx.compose.material.BackdropValue
-import androidx.compose.material.rememberBackdropScaffoldState
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import dev.alvr.katana.core.common.empty
+import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.KatanaSearchTopAppBar
 import dev.alvr.katana.core.ui.resources.Res
 import dev.alvr.katana.core.ui.resources.toolbar_menu_filter
@@ -37,19 +30,15 @@ import dev.alvr.katana.core.ui.resources.toolbar_menu_search
 import dev.alvr.katana.core.ui.resources.toolbar_search_clear
 import dev.alvr.katana.core.ui.resources.toolbar_search_close
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.core.ui.theme.KatanaTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import dev.alvr.katana.core.ui.theme.noInsets
 
 @Composable
 fun KatanaHomeScaffold(
     title: String,
     searchPlaceholder: String,
     onSearch: (String) -> Unit,
-    backContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     katanaScaffoldState: KatanaHomeScaffoldState = rememberKatanaHomeScaffoldState(),
-    scaffoldState: BackdropScaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed),
     subtitle: String? = null,
     searchContentDescription: String = Res.string.toolbar_menu_search.value,
     filterContentDescription: String = Res.string.toolbar_menu_filter.value,
@@ -58,14 +47,11 @@ fun KatanaHomeScaffold(
     fab: @Composable (() -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit,
 ) {
-    BackdropScaffold(
+    KatanaScaffold(
         modifier = modifier,
-        scaffoldState = scaffoldState,
-        gesturesEnabled = false,
-        appBar = {
+        topBar = {
             KatanaTopAppBar(
                 katanaScaffoldState = katanaScaffoldState,
-                scaffoldState = scaffoldState,
                 title = title,
                 subtitle = subtitle,
                 onSearch = onSearch,
@@ -76,27 +62,15 @@ fun KatanaHomeScaffold(
                 clearContentDescription = clearContentDescription,
             )
         },
-        backLayerBackgroundColor = KatanaTheme.colorScheme.primary,
-        backLayerContentColor = contentColorFor(KatanaTheme.colorScheme.primary),
-        backLayerContent = backContent,
-        frontLayerShape = RectangleShape,
-        frontLayerBackgroundColor = KatanaTheme.colorScheme.surface,
-        frontLayerContentColor = contentColorFor(KatanaTheme.colorScheme.surface),
-        frontLayerScrimColor = KatanaTheme.colorScheme.surface.copy(alpha = KatanaTheme.alpha.alpha66),
-        frontLayerContent = {
-            Scaffold(
-                floatingActionButton = { fab?.invoke() },
-                contentWindowInsets = WindowInsets(0, 0, 0, 0),
-                content = content,
-            )
-        },
+        floatingActionButton = { fab?.invoke() },
+        contentWindowInsets = WindowInsets.noInsets,
+        content = content,
     )
 }
 
 @Composable
 private fun KatanaTopAppBar(
     katanaScaffoldState: KatanaHomeScaffoldState,
-    scaffoldState: BackdropScaffoldState,
     title: String,
     searchPlaceholder: String,
     searchContentDescription: String,
@@ -106,8 +80,6 @@ private fun KatanaTopAppBar(
     onSearch: (String) -> Unit,
     subtitle: String? = null,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     Surface {
         AnimatedContent(
             label = "KatanaTopAppBar",
@@ -129,12 +101,8 @@ private fun KatanaTopAppBar(
                     subtitle = subtitle,
                     searchContentDescription = searchContentDescription,
                     filterContentDescription = filterContentDescription,
-                    onSearch = { katanaScaffoldState.searchToolbar() }.takeIf {
-                        katanaScaffoldState.showTopAppBarActions
-                    },
-                    onFilter = { scaffoldState.toggleBackdrop(coroutineScope) }.takeIf {
-                        katanaScaffoldState.showTopAppBarActions
-                    },
+                    onSearch = { katanaScaffoldState.searchToolbar() },
+                    onFilter = null,
                 )
                 TopAppBarStyle.Search -> KatanaSearchTopAppBar(
                     onValueChange = onSearch,
@@ -146,20 +114,8 @@ private fun KatanaTopAppBar(
                         onSearch(String.empty)
                     },
                     onClear = { onSearch(String.empty) },
-                ).also {
-                    coroutineScope.launch { scaffoldState.conceal() }
-                }
+                )
             }
-        }
-    }
-}
-
-private fun BackdropScaffoldState.toggleBackdrop(scope: CoroutineScope) {
-    scope.launch {
-        if (isConcealed) {
-            reveal()
-        } else {
-            conceal()
         }
     }
 }
