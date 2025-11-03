@@ -1,4 +1,4 @@
-package dev.alvr.katana.core.tests
+package io.kotest.provided
 
 import dev.alvr.katana.core.tests.di.coreTestsModule
 import io.kotest.core.config.AbstractProjectConfig
@@ -6,20 +6,18 @@ import io.kotest.core.config.LogLevel
 import io.kotest.core.names.DuplicateTestNameMode
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.test.AssertionMode
+import io.kotest.engine.config.IncludeTestScopeAffixes
+import io.kotest.koin.KoinExtension
 
-object KotestProjectConfig : AbstractProjectConfig() {
-    private const val NUM_THREADS = 1
-
+object ProjectConfig : AbstractProjectConfig() {
     override val assertionMode = AssertionMode.Warn
     override val coroutineDebugProbes = true
     override val duplicateTestNameMode = DuplicateTestNameMode.Silent
+    override val extensions = listOf(KoinExtension(coreTestsModule))
     override val globalAssertSoftly = true
-    override val includeTestScopePrefixes = true
+    override val includeTestScopeAffixes = IncludeTestScopeAffixes.ALWAYS
     override val isolationMode = IsolationMode.SingleInstance
     override val logLevel = LogLevel.Warn
-    override val parallelism = NUM_THREADS
+    override val removeTestNameWhitespace = true
     override val testNameAppendTags = true
-    override val testNameRemoveWhitespace = true
-
-    override fun extensions() = listOf(koinExtension(coreTestsModule))
 }

@@ -26,7 +26,7 @@ internal fun Project.commonConfiguration(
 ) {
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
     apply(plugin = "com.google.devtools.ksp")
-    apply(plugin = "io.kotest.multiplatform")
+    apply(plugin = "io.kotest")
     apply(plugin = "org.jetbrains.kotlinx.kover")
     apply(plugin = "dev.mokkery")
 
