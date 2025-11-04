@@ -310,13 +310,11 @@ ui-common-test-ksp = []
 ui-android-test-ksp = []
 ui-ios-test-ksp = []
 
-app-common = []
 app-android = [
     "androidx-activity",
     "androidx-splashscreen",
     "coil",
 ]
-app-ios = []
 
 build-config = [
     "kaml",

@@ -12,7 +12,6 @@ import java.util.Properties
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.invoke
@@ -41,9 +40,6 @@ internal class KatanaAppPlugin : Plugin<Project> {
         sourceSets {
             androidMain.dependencies {
                 bundleImplementation("app-android")
-            }
-            iosMain.dependencies {
-                bundleImplementation("app-ios")
             }
         }
     }
