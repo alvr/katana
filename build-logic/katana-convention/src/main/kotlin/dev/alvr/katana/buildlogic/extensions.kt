@@ -27,7 +27,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.androidJvm
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.common
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.jvm
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.native
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -175,13 +174,11 @@ private fun KotlinTarget.configurationName(suffix: String) =
 
 private val String.suffix get() = if (isNotEmpty()) "-$this" else ""
 
-private val KotlinTarget.groupName get() = when {
-    platformType == native && targetName.contains(IosTarget) -> IosTarget
-    platformType == androidJvm -> AndroidTarget
-    platformType == jvm -> DesktopTarget
+private val KotlinTarget.groupName get() = when (platformType) {
+    native if targetName.contains(IosTarget) -> IosTarget
+    androidJvm -> AndroidTarget
     else -> platformType.visibleName
 }
 
 private const val AndroidTarget = "android"
 private const val IosTarget = "ios"
-private const val DesktopTarget = "desktop"

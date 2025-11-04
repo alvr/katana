@@ -10,8 +10,6 @@ import dev.alvr.katana.features.home.ui.screens.HomeScreen
 import dev.alvr.katana.features.home.ui.viewmodel.HomeViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
-internal expect fun NavGraphBuilder.tokenInputDialog(homeNavigator: HomeNavigator)
-
 fun NavGraphBuilder.home(homeNavigator: HomeNavigator) {
     navigation<HomeDestination.Root>(
         startDestination = HomeDestination.Home(),
@@ -29,7 +27,5 @@ fun NavGraphBuilder.home(homeNavigator: HomeNavigator) {
                 viewModel = viewModel,
             )
         }
-
-        tokenInputDialog(homeNavigator)
     }
 }

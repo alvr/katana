@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 internal class KatanaBuildConfigPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         val sourceSets = extensions.getByType<KotlinMultiplatformExtension>().sourceSets
-        val sourceOutputDirs = OutputDir.values().associateWith { output ->
+        val sourceOutputDirs = OutputDir.entries.associateWith { output ->
             project.outputDir(output.sourceSet).get()
         }
 
@@ -87,20 +87,14 @@ internal abstract class GenerateBuildConfigTask : DefaultTask() {
 
         val android = config.android.fromFlavor(flavor.get())
         val ios = config.ios.fromFlavor(flavor.get())
-        val desktop = config.desktop.fromFlavor(flavor.get())
-        val web = config.web.fromFlavor(flavor.get())
-        val common = (android + ios + desktop + web).distinctBy { it.name }.toSet()
+        val common = (android + ios).distinctBy { it.name }.toSet()
 
         require(android.size == common.size) { "Android build config is missing some values: ${common - android}" }
         require(ios.size == common.size) { "iOS build config is missing some values: ${common - ios}" }
-        require(desktop.size == common.size) { "Desktop build config is missing some values: ${common - desktop}" }
-        require(web.size == common.size) { "Web build config is missing some values: ${common - web}" }
 
         common.generateExpect()
         android.generateActual(OutputDir.android)
         ios.generateActual(OutputDir.ios)
-        desktop.generateActual(OutputDir.desktop)
-        web.generateActual(OutputDir.web)
     }
 
     private fun Set<BuildConfig>.generateExpect() {
@@ -141,8 +135,6 @@ internal abstract class GenerateBuildConfigTask : DefaultTask() {
 private data class Config(
     @SerialName("android") val android: Environment,
     @SerialName("ios") val ios: Environment,
-    @SerialName("desktop") val desktop: Environment,
-    @SerialName("web") val web: Environment,
 ) {
     @Serializable
     data class Environment(
@@ -174,8 +166,6 @@ internal enum class OutputDir(
     common("", "commonMain"),
     android(".android", "androidMain"),
     ios(".ios", "iosMain"),
-    desktop(".desktop", "desktopMain"),
-    web(".webBased", "webBasedMain"),
 }
 
 private const val FILENAME = "KatanaBuildConfig"

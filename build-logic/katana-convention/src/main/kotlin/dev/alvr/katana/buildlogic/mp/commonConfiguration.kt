@@ -13,16 +13,10 @@ import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsTargetDsl
-import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinWasmJsTargetDsl
-import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
 internal fun Project.commonConfiguration(
     configureAndroid: KotlinAndroidTarget.() -> Unit = { },
-    configureApple: KotlinNativeTarget.() -> Unit = { },
-    configureDesktop: KotlinJvmTarget.() -> Unit = { },
-    configureJs: KotlinJsTargetDsl.() -> Unit = { browser() },
-    configureWasmJs: KotlinWasmJsTargetDsl.() -> Unit = { browser() },
+    configureIos: KotlinNativeTarget.() -> Unit = { },
 ) {
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
     apply(plugin = "com.google.devtools.ksp")
@@ -36,10 +30,7 @@ internal fun Project.commonConfiguration(
             configureMultiplatform(
                 project = project,
                 configureAndroid = configureAndroid,
-                configureApple = configureApple,
-                configureDesktop = configureDesktop,
-                configureJs = configureJs,
-                configureWasmJs = configureWasmJs,
+                configureIos = configureIos,
             )
         }
     }
@@ -50,17 +41,11 @@ internal fun Project.commonConfiguration(
 private fun KotlinMultiplatformExtension.configureMultiplatform(
     project: Project,
     configureAndroid: KotlinAndroidTarget.() -> Unit = { },
-    configureApple: KotlinNativeTarget.() -> Unit = { },
-    configureDesktop: KotlinJvmTarget.() -> Unit = { },
-    configureJs: KotlinJsTargetDsl.() -> Unit = { },
-    configureWasmJs: KotlinWasmJsTargetDsl.() -> Unit = { },
+    configureIos: KotlinNativeTarget.() -> Unit = { },
 ) {
     hierarchy(
         configureAndroid = configureAndroid,
-        configureApple = configureApple,
-        configureDesktop = configureDesktop,
-        configureJs = configureJs,
-        configureWasmJs = configureWasmJs,
+        configureIos = configureIos,
     )
     configureSourceSets()
 
@@ -78,15 +63,6 @@ private fun KotlinMultiplatformExtension.configureSourceSets() {
         iosMain.dependencies {
             bundleImplementation("core-ios")
         }
-        desktopMain.dependencies {
-            bundleImplementation("core-desktop")
-        }
-        jsMain.dependencies {
-            bundleImplementation("core-js")
-        }
-        wasmJsMain.dependencies {
-            bundleImplementation("core-wasm")
-        }
 
         commonTest.dependencies {
             bundleImplementation("core-common-test")
@@ -96,15 +72,6 @@ private fun KotlinMultiplatformExtension.configureSourceSets() {
         }
         iosTest.dependencies {
             bundleImplementation("core-ios-test")
-        }
-        desktopTest.dependencies {
-            bundleImplementation("core-desktop-test")
-        }
-        jsTest.dependencies {
-            bundleImplementation("core-js-test")
-        }
-        wasmJsTest.dependencies {
-            bundleImplementation("core-wasm-test")
         }
     }
 }

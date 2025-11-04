@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="login_dialog_title">Login in AniList</string>
-    <string name="login_dialog_placeholder">Enter the token here</string>
-    <string name="login_dialog_login_button">Log In</string>
-</resources>

@@ -24,29 +24,3 @@ ios:
     - type: Boolean
       name: DEBUG
       value: false
-desktop:
-  dev:
-    - type: Boolean
-      name: DEBUG
-      value: true
-  beta:
-    - type: Boolean
-      name: DEBUG
-      value: false
-  release:
-    - type: Boolean
-      name: DEBUG
-      value: false
-web:
-  dev:
-    - type: Boolean
-      name: DEBUG
-      value: true
-  beta:
-    - type: Boolean
-      name: DEBUG
-      value: false
-  release:
-    - type: Boolean
-      name: DEBUG
-      value: false

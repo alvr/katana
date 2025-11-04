@@ -7,8 +7,6 @@ import com.apollographql.apollo.gradle.api.ApolloExtension
 import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
-import dev.alvr.katana.buildlogic.mp.desktopMain
-import dev.alvr.katana.buildlogic.mp.desktopTest
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -45,15 +43,6 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
             iosMain.dependencies {
                 bundleImplementation("data-remote-ios")
             }
-            desktopMain.dependencies {
-                bundleImplementation("data-remote-desktop")
-            }
-            jsMain.dependencies {
-                bundleImplementation("data-remote-js")
-            }
-            wasmJsMain.dependencies {
-                bundleImplementation("data-remote-wasm")
-            }
 
             commonTest.dependencies {
                 bundleImplementation("data-remote-common-test")
@@ -63,15 +52,6 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
             }
             iosTest.dependencies {
                 bundleImplementation("data-remote-ios-test")
-            }
-            desktopTest.dependencies {
-                bundleImplementation("data-remote-desktop-test")
-            }
-            jsTest.dependencies {
-                bundleImplementation("data-remote-js-test")
-            }
-            wasmJsTest.dependencies {
-                bundleImplementation("data-remote-wasm-test")
             }
         }
     }

@@ -4,9 +4,7 @@ import androidx.navigation.NavHostController
 import dev.alvr.katana.core.ui.navigation.KatanaNavigator
 import dev.alvr.katana.core.ui.navigation.overridden
 
-expect sealed interface PlatformHomeNavigator : KatanaNavigator
-
-interface HomeNavigator : PlatformHomeNavigator, KatanaNavigator {
+interface HomeNavigator : KatanaNavigator {
     fun navigateToAnimeLists()
     fun navigateToMangaLists()
     fun navigateToTrending()
