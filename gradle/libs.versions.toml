@@ -39,7 +39,7 @@ mokkery = "2.10.2"
 navigation = "2.9.1"
 navigation3 = "1.0.0-alpha04"
 navigation-material = "1.9.3"
-okio = "3.16.3"
+okio = "3.16.4"
 turbine = "1.2.1"
 
 [plugins]
