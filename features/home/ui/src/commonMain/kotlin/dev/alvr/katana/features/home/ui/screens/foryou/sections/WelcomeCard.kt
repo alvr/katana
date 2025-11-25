@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -27,6 +25,8 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.symbols.Cross
+import dev.alvr.katana.core.ui.symbols.KatanaSymbols
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.features.home.ui.ANILIST_LOGIN
 import dev.alvr.katana.features.home.ui.ANILIST_REGISTER
@@ -92,7 +92,7 @@ private fun WelcomeCardHeader(
 
         IconButton(onClick = onCloseCard) {
             Icon(
-                imageVector = Icons.Default.Close,
+                imageVector = KatanaSymbols.Cross,
                 contentDescription = Res.string.welcome_card_close_card_a11y.value,
             )
         }

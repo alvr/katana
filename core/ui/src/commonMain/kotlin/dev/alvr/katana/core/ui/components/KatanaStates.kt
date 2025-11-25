@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.Error
-import androidx.compose.material.icons.twotone.Inbox
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
@@ -28,6 +25,9 @@ import dev.alvr.katana.core.ui.resources.component_empty_state
 import dev.alvr.katana.core.ui.resources.component_error_state
 import dev.alvr.katana.core.ui.resources.component_error_state_try_button
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.symbols.Error
+import dev.alvr.katana.core.ui.symbols.Inbox
+import dev.alvr.katana.core.ui.symbols.KatanaSymbols
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 
 @Composable
@@ -39,7 +39,7 @@ fun KatanaEmptyState(
     KatanaState(
         modifier = modifier,
         text = text,
-        imageVector = Icons.TwoTone.Inbox,
+        imageVector = KatanaSymbols.Inbox,
         contentDescription = contentDescription,
     )
 }
@@ -56,7 +56,7 @@ fun KatanaErrorState(
     KatanaState(
         modifier = modifier,
         text = text,
-        imageVector = Icons.TwoTone.Error,
+        imageVector = KatanaSymbols.Error,
         contentDescription = contentDescription,
     ) {
         Spacer(Modifier.height(KatanaTheme.sizes.size4))

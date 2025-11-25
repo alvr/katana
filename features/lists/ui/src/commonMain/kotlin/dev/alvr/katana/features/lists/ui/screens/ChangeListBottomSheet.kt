@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.twotone.List
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -24,6 +22,8 @@ import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.symbols.KatanaSymbols
+import dev.alvr.katana.core.ui.symbols.Lists
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.features.lists.ui.entities.UserList
 import dev.alvr.katana.features.lists.ui.resources.Res
@@ -98,7 +98,7 @@ internal fun ChangeListButton(
         FloatingActionButton(onClick = onClick) {
             Icon(
                 contentDescription = Res.string.change_list_button.value,
-                imageVector = Icons.AutoMirrored.TwoTone.List,
+                imageVector = KatanaSymbols.Lists,
             )
         }
     }

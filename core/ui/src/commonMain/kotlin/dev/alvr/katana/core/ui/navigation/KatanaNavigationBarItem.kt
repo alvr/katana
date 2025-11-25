@@ -10,8 +10,7 @@ import org.jetbrains.compose.resources.StringResource
 @Stable
 interface KatanaNavigationBarItem {
     val screen: KatanaDestination
-    val selectedIcon: ImageVector
-    val unselectedIcon: ImageVector
+    val icon: ImageVector
     val label: StringResource
 
     companion object {
