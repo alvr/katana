@@ -4,14 +4,8 @@
 /.kotlin
 /build
 /captures
-/kotlin-js-store
 *.iml
 .DS_Store
 coverage-error.log
 katana.jks
 local.properties
-app-ios/Podfile.lock
-app-ios/Pods/*
-app-ios/iosApp.xcworkspace/*
-app-ios/iosApp.xcodeproj/*
-!app-ios/iosApp.xcodeproj/project.pbxproj

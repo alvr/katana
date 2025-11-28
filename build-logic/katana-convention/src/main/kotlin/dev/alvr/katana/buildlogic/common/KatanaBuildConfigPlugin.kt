@@ -36,6 +36,7 @@ import org.gradle.kotlin.dsl.registering
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 internal class KatanaBuildConfigPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
@@ -51,7 +52,10 @@ internal class KatanaBuildConfigPlugin : Plugin<Project> {
             outputDirs = sourceOutputDirs
         }
 
-        tasks.withType<KotlinCompile> { dependsOn(generateBuildConfig) }
+        tasks {
+            withType<KotlinCompile> { dependsOn(generateBuildConfig) }
+            withType<KotlinNativeLink> { dependsOn(generateBuildConfig) }
+        }
 
         configure<KotlinMultiplatformExtension> {
             sourceSets {

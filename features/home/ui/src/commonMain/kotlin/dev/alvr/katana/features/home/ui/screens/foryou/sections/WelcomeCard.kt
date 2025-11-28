@@ -124,7 +124,7 @@ private fun WelcomeCardBody(
 @Composable
 private fun WelcomeCardRegisterButton(
     modifier: Modifier = Modifier,
-    ) {
+) {
     val uriHandler = LocalUriHandler.current
 
     OutlinedButton(

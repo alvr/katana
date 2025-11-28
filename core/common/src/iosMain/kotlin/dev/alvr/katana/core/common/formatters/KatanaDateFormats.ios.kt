@@ -6,7 +6,7 @@ internal actual typealias KatanaPlatformDateTimeFormatterBuilder = NSDateFormatt
 
 internal actual fun dateTimeFormatterBuilder(
     block: KatanaPlatformDateTimeFormatterBuilder.() -> Unit
-): KatanaDateTimeFormatter = NSDateFormatter().apply(block).let { KatanaDateTimeFormatter(it) }
+): KatanaDateTimeFormatter = KatanaDateTimeFormatter(NSDateFormatter().apply(block))
 
 actual object KatanaDateFormats {
     actual val nextEpisodeFormat: KatanaDateTimeFormatter get() = TODO()

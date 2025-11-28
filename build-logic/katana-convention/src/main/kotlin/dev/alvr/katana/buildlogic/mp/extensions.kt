@@ -73,11 +73,8 @@ private fun KotlinCompilationTask<*>.configureKotlinCompiler() {
 }
 
 private val Project.frameworkIdentifier
-    get() = path.split(':').identifier
-
-internal val List<String>.identifier
-    get() = filter { it.isNotEmpty() }
-        .reduceRight { acc, s -> "$acc${s.capitalize()}" }
+    get() = path.split(':')
+        .joinToString(separator = "", prefix = "Katana") { it.capitalize() }
 
 internal fun String.capitalize() =
     replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }

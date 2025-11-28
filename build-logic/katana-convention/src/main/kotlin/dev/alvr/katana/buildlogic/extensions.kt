@@ -144,6 +144,7 @@ internal fun KotlinCommonCompilerOptions.configureKotlinCompiler() {
         "-opt-in=kotlin.RequiresOptIn",
         "-Xexpect-actual-classes",
         "-Xconsistent-data-class-copy-visibility",
+        "-Xcontext-parameters",
     )
 }
 
