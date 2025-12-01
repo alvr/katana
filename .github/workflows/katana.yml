@@ -165,15 +165,6 @@ jobs:
           SIGNING_FILE: ${{ secrets.SIGNING_FILE }}
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
         run: ./gradlew :app:assembleBeta -Pkatana.flavor=beta --no-daemon --stacktrace
-      - name: Publish beta APK to TestApp.io
-        uses: testappio/github-action@57d81be5051e10ea7c07da5730b2eaae1b9b1fa1 # v5
-        with:
-          api_token: ${{ secrets.TESTAPPIO_API_TOKEN }}
-          app_id: ${{ secrets.TESTAPPIO_APP_ID }}
-          file: ${{ vars.ANDROID_BETA_APK }}
-          git_release_notes: true
-          include_git_commit_id: true
-          notify: true
 
   deploy-production:
     name: Production deployment

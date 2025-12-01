@@ -1,9 +1,6 @@
 package dev.alvr.katana.core.ui.components.home
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FilterAlt
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,6 +12,9 @@ import dev.alvr.katana.core.ui.resources.Res
 import dev.alvr.katana.core.ui.resources.toolbar_menu_filter
 import dev.alvr.katana.core.ui.resources.toolbar_menu_search
 import dev.alvr.katana.core.ui.resources.value
+import dev.alvr.katana.core.ui.symbols.Filter
+import dev.alvr.katana.core.ui.symbols.KatanaSymbols
+import dev.alvr.katana.core.ui.symbols.Search
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 
 @Composable
@@ -42,7 +42,7 @@ fun KatanaHomeTopAppBar(
             if (onSearch != null) {
                 IconButton(onClick = onSearch) {
                     Icon(
-                        imageVector = Icons.Outlined.Search,
+                        imageVector = KatanaSymbols.Search,
                         contentDescription = searchContentDescription,
                     )
                 }
@@ -51,7 +51,7 @@ fun KatanaHomeTopAppBar(
             if (onFilter != null) {
                 IconButton(onClick = onFilter) {
                     Icon(
-                        imageVector = Icons.Outlined.FilterAlt,
+                        imageVector = KatanaSymbols.Filter,
                         contentDescription = filterContentDescription,
                     )
                 }

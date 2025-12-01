@@ -3,9 +3,6 @@ package dev.alvr.katana.core.ui.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -26,6 +23,9 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import dev.alvr.katana.core.common.empty
+import dev.alvr.katana.core.ui.symbols.ArrowBack
+import dev.alvr.katana.core.ui.symbols.Cross
+import dev.alvr.katana.core.ui.symbols.KatanaSymbols
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 
 @Composable
@@ -66,7 +66,7 @@ fun KatanaSearchTopAppBar(
             IconButton(onClick = onBack) {
                 Icon(
                     contentDescription = closeContentDescription,
-                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                    imageVector = KatanaSymbols.ArrowBack,
                 )
             }
         },
@@ -78,7 +78,7 @@ fun KatanaSearchTopAppBar(
                 },
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Clear,
+                    imageVector = KatanaSymbols.Cross,
                     contentDescription = clearContentDescription,
                 )
             }

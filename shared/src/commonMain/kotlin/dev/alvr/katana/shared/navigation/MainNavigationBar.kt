@@ -1,20 +1,15 @@
 package dev.alvr.katana.shared.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.LibraryBooks
-import androidx.compose.material.icons.automirrored.outlined.LibraryBooks
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.VideoLibrary
-import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Explore
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.VideoLibrary
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 import dev.alvr.katana.core.ui.navigation.KatanaDestination
 import dev.alvr.katana.core.ui.navigation.KatanaNavigationBarItem
+import dev.alvr.katana.core.ui.symbols.AccountCircle
+import dev.alvr.katana.core.ui.symbols.AnimeLibrary
+import dev.alvr.katana.core.ui.symbols.Explore
+import dev.alvr.katana.core.ui.symbols.Home
+import dev.alvr.katana.core.ui.symbols.KatanaSymbols
+import dev.alvr.katana.core.ui.symbols.MangaLibrary
 import dev.alvr.katana.features.account.ui.navigation.AccountDestination
 import dev.alvr.katana.features.explore.ui.navigation.ExploreDestination
 import dev.alvr.katana.features.home.ui.navigation.HomeDestination
@@ -34,8 +29,7 @@ import org.jetbrains.compose.resources.StringResource
 @Suppress("UseDataClass")
 private class MainNavigationBar(
     override val screen: KatanaDestination,
-    override val selectedIcon: ImageVector,
-    override val unselectedIcon: ImageVector,
+    override val icon: ImageVector,
     override val label: StringResource,
     override val requireSession: Boolean,
 ) : MainNavigationBarItem {
@@ -49,36 +43,31 @@ internal interface MainNavigationBarItem : KatanaNavigationBarItem {
 internal val mainNavigationBarItems: ImmutableList<MainNavigationBarItem> = persistentListOf(
     MainNavigationBar(
         screen = HomeDestination.Root,
-        selectedIcon = Icons.Filled.Home,
-        unselectedIcon = Icons.Outlined.Home,
+        icon = KatanaSymbols.Home,
         label = Res.string.navigation_bar_home,
         requireSession = false,
     ),
     MainNavigationBar(
         screen = AnimeListsDestination.Root,
-        selectedIcon = Icons.Filled.VideoLibrary,
-        unselectedIcon = Icons.Outlined.VideoLibrary,
+        icon = KatanaSymbols.AnimeLibrary,
         label = Res.string.navigation_bar_anime,
         requireSession = true,
     ),
     MainNavigationBar(
         screen = MangaListsDestination.Root,
-        selectedIcon = Icons.AutoMirrored.Filled.LibraryBooks,
-        unselectedIcon = Icons.AutoMirrored.Outlined.LibraryBooks,
+        icon = KatanaSymbols.MangaLibrary,
         label = Res.string.navigation_bar_manga,
         requireSession = true,
     ),
     MainNavigationBar(
         screen = ExploreDestination.Root,
-        selectedIcon = Icons.Filled.Explore,
-        unselectedIcon = Icons.Outlined.Explore,
+        icon = KatanaSymbols.Explore,
         label = Res.string.navigation_bar_explore,
         requireSession = false,
     ),
     MainNavigationBar(
         screen = AccountDestination.Root,
-        selectedIcon = Icons.Filled.AccountCircle,
-        unselectedIcon = Icons.Outlined.AccountCircle,
+        icon = KatanaSymbols.AccountCircle,
         label = Res.string.navigation_bar_account,
         requireSession = false,
     ),

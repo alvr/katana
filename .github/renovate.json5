@@ -18,11 +18,20 @@
     "prHourlyLimit": 3,
     "enabledManagers": [
         "gradle",
+        "gradle-wrapper",
         "github-actions",
     ],
     "rebaseWhen": "behind-base-branch",
     "recreateWhen": "never",
     "packageRules": [
+        {
+            "groupName": "JetBrains AndroidX",
+            "groupSlug": "jetbrains-androidx",
+            "matchPackagePatterns": [
+                "org.jetbrains.androidx.*",
+            ],
+            "matchManagers": ["gradle"],
+        },
         {
             "groupName": "Kotlin Dependants",
             "groupSlug": "kotlin",

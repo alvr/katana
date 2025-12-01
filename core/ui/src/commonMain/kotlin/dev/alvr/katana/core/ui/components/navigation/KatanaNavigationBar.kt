@@ -54,7 +54,7 @@ private fun <T : KatanaNavigationBarItem> BottomNavigationBar(
             val selected = isSelected(item)
 
             NavigationBarItem(
-                icon = { NavigationBarIcon(item, selected) },
+                icon = { NavigationBarIcon(item) },
                 label = { NavigationBarLabel(item) },
                 selected = selected,
                 onClick = { onClick(item) },
@@ -77,7 +77,7 @@ private fun <T : KatanaNavigationBarItem> RailNavigationBar(
             val selected = isSelected(item)
 
             NavigationRailItem(
-                icon = { NavigationBarIcon(item, selected) },
+                icon = { NavigationBarIcon(item) },
                 label = { NavigationBarLabel(item) },
                 selected = selected,
                 onClick = { onClick(item) },
@@ -91,10 +91,9 @@ private fun <T : KatanaNavigationBarItem> RailNavigationBar(
 @Composable
 private fun NavigationBarIcon(
     destination: KatanaNavigationBarItem,
-    selected: Boolean,
 ) {
     Icon(
-        imageVector = if (selected) destination.selectedIcon else destination.unselectedIcon,
+        imageVector = destination.icon,
         contentDescription = destination.label.value,
     )
 }

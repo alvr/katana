@@ -17,7 +17,6 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.compose.ComposeExtension
-import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.compose.resources.ResourcesExtension
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -43,22 +42,11 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
-        val compose = (this as ExtensionAware).extensions.getByType<ComposePlugin.Dependencies>()
-
         sourceSets {
             commonMain.dependencies {
-                implementation(compose.animation)
-                implementation(compose.components.resources)
-                implementation(compose.foundation)
-                implementation(compose.materialIconsExtended)
-                implementation(compose.runtime)
-                implementation(compose.runtimeSaveable)
-                implementation(compose.ui)
                 bundleImplementation("ui-common")
             }
             androidMain.dependencies {
-                implementation(compose.preview)
-                implementation(compose.uiTooling)
                 bundleImplementation("ui-android")
             }
             iosMain.dependencies {

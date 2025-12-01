@@ -76,9 +76,16 @@ coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
 # Compose
+compose-animation = { module = "org.jetbrains.compose.animation:animation", version.ref = "compose" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 compose-material3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "material3-adaptive" }
 compose-placeholder = { module = "com.eygraber:compose-placeholder-material3", version.ref = "compose-placeholder" }
+compose-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose" }
+compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
+compose-runtime-saveable = { module = "org.jetbrains.compose.runtime:runtime-saveable", version.ref = "compose" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
 compose-windowsize = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "material3" }
 
 # Detekt
@@ -329,8 +336,15 @@ data-remote-wasm-test-ksp = []
 # Deps for UI
 ui-common = [
     "coil",
+    "compose-animation",
+    "compose-foundation",
     "compose-material3",
     "compose-material3-adaptive",
+    "compose-preview",
+    "compose-resources",
+    "compose-runtime",
+    "compose-runtime-saveable",
+    "compose-ui",
     "lifecycle-runtime",
     "lifecycle-viewmodel",
     "koin-compose",
