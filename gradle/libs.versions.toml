@@ -14,7 +14,7 @@ detekt-compose = "0.4.28"
 detekt-compose2 = "1.4.0"
 kermit = "2.0.8"
 kaml = "0.104.0"
-koin = "4.1.1"
+koin = "4.2.0-alpha3"
 kotest = "6.0.7"
 kotest-property-datetime = "2.0.0"
 kotlin = "2.2.21"
@@ -171,7 +171,7 @@ kotest-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "k
 kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-koin = { module = "io.kotest:kotest-extensions-koin", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
-kotest-property-datetime = { module = "io.kotest.extensions:kotest-property-datetime", version.ref = "kotest-property-datetime" }
+kotest-property-datetime = { module = "io.kotest:kotest-property-datetime", version.ref = "kotest" }
 
 ## MockK
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
@@ -218,19 +218,16 @@ core-common-test = [
     "kotest-koin",
     "kotest-property",
     "kotlinx-coroutines-test",
+    "kotest-property-datetime",
     "turbine",
 ]
 core-android-test = [
     "kotest-junit5",
-    "kotest-property-datetime",
     "mockk",
 ]
-core-ios-test = [
-    "kotest-property-datetime",
-]
+core-ios-test = []
 core-desktop-test = [
     "kotest-junit5",
-    "kotest-property-datetime",
     "mockk",
 ]
 core-js-test = []

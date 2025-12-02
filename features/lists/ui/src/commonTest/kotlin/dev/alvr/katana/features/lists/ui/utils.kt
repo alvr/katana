@@ -40,26 +40,26 @@ internal inline fun <reified T : MediaEntry> randomCollection(): List<MediaListG
 
 private val mediaListArb = arbitrary {
     MediaList(
-        id = ItemEntryId(Arb.int().next()),
+        id = ItemEntryId(Arb.int().bind()),
         score = 0.0,
-        progress = Arb.int().next(),
+        progress = Arb.int().bind(),
         progressVolumes = null,
-        repeat = Arb.int().next(),
-        private = Arb.boolean().next(),
-        notes = Arb.string().next(),
-        hiddenFromStatusLists = Arb.boolean().next(),
-        startedAt = Arb.date().orNull().next(),
-        completedAt = Arb.date().orNull().next(),
-        updatedAt = Arb.datetime().orNull().next(),
+        repeat = Arb.int().bind(),
+        private = Arb.boolean().bind(),
+        notes = Arb.string().bind(),
+        hiddenFromStatusLists = Arb.boolean().bind(),
+        startedAt = Arb.date().orNull().bind(),
+        completedAt = Arb.date().orNull().bind(),
+        updatedAt = Arb.datetime().orNull().bind(),
     )
 }
 
 private val commonMediaEntryArb = arbitrary {
     CommonMediaEntry(
-        id = ItemMediaId(Arb.int().next()),
-        title = Arb.string(minSize = 10).next(),
-        coverImage = Arb.string().next(),
-        format = Arb.enum<CommonMediaEntry.Format>().next(),
+        id = ItemMediaId(Arb.int().bind()),
+        title = Arb.string(minSize = 10).bind(),
+        coverImage = Arb.string().bind(),
+        format = Arb.enum<CommonMediaEntry.Format>().bind(),
     )
 }
 
@@ -67,13 +67,13 @@ private val commonMediaEntryArb = arbitrary {
 private inline fun <reified T : MediaEntry> entryArb(): Arb<T> = arbitrary {
     when (T::class) {
         MediaEntry.Anime::class -> MediaEntry.Anime(
-            entry = commonMediaEntryArb.next(),
+            entry = commonMediaEntryArb.bind(),
             episodes = null,
             nextEpisode = null,
         )
 
         MediaEntry.Manga::class -> MediaEntry.Manga(
-            entry = commonMediaEntryArb.next(),
+            entry = commonMediaEntryArb.bind(),
             chapters = null,
             volumes = null,
         )
