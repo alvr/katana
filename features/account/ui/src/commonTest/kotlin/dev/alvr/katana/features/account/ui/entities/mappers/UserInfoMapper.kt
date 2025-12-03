@@ -30,9 +30,9 @@ internal class UserInfoMapper : ShouldSpec({
         should("return the expected value") {
             val model = arbitrary {
                 UserInfo(
-                    username = Arb.string().next(),
-                    avatar = Arb.string().next(),
-                    banner = Arb.string().next(),
+                    username = Arb.string().bind(),
+                    avatar = Arb.string().bind(),
+                    banner = Arb.string().bind(),
                 )
             }.next()
 
