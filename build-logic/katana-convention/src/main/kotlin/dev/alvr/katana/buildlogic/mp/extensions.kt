@@ -3,6 +3,7 @@ package dev.alvr.katana.buildlogic.mp
 import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
 import com.android.build.api.dsl.androidLibrary
 import dev.alvr.katana.buildlogic.KatanaConfiguration
+import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.configureKotlinCompiler
 import dev.alvr.katana.buildlogic.fullPackageName
 import java.util.Locale
@@ -39,19 +40,14 @@ private fun KotlinMultiplatformExtension.configureAndroid(
         minSdk = KatanaConfiguration.MinSdk
         namespace = project.fullPackageName
 
+        androidResources.enable = false
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
 
-        localDependencySelection {
-            selectBuildTypeFrom.set(listOf("debug", "release"))
-        }
-
-        optimization {
-            minify = true
-        }
+        enableCoreLibraryDesugaring = true
+        project.dependencies.add("coreLibraryDesugaring", project.catalogLib("desugaring"))
 
         withHostTest {
             isIncludeAndroidResources = true
-            enableCoverage = true
         }
 
         compilerOptions.configureKotlinCompiler()

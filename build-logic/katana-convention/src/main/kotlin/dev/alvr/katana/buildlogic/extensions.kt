@@ -130,6 +130,7 @@ internal fun TaskContainer.commonTasks() {
         compilerOptions.configureKotlinCompiler()
     }
     withType<Test>().configureEach {
+        useJUnitPlatform()
         failOnNoDiscoveredTests = false
     }
 }

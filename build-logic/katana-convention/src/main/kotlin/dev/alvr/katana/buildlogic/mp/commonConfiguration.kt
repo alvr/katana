@@ -18,6 +18,7 @@ internal fun Project.commonConfiguration(
     configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = { },
     configureIos: KotlinNativeTarget.() -> Unit = { },
 ) {
+    apply(plugin = "com.android.kotlin.multiplatform.library")
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
     apply(plugin = "com.google.devtools.ksp")
     apply(plugin = "io.kotest")
