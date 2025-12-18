@@ -1,10 +1,7 @@
 package dev.alvr.katana.buildlogic.mp.core
 
-import com.android.build.gradle.LibraryExtension
 import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.commonTasks
-import dev.alvr.katana.buildlogic.configureAndroid
-import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.mp.hierarchy
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,14 +13,10 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
+        apply(plugin = "com.android.kotlin.multiplatform.library")
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
-        apply(plugin = "com.android.library")
 
-        with(extensions) {
-            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
-            configure<LibraryExtension> { configureAndroid(project.fullPackageName) }
-        }
-
+        extensions.configure<KotlinMultiplatformExtension> { configureMultiplatform() }
         tasks.commonTasks()
     }
 

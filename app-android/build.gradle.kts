@@ -7,4 +7,6 @@ dependencies {
 
     implementation(projects.core.ui)
     implementation(projects.shared)
+
+    implementation(libs.bundles.app.android)
 }

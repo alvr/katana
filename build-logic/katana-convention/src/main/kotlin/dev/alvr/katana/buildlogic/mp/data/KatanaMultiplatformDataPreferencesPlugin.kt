@@ -2,6 +2,7 @@ package dev.alvr.katana.buildlogic.mp.data
 
 import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.kspDependencies
+import dev.alvr.katana.buildlogic.mp.androidHostTest
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -40,7 +41,7 @@ internal class KatanaMultiplatformDataPreferencesPlugin : Plugin<Project> {
             commonTest.dependencies {
                 bundleImplementation("data-preferences-common-test")
             }
-            androidUnitTest.dependencies {
+            androidHostTest.dependencies {
                 bundleImplementation("data-preferences-android-test")
             }
             iosTest.dependencies {

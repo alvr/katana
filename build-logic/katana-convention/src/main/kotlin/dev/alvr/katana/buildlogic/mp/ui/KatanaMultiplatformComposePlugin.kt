@@ -5,6 +5,7 @@ package dev.alvr.katana.buildlogic.mp.ui
 import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
+import dev.alvr.katana.buildlogic.mp.androidHostTest
 import java.io.File
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -54,7 +55,7 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
             commonTest.dependencies {
                 bundleImplementation("ui-common-test")
             }
-            androidUnitTest.dependencies {
+            androidHostTest.dependencies {
                 bundleImplementation("ui-android-test")
             }
             iosTest.dependencies {

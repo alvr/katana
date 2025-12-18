@@ -16,7 +16,6 @@ kermit = "2.0.8"
 kaml = "0.104.0"
 koin = "4.2.0-beta2"
 kotest = "6.0.7"
-kotest-property-datetime = "2.0.0"
 kotlin = "2.3.0"
 kotlinpoet = "2.2.0"
 kotlinx-atomicfu = "0.29.0"
@@ -43,7 +42,7 @@ turbine = "1.2.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
-android-library = { id = "com.android.library", version.ref = "android" }
+android-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "android" }
 apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -137,12 +136,10 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 # KStore
 kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
 kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
-kstore-storage = { module = "io.github.xxfast:kstore-storage", version.ref = "kstore" }
 
 # Ktor
 ktor-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
-ktor-jvm = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 
 # Lifecycle
 lifecycle-runtime = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
@@ -158,7 +155,6 @@ navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui",
 
 # Okio
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
-okio-nodefilesystem = { module = "com.squareup.okio:okio-nodefilesystem", version.ref = "okio" }
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
 
 # Tests

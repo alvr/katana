@@ -13,7 +13,7 @@ import dev.alvr.katana.core.common.KatanaCachePath
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.shared.di.katanaModule
 import dev.alvr.katana.shared.screens.Katana
-import org.koin.compose.KoinMultiplatformApplication
+import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.logger.Level
@@ -24,8 +24,8 @@ import org.koin.dsl.KoinConfiguration
 fun Katana() {
     initNapier()
 
-    KoinMultiplatformApplication(
-        config = KoinConfiguration { modules(katanaModule) },
+    KoinApplication(
+        configuration = KoinConfiguration { modules(katanaModule) },
         logLevel = if (KatanaBuildConfig.DEBUG) Level.DEBUG else Level.NONE,
     ) {
         InitCoil()

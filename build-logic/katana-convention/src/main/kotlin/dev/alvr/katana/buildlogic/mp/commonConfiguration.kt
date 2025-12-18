@@ -2,6 +2,7 @@
 
 package dev.alvr.katana.buildlogic.mp
 
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
 import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
@@ -11,11 +12,10 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 internal fun Project.commonConfiguration(
-    configureAndroid: KotlinAndroidTarget.() -> Unit = { },
+    configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = { },
     configureIos: KotlinNativeTarget.() -> Unit = { },
 ) {
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
@@ -40,7 +40,7 @@ internal fun Project.commonConfiguration(
 
 private fun KotlinMultiplatformExtension.configureMultiplatform(
     project: Project,
-    configureAndroid: KotlinAndroidTarget.() -> Unit = { },
+    configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = { },
     configureIos: KotlinNativeTarget.() -> Unit = { },
 ) {
     hierarchy(
@@ -67,7 +67,7 @@ private fun KotlinMultiplatformExtension.configureSourceSets() {
         commonTest.dependencies {
             bundleImplementation("core-common-test")
         }
-        androidUnitTest.dependencies {
+        androidHostTest.dependencies {
             bundleImplementation("core-android-test")
         }
         iosTest.dependencies {
