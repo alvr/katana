@@ -12,17 +12,8 @@ import dev.alvr.katana.features.home.domain.usecases.HideWelcomeCardUseCase
 import dev.alvr.katana.features.home.domain.usecases.ObserveWelcomeCardVisibilityUseCase
 import dev.alvr.katana.features.home.ui.LOGIN_DEEP_LINK_TOKEN
 
-internal expect class PlatformHomeViewModel(
-    savedStateHandle: SavedStateHandle,
-    hideWelcomeCardUseCase: HideWelcomeCardUseCase,
-    observeActiveSessionUseCase: ObserveActiveSessionUseCase,
-    observeWelcomeCardVisibilityUseCase: ObserveWelcomeCardVisibilityUseCase,
-    saveSessionUseCase: SaveSessionUseCase,
-    saveUserIdUseCase: SaveUserIdUseCase,
-) : HomeViewModel
-
 @Stable
-internal abstract class HomeViewModel(
+internal class HomeViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val hideWelcomeCardUseCase: HideWelcomeCardUseCase,
     private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,
@@ -30,8 +21,6 @@ internal abstract class HomeViewModel(
     private val saveSessionUseCase: SaveSessionUseCase,
     private val saveUserIdUseCase: SaveUserIdUseCase,
 ) : KatanaViewModel<HomeState, HomeEffect, HomeIntent>(HomeState()) {
-
-    protected abstract fun platformHandleIntent(intent: PlatformHomeIntent)
 
     override fun init() {
         observeSession()
@@ -45,7 +34,6 @@ internal abstract class HomeViewModel(
             is HomeIntent.SaveToken -> handleSaveAnilistToken(intent.token)
             is HomeIntent.ForYouIntent -> handleForYouIntent(intent)
             is HomeIntent.ActivityIntent -> handleActivityIntent(intent)
-            is PlatformHomeIntent -> platformHandleIntent(intent)
         }
     }
 

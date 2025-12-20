@@ -16,11 +16,9 @@ kermit = "2.0.8"
 kaml = "0.104.0"
 koin = "4.2.0-beta2"
 kotest = "6.0.7"
-kotest-property-datetime = "2.0.0"
 kotlin = "2.3.0"
 kotlinpoet = "2.2.0"
 kotlinx-atomicfu = "0.29.0"
-kotlinx-browser = "0.5.0"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1-0.6.x-compat"
 kotlinx-immutable = "0.4.0"
@@ -44,7 +42,7 @@ turbine = "1.2.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
-android-library = { id = "com.android.library", version.ref = "android" }
+android-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "android" }
 apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -125,9 +123,7 @@ koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "kotlinx-atomicfu" }
-kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.ref = "kotlinx-browser" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-immutable" }
@@ -140,12 +136,10 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 # KStore
 kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
 kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
-kstore-storage = { module = "io.github.xxfast:kstore-storage", version.ref = "kstore" }
 
 # Ktor
 ktor-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
-ktor-jvm = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 
 # Lifecycle
 lifecycle-runtime = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
@@ -161,7 +155,6 @@ navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui",
 
 # Okio
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
-okio-nodefilesystem = { module = "com.squareup.okio:okio-nodefilesystem", version.ref = "okio" }
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
 
 # Tests
@@ -196,20 +189,10 @@ core-android = [
     "koin-android",
 ]
 core-ios = []
-core-desktop = []
-core-js = [
-    "okio-nodefilesystem",
-]
-core-wasm = [
-    "kotlinx-browser",
-]
 
 core-common-ksp = []
 core-android-ksp = []
 core-ios-ksp = []
-core-desktop-ksp = []
-core-js-ksp = []
-core-wasm-ksp = []
 
 core-common-test = [
     "koin-test",
@@ -226,19 +209,10 @@ core-android-test = [
     "mockk",
 ]
 core-ios-test = []
-core-desktop-test = [
-    "kotest-junit5",
-    "mockk",
-]
-core-js-test = []
-core-wasm-test = []
 
 core-common-test-ksp = []
 core-android-test-ksp = []
 core-ios-test-ksp = []
-core-desktop-test-ksp = []
-core-js-test-ksp = []
-core-wasm-test-ksp = []
 
 # Deps for Data Preferences
 data-preferences-common = [
@@ -251,40 +225,20 @@ data-preferences-android = [
 data-preferences-ios = [
     "kstore-file",
 ]
-data-preferences-desktop = [
-    "kstore-file",
-]
-data-preferences-js = [
-    "kstore-storage",
-]
-data-preferences-wasm = [
-    "kstore-storage",
-]
 
 data-preferences-common-ksp = []
 data-preferences-android-ksp = []
 data-preferences-ios-ksp = []
-data-preferences-desktop-ksp = []
-data-preferences-js-ksp = []
-data-preferences-wasm-ksp = []
 
 data-preferences-common-test = [
     "okio-fakefilesystem",
 ]
 data-preferences-android-test = []
 data-preferences-ios-test = []
-data-preferences-desktop-test = []
-data-preferences-js-test = [
-    "okio-nodefilesystem",
-]
-data-preferences-wasm-test = []
 
 data-preferences-common-test-ksp = []
 data-preferences-android-test-ksp = []
 data-preferences-ios-test-ksp = []
-data-preferences-desktop-test-ksp = []
-data-preferences-js-test-ksp = []
-data-preferences-wasm-test-ksp = []
 
 # Deps for Data Remote
 data-remote-common = [
@@ -299,19 +253,10 @@ data-remote-ios = [
     "apollo-cache-sqlite",
     "ktor-ios",
 ]
-data-remote-desktop = [
-    "apollo-cache-sqlite",
-    "ktor-jvm",
-]
-data-remote-js = []
-data-remote-wasm = []
 
 data-remote-common-ksp = []
 data-remote-android-ksp = []
 data-remote-ios-ksp = []
-data-remote-desktop-ksp = []
-data-remote-js-ksp = []
-data-remote-wasm-ksp = []
 
 data-remote-common-test = [
     "apollo-mockserver",
@@ -319,16 +264,10 @@ data-remote-common-test = [
 ]
 data-remote-android-test = []
 data-remote-ios-test = []
-data-remote-desktop-test = []
-data-remote-js-test = []
-data-remote-wasm-test = []
 
 data-remote-common-test-ksp = []
 data-remote-android-test-ksp = []
 data-remote-ios-test-ksp = []
-data-remote-desktop-test-ksp = []
-data-remote-js-test-ksp = []
-data-remote-wasm-test-ksp = []
 
 # Deps for UI
 ui-common = [
@@ -354,43 +293,24 @@ ui-common = [
 ]
 ui-android = []
 ui-ios = []
-ui-desktop = [
-    "kotlinx-coroutines-swing",
-]
-ui-js = []
-ui-wasm = []
 
 ui-common-ksp = []
 ui-android-ksp = []
 ui-ios-ksp = []
-ui-desktop-ksp = []
-ui-js-ksp = []
-ui-wasm-ksp = []
 
 ui-common-test = []
 ui-android-test = []
 ui-ios-test = []
-ui-desktop-test = []
-ui-js-test = []
-ui-wasm-test = []
 
 ui-common-test-ksp = []
 ui-android-test-ksp = []
 ui-ios-test-ksp = []
-ui-desktop-test-ksp = []
-ui-js-test-ksp = []
-ui-wasm-test-ksp = []
 
-app-common = []
 app-android = [
     "androidx-activity",
     "androidx-splashscreen",
     "coil",
 ]
-app-ios = []
-app-desktop = []
-app-js = []
-app-wasm = []
 
 build-config = [
     "kaml",

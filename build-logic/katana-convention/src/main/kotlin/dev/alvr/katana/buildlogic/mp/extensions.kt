@@ -1,79 +1,62 @@
 package dev.alvr.katana.buildlogic.mp
 
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
+import com.android.build.api.dsl.androidLibrary
 import dev.alvr.katana.buildlogic.KatanaConfiguration
+import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.configureKotlinCompiler
+import dev.alvr.katana.buildlogic.fullPackageName
 import java.util.Locale
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.NamedDomainObjectProvider
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.provideDelegate
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinSourceSetConvention
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsTargetDsl
-import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinWasmJsTargetDsl
-import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
 internal fun KotlinMultiplatformExtension.hierarchy(
-    configureAndroid: KotlinAndroidTarget.() -> Unit = { },
-    configureApple: KotlinNativeTarget.() -> Unit = { },
-    configureDesktop: KotlinJvmTarget.() -> Unit = { },
-    configureJs: KotlinJsTargetDsl.() -> Unit = { browser() },
-    configureWasmJs: KotlinWasmJsTargetDsl.() -> Unit = { browser() },
+    configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = { },
+    configureIos: KotlinNativeTarget.() -> Unit = { },
 ) {
-    applyDefaultHierarchyTemplate {
-        common {
-            group("jvmBased") {
-                withJvm()
-                withAndroidTarget()
-            }
-
-            group("webBased") {
-                withJs()
-                withWasmJs()
-            }
-
-            group("mobile") {
-                withAndroidTarget()
-                withIos()
-                withIosX64()
-                withIosArm64()
-                withIosSimulatorArm64()
-            }
-
-            group("nonMobile") {
-                withJvm()
-                withJs()
-                withWasmJs()
-            }
-        }
-    }
+    applyDefaultHierarchyTemplate()
 
     configureAndroid(configureAndroid)
-    configureApple(configureApple)
-    configureDesktop(configureDesktop)
-    configureJs(configureJs)
-    configureWasmJs(configureWasmJs)
+    configureIos(configureIos)
 
     configureKotlin()
 }
 
+@Suppress("UnstableApiUsage")
 private fun KotlinMultiplatformExtension.configureAndroid(
-    configure: KotlinAndroidTarget.() -> Unit,
+    configure: KotlinMultiplatformAndroidLibraryTarget.() -> Unit,
 ) {
-    androidTarget {
+    androidLibrary {
+        buildToolsVersion = KatanaConfiguration.BuildTools
+        compileSdk = KatanaConfiguration.CompileSdk
+        minSdk = KatanaConfiguration.MinSdk
+        namespace = project.fullPackageName
+
+        androidResources.enable = false
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
+
+        enableCoreLibraryDesugaring = true
+        project.dependencies.add("coreLibraryDesugaring", project.catalogLib("desugaring"))
+
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
+
+        compilerOptions.configureKotlinCompiler()
+
         configure()
     }
 }
 
-private fun KotlinMultiplatformExtension.configureApple(
+private fun KotlinMultiplatformExtension.configureIos(
     configure: KotlinNativeTarget.() -> Unit,
 ) {
     listOf(
@@ -90,37 +73,15 @@ private fun KotlinMultiplatformExtension.configureApple(
     }
 }
 
-private fun KotlinMultiplatformExtension.configureDesktop(
-    configure: KotlinJvmTarget.() -> Unit,
-) {
-    jvm("desktop") {
-        configure()
-        testRuns["test"].executionTask.configure { useJUnitPlatform() }
-    }
-}
-
-private fun KotlinMultiplatformExtension.configureJs(
-    configure: KotlinJsTargetDsl.() -> Unit,
-) {
-    js(IR) {
-        configure()
-    }
-}
-
-@OptIn(ExperimentalWasmDsl::class)
-private fun KotlinMultiplatformExtension.configureWasmJs(
-    configure: KotlinWasmJsTargetDsl.() -> Unit,
-) {
-    wasmJs(configure)
-}
-
 private fun KotlinMultiplatformExtension.configureKotlin() {
     jvmToolchain(KatanaConfiguration.JvmTargetStr.toInt())
     sourceSets.commonMain { configureCommonLanguageSettings() }
 
     targets.configureEach {
-        compilations.configureEach {
-            compileTaskProvider.get().configureKotlinCompiler()
+        compilations.all {
+            compileTaskProvider.configure {
+                configureKotlinCompiler()
+            }
         }
     }
 }
@@ -138,19 +99,12 @@ private fun KotlinCompilationTask<*>.configureKotlinCompiler() {
 }
 
 private val Project.frameworkIdentifier
-    get() = path.split(':').identifier
-
-internal val List<String>.identifier
-    get() = filter { it.isNotEmpty() }
-        .reduceRight { acc, s -> "$acc${s.capitalize()}" }
+    get() = path.split(':')
+        .joinToString(separator = "", prefix = "Katana") { it.capitalize() }
 
 internal fun String.capitalize() =
     replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
-internal val NamedDomainObjectContainer<KotlinSourceSet>.desktopMain:
-    NamedDomainObjectProvider<KotlinSourceSet> by KotlinSourceSetConvention
-
-@OptIn(ExperimentalKotlinGradlePluginApi::class)
-internal val NamedDomainObjectContainer<KotlinSourceSet>.desktopTest:
+internal val NamedDomainObjectContainer<KotlinSourceSet>.androidHostTest:
     NamedDomainObjectProvider<KotlinSourceSet> by KotlinSourceSetConvention

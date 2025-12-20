@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":app:bundleBeta" />
+          <option value=":app-android:bundleBeta" />
         </list>
       </option>
       <option name="vmOptions" value="" />

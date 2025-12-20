@@ -2,6 +2,7 @@
 
 package dev.alvr.katana.buildlogic.mp
 
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
 import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
@@ -11,19 +12,13 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsTargetDsl
-import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinWasmJsTargetDsl
-import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
 internal fun Project.commonConfiguration(
-    configureAndroid: KotlinAndroidTarget.() -> Unit = { },
-    configureApple: KotlinNativeTarget.() -> Unit = { },
-    configureDesktop: KotlinJvmTarget.() -> Unit = { },
-    configureJs: KotlinJsTargetDsl.() -> Unit = { browser() },
-    configureWasmJs: KotlinWasmJsTargetDsl.() -> Unit = { browser() },
+    configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = { },
+    configureIos: KotlinNativeTarget.() -> Unit = { },
 ) {
+    apply(plugin = "com.android.kotlin.multiplatform.library")
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
     apply(plugin = "com.google.devtools.ksp")
     apply(plugin = "io.kotest")
@@ -36,10 +31,7 @@ internal fun Project.commonConfiguration(
             configureMultiplatform(
                 project = project,
                 configureAndroid = configureAndroid,
-                configureApple = configureApple,
-                configureDesktop = configureDesktop,
-                configureJs = configureJs,
-                configureWasmJs = configureWasmJs,
+                configureIos = configureIos,
             )
         }
     }
@@ -49,18 +41,12 @@ internal fun Project.commonConfiguration(
 
 private fun KotlinMultiplatformExtension.configureMultiplatform(
     project: Project,
-    configureAndroid: KotlinAndroidTarget.() -> Unit = { },
-    configureApple: KotlinNativeTarget.() -> Unit = { },
-    configureDesktop: KotlinJvmTarget.() -> Unit = { },
-    configureJs: KotlinJsTargetDsl.() -> Unit = { },
-    configureWasmJs: KotlinWasmJsTargetDsl.() -> Unit = { },
+    configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = { },
+    configureIos: KotlinNativeTarget.() -> Unit = { },
 ) {
     hierarchy(
         configureAndroid = configureAndroid,
-        configureApple = configureApple,
-        configureDesktop = configureDesktop,
-        configureJs = configureJs,
-        configureWasmJs = configureWasmJs,
+        configureIos = configureIos,
     )
     configureSourceSets()
 
@@ -78,33 +64,15 @@ private fun KotlinMultiplatformExtension.configureSourceSets() {
         iosMain.dependencies {
             bundleImplementation("core-ios")
         }
-        desktopMain.dependencies {
-            bundleImplementation("core-desktop")
-        }
-        jsMain.dependencies {
-            bundleImplementation("core-js")
-        }
-        wasmJsMain.dependencies {
-            bundleImplementation("core-wasm")
-        }
 
         commonTest.dependencies {
             bundleImplementation("core-common-test")
         }
-        androidUnitTest.dependencies {
+        androidHostTest.dependencies {
             bundleImplementation("core-android-test")
         }
         iosTest.dependencies {
             bundleImplementation("core-ios-test")
-        }
-        desktopTest.dependencies {
-            bundleImplementation("core-desktop-test")
-        }
-        jsTest.dependencies {
-            bundleImplementation("core-js-test")
-        }
-        wasmJsTest.dependencies {
-            bundleImplementation("core-wasm-test")
         }
     }
 }

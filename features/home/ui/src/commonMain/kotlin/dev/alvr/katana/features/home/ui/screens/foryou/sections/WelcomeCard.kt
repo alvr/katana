@@ -66,9 +66,7 @@ internal fun WelcomeCard(
                     },
                 )
 
-                WelcomeCardBody(
-                    onIntent = onIntent,
-                )
+                WelcomeCardBody()
             }
         }
     }
@@ -101,9 +99,10 @@ private fun WelcomeCardHeader(
 
 @Composable
 private fun WelcomeCardBody(
-    onIntent: (HomeIntent) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.spacing2),
     ) {
         Text(
@@ -117,14 +116,15 @@ private fun WelcomeCardBody(
             WelcomeCardRegisterButton(Modifier.weight(1f))
             WelcomeCardLoginButton(
                 modifier = Modifier.weight(1f),
-                onIntent = onIntent,
             )
         }
     }
 }
 
 @Composable
-private fun WelcomeCardRegisterButton(modifier: Modifier = Modifier) {
+private fun WelcomeCardRegisterButton(
+    modifier: Modifier = Modifier,
+) {
     val uriHandler = LocalUriHandler.current
 
     OutlinedButton(
@@ -139,7 +139,6 @@ private fun WelcomeCardRegisterButton(modifier: Modifier = Modifier) {
 
 @Composable
 private fun WelcomeCardLoginButton(
-    onIntent: (HomeIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val uriHandler = LocalUriHandler.current
@@ -147,7 +146,6 @@ private fun WelcomeCardLoginButton(
     Button(
         modifier = modifier,
         onClick = {
-            onLoginButtonClick(onIntent)
             uriHandler.openUri(ANILIST_LOGIN)
         },
     ) {
@@ -156,5 +154,3 @@ private fun WelcomeCardLoginButton(
         )
     }
 }
-
-internal expect fun onLoginButtonClick(intent: (HomeIntent) -> Unit)

@@ -37,7 +37,7 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         "*.Module_*Kt",
 
         // Serializers
-        "*.*$\$serializer",
+        $$$"*.*$$serializer",
     )
     private val packagesExcludes = listOf(
         // Core

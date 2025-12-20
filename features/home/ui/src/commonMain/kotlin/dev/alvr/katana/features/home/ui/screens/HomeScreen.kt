@@ -69,7 +69,6 @@ internal fun HomeScreen(
             HomeEffect.ForYouEffect.NavigateToTrending -> homeNavigator.navigateToTrending()
             HomeEffect.ForYouEffect.NavigateToPopular -> homeNavigator.navigateToPopular()
             HomeEffect.ForYouEffect.NavigateToUpcoming -> homeNavigator.navigateToUpcoming()
-            else -> effect.handleHomeEffect(homeNavigator)
         }
     }
 
@@ -126,5 +125,3 @@ internal fun HomeScreen(
         }
     }
 }
-
-internal expect fun HomeEffect.handleHomeEffect(homeNavigator: HomeNavigator)

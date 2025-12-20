@@ -1,11 +1,7 @@
 package dev.alvr.katana.buildlogic.mp.core
 
-import com.android.build.gradle.LibraryExtension
 import dev.alvr.katana.buildlogic.bundleImplementation
 import dev.alvr.katana.buildlogic.commonTasks
-import dev.alvr.katana.buildlogic.configureAndroid
-import dev.alvr.katana.buildlogic.fullPackageName
-import dev.alvr.katana.buildlogic.mp.desktopMain
 import dev.alvr.katana.buildlogic.mp.hierarchy
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -17,14 +13,10 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
+        apply(plugin = "com.android.kotlin.multiplatform.library")
         apply(plugin = "org.jetbrains.kotlin.multiplatform")
-        apply(plugin = "com.android.library")
 
-        with(extensions) {
-            configure<KotlinMultiplatformExtension> { configureMultiplatform() }
-            configure<LibraryExtension> { configureAndroid(project.fullPackageName) }
-        }
-
+        extensions.configure<KotlinMultiplatformExtension> { configureMultiplatform() }
         tasks.commonTasks()
     }
 
@@ -52,24 +44,6 @@ internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
                 bundleImplementation("data-preferences-ios-test")
                 bundleImplementation("data-remote-ios-test")
                 bundleImplementation("ui-ios-test")
-            }
-            desktopMain.dependencies {
-                bundleImplementation("core-desktop-test")
-                bundleImplementation("data-preferences-desktop-test")
-                bundleImplementation("data-remote-desktop-test")
-                bundleImplementation("ui-desktop-test")
-            }
-            jsMain.dependencies {
-                bundleImplementation("core-js-test")
-                bundleImplementation("data-preferences-js-test")
-                bundleImplementation("data-remote-js-test")
-                bundleImplementation("ui-js-test")
-            }
-            wasmJsMain.dependencies {
-                bundleImplementation("core-wasm-test")
-                bundleImplementation("data-preferences-wasm-test")
-                bundleImplementation("data-remote-wasm-test")
-                bundleImplementation("ui-wasm-test")
             }
         }
     }
