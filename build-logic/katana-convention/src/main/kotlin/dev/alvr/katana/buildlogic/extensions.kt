@@ -2,7 +2,7 @@
 
 package dev.alvr.katana.buildlogic
 
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.dsl.ApplicationExtension
 import dev.alvr.katana.buildlogic.mp.capitalize
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
@@ -70,13 +70,21 @@ internal fun DependencyHandlerScope.detekt(provider: Provider<*>) {
 }
 
 internal fun KotlinMultiplatformExtension.kspDependencies(project: Project, catalogPrefix: String) {
-    kspDependencies(project, "", catalogPrefix)
-    kspDependencies(project, "Test", catalogPrefix)
+    project.dependencies {
+        targets.forEach { target ->
+            val configurationName = "ksp${target.configurationName()}"
+            val catalogAlias = "$catalogPrefix-${target.groupName}-ksp".lowercase()
+
+            project.optionalCatalogBundle(catalogAlias).ifPresent { bundle ->
+                add(configurationName, bundle)
+            }
+        }
+    }
 }
 
-internal fun BaseExtension.configureAndroid(packageName: String) {
-    compileSdkVersion(KatanaConfiguration.CompileSdk)
-    buildToolsVersion(KatanaConfiguration.BuildTools)
+internal fun ApplicationExtension.configureAndroid(packageName: String) {
+    compileSdk { version = release(KatanaConfiguration.CompileSdk) }
+    buildToolsVersion = KatanaConfiguration.BuildTools
 
     buildFeatures.buildConfig = false
     namespace = packageName
@@ -149,32 +157,12 @@ internal fun KotlinCommonCompilerOptions.configureKotlinCompiler() {
     )
 }
 
-private fun KotlinMultiplatformExtension.kspDependencies(
-    project: Project,
-    configurationNameSuffix: String,
-    catalogPrefix: String,
-) {
-    project.dependencies {
-        targets.forEach { target ->
-            val configurationName = "ksp${target.configurationName(configurationNameSuffix)}"
-            val groupName = "${target.groupName}${configurationNameSuffix.suffix}"
-            val catalogAlias = "$catalogPrefix-$groupName-ksp".lowercase()
-
-            project.optionalCatalogBundle(catalogAlias).ifPresent { bundle ->
-                add(configurationName, bundle)
-            }
-        }
-    }
-}
-
-private fun KotlinTarget.configurationName(suffix: String) =
+private fun KotlinTarget.configurationName() =
     if (platformType == common) {
         "CommonMainMetadata"
     } else {
-        "${targetName.capitalize()}$suffix"
+        targetName.capitalize()
     }
-
-private val String.suffix get() = if (isNotEmpty()) "-$this" else ""
 
 private val KotlinTarget.groupName get() = when (platformType) {
     native if targetName.contains(IosTarget) -> IosTarget

@@ -3,7 +3,7 @@
 package dev.alvr.katana.buildlogic.mp
 
 import com.android.build.api.dsl.ApplicationBuildType
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import com.android.build.api.dsl.ApplicationExtension
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
@@ -19,19 +19,18 @@ internal class KatanaAppPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
         apply(plugin = "com.android.application")
-        apply(plugin = "org.jetbrains.kotlin.android")
         apply(plugin = "org.jetbrains.kotlin.plugin.compose")
 
         with(extensions) {
             commonExtensions()
-            configure<BaseAppModuleExtension> { configureAndroid(project) }
+            configure<ApplicationExtension> { configureAndroid(project) }
         }
 
         tasks.commonTasks()
     }
 
     @Suppress("StringLiteralDuplication")
-    private fun BaseAppModuleExtension.configureAndroid(project: Project) {
+    private fun ApplicationExtension.configureAndroid(project: Project) {
         fun ApplicationBuildType.configure(isDebug: Boolean) {
             isDebuggable = isDebug
             isDefault = isDebug
@@ -42,11 +41,12 @@ internal class KatanaAppPlugin : Plugin<Project> {
 
         configureAndroid(KatanaConfiguration.PackageName)
 
+        buildFeatures.resValues = true
         compileOptions.isCoreLibraryDesugaringEnabled = true
         defaultConfig.applicationId = KatanaConfiguration.PackageName
         lint.abortOnError = false
 
-        with(packagingOptions.resources.excludes) {
+        with(packaging.resources.excludes) {
             add("/META-INF/{AL2.0,LGPL2.1}")
             add("DebugProbesKt.bin")
         }

@@ -1,15 +1,16 @@
 package dev.alvr.katana.buildlogic.mp
 
 import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
-import com.android.build.api.dsl.androidLibrary
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.configureKotlinCompiler
 import dev.alvr.katana.buildlogic.fullPackageName
 import java.util.Locale
+import org.gradle.api.Action
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.NamedDomainObjectProvider
 import org.gradle.api.Project
+import org.gradle.api.plugins.ExtensionAware
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinSourceSetConvention
@@ -30,7 +31,6 @@ internal fun KotlinMultiplatformExtension.hierarchy(
     configureKotlin()
 }
 
-@Suppress("UnstableApiUsage")
 private fun KotlinMultiplatformExtension.configureAndroid(
     configure: KotlinMultiplatformAndroidLibraryTarget.() -> Unit,
 ) {
@@ -104,6 +104,10 @@ private val Project.frameworkIdentifier
 
 internal fun String.capitalize() =
     replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+
+private fun KotlinMultiplatformExtension.androidLibrary(action: Action<KotlinMultiplatformAndroidLibraryTarget>) {
+    (this as ExtensionAware).extensions.configure("androidLibrary", action)
+}
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
 internal val NamedDomainObjectContainer<KotlinSourceSet>.androidHostTest:
