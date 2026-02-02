@@ -33,6 +33,8 @@ internal class KatanaDetektPlugin : Plugin<Project> {
                 html.required = true
                 sarif.required = true
             }
+
+            dependsOn("spotlessCheck")
         }
 
         dependencies {

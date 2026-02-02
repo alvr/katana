@@ -38,6 +38,7 @@ navigation = "2.9.1"
 navigation3 = "1.0.0-alpha06"
 navigation-material = "1.10.0"
 okio = "3.16.4"
+spotless = "8.2.1"
 turbine = "1.2.1"
 
 [plugins]
@@ -53,6 +54,7 @@ kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 [libraries]
 # AndroidX
@@ -105,6 +107,7 @@ gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.
 gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 gradle-mokkery = { module = "dev.mokkery:mokkery-gradle", version.ref = "mokkery" }
+gradle-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
 
 # Kaml
 kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
@@ -328,4 +331,5 @@ gradle = [
     "gradle-kover",
     "gradle-ksp",
     "gradle-mokkery",
+    "gradle-spotless",
 ]

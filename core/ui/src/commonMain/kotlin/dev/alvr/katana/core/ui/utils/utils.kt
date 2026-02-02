@@ -14,9 +14,11 @@ fun isLandscape(): Boolean {
     val windowSizeClass = calculateWindowSizeClass()
 
     return remember(windowSizeClass.widthSizeClass, windowSizeClass.heightSizeClass) {
-        windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded ||
-            windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium &&
+        val expanded = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded
+        val medium = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium &&
             windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+
+        expanded || medium
     }
 }
 

@@ -48,7 +48,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
 
     private val _uiState = MutableStateFlow(initialState)
     private val _effects = Channel<E>()
-    private val _intents = Channel<I>()
+    private val intents = Channel<I>()
 
     private val viewModelLogTag get() = this::class.simpleName ?: LogTag
 
@@ -109,13 +109,13 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     @KatanaViewModelDsl
     fun intent(intent: I) {
         viewModelScope.launch(dispatcher.main) {
-            _intents.send(intent)
+            intents.send(intent)
         }
     }
 
     private fun collectIntents() {
         viewModelScope.launch(dispatcher.main) {
-            _intents
+            intents
                 .consumeAsFlow()
                 .collect { intent ->
                     handleIntent(intent)
