@@ -1,5 +1,3 @@
-@file:Suppress("NoUnusedImports", "UnusedImports")
-
 package dev.alvr.katana.buildlogic.common
 
 import kotlinx.kover.gradle.plugin.dsl.CoverageUnit

@@ -1,5 +1,3 @@
-@file:Suppress("NoUnusedImports", "UnusedImports")
-
 package dev.alvr.katana.buildlogic.mp
 
 import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget

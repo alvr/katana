@@ -1,11 +1,9 @@
-@file:Suppress("NoUnusedImports", "UnusedImports")
-
 package dev.alvr.katana.buildlogic.analysis
 
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.detekt
-import io.gitlab.arturbosch.detekt.Detekt
+import dev.detekt.gradle.Detekt
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -16,7 +14,7 @@ import org.gradle.kotlin.dsl.register
 internal class KatanaDetektPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
-        apply(plugin = "io.gitlab.arturbosch.detekt")
+        apply(plugin = "dev.detekt")
 
         tasks.register<Detekt>("detektAll") {
             description = "Run detekt in all modules"
@@ -34,15 +32,13 @@ internal class KatanaDetektPlugin : Plugin<Project> {
             reports {
                 html.required = true
                 sarif.required = true
-                txt.required = false
-                xml.required = true
             }
         }
 
         dependencies {
             detekt(catalogLib("detekt-compose"))
             detekt(catalogLib("detekt-compose2"))
-            detekt(catalogLib("detekt-formatting"))
+            detekt(catalogLib("detekt-rules"))
         }
     }
 }

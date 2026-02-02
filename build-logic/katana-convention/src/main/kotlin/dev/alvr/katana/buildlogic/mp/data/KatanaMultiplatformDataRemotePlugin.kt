@@ -1,5 +1,3 @@
-@file:Suppress("NoUnusedImports", "UnusedImports")
-
 package dev.alvr.katana.buildlogic.mp.data
 
 import com.apollographql.apollo.annotations.ApolloExperimental
