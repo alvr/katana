@@ -7,12 +7,9 @@ import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
 @OptIn(KoinExperimentalAPI::class)
-internal class CoreRemoteModuleTest : FreeSpec({
-    beforeSpec {
-        MockProvider.register { clazz -> mockkClass(clazz) }
-    }
+internal class CoreRemoteModuleTest :
+    FreeSpec({
+        beforeSpec { MockProvider.register { clazz -> mockkClass(clazz) } }
 
-    "verify coreRemoteModule" - {
-        coreRemoteModule.verify()
-    }
-})
+        "verify coreRemoteModule" - { coreRemoteModule.verify() }
+    })

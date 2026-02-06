@@ -7,12 +7,9 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 val DrawableResource.asPainter
-    @Composable
-    get() = painterResource(this)
+    @Composable get() = painterResource(this)
 
 val StringResource.value
-    @Composable
-    get() = stringResource(this)
+    @Composable get() = stringResource(this)
 
-@Composable
-fun StringResource.format(vararg format: Any) = stringResource(this, *format)
+@Composable fun StringResource.format(vararg format: Any) = stringResource(this, *format)

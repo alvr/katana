@@ -12,15 +12,12 @@ import dev.alvr.katana.core.ui.theme.KatanaTheme
 
 @Composable
 @Suppress("ModifierComposable")
-fun Modifier.katanaPlaceholder(
-    visible: Boolean,
-    shape: Shape? = null,
-): Modifier = placeholder(
-    visible = visible,
-    shape = shape,
-    highlight = PlaceholderHighlight.shimmer(
-        highlightColor = PlaceholderDefaults.shimmerHighlightColor(
-            alpha = KatanaTheme.alpha.alpha33,
-        ),
-    ),
-)
+fun Modifier.katanaPlaceholder(visible: Boolean, shape: Shape? = null): Modifier =
+    placeholder(
+        visible = visible,
+        shape = shape,
+        highlight =
+            PlaceholderHighlight.shimmer(
+                highlightColor = PlaceholderDefaults.shimmerHighlightColor(alpha = KatanaTheme.alpha.alpha33)
+            ),
+    )

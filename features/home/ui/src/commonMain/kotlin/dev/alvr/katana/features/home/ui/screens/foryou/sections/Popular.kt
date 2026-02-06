@@ -10,10 +10,7 @@ import dev.alvr.katana.features.home.ui.screens.foryou.components.Lists
 import dev.alvr.katana.features.home.ui.viewmodel.HomeIntent
 
 @Composable
-internal fun Popular(
-    onIntent: (HomeIntent) -> Unit,
-    modifier: Modifier = Modifier
-) {
+internal fun Popular(onIntent: (HomeIntent) -> Unit, modifier: Modifier = Modifier) {
     Lists(
         modifier = modifier,
         title = Res.string.popular_title.value,

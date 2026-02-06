@@ -11,10 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-@OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3ExpressiveApi::class,
-)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 fun KatanaPullRefresh(
     refreshing: Boolean,
     onRefresh: () -> Unit,
@@ -29,11 +26,7 @@ fun KatanaPullRefresh(
         isRefreshing = refreshing,
         onRefresh = onRefresh,
         indicator = {
-            LoadingIndicator(
-                modifier = Modifier.align(Alignment.TopCenter),
-                state = state,
-                isRefreshing = refreshing,
-            )
+            LoadingIndicator(modifier = Modifier.align(Alignment.TopCenter), state = state, isRefreshing = refreshing)
         },
         content = content,
     )

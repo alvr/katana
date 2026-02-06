@@ -39,31 +39,25 @@ import dev.alvr.katana.features.home.ui.resources.welcome_card_title
 import dev.alvr.katana.features.home.ui.viewmodel.HomeIntent
 
 @Composable
-internal fun WelcomeCard(
-    onIntent: (HomeIntent) -> Unit,
-    modifier: Modifier = Modifier
-) {
+internal fun WelcomeCard(onIntent: (HomeIntent) -> Unit, modifier: Modifier = Modifier) {
     var isCardVisible by remember { mutableStateOf(true) }
 
-    AnimatedVisibility(
-        modifier = modifier,
-        visible = isCardVisible,
-        exit = fadeOut() + slideOutHorizontally { it },
-    ) {
+    AnimatedVisibility(modifier = modifier, visible = isCardVisible, exit = fadeOut() + slideOutHorizontally { it }) {
         ElevatedCard {
             Column(
-                modifier = Modifier.padding(
-                    start = KatanaTheme.dimensions.spacing4,
-                    end = KatanaTheme.dimensions.spacing4,
-                    top = KatanaTheme.dimensions.spacing2,
-                    bottom = KatanaTheme.dimensions.spacing4,
-                ),
+                modifier =
+                    Modifier.padding(
+                        start = KatanaTheme.dimensions.spacing4,
+                        end = KatanaTheme.dimensions.spacing4,
+                        top = KatanaTheme.dimensions.spacing2,
+                        bottom = KatanaTheme.dimensions.spacing4,
+                    )
             ) {
                 WelcomeCardHeader(
                     onCloseCard = {
                         isCardVisible = false
                         onIntent(HomeIntent.ForYouIntent.CloseWelcomeCard)
-                    },
+                    }
                 )
 
                 WelcomeCardBody()
@@ -73,10 +67,7 @@ internal fun WelcomeCard(
 }
 
 @Composable
-private fun WelcomeCardHeader(
-    onCloseCard: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+private fun WelcomeCardHeader(onCloseCard: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -89,68 +80,37 @@ private fun WelcomeCardHeader(
         )
 
         IconButton(onClick = onCloseCard) {
-            Icon(
-                imageVector = KatanaSymbols.Cross,
-                contentDescription = Res.string.welcome_card_close_card_a11y.value,
-            )
+            Icon(imageVector = KatanaSymbols.Cross, contentDescription = Res.string.welcome_card_close_card_a11y.value)
         }
     }
 }
 
 @Composable
-private fun WelcomeCardBody(
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.spacing2),
-    ) {
-        Text(
-            text = Res.string.welcome_card_message.value,
-            textAlign = TextAlign.Justify,
-        )
+private fun WelcomeCardBody(modifier: Modifier = Modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.spacing2)) {
+        Text(text = Res.string.welcome_card_message.value, textAlign = TextAlign.Justify)
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.spacing3),
-        ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.spacing3)) {
             WelcomeCardRegisterButton(Modifier.weight(1f))
-            WelcomeCardLoginButton(
-                modifier = Modifier.weight(1f),
-            )
+            WelcomeCardLoginButton(modifier = Modifier.weight(1f))
         }
     }
 }
 
 @Composable
-private fun WelcomeCardRegisterButton(
-    modifier: Modifier = Modifier,
-) {
+private fun WelcomeCardRegisterButton(modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
 
-    OutlinedButton(
-        modifier = modifier,
-        onClick = { uriHandler.openUri(ANILIST_REGISTER) },
-    ) {
-        Text(
-            text = Res.string.welcome_card_register_button.value,
-        )
+    OutlinedButton(modifier = modifier, onClick = { uriHandler.openUri(ANILIST_REGISTER) }) {
+        Text(text = Res.string.welcome_card_register_button.value)
     }
 }
 
 @Composable
-private fun WelcomeCardLoginButton(
-    modifier: Modifier = Modifier,
-) {
+private fun WelcomeCardLoginButton(modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
 
-    Button(
-        modifier = modifier,
-        onClick = {
-            uriHandler.openUri(ANILIST_LOGIN)
-        },
-    ) {
-        Text(
-            text = Res.string.welcome_card_login_button.value,
-        )
+    Button(modifier = modifier, onClick = { uriHandler.openUri(ANILIST_LOGIN) }) {
+        Text(text = Res.string.welcome_card_login_button.value)
     }
 }

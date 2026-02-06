@@ -25,100 +25,100 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 internal class SessionRepositoryTest : FreeSpec() {
-    private val source: SessionLocalSource = mock<SessionLocalSource> {
-        every { sessionActive } returns emptyFlow()
-    }
+    private val source: SessionLocalSource = mock<SessionLocalSource> { every { sessionActive } returns emptyFlow() }
     private lateinit var repo: SessionRepository
 
     init {
-        "observing" - {
-            every { source.sessionActive } returns flowOf(
-                true.right(),
-                true.right(),
-                false.right(),
-            )
+        "observing" -
+            {
+                every { source.sessionActive } returns flowOf(true.right(), true.right(), false.right())
 
-            "observing if the session is active" {
-                repo.sessionActive.test {
-                    awaitItem().shouldBeRight(true)
-                    awaitItem().shouldBeRight(true)
-                    awaitItem().shouldBeRight(false)
-                    awaitComplete()
+                "observing if the session is active" {
+                    repo.sessionActive.test {
+                        awaitItem().shouldBeRight(true)
+                        awaitItem().shouldBeRight(true)
+                        awaitItem().shouldBeRight(false)
+                        awaitComplete()
+                    }
+
+                    verify { source.sessionActive }
+                }
+            }
+
+        "getting" -
+            {
+                "getting a non-existing token" {
+                    everySuspend { source.getAnilistToken() } returns none()
+                    repo.getAnilistToken().shouldBeNone()
+                    verifySuspend { source.getAnilistToken() }
                 }
 
-                verify { source.sessionActive }
-            }
-        }
-
-        "getting" - {
-            "getting a non-existing token" {
-                everySuspend { source.getAnilistToken() } returns none()
-                repo.getAnilistToken().shouldBeNone()
-                verifySuspend { source.getAnilistToken() }
+                "getting an existing token" {
+                    everySuspend { source.getAnilistToken() } returns anilistTokenMock.some()
+                    repo.getAnilistToken().shouldBeSome(anilistTokenMock)
+                    verifySuspend { source.getAnilistToken() }
+                }
             }
 
-            "getting an existing token" {
-                everySuspend { source.getAnilistToken() } returns anilistTokenMock.some()
-                repo.getAnilistToken().shouldBeSome(anilistTokenMock)
-                verifySuspend { source.getAnilistToken() }
-            }
-        }
+        "saving" -
+            {
+                "saving a session without error" {
+                    everySuspend { source.saveSession(anilistTokenMock) } returns Unit.right()
+                    repo.saveSession(anilistTokenMock).shouldBeRight(Unit)
+                    verifySuspend { source.saveSession(anilistTokenMock) }
+                }
 
-        "saving" - {
-            "saving a session without error" {
-                everySuspend { source.saveSession(anilistTokenMock) } returns Unit.right()
-                repo.saveSession(anilistTokenMock).shouldBeRight(Unit)
-                verifySuspend { source.saveSession(anilistTokenMock) }
-            }
-
-            "saving a session with an error" {
-                everySuspend { source.saveSession(anilistTokenMock) } returns SessionFailure.SavingSession.left()
-                repo.saveSession(anilistTokenMock).shouldBeLeft(SessionFailure.SavingSession)
-                verifySuspend { source.saveSession(anilistTokenMock) }
-            }
-        }
-
-        "deleting" - {
-            "deleting a session without error" {
-                everySuspend { source.deleteAnilistToken() } returns Unit.right()
-                repo.deleteAnilistToken().shouldBeRight(Unit)
-                verifySuspend { source.deleteAnilistToken() }
+                "saving a session with an error" {
+                    everySuspend { source.saveSession(anilistTokenMock) } returns SessionFailure.SavingSession.left()
+                    repo.saveSession(anilistTokenMock).shouldBeLeft(SessionFailure.SavingSession)
+                    verifySuspend { source.saveSession(anilistTokenMock) }
+                }
             }
 
-            "deleting a session with an error" {
-                everySuspend { source.deleteAnilistToken() } returns SessionFailure.DeletingToken.left()
-                repo.deleteAnilistToken().shouldBeLeft(SessionFailure.DeletingToken)
-                verifySuspend { source.deleteAnilistToken() }
-            }
-        }
+        "deleting" -
+            {
+                "deleting a session without error" {
+                    everySuspend { source.deleteAnilistToken() } returns Unit.right()
+                    repo.deleteAnilistToken().shouldBeRight(Unit)
+                    verifySuspend { source.deleteAnilistToken() }
+                }
 
-        "clearing" - {
-            "clearing a session without error" {
-                everySuspend { source.clearActiveSession() } returns Unit.right()
-                repo.clearActiveSession().shouldBeRight(Unit)
-                verifySuspend { source.clearActiveSession() }
-            }
-
-            "clearing a session with an error" {
-                everySuspend { source.clearActiveSession() } returns SessionFailure.ClearingSession.left()
-                repo.clearActiveSession().shouldBeLeft(SessionFailure.ClearingSession)
-                verifySuspend { source.clearActiveSession() }
-            }
-        }
-
-        "logging out" - {
-            "logging out without error" {
-                everySuspend { source.logout() } returns Unit.right()
-                repo.logout().shouldBeRight(Unit)
-                verifySuspend { source.logout() }
+                "deleting a session with an error" {
+                    everySuspend { source.deleteAnilistToken() } returns SessionFailure.DeletingToken.left()
+                    repo.deleteAnilistToken().shouldBeLeft(SessionFailure.DeletingToken)
+                    verifySuspend { source.deleteAnilistToken() }
+                }
             }
 
-            "logging out with an error" {
-                everySuspend { source.logout() } returns SessionFailure.LoggingOut.left()
-                repo.logout().shouldBeLeft(SessionFailure.LoggingOut)
-                verifySuspend { source.logout() }
+        "clearing" -
+            {
+                "clearing a session without error" {
+                    everySuspend { source.clearActiveSession() } returns Unit.right()
+                    repo.clearActiveSession().shouldBeRight(Unit)
+                    verifySuspend { source.clearActiveSession() }
+                }
+
+                "clearing a session with an error" {
+                    everySuspend { source.clearActiveSession() } returns SessionFailure.ClearingSession.left()
+                    repo.clearActiveSession().shouldBeLeft(SessionFailure.ClearingSession)
+                    verifySuspend { source.clearActiveSession() }
+                }
             }
-        }
+
+        "logging out" -
+            {
+                "logging out without error" {
+                    everySuspend { source.logout() } returns Unit.right()
+                    repo.logout().shouldBeRight(Unit)
+                    verifySuspend { source.logout() }
+                }
+
+                "logging out with an error" {
+                    everySuspend { source.logout() } returns SessionFailure.LoggingOut.left()
+                    repo.logout().shouldBeLeft(SessionFailure.LoggingOut)
+                    verifySuspend { source.logout() }
+                }
+            }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

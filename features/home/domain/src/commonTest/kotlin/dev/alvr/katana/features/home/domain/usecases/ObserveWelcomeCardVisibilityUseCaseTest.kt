@@ -41,9 +41,7 @@ internal class ObserveWelcomeCardVisibilityUseCaseTest : FreeSpec(), KoinTest {
         }
 
         "failure observe the welcome card visibility" {
-            every { repo.welcomeCardVisible } returns flowOf(
-                HomeFailure.GettingWelcomeCardVisibility.left(),
-            )
+            every { repo.welcomeCardVisible } returns flowOf(HomeFailure.GettingWelcomeCardVisibility.left())
 
             useCase()
 

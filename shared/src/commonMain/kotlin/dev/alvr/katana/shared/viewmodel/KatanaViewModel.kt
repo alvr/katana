@@ -9,9 +9,8 @@ import dev.alvr.katana.shared.navigation.mainNavigationBarItems
 import kotlinx.collections.immutable.toImmutableList
 
 @Stable
-internal class KatanaViewModel(
-    private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,
-) : KatanaViewModel<KatanaState, EmptyEffect, EmptyIntent>(KatanaState()) {
+internal class KatanaViewModel(private val observeActiveSessionUseCase: ObserveActiveSessionUseCase) :
+    KatanaViewModel<KatanaState, EmptyEffect, EmptyIntent>(KatanaState()) {
     override fun init() {
         observeActiveSession()
     }
@@ -21,29 +20,20 @@ internal class KatanaViewModel(
             useCase = observeActiveSessionUseCase,
             params = Unit,
             onFailure = {
-                state {
-                    copy(
-                        loading = false,
-                        sessionActive = false,
-                        navigationBarItems = navigationBarItems(),
-                    )
-                }
+                state { copy(loading = false, sessionActive = false, navigationBarItems = navigationBarItems()) }
             },
             onSuccess = { isActive ->
                 state {
-                    copy(
-                        loading = false,
-                        sessionActive = isActive,
-                        navigationBarItems = navigationBarItems(isActive),
-                    )
+                    copy(loading = false, sessionActive = isActive, navigationBarItems = navigationBarItems(isActive))
                 }
             },
         )
     }
 
-    private fun navigationBarItems(sessionActive: Boolean = false) = if (sessionActive) {
-        mainNavigationBarItems
-    } else {
-        mainNavigationBarItems.filterNot { it.requireSession }.toImmutableList()
-    }
+    private fun navigationBarItems(sessionActive: Boolean = false) =
+        if (sessionActive) {
+            mainNavigationBarItems
+        } else {
+            mainNavigationBarItems.filterNot { it.requireSession }.toImmutableList()
+        }
 }

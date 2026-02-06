@@ -9,40 +9,31 @@ import io.kotest.property.arbitrary.arbitrary
 import io.kotest.property.arbitrary.next
 import io.kotest.property.arbitrary.string
 
-internal class UserInfoMapper : ShouldSpec({
-    context("map with specific values") {
-        should("return the expected value") {
-            val result = UserInfo(
-                username = "username",
-                avatar = "avatar",
-                banner = "banner",
-            ).toEntity()
+internal class UserInfoMapper :
+    ShouldSpec({
+        context("map with specific values") {
+            should("return the expected value") {
+                val result = UserInfo(username = "username", avatar = "avatar", banner = "banner").toEntity()
 
-            result shouldBe UserInfoUi(
-                username = "username",
-                avatar = "avatar",
-                banner = "banner",
-            )
+                result shouldBe UserInfoUi(username = "username", avatar = "avatar", banner = "banner")
+            }
         }
-    }
 
-    context("map with random values") {
-        should("return the expected value") {
-            val model = arbitrary {
-                UserInfo(
-                    username = Arb.string().bind(),
-                    avatar = Arb.string().bind(),
-                    banner = Arb.string().bind(),
-                )
-            }.next()
+        context("map with random values") {
+            should("return the expected value") {
+                val model =
+                    arbitrary {
+                            UserInfo(
+                                username = Arb.string().bind(),
+                                avatar = Arb.string().bind(),
+                                banner = Arb.string().bind(),
+                            )
+                        }
+                        .next()
 
-            val result = model.toEntity()
+                val result = model.toEntity()
 
-            result shouldBe UserInfoUi(
-                username = model.username,
-                avatar = model.avatar,
-                banner = model.banner,
-            )
+                result shouldBe UserInfoUi(username = model.username, avatar = model.avatar, banner = model.banner)
+            }
         }
-    }
-})
+    })

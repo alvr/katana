@@ -23,57 +23,62 @@ internal class ApolloUserIdManagerTest : FreeSpec() {
     private val client = ApolloClient.Builder().networkTransport(QueueTestNetworkTransport()).store(store).build()
 
     init {
-        "retrieving the authenticated user" - {
-            "the first time should make a HTTP request" {
-                val query = UserIdQuery.Data {
-                    viewer = buildUser {
-                        id = 12345
-                    }
+        "retrieving the authenticated user" -
+            {
+                "the first time should make a HTTP request" {
+                    val query = UserIdQuery.Data { viewer = buildUser { id = 12345 } }
+
+                    client.enqueueTestResponse(UserIdQuery(), query)
+                    client
+                        .query(UserIdQuery())
+                        .executeOrThrow()
+                        .also { res -> res.isFromCache.shouldBeFalse() }
+                        .data
+                        .shouldNotBeNull()
+                        .viewer
+                        .shouldNotBeNull() shouldBeEqual query.viewer.shouldNotBeNull()
                 }
 
-                client.enqueueTestResponse(UserIdQuery(), query)
-                client.query(UserIdQuery()).executeOrThrow()
-                    .also { res -> res.isFromCache.shouldBeFalse() }
-                    .data.shouldNotBeNull()
-                    .viewer.shouldNotBeNull() shouldBeEqual query.viewer.shouldNotBeNull()
-            }
+                "the second onwards it should be read from cache" {
+                    val query = UserIdQuery.Data { viewer = buildUser { id = 12345 } }
 
-            "the second onwards it should be read from cache" {
-                val query = UserIdQuery.Data {
-                    viewer = buildUser {
-                        id = 12345
-                    }
+                    client.enqueueTestResponse(UserIdQuery(), query)
+                    client.query(UserIdQuery()).executeOrThrow() // Simulate HTTP request
+                    client
+                        .query(UserIdQuery())
+                        .executeOrThrow() // Next request is from cache
+                        .also { res -> res.isFromCache.shouldBeTrue() }
+                        .data
+                        .shouldNotBeNull()
+                        .viewer
+                        .shouldNotBeNull() shouldBeEqual query.viewer.shouldNotBeNull()
                 }
-
-                client.enqueueTestResponse(UserIdQuery(), query)
-                client.query(UserIdQuery()).executeOrThrow() // Simulate HTTP request
-                client.query(UserIdQuery()).executeOrThrow() // Next request is from cache
-                    .also { res -> res.isFromCache.shouldBeTrue() }
-                    .data.shouldNotBeNull()
-                    .viewer.shouldNotBeNull() shouldBeEqual query.viewer.shouldNotBeNull()
             }
-        }
 
         "clearing the database" {
-            val query = UserIdQuery.Data {
-                viewer = buildUser {
-                    id = 12345
-                }
-            }
+            val query = UserIdQuery.Data { viewer = buildUser { id = 12345 } }
 
             client.enqueueTestResponse(UserIdQuery(), query)
             client.query(UserIdQuery()).executeOrThrow() // Simulate HTTP request
-            client.query(UserIdQuery()).executeOrThrow() // Next request is from cache
+            client
+                .query(UserIdQuery())
+                .executeOrThrow() // Next request is from cache
                 .also { res -> res.isFromCache.shouldBeTrue() }
-                .data.shouldNotBeNull()
-                .viewer.shouldNotBeNull() shouldBeEqual query.viewer.shouldNotBeNull()
+                .data
+                .shouldNotBeNull()
+                .viewer
+                .shouldNotBeNull() shouldBeEqual query.viewer.shouldNotBeNull()
 
             store.clearAll()
 
-            client.query(UserIdQuery()).executeOrThrow() // No cache, HTTP request
+            client
+                .query(UserIdQuery())
+                .executeOrThrow() // No cache, HTTP request
                 .also { res -> res.isFromCache.shouldBeFalse() }
-                .data.shouldNotBeNull()
-                .viewer.shouldNotBeNull() shouldBeEqual query.viewer.shouldNotBeNull()
+                .data
+                .shouldNotBeNull()
+                .viewer
+                .shouldNotBeNull() shouldBeEqual query.viewer.shouldNotBeNull()
         }
     }
 }

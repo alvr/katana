@@ -6,5 +6,4 @@ import dev.alvr.katana.core.ui.viewmodel.EmptyIntent
 import dev.alvr.katana.core.ui.viewmodel.EmptyState
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 
-@Stable
-internal class ExploreViewModel : KatanaViewModel<EmptyState, EmptyEffect, EmptyIntent>(EmptyState)
+@Stable internal class ExploreViewModel : KatanaViewModel<EmptyState, EmptyEffect, EmptyIntent>(EmptyState)

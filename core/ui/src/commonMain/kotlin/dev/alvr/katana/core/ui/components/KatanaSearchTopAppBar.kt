@@ -53,9 +53,7 @@ fun KatanaSearchTopAppBar(
     }
 
     TextField(
-        modifier = modifier
-            .fillMaxWidth()
-            .focusRequester(focusRequester),
+        modifier = modifier.fillMaxWidth().focusRequester(focusRequester),
         value = search,
         onValueChange = {
             search = it
@@ -64,10 +62,7 @@ fun KatanaSearchTopAppBar(
         placeholder = { Text(text = searchPlaceholder) },
         leadingIcon = {
             IconButton(onClick = onBack) {
-                Icon(
-                    contentDescription = closeContentDescription,
-                    imageVector = KatanaSymbols.ArrowBack,
-                )
+                Icon(contentDescription = closeContentDescription, imageVector = KatanaSymbols.ArrowBack)
             }
         },
         trailingIcon = {
@@ -75,22 +70,20 @@ fun KatanaSearchTopAppBar(
                 onClick = {
                     search = String.empty
                     onClear()
-                },
+                }
             ) {
-                Icon(
-                    imageVector = KatanaSymbols.Cross,
-                    contentDescription = clearContentDescription,
-                )
+                Icon(imageVector = KatanaSymbols.Cross, contentDescription = clearContentDescription)
             }
         },
         singleLine = true,
         shape = RectangleShape,
         keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-        colors = TextFieldDefaults.colors(
-            cursorColor = KatanaTheme.colorScheme.onSurface.copy(alpha = KatanaTheme.alpha.alpha15),
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        ),
+        colors =
+            TextFieldDefaults.colors(
+                cursorColor = KatanaTheme.colorScheme.onSurface.copy(alpha = KatanaTheme.alpha.alpha15),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+            ),
     )
 }

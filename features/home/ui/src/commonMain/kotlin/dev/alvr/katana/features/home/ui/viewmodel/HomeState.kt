@@ -10,11 +10,7 @@ internal data class HomeState(
     val activityTab: ActivityTabState = ActivityTabState,
 ) : UiState {
 
-    @Immutable
-    data class ForYouTabState(
-        val showWelcomeCard: Boolean = false,
-    ) : UiState
+    @Immutable data class ForYouTabState(val showWelcomeCard: Boolean = false) : UiState
 
-    @Immutable
-    data object ActivityTabState : UiState
+    @Immutable data object ActivityTabState : UiState
 }

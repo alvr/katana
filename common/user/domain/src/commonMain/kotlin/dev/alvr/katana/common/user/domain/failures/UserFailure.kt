@@ -4,7 +4,10 @@ import dev.alvr.katana.core.domain.failures.Failure
 
 sealed interface UserFailure : Failure {
     data object FetchingUser : UserFailure
+
     data object SavingUser : UserFailure
+
     data object GettingUserId : UserFailure
+
     data object GettingUserInfo : UserFailure
 }

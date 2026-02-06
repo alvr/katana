@@ -6,11 +6,7 @@ import androidx.navigation.navigation
 import dev.alvr.katana.features.account.ui.screens.AccountScreen
 
 fun NavGraphBuilder.account(accountNavigator: AccountNavigator) {
-    navigation<AccountDestination.Root>(
-        startDestination = AccountDestination.Account,
-    ) {
-        composable<AccountDestination.Account> {
-            AccountScreen(accountNavigator)
-        }
+    navigation<AccountDestination.Root>(startDestination = AccountDestination.Account) {
+        composable<AccountDestination.Account> { AccountScreen(accountNavigator) }
     }
 }

@@ -65,528 +65,494 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
     private lateinit var source: ListsRemoteSource
 
     init {
-        beforeEach {
-            everySuspend { userIdManager.getId() } returns userId
-        }
+        beforeEach { everySuspend { userIdManager.getId() } returns userId }
 
-        "anime" - {
-            "the collection has no lists" {
-                val query = MediaListCollectionQuery.Data {
-                    this["MediaListCollection"] = buildMediaListCollection {
-                        lists = emptyList()
+        "anime" -
+            {
+                "the collection has no lists" {
+                    val query =
+                        MediaListCollectionQuery.Data {
+                            this["MediaListCollection"] = buildMediaListCollection { lists = emptyList() }
+                        }
+
+                    client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.ANIME), query)
+
+                    source.animeCollection.test {
+                        awaitItem().shouldBeRight().lists.shouldBeEmpty()
+                        awaitComplete()
                     }
+                    verifySuspend { userIdManager.getId() }
                 }
 
-                client.registerTestResponse(
-                    MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
-                    query,
-                )
-
-                source.animeCollection.test {
-                    awaitItem().shouldBeRight().lists.shouldBeEmpty()
-                    awaitComplete()
-                }
-                verifySuspend { userIdManager.getId() }
-            }
-
-            "the entries are empty" {
-                val query = MediaListCollectionQuery.Data {
-                    this["MediaListCollection"] = buildMediaListCollection {
-                        lists = listOf(
-                            buildMediaListGroup {
-                                name = "Watching"
-                                entries = emptyList()
-                            },
-                            buildMediaListGroup {
-                                name = "Completed TV"
-                                entries = emptyList()
-                            },
-                            buildMediaListGroup {
-                                name = "Custom List"
-                                entries = emptyList()
-                            },
-                        )
-                        user = buildUser {
-                            mediaListOptions = buildMediaListOptions {
-                                animeList = buildMediaListTypeOptions {
-                                    sectionOrder = listOf("Watching", "Completed TV", "Custom List")
+                "the entries are empty" {
+                    val query =
+                        MediaListCollectionQuery.Data {
+                            this["MediaListCollection"] = buildMediaListCollection {
+                                lists =
+                                    listOf(
+                                        buildMediaListGroup {
+                                            name = "Watching"
+                                            entries = emptyList()
+                                        },
+                                        buildMediaListGroup {
+                                            name = "Completed TV"
+                                            entries = emptyList()
+                                        },
+                                        buildMediaListGroup {
+                                            name = "Custom List"
+                                            entries = emptyList()
+                                        },
+                                    )
+                                user = buildUser {
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions {
+                                            sectionOrder = listOf("Watching", "Completed TV", "Custom List")
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-                }
 
-                client.registerTestResponse(
-                    MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
-                    query,
-                )
+                    client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.ANIME), query)
 
-                source.animeCollection.test {
-                    awaitItem().shouldBeRight().lists
-                        .shouldHaveSize(3)
-                        .also { lists ->
+                    source.animeCollection.test {
+                        awaitItem().shouldBeRight().lists.shouldHaveSize(3).also { lists ->
                             with(lists.first()) {
                                 entries.shouldBeEmpty()
                                 name shouldBe "Watching"
                             }
                         }
-                    awaitComplete()
-                }
-                verifySuspend { userIdManager.getId() }
-            }
-
-            "the entry has null values" {
-                val query = MediaListCollectionQuery.Data {
-                    this["MediaListCollection"] = buildMediaListCollection {
-                        lists = listOf(
-                            buildMediaListGroup {
-                                name = "Watching"
-                                entries = listOf(
-                                    buildMediaList {
-                                        id = Int.zero
-                                        score = Double.zero
-                                        progress = null
-                                        progressVolumes = null
-                                        repeat = null
-                                        private = null
-                                        notes = null
-                                        hiddenFromStatusLists = null
-                                        startedAt = null
-                                        completedAt = null
-                                        media = buildMedia {
-                                            id = Int.zero
-                                            title = buildMediaTitle { userPreferred = String.empty }
-                                            episodes = null
-                                            format = null
-                                            coverImage = buildMediaCoverImage { large = String.empty }
-                                            nextAiringEpisode = null
-                                        }
-                                    },
-                                )
-                            },
-                        )
+                        awaitComplete()
                     }
+                    verifySuspend { userIdManager.getId() }
                 }
 
-                client.registerTestResponse(
-                    MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
-                    query,
-                )
-
-                source.animeCollection.test {
-                    awaitItem().shouldBeRight().lists.also { lists ->
-                        val entry = lists.first().entries.shouldHaveSize(1).first()
-
-                        with(entry.list) {
-                            id shouldBe ItemEntryId(Int.zero)
-                            score shouldBe Double.zero
-                            progress shouldBe Int.zero
-                            progressVolumes.shouldBeNull()
-                            repeat shouldBe Int.zero
-                            private.shouldBeFalse()
-                            notes.shouldBeEmpty()
-                            hiddenFromStatusLists.shouldBeFalse()
-                            startedAt.shouldBeNull()
-                            completedAt.shouldBeNull()
-                        }
-
-                        with(entry.entry) {
-                            shouldBeTypeOf<MediaEntry.Anime>()
-                            shouldNotBeTypeOf<MediaEntry>()
-                            shouldNotBeTypeOf<MediaEntry.Manga>()
-
-                            id shouldBe ItemMediaId(Int.zero)
-                            title.shouldBeEmpty()
-                            coverImage.shouldBeEmpty()
-                            format shouldBe CommonMediaEntry.Format.UNKNOWN
-                            episodes.shouldBeNull()
-                            nextEpisode.shouldBeNull()
-                        }
-                    }
-                    awaitComplete()
-                }
-                verifySuspend { userIdManager.getId() }
-            }
-
-            "the entry has values" {
-                val query = MediaListCollectionQuery.Data {
-                    this["MediaListCollection"] = buildMediaListCollection {
-                        lists = listOf(
-                            buildMediaListGroup {
-                                name = "Watching"
-                                entries = listOf(
-                                    buildMediaList {
-                                        id = 100
-                                        score = 7.3
-                                        progress = 12
-                                        progressVolumes = null
-                                        repeat = 2
-                                        private = true
-                                        notes = "My notes :)"
-                                        hiddenFromStatusLists = true
-                                        startedAt = buildFuzzyDate {
-                                            day = 23
-                                            month = 12
-                                            year = 1999
+                "the entry has null values" {
+                    val query =
+                        MediaListCollectionQuery.Data {
+                            this["MediaListCollection"] = buildMediaListCollection {
+                                lists =
+                                    listOf(
+                                        buildMediaListGroup {
+                                            name = "Watching"
+                                            entries =
+                                                listOf(
+                                                    buildMediaList {
+                                                        id = Int.zero
+                                                        score = Double.zero
+                                                        progress = null
+                                                        progressVolumes = null
+                                                        repeat = null
+                                                        private = null
+                                                        notes = null
+                                                        hiddenFromStatusLists = null
+                                                        startedAt = null
+                                                        completedAt = null
+                                                        media = buildMedia {
+                                                            id = Int.zero
+                                                            title = buildMediaTitle { userPreferred = String.empty }
+                                                            episodes = null
+                                                            format = null
+                                                            coverImage = buildMediaCoverImage { large = String.empty }
+                                                            nextAiringEpisode = null
+                                                        }
+                                                    }
+                                                )
                                         }
-                                        completedAt = buildFuzzyDate {
-                                            day = 5
-                                            month = 5
-                                            year = 2009
-                                        }
-                                        media = buildMedia {
-                                            id = 100
-                                            title = buildMediaTitle {
-                                                userPreferred = "My anime entry"
-                                            }
-                                            episodes = 23
-                                            format = MediaFormat.TV
-                                            coverImage = buildMediaCoverImage {
-                                                large = "https://placehold.co/128x256"
-                                            }
-                                            nextAiringEpisode = buildAiringSchedule {
-                                                airingAt = 1_649_790_000
-                                                episode = 13
-                                            }
-                                        }
-                                    },
-                                )
-                            },
-                        )
-                    }
-                }
-
-                client.registerTestResponse(
-                    MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
-                    query,
-                )
-
-                source.animeCollection.test {
-                    awaitItem().shouldBeRight().lists.also { lists ->
-                        val entry = lists.first().entries.shouldHaveSize(1).first()
-
-                        with(entry.list) {
-                            id shouldBe ItemEntryId(100)
-                            score shouldBe 7.3
-                            progress shouldBe 12
-                            progressVolumes.shouldBeNull()
-                            repeat shouldBe 2
-                            private.shouldBeTrue()
-                            notes shouldBe "My notes :)"
-                            hiddenFromStatusLists.shouldBeTrue()
-                            startedAt?.shouldBeEqualComparingTo(LocalDate(1999, 12, 23))
-                            completedAt?.shouldBeEqualComparingTo(LocalDate(2009, 5, 5))
-                        }
-
-                        with(entry.entry) {
-                            shouldBeTypeOf<MediaEntry.Anime>()
-                            shouldNotBeTypeOf<MediaEntry>()
-                            shouldNotBeTypeOf<MediaEntry.Manga>()
-
-                            id shouldBe ItemMediaId(100)
-                            title shouldBe "My anime entry"
-                            coverImage shouldBe "https://placehold.co/128x256"
-                            format shouldBe CommonMediaEntry.Format.TV
-                            episodes shouldBe 23
-                            with(nextEpisode.shouldNotBeNull()) {
-                                at shouldBeEqualComparingTo LocalDateTime(2022, 4, 12, 19, 0, 0)
-                                number shouldBe 13
+                                    )
                             }
                         }
+
+                    client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.ANIME), query)
+
+                    source.animeCollection.test {
+                        awaitItem().shouldBeRight().lists.also { lists ->
+                            val entry = lists.first().entries.shouldHaveSize(1).first()
+
+                            with(entry.list) {
+                                id shouldBe ItemEntryId(Int.zero)
+                                score shouldBe Double.zero
+                                progress shouldBe Int.zero
+                                progressVolumes.shouldBeNull()
+                                repeat shouldBe Int.zero
+                                private.shouldBeFalse()
+                                notes.shouldBeEmpty()
+                                hiddenFromStatusLists.shouldBeFalse()
+                                startedAt.shouldBeNull()
+                                completedAt.shouldBeNull()
+                            }
+
+                            with(entry.entry) {
+                                shouldBeTypeOf<MediaEntry.Anime>()
+                                shouldNotBeTypeOf<MediaEntry>()
+                                shouldNotBeTypeOf<MediaEntry.Manga>()
+
+                                id shouldBe ItemMediaId(Int.zero)
+                                title.shouldBeEmpty()
+                                coverImage.shouldBeEmpty()
+                                format shouldBe CommonMediaEntry.Format.UNKNOWN
+                                episodes.shouldBeNull()
+                                nextEpisode.shouldBeNull()
+                            }
+                        }
+                        awaitComplete()
                     }
-                    awaitComplete()
-                }
-                verifySuspend { userIdManager.getId() }
-            }
-
-            "the returned data is null" {
-                client.registerTestResponse(
-                    MediaListCollectionQuery(userIdOpt, MediaType.ANIME),
-                    null,
-                )
-
-                source.animeCollection.test {
-                    awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                    awaitComplete()
+                    verifySuspend { userIdManager.getId() }
                 }
 
-                verifySuspend { userIdManager.getId() }
-            }
+                "the entry has values" {
+                    val query =
+                        MediaListCollectionQuery.Data {
+                            this["MediaListCollection"] = buildMediaListCollection {
+                                lists =
+                                    listOf(
+                                        buildMediaListGroup {
+                                            name = "Watching"
+                                            entries =
+                                                listOf(
+                                                    buildMediaList {
+                                                        id = 100
+                                                        score = 7.3
+                                                        progress = 12
+                                                        progressVolumes = null
+                                                        repeat = 2
+                                                        private = true
+                                                        notes = "My notes :)"
+                                                        hiddenFromStatusLists = true
+                                                        startedAt = buildFuzzyDate {
+                                                            day = 23
+                                                            month = 12
+                                                            year = 1999
+                                                        }
+                                                        completedAt = buildFuzzyDate {
+                                                            day = 5
+                                                            month = 5
+                                                            year = 2009
+                                                        }
+                                                        media = buildMedia {
+                                                            id = 100
+                                                            title = buildMediaTitle { userPreferred = "My anime entry" }
+                                                            episodes = 23
+                                                            format = MediaFormat.TV
+                                                            coverImage = buildMediaCoverImage {
+                                                                large = "https://placehold.co/128x256"
+                                                            }
+                                                            nextAiringEpisode = buildAiringSchedule {
+                                                                airingAt = 1_649_790_000
+                                                                episode = 13
+                                                            }
+                                                        }
+                                                    }
+                                                )
+                                        }
+                                    )
+                            }
+                        }
 
-            "an error occurs" {
-                client.registerTestNetworkError(
-                    MediaListCollectionQuery(
-                        userIdOpt,
-                        MediaType.ANIME,
-                    ),
-                )
+                    client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.ANIME), query)
 
-                source.animeCollection.test {
-                    awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                    awaitComplete()
-                }
+                    source.animeCollection.test {
+                        awaitItem().shouldBeRight().lists.also { lists ->
+                            val entry = lists.first().entries.shouldHaveSize(1).first()
 
-                verifySuspend { userIdManager.getId() }
-            }
-        }
+                            with(entry.list) {
+                                id shouldBe ItemEntryId(100)
+                                score shouldBe 7.3
+                                progress shouldBe 12
+                                progressVolumes.shouldBeNull()
+                                repeat shouldBe 2
+                                private.shouldBeTrue()
+                                notes shouldBe "My notes :)"
+                                hiddenFromStatusLists.shouldBeTrue()
+                                startedAt?.shouldBeEqualComparingTo(LocalDate(1999, 12, 23))
+                                completedAt?.shouldBeEqualComparingTo(LocalDate(2009, 5, 5))
+                            }
 
-        "manga" - {
-            "the collection has no lists" {
-                val query = MediaListCollectionQuery.Data {
-                    this["MediaListCollection"] = buildMediaListCollection {
-                        lists = emptyList()
-                    }
-                }
+                            with(entry.entry) {
+                                shouldBeTypeOf<MediaEntry.Anime>()
+                                shouldNotBeTypeOf<MediaEntry>()
+                                shouldNotBeTypeOf<MediaEntry.Manga>()
 
-                client.registerTestResponse(
-                    MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
-                    query,
-                )
-
-                source.mangaCollection.test {
-                    awaitItem().shouldBeRight().lists.shouldBeEmpty()
-                    awaitComplete()
-                }
-
-                verifySuspend { userIdManager.getId() }
-            }
-
-            "the entries are empty" {
-                val query = MediaListCollectionQuery.Data {
-                    this["MediaListCollection"] = buildMediaListCollection {
-                        lists = listOf(
-                            buildMediaListGroup {
-                                name = "Rereading"
-                                entries = emptyList()
-                            },
-                            buildMediaListGroup {
-                                name = "Reading"
-                                entries = emptyList()
-                            },
-                            buildMediaListGroup {
-                                name = "Custom List"
-                                entries = emptyList()
-                            },
-                        )
-                        user = buildUser {
-                            mediaListOptions = buildMediaListOptions {
-                                mangaList = buildMediaListTypeOptions {
-                                    sectionOrder = listOf("Custom List", "Reading", "Rereading")
+                                id shouldBe ItemMediaId(100)
+                                title shouldBe "My anime entry"
+                                coverImage shouldBe "https://placehold.co/128x256"
+                                format shouldBe CommonMediaEntry.Format.TV
+                                episodes shouldBe 23
+                                with(nextEpisode.shouldNotBeNull()) {
+                                    at shouldBeEqualComparingTo LocalDateTime(2022, 4, 12, 19, 0, 0)
+                                    number shouldBe 13
                                 }
                             }
                         }
+                        awaitComplete()
                     }
+                    verifySuspend { userIdManager.getId() }
                 }
 
-                client.registerTestResponse(
-                    MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
-                    query,
-                )
+                "the returned data is null" {
+                    client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.ANIME), null)
 
-                source.mangaCollection.test {
-                    awaitItem().shouldBeRight().lists
-                        .shouldHaveSize(3)
-                        .also { lists ->
+                    source.animeCollection.test {
+                        awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                        awaitComplete()
+                    }
+
+                    verifySuspend { userIdManager.getId() }
+                }
+
+                "an error occurs" {
+                    client.registerTestNetworkError(MediaListCollectionQuery(userIdOpt, MediaType.ANIME))
+
+                    source.animeCollection.test {
+                        awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                        awaitComplete()
+                    }
+
+                    verifySuspend { userIdManager.getId() }
+                }
+            }
+
+        "manga" -
+            {
+                "the collection has no lists" {
+                    val query =
+                        MediaListCollectionQuery.Data {
+                            this["MediaListCollection"] = buildMediaListCollection { lists = emptyList() }
+                        }
+
+                    client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.MANGA), query)
+
+                    source.mangaCollection.test {
+                        awaitItem().shouldBeRight().lists.shouldBeEmpty()
+                        awaitComplete()
+                    }
+
+                    verifySuspend { userIdManager.getId() }
+                }
+
+                "the entries are empty" {
+                    val query =
+                        MediaListCollectionQuery.Data {
+                            this["MediaListCollection"] = buildMediaListCollection {
+                                lists =
+                                    listOf(
+                                        buildMediaListGroup {
+                                            name = "Rereading"
+                                            entries = emptyList()
+                                        },
+                                        buildMediaListGroup {
+                                            name = "Reading"
+                                            entries = emptyList()
+                                        },
+                                        buildMediaListGroup {
+                                            name = "Custom List"
+                                            entries = emptyList()
+                                        },
+                                    )
+                                user = buildUser {
+                                    mediaListOptions = buildMediaListOptions {
+                                        mangaList = buildMediaListTypeOptions {
+                                            sectionOrder = listOf("Custom List", "Reading", "Rereading")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.MANGA), query)
+
+                    source.mangaCollection.test {
+                        awaitItem().shouldBeRight().lists.shouldHaveSize(3).also { lists ->
                             with(lists.first()) {
                                 entries.shouldBeEmpty()
                                 name shouldBe "Custom List"
                             }
                         }
-                    awaitComplete()
-                }
-                verifySuspend { userIdManager.getId() }
-            }
-
-            "the entry has null values" {
-                val query = MediaListCollectionQuery.Data {
-                    this["MediaListCollection"] = buildMediaListCollection {
-                        lists = listOf(
-                            buildMediaListGroup {
-                                name = "Reading"
-                                entries = listOf(
-                                    buildMediaList {
-                                        id = Int.zero
-                                        score = Double.zero
-                                        progress = null
-                                        progressVolumes = null
-                                        repeat = null
-                                        private = null
-                                        notes = null
-                                        hiddenFromStatusLists = null
-                                        startedAt = null
-                                        completedAt = null
-                                        media = buildMedia {
-                                            id = Int.zero
-                                            title = buildMediaTitle { userPreferred = String.empty }
-                                            chapters = null
-                                            volumes = null
-                                            format = null
-                                            coverImage = buildMediaCoverImage { large = String.empty }
-                                            nextAiringEpisode = null
-                                        }
-                                    },
-                                )
-                            },
-                        )
+                        awaitComplete()
                     }
+                    verifySuspend { userIdManager.getId() }
                 }
 
-                client.registerTestResponse(
-                    MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
-                    query,
-                )
-
-                source.mangaCollection.test {
-                    awaitItem().shouldBeRight().lists.also { lists ->
-                        val entry = lists.first().entries.shouldHaveSize(1).first()
-
-                        with(entry.list) {
-                            id shouldBe ItemEntryId(Int.zero)
-                            score shouldBe Double.zero
-                            progress shouldBe Int.zero
-                            progressVolumes.shouldBeNull()
-                            repeat shouldBe Int.zero
-                            private.shouldBeFalse()
-                            notes.shouldBeEmpty()
-                            hiddenFromStatusLists.shouldBeFalse()
-                            startedAt.shouldBeNull()
-                            completedAt.shouldBeNull()
+                "the entry has null values" {
+                    val query =
+                        MediaListCollectionQuery.Data {
+                            this["MediaListCollection"] = buildMediaListCollection {
+                                lists =
+                                    listOf(
+                                        buildMediaListGroup {
+                                            name = "Reading"
+                                            entries =
+                                                listOf(
+                                                    buildMediaList {
+                                                        id = Int.zero
+                                                        score = Double.zero
+                                                        progress = null
+                                                        progressVolumes = null
+                                                        repeat = null
+                                                        private = null
+                                                        notes = null
+                                                        hiddenFromStatusLists = null
+                                                        startedAt = null
+                                                        completedAt = null
+                                                        media = buildMedia {
+                                                            id = Int.zero
+                                                            title = buildMediaTitle { userPreferred = String.empty }
+                                                            chapters = null
+                                                            volumes = null
+                                                            format = null
+                                                            coverImage = buildMediaCoverImage { large = String.empty }
+                                                            nextAiringEpisode = null
+                                                        }
+                                                    }
+                                                )
+                                        }
+                                    )
+                            }
                         }
 
-                        with(entry.entry) {
-                            shouldBeTypeOf<MediaEntry.Manga>()
-                            shouldNotBeTypeOf<MediaEntry>()
-                            shouldNotBeTypeOf<MediaEntry.Anime>()
+                    client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.MANGA), query)
 
-                            id shouldBe ItemMediaId(Int.zero)
-                            title.shouldBeEmpty()
-                            coverImage.shouldBeEmpty()
-                            format shouldBe CommonMediaEntry.Format.UNKNOWN
-                            chapters.shouldBeNull()
-                            volumes.shouldBeNull()
+                    source.mangaCollection.test {
+                        awaitItem().shouldBeRight().lists.also { lists ->
+                            val entry = lists.first().entries.shouldHaveSize(1).first()
+
+                            with(entry.list) {
+                                id shouldBe ItemEntryId(Int.zero)
+                                score shouldBe Double.zero
+                                progress shouldBe Int.zero
+                                progressVolumes.shouldBeNull()
+                                repeat shouldBe Int.zero
+                                private.shouldBeFalse()
+                                notes.shouldBeEmpty()
+                                hiddenFromStatusLists.shouldBeFalse()
+                                startedAt.shouldBeNull()
+                                completedAt.shouldBeNull()
+                            }
+
+                            with(entry.entry) {
+                                shouldBeTypeOf<MediaEntry.Manga>()
+                                shouldNotBeTypeOf<MediaEntry>()
+                                shouldNotBeTypeOf<MediaEntry.Anime>()
+
+                                id shouldBe ItemMediaId(Int.zero)
+                                title.shouldBeEmpty()
+                                coverImage.shouldBeEmpty()
+                                format shouldBe CommonMediaEntry.Format.UNKNOWN
+                                chapters.shouldBeNull()
+                                volumes.shouldBeNull()
+                            }
                         }
+                        awaitComplete()
                     }
-                    awaitComplete()
-                }
-                verifySuspend { userIdManager.getId() }
-            }
-
-            "the entry has values" {
-                val query = MediaListCollectionQuery.Data {
-                    this["MediaListCollection"] = buildMediaListCollection {
-                        lists = listOf(
-                            buildMediaListGroup {
-                                name = "Reading"
-                                entries = listOf(
-                                    buildMediaList {
-                                        id = 100
-                                        score = 7.3
-                                        progress = 12
-                                        progressVolumes = 1
-                                        repeat = 2
-                                        private = true
-                                        notes = "My notes :)"
-                                        hiddenFromStatusLists = true
-                                        startedAt = buildFuzzyDate {
-                                            day = 23
-                                            month = 12
-                                            year = 1999
-                                        }
-                                        completedAt = buildFuzzyDate {
-                                            day = 5
-                                            month = 5
-                                            year = 2009
-                                        }
-                                        media = buildMedia {
-                                            id = 100
-                                            title = buildMediaTitle {
-                                                userPreferred = "My manga entry"
-                                            }
-                                            chapters = 23
-                                            volumes = 2
-                                            format = MediaFormat.NOVEL
-                                            coverImage = buildMediaCoverImage {
-                                                large = "https://placehold.co/128x256"
-                                            }
-                                            nextAiringEpisode = null
-                                        }
-                                    },
-                                )
-                            },
-                        )
-                    }
+                    verifySuspend { userIdManager.getId() }
                 }
 
-                client.registerTestResponse(
-                    MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
-                    query,
-                )
-
-                source.mangaCollection.test {
-                    awaitItem().shouldBeRight().lists.also { lists ->
-                        val entry = lists.first().entries.shouldHaveSize(1).first()
-
-                        with(entry.list) {
-                            id shouldBe ItemEntryId(100)
-                            score shouldBe 7.3
-                            progress shouldBe 12
-                            progressVolumes shouldBe 1
-                            repeat shouldBe 2
-                            private.shouldBeTrue()
-                            notes shouldBe "My notes :)"
-                            hiddenFromStatusLists.shouldBeTrue()
-                            startedAt?.shouldBeEqualComparingTo(LocalDate(1999, 12, 23))
-                            completedAt?.shouldBeEqualComparingTo(LocalDate(2009, 5, 5))
+                "the entry has values" {
+                    val query =
+                        MediaListCollectionQuery.Data {
+                            this["MediaListCollection"] = buildMediaListCollection {
+                                lists =
+                                    listOf(
+                                        buildMediaListGroup {
+                                            name = "Reading"
+                                            entries =
+                                                listOf(
+                                                    buildMediaList {
+                                                        id = 100
+                                                        score = 7.3
+                                                        progress = 12
+                                                        progressVolumes = 1
+                                                        repeat = 2
+                                                        private = true
+                                                        notes = "My notes :)"
+                                                        hiddenFromStatusLists = true
+                                                        startedAt = buildFuzzyDate {
+                                                            day = 23
+                                                            month = 12
+                                                            year = 1999
+                                                        }
+                                                        completedAt = buildFuzzyDate {
+                                                            day = 5
+                                                            month = 5
+                                                            year = 2009
+                                                        }
+                                                        media = buildMedia {
+                                                            id = 100
+                                                            title = buildMediaTitle { userPreferred = "My manga entry" }
+                                                            chapters = 23
+                                                            volumes = 2
+                                                            format = MediaFormat.NOVEL
+                                                            coverImage = buildMediaCoverImage {
+                                                                large = "https://placehold.co/128x256"
+                                                            }
+                                                            nextAiringEpisode = null
+                                                        }
+                                                    }
+                                                )
+                                        }
+                                    )
+                            }
                         }
 
-                        with(entry.entry) {
-                            shouldBeTypeOf<MediaEntry.Manga>()
-                            shouldNotBeTypeOf<MediaEntry>()
-                            shouldNotBeTypeOf<MediaEntry.Anime>()
+                    client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.MANGA), query)
 
-                            id shouldBe ItemMediaId(100)
-                            title shouldBe "My manga entry"
-                            coverImage shouldBe "https://placehold.co/128x256"
-                            format shouldBe CommonMediaEntry.Format.NOVEL
-                            chapters shouldBe 23
-                            volumes shouldBe 2
+                    source.mangaCollection.test {
+                        awaitItem().shouldBeRight().lists.also { lists ->
+                            val entry = lists.first().entries.shouldHaveSize(1).first()
+
+                            with(entry.list) {
+                                id shouldBe ItemEntryId(100)
+                                score shouldBe 7.3
+                                progress shouldBe 12
+                                progressVolumes shouldBe 1
+                                repeat shouldBe 2
+                                private.shouldBeTrue()
+                                notes shouldBe "My notes :)"
+                                hiddenFromStatusLists.shouldBeTrue()
+                                startedAt?.shouldBeEqualComparingTo(LocalDate(1999, 12, 23))
+                                completedAt?.shouldBeEqualComparingTo(LocalDate(2009, 5, 5))
+                            }
+
+                            with(entry.entry) {
+                                shouldBeTypeOf<MediaEntry.Manga>()
+                                shouldNotBeTypeOf<MediaEntry>()
+                                shouldNotBeTypeOf<MediaEntry.Anime>()
+
+                                id shouldBe ItemMediaId(100)
+                                title shouldBe "My manga entry"
+                                coverImage shouldBe "https://placehold.co/128x256"
+                                format shouldBe CommonMediaEntry.Format.NOVEL
+                                chapters shouldBe 23
+                                volumes shouldBe 2
+                            }
                         }
+                        awaitComplete()
                     }
-                    awaitComplete()
-                }
-                verifySuspend { userIdManager.getId() }
-            }
-
-            "the returned data is null" {
-                client.registerTestResponse(
-                    MediaListCollectionQuery(userIdOpt, MediaType.MANGA),
-                    null,
-                )
-
-                source.mangaCollection.test {
-                    awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                    awaitComplete()
+                    verifySuspend { userIdManager.getId() }
                 }
 
-                verifySuspend { userIdManager.getId() }
-            }
+                "the returned data is null" {
+                    client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.MANGA), null)
 
-            "an error occurs" {
-                client.registerTestNetworkError(
-                    MediaListCollectionQuery(
-                        userIdOpt,
-                        MediaType.MANGA,
-                    ),
-                )
+                    source.mangaCollection.test {
+                        awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                        awaitComplete()
+                    }
 
-                source.mangaCollection.test {
-                    awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                    awaitComplete()
+                    verifySuspend { userIdManager.getId() }
                 }
 
-                verifySuspend { userIdManager.getId() }
+                "an error occurs" {
+                    client.registerTestNetworkError(MediaListCollectionQuery(userIdOpt, MediaType.MANGA))
+
+                    source.mangaCollection.test {
+                        awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                        awaitComplete()
+                    }
+
+                    verifySuspend { userIdManager.getId() }
+                }
             }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

@@ -19,70 +19,74 @@ import kotlinx.datetime.LocalDateTime
 
 internal class CommonListItemMapperTest : FreeSpec() {
 
-    private val animeListItem = MediaListItem.AnimeListItem(
-        entryId = ItemEntryId(1234),
-        mediaId = ItemMediaId(Arb.int().next()),
-        title = Arb.string().next(),
-        score = 9.8,
-        format = MediaListItem.Format.Tv,
-        cover = Arb.string().next(),
-        progress = 132,
-        total = null,
-        repeat = 1,
-        private = false,
-        notes = String.noData,
-        hiddenFromStatusLists = true,
-        startedAt = LocalDate(2022, 7, 20),
-        completedAt = LocalDate(2022, 7, 20),
-        updatedAt = LocalDateTime(2022, 8, 14, 9, 0),
-        nextEpisode = null,
-    )
-    private val mangaListItem = MediaListItem.MangaListItem(
-        entryId = ItemEntryId(5678),
-        mediaId = ItemMediaId(Arb.int().next()),
-        title = Arb.string().next(),
-        score = 6.9,
-        format = MediaListItem.Format.Manga,
-        cover = Arb.string().next(),
-        progress = 46,
-        total = Arb.int().next(),
-        volumesProgress = 12,
-        volumesTotal = Arb.int().next(),
-        repeat = Int.zero,
-        private = true,
-        notes = String.noData,
-        hiddenFromStatusLists = false,
-        startedAt = LocalDate(2022, 7, 20),
-        completedAt = LocalDate(2022, 7, 20),
-        updatedAt = LocalDateTime(2022, 8, 14, 9, 0),
-    )
+    private val animeListItem =
+        MediaListItem.AnimeListItem(
+            entryId = ItemEntryId(1234),
+            mediaId = ItemMediaId(Arb.int().next()),
+            title = Arb.string().next(),
+            score = 9.8,
+            format = MediaListItem.Format.Tv,
+            cover = Arb.string().next(),
+            progress = 132,
+            total = null,
+            repeat = 1,
+            private = false,
+            notes = String.noData,
+            hiddenFromStatusLists = true,
+            startedAt = LocalDate(2022, 7, 20),
+            completedAt = LocalDate(2022, 7, 20),
+            updatedAt = LocalDateTime(2022, 8, 14, 9, 0),
+            nextEpisode = null,
+        )
+    private val mangaListItem =
+        MediaListItem.MangaListItem(
+            entryId = ItemEntryId(5678),
+            mediaId = ItemMediaId(Arb.int().next()),
+            title = Arb.string().next(),
+            score = 6.9,
+            format = MediaListItem.Format.Manga,
+            cover = Arb.string().next(),
+            progress = 46,
+            total = Arb.int().next(),
+            volumesProgress = 12,
+            volumesTotal = Arb.int().next(),
+            repeat = Int.zero,
+            private = true,
+            notes = String.noData,
+            hiddenFromStatusLists = false,
+            startedAt = LocalDate(2022, 7, 20),
+            completedAt = LocalDate(2022, 7, 20),
+            updatedAt = LocalDateTime(2022, 8, 14, 9, 0),
+        )
 
-    private val animeMediaList = MediaList(
-        id = ItemEntryId(1234),
-        score = 9.8,
-        progress = 132,
-        progressVolumes = null,
-        repeat = 1,
-        private = false,
-        notes = String.noData,
-        hiddenFromStatusLists = true,
-        startedAt = LocalDate(2022, 7, 20),
-        completedAt = LocalDate(2022, 7, 20),
-        updatedAt = LocalDateTime(2022, 8, 14, 9, 0),
-    )
-    private val mangaMediaList = MediaList(
-        id = ItemEntryId(5678),
-        score = 6.9,
-        progress = 46,
-        progressVolumes = 12,
-        repeat = Int.zero,
-        private = true,
-        notes = String.noData,
-        hiddenFromStatusLists = false,
-        startedAt = LocalDate(2022, 7, 20),
-        completedAt = LocalDate(2022, 7, 20),
-        updatedAt = LocalDateTime(2022, 8, 14, 9, 0),
-    )
+    private val animeMediaList =
+        MediaList(
+            id = ItemEntryId(1234),
+            score = 9.8,
+            progress = 132,
+            progressVolumes = null,
+            repeat = 1,
+            private = false,
+            notes = String.noData,
+            hiddenFromStatusLists = true,
+            startedAt = LocalDate(2022, 7, 20),
+            completedAt = LocalDate(2022, 7, 20),
+            updatedAt = LocalDateTime(2022, 8, 14, 9, 0),
+        )
+    private val mangaMediaList =
+        MediaList(
+            id = ItemEntryId(5678),
+            score = 6.9,
+            progress = 46,
+            progressVolumes = 12,
+            repeat = Int.zero,
+            private = true,
+            notes = String.noData,
+            hiddenFromStatusLists = false,
+            startedAt = LocalDate(2022, 7, 20),
+            completedAt = LocalDate(2022, 7, 20),
+            updatedAt = LocalDateTime(2022, 8, 14, 9, 0),
+        )
 
     init {
         "a CommonMediaEntryFormat mapper" {
@@ -103,13 +107,8 @@ internal class CommonListItemMapperTest : FreeSpec() {
             }
         }
 
-        listOf(
-            animeListItem to animeMediaList,
-            mangaListItem to mangaMediaList,
-        ).forEach { (input, expected) ->
-            "a $input should be mapped to $expected" {
-                input.toMediaList() shouldBeEqual expected
-            }
+        listOf(animeListItem to animeMediaList, mangaListItem to mangaMediaList).forEach { (input, expected) ->
+            "a $input should be mapped to $expected" { input.toMediaList() shouldBeEqual expected }
         }
     }
 

@@ -8,12 +8,11 @@ import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 
 interface AnimeListsNavigator : KatanaNavigator {
     fun animeEntryDetails(id: ItemEntryId)
+
     fun editAnimeEntry(id: ItemEntryId)
 }
 
-private class KatanaAnimeListsNavigator(
-    override val navController: NavHostController,
-) : AnimeListsNavigator {
+private class KatanaAnimeListsNavigator(override val navController: NavHostController) : AnimeListsNavigator {
     override fun navigateBack() {
         overridden()
     }

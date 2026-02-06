@@ -28,11 +28,7 @@ import dev.alvr.katana.features.lists.ui.navigation.katanaAnimeListsNavigator
 import dev.alvr.katana.features.lists.ui.navigation.katanaMangaListsNavigator
 
 internal sealed interface RootNavigator :
-    HomeNavigator,
-    AnimeListsNavigator,
-    MangaListsNavigator,
-    ExploreNavigator,
-    AccountNavigator {
+    HomeNavigator, AnimeListsNavigator, MangaListsNavigator, ExploreNavigator, AccountNavigator {
 
     fun navigateToHome()
 
@@ -46,7 +42,8 @@ private class KatanaRootNavigator(
     mangaListsNavigator: MangaListsNavigator,
     exploreNavigator: ExploreNavigator,
     accountNavigator: AccountNavigator,
-) : RootNavigator,
+) :
+    RootNavigator,
     HomeNavigator by homeNavigator,
     AnimeListsNavigator by animeListsNavigator,
     MangaListsNavigator by mangaListsNavigator,
@@ -65,6 +62,7 @@ private class KatanaRootNavigator(
     override fun onNavigationBarItemClicked(item: MainNavigationBarItem) {
         onNavigationBarItemClicked(item.screen)
     }
+
     // endregion [RootNavigator]
 
     // region [HomeNavigator]
@@ -87,6 +85,7 @@ private class KatanaRootNavigator(
     override fun navigateToUpcoming() {
         onNavigationBarItemClicked(ExploreDestination.Root)
     }
+
     // endregion [HomeNavigator]
 
     private fun onNavigationBarItemClicked(screen: KatanaDestination) {
@@ -122,17 +121,18 @@ internal fun rememberKatanaNavigator(): RootNavigator {
 private fun NavHostController.loggerObserver() = apply {
     if (KatanaBuildConfig.DEBUG) {
         DisposableEffect(this, LocalLifecycleOwner.current.lifecycle) {
-            val listener = NavController.OnDestinationChangedListener { navController, destination, args ->
-                Logger.d(LogTag) {
-                    buildString {
-                        append("Navigating to route ${destination.route}")
+            val listener =
+                NavController.OnDestinationChangedListener { navController, destination, args ->
+                    Logger.d(LogTag) {
+                        buildString {
+                            append("Navigating to route ${destination.route}")
 
-                        navController.previousBackStackEntry?.destination?.route?.let { previousRoute ->
-                            append(" from $previousRoute")
+                            navController.previousBackStackEntry?.destination?.route?.let { previousRoute ->
+                                append(" from $previousRoute")
+                            }
                         }
                     }
                 }
-            }
 
             addOnDestinationChangedListener(listener)
             onDispose { removeOnDestinationChangedListener(listener) }

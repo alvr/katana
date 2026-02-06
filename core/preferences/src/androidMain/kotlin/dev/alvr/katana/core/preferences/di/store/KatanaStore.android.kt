@@ -6,6 +6,5 @@ import io.github.xxfast.kstore.file.FileCodec
 import kotlinx.serialization.Serializable
 
 @PublishedApi
-internal actual inline fun <reified T : @Serializable Any> codec(path: KatanaPath, name: String): Codec<T> = FileCodec(
-    file = path.resolve("$name.json").toKtPath(),
-)
+internal actual inline fun <reified T : @Serializable Any> codec(path: KatanaPath, name: String): Codec<T> =
+    FileCodec(file = path.resolve("$name.json").toKtPath())

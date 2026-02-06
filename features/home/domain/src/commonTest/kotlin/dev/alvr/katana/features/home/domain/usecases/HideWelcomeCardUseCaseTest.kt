@@ -32,15 +32,16 @@ internal class HideWelcomeCardUseCaseTest : FreeSpec(), KoinTest {
         }
 
         listOf(
-            HomeFailure.HidingWelcomeCard to HomeFailure.HidingWelcomeCard.left(),
-            Failure.Unknown to Failure.Unknown.left(),
-        ).forEach { (expected, failure) ->
-            "failure hiding the welcome card ($expected)" {
-                everySuspend { repo.hideWelcomeCard() } returns failure
-                useCase().shouldBeLeft(expected)
-                verifySuspend { repo.hideWelcomeCard() }
+                HomeFailure.HidingWelcomeCard to HomeFailure.HidingWelcomeCard.left(),
+                Failure.Unknown to Failure.Unknown.left(),
+            )
+            .forEach { (expected, failure) ->
+                "failure hiding the welcome card ($expected)" {
+                    everySuspend { repo.hideWelcomeCard() } returns failure
+                    useCase().shouldBeLeft(expected)
+                    verifySuspend { repo.hideWelcomeCard() }
+                }
             }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

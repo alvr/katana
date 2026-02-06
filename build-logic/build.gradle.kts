@@ -1,3 +1,1 @@
-plugins {
-    kotlin("plugin.serialization") version embeddedKotlinVersion apply false
-}
+plugins { kotlin("plugin.serialization") version embeddedKotlinVersion apply false }

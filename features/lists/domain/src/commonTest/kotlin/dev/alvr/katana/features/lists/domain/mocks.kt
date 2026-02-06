@@ -11,16 +11,17 @@ import io.kotest.property.arbitrary.string
 import io.kotest.property.kotlinx.datetime.date
 import io.kotest.property.kotlinx.datetime.datetime
 
-internal val mediaListMock = MediaList(
-    id = ItemEntryId(Arb.int().next()),
-    score = Arb.double().next(),
-    progress = Arb.int().next(),
-    progressVolumes = Arb.int().next(),
-    repeat = Arb.int().next(),
-    private = Arb.boolean().next(),
-    notes = Arb.string().next(),
-    hiddenFromStatusLists = Arb.boolean().next(),
-    startedAt = Arb.date().next(),
-    completedAt = Arb.date().next(),
-    updatedAt = Arb.datetime().next(),
-)
+internal val mediaListMock =
+    MediaList(
+        id = ItemEntryId(Arb.int().next()),
+        score = Arb.double().next(),
+        progress = Arb.int().next(),
+        progressVolumes = Arb.int().next(),
+        repeat = Arb.int().next(),
+        private = Arb.boolean().next(),
+        notes = Arb.string().next(),
+        hiddenFromStatusLists = Arb.boolean().next(),
+        startedAt = Arb.date().next(),
+        completedAt = Arb.date().next(),
+        updatedAt = Arb.datetime().next(),
+    )

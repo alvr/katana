@@ -11,28 +11,25 @@ internal fun List<MediaListGroup<MediaEntry.Anime>>.toMediaItems() =
         .associateBy { item -> item.entryId }
         .toImmutableMap()
 
-private fun MediaListEntry<MediaEntry.Anime>.toMediaItem() = MediaListItem.AnimeListItem(
-    entryId = list.id,
-    mediaId = entry.id,
-    title = entry.title,
-    score = list.score,
-    format = entry.format.toEntity(),
-    cover = entry.coverImage,
-    progress = list.progress,
-    total = entry.episodes,
-    repeat = list.repeat,
-    private = list.private,
-    notes = list.notes,
-    hiddenFromStatusLists = list.hiddenFromStatusLists,
-    startedAt = list.startedAt,
-    completedAt = list.completedAt,
-    updatedAt = list.updatedAt,
-    nextEpisode = entry.nextEpisode.nextEpisode(),
-)
-
-private fun MediaEntry.Anime.NextEpisode?.nextEpisode() = this?.let { next ->
-    MediaListItem.AnimeListItem.NextEpisode(
-        number = next.number,
-        date = next.at,
+private fun MediaListEntry<MediaEntry.Anime>.toMediaItem() =
+    MediaListItem.AnimeListItem(
+        entryId = list.id,
+        mediaId = entry.id,
+        title = entry.title,
+        score = list.score,
+        format = entry.format.toEntity(),
+        cover = entry.coverImage,
+        progress = list.progress,
+        total = entry.episodes,
+        repeat = list.repeat,
+        private = list.private,
+        notes = list.notes,
+        hiddenFromStatusLists = list.hiddenFromStatusLists,
+        startedAt = list.startedAt,
+        completedAt = list.completedAt,
+        updatedAt = list.updatedAt,
+        nextEpisode = entry.nextEpisode.nextEpisode(),
     )
-}
+
+private fun MediaEntry.Anime.NextEpisode?.nextEpisode() =
+    this?.let { next -> MediaListItem.AnimeListItem.NextEpisode(number = next.number, date = next.at) }

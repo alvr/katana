@@ -5,9 +5,7 @@ import kotlinx.serialization.Serializable
 
 sealed interface MangaListsDestination : KatanaDestination {
 
-    @Serializable
-    data object Root : MangaListsDestination
+    @Serializable data object Root : MangaListsDestination
 
-    @Serializable
-    data object Lists : MangaListsDestination
+    @Serializable data object Lists : MangaListsDestination
 }

@@ -54,35 +54,34 @@ internal fun ChangeListSheet(
             }
         },
     ) {
-        Column(
-            modifier = Modifier.navigationBarsPadding(),
-        ) {
+        Column(modifier = Modifier.navigationBarsPadding()) {
             lists.forEach { (name, count) ->
                 Text(
-                    text = buildAnnotatedString {
-                        append(name)
-                        withStyle(
-                            SpanStyle(
-                                baselineShift = BaselineShift.Superscript,
-                                fontSize = 12.sp,
-                                color = KatanaTheme.colorScheme.onSurfaceVariant,
-                            ),
-                        ) {
-                            append(" $count")
-                        }
-                    },
+                    text =
+                        buildAnnotatedString {
+                            append(name)
+                            withStyle(
+                                SpanStyle(
+                                    baselineShift = BaselineShift.Superscript,
+                                    fontSize = 12.sp,
+                                    color = KatanaTheme.colorScheme.onSurfaceVariant,
+                                )
+                            ) {
+                                append(" $count")
+                            }
+                        },
                     fontWeight = if (selectedList == name) FontWeight.SemiBold else FontWeight.Normal,
                     style = KatanaTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                                onClick(name)
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .clickable {
+                                coroutineScope.launch {
+                                    sheetState.hide()
+                                    onClick(name)
+                                }
                             }
-                        }
-                        .heightIn(min = KatanaTheme.dimensions.spacing12)
-                        .padding(all = KatanaTheme.dimensions.spacing2),
+                            .heightIn(min = KatanaTheme.dimensions.spacing12)
+                            .padding(all = KatanaTheme.dimensions.spacing2),
                 )
             }
         }
@@ -90,16 +89,10 @@ internal fun ChangeListSheet(
 }
 
 @Composable
-internal fun ChangeListButton(
-    visible: Boolean,
-    onClick: () -> Unit,
-) {
+internal fun ChangeListButton(visible: Boolean, onClick: () -> Unit) {
     if (visible) {
         FloatingActionButton(onClick = onClick) {
-            Icon(
-                contentDescription = Res.string.change_list_button.value,
-                imageVector = KatanaSymbols.Lists,
-            )
+            Icon(contentDescription = Res.string.change_list_button.value, imageVector = KatanaSymbols.Lists)
         }
     }
 }

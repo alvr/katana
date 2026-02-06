@@ -88,9 +88,7 @@ internal class HomeViewModel(
                 state { copy(sessionActive = false) }
                 effect(HomeEffect.ObserveSessionFailure)
             },
-            onSuccess = { isActive ->
-                state { copy(sessionActive = isActive) }
-            },
+            onSuccess = { isActive -> state { copy(sessionActive = isActive) } },
         )
     }
 
@@ -101,6 +99,7 @@ internal class HomeViewModel(
     private fun loadActivity() {
         Logger.d(LogTag) { "Loading Activity tab..." }
     }
+
     // endregion [Initialization]
 
     // region [ForYou Tab]
@@ -108,12 +107,8 @@ internal class HomeViewModel(
         execute(
             useCase = observeWelcomeCardVisibilityUseCase,
             params = Unit,
-            onFailure = {
-                state { copy(forYouTab = forYouTab.copy(showWelcomeCard = false)) }
-            },
-            onSuccess = { isVisible ->
-                state { copy(forYouTab = forYouTab.copy(showWelcomeCard = isVisible)) }
-            },
+            onFailure = { state { copy(forYouTab = forYouTab.copy(showWelcomeCard = false)) } },
+            onSuccess = { isVisible -> state { copy(forYouTab = forYouTab.copy(showWelcomeCard = isVisible)) } },
         )
     }
 
@@ -122,9 +117,7 @@ internal class HomeViewModel(
         execute(
             useCase = hideWelcomeCardUseCase,
             params = Unit,
-            onFailure = {
-                state { copy(forYouTab = forYouTab.copy(showWelcomeCard = false)) }
-            },
+            onFailure = { state { copy(forYouTab = forYouTab.copy(showWelcomeCard = false)) } },
             onSuccess = { /* no-op */ },
         )
     }

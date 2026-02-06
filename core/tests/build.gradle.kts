@@ -1,6 +1,4 @@
-plugins {
-    id("katana.multiplatform.tests")
-}
+plugins { id("katana.multiplatform.tests") }
 
 kotlin {
     sourceSets {

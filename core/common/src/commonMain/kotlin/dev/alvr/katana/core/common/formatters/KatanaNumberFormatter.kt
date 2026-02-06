@@ -9,7 +9,8 @@ value class KatanaNumberFormatter private constructor(private val pattern: Strin
     companion object {
         private const val NO_DECIMAL_IF_ZERO_DECIMAL = "0.#"
 
-        val Score get() = KatanaNumberFormatter(NO_DECIMAL_IF_ZERO_DECIMAL)
+        val Score
+            get() = KatanaNumberFormatter(NO_DECIMAL_IF_ZERO_DECIMAL)
     }
 }
 

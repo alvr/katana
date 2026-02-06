@@ -6,11 +6,7 @@ import androidx.navigation.compose.navigation
 import dev.alvr.katana.features.explore.ui.screens.ExploreScreen
 
 fun NavGraphBuilder.explore(exploreNavigator: ExploreNavigator) {
-    navigation<ExploreDestination.Root>(
-        startDestination = ExploreDestination.Explore,
-    ) {
-        composable<ExploreDestination.Explore> {
-            ExploreScreen(exploreNavigator)
-        }
+    navigation<ExploreDestination.Root>(startDestination = ExploreDestination.Explore) {
+        composable<ExploreDestination.Explore> { ExploreScreen(exploreNavigator) }
     }
 }

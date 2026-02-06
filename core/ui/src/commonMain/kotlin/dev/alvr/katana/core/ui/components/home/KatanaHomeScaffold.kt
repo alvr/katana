@@ -89,32 +89,32 @@ private fun KatanaTopAppBar(
                     fadeOut(tween(ANIMATION_MILLIS, easing = EaseOut)) using
                     SizeTransform(
                         clip = false,
-                        sizeAnimationSpec = { _, _ ->
-                            tween(ANIMATION_MILLIS, easing = EaseInOut)
-                        },
+                        sizeAnimationSpec = { _, _ -> tween(ANIMATION_MILLIS, easing = EaseInOut) },
                     )
             },
         ) { targetState ->
             when (targetState) {
-                TopAppBarStyle.Normal -> KatanaHomeTopAppBar(
-                    title = title,
-                    subtitle = subtitle,
-                    searchContentDescription = searchContentDescription,
-                    filterContentDescription = filterContentDescription,
-                    onSearch = { katanaScaffoldState.searchToolbar() },
-                    onFilter = null,
-                )
-                TopAppBarStyle.Search -> KatanaSearchTopAppBar(
-                    onValueChange = onSearch,
-                    searchPlaceholder = searchPlaceholder,
-                    closeContentDescription = closeContentDescription,
-                    clearContentDescription = clearContentDescription,
-                    onBack = {
-                        katanaScaffoldState.resetToolbar()
-                        onSearch(String.empty)
-                    },
-                    onClear = { onSearch(String.empty) },
-                )
+                TopAppBarStyle.Normal ->
+                    KatanaHomeTopAppBar(
+                        title = title,
+                        subtitle = subtitle,
+                        searchContentDescription = searchContentDescription,
+                        filterContentDescription = filterContentDescription,
+                        onSearch = { katanaScaffoldState.searchToolbar() },
+                        onFilter = null,
+                    )
+                TopAppBarStyle.Search ->
+                    KatanaSearchTopAppBar(
+                        onValueChange = onSearch,
+                        searchPlaceholder = searchPlaceholder,
+                        closeContentDescription = closeContentDescription,
+                        clearContentDescription = clearContentDescription,
+                        onBack = {
+                            katanaScaffoldState.resetToolbar()
+                            onSearch(String.empty)
+                        },
+                        onClear = { onSearch(String.empty) },
+                    )
             }
         }
     }
@@ -136,22 +136,22 @@ class KatanaHomeScaffoldState {
     }
 
     companion object {
-        internal val saver: Saver<KatanaHomeScaffoldState, *> = listSaver(
-            save = { listOf<Any>(it.topAppBarStyle, it.showTopAppBarActions) },
-            restore = {
-                KatanaHomeScaffoldState().apply {
-                    topAppBarStyle = it.first() as TopAppBarStyle
-                    showTopAppBarActions = it.last() as Boolean
-                }
-            },
-        )
+        internal val saver: Saver<KatanaHomeScaffoldState, *> =
+            listSaver(
+                save = { listOf<Any>(it.topAppBarStyle, it.showTopAppBarActions) },
+                restore = {
+                    KatanaHomeScaffoldState().apply {
+                        topAppBarStyle = it.first() as TopAppBarStyle
+                        showTopAppBarActions = it.last() as Boolean
+                    }
+                },
+            )
     }
 }
 
 @Composable
-fun rememberKatanaHomeScaffoldState() = rememberSaveable(
-    saver = KatanaHomeScaffoldState.saver,
-) { KatanaHomeScaffoldState() }
+fun rememberKatanaHomeScaffoldState() =
+    rememberSaveable(saver = KatanaHomeScaffoldState.saver) { KatanaHomeScaffoldState() }
 
 internal enum class TopAppBarStyle {
     Normal,

@@ -9,9 +9,13 @@ internal interface HomeIntent : UiIntent {
         data object CloseWelcomeCard : ForYouIntent
 
         data object NavigateToAnimeLists : ForYouIntent
+
         data object NavigateToMangaLists : ForYouIntent
+
         data object NavigateToTrending : ForYouIntent
+
         data object NavigateToPopular : ForYouIntent
+
         data object NavigateToUpcoming : ForYouIntent
     }
 

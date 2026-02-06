@@ -41,19 +41,13 @@ fun KatanaHomeTopAppBar(
         actions = {
             if (onSearch != null) {
                 IconButton(onClick = onSearch) {
-                    Icon(
-                        imageVector = KatanaSymbols.Search,
-                        contentDescription = searchContentDescription,
-                    )
+                    Icon(imageVector = KatanaSymbols.Search, contentDescription = searchContentDescription)
                 }
             }
 
             if (onFilter != null) {
                 IconButton(onClick = onFilter) {
-                    Icon(
-                        imageVector = KatanaSymbols.Filter,
-                        contentDescription = filterContentDescription,
-                    )
+                    Icon(imageVector = KatanaSymbols.Filter, contentDescription = filterContentDescription)
                 }
             }
         },

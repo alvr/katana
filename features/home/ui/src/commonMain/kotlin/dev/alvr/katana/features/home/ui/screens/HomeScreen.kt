@@ -2,10 +2,12 @@ package dev.alvr.katana.features.home.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,6 +15,7 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -42,16 +45,15 @@ import dev.alvr.katana.features.home.ui.resources.katana_logo_a11y
 import dev.alvr.katana.features.home.ui.screens.activity.ActivityTabContent
 import dev.alvr.katana.features.home.ui.screens.foryou.ForYouTabContent
 import dev.alvr.katana.features.home.ui.viewmodel.HomeEffect
+import dev.alvr.katana.features.home.ui.viewmodel.HomeIntent
+import dev.alvr.katana.features.home.ui.viewmodel.HomeState
 import dev.alvr.katana.features.home.ui.viewmodel.HomeViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-internal fun HomeScreen(
-    homeNavigator: HomeNavigator,
-    viewModel: HomeViewModel,
-    modifier: Modifier = Modifier,
-) {
+internal fun HomeScreen(homeNavigator: HomeNavigator, viewModel: HomeViewModel, modifier: Modifier = Modifier) {
     val tabs = remember { HomeTab.entries.toImmutableList() }
     val pagerState = rememberPagerState { HomeTab.entries.size }
     val snackbarHostState = rememberSnackbarHostState()
@@ -76,52 +78,80 @@ internal fun HomeScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHostState = snackbarHostState,
         topBar = {
-            Column {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Image(
-                            modifier = Modifier.padding(vertical = KatanaTheme.dimensions.spacing3),
-                            painter = Res.drawable.katana_logo.asPainter,
-                            contentDescription = Res.string.katana_logo_a11y.value,
-                        )
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                    scrollBehavior = scrollBehavior,
-                )
-
-                PrimaryTabRow(selectedTabIndex = currentTab) {
-                    tabs.fastForEach { tab ->
-                        Tab(
-                            selected = currentTab == tab.ordinal,
-                            onClick = { pagerState.requestScrollToPage(tab.ordinal) },
-                            text = { Text(text = tab.title.value) },
-                        )
-                    }
-                }
-            }
+            TopBar(
+                scrollBehavior = scrollBehavior,
+                currentTab = currentTab,
+                tabs = tabs,
+                onTabClick = { tab -> pagerState.requestScrollToPage(tab.ordinal) },
+            )
         },
         contentWindowInsets = WindowInsets.noInsets,
     ) { paddingValues ->
-        HorizontalPager(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            state = pagerState,
-            verticalAlignment = Alignment.Top,
-            pageSpacing = KatanaTheme.dimensions.pageSpacing,
-        ) { page ->
-            when (page) {
-                HomeTab.ForYou.ordinal -> ForYouTabContent(
-                    sessionActive = uiState.sessionActive,
-                    onIntent = viewModel::intent,
-                    uiState = uiState.forYouTab,
+        PagerContent(
+            paddingValues = paddingValues,
+            pagerState = pagerState,
+            sessionActive = uiState.sessionActive,
+            forYouState = uiState.forYouTab,
+            activityState = uiState.activityTab,
+            onIntent = viewModel::intent,
+        )
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun TopBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    currentTab: Int,
+    tabs: ImmutableList<HomeTab>,
+    onTabClick: (HomeTab) -> Unit,
+) {
+    Column {
+        CenterAlignedTopAppBar(
+            title = {
+                Image(
+                    modifier = Modifier.padding(vertical = KatanaTheme.dimensions.spacing3),
+                    painter = Res.drawable.katana_logo.asPainter,
+                    contentDescription = Res.string.katana_logo_a11y.value,
                 )
-                HomeTab.Activity.ordinal -> ActivityTabContent(
-                    sessionActive = uiState.sessionActive,
-                    onEvent = viewModel::intent,
-                    uiState = uiState.activityTab,
+            },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+            scrollBehavior = scrollBehavior,
+        )
+
+        PrimaryTabRow(selectedTabIndex = currentTab) {
+            tabs.fastForEach { tab ->
+                Tab(
+                    selected = currentTab == tab.ordinal,
+                    onClick = { onTabClick(tab) },
+                    text = { Text(text = tab.title.value) },
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun PagerContent(
+    paddingValues: PaddingValues,
+    pagerState: PagerState,
+    sessionActive: Boolean,
+    forYouState: HomeState.ForYouTabState,
+    activityState: HomeState.ActivityTabState,
+    onIntent: (HomeIntent) -> Unit,
+) {
+    HorizontalPager(
+        modifier = Modifier.fillMaxSize().padding(paddingValues),
+        state = pagerState,
+        verticalAlignment = Alignment.Top,
+        pageSpacing = KatanaTheme.dimensions.pageSpacing,
+    ) { page ->
+        when (page) {
+            HomeTab.ForYou.ordinal ->
+                ForYouTabContent(sessionActive = sessionActive, onIntent = onIntent, uiState = forYouState)
+
+            HomeTab.Activity.ordinal ->
+                ActivityTabContent(sessionActive = sessionActive, onIntent = onIntent, uiState = activityState)
         }
     }
 }

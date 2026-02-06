@@ -1,6 +1,4 @@
-plugins {
-    id("katana.app")
-}
+plugins { id("katana.app") }
 
 dependencies {
     coreLibraryDesugaring(libs.desugaring)

@@ -16,15 +16,16 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
 
-    override fun apply(target: Project) = with(target) {
-        apply(plugin = "katana.multiplatform.core")
-        apply(plugin = "com.apollographql.apollo")
+    override fun apply(target: Project) =
+        with(target) {
+            apply(plugin = "katana.multiplatform.core")
+            apply(plugin = "com.apollographql.apollo")
 
-        with(extensions) {
-            configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
-            configure<ApolloExtension> { configureApollo(project) }
+            with(extensions) {
+                configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
+                configure<ApolloExtension> { configureApollo(project) }
+            }
         }
-    }
 
     private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
         configureSourceSets()
@@ -33,25 +34,13 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         sourceSets {
-            commonMain.dependencies {
-                bundleImplementation("data-remote-common")
-            }
-            androidMain.dependencies {
-                bundleImplementation("data-remote-android")
-            }
-            iosMain.dependencies {
-                bundleImplementation("data-remote-ios")
-            }
+            commonMain.dependencies { bundleImplementation("data-remote-common") }
+            androidMain.dependencies { bundleImplementation("data-remote-android") }
+            iosMain.dependencies { bundleImplementation("data-remote-ios") }
 
-            commonTest.dependencies {
-                bundleImplementation("data-remote-common-test")
-            }
-            androidHostTest.dependencies {
-                bundleImplementation("data-remote-android-test")
-            }
-            iosTest.dependencies {
-                bundleImplementation("data-remote-ios-test")
-            }
+            commonTest.dependencies { bundleImplementation("data-remote-common-test") }
+            androidHostTest.dependencies { bundleImplementation("data-remote-android-test") }
+            iosTest.dependencies { bundleImplementation("data-remote-ios-test") }
         }
     }
 

@@ -23,29 +23,18 @@ internal fun Lists(
     title: String,
     iconButtonContentDescription: String,
     onNavigateClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
 
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.spacing2),
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = title,
-                style = KatanaTheme.typography.headlineSmall,
-            )
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.spacing2)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = title, style = KatanaTheme.typography.headlineSmall)
 
             Spacer(Modifier.weight(1f))
 
             IconButton(onClick = onNavigateClick) {
-                Icon(
-                    imageVector = KatanaSymbols.ArrowForward,
-                    contentDescription = iconButtonContentDescription,
-                )
+                Icon(imageVector = KatanaSymbols.ArrowForward, contentDescription = iconButtonContentDescription)
             }
         }
 
@@ -53,7 +42,6 @@ internal fun Lists(
             state = lazyListState,
             flingBehavior = rememberSnapFlingBehavior(lazyListState, SnapPosition.Start),
             horizontalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
-        ) {
-        }
+        ) {}
     }
 }

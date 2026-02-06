@@ -9,17 +9,12 @@ import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
 @OptIn(KoinExperimentalAPI::class)
-internal class FeaturesAccountUiModuleTest : FreeSpec({
-    beforeSpec {
-        MockProvider.register { clazz -> mockkClass(clazz) }
-    }
+internal class FeaturesAccountUiModuleTest :
+    FreeSpec({
+        beforeSpec { MockProvider.register { clazz -> mockkClass(clazz) } }
 
-    "verify featuresAccountUiModule" - {
-        featuresAccountUiModule.verify(
-            extraTypes = listOf(
-                LogOutUseCase::class,
-                ObserveUserInfoUseCase::class,
-            ),
-        )
-    }
-})
+        "verify featuresAccountUiModule" -
+            {
+                featuresAccountUiModule.verify(extraTypes = listOf(LogOutUseCase::class, ObserveUserInfoUseCase::class))
+            }
+    })

@@ -10,10 +10,7 @@ import dev.alvr.katana.features.home.ui.screens.foryou.components.Lists
 import dev.alvr.katana.features.home.ui.viewmodel.HomeIntent
 
 @Composable
-internal fun Upcoming(
-    onIntent: (HomeIntent) -> Unit,
-    modifier: Modifier = Modifier
-) {
+internal fun Upcoming(onIntent: (HomeIntent) -> Unit, modifier: Modifier = Modifier) {
     Lists(
         modifier = modifier,
         title = Res.string.upcoming_title.value,

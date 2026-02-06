@@ -24,12 +24,7 @@ suspend fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.t
     test: suspend TestKatanaBaseViewModelScope<S, E, I>.() -> Unit,
 ) {
     let { viewModel ->
-        merge(
-            uiState
-                .initialState(initialState)
-                .map { ItemState<S, E>(it) },
-            effects.map { ItemEffect(it) },
-        ).test {
+        merge(uiState.initialState(initialState).map { ItemState<S, E>(it) }, effects.map { ItemEffect(it) }).test {
             when (verifyInitialState) {
                 is VerifyInitialState.ItemState -> awaitItem() shouldBe verifyInitialState.state
                 VerifyInitialState.Skip -> skipItems(1)
@@ -49,7 +44,9 @@ sealed interface TestKatanaBaseViewModelScope<S : UiState, E : UiEffect, I : UiI
     val currentState: S
 
     fun intent(intent: I)
+
     suspend fun expectState(state: S.() -> S)
+
     suspend fun expectEffect(effect: E)
 }
 
@@ -58,7 +55,8 @@ private class TestKatanaBaseViewModelScopeImpl<S : UiState, E : UiEffect, I : Ui
     private val turbine: ReceiveTurbine<Item<S, E>>,
     private val viewModel: KatanaViewModel<S, E, I>,
 ) : TestKatanaBaseViewModelScope<S, E, I>, ReceiveTurbine<Item<S, E>> by turbine {
-    override val currentState: S get() = viewModel.uiState.value
+    override val currentState: S
+        get() = viewModel.uiState.value
 
     override fun intent(intent: I) {
         viewModel.intent(intent)
@@ -98,9 +96,12 @@ private fun <S : UiState> Flow<S>.initialState(initialState: S?): Flow<S> = flow
 
 sealed interface VerifyInitialState<S : UiState> {
     data object Skip : VerifyInitialState<Nothing>
+
     @JvmInline value class ItemState<S : UiState>(val state: S) : VerifyInitialState<S>
 }
 
 sealed interface Item<S : UiState, E : UiEffect>
+
 @JvmInline internal value class ItemState<S : UiState, E : UiEffect>(val state: S) : Item<S, E>
+
 @JvmInline internal value class ItemEffect<S : UiState, E : UiEffect>(val effect: E) : Item<S, E>

@@ -15,56 +15,56 @@ import org.gradle.kotlin.dsl.dependencies
 internal class KatanaKoverPlugin : Plugin<Project> {
 
     // Keep in sync with codecov.yml
-    private val classesExcludes = listOf(
-        // Common
-        "*.KatanaApp*",
-        "*.KatanaBuildConfig",
+    private val classesExcludes =
+        listOf(
+            // Common
+            "*.KatanaApp*",
+            "*.KatanaBuildConfig",
 
-        // Android
-        "*.*Activity",
-        "*.*Fragment",
+            // Android
+            "*.*Activity",
+            "*.*Fragment",
 
-        // Apollo
-        "*.data.*Mutation*",
-        "*.data.*Query*",
+            // Apollo
+            "*.data.*Mutation*",
+            "*.data.*Query*",
 
-        // Compose
-        "*.*ComposableSingletons*",
+            // Compose
+            "*.*ComposableSingletons*",
 
-        // DI
-        "*.Module_*Kt",
+            // DI
+            "*.Module_*Kt",
 
-        // Serializers
-        $$$"*.*$$serializer",
-    )
-    private val packagesExcludes = listOf(
-        // Core
-        "*.core.*",
+            // Serializers
+            $$$"*.*$$serializer",
+        )
+    private val packagesExcludes =
+        listOf(
+            // Core
+            "*.core.*",
 
-        // Remote
-        "*.data.adapter",
-        "*.data.fragment",
-        "*.data.selections",
-        "*.data.type",
+            // Remote
+            "*.data.adapter",
+            "*.data.fragment",
+            "*.data.selections",
+            "*.data.type",
 
-        // UI
-        "*.navigation",
-        "*.resources",
-        "*.screens",
+            // UI
+            "*.navigation",
+            "*.resources",
+            "*.screens",
+            "*.shared.utils",
+        )
 
-        "*.shared.utils",
-    )
+    override fun apply(target: Project) =
+        with(target) {
+            apply(plugin = "org.jetbrains.kotlinx.kover")
 
-    override fun apply(target: Project) = with(target) {
-        apply(plugin = "org.jetbrains.kotlinx.kover")
-
-        extensions.configure<KoverProjectExtension> { configureRoot(project) }
-    }
+            extensions.configure<KoverProjectExtension> { configureRoot(project) }
+        }
 
     private fun KoverProjectExtension.configureRoot(project: Project) {
-        project.subprojects
-            .filter { it.childProjects.isEmpty() }
-            .forEach { configureSubproject(it) }
+        project.subprojects.filter { it.childProjects.isEmpty() }.forEach { configureSubproject(it) }
 
         configureCommon()
     }

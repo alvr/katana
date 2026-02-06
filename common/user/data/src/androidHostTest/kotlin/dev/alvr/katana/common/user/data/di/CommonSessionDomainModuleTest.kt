@@ -6,12 +6,12 @@ import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.test.mock.MockProvider
 
 @OptIn(KoinExperimentalAPI::class)
-internal class CommonSessionDomainModuleTest : FreeSpec({
-    beforeSpec {
-        MockProvider.register { clazz -> mockkClass(clazz) }
-    }
+internal class CommonSessionDomainModuleTest :
+    FreeSpec({
+        beforeSpec { MockProvider.register { clazz -> mockkClass(clazz) } }
 
-    "verify commonUserDataModule" - {
-//        commonUserDataModule.verify()
-    }
-})
+        "verify commonUserDataModule" -
+            {
+                //        commonUserDataModule.verify()
+            }
+    })

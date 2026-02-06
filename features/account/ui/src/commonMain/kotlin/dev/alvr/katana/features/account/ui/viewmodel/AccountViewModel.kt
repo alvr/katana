@@ -27,15 +27,7 @@ internal class AccountViewModel(
             useCase = observeUserInfoUseCase,
             params = Unit,
             onFailure = { state { copy(error = true, loading = false) } },
-            onSuccess = { userInfo ->
-                state {
-                    copy(
-                        error = false,
-                        loading = false,
-                        userInfo = userInfo.toEntity(),
-                    )
-                }
-            },
+            onSuccess = { userInfo -> state { copy(error = false, loading = false, userInfo = userInfo.toEntity()) } },
         )
     }
 

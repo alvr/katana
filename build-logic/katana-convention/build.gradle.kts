@@ -4,6 +4,7 @@ plugins {
 }
 
 group = "dev.alvr.katana.buildlogic"
+
 version = extra["katana.plugins.version"].toString()
 
 kotlin.compilerOptions.freeCompilerArgs.addAll("-Xcontext-parameters")

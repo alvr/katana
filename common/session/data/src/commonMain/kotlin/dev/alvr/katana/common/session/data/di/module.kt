@@ -14,23 +14,13 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 private val dataStoreModule = module {
-    single<KatanaStore<Session>>(sessionDataStore) {
-        katanaStoreOf(get<KatanaFilesPath>(), "session", Session())
-    }
+    single<KatanaStore<Session>>(sessionDataStore) { katanaStoreOf(get<KatanaFilesPath>(), "session", Session()) }
 }
 
-private val repositoriesModule = module {
-    singleOf(::SessionRepositoryImpl) bind SessionRepository::class
-}
+private val repositoriesModule = module { singleOf(::SessionRepositoryImpl) bind SessionRepository::class }
 
 private val sourcesModule = module {
-    single<SessionLocalSource> {
-        SessionLocalSourceImpl(
-            store = get(sessionDataStore),
-        )
-    }
+    single<SessionLocalSource> { SessionLocalSourceImpl(store = get(sessionDataStore)) }
 }
 
-val commonSessionDataModule = module {
-    includes(dataStoreModule, repositoriesModule, sourcesModule)
-}
+val commonSessionDataModule = module { includes(dataStoreModule, repositoriesModule, sourcesModule) }

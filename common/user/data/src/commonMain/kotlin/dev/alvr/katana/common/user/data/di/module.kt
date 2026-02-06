@@ -12,19 +12,13 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-private val managersModule = module {
-    singleOf(::UserIdManagerImpl) bind UserIdManager::class
-}
+private val managersModule = module { singleOf(::UserIdManagerImpl) bind UserIdManager::class }
 
-private val repositoriesModule = module {
-    singleOf(::UserRepositoryImpl) bind UserRepository::class
-}
+private val repositoriesModule = module { singleOf(::UserRepositoryImpl) bind UserRepository::class }
 
 private val sourcesModule = module {
     singleOf(::UserLocalSourceImpl) bind UserLocalSource::class
     singleOf(::UserRemoteSourceImpl) bind UserRemoteSource::class
 }
 
-val commonUserDataModule = module {
-    includes(managersModule, repositoriesModule, sourcesModule)
-}
+val commonUserDataModule = module { includes(managersModule, repositoriesModule, sourcesModule) }

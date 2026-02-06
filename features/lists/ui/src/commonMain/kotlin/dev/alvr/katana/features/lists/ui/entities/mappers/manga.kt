@@ -12,22 +12,23 @@ internal fun List<MediaListGroup<MediaEntry.Manga>>.toMediaItems() =
         .associateBy { item -> item.entryId }
         .toImmutableMap()
 
-private fun MediaListEntry<MediaEntry.Manga>.toMediaItem() = MediaListItem.MangaListItem(
-    entryId = list.id,
-    mediaId = entry.id,
-    title = entry.title,
-    score = list.score,
-    format = entry.format.toEntity(),
-    cover = entry.coverImage,
-    progress = list.progress,
-    total = entry.chapters,
-    repeat = list.repeat,
-    private = list.private,
-    notes = list.notes,
-    hiddenFromStatusLists = list.hiddenFromStatusLists,
-    startedAt = list.startedAt,
-    completedAt = list.completedAt,
-    updatedAt = list.updatedAt,
-    volumesProgress = list.progressVolumes.orZero(),
-    volumesTotal = entry.volumes,
-)
+private fun MediaListEntry<MediaEntry.Manga>.toMediaItem() =
+    MediaListItem.MangaListItem(
+        entryId = list.id,
+        mediaId = entry.id,
+        title = entry.title,
+        score = list.score,
+        format = entry.format.toEntity(),
+        cover = entry.coverImage,
+        progress = list.progress,
+        total = entry.chapters,
+        repeat = list.repeat,
+        private = list.private,
+        notes = list.notes,
+        hiddenFromStatusLists = list.hiddenFromStatusLists,
+        startedAt = list.startedAt,
+        completedAt = list.completedAt,
+        updatedAt = list.updatedAt,
+        volumesProgress = list.progressVolumes.orZero(),
+        volumesTotal = entry.volumes,
+    )

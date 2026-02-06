@@ -79,9 +79,7 @@ internal class HomeViewModelTest : BehaviorSpec() {
                                 initMocks(token)
                                 coEvery { saveSession(AnilistToken(any())) } returns SessionFailure.SavingSession.left()
 
-                                viewModel.test {
-                                    expectEffect(HomeEffect.SaveTokenFailure)
-                                }
+                                viewModel.test { expectEffect(HomeEffect.SaveTokenFailure) }
 
                                 coVerify(exactly = 1) { saveSession(AnilistToken(CLEAR_TOKEN)) }
                                 coVerify(exactly = 0) { saveUserId() }
@@ -96,9 +94,7 @@ internal class HomeViewModelTest : BehaviorSpec() {
                                 coEitherJustRun { saveSession(AnilistToken(any())) }
                                 coEvery { saveUserId() } returns UserFailure.SavingUser.left()
 
-                                viewModel.test {
-                                    expectEffect(HomeEffect.SaveUserIdFailure)
-                                }
+                                viewModel.test { expectEffect(HomeEffect.SaveUserIdFailure) }
 
                                 coVerify(exactly = 1) { saveSession(AnilistToken(CLEAR_TOKEN)) }
                                 coVerify(exactly = 1) { saveUserId() }
@@ -117,22 +113,17 @@ internal class HomeViewModelTest : BehaviorSpec() {
                     then("it should set sessionActive to true") {
                         every { observeActiveSession.flow } returns flowOf(true.right())
 
-                        viewModel.test {
-                            expectState { copy(sessionActive = true) }
-                        }
+                        viewModel.test { expectState { copy(sessionActive = true) } }
                     }
                 }
 
                 and("there is an error") {
                     beforeTest {
-                        every { observeActiveSession.flow } returns
-                            flowOf(SessionFailure.CheckingActiveSession.left())
+                        every { observeActiveSession.flow } returns flowOf(SessionFailure.CheckingActiveSession.left())
                     }
 
                     then("it should expect HomeEffect.ObserveSessionFailure effect") {
-                        viewModel.test {
-                            expectEffect(HomeEffect.ObserveSessionFailure)
-                        }
+                        viewModel.test { expectEffect(HomeEffect.ObserveSessionFailure) }
                     }
 
                     then("it should set sessionActive to false") {
@@ -149,9 +140,7 @@ internal class HomeViewModelTest : BehaviorSpec() {
                     then("it should set showWelcomeCard to true") {
                         every { observeWelcomeCardVisibility.flow } returns flowOf(true.right())
 
-                        viewModel.test {
-                            expectState { copy(forYouTab = forYouTab.copy(showWelcomeCard = true)) }
-                        }
+                        viewModel.test { expectState { copy(forYouTab = forYouTab.copy(showWelcomeCard = true)) } }
                     }
 
                     then("it should set showWelcomeCard to false") {
@@ -182,9 +171,7 @@ internal class HomeViewModelTest : BehaviorSpec() {
             and("is of type HomeIntent.ForYouIntent") {
                 `when`("intent HomeIntent.ForYouIntent.CloseWelcomeCard") {
                     then("it should post HomeEffect.ForYouEffect.CloseWelcomeCard") {
-                        viewModel.test {
-                            intent(HomeIntent.ForYouIntent.CloseWelcomeCard)
-                        }
+                        viewModel.test { intent(HomeIntent.ForYouIntent.CloseWelcomeCard) }
                     }
                 }
 
@@ -238,9 +225,7 @@ internal class HomeViewModelTest : BehaviorSpec() {
                         coEitherJustRun { hideWelcomeCard() }
 
                         then("it should do nothing") {
-                            viewModel.test {
-                                intent(HomeIntent.ForYouIntent.CloseWelcomeCard)
-                            }
+                            viewModel.test { intent(HomeIntent.ForYouIntent.CloseWelcomeCard) }
                         }
                     }
 
@@ -259,25 +244,22 @@ internal class HomeViewModelTest : BehaviorSpec() {
 
             and("is of type HomeIntent.ActivityIntent") {
                 `when`("intent HomeIntent.ActivityIntent") {
-                    then("it should do nothing (yet)") {
-                        viewModel.test {
-                            intent(HomeIntent.ActivityIntent)
-                        }
-                    }
+                    then("it should do nothing (yet)") { viewModel.test { intent(HomeIntent.ActivityIntent) } }
                 }
             }
         }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        viewModel = HomeViewModel(
-            savedStateHandle = savedStateHandle,
-            hideWelcomeCardUseCase = hideWelcomeCard,
-            observeActiveSessionUseCase = observeActiveSession,
-            observeWelcomeCardVisibilityUseCase = observeWelcomeCardVisibility,
-            saveSessionUseCase = saveSession,
-            saveUserIdUseCase = saveUserId,
-        )
+        viewModel =
+            HomeViewModel(
+                savedStateHandle = savedStateHandle,
+                hideWelcomeCardUseCase = hideWelcomeCard,
+                observeActiveSessionUseCase = observeActiveSession,
+                observeWelcomeCardVisibilityUseCase = observeWelcomeCardVisibility,
+                saveSessionUseCase = saveSession,
+                saveUserIdUseCase = saveUserId,
+            )
     }
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {

@@ -32,16 +32,14 @@ internal class UpdateListUseCaseTest : FreeSpec(), KoinTest {
             verifySuspend { repo.updateList(mediaListMock) }
         }
 
-        listOf(
-            ListsFailure.UpdatingList to ListsFailure.UpdatingList.left(),
-            Failure.Unknown to Failure.Unknown.left(),
-        ).forEach { (expected, failure) ->
-            "failure updating the list ($expected)" {
-                everySuspend { repo.updateList(any()) } returns failure
-                useCase(mediaListMock).shouldBeLeft(expected)
-                verifySuspend { repo.updateList(mediaListMock) }
+        listOf(ListsFailure.UpdatingList to ListsFailure.UpdatingList.left(), Failure.Unknown to Failure.Unknown.left())
+            .forEach { (expected, failure) ->
+                "failure updating the list ($expected)" {
+                    everySuspend { repo.updateList(any()) } returns failure
+                    useCase(mediaListMock).shouldBeLeft(expected)
+                    verifySuspend { repo.updateList(mediaListMock) }
+                }
             }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

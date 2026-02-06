@@ -15,9 +15,10 @@ internal class ReloadInterceptor : ApolloInterceptor {
     override fun <D : Operation.Data> intercept(
         request: ApolloRequest<D>,
         chain: ApolloInterceptorChain,
-    ): Flow<ApolloResponse<D>> = if (firstQuery) {
-        CacheAndNetworkInterceptor.intercept(request, chain).also { firstQuery = false }
-    } else {
-        NetworkOnlyInterceptor.intercept(request, chain)
-    }
+    ): Flow<ApolloResponse<D>> =
+        if (firstQuery) {
+            CacheAndNetworkInterceptor.intercept(request, chain).also { firstQuery = false }
+        } else {
+            NetworkOnlyInterceptor.intercept(request, chain)
+        }
 }

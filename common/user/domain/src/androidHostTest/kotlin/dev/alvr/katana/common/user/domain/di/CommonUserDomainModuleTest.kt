@@ -9,17 +9,12 @@ import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
 @OptIn(KoinExperimentalAPI::class)
-internal class CommonUserDomainModuleTest : FreeSpec({
-    beforeSpec {
-        MockProvider.register { clazz -> mockkClass(clazz) }
-    }
+internal class CommonUserDomainModuleTest :
+    FreeSpec({
+        beforeSpec { MockProvider.register { clazz -> mockkClass(clazz) } }
 
-    "verify commonUserDomainModule" - {
-        commonUserDomainModule.verify(
-            extraTypes = listOf(
-                KatanaDispatcher::class,
-                UserRepository::class,
-            ),
-        )
-    }
-})
+        "verify commonUserDomainModule" -
+            {
+                commonUserDomainModule.verify(extraTypes = listOf(KatanaDispatcher::class, UserRepository::class))
+            }
+    })

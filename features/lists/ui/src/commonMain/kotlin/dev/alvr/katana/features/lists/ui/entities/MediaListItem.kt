@@ -58,11 +58,7 @@ internal sealed interface MediaListItem {
         override val updatedAt: LocalDateTime?,
         val nextEpisode: NextEpisode?,
     ) : MediaListItem {
-        @Stable
-        data class NextEpisode(
-            val number: Int,
-            val date: LocalDateTime,
-        )
+        @Stable data class NextEpisode(val number: Int, val date: LocalDateTime)
     }
 
     data class MangaListItem(
@@ -100,18 +96,20 @@ internal sealed interface MediaListItem {
         Unknown;
 
         val text
-            @Composable get() = when (this) {
-                Tv -> Res.string.entry_format_tv
-                TvShort -> Res.string.entry_format_tv_short
-                Movie -> Res.string.entry_format_movie
-                Special -> Res.string.entry_format_special
-                Ova -> Res.string.entry_format_ova
-                Ona -> Res.string.entry_format_ona
-                Music -> Res.string.entry_format_music
-                Manga -> Res.string.entry_format_manga
-                Novel -> Res.string.entry_format_novel
-                OneShot -> Res.string.entry_format_one_shot
-                Unknown -> Res.string.entry_format_unknown
-            }.value
+            @Composable
+            get() =
+                when (this) {
+                    Tv -> Res.string.entry_format_tv
+                    TvShort -> Res.string.entry_format_tv_short
+                    Movie -> Res.string.entry_format_movie
+                    Special -> Res.string.entry_format_special
+                    Ova -> Res.string.entry_format_ova
+                    Ona -> Res.string.entry_format_ona
+                    Music -> Res.string.entry_format_music
+                    Manga -> Res.string.entry_format_manga
+                    Novel -> Res.string.entry_format_novel
+                    OneShot -> Res.string.entry_format_one_shot
+                    Unknown -> Res.string.entry_format_unknown
+                }.value
     }
 }

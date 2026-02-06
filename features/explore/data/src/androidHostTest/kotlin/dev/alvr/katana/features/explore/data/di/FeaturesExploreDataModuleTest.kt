@@ -7,12 +7,9 @@ import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
 @OptIn(KoinExperimentalAPI::class)
-internal class FeaturesExploreDataModuleTest : FreeSpec({
-    beforeSpec {
-        MockProvider.register { clazz -> mockkClass(clazz) }
-    }
+internal class FeaturesExploreDataModuleTest :
+    FreeSpec({
+        beforeSpec { MockProvider.register { clazz -> mockkClass(clazz) } }
 
-    "verify featuresExploreDataModule" - {
-        featuresExploreDataModule.verify()
-    }
-})
+        "verify featuresExploreDataModule" - { featuresExploreDataModule.verify() }
+    })

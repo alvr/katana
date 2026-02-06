@@ -8,16 +8,9 @@ import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
 @OptIn(KoinExperimentalAPI::class)
-internal class CoreCommonModuleTest : FreeSpec({
-    beforeSpec {
-        MockProvider.register { clazz -> mockkClass(clazz) }
-    }
+internal class CoreCommonModuleTest :
+    FreeSpec({
+        beforeSpec { MockProvider.register { clazz -> mockkClass(clazz) } }
 
-    "verify coreCommonModule" - {
-        coreCommonModule.verify(
-            extraTypes = listOf(
-                Path::class,
-            ),
-        )
-    }
-})
+        "verify coreCommonModule" - { coreCommonModule.verify(extraTypes = listOf(Path::class)) }
+    })

@@ -20,17 +20,18 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
 
-    override fun apply(target: Project) = with(target) {
-        apply(plugin = "org.jetbrains.kotlin.multiplatform")
-        apply(plugin = "org.jetbrains.compose")
-        apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+    override fun apply(target: Project) =
+        with(target) {
+            apply(plugin = "org.jetbrains.kotlin.multiplatform")
+            apply(plugin = "org.jetbrains.compose")
+            apply(plugin = "org.jetbrains.kotlin.plugin.compose")
 
-        with(extensions) {
-            configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
-            configure<ComposeExtension> { configureComposeResources(project) }
-            configure<ComposeCompilerGradlePluginExtension> { configureComposeCompiler(project) }
+            with(extensions) {
+                configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
+                configure<ComposeExtension> { configureComposeResources(project) }
+                configure<ComposeCompilerGradlePluginExtension> { configureComposeCompiler(project) }
+            }
         }
-    }
 
     private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
         configureSourceSets()
@@ -40,25 +41,13 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
         sourceSets {
-            commonMain.dependencies {
-                bundleImplementation("ui-common")
-            }
-            androidMain.dependencies {
-                bundleImplementation("ui-android")
-            }
-            iosMain.dependencies {
-                bundleImplementation("ui-ios")
-            }
+            commonMain.dependencies { bundleImplementation("ui-common") }
+            androidMain.dependencies { bundleImplementation("ui-android") }
+            iosMain.dependencies { bundleImplementation("ui-ios") }
 
-            commonTest.dependencies {
-                bundleImplementation("ui-common-test")
-            }
-            androidHostTest.dependencies {
-                bundleImplementation("ui-android-test")
-            }
-            iosTest.dependencies {
-                bundleImplementation("ui-ios-test")
-            }
+            commonTest.dependencies { bundleImplementation("ui-common-test") }
+            androidHostTest.dependencies { bundleImplementation("ui-android-test") }
+            iosTest.dependencies { bundleImplementation("ui-ios-test") }
         }
     }
 

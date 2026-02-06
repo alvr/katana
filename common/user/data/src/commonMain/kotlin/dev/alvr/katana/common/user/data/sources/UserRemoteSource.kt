@@ -10,5 +10,6 @@ internal interface UserRemoteSource {
     val userInfo: Flow<Either<Failure, UserInfo>>
 
     suspend fun getUserId(): Either<Failure, UserId>
+
     suspend fun saveUserId(): Either<Failure, Unit>
 }

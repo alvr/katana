@@ -40,12 +40,7 @@ private fun InitCoil() {
     setSingletonImageLoaderFactory { context ->
         ImageLoader.Builder(context)
             .crossfade(true)
-            .diskCache {
-                DiskCache.Builder()
-                    .directory(diskCacheDir)
-                    .maxSizePercent(CoilMaxSizePercent)
-                    .build()
-            }
+            .diskCache { DiskCache.Builder().directory(diskCacheDir).maxSizePercent(CoilMaxSizePercent).build() }
             .build()
     }
 }

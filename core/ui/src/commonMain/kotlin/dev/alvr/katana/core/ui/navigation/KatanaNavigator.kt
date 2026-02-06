@@ -15,15 +15,15 @@ interface KatanaNavigator {
 }
 
 @Suppress("UnusedReceiverParameter")
-fun KatanaNavigator.overridden(
-    navigator: String = "KatanaRootNavigator",
-) {
+fun KatanaNavigator.overridden(navigator: String = "KatanaRootNavigator") {
     Logger.i(LogTag) { "Implementation overridden in $navigator" }
 }
 
 val KatanaNavigator.viewModelStoreOwner: ViewModelStoreOwner
-    @Composable get() = navController.previousBackStackEntry
-        ?: LocalViewModelStoreOwner.current
-        ?: error("ViewModelStoreOwner not found")
+    @Composable
+    get() =
+        navController.previousBackStackEntry
+            ?: LocalViewModelStoreOwner.current
+            ?: error("ViewModelStoreOwner not found")
 
 private const val LogTag = "KatanaNavigator"

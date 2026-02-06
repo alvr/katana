@@ -14,14 +14,8 @@ import dev.alvr.katana.core.ui.resources.value
 import org.jetbrains.compose.resources.StringResource
 
 @Composable
-fun KatanaSnackbarHost(
-    hostState: SnackbarHostState,
-    modifier: Modifier = Modifier,
-) {
-    SnackbarHost(
-        hostState = hostState,
-        modifier = modifier,
-    ) { data ->
+fun KatanaSnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifier) {
+    SnackbarHost(hostState = hostState, modifier = modifier) { data ->
         val visuals = (data.visuals as? KatanaSnackbarVisuals)?.toSnackbarVisuals() ?: data.visuals
         Snackbar(KatanaSnackbarData(data, visuals))
     }
@@ -31,26 +25,28 @@ suspend fun SnackbarHostState.showSnackbar(
     stringResource: StringResource,
     actionLabel: String? = null,
     withDismissAction: Boolean = false,
-    duration: SnackbarDuration = if (actionLabel == null) {
-        SnackbarDuration.Short
-    } else {
-        SnackbarDuration.Indefinite
-    },
-) = showSnackbar(
-    KatanaSnackbarVisuals(
-        stringResource = stringResource,
-        actionLabel = actionLabel,
-        withDismissAction = withDismissAction,
-        duration = duration,
-    ),
-)
+    duration: SnackbarDuration =
+        if (actionLabel == null) {
+            SnackbarDuration.Short
+        } else {
+            SnackbarDuration.Indefinite
+        },
+) =
+    showSnackbar(
+        KatanaSnackbarVisuals(
+            stringResource = stringResource,
+            actionLabel = actionLabel,
+            withDismissAction = withDismissAction,
+            duration = duration,
+        )
+    )
 
 @Stable
 private class KatanaSnackbarVisuals(
     val stringResource: StringResource,
     override val actionLabel: String?,
     override val withDismissAction: Boolean,
-    override val duration: SnackbarDuration
+    override val duration: SnackbarDuration,
 ) : SnackbarVisuals {
     override val message: String = String.empty
 }
@@ -66,7 +62,4 @@ private fun KatanaSnackbarVisuals.toSnackbarVisuals(): SnackbarVisuals = let { v
 }
 
 @Stable
-private class KatanaSnackbarData(
-    data: SnackbarData,
-    override val visuals: SnackbarVisuals
-) : SnackbarData by data
+private class KatanaSnackbarData(data: SnackbarData, override val visuals: SnackbarVisuals) : SnackbarData by data

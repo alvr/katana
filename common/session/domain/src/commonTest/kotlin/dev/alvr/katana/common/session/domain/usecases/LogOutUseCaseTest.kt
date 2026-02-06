@@ -31,16 +31,14 @@ internal class LogOutUseCaseTest : FreeSpec(), KoinTest {
             verifySuspend { repo.logout() }
         }
 
-        listOf(
-            SessionFailure.LoggingOut to SessionFailure.LoggingOut.left(),
-            Failure.Unknown to Failure.Unknown.left(),
-        ).forEach { (expected, failure) ->
-            "failure saving the session ($expected)" {
-                everySuspend { repo.logout() } returns failure
-                useCase().shouldBeLeft(expected)
-                verifySuspend { repo.logout() }
+        listOf(SessionFailure.LoggingOut to SessionFailure.LoggingOut.left(), Failure.Unknown to Failure.Unknown.left())
+            .forEach { (expected, failure) ->
+                "failure saving the session ($expected)" {
+                    everySuspend { repo.logout() } returns failure
+                    useCase().shouldBeLeft(expected)
+                    verifySuspend { repo.logout() }
+                }
             }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

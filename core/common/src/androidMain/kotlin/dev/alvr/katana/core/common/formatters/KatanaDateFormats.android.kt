@@ -8,10 +8,10 @@ internal actual typealias KatanaPlatformDateTimeFormatterBuilder = DateTimeForma
 
 internal actual fun dateTimeFormatterBuilder(
     block: KatanaPlatformDateTimeFormatterBuilder.() -> Unit
-): KatanaDateTimeFormatter = DateTimeFormatterBuilder()
-    .apply(block)
-    .toFormatter(KatanaLocale.default().locale)
-    .let { KatanaDateTimeFormatter(it) }
+): KatanaDateTimeFormatter =
+    DateTimeFormatterBuilder().apply(block).toFormatter(KatanaLocale.default().locale).let {
+        KatanaDateTimeFormatter(it)
+    }
 
 actual object KatanaDateFormats {
     actual val nextEpisodeFormat: KatanaDateTimeFormatter

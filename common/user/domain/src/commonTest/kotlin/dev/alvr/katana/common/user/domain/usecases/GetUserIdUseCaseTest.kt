@@ -32,16 +32,14 @@ internal class GetUserIdUseCaseTest : FreeSpec(), KoinTest {
             verifySuspend { repo.getUserId() }
         }
 
-        listOf(
-            UserFailure.GettingUserId to UserFailure.GettingUserId.left(),
-            Failure.Unknown to Failure.Unknown.left(),
-        ).forEach { (expected, failure) ->
-            "failure getting user id ($expected)" {
-                everySuspend { repo.getUserId() } returns failure
-                useCase().shouldBeLeft(expected)
-                verifySuspend { repo.getUserId() }
+        listOf(UserFailure.GettingUserId to UserFailure.GettingUserId.left(), Failure.Unknown to Failure.Unknown.left())
+            .forEach { (expected, failure) ->
+                "failure getting user id ($expected)" {
+                    everySuspend { repo.getUserId() } returns failure
+                    useCase().shouldBeLeft(expected)
+                    verifySuspend { repo.getUserId() }
+                }
             }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

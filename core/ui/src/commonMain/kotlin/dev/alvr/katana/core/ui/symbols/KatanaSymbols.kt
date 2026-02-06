@@ -17,50 +17,50 @@ import kotlin.reflect.KProperty
 object KatanaSymbols
 
 @Stable
-internal class KatanaSymbol(
-    private val autoMirror: Boolean = false,
-    private val builder: PathBuilder.() -> Unit,
-) : ReadOnlyProperty<KatanaSymbols, ImageVector> {
+internal class KatanaSymbol(private val autoMirror: Boolean = false, private val builder: PathBuilder.() -> Unit) :
+    ReadOnlyProperty<KatanaSymbols, ImageVector> {
     private var symbol: ImageVector? = null
 
-    override fun getValue(
-        thisRef: KatanaSymbols,
-        property: KProperty<*>,
-    ): ImageVector = symbol ?: materialSymbol(name = property.name, autoMirror = autoMirror) {
-        materialPath(pathBuilder = builder)
-    }.also { imageVector -> symbol = imageVector }
+    override fun getValue(thisRef: KatanaSymbols, property: KProperty<*>): ImageVector =
+        symbol
+            ?: materialSymbol(name = property.name, autoMirror = autoMirror) { materialPath(pathBuilder = builder) }
+                .also { imageVector -> symbol = imageVector }
 }
 
 private inline fun materialSymbol(
     name: String,
     autoMirror: Boolean = false,
     block: ImageVector.Builder.() -> Unit,
-): ImageVector = ImageVector.Builder(
-    name = name,
-    defaultWidth = MaterialSymbolSize,
-    defaultHeight = MaterialSymbolSize,
-    viewportWidth = MaterialSymbolViewport,
-    viewportHeight = MaterialSymbolViewport,
-    autoMirror = autoMirror,
-).apply(block).build()
+): ImageVector =
+    ImageVector.Builder(
+            name = name,
+            defaultWidth = MaterialSymbolSize,
+            defaultHeight = MaterialSymbolSize,
+            viewportWidth = MaterialSymbolViewport,
+            viewportHeight = MaterialSymbolViewport,
+            autoMirror = autoMirror,
+        )
+        .apply(block)
+        .build()
 
 private inline fun ImageVector.Builder.materialPath(
     fillAlpha: Float = 1f,
     strokeAlpha: Float = 1f,
     pathFillType: PathFillType = DefaultFillType,
     pathBuilder: PathBuilder.() -> Unit,
-): ImageVector.Builder = path(
-    fill = SolidColor(Color.Black),
-    fillAlpha = fillAlpha,
-    stroke = null,
-    strokeAlpha = strokeAlpha,
-    strokeLineWidth = 1f,
-    strokeLineCap = StrokeCap.Butt,
-    strokeLineJoin = StrokeJoin.Bevel,
-    strokeLineMiter = 1f,
-    pathFillType = pathFillType,
-    pathBuilder = pathBuilder,
-)
+): ImageVector.Builder =
+    path(
+        fill = SolidColor(Color.Black),
+        fillAlpha = fillAlpha,
+        stroke = null,
+        strokeAlpha = strokeAlpha,
+        strokeLineWidth = 1f,
+        strokeLineCap = StrokeCap.Butt,
+        strokeLineJoin = StrokeJoin.Bevel,
+        strokeLineMiter = 1f,
+        pathFillType = pathFillType,
+        pathBuilder = pathBuilder,
+    )
 
 private val MaterialSymbolSize = 24.dp
 private const val MaterialSymbolViewport = 960f

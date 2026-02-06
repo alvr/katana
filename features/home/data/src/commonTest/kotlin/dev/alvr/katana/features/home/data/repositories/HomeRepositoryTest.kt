@@ -21,46 +21,42 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 internal class HomeRepositoryTest : FreeSpec() {
-    private val localSource = mock<HomeLocalSource> {
-        every { welcomeCardVisible } returns emptyFlow()
-    }
+    private val localSource = mock<HomeLocalSource> { every { welcomeCardVisible } returns emptyFlow() }
     private val remoteSource = mock<HomeRemoteSource>()
 
     private lateinit var repo: HomeRepository
 
     init {
-        "observing welcome card visibility" - {
-            every { localSource.welcomeCardVisible } returns flowOf(
-                true.right(),
-                true.right(),
-                false.right(),
-            )
+        "observing welcome card visibility" -
+            {
+                every { localSource.welcomeCardVisible } returns flowOf(true.right(), true.right(), false.right())
 
-            "observing if the session is active" {
-                repo.welcomeCardVisible.test {
-                    awaitItem().shouldBeRight(true)
-                    awaitItem().shouldBeRight(true)
-                    awaitItem().shouldBeRight(false)
-                    awaitComplete()
+                "observing if the session is active" {
+                    repo.welcomeCardVisible.test {
+                        awaitItem().shouldBeRight(true)
+                        awaitItem().shouldBeRight(true)
+                        awaitItem().shouldBeRight(false)
+                        awaitComplete()
+                    }
+
+                    verify { localSource.welcomeCardVisible }
+                }
+            }
+
+        "getting welcome card visibility" -
+            {
+                "is successful" {
+                    everySuspend { localSource.hideWelcomeCard() } returns Unit.right()
+                    repo.hideWelcomeCard().shouldBeRight()
+                    verifySuspend { localSource.hideWelcomeCard() }
                 }
 
-                verify { localSource.welcomeCardVisible }
+                "is failure" {
+                    everySuspend { localSource.hideWelcomeCard() } returns HomeFailure.HidingWelcomeCard.left()
+                    repo.hideWelcomeCard().shouldBeLeft(HomeFailure.HidingWelcomeCard)
+                    verifySuspend { localSource.hideWelcomeCard() }
+                }
             }
-        }
-
-        "getting welcome card visibility" - {
-            "is successful" {
-                everySuspend { localSource.hideWelcomeCard() } returns Unit.right()
-                repo.hideWelcomeCard().shouldBeRight()
-                verifySuspend { localSource.hideWelcomeCard() }
-            }
-
-            "is failure" {
-                everySuspend { localSource.hideWelcomeCard() } returns HomeFailure.HidingWelcomeCard.left()
-                repo.hideWelcomeCard().shouldBeLeft(HomeFailure.HidingWelcomeCard)
-                verifySuspend { localSource.hideWelcomeCard() }
-            }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

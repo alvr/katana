@@ -32,15 +32,16 @@ internal class SaveAnilistTokenUseCaseTest : FreeSpec(), KoinTest {
         }
 
         listOf(
-            SessionFailure.SavingSession to SessionFailure.SavingSession.left(),
-            Failure.Unknown to Failure.Unknown.left(),
-        ).forEach { (expected, failure) ->
-            "failure saving the session ($expected)" {
-                everySuspend { repo.saveSession(anilistTokenMock) } returns failure
-                useCase(anilistTokenMock).shouldBeLeft(expected)
-                verifySuspend { repo.saveSession(anilistTokenMock) }
+                SessionFailure.SavingSession to SessionFailure.SavingSession.left(),
+                Failure.Unknown to Failure.Unknown.left(),
+            )
+            .forEach { (expected, failure) ->
+                "failure saving the session ($expected)" {
+                    everySuspend { repo.saveSession(anilistTokenMock) } returns failure
+                    useCase(anilistTokenMock).shouldBeLeft(expected)
+                    verifySuspend { repo.saveSession(anilistTokenMock) }
+                }
             }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

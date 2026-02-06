@@ -15,18 +15,12 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 @Suppress("UNUSED_PARAMETER")
-internal fun ExploreScreen(
-    navigator: ExploreNavigator,
-    viewModel: ExploreViewModel = koinViewModel(),
-) {
+internal fun ExploreScreen(navigator: ExploreNavigator, viewModel: ExploreViewModel = koinViewModel()) {
     KatanaHomeScaffold(
         title = Res.string.explore_toolbar_title.value,
         searchPlaceholder = Res.string.explore_toolbar_search_placeholder.value,
         onSearch = {},
     ) { paddingValues ->
-        Text(
-            modifier = Modifier.padding(paddingValues),
-            text = Res.string.explore_toolbar_title.value,
-        )
+        Text(modifier = Modifier.padding(paddingValues), text = Res.string.explore_toolbar_title.value)
     }
 }

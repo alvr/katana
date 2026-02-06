@@ -18,16 +18,12 @@ fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.collectAs
 @Composable
 @OptIn(KatanaInternalApi::class)
 fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.CollectEffect(
-    onEffect: @DisallowComposableCalls suspend (E) -> Unit,
+    onEffect: @DisallowComposableCalls suspend (E) -> Unit
 ) {
     val currentOnEffect by rememberUpdatedState(onEffect)
 
     LifecycleStartEffect(effects) {
-        val job = lifecycleScope.launch(dispatcher.immediate) {
-            effects.collect { effect ->
-                currentOnEffect(effect)
-            }
-        }
+        val job = lifecycleScope.launch(dispatcher.immediate) { effects.collect { effect -> currentOnEffect(effect) } }
 
         onStopOrDispose { job.cancel() }
     }

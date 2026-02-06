@@ -71,10 +71,11 @@ internal fun ListScreen(
         },
     )
 
-    val searchPlaceholder = when (state.type) {
-        ListsState.ListType.Anime -> Res.string.anime_toolbar_search_placeholder
-        ListsState.ListType.Manga -> Res.string.manga_toolbar_search_placeholder
-    }.value
+    val searchPlaceholder =
+        when (state.type) {
+            ListsState.ListType.Anime -> Res.string.anime_toolbar_search_placeholder
+            ListsState.ListType.Manga -> Res.string.manga_toolbar_search_placeholder
+        }.value
 
     val buttonsVisible = !state.error
     katanaScaffoldState.showTopAppBarActions = buttonsVisible
@@ -85,36 +86,32 @@ internal fun ListScreen(
         subtitle = state.selectedList,
         searchPlaceholder = searchPlaceholder,
         onSearch = { search -> onIntent(ListsIntent.Search(search)) },
-        fab = {
-            ChangeListButton(visible = buttonsVisible && state.lists.isNotEmpty()) {
-                showListSelector = true
-            }
-        },
+        fab = { ChangeListButton(visible = buttonsVisible && state.lists.isNotEmpty()) { showListSelector = true } },
     ) { paddingValues ->
         when {
-            state.error -> KatanaErrorState(
-                modifier = modifier.padding(paddingValues),
-                text = Res.string.error_message.value,
-                onRetry = {
-                    onIntent(ListsIntent.Refresh)
-                    katanaScaffoldState.resetToolbar()
-                },
-                loading = state.loading,
-            )
-            state.empty && !state.loading -> KatanaEmptyState(
-                modifier = modifier.padding(paddingValues),
-                text = emptyStateRes,
-            )
-            else -> MediaList(
-                lazyGridState = lazyGridState,
-                modifier = modifier.padding(paddingValues),
-                items = state.items,
-                loading = state.loading,
-                onRefresh = { onIntent(ListsIntent.Refresh) },
-                onAddPlusOne = { entryId -> onIntent(ListsIntent.AddPlusOne(entryId)) },
-                onEditEntry = onEditEntry,
-                onEntryDetails = onEntryDetails,
-            )
+            state.error ->
+                KatanaErrorState(
+                    modifier = modifier.padding(paddingValues),
+                    text = Res.string.error_message.value,
+                    onRetry = {
+                        onIntent(ListsIntent.Refresh)
+                        katanaScaffoldState.resetToolbar()
+                    },
+                    loading = state.loading,
+                )
+            state.empty && !state.loading ->
+                KatanaEmptyState(modifier = modifier.padding(paddingValues), text = emptyStateRes)
+            else ->
+                MediaList(
+                    lazyGridState = lazyGridState,
+                    modifier = modifier.padding(paddingValues),
+                    items = state.items,
+                    loading = state.loading,
+                    onRefresh = { onIntent(ListsIntent.Refresh) },
+                    onAddPlusOne = { entryId -> onIntent(ListsIntent.AddPlusOne(entryId)) },
+                    onEditEntry = onEditEntry,
+                    onEntryDetails = onEntryDetails,
+                )
         }
     }
 }

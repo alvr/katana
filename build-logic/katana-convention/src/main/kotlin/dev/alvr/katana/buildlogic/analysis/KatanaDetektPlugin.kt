@@ -13,34 +13,35 @@ import org.gradle.kotlin.dsl.register
 
 internal class KatanaDetektPlugin : Plugin<Project> {
 
-    override fun apply(target: Project) = with(target) {
-        apply(plugin = "dev.detekt")
+    override fun apply(target: Project) =
+        with(target) {
+            apply(plugin = "dev.detekt")
 
-        tasks.register<Detekt>("detektAll") {
-            description = "Run detekt in all modules"
+            tasks.register<Detekt>("detektAll") {
+                description = "Run detekt in all modules"
 
-            parallel = true
-            ignoreFailures = false
-            autoCorrect = true
-            buildUponDefaultConfig = true
-            jvmTarget = KatanaConfiguration.JvmTargetStr
-            setSource(files(projectDir))
-            config.setFrom(files("$rootDir/gradle/config/detekt.yml"))
-            include("**/*.kt", "**/*.kts")
-            exclude("**/resources/**", "**/build/**")
+                parallel = true
+                ignoreFailures = false
+                autoCorrect = true
+                buildUponDefaultConfig = true
+                jvmTarget = KatanaConfiguration.JvmTargetStr
+                setSource(files(projectDir))
+                config.setFrom(files("$rootDir/gradle/config/detekt.yml"))
+                include("**/*.kt", "**/*.kts")
+                exclude("**/resources/**", "**/build/**")
 
-            reports {
-                html.required = true
-                sarif.required = true
+                reports {
+                    html.required = true
+                    sarif.required = true
+                }
+
+                dependsOn("spotlessCheck")
             }
 
-            dependsOn("spotlessCheck")
+            dependencies {
+                detekt(catalogLib("detekt-compose"))
+                detekt(catalogLib("detekt-compose2"))
+                detekt(catalogLib("detekt-rules"))
+            }
         }
-
-        dependencies {
-            detekt(catalogLib("detekt-compose"))
-            detekt(catalogLib("detekt-compose2"))
-            detekt(catalogLib("detekt-rules"))
-        }
-    }
 }

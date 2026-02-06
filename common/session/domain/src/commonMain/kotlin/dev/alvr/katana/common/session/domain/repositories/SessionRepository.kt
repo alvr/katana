@@ -10,8 +10,12 @@ interface SessionRepository {
     val sessionActive: Flow<Either<Failure, Boolean>>
 
     suspend fun clearActiveSession(): Either<Failure, Unit>
+
     suspend fun deleteAnilistToken(): Either<Failure, Unit>
+
     suspend fun getAnilistToken(): Option<AnilistToken>
+
     suspend fun logout(): Either<Failure, Unit>
+
     suspend fun saveSession(anilistToken: AnilistToken): Either<Failure, Unit>
 }
