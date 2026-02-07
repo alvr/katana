@@ -21,19 +21,11 @@ private val dataStoreModule = module {
     }
 }
 
-private val repositoriesModule = module {
-    singleOf(::HomeRepositoryImpl) bind HomeRepository::class
-}
+private val repositoriesModule = module { singleOf(::HomeRepositoryImpl) bind HomeRepository::class }
 
 private val sourcesModule = module {
-    single<HomeLocalSource> {
-        HomeLocalSourceImpl(
-            store = get(homePreferencesDataStore),
-        )
-    }
+    single<HomeLocalSource> { HomeLocalSourceImpl(store = get(homePreferencesDataStore)) }
     singleOf(::HomeRemoteSourceImpl) bind HomeRemoteSource::class
 }
 
-val featuresHomeDataModule = module {
-    includes(dataStoreModule, repositoriesModule, sourcesModule)
-}
+val featuresHomeDataModule = module { includes(dataStoreModule, repositoriesModule, sourcesModule) }

@@ -11,9 +11,7 @@ import dev.alvr.katana.features.lists.ui.viewmodel.MangaListsViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-internal fun MangaScreen(
-    navigator: MangaListsNavigator,
-) {
+internal fun MangaScreen(navigator: MangaListsNavigator) {
     ListScreen(
         viewModel = koinViewModel<MangaListsViewModel>(),
         title = Res.string.manga_toolbar.value,

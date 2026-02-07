@@ -32,15 +32,16 @@ internal class DeleteAnilistTokenUseCaseTest : FreeSpec(), KoinTest {
         }
 
         listOf(
-            SessionFailure.DeletingToken to SessionFailure.DeletingToken.left(),
-            Failure.Unknown to Failure.Unknown.left(),
-        ).forEach { (expected, failure) ->
-            "failure deleting the token ($expected)" {
-                everySuspend { repo.deleteAnilistToken() } returns failure
-                useCase().shouldBeLeft(expected)
-                verifySuspend { repo.deleteAnilistToken() }
+                SessionFailure.DeletingToken to SessionFailure.DeletingToken.left(),
+                Failure.Unknown to Failure.Unknown.left(),
+            )
+            .forEach { (expected, failure) ->
+                "failure deleting the token ($expected)" {
+                    everySuspend { repo.deleteAnilistToken() } returns failure
+                    useCase().shouldBeLeft(expected)
+                    verifySuspend { repo.deleteAnilistToken() }
+                }
             }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

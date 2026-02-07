@@ -9,8 +9,8 @@ coil = "3.3.0"
 compose = "1.10.0"
 compose-placeholder = "1.0.12"
 desugaring = "2.1.5"
-detekt = "1.23.8"
-detekt-compose = "0.4.28"
+detekt = "2.0.0-alpha.2"
+detekt-compose = "0.5.6"
 detekt-compose2 = "1.4.0"
 kermit = "2.0.8"
 kaml = "0.104.0"
@@ -38,6 +38,7 @@ navigation = "2.9.1"
 navigation3 = "1.0.0-alpha06"
 navigation-material = "1.10.0"
 okio = "3.16.4"
+spotless = "8.2.1"
 turbine = "1.2.1"
 
 [plugins]
@@ -46,13 +47,14 @@ android-library = { id = "com.android.kotlin.multiplatform.library", version.ref
 apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 kotest = { id = "io.kotest", version.ref = "kotest" }
 kotlin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 [libraries]
 # AndroidX
@@ -89,7 +91,7 @@ compose-windowsize = { module = "org.jetbrains.compose.material3:material3-windo
 # Detekt
 detekt-compose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detekt-compose" }
 detekt-compose2 = { module = "ru.kode:detekt-rules-compose", version.ref = "detekt-compose2" }
-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+detekt-rules = { module = "dev.detekt:detekt-rules", version.ref = "detekt" }
 
 # Desugaring
 desugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugaring" }
@@ -99,12 +101,13 @@ gradle-android = { module = "com.android.tools.build:gradle", version.ref = "and
 gradle-apollo = { module = "com.apollographql.apollo:apollo-gradle-plugin", version.ref = "apollo" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
 gradle-compose-compiler = { module = "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin", version.ref = "kotlin" }
-gradle-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+gradle-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotest = { module = "io.kotest:io.kotest.gradle.plugin", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gradle-ksp = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 gradle-mokkery = { module = "dev.mokkery:mokkery-gradle", version.ref = "mokkery" }
+gradle-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
 
 # Kaml
 kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
@@ -328,4 +331,5 @@ gradle = [
     "gradle-kover",
     "gradle-ksp",
     "gradle-mokkery",
+    "gradle-spotless",
 ]

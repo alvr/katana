@@ -28,57 +28,55 @@ internal class AccountViewModelTest : FreeSpec() {
     private lateinit var viewModel: AccountViewModel
 
     init {
-        "observing the user info" - {
-            "successfully" {
-                every { observeUserInfoUseCase.flow } returns flowOf(userInfo.right())
-                coJustRun { observeUserInfoUseCase() }
+        "observing the user info" -
+            {
+                "successfully" {
+                    every { observeUserInfoUseCase.flow } returns flowOf(userInfo.right())
+                    coJustRun { observeUserInfoUseCase() }
 
-                viewModel.test {
-                    expectState { copy(userInfo = userInfoUi, loading = false, error = false) }
+                    viewModel.test { expectState { copy(userInfo = userInfoUi, loading = false, error = false) } }
+
+                    coVerify(exactly = 1) { observeUserInfoUseCase() }
+                    verify(exactly = 1) { observeUserInfoUseCase.flow }
                 }
 
-                coVerify(exactly = 1) { observeUserInfoUseCase() }
-                verify(exactly = 1) { observeUserInfoUseCase.flow }
+                "unsuccessfully" {
+                    every { observeUserInfoUseCase.flow } returns flowOf(UserFailure.GettingUserInfo.left())
+                    coJustRun { observeUserInfoUseCase() }
+
+                    viewModel.test { expectState { copy(loading = false, error = true) } }
+
+                    coVerify(exactly = 1) { observeUserInfoUseCase() }
+                    verify(exactly = 1) { observeUserInfoUseCase.flow }
+                }
             }
 
-            "unsuccessfully" {
-                every { observeUserInfoUseCase.flow } returns flowOf(UserFailure.GettingUserInfo.left())
-                coJustRun { observeUserInfoUseCase() }
+        "logging out from the account" -
+            {
+                "is successful" {
+                    coEvery { logOutUseCase() } returns Unit.right()
 
-                viewModel.test {
-                    expectState { copy(loading = false, error = true) }
+                    viewModel.test(AccountState(userInfo = UserInfoUi())) {
+                        intent(AccountIntent.Logout)
+                        expectState { copy(userInfo = null) }
+                        expectEffect(AccountEffect.LoggingOutSuccess)
+                    }
+
+                    coVerify(exactly = 1) { logOutUseCase() }
                 }
 
-                coVerify(exactly = 1) { observeUserInfoUseCase() }
-                verify(exactly = 1) { observeUserInfoUseCase.flow }
-            }
-        }
+                "is failure" {
+                    coEvery { logOutUseCase() } returns SessionFailure.LoggingOut.left()
 
-        "logging out from the account" - {
-            "is successful" {
-                coEvery { logOutUseCase() } returns Unit.right()
+                    viewModel.test(AccountState(userInfo = UserInfoUi())) {
+                        intent(AccountIntent.Logout)
+                        expectState { copy(userInfo = null) }
+                        expectEffect(AccountEffect.LoggingOutFailure)
+                    }
 
-                viewModel.test(AccountState(userInfo = UserInfoUi())) {
-                    intent(AccountIntent.Logout)
-                    expectState { copy(userInfo = null) }
-                    expectEffect(AccountEffect.LoggingOutSuccess)
+                    coVerify(exactly = 1) { logOutUseCase() }
                 }
-
-                coVerify(exactly = 1) { logOutUseCase() }
             }
-
-            "is failure" {
-                coEvery { logOutUseCase() } returns SessionFailure.LoggingOut.left()
-
-                viewModel.test(AccountState(userInfo = UserInfoUi())) {
-                    intent(AccountIntent.Logout)
-                    expectState { copy(userInfo = null) }
-                    expectEffect(AccountEffect.LoggingOutFailure)
-                }
-
-                coVerify(exactly = 1) { logOutUseCase() }
-            }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
@@ -87,16 +85,8 @@ internal class AccountViewModelTest : FreeSpec() {
     }
 
     private companion object {
-        val userInfo = UserInfo(
-            username = "username",
-            avatar = "avatar",
-            banner = "banner",
-        )
+        val userInfo = UserInfo(username = "username", avatar = "avatar", banner = "banner")
 
-        val userInfoUi = UserInfoUi(
-            username = "username",
-            avatar = "avatar",
-            banner = "banner",
-        )
+        val userInfoUi = UserInfoUi(username = "username", avatar = "avatar", banner = "banner")
     }
 }

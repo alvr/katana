@@ -5,9 +5,7 @@ import kotlinx.serialization.Serializable
 
 interface HomeDestination : KatanaDestination {
 
-    @Serializable
-    data object Root : HomeDestination
+    @Serializable data object Root : HomeDestination
 
-    @Serializable
-    data class Home(val token: String? = null) : HomeDestination
+    @Serializable data class Home(val token: String? = null) : HomeDestination
 }

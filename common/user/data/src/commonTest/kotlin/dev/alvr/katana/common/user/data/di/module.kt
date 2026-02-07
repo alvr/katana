@@ -8,11 +8,7 @@ import dev.alvr.katana.core.tests.di.coreTestsModule
 import org.koin.dsl.module
 
 private val managersModule = module {
-    single<UserIdManager> { (repo: UserRepository) ->
-        UserIdManagerImpl(GetUserIdUseCase(get(), repo))
-    }
+    single<UserIdManager> { (repo: UserRepository) -> UserIdManagerImpl(GetUserIdUseCase(get(), repo)) }
 }
 
-internal val fakeCommonUserDataModule = module {
-    includes(coreTestsModule, managersModule)
-}
+internal val fakeCommonUserDataModule = module { includes(coreTestsModule, managersModule) }

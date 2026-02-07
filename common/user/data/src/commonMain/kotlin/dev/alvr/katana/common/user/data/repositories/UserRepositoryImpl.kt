@@ -12,5 +12,6 @@ internal class UserRepositoryImpl(
     override val userInfo = remoteSource.userInfo
 
     override suspend fun getUserId() = remoteSource.getUserId()
+
     override suspend fun saveUserId() = remoteSource.saveUserId()
 }

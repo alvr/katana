@@ -4,7 +4,10 @@ plugins {
 }
 
 group = "dev.alvr.katana.buildlogic"
+
 version = extra["katana.plugins.version"].toString()
+
+kotlin.compilerOptions.freeCompilerArgs.addAll("-Xcontext-parameters")
 
 dependencies {
     implementation(libs.bundles.build.config)
@@ -56,6 +59,10 @@ gradlePlugin {
         register("multiplatform-ui") {
             id = "katana.multiplatform.ui"
             implementationClass = "dev.alvr.katana.buildlogic.mp.ui.KatanaMultiplatformUiPlugin"
+        }
+        register("spotless") {
+            id = "katana.spotless"
+            implementationClass = "dev.alvr.katana.buildlogic.analysis.KatanaSpotlessPlugin"
         }
     }
 }

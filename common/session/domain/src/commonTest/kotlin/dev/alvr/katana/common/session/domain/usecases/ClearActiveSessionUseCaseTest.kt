@@ -32,15 +32,16 @@ internal class ClearActiveSessionUseCaseTest : FreeSpec(), KoinTest {
         }
 
         listOf(
-            SessionFailure.ClearingSession to SessionFailure.ClearingSession.left(),
-            Failure.Unknown to Failure.Unknown.left(),
-        ).forEach { (expected, failure) ->
-            "failure clearing the session ($expected)" {
-                everySuspend { repo.clearActiveSession() } returns failure
-                useCase().shouldBeLeft(expected)
-                verifySuspend { repo.clearActiveSession() }
+                SessionFailure.ClearingSession to SessionFailure.ClearingSession.left(),
+                Failure.Unknown to Failure.Unknown.left(),
+            )
+            .forEach { (expected, failure) ->
+                "failure clearing the session ($expected)" {
+                    everySuspend { repo.clearActiveSession() } returns failure
+                    useCase().shouldBeLeft(expected)
+                    verifySuspend { repo.clearActiveSession() }
+                }
             }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

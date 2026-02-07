@@ -13,21 +13,22 @@ import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
 @OptIn(KoinExperimentalAPI::class)
-internal class FeaturesHomeUiModuleTest : FreeSpec({
-    beforeSpec {
-        MockProvider.register { clazz -> mockkClass(clazz) }
-    }
+internal class FeaturesHomeUiModuleTest :
+    FreeSpec({
+        beforeSpec { MockProvider.register { clazz -> mockkClass(clazz) } }
 
-    "verify featuresHomeUiModule" - {
-        featuresHomeUiModule.verify(
-            extraTypes = listOf(
-                SavedStateHandle::class,
-                HideWelcomeCardUseCase::class,
-                ObserveActiveSessionUseCase::class,
-                ObserveWelcomeCardVisibilityUseCase::class,
-                SaveSessionUseCase::class,
-                SaveUserIdUseCase::class,
-            ),
-        )
-    }
-})
+        "verify featuresHomeUiModule" -
+            {
+                featuresHomeUiModule.verify(
+                    extraTypes =
+                        listOf(
+                            SavedStateHandle::class,
+                            HideWelcomeCardUseCase::class,
+                            ObserveActiveSessionUseCase::class,
+                            ObserveWelcomeCardVisibilityUseCase::class,
+                            SaveSessionUseCase::class,
+                            SaveUserIdUseCase::class,
+                        )
+                )
+            }
+    })

@@ -35,32 +35,27 @@ import org.koin.compose.viewmodel.koinViewModel
 internal fun Katana(
     modifier: Modifier = Modifier,
     navigator: RootNavigator = rememberKatanaNavigator(),
-    viewModel: KatanaViewModel = koinViewModel()
+    viewModel: KatanaViewModel = koinViewModel(),
 ) {
     val currentNav by navigator.navController.currentBackStackEntryAsState()
     val uiState by viewModel.collectAsState()
 
-    val navigationBar = @Composable { type: KatanaNavigationBarType ->
-        KatanaNavigationBar(
-            items = uiState.navigationBarItems,
-            isSelected = { item -> currentNav.hasRoute(item) },
-            onClick = { item -> navigator.onNavigationBarItemClicked(item) },
-            type = type,
-        )
-    }
+    val navigationBar =
+        @Composable { type: KatanaNavigationBarType ->
+            KatanaNavigationBar(
+                items = uiState.navigationBarItems,
+                isSelected = { item -> currentNav.hasRoute(item) },
+                onClick = { item -> navigator.onNavigationBarItemClicked(item) },
+                type = type,
+            )
+        }
 
     Box(modifier = modifier) {
         KatanaScaffold(
             contentWindowInsets = WindowInsets.noInsets,
             bottomBar = { navigationBar(KatanaNavigationBarType.Bottom) },
         ) { paddingValues ->
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .statusBarsPadding()
-                    .displayCutoutPadding()
-                    .padding(paddingValues),
-            ) {
+            Row(modifier = Modifier.fillMaxSize().statusBarsPadding().displayCutoutPadding().padding(paddingValues)) {
                 navigationBar(KatanaNavigationBarType.Rail)
 
                 NavHost(
@@ -77,11 +72,7 @@ internal fun Katana(
         }
 
         AnimatedVisibility(uiState.loading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(KatanaTheme.colorScheme.background),
-            )
+            Box(modifier = Modifier.fillMaxSize().background(KatanaTheme.colorScheme.background))
         }
     }
 }

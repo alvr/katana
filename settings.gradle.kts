@@ -34,27 +34,23 @@ develocity {
 }
 
 // Keep in sync with build-logic/settings.gradle.kts
-buildCache {
-    local {
-        directory = rootDir.resolve(".gradle/build-cache")
-    }
-}
+buildCache { local { directory = rootDir.resolve(".gradle/build-cache") } }
 
 include(":app-android", ":shared")
+
 includes("common", "core", "features")
 
 fun includes(vararg directories: String, maxDepth: Int = 2) {
     directories.forEach { topDir ->
-        rootDir.resolve(topDir)
+        rootDir
+            .resolve(topDir)
             .walkTopDown()
             .maxDepth(maxDepth)
-            .filter { file ->
-                file.isDirectory && file.resolve("build.gradle.kts").exists()
-            }.forEach { module ->
-                include(":${module.relativeTo(rootDir).path.replace(File.separatorChar, ':')}")
-            }
+            .filter { file -> file.isDirectory && file.resolve("build.gradle.kts").exists() }
+            .forEach { module -> include(":${module.relativeTo(rootDir).path.replace(File.separatorChar, ':')}") }
     }
 }
 
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

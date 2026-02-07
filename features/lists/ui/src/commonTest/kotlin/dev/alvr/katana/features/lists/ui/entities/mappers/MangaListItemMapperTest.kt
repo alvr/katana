@@ -6,10 +6,9 @@ import dev.alvr.katana.features.lists.ui.randomCollection
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.maps.shouldHaveSize
 
-internal class MangaListItemMapperTest : FreeSpec({
-    "a random collection of manga" {
-        randomCollection<MediaEntry.Manga>()
-            .toMediaItems()
-            .shouldHaveSize(COLLECTION_SIZE * COLLECTION_SIZE)
-    }
-})
+internal class MangaListItemMapperTest :
+    FreeSpec({
+        "a random collection of manga" {
+            randomCollection<MediaEntry.Manga>().toMediaItems().shouldHaveSize(COLLECTION_SIZE * COLLECTION_SIZE)
+        }
+    })

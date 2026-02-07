@@ -13,32 +13,31 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import kotlinx.collections.immutable.persistentMapOf
 
-internal class UserListMapperTest : FreeSpec({
-    "a collection of anime" {
-        persistentMapOf(
-            "MyCustomAnimeList" to persistentMapOf(ItemEntryId(Int.zero) to animeListItem1),
-            "MyCustomAnimeList2" to persistentMapOf(ItemEntryId(Int.zero) to animeListItem2),
-        ).also { collection ->
-            collection.toUserList()
-                .shouldHaveSize(collection.size)
-                .forAll { (name, count) ->
-                    name shouldBeIn collection.keys
-                    count shouldBe 1
+internal class UserListMapperTest :
+    FreeSpec({
+        "a collection of anime" {
+            persistentMapOf(
+                    "MyCustomAnimeList" to persistentMapOf(ItemEntryId(Int.zero) to animeListItem1),
+                    "MyCustomAnimeList2" to persistentMapOf(ItemEntryId(Int.zero) to animeListItem2),
+                )
+                .also { collection ->
+                    collection.toUserList().shouldHaveSize(collection.size).forAll { (name, count) ->
+                        name shouldBeIn collection.keys
+                        count shouldBe 1
+                    }
                 }
         }
-    }
 
-    "a collection of manga" {
-        persistentMapOf(
-            "MyCustomMangaList" to persistentMapOf(ItemEntryId(Int.zero) to mangaListItem1),
-            "MyCustomMangaList2" to persistentMapOf(ItemEntryId(Int.zero) to mangaListItem2),
-        ).also { collection ->
-            collection.toUserList()
-                .shouldHaveSize(collection.size)
-                .forAll { (name, count) ->
-                    name shouldBeIn collection.keys
-                    count shouldBe 1
+        "a collection of manga" {
+            persistentMapOf(
+                    "MyCustomMangaList" to persistentMapOf(ItemEntryId(Int.zero) to mangaListItem1),
+                    "MyCustomMangaList2" to persistentMapOf(ItemEntryId(Int.zero) to mangaListItem2),
+                )
+                .also { collection ->
+                    collection.toUserList().shouldHaveSize(collection.size).forAll { (name, count) ->
+                        name shouldBeIn collection.keys
+                        count shouldBe 1
+                    }
                 }
         }
-    }
-})
+    })

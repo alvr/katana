@@ -8,14 +8,8 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-private val repositoriesModule = module {
-    singleOf(::ListsRepositoryImpl) bind ListsRepository::class
-}
+private val repositoriesModule = module { singleOf(::ListsRepositoryImpl) bind ListsRepository::class }
 
-private val sourcesModule = module {
-    singleOf(::ListsRemoteSourceImpl) bind ListsRemoteSource::class
-}
+private val sourcesModule = module { singleOf(::ListsRemoteSourceImpl) bind ListsRemoteSource::class }
 
-val featuresListsDataModule = module {
-    includes(repositoriesModule, sourcesModule)
-}
+val featuresListsDataModule = module { includes(repositoriesModule, sourcesModule) }

@@ -6,13 +6,10 @@ import dev.alvr.katana.core.ui.navigation.overridden
 
 interface ExploreNavigator : KatanaNavigator
 
-private class KatanaExploreNavigator(
-    override val navController: NavHostController,
-) : ExploreNavigator {
+private class KatanaExploreNavigator(override val navController: NavHostController) : ExploreNavigator {
     override fun navigateBack() {
         overridden()
     }
 }
 
-fun katanaExploreNavigator(navController: NavHostController): ExploreNavigator =
-    KatanaExploreNavigator(navController)
+fun katanaExploreNavigator(navController: NavHostController): ExploreNavigator = KatanaExploreNavigator(navController)

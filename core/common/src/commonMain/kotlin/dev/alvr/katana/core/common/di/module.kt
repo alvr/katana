@@ -9,10 +9,6 @@ import org.koin.dsl.module
 
 internal expect fun katanaPathModule(): Module
 
-private val dispatcherModule = module {
-    singleOf(::AppKatanaDispatcher) bind KatanaDispatcher::class
-}
+private val dispatcherModule = module { singleOf(::AppKatanaDispatcher) bind KatanaDispatcher::class }
 
-val coreCommonModule = module {
-    includes(dispatcherModule, katanaPathModule())
-}
+val coreCommonModule = module { includes(dispatcherModule, katanaPathModule()) }

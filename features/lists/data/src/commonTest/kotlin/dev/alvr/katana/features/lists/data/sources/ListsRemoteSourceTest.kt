@@ -46,97 +46,94 @@ internal class ListsRemoteSourceTest : FreeSpec() {
     private val source: ListsRemoteSource = ListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
 
     init {
-        "querying" - {
-            queryList(source).forEach { (data, type, flow) ->
-                "the server responded with data or not ($data, $type)" {
-                    everySuspend { userIdManager.getId() } returns USER_ID.right()
-                    val response = ApolloResponse.Builder(
-                        operation = mediaListCollectionQueryMock,
-                        requestUuid = uuid4(),
-                    ).data(data).build()
-                    client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional, type),
-                        response,
-                    )
-
-                    flow.test {
-                        if (data == null) {
-                            awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
-                        } else {
-                            awaitItem().shouldBeRight(MediaCollection(emptyList()))
-                        }
-
-                        awaitComplete()
-                    }
-
-                    verifySuspend { userIdManager.getId() }
-                }
-
-                "a HTTP error occurs ($data, $type)" {
-                    everySuspend { userIdManager.getId() } returns USER_ID.right()
-                    val response = ApolloResponse.Builder(
-                        operation = mediaListCollectionQueryMock,
-                        requestUuid = uuid4(),
-                    ).data(data).errors(listOf(apolloErrorMock)).build()
-                    client.registerTestResponse(
-                        MediaListCollectionQuery(USER_ID.optional, type),
-                        response,
-                    )
-
-                    flow.test {
-                        awaitItem().shouldBeLeft(Failure.Unknown)
-                        awaitComplete()
-                    }
-                    verifySuspend { userIdManager.getId() }
-                }
-            }
-
-            "with errors" - {
-                val mockServer = MockServer()
-                val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
-                val source: ListsRemoteSource = ListsRemoteSourceImpl(
-                    badClient,
-                    userIdManager,
-                    reloadInterceptor,
-                )
-
-                afterSpec { mockServer.close() }
-
-                mockServer.badClient(source).forEach { (type, enqueueAction, flow) ->
-                    "a HTTP error occurs" {
+        "querying" -
+            {
+                queryList(source).forEach { (data, type, flow) ->
+                    "the server responded with data or not ($data, $type)" {
                         everySuspend { userIdManager.getId() } returns USER_ID.right()
-                        enqueueAction()
+                        val response =
+                            ApolloResponse.Builder(operation = mediaListCollectionQueryMock, requestUuid = uuid4())
+                                .data(data)
+                                .build()
+                        client.registerTestResponse(MediaListCollectionQuery(USER_ID.optional, type), response)
 
                         flow.test {
-                            awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                            if (data == null) {
+                                awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                            } else {
+                                awaitItem().shouldBeRight(MediaCollection(emptyList()))
+                            }
+
+                            awaitComplete()
+                        }
+
+                        verifySuspend { userIdManager.getId() }
+                    }
+
+                    "a HTTP error occurs ($data, $type)" {
+                        everySuspend { userIdManager.getId() } returns USER_ID.right()
+                        val response =
+                            ApolloResponse.Builder(operation = mediaListCollectionQueryMock, requestUuid = uuid4())
+                                .data(data)
+                                .errors(listOf(apolloErrorMock))
+                                .build()
+                        client.registerTestResponse(MediaListCollectionQuery(USER_ID.optional, type), response)
+
+                        flow.test {
+                            awaitItem().shouldBeLeft(Failure.Unknown)
                             awaitComplete()
                         }
                         verifySuspend { userIdManager.getId() }
                     }
                 }
-            }
-        }
 
-        "updating" - {
-            "the server returns some data" {
-                client.registerTestResponse(mediaListMock.toMutation())
-                source.updateList(mediaListMock).shouldBeRight()
+                "with errors" -
+                    {
+                        val mockServer = MockServer()
+                        val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
+                        val source: ListsRemoteSource =
+                            ListsRemoteSourceImpl(badClient, userIdManager, reloadInterceptor)
+
+                        afterSpec { mockServer.close() }
+
+                        mockServer.badClient(source).forEach { (type, enqueueAction, flow) ->
+                            "a HTTP error occurs" {
+                                everySuspend { userIdManager.getId() } returns USER_ID.right()
+                                enqueueAction()
+
+                                flow.test {
+                                    awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
+                                    awaitComplete()
+                                }
+                                verifySuspend { userIdManager.getId() }
+                            }
+                        }
+                    }
             }
 
-            "with errors" - {
-                client.registerTestNetworkError(mediaListMock.toMutation())
-                source.updateList(mediaListMock).shouldBeLeft()
+        "updating" -
+            {
+                "the server returns some data" {
+                    client.registerTestResponse(mediaListMock.toMutation())
+                    source.updateList(mediaListMock).shouldBeRight()
+                }
+
+                "with errors" -
+                    {
+                        client.registerTestNetworkError(mediaListMock.toMutation())
+                        source.updateList(mediaListMock).shouldBeLeft()
+                    }
             }
-        }
     }
 
     private fun queryList(source: ListsRemoteSource): List<GoodQuery> {
-        val empty = MediaListCollectionQuery.Data {
-            this["MediaListCollection"] = buildMediaListCollection {
-                lists = emptyList()
-                user = buildUser { }
+        val empty =
+            MediaListCollectionQuery.Data {
+                this["MediaListCollection"] = buildMediaListCollection {
+                    lists = emptyList()
+                    user = buildUser {}
+                }
             }
-        }
 
         val values = buildList {
             add(null)
@@ -150,12 +147,13 @@ internal class ListsRemoteSourceTest : FreeSpec() {
                         GoodQuery(
                             first = v,
                             second = t,
-                            third = when (t) {
-                                MediaType.ANIME -> source.animeCollection
-                                MediaType.MANGA -> source.mangaCollection
-                                else -> error("Unknown type")
-                            },
-                        ),
+                            third =
+                                when (t) {
+                                    MediaType.ANIME -> source.animeCollection
+                                    MediaType.MANGA -> source.mangaCollection
+                                    else -> error("Unknown type")
+                                },
+                        )
                     )
                 }
             }
@@ -176,12 +174,13 @@ internal class ListsRemoteSourceTest : FreeSpec() {
                         BadQuery(
                             first = t,
                             second = c,
-                            third = when (t) {
-                                MediaType.ANIME -> source.animeCollection
-                                MediaType.MANGA -> source.mangaCollection
-                                else -> error("Unknown type")
-                            },
-                        ),
+                            third =
+                                when (t) {
+                                    MediaType.ANIME -> source.animeCollection
+                                    MediaType.MANGA -> source.mangaCollection
+                                    else -> error("Unknown type")
+                                },
+                        )
                     )
                 }
             }
@@ -194,5 +193,7 @@ internal class ListsRemoteSourceTest : FreeSpec() {
 }
 
 private typealias MediaCollectionFlow = Flow<Either<Failure, MediaCollection<MediaEntry>>>
+
 private typealias GoodQuery = Triple<MediaListCollectionQuery.Data?, MediaType, MediaCollectionFlow>
+
 private typealias BadQuery = Triple<MediaType, (() -> Unit), MediaCollectionFlow>

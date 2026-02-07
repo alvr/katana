@@ -19,31 +19,15 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 @Suppress("UNUSED_PARAMETER")
-internal fun AccountScreen(
-    navigator: AccountNavigator,
-    viewModel: AccountViewModel = koinViewModel(),
-) {
+internal fun AccountScreen(navigator: AccountNavigator, viewModel: AccountViewModel = koinViewModel()) {
     val state by viewModel.collectAsState()
 
-    AccountScreen(
-        userInfo = state.userInfo,
-        onIntent = viewModel::intent,
-    )
+    AccountScreen(userInfo = state.userInfo, onIntent = viewModel::intent)
 }
 
 @Composable
-private fun AccountScreen(
-    userInfo: UserInfoUi?,
-    onIntent: (AccountIntent) -> Unit,
-) {
-    KatanaScaffold(
-        topBar = {
-            KatanaHomeTopAppBar(
-                title = Res.string.title.value,
-                subtitle = null,
-            )
-        },
-    ) { paddingValues ->
+private fun AccountScreen(userInfo: UserInfoUi?, onIntent: (AccountIntent) -> Unit) {
+    KatanaScaffold(topBar = { KatanaHomeTopAppBar(title = Res.string.title.value, subtitle = null) }) { paddingValues ->
         userInfo?.let { info ->
             UserInfo(
                 userInfo = info,

@@ -9,24 +9,23 @@ import io.kotest.property.Arb
 import io.kotest.property.arbitrary.next
 import io.kotest.property.arbitrary.string
 
-internal class AnilistTokenTest : FreeSpec({
-    "an empty token should throw an exception" {
-        shouldThrowUnitWithMessage<IllegalArgumentException>("Token should not be empty.") {
-            AnilistToken(String.empty)
+internal class AnilistTokenTest :
+    FreeSpec({
+        "an empty token should throw an exception" {
+            shouldThrowUnitWithMessage<IllegalArgumentException>("Token should not be empty.") {
+                AnilistToken(String.empty)
+            }
         }
-    }
 
-    "a blank token should throw an exception" {
-        shouldThrowUnitWithMessage<IllegalArgumentException>("Token should not be empty.") {
-            AnilistToken(" ".repeat(5))
+        "a blank token should throw an exception" {
+            shouldThrowUnitWithMessage<IllegalArgumentException>("Token should not be empty.") {
+                AnilistToken(" ".repeat(5))
+            }
         }
-    }
 
-    "a token with value should not throw an exception" {
-        val token = Arb.string(minSize = 1).next()
+        "a token with value should not throw an exception" {
+            val token = Arb.string(minSize = 1).next()
 
-        shouldNotThrowExactlyUnit<IllegalStateException> {
-            AnilistToken(token).token shouldBe token
+            shouldNotThrowExactlyUnit<IllegalStateException> { AnilistToken(token).token shouldBe token }
         }
-    }
-})
+    })

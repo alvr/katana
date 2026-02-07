@@ -13,8 +13,8 @@ import dev.alvr.katana.features.home.ui.viewmodel.HomeState
 internal fun ActivityTabContent(
     sessionActive: Boolean,
     uiState: HomeState.ActivityTabState,
-    onEvent: (HomeIntent) -> Unit,
-    modifier: Modifier = Modifier
+    onIntent: (HomeIntent) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Text(HomeTab.Activity.title.value)
 }

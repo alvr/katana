@@ -26,19 +26,11 @@ fun <T : KatanaNavigationBarItem> KatanaNavigationBar(
     val isLandscape = isLandscape()
 
     when {
-        type == KatanaNavigationBarType.Bottom && !isLandscape -> BottomNavigationBar(
-            items = items,
-            isSelected = isSelected,
-            onClick = onClick,
-            modifier = modifier,
-        )
+        type == KatanaNavigationBarType.Bottom && !isLandscape ->
+            BottomNavigationBar(items = items, isSelected = isSelected, onClick = onClick, modifier = modifier)
 
-        type == KatanaNavigationBarType.Rail && isLandscape -> RailNavigationBar(
-            items = items,
-            isSelected = isSelected,
-            onClick = onClick,
-            modifier = modifier,
-        )
+        type == KatanaNavigationBarType.Rail && isLandscape ->
+            RailNavigationBar(items = items, isSelected = isSelected, onClick = onClick, modifier = modifier)
     }
 }
 
@@ -89,13 +81,8 @@ private fun <T : KatanaNavigationBarItem> RailNavigationBar(
 }
 
 @Composable
-private fun NavigationBarIcon(
-    destination: KatanaNavigationBarItem,
-) {
-    Icon(
-        imageVector = destination.icon,
-        contentDescription = destination.label.value,
-    )
+private fun NavigationBarIcon(destination: KatanaNavigationBarItem) {
+    Icon(imageVector = destination.icon, contentDescription = destination.label.value)
 }
 
 @Composable

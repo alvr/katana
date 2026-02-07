@@ -10,6 +10,4 @@ private val useCasesModule = module {
     factoryOf(::ObserveWelcomeCardVisibilityUseCase)
 }
 
-val featuresHomeDomainModule = module {
-    includes(useCasesModule)
-}
+val featuresHomeDomainModule = module { includes(useCasesModule) }

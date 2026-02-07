@@ -7,7 +7,8 @@ import androidx.compose.ui.unit.dp
 
 @Immutable
 @Suppress("UseDataClass")
-class Sizes internal constructor(
+class Sizes
+internal constructor(
     val size1: Dp = 4.dp,
     val size2: Dp = 8.dp,
     val size3: Dp = 12.dp,
@@ -23,7 +24,6 @@ class Sizes internal constructor(
     val size40: Dp = 160.dp,
     val size48: Dp = 192.dp,
     val size64: Dp = 256.dp,
-
     val cardHeight: Dp = 144.dp,
     val cardWidth: Dp = 320.dp,
     val coverWidth: Dp = 96.dp,

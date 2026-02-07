@@ -11,21 +11,16 @@ import dev.alvr.katana.features.home.ui.viewmodel.HomeViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 fun NavGraphBuilder.home(homeNavigator: HomeNavigator) {
-    navigation<HomeDestination.Root>(
-        startDestination = HomeDestination.Home(),
-    ) {
-        composable<HomeDestination.Home>(
-            deepLinks = listOf(navDeepLink { setUriPattern(LOGIN_DEEP_LINK) }),
-        ) { homeBackStackEntry ->
-            val viewModel = koinViewModel<HomeViewModel>(
-                viewModelStoreOwner = homeNavigator.viewModelStoreOwner,
-                extras = homeBackStackEntry.defaultViewModelCreationExtras,
-            )
+    navigation<HomeDestination.Root>(startDestination = HomeDestination.Home()) {
+        composable<HomeDestination.Home>(deepLinks = listOf(navDeepLink { setUriPattern(LOGIN_DEEP_LINK) })) {
+            homeBackStackEntry ->
+            val viewModel =
+                koinViewModel<HomeViewModel>(
+                    viewModelStoreOwner = homeNavigator.viewModelStoreOwner,
+                    extras = homeBackStackEntry.defaultViewModelCreationExtras,
+                )
 
-            HomeScreen(
-                homeNavigator = homeNavigator,
-                viewModel = viewModel,
-            )
+            HomeScreen(homeNavigator = homeNavigator, viewModel = viewModel)
         }
     }
 }

@@ -35,34 +35,34 @@ internal class ListsRemoteSourceImpl(
     override val animeCollection = getMediaCollection<MediaEntry.Anime>(MediaType.ANIME)
     override val mangaCollection = getMediaCollection<MediaEntry.Manga>(MediaType.MANGA)
 
-    override suspend fun updateList(entry: MediaList) = Either.catchUnit {
-        client.mutation(entry.toMutation()).executeOrThrow()
-    }.mapLeft { error ->
-        Logger.e(error) { "There was an error updating the entry" }
+    override suspend fun updateList(entry: MediaList) =
+        Either.catchUnit { client.mutation(entry.toMutation()).executeOrThrow() }
+            .mapLeft { error ->
+                Logger.e(error) { "There was an error updating the entry" }
 
-        error.toFailure(
-            network = ListsFailure.UpdatingList,
-            response = ListsFailure.UpdatingList,
-        )
-    }
+                error.toFailure(network = ListsFailure.UpdatingList, response = ListsFailure.UpdatingList)
+            }
 
     private fun <T : MediaEntry> getMediaCollection(type: MediaType) = flow {
-        val response = client
-            .query(MediaListCollectionQuery(userId.getId().optional, type))
-            .fetchPolicyInterceptor(reloadInterceptor)
-            .watchFiltered()
-            .distinctUntilChanged { old, new -> old.data == new.data }
-            .map { res -> MediaCollection(res.dataAssertNoErrors<T>(type)).right() }
-            .catch { error ->
-                Logger.e(error) { "There was an error collecting the lists" }
+        val response =
+            client
+                .query(MediaListCollectionQuery(userId.getId().optional, type))
+                .fetchPolicyInterceptor(reloadInterceptor)
+                .watchFiltered()
+                .distinctUntilChanged { old, new -> old.data == new.data }
+                .map { res -> MediaCollection(res.dataAssertNoErrors<T>(type)).right() }
+                .catch { error ->
+                    Logger.e(error) { "There was an error collecting the lists" }
 
-                emit(
-                    error.toFailure(
-                        network = ListsFailure.GetMediaCollection,
-                        response = ListsFailure.GetMediaCollection,
-                    ).left(),
-                )
-            }
+                    emit(
+                        error
+                            .toFailure(
+                                network = ListsFailure.GetMediaCollection,
+                                response = ListsFailure.GetMediaCollection,
+                            )
+                            .left()
+                    )
+                }
 
         emitAll(response)
     }

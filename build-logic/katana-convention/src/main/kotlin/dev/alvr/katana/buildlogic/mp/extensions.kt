@@ -20,8 +20,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
 internal fun KotlinMultiplatformExtension.hierarchy(
-    configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = { },
-    configureIos: KotlinNativeTarget.() -> Unit = { },
+    configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = {},
+    configureIos: KotlinNativeTarget.() -> Unit = {},
 ) {
     applyDefaultHierarchyTemplate()
 
@@ -32,7 +32,7 @@ internal fun KotlinMultiplatformExtension.hierarchy(
 }
 
 private fun KotlinMultiplatformExtension.configureAndroid(
-    configure: KotlinMultiplatformAndroidLibraryTarget.() -> Unit,
+    configure: KotlinMultiplatformAndroidLibraryTarget.() -> Unit
 ) {
     androidLibrary {
         buildToolsVersion = KatanaConfiguration.BuildTools
@@ -46,9 +46,7 @@ private fun KotlinMultiplatformExtension.configureAndroid(
         enableCoreLibraryDesugaring = true
         project.dependencies.add("coreLibraryDesugaring", project.catalogLib("desugaring"))
 
-        withHostTest {
-            isIncludeAndroidResources = true
-        }
+        withHostTest { isIncludeAndroidResources = true }
 
         compilerOptions.configureKotlinCompiler()
 
@@ -56,14 +54,8 @@ private fun KotlinMultiplatformExtension.configureAndroid(
     }
 }
 
-private fun KotlinMultiplatformExtension.configureIos(
-    configure: KotlinNativeTarget.() -> Unit,
-) {
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64(),
-    ).forEach { ios ->
+private fun KotlinMultiplatformExtension.configureIos(configure: KotlinNativeTarget.() -> Unit) {
+    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { ios ->
         ios.configure()
         compilerOptions.configureKotlinCompiler()
         ios.binaries.framework {
@@ -77,13 +69,7 @@ private fun KotlinMultiplatformExtension.configureKotlin() {
     jvmToolchain(KatanaConfiguration.JvmTargetStr.toInt())
     sourceSets.commonMain { configureCommonLanguageSettings() }
 
-    targets.configureEach {
-        compilations.all {
-            compileTaskProvider.configure {
-                configureKotlinCompiler()
-            }
-        }
-    }
+    targets.configureEach { compilations.all { compileTaskProvider.configure { configureKotlinCompiler() } } }
 }
 
 private fun KotlinSourceSet.configureCommonLanguageSettings() {
@@ -99,16 +85,16 @@ private fun KotlinCompilationTask<*>.configureKotlinCompiler() {
 }
 
 private val Project.frameworkIdentifier
-    get() = path.split(':')
-        .joinToString(separator = "", prefix = "Katana") { it.capitalize() }
+    get() = path.split(':').joinToString(separator = "", prefix = "Katana") { it.capitalize() }
 
-internal fun String.capitalize() =
-    replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+internal fun String.capitalize() = replaceFirstChar {
+    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+}
 
 private fun KotlinMultiplatformExtension.androidLibrary(action: Action<KotlinMultiplatformAndroidLibraryTarget>) {
     (this as ExtensionAware).extensions.configure("androidLibrary", action)
 }
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
-internal val NamedDomainObjectContainer<KotlinSourceSet>.androidHostTest:
-    NamedDomainObjectProvider<KotlinSourceSet> by KotlinSourceSetConvention
+internal val NamedDomainObjectContainer<KotlinSourceSet>.androidHostTest: NamedDomainObjectProvider<KotlinSourceSet> by
+    KotlinSourceSetConvention

@@ -29,30 +29,31 @@ internal class ListsRepositoryTest : FreeSpec() {
     private lateinit var repo: ListsRepository
 
     init {
-        "collections" - {
-            val animeCollection = MediaCollection<MediaEntry.Anime>(emptyList())
-            val mangaCollection = MediaCollection<MediaEntry.Manga>(emptyList())
-            every { remoteSource.animeCollection } returns flowOf(animeCollection.right())
-            every { remoteSource.mangaCollection } returns flowOf(mangaCollection.right())
+        "collections" -
+            {
+                val animeCollection = MediaCollection<MediaEntry.Anime>(emptyList())
+                val mangaCollection = MediaCollection<MediaEntry.Manga>(emptyList())
+                every { remoteSource.animeCollection } returns flowOf(animeCollection.right())
+                every { remoteSource.mangaCollection } returns flowOf(mangaCollection.right())
 
-            "collecting anime collection flow" {
-                repo.animeCollection.test {
-                    awaitItem().shouldBeRight(animeCollection)
-                    awaitComplete()
+                "collecting anime collection flow" {
+                    repo.animeCollection.test {
+                        awaitItem().shouldBeRight(animeCollection)
+                        awaitComplete()
+                    }
+
+                    verify { remoteSource.animeCollection }
                 }
 
-                verify { remoteSource.animeCollection }
-            }
+                "collecting manga collection flow" {
+                    repo.mangaCollection.test {
+                        awaitItem().shouldBeRight(mangaCollection)
+                        awaitComplete()
+                    }
 
-            "collecting manga collection flow" {
-                repo.mangaCollection.test {
-                    awaitItem().shouldBeRight(mangaCollection)
-                    awaitComplete()
+                    verify { remoteSource.mangaCollection }
                 }
-
-                verify { remoteSource.mangaCollection }
             }
-        }
 
         "successfully updating list" {
             everySuspend { remoteSource.updateList(any()) } returns Unit.right()
@@ -60,16 +61,14 @@ internal class ListsRepositoryTest : FreeSpec() {
             verifySuspend { remoteSource.updateList(any()) }
         }
 
-        listOf(
-            ListsFailure.UpdatingList to ListsFailure.UpdatingList.left(),
-            Failure.Unknown to Failure.Unknown.left(),
-        ).forEach { (expected, failure) ->
-            "failure updating the list ($expected)" {
-                everySuspend { remoteSource.updateList(any()) } returns failure
-                repo.updateList(mediaListMock).shouldBeLeft(expected)
-                verifySuspend { remoteSource.updateList(mediaListMock) }
+        listOf(ListsFailure.UpdatingList to ListsFailure.UpdatingList.left(), Failure.Unknown to Failure.Unknown.left())
+            .forEach { (expected, failure) ->
+                "failure updating the list ($expected)" {
+                    everySuspend { remoteSource.updateList(any()) } returns failure
+                    repo.updateList(mediaListMock).shouldBeLeft(expected)
+                    verifySuspend { remoteSource.updateList(mediaListMock) }
+                }
             }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

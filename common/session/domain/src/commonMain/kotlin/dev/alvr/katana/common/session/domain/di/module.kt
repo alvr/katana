@@ -20,6 +20,4 @@ private val useCasesModule = module {
     singleOf(::ObserveActiveSessionUseCase)
 }
 
-val commonSessionDomainModule = module {
-    includes(useCasesModule)
-}
+val commonSessionDomainModule = module { includes(useCasesModule) }

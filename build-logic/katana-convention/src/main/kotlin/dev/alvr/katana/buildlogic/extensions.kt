@@ -1,5 +1,3 @@
-@file:Suppress("NoUnusedImports", "UnusedImports")
-
 package dev.alvr.katana.buildlogic
 
 import com.android.build.api.dsl.ApplicationExtension
@@ -32,21 +30,26 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.konan.util.visibleName
 
-private val Project.libs get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
+private val Project.libs
+    get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-internal val Test.isRelease get() = name.contains("""beta|release""".toRegex(RegexOption.IGNORE_CASE))
+internal val Test.isRelease
+    get() = name.contains("""beta|release""".toRegex(RegexOption.IGNORE_CASE))
 
-internal val Project.fullPackageName get() = KatanaConfiguration.PackageName + path.replace(':', '.')
+internal val Project.fullPackageName
+    get() = KatanaConfiguration.PackageName + path.replace(':', '.')
+
 internal fun Project.catalogLib(alias: String) = libs.findLibrary(alias).get()
 
 private fun Project.optionalCatalogBundle(alias: String) = libs.findBundle(alias)
+
 internal fun KotlinDependencyHandler.bundleImplementation(alias: String) {
     project.optionalCatalogBundle(alias).ifPresent { bundle -> implementation(bundle) }
 }
 
 internal fun KotlinDependencyHandler.implementation(
     dependencyNotation: Provider<*>,
-    configure: ExternalModuleDependency.() -> Unit
+    configure: ExternalModuleDependency.() -> Unit,
 ) {
     implementation(dependencyNotation.get().toString(), configure)
 }
@@ -75,9 +78,7 @@ internal fun KotlinMultiplatformExtension.kspDependencies(project: Project, cata
             val configurationName = "ksp${target.configurationName()}"
             val catalogAlias = "$catalogPrefix-${target.groupName}-ksp".lowercase()
 
-            project.optionalCatalogBundle(catalogAlias).ifPresent { bundle ->
-                add(configurationName, bundle)
-            }
+            project.optionalCatalogBundle(catalogAlias).ifPresent { bundle -> add(configurationName, bundle) }
         }
     }
 }
@@ -117,15 +118,11 @@ internal fun ApplicationExtension.configureAndroid(packageName: String) {
 
 internal fun ExtensionContainer.commonExtensions() {
     configure<JavaPluginExtension> {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr)
-        }
+        toolchain { languageVersion = JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr) }
     }
 
     configure<KotlinProjectExtension> {
-        jvmToolchain {
-            languageVersion = JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr)
-        }
+        jvmToolchain { languageVersion = JavaLanguageVersion.of(KatanaConfiguration.JvmTargetStr) }
     }
 }
 
@@ -134,9 +131,7 @@ internal fun TaskContainer.commonTasks() {
         sourceCompatibility = KatanaConfiguration.JvmTargetStr
         targetCompatibility = KatanaConfiguration.JvmTargetStr
     }
-    withType<KotlinCompile>().configureEach {
-        compilerOptions.configureKotlinCompiler()
-    }
+    withType<KotlinCompile>().configureEach { compilerOptions.configureKotlinCompiler() }
     withType<Test>().configureEach {
         useJUnitPlatform()
         failOnNoDiscoveredTests = false
@@ -164,11 +159,13 @@ private fun KotlinTarget.configurationName() =
         targetName.capitalize()
     }
 
-private val KotlinTarget.groupName get() = when (platformType) {
-    native if targetName.contains(IosTarget) -> IosTarget
-    androidJvm -> AndroidTarget
-    else -> platformType.visibleName
-}
+private val KotlinTarget.groupName
+    get() =
+        when (platformType) {
+            native if targetName.contains(IosTarget) -> IosTarget
+            androidJvm -> AndroidTarget
+            else -> platformType.visibleName
+        }
 
 private const val AndroidTarget = "android"
 private const val IosTarget = "ios"

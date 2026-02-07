@@ -1,5 +1,3 @@
-@file:Suppress("NoUnusedImports", "UnusedImports")
-
 package dev.alvr.katana.buildlogic.mp
 
 import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
@@ -15,8 +13,8 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 internal fun Project.commonConfiguration(
-    configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = { },
-    configureIos: KotlinNativeTarget.() -> Unit = { },
+    configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = {},
+    configureIos: KotlinNativeTarget.() -> Unit = {},
 ) {
     apply(plugin = "com.android.kotlin.multiplatform.library")
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
@@ -28,11 +26,7 @@ internal fun Project.commonConfiguration(
     with(extensions) {
         commonExtensions()
         configure<KotlinMultiplatformExtension> {
-            configureMultiplatform(
-                project = project,
-                configureAndroid = configureAndroid,
-                configureIos = configureIos,
-            )
+            configureMultiplatform(project = project, configureAndroid = configureAndroid, configureIos = configureIos)
         }
     }
 
@@ -41,13 +35,10 @@ internal fun Project.commonConfiguration(
 
 private fun KotlinMultiplatformExtension.configureMultiplatform(
     project: Project,
-    configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = { },
-    configureIos: KotlinNativeTarget.() -> Unit = { },
+    configureAndroid: KotlinMultiplatformAndroidLibraryTarget.() -> Unit = {},
+    configureIos: KotlinNativeTarget.() -> Unit = {},
 ) {
-    hierarchy(
-        configureAndroid = configureAndroid,
-        configureIos = configureIos,
-    )
+    hierarchy(configureAndroid = configureAndroid, configureIos = configureIos)
     configureSourceSets()
 
     kspDependencies(project, "core")
@@ -55,24 +46,12 @@ private fun KotlinMultiplatformExtension.configureMultiplatform(
 
 private fun KotlinMultiplatformExtension.configureSourceSets() {
     sourceSets {
-        commonMain.dependencies {
-            bundleImplementation("core-common")
-        }
-        androidMain.dependencies {
-            bundleImplementation("core-android")
-        }
-        iosMain.dependencies {
-            bundleImplementation("core-ios")
-        }
+        commonMain.dependencies { bundleImplementation("core-common") }
+        androidMain.dependencies { bundleImplementation("core-android") }
+        iosMain.dependencies { bundleImplementation("core-ios") }
 
-        commonTest.dependencies {
-            bundleImplementation("core-common-test")
-        }
-        androidHostTest.dependencies {
-            bundleImplementation("core-android-test")
-        }
-        iosTest.dependencies {
-            bundleImplementation("core-ios-test")
-        }
+        commonTest.dependencies { bundleImplementation("core-common-test") }
+        androidHostTest.dependencies { bundleImplementation("core-android-test") }
+        iosTest.dependencies { bundleImplementation("core-ios-test") }
     }
 }

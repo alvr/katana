@@ -6,15 +6,17 @@ import dev.alvr.katana.core.ui.navigation.overridden
 
 interface HomeNavigator : KatanaNavigator {
     fun navigateToAnimeLists()
+
     fun navigateToMangaLists()
+
     fun navigateToTrending()
+
     fun navigateToPopular()
+
     fun navigateToUpcoming()
 }
 
-private class KatanaHomeNavigator(
-    override val navController: NavHostController,
-) : HomeNavigator {
+private class KatanaHomeNavigator(override val navController: NavHostController) : HomeNavigator {
     override fun navigateBack() {
         overridden()
     }
@@ -40,5 +42,4 @@ private class KatanaHomeNavigator(
     }
 }
 
-fun katanaHomeNavigator(navController: NavHostController): HomeNavigator =
-    KatanaHomeNavigator(navController)
+fun katanaHomeNavigator(navController: NavHostController): HomeNavigator = KatanaHomeNavigator(navController)

@@ -22,7 +22,7 @@ permissions:
 jobs:
   cancel-stale-jobs:
     name: Cancel stale jobs
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Cancel Stale Jobs
         uses: styfle/cancel-workflow-action@3155a141048f8f89c06b4cdae32e7853e97536bc # 0.13.0
@@ -31,7 +31,7 @@ jobs:
 
   validation:
     name: Validation
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -100,7 +100,7 @@ jobs:
       - name: Analyze detekt report
         uses: github/codeql-action/upload-sarif@6bc82e05fd0ea64601dd4b465378bbcf57de0314 # v4.32.1
         with:
-          sarif_file: build/reports/detekt/detekt.sarif
+          sarif_file: build/reports/detekt/all.sarif
           checkout_path: ${{ github.workspace }}
 
   unit-tests:

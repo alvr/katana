@@ -16,7 +16,7 @@ import kotlinx.serialization.serializer
 
 @Composable
 inline fun <reified D : KatanaDestination, reified R : Any> NavController.NavigationResult(
-    noinline onResult: (R) -> Unit,
+    noinline onResult: (R) -> Unit
 ) {
     NavigationResult(
         backStackEntry = remember(this) { getBackStackEntry<D>() },

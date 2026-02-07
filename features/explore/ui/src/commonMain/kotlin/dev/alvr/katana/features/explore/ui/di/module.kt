@@ -4,10 +4,6 @@ import dev.alvr.katana.features.explore.ui.viewmodel.ExploreViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-private val viewModelsModule = module {
-    viewModelOf(::ExploreViewModel)
-}
+private val viewModelsModule = module { viewModelOf(::ExploreViewModel) }
 
-val featuresExploreUiModule = module {
-    includes(viewModelsModule)
-}
+val featuresExploreUiModule = module { includes(viewModelsModule) }

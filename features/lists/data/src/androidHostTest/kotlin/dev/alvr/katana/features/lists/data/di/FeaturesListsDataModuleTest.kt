@@ -10,18 +10,14 @@ import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
 @OptIn(KoinExperimentalAPI::class)
-internal class FeaturesListsDataModuleTest : FreeSpec({
-    beforeSpec {
-        MockProvider.register { clazz -> mockkClass(clazz) }
-    }
+internal class FeaturesListsDataModuleTest :
+    FreeSpec({
+        beforeSpec { MockProvider.register { clazz -> mockkClass(clazz) } }
 
-    "verify featuresListsDataModule" - {
-        featuresListsDataModule.verify(
-            extraTypes = listOf(
-                ApolloClient::class,
-                ApolloInterceptor::class,
-                UserIdManager::class,
-            ),
-        )
-    }
-})
+        "verify featuresListsDataModule" -
+            {
+                featuresListsDataModule.verify(
+                    extraTypes = listOf(ApolloClient::class, ApolloInterceptor::class, UserIdManager::class)
+                )
+            }
+    })

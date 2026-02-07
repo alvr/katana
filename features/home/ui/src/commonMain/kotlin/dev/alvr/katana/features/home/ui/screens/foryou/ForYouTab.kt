@@ -23,7 +23,7 @@ internal fun ForYouTabContent(
     sessionActive: Boolean,
     uiState: HomeState.ForYouTabState,
     onIntent: (HomeIntent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -31,46 +31,16 @@ internal fun ForYouTabContent(
         verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
     ) {
         if (!sessionActive && uiState.showWelcomeCard) {
-            item(key = "welcome_card") {
-                WelcomeCard(
-                    modifier = Modifier.animateItem(),
-                    onIntent = onIntent,
-                )
-            }
+            item(key = "welcome_card") { WelcomeCard(modifier = Modifier.animateItem(), onIntent = onIntent) }
         }
 
         if (sessionActive) {
-            item(key = "watching") {
-                Watching(
-                    modifier = Modifier.animateItem(),
-                    onIntent = onIntent,
-                )
-            }
-            item(key = "reading") {
-                Reading(
-                    modifier = Modifier.animateItem(),
-                    onIntent = onIntent,
-                )
-            }
+            item(key = "watching") { Watching(modifier = Modifier.animateItem(), onIntent = onIntent) }
+            item(key = "reading") { Reading(modifier = Modifier.animateItem(), onIntent = onIntent) }
         }
 
-        item(key = "trending") {
-            Trending(
-                modifier = Modifier.animateItem(),
-                onIntent = onIntent,
-            )
-        }
-        item(key = "popular") {
-            Popular(
-                modifier = Modifier.animateItem(),
-                onIntent = onIntent,
-            )
-        }
-        item(key = "upcoming") {
-            Upcoming(
-                modifier = Modifier.animateItem(),
-                onIntent = onIntent,
-            )
-        }
+        item(key = "trending") { Trending(modifier = Modifier.animateItem(), onIntent = onIntent) }
+        item(key = "popular") { Popular(modifier = Modifier.animateItem(), onIntent = onIntent) }
+        item(key = "upcoming") { Upcoming(modifier = Modifier.animateItem(), onIntent = onIntent) }
     }
 }

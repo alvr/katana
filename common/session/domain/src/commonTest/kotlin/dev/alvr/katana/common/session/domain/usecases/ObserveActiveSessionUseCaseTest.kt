@@ -27,14 +27,8 @@ internal class ObserveActiveSessionUseCaseTest : FreeSpec(), KoinTest {
 
     init {
         "successfully observing the session" {
-            every { repo.sessionActive } returns flowOf(
-                false.right(),
-                true.right(),
-                false.right(),
-                true.right(),
-                true.right(),
-                false.right(),
-            )
+            every { repo.sessionActive } returns
+                flowOf(false.right(), true.right(), false.right(), true.right(), true.right(), false.right())
 
             useCase()
 

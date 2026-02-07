@@ -1,6 +1,4 @@
-plugins {
-    id("katana.multiplatform.data.preferences")
-}
+plugins { id("katana.multiplatform.data.preferences") }
 
 kotlin {
     sourceSets {

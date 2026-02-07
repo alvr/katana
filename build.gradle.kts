@@ -2,6 +2,7 @@ plugins {
     id("katana.common")
     id("katana.detekt")
     id("katana.kover")
+    id("katana.spotless")
 
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -15,4 +16,5 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.mokkery) apply false
     alias(libs.plugins.serialization) apply false
+    alias(libs.plugins.spotless) apply false
 }

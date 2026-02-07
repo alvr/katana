@@ -6,13 +6,10 @@ import dev.alvr.katana.core.ui.navigation.overridden
 
 interface AccountNavigator : KatanaNavigator
 
-private class KatanaAccountNavigator(
-    override val navController: NavHostController,
-) : AccountNavigator {
+private class KatanaAccountNavigator(override val navController: NavHostController) : AccountNavigator {
     override fun navigateBack() {
         overridden()
     }
 }
 
-fun katanaAccountNavigator(navController: NavHostController): AccountNavigator =
-    KatanaAccountNavigator(navController)
+fun katanaAccountNavigator(navController: NavHostController): AccountNavigator = KatanaAccountNavigator(navController)

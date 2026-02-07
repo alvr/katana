@@ -1,5 +1,3 @@
-@file:Suppress("NoUnusedImports", "UnusedImports")
-
 package dev.alvr.katana.buildlogic.common
 
 import com.charleskorn.kaml.Yaml
@@ -39,51 +37,47 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 internal class KatanaBuildConfigPlugin : Plugin<Project> {
-    override fun apply(target: Project) = with(target) {
-        val sourceSets = extensions.getByType<KotlinMultiplatformExtension>().sourceSets
-        val sourceOutputDirs = OutputDir.entries.associateWith { output ->
-            project.outputDir(output.sourceSet).get()
-        }
+    override fun apply(target: Project) =
+        with(target) {
+            val sourceSets = extensions.getByType<KotlinMultiplatformExtension>().sourceSets
+            val sourceOutputDirs =
+                OutputDir.entries.associateWith { output -> project.outputDir(output.sourceSet).get() }
 
-        val generateBuildConfig by tasks.registering(GenerateBuildConfigTask::class) {
-            config = rootProject.file("gradle/config/build_config.yml")
-            flavor = providers.gradleProperty("katana.flavor").getOrElse("dev")
-            packageName = fullPackageName
-            outputDirs = sourceOutputDirs
-        }
+            val generateBuildConfig by
+                tasks.registering(GenerateBuildConfigTask::class) {
+                    config = rootProject.file("gradle/config/build_config.yml")
+                    flavor = providers.gradleProperty("katana.flavor").getOrElse("dev")
+                    packageName = fullPackageName
+                    outputDirs = sourceOutputDirs
+                }
 
-        tasks {
-            withType<KotlinCompile> { dependsOn(generateBuildConfig) }
-            withType<KotlinNativeLink> { dependsOn(generateBuildConfig) }
-        }
+            tasks {
+                withType<KotlinCompile> { dependsOn(generateBuildConfig) }
+                withType<KotlinNativeLink> { dependsOn(generateBuildConfig) }
+            }
 
-        configure<KotlinMultiplatformExtension> {
-            sourceSets {
-                sourceOutputDirs.forEach { (output, dir) ->
-                    val sourceSet = getByName(output.sourceSet)
-                    sourceSet.kotlin.srcDir(dir)
+            configure<KotlinMultiplatformExtension> {
+                sourceSets {
+                    sourceOutputDirs.forEach { (output, dir) ->
+                        val sourceSet = getByName(output.sourceSet)
+                        sourceSet.kotlin.srcDir(dir)
+                    }
                 }
             }
         }
-    }
 
     private fun Project.outputDir(name: String) = layout.buildDirectory.dir("$GENERATED_DIR/$name")
 }
 
 @CacheableTask
 internal abstract class GenerateBuildConfigTask : DefaultTask() {
-    @get:InputFile
-    @get:PathSensitive(PathSensitivity.ABSOLUTE)
-    abstract val config: RegularFileProperty
+    @get:InputFile @get:PathSensitive(PathSensitivity.ABSOLUTE) abstract val config: RegularFileProperty
 
-    @get:Input
-    abstract val flavor: Property<String>
+    @get:Input abstract val flavor: Property<String>
 
-    @get:Input
-    abstract val packageName: Property<String>
+    @get:Input abstract val packageName: Property<String>
 
-    @get:OutputDirectories
-    abstract val outputDirs: MapProperty<OutputDir, Directory>
+    @get:OutputDirectories abstract val outputDirs: MapProperty<OutputDir, Directory>
 
     @TaskAction
     fun generate() {
@@ -111,62 +105,50 @@ internal abstract class GenerateBuildConfigTask : DefaultTask() {
 
     private fun Set<BuildConfig>.generateBuildConfig(modifier: KModifier, outputDir: OutputDir) {
         val properties = map { config ->
-            PropertySpec.builder(
-                config.name,
-                ClassName("kotlin", config.type),
-            ).apply {
-                if (modifier == KModifier.ACTUAL) {
-                    addModifiers(KModifier.ACTUAL, KModifier.CONST)
-                        .initializer("%L", config.value)
+            PropertySpec.builder(config.name, ClassName("kotlin", config.type))
+                .apply {
+                    if (modifier == KModifier.ACTUAL) {
+                        addModifiers(KModifier.ACTUAL, KModifier.CONST).initializer("%L", config.value)
+                    }
                 }
-            }.build()
+                .build()
         }
 
-        val buildConfigType = TypeSpec.objectBuilder(FILENAME)
-            .addModifiers(modifier)
-            .addProperties(properties)
-            .build()
+        val buildConfigType = TypeSpec.objectBuilder(FILENAME).addModifiers(modifier).addProperties(properties).build()
 
-        val file = FileSpec.builder(packageName.get(), "$FILENAME${outputDir.suffix}")
-            .addType(buildConfigType)
-            .build()
+        val file = FileSpec.builder(packageName.get(), "$FILENAME${outputDir.suffix}").addType(buildConfigType).build()
 
         file.writeTo(outputDirs.getting(outputDir).get().asFile)
     }
 }
 
 @Serializable
-private data class Config(
-    @SerialName("android") val android: Environment,
-    @SerialName("ios") val ios: Environment,
-) {
+private data class Config(@SerialName("android") val android: Environment, @SerialName("ios") val ios: Environment) {
     @Serializable
     data class Environment(
         @SerialName("dev") val dev: Set<BuildConfig>,
         @SerialName("beta") val beta: Set<BuildConfig>,
-        @SerialName("release") val release: Set<BuildConfig>
+        @SerialName("release") val release: Set<BuildConfig>,
     ) {
         @Serializable
         data class BuildConfig(
             @SerialName("type") val type: String,
             @SerialName("name") val name: String,
-            @SerialName("value") val value: String
+            @SerialName("value") val value: String,
         )
 
-        fun fromFlavor(flavor: String) = when (flavor) {
-            "dev" -> dev
-            "beta" -> beta
-            "release" -> release
-            else -> dev
-        }
+        fun fromFlavor(flavor: String) =
+            when (flavor) {
+                "dev" -> dev
+                "beta" -> beta
+                "release" -> release
+                else -> dev
+            }
     }
 }
 
 @Suppress("EnumEntryName", "EnumNaming")
-internal enum class OutputDir(
-    internal val suffix: String,
-    internal val sourceSet: String,
-) {
+internal enum class OutputDir(internal val suffix: String, internal val sourceSet: String) {
     common("", "commonMain"),
     android(".android", "androidMain"),
     ios(".ios", "iosMain"),

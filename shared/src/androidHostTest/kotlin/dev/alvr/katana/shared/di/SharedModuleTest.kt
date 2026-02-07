@@ -9,17 +9,9 @@ import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
 @OptIn(KoinExperimentalAPI::class)
-internal class SharedModuleTest : FreeSpec({
-    beforeSpec {
-        MockProvider.register { clazz -> mockkClass(clazz) }
-    }
+internal class SharedModuleTest :
+    FreeSpec({
+        beforeSpec { MockProvider.register { clazz -> mockkClass(clazz) } }
 
-    "verify katanaModule" - {
-        katanaModule.verify(
-            extraTypes = listOf(
-                Path::class,
-                SavedStateHandle::class,
-            ),
-        )
-    }
-})
+        "verify katanaModule" - { katanaModule.verify(extraTypes = listOf(Path::class, SavedStateHandle::class)) }
+    })

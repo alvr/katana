@@ -32,16 +32,17 @@ internal class SaveUserIdUseCaseTest : FreeSpec(), KoinTest {
         }
 
         listOf(
-            UserFailure.FetchingUser to UserFailure.FetchingUser.left(),
-            UserFailure.SavingUser to UserFailure.SavingUser.left(),
-            Failure.Unknown to Failure.Unknown.left(),
-        ).forEach { (expected, failure) ->
-            "failure saving user id ($expected)" {
-                everySuspend { repo.saveUserId() } returns failure
-                useCase().shouldBeLeft(expected)
-                verifySuspend { repo.saveUserId() }
+                UserFailure.FetchingUser to UserFailure.FetchingUser.left(),
+                UserFailure.SavingUser to UserFailure.SavingUser.left(),
+                Failure.Unknown to Failure.Unknown.left(),
+            )
+            .forEach { (expected, failure) ->
+                "failure saving user id ($expected)" {
+                    everySuspend { repo.saveUserId() } returns failure
+                    useCase().shouldBeLeft(expected)
+                    verifySuspend { repo.saveUserId() }
+                }
             }
-        }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {

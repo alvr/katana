@@ -12,10 +12,12 @@ import dev.alvr.katana.features.lists.ui.entities.mappers.toMediaItems
 internal class MangaListsViewModel(
     updateListUseCase: UpdateListUseCase,
     observeMangaListUseCase: ObserveMangaListUseCase,
-) : ListsViewModel<MediaEntry.Manga, MediaListItem.MangaListItem>(
-    type = ListsState.ListType.Manga,
-    updateListUseCase = updateListUseCase,
-) {
+) :
+    ListsViewModel<MediaEntry.Manga, MediaListItem.MangaListItem>(
+        type = ListsState.ListType.Manga,
+        updateListUseCase = updateListUseCase,
+    ) {
     override val observeListUseCase = observeMangaListUseCase
+
     override fun List<MediaListGroup<MediaEntry.Manga>>.entryMap() = toMediaItems()
 }

@@ -75,11 +75,7 @@ internal fun MediaList(
     modifier: Modifier = Modifier,
     lazyGridState: LazyGridState = rememberLazyGridState(),
 ) {
-    KatanaPullRefresh(
-        modifier = modifier,
-        refreshing = loading,
-        onRefresh = onRefresh,
-    ) {
+    KatanaPullRefresh(modifier = modifier, refreshing = loading, onRefresh = onRefresh) {
         MediaList(
             modifier = Modifier.fillMaxSize(),
             lazyGridState = lazyGridState,
@@ -110,14 +106,9 @@ private fun MediaList(
         verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
         horizontalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
     ) {
-        items(
-            items = items,
-            key = { it.mediaId.value },
-        ) { item ->
+        items(items = items, key = { it.mediaId.value }) { item ->
             MediaListItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .animateItem(),
+                modifier = Modifier.fillMaxWidth().animateItem(),
                 item = item,
                 itemLoading = itemLoading,
                 onAddPlusOne = { onAddPlusOne(item.entryId) },
@@ -126,9 +117,7 @@ private fun MediaList(
             )
         }
 
-        item {
-            Spacer(modifier = Modifier.height(KatanaTheme.sizes.lastItemListHeight))
-        }
+        item { Spacer(modifier = Modifier.height(KatanaTheme.sizes.lastItemListHeight)) }
     }
 }
 
@@ -143,19 +132,12 @@ private fun MediaListItem(
     modifier: Modifier = Modifier,
 ) {
     ElevatedCard(
-        modifier = modifier
-            .height(KatanaTheme.sizes.cardHeight)
-            .combinedClickable(
-                onClick = onEntryDetails,
-                onDoubleClick = onAddPlusOne,
-                onLongClick = onEditEntry,
-            ),
+        modifier =
+            modifier
+                .height(KatanaTheme.sizes.cardHeight)
+                .combinedClickable(onClick = onEntryDetails, onDoubleClick = onAddPlusOne, onLongClick = onEditEntry)
     ) {
-        CardContent(
-            item = item,
-            itemLoading = itemLoading,
-            onAddPlusOne = onAddPlusOne,
-        )
+        CardContent(item = item, itemLoading = itemLoading, onAddPlusOne = onAddPlusOne)
     }
 }
 
@@ -171,38 +153,28 @@ private fun CardContent(
             cover = item.cover,
             score = item.score,
             title = item.title,
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .fillMaxHeight()
-                .katanaPlaceholder(
-                    visible = itemLoading,
-                    shape = RectangleShape,
-                ),
+            modifier =
+                Modifier.align(Alignment.CenterVertically)
+                    .fillMaxHeight()
+                    .katanaPlaceholder(visible = itemLoading, shape = RectangleShape),
         )
 
-        Column(
-            modifier = Modifier
-                .padding(top = KatanaTheme.dimensions.spacing1)
-                .fillMaxHeight(),
-        ) {
+        Column(modifier = Modifier.padding(top = KatanaTheme.dimensions.spacing1).fillMaxHeight()) {
             Title(
                 title = item.title,
-                modifier = Modifier
-                    .padding(start = KatanaTheme.dimensions.spacing2)
-                    .testTag(ITEM_TITLE_TAG)
-                    .katanaPlaceholder(visible = itemLoading),
+                modifier =
+                    Modifier.padding(start = KatanaTheme.dimensions.spacing2)
+                        .testTag(ITEM_TITLE_TAG)
+                        .katanaPlaceholder(visible = itemLoading),
             )
 
             Subtitle(
                 format = item.format,
                 nextEpisode = (item as? MediaListItem.AnimeListItem)?.nextEpisode,
-                modifier = Modifier
-                    .padding(
-                        start = KatanaTheme.dimensions.spacing2,
-                        top = KatanaTheme.dimensions.spacing1,
-                    )
-                    .testTag(ITEM_SUBTITLE_TAG)
-                    .katanaPlaceholder(visible = itemLoading),
+                modifier =
+                    Modifier.padding(start = KatanaTheme.dimensions.spacing2, top = KatanaTheme.dimensions.spacing1)
+                        .testTag(ITEM_SUBTITLE_TAG)
+                        .katanaPlaceholder(visible = itemLoading),
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -212,57 +184,32 @@ private fun CardContent(
                 total = item.total,
                 itemLoading = itemLoading,
                 onAddPlusOne = onAddPlusOne,
-                modifier = Modifier
-                    .padding(end = KatanaTheme.dimensions.spacing2)
-                    .align(Alignment.End)
-                    .testTag(ITEM_PLUSONE_TAG),
+                modifier =
+                    Modifier.padding(end = KatanaTheme.dimensions.spacing2)
+                        .align(Alignment.End)
+                        .testTag(ITEM_PLUSONE_TAG),
             )
 
             Progress(
                 progress = item.progress,
                 total = item.total,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .katanaPlaceholder(
-                        visible = itemLoading,
-                        shape = RectangleShape,
-                    ),
+                modifier = Modifier.fillMaxWidth().katanaPlaceholder(visible = itemLoading, shape = RectangleShape),
             )
         }
     }
 }
 
 @Composable
-private fun CoverAndScore(
-    cover: String,
-    score: Double,
-    title: String,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier.width(KatanaTheme.sizes.coverWidth),
-    ) {
-        Cover(
-            cover = cover,
-            title = title,
-            modifier = Modifier.fillMaxSize(),
-        )
+private fun CoverAndScore(cover: String, score: Double, title: String, modifier: Modifier = Modifier) {
+    Box(modifier = modifier.width(KatanaTheme.sizes.coverWidth)) {
+        Cover(cover = cover, title = title, modifier = Modifier.fillMaxSize())
 
-        Score(
-            score = score,
-            modifier = Modifier
-                .align(AbsoluteAlignment.BottomLeft)
-                .testTag(ITEM_SCORE_TAG),
-        )
+        Score(score = score, modifier = Modifier.align(AbsoluteAlignment.BottomLeft).testTag(ITEM_SCORE_TAG))
     }
 }
 
 @Composable
-private fun Cover(
-    cover: String,
-    title: String,
-    modifier: Modifier = Modifier,
-) {
+private fun Cover(cover: String, title: String, modifier: Modifier = Modifier) {
     AsyncImage(
         modifier = modifier,
         model = imageRequest { data(cover) },
@@ -273,10 +220,7 @@ private fun Cover(
 }
 
 @Composable
-private fun Title(
-    title: String,
-    modifier: Modifier = Modifier,
-) {
+private fun Title(title: String, modifier: Modifier = Modifier) {
     Text(
         text = title,
         modifier = modifier,
@@ -302,32 +246,26 @@ private fun Subtitle(
                 Res.string.entry_next_episode.format(
                     nextEpisode.number,
                     KatanaDateFormats.nextEpisodeFormat(nextEpisode.date),
-                ),
+                )
             )
         }
     }
 
-    Text(
-        text = text,
-        modifier = modifier,
-        style = KatanaTheme.typography.bodySmall,
-    )
+    Text(text = text, modifier = modifier, style = KatanaTheme.typography.bodySmall)
 }
 
 @Composable
-private fun Score(
-    score: Double,
-    modifier: Modifier = Modifier,
-) {
+private fun Score(score: Double, modifier: Modifier = Modifier) {
     if (score != Double.zero) {
         Box(
-            modifier = modifier
-                .background(
-                    color = KatanaTheme.colorScheme.surface.copy(alpha = KatanaTheme.alpha.alpha66),
-                    shape = RoundedCornerShape(topEnd = KatanaTheme.sizes.size1),
-                )
-                .padding(KatanaTheme.dimensions.spacing1)
-                .defaultMinSize(minWidth = KatanaTheme.sizes.size5),
+            modifier =
+                modifier
+                    .background(
+                        color = KatanaTheme.colorScheme.surface.copy(alpha = KatanaTheme.alpha.alpha66),
+                        shape = RoundedCornerShape(topEnd = KatanaTheme.sizes.size1),
+                    )
+                    .padding(KatanaTheme.dimensions.spacing1)
+                    .defaultMinSize(minWidth = KatanaTheme.sizes.size5)
         ) {
             Text(
                 text = KatanaNumberFormatter.Score(score),
@@ -364,11 +302,7 @@ private fun PlusOneButton(
     onAddPlusOne: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TextButton(
-        onClick = onAddPlusOne,
-        modifier = modifier,
-        shape = CircleShape,
-    ) {
+    TextButton(onClick = onAddPlusOne, modifier = modifier, shape = CircleShape) {
         Text(
             modifier = Modifier.katanaPlaceholder(visible = itemLoading),
             text = Res.string.entry_plus_one.format(progress),
@@ -377,19 +311,16 @@ private fun PlusOneButton(
 }
 
 @Composable
-private fun Progress(
-    progress: Int,
-    total: Int?,
-    modifier: Modifier = Modifier,
-) {
+private fun Progress(progress: Int, total: Int?, modifier: Modifier = Modifier) {
     // For those entries where the total number of episodes/chapters is not known,
     // the progress bar is incomplete and is filled with about 90% of the current progress.
     val totalProgress = (total ?: progress.plus(progress.times(PROGRESS_IF_UNKNOWN))).toFloat()
-    val currentProgress = if (progress == Int.zero && totalProgress == Float.zero) {
-        Float.zero
-    } else {
-        progress / totalProgress
-    }
+    val currentProgress =
+        if (progress == Int.zero && totalProgress == Float.zero) {
+            Float.zero
+        } else {
+            progress / totalProgress
+        }
 
     LinearProgressIndicator(
         modifier = modifier,

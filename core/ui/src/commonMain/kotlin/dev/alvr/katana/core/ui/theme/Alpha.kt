@@ -5,7 +5,8 @@ import androidx.compose.runtime.staticCompositionLocalOf
 
 @Immutable
 @Suppress("UseDataClass")
-class Alpha internal constructor(
+class Alpha
+internal constructor(
     val alpha0: Float = 0f,
     val alpha15: Float = 0.15f,
     val alpha25: Float = 0.25f,

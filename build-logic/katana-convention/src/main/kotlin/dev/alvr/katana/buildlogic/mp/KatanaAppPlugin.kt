@@ -1,5 +1,3 @@
-@file:Suppress("NoUnusedImports", "UnusedImports")
-
 package dev.alvr.katana.buildlogic.mp
 
 import com.android.build.api.dsl.ApplicationBuildType
@@ -17,17 +15,18 @@ import org.gradle.kotlin.dsl.configure
 
 internal class KatanaAppPlugin : Plugin<Project> {
 
-    override fun apply(target: Project) = with(target) {
-        apply(plugin = "com.android.application")
-        apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+    override fun apply(target: Project) =
+        with(target) {
+            apply(plugin = "com.android.application")
+            apply(plugin = "org.jetbrains.kotlin.plugin.compose")
 
-        with(extensions) {
-            commonExtensions()
-            configure<ApplicationExtension> { configureAndroid(project) }
+            with(extensions) {
+                commonExtensions()
+                configure<ApplicationExtension> { configureAndroid(project) }
+            }
+
+            tasks.commonTasks()
         }
-
-        tasks.commonTasks()
-    }
 
     @Suppress("StringLiteralDuplication")
     private fun ApplicationExtension.configureAndroid(project: Project) {
@@ -53,22 +52,19 @@ internal class KatanaAppPlugin : Plugin<Project> {
 
         signingConfigs {
             register("release") {
-                val props = Properties().also { p ->
-                    runCatching {
-                        FileInputStream(project.rootProject.file("local.properties")).use { f ->
-                            p.load(f)
+                val props =
+                    Properties().also { p ->
+                        runCatching {
+                            FileInputStream(project.rootProject.file("local.properties")).use { f -> p.load(f) }
                         }
                     }
-                }
 
                 enableV3Signing = true
                 enableV4Signing = true
 
                 keyAlias = props["signingAlias", "SIGNING_ALIAS"]
                 keyPassword = props["signingAliasPass", "SIGNING_ALIAS_PASS"]
-                storeFile = props["signingFile", "SIGNING_FILE"]?.let {
-                    project.rootProject.file(it)
-                }
+                storeFile = props["signingFile", "SIGNING_FILE"]?.let { project.rootProject.file(it) }
                 storePassword = props["signingFilePass", "SIGNING_FILE_PASS"]
             }
         }
@@ -85,10 +81,7 @@ internal class KatanaAppPlugin : Plugin<Project> {
             release {
                 configure(isDebug = false)
 
-                proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro",
-                )
+                proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
                 signingConfig = signingConfigs.getByName("release")
                 resValue("string", "app_name", "Katana")
@@ -105,6 +98,5 @@ internal class KatanaAppPlugin : Plugin<Project> {
         }
     }
 
-    private operator fun Properties.get(key: String, env: String) =
-        getOrElse(key) { System.getenv(env) } as? String
+    private operator fun Properties.get(key: String, env: String) = getOrElse(key) { System.getenv(env) } as? String
 }

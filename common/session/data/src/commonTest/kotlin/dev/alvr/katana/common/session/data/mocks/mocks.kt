@@ -8,7 +8,4 @@ import io.kotest.property.arbitrary.next
 
 internal val anilistTokenMock = AnilistToken("TOKEN")
 
-internal val sessionMock = Session(
-    anilistToken = anilistTokenMock,
-    sessionActive = Arb.boolean().next(),
-)
+internal val sessionMock = Session(anilistToken = anilistTokenMock, sessionActive = Arb.boolean().next())

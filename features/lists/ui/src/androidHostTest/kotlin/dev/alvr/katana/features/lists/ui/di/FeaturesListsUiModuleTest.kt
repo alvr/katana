@@ -10,18 +10,15 @@ import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
 @OptIn(KoinExperimentalAPI::class)
-internal class FeaturesListsUiModuleTest : FreeSpec({
-    beforeSpec {
-        MockProvider.register { clazz -> mockkClass(clazz) }
-    }
+internal class FeaturesListsUiModuleTest :
+    FreeSpec({
+        beforeSpec { MockProvider.register { clazz -> mockkClass(clazz) } }
 
-    "verify featuresListsUiModule" - {
-        featuresListsUiModule.verify(
-            extraTypes = listOf(
-                ObserveAnimeListUseCase::class,
-                ObserveMangaListUseCase::class,
-                UpdateListUseCase::class,
-            ),
-        )
-    }
-})
+        "verify featuresListsUiModule" -
+            {
+                featuresListsUiModule.verify(
+                    extraTypes =
+                        listOf(ObserveAnimeListUseCase::class, ObserveMangaListUseCase::class, UpdateListUseCase::class)
+                )
+            }
+    })

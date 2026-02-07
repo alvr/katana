@@ -9,8 +9,5 @@ import io.kotest.property.arbitrary.string
 
 internal val userIdMock = UserId(Arb.int().next())
 
-internal val userInfoMock = UserInfo(
-    username = Arb.string().next(),
-    avatar = Arb.string().next(),
-    banner = Arb.string().next(),
-)
+internal val userInfoMock =
+    UserInfo(username = Arb.string().next(), avatar = Arb.string().next(), banner = Arb.string().next())

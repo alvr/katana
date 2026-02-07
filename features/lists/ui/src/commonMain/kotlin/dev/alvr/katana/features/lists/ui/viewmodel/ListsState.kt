@@ -22,13 +22,12 @@ internal data class ListsState<T : MediaListItem>(
 ) : UiState {
     private val originalEntries = collection.getOrElse(selectedList) { persistentMapOf() }
 
-    val entries = if (searchQuery.isEmpty()) {
-        originalEntries
-    } else {
-        originalEntries.filter { (_, item) ->
-            item.title.contains(searchQuery, ignoreCase = true)
-        }.toImmutableMap()
-    }
+    val entries =
+        if (searchQuery.isEmpty()) {
+            originalEntries
+        } else {
+            originalEntries.filter { (_, item) -> item.title.contains(searchQuery, ignoreCase = true) }.toImmutableMap()
+        }
 
     val items = entries.values.toImmutableList()
     val empty = items.isEmpty()

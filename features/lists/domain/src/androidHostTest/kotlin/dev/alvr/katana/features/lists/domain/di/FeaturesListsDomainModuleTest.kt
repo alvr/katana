@@ -9,17 +9,12 @@ import org.koin.test.mock.MockProvider
 import org.koin.test.verify.verify
 
 @OptIn(KoinExperimentalAPI::class)
-internal class FeaturesListsDomainModuleTest : FreeSpec({
-    beforeSpec {
-        MockProvider.register { clazz -> mockkClass(clazz) }
-    }
+internal class FeaturesListsDomainModuleTest :
+    FreeSpec({
+        beforeSpec { MockProvider.register { clazz -> mockkClass(clazz) } }
 
-    "verify featuresListsDomainModule" - {
-        featuresListsDomainModule.verify(
-            extraTypes = listOf(
-                KatanaDispatcher::class,
-                ListsRepository::class,
-            ),
-        )
-    }
-})
+        "verify featuresListsDomainModule" -
+            {
+                featuresListsDomainModule.verify(extraTypes = listOf(KatanaDispatcher::class, ListsRepository::class))
+            }
+    })

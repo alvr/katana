@@ -1,5 +1,3 @@
-@file:Suppress("NoUnusedImports", "UnusedImports")
-
 package dev.alvr.katana.buildlogic.common
 
 import dev.alvr.katana.buildlogic.isRelease
@@ -17,9 +15,7 @@ internal class KatanaCommonPlugin : Plugin<Project> {
         with(target) {
             with(tasks) {
                 register<TestReport>("unitTests") {
-                    val testTasks = subprojects.map { p ->
-                        p.tasks.withType<Test>().matching { t -> !t.isRelease }
-                    }
+                    val testTasks = subprojects.map { p -> p.tasks.withType<Test>().matching { t -> !t.isRelease } }
 
                     mustRunAfter(testTasks)
                     destinationDirectory = file("${layout.buildDirectory.asFile.get()}/reports/allTests")

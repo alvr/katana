@@ -14,20 +14,19 @@ fun isLandscape(): Boolean {
     val windowSizeClass = calculateWindowSizeClass()
 
     return remember(windowSizeClass.widthSizeClass, windowSizeClass.heightSizeClass) {
-        windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded ||
+        val expanded = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded
+        val medium =
             windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium &&
-            windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+                windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+
+        expanded || medium
     }
 }
 
-@Composable
-fun rememberSnackbarHostState() = remember { SnackbarHostState() }
+@Composable fun rememberSnackbarHostState() = remember { SnackbarHostState() }
 
-@Composable
-internal expect fun calculateWindowSizeClass(): WindowSizeClass
+@Composable internal expect fun calculateWindowSizeClass(): WindowSizeClass
 
 @Composable
 fun imageRequest(builder: ImageRequest.Builder.() -> Unit) =
-    ImageRequest.Builder(LocalPlatformContext.current)
-        .apply(builder)
-        .build()
+    ImageRequest.Builder(LocalPlatformContext.current).apply(builder).build()

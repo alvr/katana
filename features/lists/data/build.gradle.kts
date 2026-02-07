@@ -1,6 +1,4 @@
-plugins {
-    id("katana.multiplatform.data.remote")
-}
+plugins { id("katana.multiplatform.data.remote") }
 
 kotlin {
     sourceSets {

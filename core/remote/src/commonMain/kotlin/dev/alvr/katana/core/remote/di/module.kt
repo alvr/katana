@@ -40,19 +40,15 @@ private enum class Interceptor {
 
 private val apolloClientModule = module {
     single {
-        val cacheKeyGenerator = object : CacheKeyGenerator {
-            override fun cacheKeyForObject(
-                obj: Map<String, Any?>,
-                context: CacheKeyGeneratorContext,
-            ): CacheKey? = if (
-                obj[CACHE_ID_KEY] != null &&
-                obj[CACHE_TYPE_KEY] != null
-            ) {
-                CacheKey(obj[CACHE_TYPE_KEY].toString(), obj[CACHE_ID_KEY].toString())
-            } else {
-                null
+        val cacheKeyGenerator =
+            object : CacheKeyGenerator {
+                override fun cacheKeyForObject(obj: Map<String, Any?>, context: CacheKeyGeneratorContext): CacheKey? =
+                    if (obj[CACHE_ID_KEY] != null && obj[CACHE_TYPE_KEY] != null) {
+                        CacheKey(obj[CACHE_TYPE_KEY].toString(), obj[CACHE_ID_KEY].toString())
+                    } else {
+                        null
+                    }
             }
-        }
 
         ApolloClient.Builder()
             .serverUrl(ANILIST_BASE_URL)
@@ -74,24 +70,25 @@ private val apolloInterceptorsModule = module {
         var token: Option<AnilistToken> = None
         val useCase = get<GetAnilistTokenUseCase>()
 
-        registerCallback(object : ScopeCallback {
-            override fun onScopeClose(scope: Scope) {
-                token = None
+        registerCallback(
+            object : ScopeCallback {
+                override fun onScopeClose(scope: Scope) {
+                    token = None
+                }
             }
-        })
+        )
 
         object : HttpInterceptor {
             override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain): HttpResponse {
-                val bearer = token.fold(
-                    ifEmpty = { useCase().also { token = it }.getOrNull() },
-                    ifSome = { it },
-                )?.token
+                val bearer = token.fold(ifEmpty = { useCase().also { token = it }.getOrNull() }, ifSome = { it })?.token
 
-                return request.newBuilder()
+                return request
+                    .newBuilder()
                     .addHeader("Authorization", "Bearer $bearer")
                     .addHeader("Accept", "application/json")
                     .addHeader("Content-Type", "application/json")
-                    .build().let { chain.proceed(it) }
+                    .build()
+                    .let { chain.proceed(it) }
             }
         }
     }
@@ -102,10 +99,7 @@ private val apolloInterceptorsModule = module {
         object : HttpInterceptor {
             override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain) =
                 chain.proceed(request).also { response ->
-                    if (
-                        response.statusCode == HTTP_BAD_REQUEST ||
-                        response.statusCode == HTTP_UNAUTHORIZED
-                    ) {
+                    if (response.statusCode == HTTP_BAD_REQUEST || response.statusCode == HTTP_UNAUTHORIZED) {
                         useCase()
                     }
                 }
@@ -115,20 +109,19 @@ private val apolloInterceptorsModule = module {
     single<HttpInterceptor>(named(Interceptor.LOGGING)) {
         LoggingInterceptor(
             log = { Logger.i(LogTag) { it } },
-            level = if (KatanaBuildConfig.DEBUG) {
-                LoggingInterceptor.Level.BODY
-            } else {
-                LoggingInterceptor.Level.NONE
-            },
+            level =
+                if (KatanaBuildConfig.DEBUG) {
+                    LoggingInterceptor.Level.BODY
+                } else {
+                    LoggingInterceptor.Level.NONE
+                },
         )
     }
 
     factoryOf(::ReloadInterceptor) bind ApolloInterceptor::class
 }
 
-val coreRemoteModule = module {
-    includes(apolloClientModule, apolloDatabaseModule(), apolloInterceptorsModule)
-}
+val coreRemoteModule = module { includes(apolloClientModule, apolloDatabaseModule(), apolloInterceptorsModule) }
 
 private const val ANILIST_BASE_URL = "https://graphql.anilist.co"
 

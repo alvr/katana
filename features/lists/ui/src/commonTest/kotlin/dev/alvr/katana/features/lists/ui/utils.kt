@@ -23,17 +23,13 @@ internal inline fun <reified T : MediaEntry> randomCollection(): List<MediaListG
         add(
             MediaListGroup(
                 name = Arb.string().next(),
-                entries = buildList {
-                    repeat(COLLECTION_SIZE) {
-                        add(
-                            MediaListEntry(
-                                list = mediaListArb.next(),
-                                entry = entryArb<T>().next(),
-                            ),
-                        )
-                    }
-                },
-            ),
+                entries =
+                    buildList {
+                        repeat(COLLECTION_SIZE) {
+                            add(MediaListEntry(list = mediaListArb.next(), entry = entryArb<T>().next()))
+                        }
+                    },
+            )
         )
     }
 }
@@ -64,22 +60,18 @@ private val commonMediaEntryArb = arbitrary {
 }
 
 @Suppress("UNCHECKED_CAST")
-private inline fun <reified T : MediaEntry> entryArb(): Arb<T> = arbitrary {
-    when (T::class) {
-        MediaEntry.Anime::class -> MediaEntry.Anime(
-            entry = commonMediaEntryArb.bind(),
-            episodes = null,
-            nextEpisode = null,
-        )
+private inline fun <reified T : MediaEntry> entryArb(): Arb<T> =
+    arbitrary {
+        when (T::class) {
+            MediaEntry.Anime::class ->
+                MediaEntry.Anime(entry = commonMediaEntryArb.bind(), episodes = null, nextEpisode = null)
 
-        MediaEntry.Manga::class -> MediaEntry.Manga(
-            entry = commonMediaEntryArb.bind(),
-            chapters = null,
-            volumes = null,
-        )
+            MediaEntry.Manga::class ->
+                MediaEntry.Manga(entry = commonMediaEntryArb.bind(), chapters = null, volumes = null)
 
-        else -> error("")
+            else -> error("")
+        }
     }
-} as Arb<T>
+        as Arb<T>
 
 internal const val COLLECTION_SIZE = 8

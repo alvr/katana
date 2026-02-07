@@ -12,13 +12,14 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
 
-    override fun apply(target: Project) = with(target) {
-        apply(plugin = "com.android.kotlin.multiplatform.library")
-        apply(plugin = "org.jetbrains.kotlin.multiplatform")
+    override fun apply(target: Project) =
+        with(target) {
+            apply(plugin = "com.android.kotlin.multiplatform.library")
+            apply(plugin = "org.jetbrains.kotlin.multiplatform")
 
-        extensions.configure<KotlinMultiplatformExtension> { configureMultiplatform() }
-        tasks.commonTasks()
-    }
+            extensions.configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+            tasks.commonTasks()
+        }
 
     private fun KotlinMultiplatformExtension.configureMultiplatform() {
         hierarchy()

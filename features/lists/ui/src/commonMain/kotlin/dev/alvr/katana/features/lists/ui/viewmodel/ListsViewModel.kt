@@ -54,30 +54,17 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
             params = Unit,
             onFailure = {
                 state {
-                    copy(
-                        collection = persistentMapOf(),
-                        selectedList = String.empty,
-                        error = true,
-                        loading = false,
-                    )
+                    copy(collection = persistentMapOf(), selectedList = String.empty, error = true, loading = false)
                 }
                 effect(ListsEffect.LoadingListsFailure)
             },
             onSuccess = { media ->
-                val collection = media.lists
-                    .groupBy { it.name }
-                    .mapValues { it.value.entryMap() }
-                    .toImmutableMap()
+                val collection = media.lists.groupBy { it.name }.mapValues { it.value.entryMap() }.toImmutableMap()
 
                 state {
                     val selectedList = selectedList.ifEmpty { collection.keys.firstOrNull().orEmpty() }
 
-                    copy(
-                        collection = collection,
-                        selectedList = selectedList,
-                        error = false,
-                        loading = false,
-                    )
+                    copy(collection = collection, selectedList = selectedList, error = false, loading = false)
                 }
             },
         )
@@ -86,11 +73,7 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     @OptIn(FlowPreview::class)
     private fun observeSearch() {
         viewModelScope.launch {
-            searchFlow
-                .debounce(SEARCH_DEBOUNCE)
-                .collect { query ->
-                    state { copy(searchQuery = query) }
-                }
+            searchFlow.debounce(SEARCH_DEBOUNCE).collect { query -> state { copy(searchQuery = query) } }
         }
     }
 
@@ -107,11 +90,7 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     }
 
     private fun selectList(name: String) {
-        state {
-            copy(
-                selectedList = name,
-            )
-        }
+        state { copy(selectedList = name) }
     }
 
     private fun search(search: String) {

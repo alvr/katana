@@ -12,19 +12,12 @@ import kotlinx.datetime.toJavaLocalTime
 actual typealias KatanaPlatformDateTimeFormatter = DateTimeFormatter
 
 @JvmInline
-actual value class KatanaDateTimeFormatter private constructor(
-    private val formatter: KatanaPlatformDateTimeFormatter,
-) {
-    constructor(
-        pattern: String,
-        locale: KatanaLocale,
-    ) : this(DateTimeFormatter.ofPattern(pattern, locale.locale))
+actual value class KatanaDateTimeFormatter private constructor(private val formatter: KatanaPlatformDateTimeFormatter) {
+    constructor(pattern: String, locale: KatanaLocale) : this(DateTimeFormatter.ofPattern(pattern, locale.locale))
 
-    actual operator fun invoke(localDate: LocalDate): String =
-        formatter.format(localDate.toJavaLocalDate())
+    actual operator fun invoke(localDate: LocalDate): String = formatter.format(localDate.toJavaLocalDate())
 
-    actual operator fun invoke(localTime: LocalTime): String =
-        formatter.format(localTime.toJavaLocalTime())
+    actual operator fun invoke(localTime: LocalTime): String = formatter.format(localTime.toJavaLocalTime())
 
     actual operator fun invoke(localDateTime: LocalDateTime): String =
         formatter.format(localDateTime.toJavaLocalDateTime())

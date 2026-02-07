@@ -5,9 +5,7 @@ import kotlinx.serialization.Serializable
 
 sealed interface ExploreDestination : KatanaDestination {
 
-    @Serializable
-    data object Root : ExploreDestination
+    @Serializable data object Root : ExploreDestination
 
-    @Serializable
-    data object Explore : ExploreDestination
+    @Serializable data object Explore : ExploreDestination
 }

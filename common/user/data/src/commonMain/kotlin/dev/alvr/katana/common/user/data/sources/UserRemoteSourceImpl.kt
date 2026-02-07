@@ -20,51 +20,44 @@ import dev.alvr.katana.core.remote.watchFiltered
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
-internal class UserRemoteSourceImpl(
-    private val client: ApolloClient,
-) : UserRemoteSource {
-    override val userInfo = client.query(UserInfoQuery())
-        .fetchPolicy(FetchPolicy.CacheAndNetwork)
-        .watchFiltered()
-        .map { res ->
-            @Suppress("USELESS_CAST")
-            res.dataAssertNoErrors().right() as Either<Failure, UserInfo>
-        }
-        .catch { error ->
-            Logger.e(LogTag, error) { "Was not possible to get the user info" }
+internal class UserRemoteSourceImpl(private val client: ApolloClient) : UserRemoteSource {
+    override val userInfo =
+        client
+            .query(UserInfoQuery())
+            .fetchPolicy(FetchPolicy.CacheAndNetwork)
+            .watchFiltered()
+            .map { res ->
+                @Suppress("USELESS_CAST")
+                res.dataAssertNoErrors().right() as Either<Failure, UserInfo>
+            }
+            .catch { error ->
+                Logger.e(LogTag, error) { "Was not possible to get the user info" }
 
-            emit(
-                error.toFailure(
-                    network = UserFailure.GettingUserInfo,
-                    response = UserFailure.GettingUserInfo,
-                ).left(),
-            )
-        }
+                emit(
+                    error
+                        .toFailure(network = UserFailure.GettingUserInfo, response = UserFailure.GettingUserInfo)
+                        .left()
+                )
+            }
 
-    override suspend fun getUserId() = Either.catch {
-        userIdHandler(FetchPolicy.CacheOnly)
-    }.mapLeft { error ->
-        Logger.e(LogTag, error) { "Was not possible to get the userId" }
+    override suspend fun getUserId() =
+        Either.catch { userIdHandler(FetchPolicy.CacheOnly) }
+            .mapLeft { error ->
+                Logger.e(LogTag, error) { "Was not possible to get the userId" }
 
-        error.toFailure(cache = UserFailure.GettingUserId)
-    }
+                error.toFailure(cache = UserFailure.GettingUserId)
+            }
 
-    override suspend fun saveUserId() = Either.catchUnit {
-        userIdHandler(FetchPolicy.NetworkOnly)
-    }.mapLeft { error ->
-        Logger.e(LogTag, error) { "Was not possible to save the userId" }
+    override suspend fun saveUserId() =
+        Either.catchUnit { userIdHandler(FetchPolicy.NetworkOnly) }
+            .mapLeft { error ->
+                Logger.e(LogTag, error) { "Was not possible to save the userId" }
 
-        error.toFailure(
-            network = UserFailure.FetchingUser,
-            response = UserFailure.SavingUser,
-        )
-    }
+                error.toFailure(network = UserFailure.FetchingUser, response = UserFailure.SavingUser)
+            }
 
-    private suspend fun userIdHandler(policy: FetchPolicy) = client
-        .query(UserIdQuery())
-        .fetchPolicy(policy)
-        .executeOrThrow()
-        .dataAssertNoErrors()
+    private suspend fun userIdHandler(policy: FetchPolicy) =
+        client.query(UserIdQuery()).fetchPolicy(policy).executeOrThrow().dataAssertNoErrors()
 }
 
 private const val LogTag = "UserRemoteSource"

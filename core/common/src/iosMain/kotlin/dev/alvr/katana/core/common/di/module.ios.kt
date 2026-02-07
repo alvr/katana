@@ -17,10 +17,14 @@ internal actual fun katanaPathModule() = module {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-private fun createDirectoryPath(directory: ULong): Path = NSFileManager.defaultManager.URLForDirectory(
-    directory = directory,
-    appropriateForURL = null,
-    create = false,
-    inDomain = NSUserDomainMask,
-    error = null,
-)!!.path!!.toPath()
+private fun createDirectoryPath(directory: ULong): Path =
+    NSFileManager.defaultManager
+        .URLForDirectory(
+            directory = directory,
+            appropriateForURL = null,
+            create = false,
+            inDomain = NSUserDomainMask,
+            error = null,
+        )!!
+        .path!!
+        .toPath()

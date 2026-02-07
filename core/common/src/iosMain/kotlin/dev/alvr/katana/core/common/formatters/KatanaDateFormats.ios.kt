@@ -9,5 +9,6 @@ internal actual fun dateTimeFormatterBuilder(
 ): KatanaDateTimeFormatter = KatanaDateTimeFormatter(NSDateFormatter().apply(block))
 
 actual object KatanaDateFormats {
-    actual val nextEpisodeFormat: KatanaDateTimeFormatter get() = TODO()
+    actual val nextEpisodeFormat: KatanaDateTimeFormatter
+        get() = TODO()
 }

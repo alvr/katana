@@ -29,9 +29,7 @@ internal class ObserveMangaListUseCaseTest : FreeSpec(), KoinTest {
 
     init {
         "successfully observe the manga lists" {
-            every { repo.mangaCollection } returns flowOf(
-                MediaCollection<MediaEntry.Manga>(emptyList()).right(),
-            )
+            every { repo.mangaCollection } returns flowOf(MediaCollection<MediaEntry.Manga>(emptyList()).right())
 
             useCase()
 
@@ -44,9 +42,7 @@ internal class ObserveMangaListUseCaseTest : FreeSpec(), KoinTest {
         }
 
         "failure observe the manga lists" {
-            every { repo.mangaCollection } returns flowOf(
-                ListsFailure.GetMediaCollection.left(),
-            )
+            every { repo.mangaCollection } returns flowOf(ListsFailure.GetMediaCollection.left())
 
             useCase()
 

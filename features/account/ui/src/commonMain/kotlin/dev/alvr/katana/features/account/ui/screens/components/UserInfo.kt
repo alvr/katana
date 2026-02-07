@@ -22,40 +22,23 @@ import dev.alvr.katana.features.account.ui.resources.Res
 import dev.alvr.katana.features.account.ui.resources.logout_button
 
 @Composable
-internal fun UserInfo(
-    userInfo: UserInfoUi,
-    onLogoutClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
+internal fun UserInfo(userInfo: UserInfoUi, onLogoutClick: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        UsernameAvatar(
-            avatar = userInfo.avatar,
-            username = userInfo.username,
-        )
+        UsernameAvatar(avatar = userInfo.avatar, username = userInfo.username)
 
-        Button(
-            onClick = onLogoutClick,
-        ) {
-            Text(text = Res.string.logout_button.value)
-        }
+        Button(onClick = onLogoutClick) { Text(text = Res.string.logout_button.value) }
     }
 }
 
 @Composable
-private fun UsernameAvatar(
-    avatar: String,
-    username: String,
-    modifier: Modifier = Modifier,
-) {
+private fun UsernameAvatar(avatar: String, username: String, modifier: Modifier = Modifier) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         AsyncImage(
-            modifier = Modifier
-                .size(KatanaTheme.sizes.size18)
-                .clip(CircleShape),
+            modifier = Modifier.size(KatanaTheme.sizes.size18).clip(CircleShape),
             model = imageRequest { data(avatar) },
             contentDescription = null,
             contentScale = ContentScale.Crop,

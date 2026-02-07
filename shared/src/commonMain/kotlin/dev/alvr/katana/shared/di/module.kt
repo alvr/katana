@@ -23,9 +23,7 @@ import dev.alvr.katana.shared.viewmodel.KatanaViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-private val viewModelsModule = module {
-    viewModelOf(::KatanaViewModel)
-}
+private val viewModelsModule = module { viewModelOf(::KatanaViewModel) }
 
 internal val katanaModule = module {
     includes(

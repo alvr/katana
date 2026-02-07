@@ -17,23 +17,22 @@ import io.kotest.property.arbitrary.string
 import io.kotest.property.kotlinx.datetime.date
 import io.kotest.property.kotlinx.datetime.datetime
 
-internal val mediaListCollectionQueryMock = MediaListCollectionQuery(
-    user = Arb.positiveInt().orNull().next().optional,
-    type = Arb.enum<MediaType>().next(),
-)
+internal val mediaListCollectionQueryMock =
+    MediaListCollectionQuery(user = Arb.positiveInt().orNull().next().optional, type = Arb.enum<MediaType>().next())
 
-internal val mediaListMock = MediaList(
-    id = ItemEntryId(Arb.int().next()),
-    score = Arb.positiveDouble().next(),
-    progress = Arb.positiveInt().next(),
-    progressVolumes = Arb.positiveInt().orNull().next(),
-    repeat = Arb.positiveInt().next(),
-    private = Arb.boolean().next(),
-    notes = Arb.string().next(),
-    hiddenFromStatusLists = Arb.boolean().next(),
-    startedAt = Arb.date().orNull().next(),
-    completedAt = Arb.date().orNull().next(),
-    updatedAt = Arb.datetime().orNull().next(),
-)
+internal val mediaListMock =
+    MediaList(
+        id = ItemEntryId(Arb.int().next()),
+        score = Arb.positiveDouble().next(),
+        progress = Arb.positiveInt().next(),
+        progressVolumes = Arb.positiveInt().orNull().next(),
+        repeat = Arb.positiveInt().next(),
+        private = Arb.boolean().next(),
+        notes = Arb.string().next(),
+        hiddenFromStatusLists = Arb.boolean().next(),
+        startedAt = Arb.date().orNull().next(),
+        completedAt = Arb.date().orNull().next(),
+        updatedAt = Arb.datetime().orNull().next(),
+    )
 
 internal val apolloErrorMock = Error.Builder(Arb.string().next()).build()

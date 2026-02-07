@@ -62,19 +62,21 @@ fun KatanaErrorState(
         Spacer(Modifier.height(KatanaTheme.sizes.size4))
 
         OutlinedButton(
-            modifier = Modifier.alpha(
-                if (loading) {
-                    KatanaTheme.alpha.alpha66
-                } else {
-                    KatanaTheme.alpha.alpha100
-                },
-            ),
+            modifier =
+                Modifier.alpha(
+                    if (loading) {
+                        KatanaTheme.alpha.alpha66
+                    } else {
+                        KatanaTheme.alpha.alpha100
+                    }
+                ),
             onClick = onRetry,
             enabled = !loading,
-            colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = KatanaTheme.colorScheme.secondary,
-                contentColor = contentColorFor(KatanaTheme.colorScheme.primary),
-            ),
+            colors =
+                ButtonDefaults.outlinedButtonColors(
+                    containerColor = KatanaTheme.colorScheme.secondary,
+                    contentColor = contentColorFor(KatanaTheme.colorScheme.primary),
+                ),
         ) {
             Text(text = buttonText, fontWeight = FontWeight.Bold)
         }
@@ -89,10 +91,7 @@ private fun KatanaState(
     modifier: Modifier = Modifier,
     extraContent: @Composable (() -> Unit)? = null,
 ) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier.fillMaxWidth(STATE_CONTENT_FRACTION),
             verticalArrangement = Arrangement.Center,
@@ -103,11 +102,7 @@ private fun KatanaState(
                 modifier = Modifier.size(KatanaTheme.sizes.size40),
                 contentDescription = contentDescription,
             )
-            Text(
-                modifier = Modifier,
-                text = text,
-                textAlign = TextAlign.Justify,
-            )
+            Text(modifier = Modifier, text = text, textAlign = TextAlign.Justify)
 
             extraContent?.invoke()
         }
