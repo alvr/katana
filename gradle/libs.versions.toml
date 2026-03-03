@@ -38,7 +38,7 @@ navigation = "2.9.2"
 navigation3 = "1.0.0-alpha06"
 navigation-material = "1.10.1"
 okio = "3.16.4"
-spotless = "8.2.1"
+spotless = "8.3.0"
 turbine = "1.2.1"
 
 [plugins]
