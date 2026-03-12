@@ -37,7 +37,7 @@ mokkery = "3.2.0"
 navigation = "2.9.2"
 navigation3 = "1.0.0-alpha06"
 navigation-material = "1.10.2"
-okio = "3.16.4"
+okio = "3.17.0"
 spotless = "8.3.0"
 turbine = "1.2.1"
 
