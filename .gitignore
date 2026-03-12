@@ -9,3 +9,14 @@
 coverage-error.log
 katana.jks
 local.properties
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/readme.md
+
+# Ruby / Bundler
+vendor/bundle
+.bundle

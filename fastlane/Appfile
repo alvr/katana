@@ -1,0 +1,8 @@
+# Android
+json_key_file("") # Path to the json secret file for Google Play (when needed)
+package_name("dev.alvr.katana")
+
+# iOS
+# app_identifier("dev.alvr.Katana")
+# apple_id("")
+# team_id("R9Q34BGSF3")

@@ -1,0 +1,84 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build Android Debug APK"
+  lane :katana_debug do
+    gradle(
+      project_dir: ".",
+      task: "assembleDebug",
+      properties: { "katana.flavor" => "dev" },
+    )
+  end
+
+  desc "Build Android Beta APK and AAB"
+  lane :katana_beta do
+    gradle(
+      project_dir: ".",
+      task: "assembleBeta",
+      properties: { "katana.flavor" => "beta" },
+    )
+    gradle(
+      project_dir: ".",
+      task: "bundleBeta",
+      properties: { "katana.flavor" => "beta" },
+    )
+  end
+
+  desc "Build Android Release APK and AAB"
+  lane :katana_release do
+    gradle(
+      project_dir: ".",
+      task: "assembleRelease",
+      properties: { "katana.flavor" => "release" },
+    )
+    gradle(
+      project_dir: ".",
+      task: "bundleRelease",
+      properties: { "katana.flavor" => "release" },
+    )
+  end
+end
+
+platform :ios do
+  IOS_PROJECT = "app-ios/Katana.xcodeproj"
+  IOS_SCHEME  = "Katana iOS"
+
+  desc "Build iOS Debug (simulator)"
+  lane :katana_debug do
+    xcodebuild(
+      project: IOS_PROJECT,
+      scheme: IOS_SCHEME,
+      configuration: "Debug",
+      destination: "generic/platform=iOS Simulator",
+      xcargs: "KATANA_FLAVOR=dev",
+      build: true,
+      clean: false,
+    )
+  end
+
+  desc "Build iOS Beta (simulator)"
+  lane :katana_beta do
+    xcodebuild(
+      project: IOS_PROJECT,
+      scheme: IOS_SCHEME,
+      configuration: "Release",
+      destination: "generic/platform=iOS Simulator",
+      xcargs: "KATANA_FLAVOR=beta",
+      build: true,
+      clean: false,
+    )
+  end
+
+  desc "Build iOS Release (simulator)"
+  lane :katana_release do
+    xcodebuild(
+      project: IOS_PROJECT,
+      scheme: IOS_SCHEME,
+      configuration: "Release",
+      destination: "generic/platform=iOS Simulator",
+      xcargs: "KATANA_FLAVOR=release",
+      build: true,
+      clean: false,
+    )
+  end
+end
