@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-slim
     steps:
       - name: Cancel Stale Jobs
-        uses: styfle/cancel-workflow-action@3155a141048f8f89c06b4cdae32e7853e97536bc # 0.13.0
+        uses: styfle/cancel-workflow-action@d07a454dad7609a92316b57b23c9ccfd4f59af66 # 0.13.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
