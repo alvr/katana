@@ -15,6 +15,10 @@ runs:
       with:
         distribution: zulu
         java-version: 21
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@319994f95fa847cf3fb3cd3dbe89f6dcde9f178f # v1.295.0
+      with:
+        bundler-cache: true
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
       with:

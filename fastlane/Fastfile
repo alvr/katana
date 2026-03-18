@@ -2,7 +2,7 @@ default_platform(:android)
 
 platform :android do
   desc "Build Android Debug APK"
-  lane :katana_debug do
+  lane :build_debug do
     gradle(
       project_dir: ".",
       task: "assembleDebug",
@@ -10,27 +10,23 @@ platform :android do
     )
   end
 
-  desc "Build Android Beta APK and AAB"
-  lane :katana_beta do
+  desc "Build & Deploy Android Beta APK"
+  lane :build_deploy_beta do
     gradle(
       project_dir: ".",
       task: "assembleBeta",
       properties: { "katana.flavor" => "beta" },
     )
-    gradle(
-      project_dir: ".",
-      task: "bundleBeta",
-      properties: { "katana.flavor" => "beta" },
+    appcircle_testing_distribution(
+      personalAPIToken: ENV["AC_PERSONAL_API_TOKEN"],
+      profileName: ENV["AC_PROFILE_NAME"],
+      appPath: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
+      message: "Android Beta",
     )
   end
 
-  desc "Build Android Release APK and AAB"
-  lane :katana_release do
-    gradle(
-      project_dir: ".",
-      task: "assembleRelease",
-      properties: { "katana.flavor" => "release" },
-    )
+  desc "Build Android Release AAB"
+  lane :build_release do
     gradle(
       project_dir: ".",
       task: "bundleRelease",
@@ -43,8 +39,8 @@ platform :ios do
   IOS_PROJECT = "app-ios/Katana.xcodeproj"
   IOS_SCHEME  = "Katana iOS"
 
-  desc "Build iOS Debug (simulator)"
-  lane :katana_debug do
+  desc "Build iOS Debug"
+  lane :build_debug do
     xcodebuild(
       project: IOS_PROJECT,
       scheme: IOS_SCHEME,
@@ -52,32 +48,36 @@ platform :ios do
       destination: "generic/platform=iOS Simulator",
       xcargs: "KATANA_FLAVOR=dev",
       build: true,
-      clean: false,
+      clean: true,
     )
   end
 
-  desc "Build iOS Beta (simulator)"
-  lane :katana_beta do
-    xcodebuild(
+  desc "Build and Deploy iOS Beta"
+  lane :build_deploy_beta do
+    build_ios_app(
       project: IOS_PROJECT,
       scheme: IOS_SCHEME,
       configuration: "Release",
-      destination: "generic/platform=iOS Simulator",
+      export_method: "ad-hoc",
       xcargs: "KATANA_FLAVOR=beta",
-      build: true,
-      clean: false,
+      clean: true,
+    )
+    appcircle_testing_distribution(
+      personalAPIToken: ENV["AC_PERSONAL_API_TOKEN"],
+      profileName: ENV["AC_PROFILE_NAME"],
+      appPath: lane_context[SharedValues::IPA_OUTPUT_PATH],
+      message: "iOS Beta",
     )
   end
 
-  desc "Build iOS Release (simulator)"
-  lane :katana_release do
-    xcodebuild(
+  desc "Build iOS Release"
+  lane :build_release do
+    build_ios_app(
       project: IOS_PROJECT,
       scheme: IOS_SCHEME,
       configuration: "Release",
-      destination: "generic/platform=iOS Simulator",
+      export_method: "app-store",
       xcargs: "KATANA_FLAVOR=release",
-      build: true,
       clean: false,
     )
   end

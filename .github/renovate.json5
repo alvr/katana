@@ -71,10 +71,11 @@
             ],
             "matchManagers": ["gradle"],
         },
-       {
+        {
             "groupName": "GitHub Actions",
             "groupSlug": "github-actions",
             "matchManagers": ["github-actions"],
+            "automerge": true,
         },
         {
             "automerge": false,
