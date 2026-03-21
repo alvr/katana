@@ -1,8 +1,8 @@
 import SwiftUI
 
 @main
-struct KatanaApp: App {
-    var body: some Scene {
+internal struct KatanaApp: App {
+    internal var body: some Scene {
         WindowGroup {
             ContentView()
         }
