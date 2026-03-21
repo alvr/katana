@@ -33,8 +33,7 @@ import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.registering
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 internal class KatanaBuildConfigPlugin : Plugin<Project> {
     override fun apply(target: Project) =
@@ -51,11 +50,6 @@ internal class KatanaBuildConfigPlugin : Plugin<Project> {
                     outputDirs = sourceOutputDirs
                 }
 
-            tasks {
-                withType<KotlinCompile> { dependsOn(generateBuildConfig) }
-                withType<KotlinNativeLink> { dependsOn(generateBuildConfig) }
-            }
-
             configure<KotlinMultiplatformExtension> {
                 sourceSets {
                     sourceOutputDirs.forEach { (output, dir) ->
@@ -64,6 +58,8 @@ internal class KatanaBuildConfigPlugin : Plugin<Project> {
                     }
                 }
             }
+
+            tasks.withType<KotlinCompilationTask<*>>().configureEach { dependsOn(generateBuildConfig) }
         }
 
     private fun Project.outputDir(name: String) = layout.buildDirectory.dir("$GENERATED_DIR/$name")

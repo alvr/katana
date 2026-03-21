@@ -55,7 +55,7 @@ private fun KotlinMultiplatformExtension.configureAndroid(
 }
 
 private fun KotlinMultiplatformExtension.configureIos(configure: KotlinNativeTarget.() -> Unit) {
-    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { ios ->
+    listOf(iosArm64(), iosSimulatorArm64()).forEach { ios ->
         ios.configure()
         compilerOptions.configureKotlinCompiler()
         ios.binaries.framework {
