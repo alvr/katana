@@ -24,7 +24,7 @@ internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) :
                 (session.anilistToken != null && session.sessionActive).right() as Either<Failure, Boolean>
             }
             .catch { error ->
-                Logger.e(LogTag, error) { "There was an error observing the session" }
+                Logger.e(tag = LogTag, throwable = error) { "There was an error observing the session" }
                 emit(SessionFailure.CheckingActiveSession.left())
             }
             .distinctUntilChanged()
@@ -32,20 +32,20 @@ internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) :
     override suspend fun clearActiveSession() =
         Either.catch {
                 store.update { p -> p.copy(sessionActive = false) }
-                Logger.d(LogTag) { "Session cleared" }
+                Logger.d(tag = LogTag) { "Session cleared" }
             }
             .mapLeft { error ->
-                Logger.e(LogTag, error) { "There was an error clearing session" }
+                Logger.e(tag = LogTag, throwable = error) { "There was an error clearing session" }
                 SessionFailure.ClearingSession
             }
 
     override suspend fun deleteAnilistToken() =
         Either.catch {
                 store.update { p -> p.copy(anilistToken = null) }
-                Logger.d(LogTag) { "Anilist token deleted" }
+                Logger.d(tag = LogTag) { "Anilist token deleted" }
             }
             .mapLeft { error ->
-                Logger.e(LogTag, error) { "There was an error deleting the token" }
+                Logger.e(tag = LogTag, throwable = error) { "There was an error deleting the token" }
                 SessionFailure.DeletingToken
             }
 
@@ -53,7 +53,9 @@ internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) :
         store.data
             .map { session -> session.anilistToken.toOption() }
             .catch { error ->
-                Logger.e(LogTag, error) { "There was an error reading the token from the preferences" }
+                Logger.e(tag = LogTag, throwable = error) {
+                    "There was an error reading the token from the preferences"
+                }
                 emit(None)
             }
             .first()
@@ -61,20 +63,20 @@ internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) :
     override suspend fun logout() =
         Either.catch {
                 store.update { p -> p.copy(anilistToken = null, sessionActive = false) }
-                Logger.d(LogTag) { "Logged out" }
+                Logger.d(tag = LogTag) { "Logged out" }
             }
             .mapLeft { error ->
-                Logger.e(LogTag, error) { "There was an error logging out" }
+                Logger.e(tag = LogTag, throwable = error) { "There was an error logging out" }
                 SessionFailure.LoggingOut
             }
 
     override suspend fun saveSession(anilistToken: AnilistToken) =
         Either.catch {
                 store.update { p -> p.copy(anilistToken = anilistToken, sessionActive = true) }
-                Logger.d(LogTag) { "Token saved: ${anilistToken.token}" }
+                Logger.d(tag = LogTag) { "Token saved: ${anilistToken.token}" }
             }
             .mapLeft { error ->
-                Logger.e(LogTag, error) { "There was an error saving the token" }
+                Logger.e(tag = LogTag, throwable = error) { "There was an error saving the token" }
                 SessionFailure.SavingSession
             }
 }

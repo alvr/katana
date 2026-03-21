@@ -97,7 +97,7 @@ internal class HomeViewModel(
     }
 
     private fun loadActivity() {
-        Logger.d(LogTag) { "Loading Activity tab..." }
+        Logger.d(tag = LogTag) { "Loading Activity tab..." }
     }
 
     // endregion [Initialization]

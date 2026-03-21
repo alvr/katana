@@ -21,6 +21,7 @@ import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.io.IOException
 
@@ -92,6 +93,42 @@ internal class SessionLocalSourceTest : FreeSpec() {
 
         "failure" -
             {
+                "observing the session fails AND it's a common Exception" {
+                    every { store.data } returns flow { throw IllegalStateException() }
+                    source = SessionLocalSourceImpl(store)
+
+                    source.sessionActive.test {
+                        awaitItem().shouldBeLeft(SessionFailure.CheckingActiveSession)
+                        awaitComplete()
+                    }
+
+                    verify { store.data }
+                }
+
+                "observing the session fails AND it's a reading Exception" {
+                    every { store.data } returns flow { throw IOException("Oops.") }
+                    source = SessionLocalSourceImpl(store)
+
+                    source.sessionActive.test {
+                        awaitItem().shouldBeLeft(SessionFailure.CheckingActiveSession)
+                        awaitComplete()
+                    }
+
+                    verify { store.data }
+                }
+
+                "reading the token from the preferences fails AND it's a common Exception" {
+                    every { store.data } returns flow { throw IllegalStateException() }
+                    source.getAnilistToken().shouldBeNone()
+                    verify { store.data }
+                }
+
+                "reading the token from the preferences fails AND it's a reading Exception" {
+                    every { store.data } returns flow { throw IOException("Oops.") }
+                    source.getAnilistToken().shouldBeNone()
+                    verify { store.data }
+                }
+
                 "the clearing the session fails AND it's a common Exception" {
                     everySuspend { store.update(any()) } throws Exception()
                     source.clearActiveSession().shouldBeLeft(SessionFailure.ClearingSession)

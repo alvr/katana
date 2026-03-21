@@ -248,7 +248,7 @@ PLATFORMS
 
 DEPENDENCIES
   faraday (>= 1.10.5, < 2.0)
-  fastlane
+  fastlane (~> 2.225)
   fastlane-plugin-appcircle_testing_distribution
 
 BUNDLED WITH

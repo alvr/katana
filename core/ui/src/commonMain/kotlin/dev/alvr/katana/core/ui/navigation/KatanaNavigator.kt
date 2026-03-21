@@ -16,7 +16,7 @@ interface KatanaNavigator {
 
 @Suppress("UnusedReceiverParameter")
 fun KatanaNavigator.overridden(navigator: String = "KatanaRootNavigator") {
-    Logger.i(LogTag) { "Implementation overridden in $navigator" }
+    Logger.i(tag = LogTag) { "Implementation overridden in $navigator" }
 }
 
 val KatanaNavigator.viewModelStoreOwner: ViewModelStoreOwner

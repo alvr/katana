@@ -31,10 +31,6 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-@DslMarker internal annotation class KatanaViewModelDsl
-
-@DslMarker internal annotation class KatanaViewModelExecuteDsl
-
 @Stable
 abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialState: S) : ViewModel(), KoinComponent {
     internal val dispatcher by inject<KatanaDispatcher>()
@@ -72,7 +68,6 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         }
     }
 
-    @KatanaViewModelDsl
     protected fun state(state: S.() -> S) {
         viewModelScope.launch(dispatcher.main) {
             mutex.withLock {
@@ -82,7 +77,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
                 if (prevState != newState) {
                     _uiState.value = newState
 
-                    Logger.d(viewModelLogTag) {
+                    Logger.d(tag = viewModelLogTag) {
                         """
                             |UiState changed:
                             |  Previous: $prevState
@@ -95,12 +90,10 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         }
     }
 
-    @KatanaViewModelDsl
     protected fun effect(effect: E) {
         viewModelScope.launch(dispatcher.main) { _effects.send(effect) }
     }
 
-    @KatanaViewModelDsl
     fun intent(intent: I) {
         viewModelScope.launch(dispatcher.main) { intents.send(intent) }
     }
@@ -117,7 +110,6 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         // no-op
     }
 
-    @KatanaViewModelExecuteDsl
     protected fun <P, R> execute(
         useCase: EitherUseCase<P, R>,
         params: P,
@@ -130,7 +122,6 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         }
     }
 
-    @KatanaViewModelExecuteDsl
     protected fun <P, R> execute(useCase: OptionUseCase<P, R>, params: P, onSome: (R) -> Unit, onEmpty: () -> Unit) {
         viewModelScope.launch(dispatcher.io) {
             val result = useCase(params)
@@ -138,7 +129,6 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         }
     }
 
-    @KatanaViewModelExecuteDsl
     protected fun <P, R> execute(
         useCase: FlowEitherUseCase<P, R>,
         params: P,
@@ -151,7 +141,6 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         }
     }
 
-    @KatanaViewModelExecuteDsl
     protected fun <P, R> execute(
         useCase: FlowOptionUseCase<P, R>,
         params: P,

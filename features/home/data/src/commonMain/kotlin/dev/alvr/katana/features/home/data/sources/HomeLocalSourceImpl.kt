@@ -20,7 +20,9 @@ internal class HomeLocalSourceImpl(private val store: KatanaStore<HomePreference
                 homePreferences.welcomeCardVisible.right() as Either<Failure, Boolean>
             }
             .catch { error ->
-                Logger.e(LogTag, error) { "There was an error getting the visibility of the welcome card" }
+                Logger.e(tag = LogTag, throwable = error) {
+                    "There was an error getting the visibility of the welcome card"
+                }
                 emit(HomeFailure.GettingWelcomeCardVisibility.left())
             }
             .distinctUntilChanged()
@@ -28,10 +30,10 @@ internal class HomeLocalSourceImpl(private val store: KatanaStore<HomePreference
     override suspend fun hideWelcomeCard() =
         Either.catch {
                 store.update { homePreferences -> homePreferences.copy(welcomeCardVisible = false) }
-                Logger.d(LogTag) { "Welcome card hidden" }
+                Logger.d(tag = LogTag) { "Welcome card hidden" }
             }
             .mapLeft { error ->
-                Logger.e(LogTag, error) { "There was an error hiding the welcome card" }
+                Logger.e(tag = LogTag, throwable = error) { "There was an error hiding the welcome card" }
                 HomeFailure.HidingWelcomeCard
             }
 }

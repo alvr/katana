@@ -17,6 +17,7 @@ import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.io.IOException
 
@@ -55,6 +56,30 @@ internal class HomeLocalSourceTest : FreeSpec() {
 
         "failure" -
             {
+                "getting the welcome card visibility fails AND it's a common Exception" {
+                    every { store.data } returns flow { throw IllegalStateException() }
+                    source = HomeLocalSourceImpl(store)
+
+                    source.welcomeCardVisible.test {
+                        awaitItem().shouldBeLeft(HomeFailure.GettingWelcomeCardVisibility)
+                        awaitComplete()
+                    }
+
+                    verify { store.data }
+                }
+
+                "getting the welcome card visibility fails AND it's a reading Exception" {
+                    every { store.data } returns flow { throw IOException("Oops.") }
+                    source = HomeLocalSourceImpl(store)
+
+                    source.welcomeCardVisible.test {
+                        awaitItem().shouldBeLeft(HomeFailure.GettingWelcomeCardVisibility)
+                        awaitComplete()
+                    }
+
+                    verify { store.data }
+                }
+
                 "hiding the welcome card fails AND it's a common Exception" {
                     everySuspend { store.update(any()) } throws Exception()
                     source.hideWelcomeCard().shouldBeLeft(HomeFailure.HidingWelcomeCard)

@@ -31,7 +31,7 @@ internal class UserRemoteSourceImpl(private val client: ApolloClient) : UserRemo
                 res.dataAssertNoErrors().right() as Either<Failure, UserInfo>
             }
             .catch { error ->
-                Logger.e(LogTag, error) { "Was not possible to get the user info" }
+                Logger.e(tag = LogTag, throwable = error) { "Was not possible to get the user info" }
 
                 emit(
                     error
@@ -43,7 +43,7 @@ internal class UserRemoteSourceImpl(private val client: ApolloClient) : UserRemo
     override suspend fun getUserId() =
         Either.catch { userIdHandler(FetchPolicy.CacheOnly) }
             .mapLeft { error ->
-                Logger.e(LogTag, error) { "Was not possible to get the userId" }
+                Logger.e(tag = LogTag, throwable = error) { "Was not possible to get the userId" }
 
                 error.toFailure(cache = UserFailure.GettingUserId)
             }
@@ -51,7 +51,7 @@ internal class UserRemoteSourceImpl(private val client: ApolloClient) : UserRemo
     override suspend fun saveUserId() =
         Either.catchUnit { userIdHandler(FetchPolicy.NetworkOnly) }
             .mapLeft { error ->
-                Logger.e(LogTag, error) { "Was not possible to save the userId" }
+                Logger.e(tag = LogTag, throwable = error) { "Was not possible to save the userId" }
 
                 error.toFailure(network = UserFailure.FetchingUser, response = UserFailure.SavingUser)
             }
