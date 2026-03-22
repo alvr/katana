@@ -15,10 +15,7 @@ import kotlinx.coroutines.flow.map
 internal class HomeLocalSourceImpl(private val store: KatanaStore<HomePreferences>) : HomeLocalSource {
     override val welcomeCardVisible =
         store.data
-            .map { homePreferences ->
-                @Suppress("USELESS_CAST")
-                homePreferences.welcomeCardVisible.right() as Either<Failure, Boolean>
-            }
+            .map<_, Either<Failure, Boolean>> { homePreferences -> homePreferences.welcomeCardVisible.right() }
             .catch { error ->
                 Logger.e(tag = LogTag, throwable = error) {
                     "There was an error getting the visibility of the welcome card"

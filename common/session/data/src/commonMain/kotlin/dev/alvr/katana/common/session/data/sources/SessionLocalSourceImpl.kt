@@ -19,9 +19,8 @@ import kotlinx.coroutines.flow.map
 internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) : SessionLocalSource {
     override val sessionActive =
         store.data
-            .map { session ->
-                @Suppress("USELESS_CAST")
-                (session.anilistToken != null && session.sessionActive).right() as Either<Failure, Boolean>
+            .map<_, Either<Failure, Boolean>> { session ->
+                (session.anilistToken != null && session.sessionActive).right()
             }
             .catch { error ->
                 Logger.e(tag = LogTag, throwable = error) { "There was an error observing the session" }

@@ -108,7 +108,7 @@ private val apolloInterceptorsModule = module {
 
     single<HttpInterceptor>(named(Interceptor.LOGGING)) {
         LoggingInterceptor(
-            log = { Logger.i(LogTag) { it } },
+            log = { Logger.i(tag = LogTag) { it } },
             level =
                 if (KatanaBuildConfig.DEBUG) {
                     LoggingInterceptor.Level.BODY

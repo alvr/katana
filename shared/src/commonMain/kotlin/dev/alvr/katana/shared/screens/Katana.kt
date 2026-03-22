@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -26,6 +28,7 @@ import dev.alvr.katana.features.explore.ui.navigation.explore
 import dev.alvr.katana.features.home.ui.navigation.HomeDestination
 import dev.alvr.katana.features.home.ui.navigation.home
 import dev.alvr.katana.features.lists.ui.navigation.lists
+import dev.alvr.katana.shared.navigation.MainNavigationBarItem
 import dev.alvr.katana.shared.navigation.RootNavigator
 import dev.alvr.katana.shared.navigation.rememberKatanaNavigator
 import dev.alvr.katana.shared.viewmodel.KatanaViewModel
@@ -40,12 +43,18 @@ internal fun Katana(
     val currentNav by navigator.navController.currentBackStackEntryAsState()
     val uiState by viewModel.collectAsState()
 
+    val items = uiState.navigationBarItems
+    val currentNavEntry by rememberUpdatedState(currentNav)
+
+    val onItemClicked =
+        remember(navigator) { { item: MainNavigationBarItem -> navigator.onNavigationBarItemClicked(item) } }
+
     val navigationBar =
         @Composable { type: KatanaNavigationBarType ->
             KatanaNavigationBar(
-                items = uiState.navigationBarItems,
-                isSelected = { item -> currentNav.hasRoute(item) },
-                onClick = { item -> navigator.onNavigationBarItemClicked(item) },
+                items = items,
+                isSelected = { item -> currentNavEntry.hasRoute(item) },
+                onClick = onItemClicked,
                 type = type,
             )
         }
