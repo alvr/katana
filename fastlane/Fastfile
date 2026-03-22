@@ -1,0 +1,84 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build Android Debug APK"
+  lane :build_debug do
+    gradle(
+      project_dir: ".",
+      task: "assembleDebug",
+      properties: { "katana.flavor" => "dev" },
+    )
+  end
+
+  desc "Build & Deploy Android Beta APK"
+  lane :build_deploy_beta do
+    gradle(
+      project_dir: ".",
+      task: "assembleBeta",
+      properties: { "katana.flavor" => "beta" },
+    )
+    appcircle_testing_distribution(
+      personalAPIToken: ENV["AC_PERSONAL_API_TOKEN"],
+      profileName: ENV["AC_PROFILE_NAME"],
+      appPath: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
+      message: "Android Beta",
+    )
+  end
+
+  desc "Build Android Release AAB"
+  lane :build_release do
+    gradle(
+      project_dir: ".",
+      task: "bundleRelease",
+      properties: { "katana.flavor" => "release" },
+    )
+  end
+end
+
+platform :ios do
+  IOS_PROJECT = "app-ios/Katana.xcodeproj"
+  IOS_SCHEME  = "Katana iOS"
+
+  desc "Build iOS Debug"
+  lane :build_debug do
+    xcodebuild(
+      project: IOS_PROJECT,
+      scheme: IOS_SCHEME,
+      configuration: "Debug",
+      destination: "generic/platform=iOS Simulator",
+      xcargs: "KATANA_FLAVOR=dev",
+      build: true,
+      clean: true,
+    )
+  end
+
+  desc "Build and Deploy iOS Beta"
+  lane :build_deploy_beta do
+    build_ios_app(
+      project: IOS_PROJECT,
+      scheme: IOS_SCHEME,
+      configuration: "Release",
+      export_method: "ad-hoc",
+      xcargs: "KATANA_FLAVOR=beta",
+      clean: true,
+    )
+    appcircle_testing_distribution(
+      personalAPIToken: ENV["AC_PERSONAL_API_TOKEN"],
+      profileName: ENV["AC_PROFILE_NAME"],
+      appPath: lane_context[SharedValues::IPA_OUTPUT_PATH],
+      message: "iOS Beta",
+    )
+  end
+
+  desc "Build iOS Release"
+  lane :build_release do
+    build_ios_app(
+      project: IOS_PROJECT,
+      scheme: IOS_SCHEME,
+      configuration: "Release",
+      export_method: "app-store",
+      xcargs: "KATANA_FLAVOR=release",
+      clean: false,
+    )
+  end
+end

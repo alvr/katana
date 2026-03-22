@@ -18,11 +18,11 @@ private class KatanaMangaListsNavigator(override val navController: NavHostContr
     }
 
     override fun mangaEntryDetails(id: ItemEntryId) {
-        Logger.d(LogTag) { "Entry details ${id.value}" }
+        Logger.d(tag = LogTag) { "Entry details ${id.value}" }
     }
 
     override fun editMangaEntry(id: ItemEntryId) {
-        Logger.d(LogTag) { "Edit entry ${id.value}" }
+        Logger.d(tag = LogTag) { "Edit entry ${id.value}" }
     }
 }
 

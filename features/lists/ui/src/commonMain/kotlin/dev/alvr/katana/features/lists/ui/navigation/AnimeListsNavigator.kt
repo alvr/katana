@@ -18,11 +18,11 @@ private class KatanaAnimeListsNavigator(override val navController: NavHostContr
     }
 
     override fun animeEntryDetails(id: ItemEntryId) {
-        Logger.d(LogTag) { "Entry details ${id.value}" }
+        Logger.d(tag = LogTag) { "Entry details ${id.value}" }
     }
 
     override fun editAnimeEntry(id: ItemEntryId) {
-        Logger.d(LogTag) { "Edit entry ${id.value}" }
+        Logger.d(tag = LogTag) { "Edit entry ${id.value}" }
     }
 }
 

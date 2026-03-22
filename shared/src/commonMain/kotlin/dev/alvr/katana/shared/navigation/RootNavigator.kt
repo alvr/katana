@@ -123,7 +123,7 @@ private fun NavHostController.loggerObserver() = apply {
         DisposableEffect(this, LocalLifecycleOwner.current.lifecycle) {
             val listener =
                 NavController.OnDestinationChangedListener { navController, destination, args ->
-                    Logger.d(LogTag) {
+                    Logger.d(tag = LogTag) {
                         buildString {
                             append("Navigating to route ${destination.route}")
 

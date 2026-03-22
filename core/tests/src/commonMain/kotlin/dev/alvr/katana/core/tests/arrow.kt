@@ -6,7 +6,7 @@ import arrow.core.Either.Right
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
-import io.kotest.matchers.assertionCounter
+import io.kotest.assertions.assertionCounter
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import kotlin.contracts.ExperimentalContracts

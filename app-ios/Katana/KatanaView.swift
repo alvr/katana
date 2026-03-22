@@ -2,11 +2,11 @@ import KatanaShared
 import SwiftUI
 
 internal struct KatanaView: UIViewControllerRepresentable {
-    internal func makeUIViewController(_: Context) -> some UIViewController {
+    internal func makeUIViewController(context: Context) -> UIViewController {
         MainViewControllerKt.MainViewController()
     }
 
-    internal func updateUIViewController(_: UIViewControllerType, _: Context) {
+    internal func updateUIViewController(_: UIViewController, context: Context) {
         // no-op
     }
 }
