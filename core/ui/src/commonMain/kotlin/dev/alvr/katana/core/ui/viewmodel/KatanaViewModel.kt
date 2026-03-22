@@ -13,20 +13,17 @@ import dev.alvr.katana.core.domain.usecases.FlowEitherUseCase
 import dev.alvr.katana.core.domain.usecases.FlowOptionUseCase
 import dev.alvr.katana.core.domain.usecases.OptionUseCase
 import kotlinx.atomicfu.atomic
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -36,10 +33,9 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
     internal val dispatcher by inject<KatanaDispatcher>()
 
     private val initialized = atomic(false)
-    private val mutex = Mutex()
 
     private val _uiState = MutableStateFlow(initialState)
-    private val _effects = Channel<E>()
+    private val _effects = Channel<E>(Channel.BUFFERED)
     private val intents = Channel<I>()
 
     private val viewModelLogTag
@@ -50,7 +46,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         _uiState
             .onSubscribe(::onCreate)
             .stateIn(
-                scope = viewModelScope + dispatcher.coroutineContext,
+                scope = viewModelScope + dispatcher.main,
                 started = SharingStarted.WhileSubscribed(SubscriptionDuration),
                 initialValue = initialState,
             )
@@ -69,24 +65,21 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
     }
 
     protected fun state(state: S.() -> S) {
-        viewModelScope.launch(dispatcher.main) {
-            mutex.withLock {
-                val prevState = currentState
-                val newState = state(prevState)
+        _uiState.update { prevState ->
+            val newState = state(prevState)
 
-                if (prevState != newState) {
-                    _uiState.value = newState
-
-                    Logger.d(tag = viewModelLogTag) {
-                        """
-                            |UiState changed:
-                            |  Previous: $prevState
-                            |  New       $newState
-                        """
-                            .trimMargin()
-                    }
+            if (prevState != newState) {
+                Logger.d(tag = viewModelLogTag) {
+                    """
+                        |UiState changed:
+                        |  Previous: $prevState
+                        |  New       $newState
+                    """
+                        .trimMargin()
                 }
             }
+
+            newState
         }
     }
 
@@ -99,7 +92,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
     }
 
     private fun collectIntents() {
-        viewModelScope.launch(dispatcher.main) { intents.consumeAsFlow().collect { intent -> handleIntent(intent) } }
+        viewModelScope.launch(dispatcher.main) { intents.receiveAsFlow().collect { intent -> handleIntent(intent) } }
     }
 
     protected open fun handleIntent(intent: I) {
@@ -151,12 +144,6 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
             useCase(params)
             useCase.flow.collect { result -> withContext(dispatcher.main) { result.fold(onEmpty, onSome) } }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelScope.coroutineContext.cancel()
-        dispatcher.cancel()
     }
 }
 

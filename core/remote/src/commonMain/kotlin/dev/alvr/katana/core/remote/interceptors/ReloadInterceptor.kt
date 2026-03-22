@@ -7,17 +7,18 @@ import com.apollographql.apollo.cache.normalized.CacheAndNetworkInterceptor
 import com.apollographql.apollo.cache.normalized.NetworkOnlyInterceptor
 import com.apollographql.apollo.interceptor.ApolloInterceptor
 import com.apollographql.apollo.interceptor.ApolloInterceptorChain
+import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.flow.Flow
 
 internal class ReloadInterceptor : ApolloInterceptor {
-    private var firstQuery = true
+    private val firstQuery = atomic(true)
 
     override fun <D : Operation.Data> intercept(
         request: ApolloRequest<D>,
         chain: ApolloInterceptorChain,
     ): Flow<ApolloResponse<D>> =
-        if (firstQuery) {
-            CacheAndNetworkInterceptor.intercept(request, chain).also { firstQuery = false }
+        if (firstQuery.compareAndSet(expect = true, update = false)) {
+            CacheAndNetworkInterceptor.intercept(request, chain)
         } else {
             NetworkOnlyInterceptor.intercept(request, chain)
         }
