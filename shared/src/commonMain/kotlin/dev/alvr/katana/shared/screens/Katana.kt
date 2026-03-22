@@ -49,14 +49,11 @@ internal fun Katana(
     val onItemClicked =
         remember(navigator) { { item: MainNavigationBarItem -> navigator.onNavigationBarItemClicked(item) } }
 
+    val isSelected = remember(currentNavEntry) { { item: MainNavigationBarItem -> currentNavEntry.hasRoute(item) } }
+
     val navigationBar =
         @Composable { type: KatanaNavigationBarType ->
-            KatanaNavigationBar(
-                items = items,
-                isSelected = { item -> currentNavEntry.hasRoute(item) },
-                onClick = onItemClicked,
-                type = type,
-            )
+            KatanaNavigationBar(items = items, isSelected = isSelected, onClick = onItemClicked, type = type)
         }
 
     Box(modifier = modifier) {

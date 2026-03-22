@@ -8,7 +8,7 @@
   <a href="https://github.com/alvr/katana/actions/workflows/katana.yml"><img alt="GitHub build status" src="https://img.shields.io/github/actions/workflow/status/alvr/katana/katana.yml?branch=develop&logo=github"/></a>
   <a href="https://app.codecov.io/gh/alvr/katana"><img alt="Code coverage" src="https://img.shields.io/codecov/c/gh/alvr/katana?logo=codecov&logoColor=white"></a>
   <br />
-  <a href="https://portal.testapp.io/apps/install/nvbRLRmegznkO"><img alt="Download latest beta" src="https://img.shields.io/badge/%F0%9F%A5%BC%F0%9F%A7%AA-download%20latest%20beta-%230F4C75"/></a>
+  <a href="https://dist.appcircle.io/home/static-profile?profileId=d92611cb-3c29-4783-a2af-3d940c430adf"><img alt="Download latest beta" src="https://img.shields.io/badge/%F0%9F%A5%BC%F0%9F%A7%AA-download%20latest%20beta-%230F4C75"/></a>
 </p>
 
 ---
