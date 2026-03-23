@@ -16,13 +16,14 @@ env:
   TZ: UTC
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
   cancel-stale-jobs:
     name: Cancel stale jobs
     runs-on: ubuntu-slim
+    permissions:
+      actions: write
     steps:
       - name: Cancel Stale Jobs
         uses: styfle/cancel-workflow-action@d07a454dad7609a92316b57b23c9ccfd4f59af66 # 0.13.1
@@ -78,6 +79,9 @@ jobs:
   static-analysis:
     name: Static analysis
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -192,6 +196,8 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [static-analysis, unit-tests]
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

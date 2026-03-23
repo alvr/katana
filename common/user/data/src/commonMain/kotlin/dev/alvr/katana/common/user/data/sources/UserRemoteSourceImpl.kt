@@ -26,10 +26,7 @@ internal class UserRemoteSourceImpl(private val client: ApolloClient) : UserRemo
             .query(UserInfoQuery())
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watchFiltered()
-            .map { res ->
-                @Suppress("USELESS_CAST")
-                res.dataAssertNoErrors().right() as Either<Failure, UserInfo>
-            }
+            .map<_, Either<Failure, UserInfo>> { res -> res.dataAssertNoErrors().right() }
             .catch { error ->
                 Logger.e(tag = LogTag, throwable = error) { "Was not possible to get the user info" }
 

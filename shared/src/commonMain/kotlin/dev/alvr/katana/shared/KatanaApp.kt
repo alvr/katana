@@ -7,6 +7,7 @@ import co.touchlab.kermit.platformLogWriter
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
 import coil3.disk.DiskCache
+import coil3.memory.MemoryCache
 import coil3.request.crossfade
 import dev.alvr.katana.core.common.KatanaBuildConfig
 import dev.alvr.katana.core.common.KatanaCachePath
@@ -40,7 +41,8 @@ private fun InitCoil() {
     setSingletonImageLoaderFactory { context ->
         ImageLoader.Builder(context)
             .crossfade(true)
-            .diskCache { DiskCache.Builder().directory(diskCacheDir).maxSizePercent(CoilMaxSizePercent).build() }
+            .memoryCache { MemoryCache.Builder().maxSizePercent(context, CoilMemoryCachePercent).build() }
+            .diskCache { DiskCache.Builder().directory(diskCacheDir).maxSizePercent(CoilDiskCachePercent).build() }
             .build()
     }
 }
@@ -51,5 +53,6 @@ private fun initNapier() {
     }
 }
 
-private const val CoilMaxSizePercent = 0.02
+private const val CoilDiskCachePercent = 0.25
+private const val CoilMemoryCachePercent = 0.05
 private const val CoilImagesPath = "images_cache"

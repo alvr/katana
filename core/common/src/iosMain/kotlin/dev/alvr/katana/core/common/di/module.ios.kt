@@ -17,14 +17,17 @@ internal actual fun katanaPathModule() = module {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-private fun createDirectoryPath(directory: ULong): Path =
-    NSFileManager.defaultManager
-        .URLForDirectory(
+private fun createDirectoryPath(directory: ULong): Path {
+    val url =
+        NSFileManager.defaultManager.URLForDirectory(
             directory = directory,
             appropriateForURL = null,
             create = false,
             inDomain = NSUserDomainMask,
             error = null,
-        )!!
-        .path!!
-        .toPath()
+        ) ?: error("Failed to resolve system directory for type: $directory")
+
+    val path = url.path ?: error("Resolved directory URL has no path: $url")
+
+    return path.toPath()
+}
