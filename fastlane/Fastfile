@@ -26,13 +26,54 @@ platform :android do
     )
   end
 
-  desc "Build Android Release AAB"
+  desc "Build & Publish Android Release AAB"
   lane :build_deploy_release do
     gradle(
       project_dir: ".",
-      task: "bundleRelease",
+      task: "bundleRelease assembleRelease",
       properties: { "katana.flavor" => "release" },
     )
+    upload_to_play_store(
+      package_name: "dev.alvr.katana",
+      aab: lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH],
+      track: "internal",
+      release_status: "completed",
+      mapping: "app-android/build/outputs/mapping/release/mapping.txt",
+      json_key_data: ENV["GOOGLE_PLAY_SERVICE_ACCOUNT"],
+      skip_upload_apk: true,
+    )
+
+    tag = ENV["GITHUB_REF_NAME"]
+    changelog = changelog_from_git_commits(
+      pretty: "- %s",
+      merge_commit_filtering: "exclude_merges",
+    )
+
+    assets = [
+      lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
+      lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH],
+    ]
+
+    existing = get_github_release(
+      url: ENV["GITHUB_REPOSITORY"],
+      version: tag,
+      api_token: ENV["GITHUB_TOKEN"],
+    )
+
+    if existing
+      assets.each do |asset|
+        sh("gh", "release", "upload", tag, asset, "--clobber")
+      end
+    else
+      set_github_release(
+        repository_name: ENV["GITHUB_REPOSITORY"],
+        api_token: ENV["GITHUB_TOKEN"],
+        tag_name: tag,
+        name: tag,
+        description: changelog,
+        upload_assets: assets,
+      )
+    end
   end
 end
 
