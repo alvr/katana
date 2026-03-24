@@ -17,16 +17,17 @@ platform :android do
       task: "assembleBeta",
       properties: { "katana.flavor" => "beta" },
     )
+    commit = last_git_commit
     appcircle_testing_distribution(
       personalAPIToken: ENV["AC_PERSONAL_API_TOKEN"],
       profileName: ENV["AC_PROFILE_NAME"],
       appPath: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
-      message: "Android Beta",
+      message: commit[:message],
     )
   end
 
   desc "Build Android Release AAB"
-  lane :build_release do
+  lane :build_deploy_release do
     gradle(
       project_dir: ".",
       task: "bundleRelease",
@@ -62,16 +63,17 @@ platform :ios do
       xcargs: "KATANA_FLAVOR=beta",
       clean: true,
     )
+    commit = last_git_commit
     appcircle_testing_distribution(
       personalAPIToken: ENV["AC_PERSONAL_API_TOKEN"],
       profileName: ENV["AC_PROFILE_NAME"],
       appPath: lane_context[SharedValues::IPA_OUTPUT_PATH],
-      message: "iOS Beta",
+      message: commit[:message],
     )
   end
 
   desc "Build iOS Release"
-  lane :build_release do
+  lane :build_deploy_release do
     build_ios_app(
       project: IOS_PROJECT,
       scheme: IOS_SCHEME,
