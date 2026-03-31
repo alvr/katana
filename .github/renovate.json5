@@ -75,6 +75,7 @@
             "groupName": "GitHub Actions",
             "groupSlug": "github-actions",
             "matchManagers": ["github-actions"],
+            "schedule": ["on saturday"],
         },
         {
             "automerge": false,
