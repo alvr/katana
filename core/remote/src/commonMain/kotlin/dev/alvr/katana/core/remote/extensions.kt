@@ -6,7 +6,6 @@ import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.api.Operation
 import com.apollographql.apollo.api.Optional
 import com.apollographql.apollo.api.Query
-import com.apollographql.apollo.cache.normalized.watch
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.exception.ApolloNetworkException
 import com.apollographql.apollo.exception.CacheMissException
@@ -15,6 +14,7 @@ import com.apollographql.apollo.exception.HttpCacheMissException
 import com.apollographql.apollo.exception.JsonDataException
 import com.apollographql.apollo.exception.JsonEncodingException
 import com.apollographql.apollo.exception.NoDataException
+import com.apollographql.cache.normalized.watch
 import dev.alvr.katana.core.domain.failures.Failure
 import kotlinx.coroutines.flow.filterNot
 

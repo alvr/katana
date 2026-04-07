@@ -6,21 +6,19 @@ import co.touchlab.kermit.Logger
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.http.HttpRequest
 import com.apollographql.apollo.api.http.HttpResponse
-import com.apollographql.apollo.cache.normalized.FetchPolicy
-import com.apollographql.apollo.cache.normalized.api.CacheKey
-import com.apollographql.apollo.cache.normalized.api.CacheKeyGenerator
-import com.apollographql.apollo.cache.normalized.api.CacheKeyGeneratorContext
-import com.apollographql.apollo.cache.normalized.fetchPolicy
-import com.apollographql.apollo.cache.normalized.normalizedCache
 import com.apollographql.apollo.interceptor.ApolloInterceptor
 import com.apollographql.apollo.network.http.HttpInterceptor
 import com.apollographql.apollo.network.http.HttpInterceptorChain
 import com.apollographql.apollo.network.http.LoggingInterceptor
+import com.apollographql.cache.normalized.FetchPolicy
+import com.apollographql.cache.normalized.fetchPolicy
+import com.apollographql.cache.normalized.normalizedCache
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.usecases.DeleteAnilistTokenUseCase
 import dev.alvr.katana.common.session.domain.usecases.GetAnilistTokenUseCase
 import dev.alvr.katana.core.common.KatanaBuildConfig
 import dev.alvr.katana.core.domain.usecases.invoke
+import dev.alvr.katana.core.remote.cache.Cache as CacheConfig
 import dev.alvr.katana.core.remote.interceptors.ReloadInterceptor
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
@@ -40,16 +38,6 @@ private enum class Interceptor {
 
 private val apolloClientModule = module {
     single {
-        val cacheKeyGenerator =
-            object : CacheKeyGenerator {
-                override fun cacheKeyForObject(obj: Map<String, Any?>, context: CacheKeyGeneratorContext): CacheKey? =
-                    if (obj[CACHE_ID_KEY] != null && obj[CACHE_TYPE_KEY] != null) {
-                        CacheKey(obj[CACHE_TYPE_KEY].toString(), obj[CACHE_ID_KEY].toString())
-                    } else {
-                        null
-                    }
-            }
-
         ApolloClient.Builder()
             .serverUrl(ANILIST_BASE_URL)
             .addHttpInterceptor(get(named(Interceptor.GET_TOKEN)))
@@ -58,7 +46,8 @@ private val apolloClientModule = module {
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .normalizedCache(
                 normalizedCacheFactory = get(),
-                cacheKeyGenerator = cacheKeyGenerator,
+                typePolicies = CacheConfig.typePolicies,
+                fieldPolicies = CacheConfig.fieldPolicies,
                 writeToCacheAsynchronously = true,
             )
             .build()
@@ -126,8 +115,6 @@ val coreRemoteModule = module { includes(apolloClientModule, apolloDatabaseModul
 private const val ANILIST_BASE_URL = "https://graphql.anilist.co"
 
 internal const val CACHE_DATABASE = "katana_data.db"
-private const val CACHE_ID_KEY = "id"
-private const val CACHE_TYPE_KEY = "__typename"
 
 private const val HTTP_BAD_REQUEST = 400
 private const val HTTP_UNAUTHORIZED = 401
