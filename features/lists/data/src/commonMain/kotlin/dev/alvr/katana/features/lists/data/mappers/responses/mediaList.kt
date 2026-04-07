@@ -4,26 +4,23 @@ import dev.alvr.katana.core.common.orZero
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
-import dev.alvr.katana.features.lists.data.fragment.MediaEntry as MediaEntryFragment
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
+import dev.alvr.katana.features.lists.data.fragment.MediaEntry as MediaEntryFragment
 
-internal operator fun <T : MediaEntry> MediaListCollectionQuery.Data.invoke(type: MediaType): List<MediaListGroup<T>> =
-    mediaListCollection
-        .listsFilterNotNull()
+internal inline operator fun <reified T : MediaEntry> MediaListCollectionQuery.Data.invoke(
+    type: MediaType
+): List<MediaListGroup<T>> =
+    mediaListCollection.lists
         .map { list ->
-            MediaListGroup(
-                name = list.name,
-                entries = list.entriesFilterNotNull().map { entry -> entry.toModel<T>(type) }.toList(),
-            )
+            MediaListGroup(name = list.name, entries = list.entries.map { entry -> entry.toModel<T>(type) }.toList())
         }
         .sortedBy { sortLists(type, it.name) }
 
-@Suppress("UNCHECKED_CAST")
-private fun <T : MediaEntry> MediaListCollectionQuery.Entry.toModel(type: MediaType) =
+private inline fun <reified T : MediaEntry> MediaListCollectionQuery.Entry.toModel(type: MediaType) =
     with(mediaListEntry) {
         MediaListEntry(
             list =

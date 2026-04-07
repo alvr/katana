@@ -5,8 +5,8 @@ import arrow.core.left
 import arrow.core.right
 import co.touchlab.kermit.Logger
 import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.cache.normalized.fetchPolicyInterceptor
 import com.apollographql.apollo.interceptor.ApolloInterceptor
+import com.apollographql.cache.normalized.fetchPolicyInterceptor
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.core.common.catchUnit
 import dev.alvr.katana.core.remote.executeOrThrow
@@ -43,7 +43,7 @@ internal class ListsRemoteSourceImpl(
                 error.toFailure(network = ListsFailure.UpdatingList, response = ListsFailure.UpdatingList)
             }
 
-    private fun <T : MediaEntry> getMediaCollection(type: MediaType) = flow {
+    private inline fun <reified T : MediaEntry> getMediaCollection(type: MediaType) = flow {
         val response =
             client
                 .query(MediaListCollectionQuery(userId.getId().optional, type))
