@@ -62,6 +62,8 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
                     project.file("src/commonMain/graphql/extra.graphqls"),
                 )
 
+                dataBuildersOutputDirConnection { connectToKotlinSourceSet("commonMain") }
+
                 introspection {
                     endpointUrl = "https://graphql.anilist.co"
                     schemaFile = project.file("src/commonMain/graphql/schema.graphqls")

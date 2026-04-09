@@ -16,10 +16,13 @@ import com.apollographql.mockserver.enqueueString
 import com.benasher44.uuid.uuid4
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.core.domain.failures.Failure
+import dev.alvr.katana.core.remote.builder.Data
+import dev.alvr.katana.core.remote.builder.buildMediaListCollection
+import dev.alvr.katana.core.remote.builder.buildMediaListOptions
+import dev.alvr.katana.core.remote.builder.buildMediaListTypeOptions
+import dev.alvr.katana.core.remote.builder.buildUser
 import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.type.MediaType
-import dev.alvr.katana.core.remote.type.buildMediaListCollection
-import dev.alvr.katana.core.remote.type.buildUser
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
@@ -131,7 +134,13 @@ internal class ListsRemoteSourceTest : FreeSpec() {
             MediaListCollectionQuery.Data {
                 this["MediaListCollection"] = buildMediaListCollection {
                     lists = emptyList()
-                    user = buildUser {}
+                    user = buildUser {
+                        id = USER_ID
+                        mediaListOptions = buildMediaListOptions {
+                            animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                            mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                        }
+                    }
                 }
             }
 

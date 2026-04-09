@@ -4,12 +4,12 @@ import dev.alvr.katana.core.common.orZero
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
+import dev.alvr.katana.features.lists.data.fragment.MediaEntry as MediaEntryFragment
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
-import dev.alvr.katana.features.lists.data.fragment.MediaEntry as MediaEntryFragment
 
 internal inline operator fun <reified T : MediaEntry> MediaListCollectionQuery.Data.invoke(
     type: MediaType

@@ -12,13 +12,12 @@ import com.apollographql.apollo.network.http.HttpInterceptorChain
 import com.apollographql.apollo.network.http.LoggingInterceptor
 import com.apollographql.cache.normalized.FetchPolicy
 import com.apollographql.cache.normalized.fetchPolicy
-import com.apollographql.cache.normalized.normalizedCache
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.usecases.DeleteAnilistTokenUseCase
 import dev.alvr.katana.common.session.domain.usecases.GetAnilistTokenUseCase
 import dev.alvr.katana.core.common.KatanaBuildConfig
 import dev.alvr.katana.core.domain.usecases.invoke
-import dev.alvr.katana.core.remote.cache.Cache as CacheConfig
+import dev.alvr.katana.core.remote.cache.Cache.cache
 import dev.alvr.katana.core.remote.interceptors.ReloadInterceptor
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
@@ -44,12 +43,7 @@ private val apolloClientModule = module {
             .addHttpInterceptor(get(named(Interceptor.DELETE_TOKEN)))
             .addHttpInterceptor(get(named(Interceptor.LOGGING)))
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
-            .normalizedCache(
-                normalizedCacheFactory = get(),
-                typePolicies = CacheConfig.typePolicies,
-                fieldPolicies = CacheConfig.fieldPolicies,
-                writeToCacheAsynchronously = true,
-            )
+            .cache(normalizedCacheFactory = get(), writeToCacheAsynchronously = true)
             .build()
     }
 }

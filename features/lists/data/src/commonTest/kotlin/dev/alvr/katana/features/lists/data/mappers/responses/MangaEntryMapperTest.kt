@@ -3,7 +3,6 @@ package dev.alvr.katana.features.lists.data.mappers.responses
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.remote.type.MediaFormat
-import dev.alvr.katana.core.tests.random
 import dev.alvr.katana.features.lists.data.fragment.MediaEntry as MediaEntryFragment
 import dev.alvr.katana.features.lists.domain.models.ItemMediaId
 import dev.alvr.katana.features.lists.domain.models.entries.CommonMediaEntry
@@ -16,14 +15,15 @@ internal class MangaEntryMapperTest :
         "an entry with null values" {
             val entry =
                 MediaEntryFragment(
-                    __typename = String.random,
+                    __typename = "MediaEntry",
                     id = Int.zero,
-                    title = MediaEntryFragment.Title(String.empty),
+                    title = MediaEntryFragment.Title(__typename = "MediaEntryTitle", userPreferred = String.empty),
                     episodes = null,
                     chapters = null,
                     volumes = null,
                     format = null,
-                    coverImage = MediaEntryFragment.CoverImage(String.empty),
+                    coverImage =
+                        MediaEntryFragment.CoverImage(__typename = "MediaEntryCoverImage", large = String.empty),
                     nextAiringEpisode = null,
                 )
             entry.mangaEntry().also { result ->
@@ -46,14 +46,15 @@ internal class MangaEntryMapperTest :
         "an entry with null values but data classes with null" {
             val entry =
                 MediaEntryFragment(
-                    __typename = String.random,
+                    __typename = "MediaEntry",
                     id = Int.zero,
-                    title = MediaEntryFragment.Title(String.empty),
+                    title = MediaEntryFragment.Title(__typename = "MediaEntryTitle", userPreferred = String.empty),
                     episodes = null,
                     chapters = null,
                     volumes = null,
                     format = null,
-                    coverImage = MediaEntryFragment.CoverImage(String.empty),
+                    coverImage =
+                        MediaEntryFragment.CoverImage(__typename = "MediaEntryCoverImage", large = String.empty),
                     nextAiringEpisode = null,
                 )
 
@@ -77,14 +78,18 @@ internal class MangaEntryMapperTest :
         "an entry with all properties" {
             val entry =
                 MediaEntryFragment(
-                    __typename = String.random,
+                    __typename = "MediaEntry",
                     id = Int.zero,
-                    title = MediaEntryFragment.Title("One Piece"),
+                    title = MediaEntryFragment.Title(__typename = "MediaEntryTitle", userPreferred = "One Piece"),
                     episodes = null,
                     chapters = 1046,
                     volumes = 101,
                     format = MediaFormat.MANGA,
-                    coverImage = MediaEntryFragment.CoverImage("https://placehold.co/128x256"),
+                    coverImage =
+                        MediaEntryFragment.CoverImage(
+                            __typename = "MediaEntryCoverImage",
+                            large = "https://placehold.co/128x256",
+                        ),
                     nextAiringEpisode = null,
                 )
 
