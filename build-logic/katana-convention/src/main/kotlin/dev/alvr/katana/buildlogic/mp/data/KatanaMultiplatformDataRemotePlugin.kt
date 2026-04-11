@@ -1,8 +1,8 @@
 package dev.alvr.katana.buildlogic.mp.data
 
-import com.apollographql.apollo.annotations.ApolloExperimental
 import com.apollographql.apollo.gradle.api.ApolloExtension
 import dev.alvr.katana.buildlogic.bundleImplementation
+import dev.alvr.katana.buildlogic.catalogLib
 import dev.alvr.katana.buildlogic.fullPackageName
 import dev.alvr.katana.buildlogic.kspDependencies
 import dev.alvr.katana.buildlogic.mp.androidHostTest
@@ -15,7 +15,6 @@ import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
-
     override fun apply(target: Project) =
         with(target) {
             apply(plugin = "katana.multiplatform.core")
@@ -44,14 +43,15 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
         }
     }
 
-    @OptIn(ApolloExperimental::class)
     private fun ApolloExtension.configureApollo(project: Project) {
         service("anilist") {
             decapitalizeFields = true
             generateAsInternal = true
             generateMethods = listOf("equalsHashCode")
             packageName = project.fullPackageName
-            warnOnDeprecatedUsages = true
+
+            plugin(project.catalogLib("apollo-cache-plugin"))
+            pluginArgument("com.apollographql.cache.packageName", packageName.get())
 
             if (project.path == CORE_PROJECT) {
                 generateApolloMetadata = true
@@ -61,6 +61,8 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
                     project.file("src/commonMain/graphql/schema.graphqls"),
                     project.file("src/commonMain/graphql/extra.graphqls"),
                 )
+
+                dataBuildersOutputDirConnection { connectToKotlinSourceSet("commonMain") }
 
                 introspection {
                     endpointUrl = "https://graphql.anilist.co"

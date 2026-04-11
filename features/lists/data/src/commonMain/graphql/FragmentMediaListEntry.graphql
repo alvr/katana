@@ -1,6 +1,6 @@
 fragment mediaListEntry on MediaList {
-    id @nonnull
-    score @nonnull
+    id
+    score
     progress
     progressVolumes
     repeat
@@ -18,7 +18,7 @@ fragment mediaListEntry on MediaList {
         month
         day
     }
-    media @nonnull {
+    media {
         ...mediaEntry
     }
 }

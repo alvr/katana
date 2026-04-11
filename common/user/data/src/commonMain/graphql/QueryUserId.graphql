@@ -1,5 +1,5 @@
 query UserIdQuery {
-    Viewer @nonnull {
-        id @nonnull
+    Viewer {
+        id
     }
 }

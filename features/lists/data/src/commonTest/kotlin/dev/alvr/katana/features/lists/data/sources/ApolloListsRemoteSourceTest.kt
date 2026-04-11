@@ -11,20 +11,21 @@ import com.apollographql.apollo.testing.registerTestResponse
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
+import dev.alvr.katana.core.remote.builder.Data
+import dev.alvr.katana.core.remote.builder.buildAiringSchedule
+import dev.alvr.katana.core.remote.builder.buildFuzzyDate
+import dev.alvr.katana.core.remote.builder.buildMedia
+import dev.alvr.katana.core.remote.builder.buildMediaCoverImage
+import dev.alvr.katana.core.remote.builder.buildMediaList
+import dev.alvr.katana.core.remote.builder.buildMediaListCollection
+import dev.alvr.katana.core.remote.builder.buildMediaListGroup
+import dev.alvr.katana.core.remote.builder.buildMediaListOptions
+import dev.alvr.katana.core.remote.builder.buildMediaListTypeOptions
+import dev.alvr.katana.core.remote.builder.buildMediaTitle
+import dev.alvr.katana.core.remote.builder.buildUser
 import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.type.MediaFormat
 import dev.alvr.katana.core.remote.type.MediaType
-import dev.alvr.katana.core.remote.type.buildAiringSchedule
-import dev.alvr.katana.core.remote.type.buildFuzzyDate
-import dev.alvr.katana.core.remote.type.buildMedia
-import dev.alvr.katana.core.remote.type.buildMediaCoverImage
-import dev.alvr.katana.core.remote.type.buildMediaList
-import dev.alvr.katana.core.remote.type.buildMediaListCollection
-import dev.alvr.katana.core.remote.type.buildMediaListGroup
-import dev.alvr.katana.core.remote.type.buildMediaListOptions
-import dev.alvr.katana.core.remote.type.buildMediaListTypeOptions
-import dev.alvr.katana.core.remote.type.buildMediaTitle
-import dev.alvr.katana.core.remote.type.buildUser
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
@@ -72,7 +73,16 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                 "the collection has no lists" {
                     val query =
                         MediaListCollectionQuery.Data {
-                            this["MediaListCollection"] = buildMediaListCollection { lists = emptyList() }
+                            this["MediaListCollection"] = buildMediaListCollection {
+                                lists = emptyList()
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
+                            }
                         }
 
                     client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.ANIME), query)
@@ -104,10 +114,12 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                         },
                                     )
                                 user = buildUser {
+                                    id = 37_384
                                     mediaListOptions = buildMediaListOptions {
                                         animeList = buildMediaListTypeOptions {
                                             sectionOrder = listOf("Watching", "Completed TV", "Custom List")
                                         }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                     }
                                 }
                             }
@@ -139,6 +151,8 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                 listOf(
                                                     buildMediaList {
                                                         id = Int.zero
+                                                        mediaId = 100
+                                                        userId = 37_384
                                                         score = Double.zero
                                                         progress = null
                                                         progressVolumes = null
@@ -160,6 +174,13 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                 )
                                         }
                                     )
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
                             }
                         }
 
@@ -212,6 +233,8 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                 listOf(
                                                     buildMediaList {
                                                         id = 100
+                                                        mediaId = 100
+                                                        userId = 37_384
                                                         score = 7.3
                                                         progress = 12
                                                         progressVolumes = null
@@ -238,14 +261,23 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                                 large = "https://placehold.co/128x256"
                                                             }
                                                             nextAiringEpisode = buildAiringSchedule {
+                                                                id = 1
                                                                 airingAt = 1_649_790_000
                                                                 episode = 13
+                                                                mediaId = 100
                                                             }
                                                         }
                                                     }
                                                 )
                                         }
                                     )
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
                             }
                         }
 
@@ -317,7 +349,16 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                 "the collection has no lists" {
                     val query =
                         MediaListCollectionQuery.Data {
-                            this["MediaListCollection"] = buildMediaListCollection { lists = emptyList() }
+                            this["MediaListCollection"] = buildMediaListCollection {
+                                lists = emptyList()
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
+                            }
                         }
 
                     client.registerTestResponse(MediaListCollectionQuery(userIdOpt, MediaType.MANGA), query)
@@ -350,7 +391,9 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                         },
                                     )
                                 user = buildUser {
+                                    id = 37_384
                                     mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                         mangaList = buildMediaListTypeOptions {
                                             sectionOrder = listOf("Custom List", "Reading", "Rereading")
                                         }
@@ -385,6 +428,8 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                 listOf(
                                                     buildMediaList {
                                                         id = Int.zero
+                                                        mediaId = 100
+                                                        userId = 37_384
                                                         score = Double.zero
                                                         progress = null
                                                         progressVolumes = null
@@ -407,6 +452,13 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                 )
                                         }
                                     )
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
                             }
                         }
 
@@ -459,6 +511,8 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                 listOf(
                                                     buildMediaList {
                                                         id = 100
+                                                        mediaId = 100
+                                                        userId = 37_384
                                                         score = 7.3
                                                         progress = 12
                                                         progressVolumes = 1
@@ -491,6 +545,13 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                 )
                                         }
                                     )
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
                             }
                         }
 

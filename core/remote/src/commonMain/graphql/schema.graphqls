@@ -82,12 +82,12 @@ type Query {
   ActivityReply("Filter by the reply id" id: Int, "Filter by the parent id" activityId: Int): ActivityReply
 
   """
-  Follow query
+  Following query
   """
   Following("User id of the follower/followed" userId: Int!, "The order the results will be returned in" sort: [UserSort]): User
 
   """
-  Follow query
+  Follower query
   """
   Follower("User id of the follower/followed" userId: Int!, "The order the results will be returned in" sort: [UserSort]): User
 
@@ -128,6 +128,12 @@ type Query {
   """
   ExternalLinkSourceCollection("Filter by the link id" id: Int, type: ExternalLinkType, mediaType: ExternalLinkMediaType): [MediaExternalLink]
 }
+
+"""
+The `Int` scalar type represents non-fractional signed whole numeric
+values. Int can represent values between -(2^31) and 2^31 - 1. 
+"""
+scalar Int
 
 """
 Page of data
@@ -201,6 +207,18 @@ type PageInfo {
   """
   hasNextPage: Boolean
 }
+
+"""
+The `Boolean` scalar type represents `true` or `false`.
+"""
+scalar Boolean
+
+"""
+The `String` scalar type represents textual data, represented as UTF-8
+character sequences. The String type is most often used by GraphQL to
+represent free-form human-readable text.
+"""
+scalar String
 
 """
 User sort enums
@@ -357,6 +375,7 @@ type UserAvatar {
   medium: String
 }
 
+""""""
 scalar Json
 
 """
@@ -552,6 +571,21 @@ enum NotificationType {
   An anime or manga on the user's list has been deleted from the site
   """
   MEDIA_DELETION
+
+  """
+  A user's submission has been accepted, partially accepted, or rejected
+  """
+  MEDIA_SUBMISSION_UPDATE
+
+  """
+  A user's staff submission has been accepted, partially accepted, or rejected
+  """
+  STAFF_SUBMISSION_UPDATE
+
+  """
+  A user's character submission has been accepted, partially accepted, or rejected
+  """
+  CHARACTER_SUBMISSION_UPDATE
 }
 
 """
@@ -2562,6 +2596,13 @@ type MediaList {
 }
 
 """
+The `Float` scalar type represents signed double-precision fractional
+values as specified by
+[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
+"""
+scalar Float
+
+"""
 Review sort enums
 """
 enum ReviewSort {
@@ -3494,7 +3535,7 @@ enum AiringSort {
 """
 Notification union type
 """
-union NotificationUnion = AiringNotification|FollowingNotification|ActivityMessageNotification|ActivityMentionNotification|ActivityReplyNotification|ActivityReplySubscribedNotification|ActivityLikeNotification|ActivityReplyLikeNotification|ThreadCommentMentionNotification|ThreadCommentReplyNotification|ThreadCommentSubscribedNotification|ThreadCommentLikeNotification|ThreadLikeNotification|RelatedMediaAdditionNotification|MediaDataChangeNotification|MediaMergeNotification|MediaDeletionNotification
+union NotificationUnion = AiringNotification|FollowingNotification|ActivityMessageNotification|ActivityMentionNotification|ActivityReplyNotification|ActivityReplySubscribedNotification|ActivityLikeNotification|ActivityReplyLikeNotification|ThreadCommentMentionNotification|ThreadCommentReplyNotification|ThreadCommentSubscribedNotification|ThreadCommentLikeNotification|ThreadLikeNotification|RelatedMediaAdditionNotification|MediaDataChangeNotification|MediaMergeNotification|MediaDeletionNotification|MediaSubmissionUpdateNotification|StaffSubmissionUpdateNotification|CharacterSubmissionUpdateNotification
 
 """
 Notification for when an episode of anime airs
@@ -4797,6 +4838,131 @@ type MediaDeletionNotification {
 }
 
 """
+Notification for when a media submission is accepted, partially accepted, or rejected
+"""
+type MediaSubmissionUpdateNotification {
+  """
+  The id of the Notification
+  """
+  id: Int!
+
+  """
+  The type of notification
+  """
+  type: NotificationType
+
+  """
+  The notification context text
+  """
+  contexts: [String]
+
+  """
+  The status of the submission
+  """
+  status: String
+
+  """
+  The notes of the submission
+  """
+  notes: String
+
+  """
+  The time the notification was created at
+  """
+  createdAt: Int
+
+  """
+  The media that was created or modified. If this submission was to create a new media and it was rejected, this will be null.
+  """
+  media: Media
+
+  """
+  The title of the media that was submitted. If this submission was to edit an existing media, this will be null.
+  """
+  submittedTitle: String
+}
+
+"""
+Notification for when a staff submission is accepted, partially accepted, or rejected
+"""
+type StaffSubmissionUpdateNotification {
+  """
+  The id of the Notification
+  """
+  id: Int!
+
+  """
+  The type of notification
+  """
+  type: NotificationType
+
+  """
+  The notification context text
+  """
+  contexts: [String]
+
+  """
+  The status of the submission
+  """
+  status: String
+
+  """
+  The notes of the submission
+  """
+  notes: String
+
+  """
+  The time the notification was created at
+  """
+  createdAt: Int
+
+  """
+  The staff that was modified.
+  """
+  staff: Staff
+}
+
+"""
+Notification for when a character submission is accepted, partially accepted, or rejected
+"""
+type CharacterSubmissionUpdateNotification {
+  """
+  The id of the Notification
+  """
+  id: Int!
+
+  """
+  The type of notification
+  """
+  type: NotificationType
+
+  """
+  The notification context text
+  """
+  contexts: [String]
+
+  """
+  The status of the submission
+  """
+  status: String
+
+  """
+  The notes of the submission
+  """
+  notes: String
+
+  """
+  The time the notification was created at
+  """
+  createdAt: Int
+
+  """
+  The character that was modified.
+  """
+  character: Character
+}
+
+"""
 Activity sort enums
 """
 enum ActivitySort {
@@ -5848,6 +6014,15 @@ type UserModData {
 }
 
 """
+The `ID` scalar type represents a unique identifier, often used to
+refetch an object or as key for a cache. The ID type appears in a JSON
+response as a String; however, it is not intended to be human-readable.
+When expected as an input type, any string (such as `"4"`) or integer
+(such as `4`) input value will be accepted as an ID.
+"""
+scalar ID
+
+"""
 A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations.
 """
 type __Schema {
@@ -6112,19 +6287,20 @@ enum __DirectiveLocation {
 """
 Directs the executor to include this field or fragment only when the `if` argument is true.
 """
-directive @include ("Included when true." if: Boolean!) on FIELD|FRAGMENT_SPREAD|INLINE_FRAGMENT
+directive @include("Included when true." if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
 
 """
 Directs the executor to skip this field or fragment when the `if` argument is true.
 """
-directive @skip ("Skipped when true." if: Boolean!) on FIELD|FRAGMENT_SPREAD|INLINE_FRAGMENT
+directive @skip("Skipped when true." if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
 
 """
 Marks an element of a GraphQL schema as no longer supported.
 """
-directive @deprecated ("Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted in [Markdown](https://daringfireball.net/projects/markdown/)." reason: String = "No longer supported") on FIELD_DEFINITION|ENUM_VALUE
+directive @deprecated("Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted in [Markdown](https://daringfireball.net/projects/markdown/)." reason: String = "No longer supported") on FIELD_DEFINITION | ENUM_VALUE
 
 schema {
   query: Query
   mutation: Mutation
 }
+

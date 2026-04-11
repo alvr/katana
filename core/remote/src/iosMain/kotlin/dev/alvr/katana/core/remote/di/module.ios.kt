@@ -1,7 +1,7 @@
 package dev.alvr.katana.core.remote.di
 
-import com.apollographql.apollo.cache.normalized.api.NormalizedCacheFactory
-import com.apollographql.apollo.cache.normalized.sql.SqlNormalizedCacheFactory
+import com.apollographql.cache.normalized.api.NormalizedCacheFactory
+import com.apollographql.cache.normalized.sql.SqlNormalizedCacheFactory
 import org.koin.core.module.Module
 import org.koin.dsl.module
 

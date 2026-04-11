@@ -2,7 +2,8 @@
 android = "9.1.0"
 androidx-activity = "1.13.0"
 androidx-splashscreen = "1.2.0"
-apollo = "4.4.2"
+apollo = "5.0.0-alpha.7"
+apollo-cache = "1.0.1"
 apollo-mockserver = "0.3.1"
 arrow = "2.2.2.1"
 coil = "3.4.0"
@@ -63,8 +64,9 @@ androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.re
 
 # Apollo
 apollo = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo" }
-apollo-cache = { module = "com.apollographql.apollo:apollo-normalized-cache", version.ref = "apollo" }
-apollo-cache-sqlite = { module = "com.apollographql.apollo:apollo-normalized-cache-sqlite", version.ref = "apollo" }
+apollo-cache = { module = "com.apollographql.cache:normalized-cache", version.ref = "apollo-cache" }
+apollo-cache-plugin = { module = "com.apollographql.cache:normalized-cache-apollo-compiler-plugin", version.ref = "apollo-cache" }
+apollo-cache-sqlite = { module = "com.apollographql.cache:normalized-cache-sqlite", version.ref = "apollo-cache" }
 apollo-mockserver = { module = "com.apollographql.mockserver:apollo-mockserver", version.ref = "apollo-mockserver" }
 apollo-test = { module = "com.apollographql.apollo:apollo-testing-support", version.ref = "apollo" }
 

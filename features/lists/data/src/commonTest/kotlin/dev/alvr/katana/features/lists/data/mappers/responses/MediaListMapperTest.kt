@@ -2,19 +2,20 @@ package dev.alvr.katana.features.lists.data.mappers.responses
 
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
+import dev.alvr.katana.core.remote.builder.Data
+import dev.alvr.katana.core.remote.builder.buildAiringSchedule
+import dev.alvr.katana.core.remote.builder.buildFuzzyDate
+import dev.alvr.katana.core.remote.builder.buildMedia
+import dev.alvr.katana.core.remote.builder.buildMediaCoverImage
+import dev.alvr.katana.core.remote.builder.buildMediaList
+import dev.alvr.katana.core.remote.builder.buildMediaListCollection
+import dev.alvr.katana.core.remote.builder.buildMediaListGroup
+import dev.alvr.katana.core.remote.builder.buildMediaListOptions
+import dev.alvr.katana.core.remote.builder.buildMediaListTypeOptions
+import dev.alvr.katana.core.remote.builder.buildMediaTitle
+import dev.alvr.katana.core.remote.builder.buildUser
 import dev.alvr.katana.core.remote.type.MediaFormat
 import dev.alvr.katana.core.remote.type.MediaType
-import dev.alvr.katana.core.remote.type.buildAiringSchedule
-import dev.alvr.katana.core.remote.type.buildFuzzyDate
-import dev.alvr.katana.core.remote.type.buildMedia
-import dev.alvr.katana.core.remote.type.buildMediaCoverImage
-import dev.alvr.katana.core.remote.type.buildMediaList
-import dev.alvr.katana.core.remote.type.buildMediaListCollection
-import dev.alvr.katana.core.remote.type.buildMediaListGroup
-import dev.alvr.katana.core.remote.type.buildMediaListOptions
-import dev.alvr.katana.core.remote.type.buildMediaListTypeOptions
-import dev.alvr.katana.core.remote.type.buildMediaTitle
-import dev.alvr.katana.core.remote.type.buildUser
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.ItemMediaId
@@ -49,7 +50,13 @@ internal class MediaListMapperTest :
             MediaListCollectionQuery.Data {
                     this["MediaListCollection"] = buildMediaListCollection {
                         lists = emptyList()
-                        user = buildUser {}
+                        user = buildUser {
+                            id = 37_384
+                            mediaListOptions = buildMediaListOptions {
+                                animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                            }
+                        }
                     }
                 }
                 .run {
@@ -69,6 +76,7 @@ internal class MediaListMapperTest :
                                 }
                             )
                         user = buildUser {
+                            id = 37_384
                             mediaListOptions = buildMediaListOptions {
                                 animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                 mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
@@ -95,7 +103,7 @@ internal class MediaListMapperTest :
                                         },
                                         buildMediaListGroup {
                                             name = "Watching"
-                                            entries = listOf(null)
+                                            entries = emptyList()
                                         },
                                         buildMediaListGroup {
                                             name = "Paused"
@@ -107,10 +115,12 @@ internal class MediaListMapperTest :
                                         },
                                     )
                                 user = buildUser {
+                                    id = 37_384
                                     mediaListOptions = buildMediaListOptions {
                                         animeList = buildMediaListTypeOptions {
                                             sectionOrder = listOf("Watching", "Rewatching", "Completed TV", "Paused")
                                         }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                     }
                                 }
                             }
@@ -136,7 +146,7 @@ internal class MediaListMapperTest :
                                         },
                                         buildMediaListGroup {
                                             name = "Watching"
-                                            entries = listOf(null)
+                                            entries = emptyList()
                                         },
                                         buildMediaListGroup {
                                             name = "Paused"
@@ -148,8 +158,10 @@ internal class MediaListMapperTest :
                                         },
                                     )
                                 user = buildUser {
+                                    id = 37_384
                                     mediaListOptions = buildMediaListOptions {
                                         animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                     }
                                 }
                             }
@@ -175,7 +187,7 @@ internal class MediaListMapperTest :
                                         },
                                         buildMediaListGroup {
                                             name = "Watching"
-                                            entries = listOf(null)
+                                            entries = emptyList()
                                         },
                                         buildMediaListGroup {
                                             name = "Paused"
@@ -186,7 +198,13 @@ internal class MediaListMapperTest :
                                             entries = emptyList()
                                         },
                                     )
-                                user = buildUser { mediaListOptions = buildMediaListOptions {} }
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
                             }
                         }
                         .invoke<MediaEntry.Anime>(MediaType.ANIME)
@@ -210,7 +228,7 @@ internal class MediaListMapperTest :
                                         },
                                         buildMediaListGroup {
                                             name = "Watching"
-                                            entries = listOf(null)
+                                            entries = emptyList()
                                         },
                                         buildMediaListGroup {
                                             name = "Paused"
@@ -222,8 +240,10 @@ internal class MediaListMapperTest :
                                         },
                                     )
                                 user = buildUser {
+                                    id = 37_384
                                     mediaListOptions = buildMediaListOptions {
-                                        animeList = buildMediaListTypeOptions {}
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                     }
                                 }
                             }
@@ -249,6 +269,8 @@ internal class MediaListMapperTest :
                                                 listOf(
                                                     buildMediaList {
                                                         id = 100
+                                                        mediaId = 100
+                                                        userId = 37_384
                                                         score = 7.3
                                                         progress = 12
                                                         progressVolumes = null
@@ -276,14 +298,23 @@ internal class MediaListMapperTest :
                                                                 large = "https://placehold.co/128x256"
                                                             }
                                                             nextAiringEpisode = buildAiringSchedule {
+                                                                id = 1
                                                                 airingAt = 1_649_790_000
                                                                 episode = 13
+                                                                mediaId = 100
                                                             }
                                                         }
                                                     }
                                                 )
                                         }
                                     )
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
                             }
                         }
                         .invoke<MediaEntry.Anime>(MediaType.ANIME)
@@ -334,6 +365,8 @@ internal class MediaListMapperTest :
                                                 listOf(
                                                     buildMediaList {
                                                         id = Int.zero
+                                                        mediaId = Int.zero
+                                                        userId = 37_384
                                                         score = Double.zero
                                                         progress = null
                                                         progressVolumes = null
@@ -356,6 +389,13 @@ internal class MediaListMapperTest :
                                                 )
                                         }
                                     )
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
                             }
                         }
                         .invoke<MediaEntry.Anime>(MediaType.ANIME)
@@ -409,7 +449,7 @@ internal class MediaListMapperTest :
                                         },
                                         buildMediaListGroup {
                                             name = "Paused"
-                                            entries = listOf(null)
+                                            entries = emptyList()
                                         },
                                         buildMediaListGroup {
                                             name = "Completed Novel"
@@ -417,7 +457,9 @@ internal class MediaListMapperTest :
                                         },
                                     )
                                 user = buildUser {
+                                    id = 37_384
                                     mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                         mangaList = buildMediaListTypeOptions {
                                             sectionOrder = listOf("Reading", "Rereading", "Completed Novel", "Paused")
                                         }
@@ -450,7 +492,7 @@ internal class MediaListMapperTest :
                                         },
                                         buildMediaListGroup {
                                             name = "Paused"
-                                            entries = listOf(null)
+                                            entries = emptyList()
                                         },
                                         buildMediaListGroup {
                                             name = "Completed Novel"
@@ -458,7 +500,9 @@ internal class MediaListMapperTest :
                                         },
                                     )
                                 user = buildUser {
+                                    id = 37_384
                                     mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                         mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                     }
                                 }
@@ -489,14 +533,20 @@ internal class MediaListMapperTest :
                                         },
                                         buildMediaListGroup {
                                             name = "Paused"
-                                            entries = listOf(null)
+                                            entries = emptyList()
                                         },
                                         buildMediaListGroup {
                                             name = "Completed Novel"
                                             entries = emptyList()
                                         },
                                     )
-                                user = buildUser { mediaListOptions = buildMediaListOptions {} }
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
                             }
                         }
                         .invoke<MediaEntry.Manga>(MediaType.MANGA)
@@ -524,7 +574,7 @@ internal class MediaListMapperTest :
                                         },
                                         buildMediaListGroup {
                                             name = "Paused"
-                                            entries = listOf(null)
+                                            entries = emptyList()
                                         },
                                         buildMediaListGroup {
                                             name = "Completed Novel"
@@ -532,8 +582,10 @@ internal class MediaListMapperTest :
                                         },
                                     )
                                 user = buildUser {
+                                    id = 37_384
                                     mediaListOptions = buildMediaListOptions {
-                                        mangaList = buildMediaListTypeOptions {}
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                     }
                                 }
                             }
@@ -559,6 +611,8 @@ internal class MediaListMapperTest :
                                                 listOf(
                                                     buildMediaList {
                                                         id = 100
+                                                        mediaId = 100
+                                                        userId = 37_384
                                                         score = 7.3
                                                         progress = 12
                                                         progressVolumes = 1
@@ -592,6 +646,13 @@ internal class MediaListMapperTest :
                                                 )
                                         }
                                     )
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
                             }
                         }
                         .invoke<MediaEntry.Manga>(MediaType.MANGA)
@@ -639,6 +700,8 @@ internal class MediaListMapperTest :
                                                 listOf(
                                                     buildMediaList {
                                                         id = Int.zero
+                                                        mediaId = Int.zero
+                                                        userId = 37_384
                                                         score = Double.zero
                                                         progress = null
                                                         progressVolumes = null
@@ -662,6 +725,13 @@ internal class MediaListMapperTest :
                                                 )
                                         }
                                     )
+                                user = buildUser {
+                                    id = 37_384
+                                    mediaListOptions = buildMediaListOptions {
+                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    }
+                                }
                             }
                         }
                         .invoke<MediaEntry.Manga>(MediaType.MANGA)

@@ -5,8 +5,8 @@ import arrow.core.left
 import arrow.core.right
 import co.touchlab.kermit.Logger
 import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.cache.normalized.FetchPolicy
-import com.apollographql.apollo.cache.normalized.fetchPolicy
+import com.apollographql.cache.normalized.FetchPolicy
+import com.apollographql.cache.normalized.fetchPolicy
 import dev.alvr.katana.common.user.data.UserIdQuery
 import dev.alvr.katana.common.user.data.UserInfoQuery
 import dev.alvr.katana.common.user.data.mappers.responses.invoke

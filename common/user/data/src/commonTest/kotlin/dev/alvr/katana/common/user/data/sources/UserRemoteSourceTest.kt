@@ -13,8 +13,9 @@ import dev.alvr.katana.common.user.domain.failures.UserFailure
 import dev.alvr.katana.common.user.domain.models.UserId
 import dev.alvr.katana.common.user.domain.models.UserInfo
 import dev.alvr.katana.core.domain.failures.Failure
-import dev.alvr.katana.core.remote.type.buildUser
-import dev.alvr.katana.core.remote.type.buildUserAvatar
+import dev.alvr.katana.core.remote.builder.Data
+import dev.alvr.katana.core.remote.builder.buildUser
+import dev.alvr.katana.core.remote.builder.buildUserAvatar
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import io.kotest.assertions.throwables.shouldThrowExactlyUnit
@@ -46,16 +47,16 @@ internal class UserRemoteSourceTest : FreeSpec() {
                         }
 
                         "the server returns a valid id" {
-                            val query = UserIdQuery.Data { this["Viewer"] = buildUser { id = 37_384 } }
+                            val query = UserIdQuery.Data { this["Viewer"] = buildUser { id = ID } }
                             client.registerTestResponse(UserIdQuery(), query)
-                            source.getUserId().shouldBeRight(UserId(37_384))
+                            source.getUserId().shouldBeRight(UserId(ID))
                         }
                     }
 
                 "saving" -
                     {
                         "is successful" {
-                            val query = UserIdQuery.Data { this["viewer"] = buildUser { id = 37_384 } }
+                            val query = UserIdQuery.Data { this["Viewer"] = buildUser { id = ID } }
                             client.registerTestResponse(UserIdQuery(), query)
                             source.saveUserId().shouldBeRight()
                         }
@@ -105,6 +106,7 @@ internal class UserRemoteSourceTest : FreeSpec() {
     }
 }
 
+private const val ID = 37_384
 private const val USER_NAME = "alvr"
 private const val AVATAR = "https://s4.anilist.co/file/anilistcdn/user/avatar/large/b37384-xJE9aA4X20Yr.png"
 private const val BANNER = "https://s4.anilist.co/file/anilistcdn/user/banner/37384-jtds8dpQIGVG.jpg"
@@ -113,6 +115,7 @@ private val validUserInfoData =
     listOf(
         UserInfoQuery.Data {
             this["Viewer"] = buildUser {
+                id = ID
                 name = USER_NAME
                 avatar = buildUserAvatar { large = AVATAR }
                 bannerImage = BANNER
@@ -120,6 +123,7 @@ private val validUserInfoData =
         } to UserInfo(username = USER_NAME, avatar = AVATAR, banner = BANNER),
         UserInfoQuery.Data {
             this["Viewer"] = buildUser {
+                id = ID
                 name = USER_NAME
                 avatar = buildUserAvatar { large = AVATAR }
                 bannerImage = null

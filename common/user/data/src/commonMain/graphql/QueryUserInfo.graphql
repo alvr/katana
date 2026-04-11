@@ -1,8 +1,8 @@
 query UserInfoQuery {
-    Viewer @nonnull {
-        name @nonnull
-        avatar @nonnull {
-            large @nonnull
+    Viewer {
+        name
+        avatar {
+            large
         }
         bannerImage
     }
