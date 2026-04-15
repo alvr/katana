@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion as KtVersion
 
 internal object KatanaConfiguration {
     const val CompileSdk = 36
+    const val CompileSdkMinor = 1
     const val BuildTools = "36.1.0"
     const val PackageName = "dev.alvr.katana"
     const val MinSdk = 23

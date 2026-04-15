@@ -11,11 +11,16 @@ import dev.alvr.katana.common.session.domain.failures.SessionFailure
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.preferences.di.store.KatanaStore
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) : SessionLocalSource {
     override val sessionActive =
         store.data
@@ -72,7 +77,7 @@ internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) :
     override suspend fun saveSession(anilistToken: AnilistToken) =
         Either.catch {
                 store.update { p -> p.copy(anilistToken = anilistToken, sessionActive = true) }
-                Logger.d(tag = LogTag) { "Token saved: ${anilistToken.token}" }
+                Logger.d(tag = LogTag) { "Token saved successfully" }
             }
             .mapLeft { error ->
                 Logger.e(tag = LogTag, throwable = error) { "There was an error saving the token" }

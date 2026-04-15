@@ -1,5 +1,6 @@
 package dev.alvr.katana.core.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +21,7 @@ fun KatanaTheme(content: @Composable () -> Unit) {
         state =
             rememberDynamicMaterialThemeState(
                 seedColor = Color(ColorSeed),
-                isDark = true,
+                isDark = isSystemInDarkTheme(),
                 specVersion = ColorSpec.SpecVersion.SPEC_2025,
                 style = PaletteStyle.Expressive,
             ),

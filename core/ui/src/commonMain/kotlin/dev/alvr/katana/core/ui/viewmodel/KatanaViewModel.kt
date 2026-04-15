@@ -12,6 +12,8 @@ import dev.alvr.katana.core.domain.usecases.EitherUseCase
 import dev.alvr.katana.core.domain.usecases.FlowEitherUseCase
 import dev.alvr.katana.core.domain.usecases.FlowOptionUseCase
 import dev.alvr.katana.core.domain.usecases.OptionUseCase
+import dev.zacsweers.metro.HasMemberInjections
+import dev.zacsweers.metro.Inject
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -26,11 +28,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @Stable
+@HasMemberInjections
 abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialState: S) : ViewModel(), KoinComponent {
-    internal val dispatcher by inject<KatanaDispatcher>()
+
+    @Inject internal lateinit var dispatcher: KatanaDispatcher
 
     private val initialized = atomic(false)
 

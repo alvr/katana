@@ -17,12 +17,13 @@ internal class KatanaMultiplatformDataPreferencesPlugin : Plugin<Project> {
             apply(plugin = "katana.multiplatform.core")
             apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
-            with(extensions) { configure<KotlinMultiplatformExtension> { configureMultiplatform(project) } }
+            with(extensions) { configure<KotlinMultiplatformExtension> { configureMultiplatform() } }
         }
 
-    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
+    context(project: Project)
+    private fun KotlinMultiplatformExtension.configureMultiplatform() {
         configureSourceSets()
-        kspDependencies(project, "data-preferences")
+        kspDependencies("data-preferences")
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {

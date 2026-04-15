@@ -27,16 +27,17 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
             apply(plugin = "org.jetbrains.kotlin.plugin.compose")
 
             with(extensions) {
-                configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
-                configure<ComposeExtension> { configureComposeResources(project) }
-                configure<ComposeCompilerGradlePluginExtension> { configureComposeCompiler(project) }
+                configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+                configure<ComposeExtension> { configureComposeResources() }
+                configure<ComposeCompilerGradlePluginExtension> { configureComposeCompiler() }
             }
         }
 
-    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
+    context(project: Project)
+    private fun KotlinMultiplatformExtension.configureMultiplatform() {
         configureSourceSets()
 
-        kspDependencies(project, "ui")
+        kspDependencies("ui")
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
@@ -51,12 +52,14 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
         }
     }
 
-    private fun ComposeCompilerGradlePluginExtension.configureComposeCompiler(project: Project) {
+    context(project: Project)
+    private fun ComposeCompilerGradlePluginExtension.configureComposeCompiler() {
         metricsDestination = project.file(project.composePluginDir("compose-metrics"))
         reportsDestination = project.file(project.composePluginDir("compose-reports"))
     }
 
-    private fun ComposeExtension.configureComposeResources(project: Project) {
+    context(project: Project)
+    private fun ComposeExtension.configureComposeResources() {
         val resources = (this as ExtensionAware).extensions.getByType<ResourcesExtension>()
         resources.packageOfResClass = "${project.fullPackageName}.resources"
     }

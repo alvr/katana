@@ -21,14 +21,15 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
             apply(plugin = "com.apollographql.apollo")
 
             with(extensions) {
-                configure<KotlinMultiplatformExtension> { configureMultiplatform(project) }
-                configure<ApolloExtension> { configureApollo(project) }
+                configure<KotlinMultiplatformExtension> { configureMultiplatform() }
+                configure<ApolloExtension> { configureApollo() }
             }
         }
 
-    private fun KotlinMultiplatformExtension.configureMultiplatform(project: Project) {
+    context(project: Project)
+    private fun KotlinMultiplatformExtension.configureMultiplatform() {
         configureSourceSets()
-        kspDependencies(project, "data-remote")
+        kspDependencies("data-remote")
     }
 
     private fun KotlinMultiplatformExtension.configureSourceSets() {
@@ -43,7 +44,8 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
         }
     }
 
-    private fun ApolloExtension.configureApollo(project: Project) {
+    context(project: Project)
+    private fun ApolloExtension.configureApollo() {
         service("anilist") {
             decapitalizeFields = true
             generateAsInternal = true

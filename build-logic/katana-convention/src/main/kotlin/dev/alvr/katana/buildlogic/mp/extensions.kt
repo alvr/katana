@@ -36,7 +36,9 @@ private fun KotlinMultiplatformExtension.configureAndroid(
 ) {
     androidLibrary {
         buildToolsVersion = KatanaConfiguration.BuildTools
-        compileSdk = KatanaConfiguration.CompileSdk
+        compileSdk {
+            version = release(KatanaConfiguration.CompileSdk) { minorApiLevel = KatanaConfiguration.CompileSdkMinor }
+        }
         minSdk = KatanaConfiguration.MinSdk
         namespace = project.fullPackageName
 

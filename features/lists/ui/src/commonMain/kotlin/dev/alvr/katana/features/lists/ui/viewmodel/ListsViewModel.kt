@@ -13,6 +13,7 @@ import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCase
 import dev.alvr.katana.features.lists.ui.entities.ListEntries
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.entities.mappers.toMediaList
+import dev.zacsweers.metro.HasMemberInjections
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.FlowPreview
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @Stable
+@HasMemberInjections
 internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     type: ListsState.ListType,
     private val updateListUseCase: UpdateListUseCase,

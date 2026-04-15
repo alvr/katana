@@ -1,19 +1,16 @@
 package io.kotest.provided
 
-import dev.alvr.katana.core.tests.di.coreTestsModule
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.config.LogLevel
 import io.kotest.core.names.DuplicateTestNameMode
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.test.AssertionMode
 import io.kotest.engine.config.IncludeTestScopeAffixes
-import io.kotest.koin.KoinExtension
 
 object ProjectConfig : AbstractProjectConfig() {
     override val assertionMode = AssertionMode.Warn
     override val coroutineDebugProbes = true
     override val duplicateTestNameMode = DuplicateTestNameMode.Silent
-    override val extensions = listOf(KoinExtension(coreTestsModule))
     override val globalAssertSoftly = true
     override val includeTestScopeAffixes = IncludeTestScopeAffixes.ALWAYS
     override val isolationMode = IsolationMode.SingleInstance

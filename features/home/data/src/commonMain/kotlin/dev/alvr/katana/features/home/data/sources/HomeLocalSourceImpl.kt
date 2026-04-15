@@ -8,10 +8,15 @@ import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.preferences.di.store.KatanaStore
 import dev.alvr.katana.features.home.data.entities.HomePreferences
 import dev.alvr.katana.features.home.domain.failures.HomeFailure
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 internal class HomeLocalSourceImpl(private val store: KatanaStore<HomePreferences>) : HomeLocalSource {
     override val welcomeCardVisible =
         store.data

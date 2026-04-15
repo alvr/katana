@@ -60,16 +60,18 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "org.jetbrains.kotlinx.kover")
 
-            extensions.configure<KoverProjectExtension> { configureRoot(project) }
+            extensions.configure<KoverProjectExtension> { configureRoot() }
         }
 
-    private fun KoverProjectExtension.configureRoot(project: Project) {
-        project.subprojects.filter { it.childProjects.isEmpty() }.forEach { configureSubproject(it) }
+    context(project: Project)
+    private fun KoverProjectExtension.configureRoot() {
+        project.subprojects.filter { p -> p.childProjects.isEmpty() }.forEach { p -> with(p) { configureSubproject() } }
 
         configureCommon()
     }
 
-    private fun KoverProjectExtension.configureSubproject(project: Project) {
+    context(project: Project)
+    private fun KoverProjectExtension.configureSubproject() {
         project.apply(plugin = "org.jetbrains.kotlinx.kover")
         project.rootProject.dependencies { add("kover", project) }
 
