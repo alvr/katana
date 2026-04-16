@@ -7,7 +7,7 @@ import dev.alvr.katana.core.domain.usecases.EitherUseCase
 import dev.zacsweers.metro.Inject
 
 @Inject
-class SaveSessionUseCase(dispatcher: KatanaDispatcher, private val repository: SessionRepository) :
+class SaveSessionUseCase internal constructor(dispatcher: KatanaDispatcher, private val repository: SessionRepository) :
     EitherUseCase<AnilistToken, Unit>(dispatcher) {
     override suspend fun run(params: AnilistToken) = repository.saveSession(params)
 }

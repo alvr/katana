@@ -15,11 +15,11 @@ import dev.alvr.katana.features.account.ui.resources.title
 import dev.alvr.katana.features.account.ui.screens.components.UserInfo
 import dev.alvr.katana.features.account.ui.viewmodel.AccountIntent
 import dev.alvr.katana.features.account.ui.viewmodel.AccountViewModel
-import org.koin.compose.viewmodel.koinViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 @Composable
 @Suppress("UNUSED_PARAMETER")
-internal fun AccountScreen(navigator: AccountNavigator, viewModel: AccountViewModel = koinViewModel()) {
+internal fun AccountScreen(navigator: AccountNavigator, viewModel: AccountViewModel = metroViewModel()) {
     val state by viewModel.collectAsState()
 
     AccountScreen(userInfo = state.userInfo, onIntent = viewModel::intent)

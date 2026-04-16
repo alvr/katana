@@ -35,14 +35,14 @@ import dev.alvr.katana.shared.navigation.MainNavigationBarItem
 import dev.alvr.katana.shared.navigation.RootNavigator
 import dev.alvr.katana.shared.navigation.rememberKatanaNavigator
 import dev.alvr.katana.shared.viewmodel.KatanaViewModel
-import org.koin.compose.viewmodel.koinViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 @Composable
 internal fun Katana(
     snackbarController: SnackbarController,
     modifier: Modifier = Modifier,
     navigator: RootNavigator = rememberKatanaNavigator(),
-    viewModel: KatanaViewModel = koinViewModel(),
+    viewModel: KatanaViewModel = metroViewModel(),
 ) {
     val currentNav by navigator.navController.currentBackStackEntryAsState()
     val uiState by viewModel.collectAsState()

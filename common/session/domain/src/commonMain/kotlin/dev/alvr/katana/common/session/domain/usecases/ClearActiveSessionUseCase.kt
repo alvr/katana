@@ -6,7 +6,8 @@ import dev.alvr.katana.core.domain.usecases.EitherUseCase
 import dev.zacsweers.metro.Inject
 
 @Inject
-class ClearActiveSessionUseCase(dispatcher: KatanaDispatcher, private val repository: SessionRepository) :
+class ClearActiveSessionUseCase
+internal constructor(dispatcher: KatanaDispatcher, private val repository: SessionRepository) :
     EitherUseCase<Unit, Unit>(dispatcher) {
     override suspend fun run(params: Unit) = repository.clearActiveSession()
 }

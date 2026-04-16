@@ -11,11 +11,11 @@ import dev.alvr.katana.features.explore.ui.resources.Res
 import dev.alvr.katana.features.explore.ui.resources.explore_toolbar_search_placeholder
 import dev.alvr.katana.features.explore.ui.resources.explore_toolbar_title
 import dev.alvr.katana.features.explore.ui.viewmodel.ExploreViewModel
-import org.koin.compose.viewmodel.koinViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 @Composable
 @Suppress("UNUSED_PARAMETER")
-internal fun ExploreScreen(navigator: ExploreNavigator, viewModel: ExploreViewModel = koinViewModel()) {
+internal fun ExploreScreen(navigator: ExploreNavigator, viewModel: ExploreViewModel = metroViewModel()) {
     KatanaHomeScaffold(
         title = Res.string.explore_toolbar_title.value,
         searchPlaceholder = Res.string.explore_toolbar_search_placeholder.value,

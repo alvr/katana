@@ -9,7 +9,7 @@ import dev.zacsweers.metro.SingleIn
 
 @SingleIn(AppScope::class)
 @DependencyGraph(AppScope::class)
-interface AppGraph : KatanaGraph {
+internal interface AppGraph : KatanaGraph {
 
     @Provides @AppContext @SingleIn(AppScope::class) fun appContext(): PlatformContext = PlatformContext.INSTANCE
 }

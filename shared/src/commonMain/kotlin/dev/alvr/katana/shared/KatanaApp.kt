@@ -1,6 +1,7 @@
 package dev.alvr.katana.shared
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import co.touchlab.kermit.DefaultFormatter
 import co.touchlab.kermit.Logger
@@ -12,13 +13,17 @@ import dev.alvr.katana.core.ui.components.snackbar.SnackbarController
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.shared.screens.Katana
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
+import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 
 @Inject
 @Composable
-fun Katana(imageLoader: ImageLoader, snackbarController: SnackbarController) {
+fun Katana(viewModelFactory: MetroViewModelFactory, imageLoader: ImageLoader, snackbarController: SnackbarController) {
     Init(imageLoader)
 
-    KatanaTheme { Katana(snackbarController) }
+    KatanaTheme {
+        CompositionLocalProvider(LocalMetroViewModelFactory provides viewModelFactory) { Katana(snackbarController) }
+    }
 }
 
 @Composable

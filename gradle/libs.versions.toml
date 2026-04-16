@@ -15,7 +15,6 @@ detekt-compose = "0.5.7"
 detekt-compose2 = "1.4.0"
 kermit = "2.1.0"
 kaml = "0.104.0"
-koin = "4.2.1"
 kotest = "6.1.11"
 kotlin = "2.3.21"
 kotlinpoet = "2.3.0"
@@ -120,14 +119,6 @@ kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
 # Kermit
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
-# Koin
-koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
-koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
-koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
-koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
-
 # Kotlin
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "kotlinx-atomicfu" }
@@ -156,6 +147,10 @@ lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-vie
 # MaterialKolor
 materialkolor = { module = "com.materialkolor:material-kolor", version.ref = "materialkolor" }
 
+# Metro
+metrox-android = { module = "dev.zacsweers.metro:metrox-android", version.ref = "metro" }
+metrox-viewmodel = { module = "dev.zacsweers.metro:metrox-viewmodel-compose", version.ref = "metro" }
+
 # Navigation
 navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
 navigation-material = { module = "org.jetbrains.compose.material:material-navigation", version.ref = "navigation-material" }
@@ -170,7 +165,6 @@ okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", versio
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-kotest-koin = { module = "io.kotest:kotest-extensions-koin", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 kotest-property-datetime = { module = "io.kotest:kotest-property-datetime", version.ref = "kotest" }
 
@@ -184,7 +178,6 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 # Deps for Core
 core-common = [
     "arrow",
-    "koin",
     "kotlin",
     "kotlinx-coroutines",
     "kotlinx-datetime",
@@ -193,9 +186,7 @@ core-common = [
     "kermit",
     "okio",
 ]
-core-android = [
-    "koin-android",
-]
+core-android = []
 core-ios = []
 
 core-common-ksp = []
@@ -203,10 +194,8 @@ core-android-ksp = []
 core-ios-ksp = []
 
 core-common-test = [
-    "koin-test",
     "kotest-assertions-core",
     "kotest-engine",
-    "kotest-koin",
     "kotest-property",
     "kotlinx-coroutines-test",
     "kotest-property-datetime",
@@ -291,15 +280,15 @@ ui-common = [
     "compose-ui",
     "lifecycle-runtime",
     "lifecycle-viewmodel",
-    "koin-compose",
-    "koin-compose-viewmodel",
-    "koin-compose-viewmodel-navigation",
     "kotlinx-serialization-json",
+    "metrox-viewmodel",
     "navigation",
     "navigation-material",
     "navigation3-ui",
 ]
-ui-android = []
+ui-android = [
+    "metrox-android",
+]
 ui-ios = []
 
 ui-common-ksp = []
@@ -318,6 +307,8 @@ app-android = [
     "androidx-activity",
     "androidx-splashscreen",
     "coil",
+    "metrox-android",
+    "metrox-viewmodel",
 ]
 
 build-config = [

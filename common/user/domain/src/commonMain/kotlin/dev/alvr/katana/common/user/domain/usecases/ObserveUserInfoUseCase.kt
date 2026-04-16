@@ -7,7 +7,8 @@ import dev.alvr.katana.core.domain.usecases.FlowEitherUseCase
 import dev.zacsweers.metro.Inject
 
 @Inject
-class ObserveUserInfoUseCase(dispatcher: KatanaDispatcher, private val repository: UserRepository) :
+class ObserveUserInfoUseCase
+internal constructor(dispatcher: KatanaDispatcher, private val repository: UserRepository) :
     FlowEitherUseCase<Unit, UserInfo>(dispatcher) {
     override fun createFlow(params: Unit) = repository.userInfo
 }

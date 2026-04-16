@@ -7,7 +7,7 @@ import dev.alvr.katana.core.domain.usecases.EitherUseCase
 import dev.zacsweers.metro.Inject
 
 @Inject
-class GetUserIdUseCase(dispatcher: KatanaDispatcher, private val repository: UserRepository) :
+class GetUserIdUseCase internal constructor(dispatcher: KatanaDispatcher, private val repository: UserRepository) :
     EitherUseCase<Unit, UserId>(dispatcher) {
     override suspend fun run(params: Unit) = repository.getUserId()
 }
