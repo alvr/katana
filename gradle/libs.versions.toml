@@ -1,5 +1,5 @@
 [versions]
-android = "9.1.1"
+android = "9.2.0"
 androidx-activity = "1.13.0"
 androidx-splashscreen = "1.2.0"
 apollo = "5.0.0-alpha.7"
