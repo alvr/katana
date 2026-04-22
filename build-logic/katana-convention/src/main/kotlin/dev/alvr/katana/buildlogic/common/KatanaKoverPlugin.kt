@@ -32,8 +32,8 @@ internal class KatanaKoverPlugin : Plugin<Project> {
             // Compose
             "*.*ComposableSingletons*",
 
-            // DI
-            "*.Module_*Kt",
+            // Metro
+            $$$"*.*$Metro*",
 
             // Serializers
             $$$"*.*$$serializer",
@@ -42,6 +42,9 @@ internal class KatanaKoverPlugin : Plugin<Project> {
         listOf(
             // Core
             "*.core.*",
+
+            // DI
+            "*.di",
 
             // Remote
             "*.data.adapter",
