@@ -16,6 +16,7 @@ import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
 import dev.alvr.katana.features.lists.domain.usecases.ObserveMangaListUseCase
 import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCase
+import dev.alvr.katana.features.lists.ui.di.createListsUiTestGraph
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.entities.UserList
 import dev.alvr.katana.features.lists.ui.entities.mappers.toMediaList
@@ -294,7 +295,7 @@ internal class MangaListsViewModelTest : FreeSpec() {
 
     override suspend fun beforeEach(testCase: TestCase) {
         clearAllMocks()
-        viewModel = MangaListsViewModel(updateList, observeManga)
+        viewModel = createListsUiTestGraph(updateList, mockk(), observeManga).mangaListsViewModel
     }
 
     private fun mockMangaFlow() {

@@ -886,7 +886,7 @@ Compose:
     allowedStateHolderNames: .*ViewModel
   ViewModelInjection:
     active: true
-    viewModelFactories: koinViewModel
+    viewModelFactories: metroViewModel
 
 compose:
   # appKode

@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 internal class SessionRepositoryTest : FreeSpec() {
-    private val source: SessionLocalSource = mock<SessionLocalSource> { every { sessionActive } returns emptyFlow() }
+    private val source = mock<SessionLocalSource> { every { sessionActive } returns emptyFlow() }
     private lateinit var repo: SessionRepository
 
     init {

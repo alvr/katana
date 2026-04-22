@@ -1,6 +1,5 @@
 package dev.alvr.katana.features.home.ui.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.common.session.domain.failures.SessionFailure
@@ -16,6 +15,7 @@ import dev.alvr.katana.core.tests.ui.test
 import dev.alvr.katana.features.home.domain.failures.HomeFailure
 import dev.alvr.katana.features.home.domain.usecases.HideWelcomeCardUseCase
 import dev.alvr.katana.features.home.domain.usecases.ObserveWelcomeCardVisibilityUseCase
+import dev.alvr.katana.features.home.ui.di.createHomeUiTestGraph
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
 import io.kotest.engine.test.TestResult
@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 
 internal class HomeViewModelTest : BehaviorSpec() {
-    private val savedStateHandle = mockk<SavedStateHandle>()
     private val observeActiveSession = mockk<ObserveActiveSessionUseCase>()
     private val saveSession = mockk<SaveSessionUseCase>()
     private val saveUserId = mockk<SaveUserIdUseCase>()
@@ -252,8 +251,8 @@ internal class HomeViewModelTest : BehaviorSpec() {
 
     override suspend fun beforeEach(testCase: TestCase) {
         viewModel =
-            HomeViewModel(
-                savedStateHandle = savedStateHandle,
+            createHomeUiTestGraph(
+                token = TOKEN_WITH_PARAMS,
                 hideWelcomeCardUseCase = hideWelcomeCard,
                 observeActiveSessionUseCase = observeActiveSession,
                 observeWelcomeCardVisibilityUseCase = observeWelcomeCardVisibility,
@@ -267,13 +266,21 @@ internal class HomeViewModelTest : BehaviorSpec() {
     }
 
     private fun initMocks(token: String? = TOKEN_WITH_PARAMS, sessionActive: Boolean = false) {
-        every { savedStateHandle.remove<String>("token") } returns token
         coJustRun { observeActiveSession() }
         coJustRun { observeWelcomeCardVisibility() }
         coEitherJustRun { saveSession(AnilistToken(any())) }
         coEitherJustRun { saveUserId() }
         every { observeActiveSession.flow } returns flowOf(sessionActive.right())
         every { observeWelcomeCardVisibility.flow } returns emptyFlow()
+        viewModel =
+            createHomeUiTestGraph(
+                token = token,
+                hideWelcomeCardUseCase = hideWelcomeCard,
+                observeActiveSessionUseCase = observeActiveSession,
+                observeWelcomeCardVisibilityUseCase = observeWelcomeCardVisibility,
+                saveSessionUseCase = saveSession,
+                saveUserIdUseCase = saveUserId,
+            )
     }
 }
 

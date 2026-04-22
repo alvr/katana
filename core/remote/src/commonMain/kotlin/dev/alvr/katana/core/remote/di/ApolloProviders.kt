@@ -51,7 +51,7 @@ interface ApolloProviders {
 
                 val response = chain.proceed(requestWithAuth)
 
-                if (response.statusCode == HTTP_UNAUTHORIZED) {
+                if (response.statusCode == HTTP_BAD_REQUEST || response.statusCode == HTTP_UNAUTHORIZED) {
                     deleteTokenUseCase()
                 }
 
@@ -92,6 +92,8 @@ interface ApolloProviders {
 }
 
 private const val ANILIST_BASE_URL = "https://graphql.anilist.co"
+
+private const val HTTP_BAD_REQUEST = 400
 
 private const val HTTP_UNAUTHORIZED = 401
 

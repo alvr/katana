@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
+import dev.alvr.katana.features.home.data.di.createHomeRepositoryTestGraph
 import dev.alvr.katana.features.home.data.sources.HomeLocalSource
 import dev.alvr.katana.features.home.data.sources.HomeRemoteSource
 import dev.alvr.katana.features.home.domain.failures.HomeFailure
@@ -60,6 +61,6 @@ internal class HomeRepositoryTest : FreeSpec() {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        repo = HomeRepositoryImpl(localSource, remoteSource)
+        repo = createHomeRepositoryTestGraph(localSource, remoteSource).homeRepository
     }
 }

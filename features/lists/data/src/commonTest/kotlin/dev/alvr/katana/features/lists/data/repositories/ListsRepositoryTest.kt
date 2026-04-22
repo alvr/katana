@@ -6,6 +6,7 @@ import arrow.core.right
 import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
+import dev.alvr.katana.features.lists.data.di.createListsRepositoryTestGraph
 import dev.alvr.katana.features.lists.data.mediaListMock
 import dev.alvr.katana.features.lists.data.sources.ListsRemoteSource
 import dev.alvr.katana.features.lists.domain.failures.ListsFailure
@@ -72,6 +73,6 @@ internal class ListsRepositoryTest : FreeSpec() {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        repo = ListsRepositoryImpl(remoteSource)
+        repo = createListsRepositoryTestGraph(remoteSource).listsRepository
     }
 }

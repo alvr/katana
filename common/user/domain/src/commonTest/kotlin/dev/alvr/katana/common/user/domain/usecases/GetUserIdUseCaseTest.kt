@@ -2,10 +2,10 @@ package dev.alvr.katana.common.user.domain.usecases
 
 import arrow.core.left
 import arrow.core.right
+import dev.alvr.katana.common.user.domain.di.createUserDomainTestGraph
 import dev.alvr.katana.common.user.domain.failures.UserFailure
 import dev.alvr.katana.common.user.domain.repositories.UserRepository
 import dev.alvr.katana.common.user.domain.userIdMock
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.tests.shouldBeLeft
@@ -16,11 +16,8 @@ import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
-import org.koin.test.KoinTest
-import org.koin.test.inject
 
-internal class GetUserIdUseCaseTest : FreeSpec(), KoinTest {
-    private val dispatcher by inject<KatanaDispatcher>()
+internal class GetUserIdUseCaseTest : FreeSpec() {
     private val repo = mock<UserRepository>()
 
     private lateinit var useCase: GetUserIdUseCase
@@ -43,6 +40,6 @@ internal class GetUserIdUseCaseTest : FreeSpec(), KoinTest {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        useCase = GetUserIdUseCase(dispatcher, repo)
+        useCase = createUserDomainTestGraph(repo).getUserIdUseCase
     }
 }

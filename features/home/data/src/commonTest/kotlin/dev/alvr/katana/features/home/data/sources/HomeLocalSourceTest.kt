@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import dev.alvr.katana.core.preferences.di.store.KatanaStore
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
+import dev.alvr.katana.features.home.data.di.createHomeLocalSourceTestGraph
 import dev.alvr.katana.features.home.data.entities.HomePreferences
 import dev.alvr.katana.features.home.domain.failures.HomeFailure
 import dev.mokkery.answering.returns
@@ -58,7 +59,7 @@ internal class HomeLocalSourceTest : FreeSpec() {
             {
                 "getting the welcome card visibility fails AND it's a common Exception" {
                     every { store.data } returns flow { throw IllegalStateException() }
-                    source = HomeLocalSourceImpl(store)
+                    source = createHomeLocalSourceTestGraph(store).homeLocalSource
 
                     source.welcomeCardVisible.test {
                         awaitItem().shouldBeLeft(HomeFailure.GettingWelcomeCardVisibility)
@@ -70,7 +71,7 @@ internal class HomeLocalSourceTest : FreeSpec() {
 
                 "getting the welcome card visibility fails AND it's a reading Exception" {
                     every { store.data } returns flow { throw IOException("Oops.") }
-                    source = HomeLocalSourceImpl(store)
+                    source = createHomeLocalSourceTestGraph(store).homeLocalSource
 
                     source.welcomeCardVisible.test {
                         awaitItem().shouldBeLeft(HomeFailure.GettingWelcomeCardVisibility)
@@ -95,6 +96,6 @@ internal class HomeLocalSourceTest : FreeSpec() {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        source = HomeLocalSourceImpl(store)
+        source = createHomeLocalSourceTestGraph(store).homeLocalSource
     }
 }

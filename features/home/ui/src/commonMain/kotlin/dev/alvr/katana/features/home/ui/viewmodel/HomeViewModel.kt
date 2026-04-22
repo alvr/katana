@@ -1,9 +1,6 @@
 package dev.alvr.katana.features.home.ui.viewmodel
 
 import androidx.compose.runtime.Stable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.CreationExtras
 import co.touchlab.kermit.Logger
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.usecases.ObserveActiveSessionUseCase
@@ -13,14 +10,13 @@ import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.alvr.katana.features.home.domain.usecases.HideWelcomeCardUseCase
 import dev.alvr.katana.features.home.domain.usecases.ObserveWelcomeCardVisibilityUseCase
-import dev.alvr.katana.features.home.ui.LOGIN_DEEP_LINK_TOKEN
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
-import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 
 @Stable
 @AssistedInject
@@ -157,14 +153,9 @@ internal class HomeViewModel(
     // endregion [ForYou Tab]
 
     @AssistedFactory
-    @ViewModelAssistedFactoryKey(HomeViewModel::class)
+    @ManualViewModelAssistedFactoryKey
     @ContributesIntoMap(AppScope::class)
-    fun interface Factory : ViewModelAssistedFactory {
-        override fun create(extras: CreationExtras): ViewModel {
-            val token = extras.createSavedStateHandle().get<String>(LOGIN_DEEP_LINK_TOKEN)
-            return create(token)
-        }
-
+    fun interface Factory : ManualViewModelAssistedFactory {
         fun create(@Assisted token: String?): HomeViewModel
     }
 }
