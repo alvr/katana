@@ -5,7 +5,9 @@ import com.android.build.api.dsl.ApplicationExtension
 import dev.alvr.katana.buildlogic.KatanaConfiguration
 import dev.alvr.katana.buildlogic.commonExtensions
 import dev.alvr.katana.buildlogic.commonTasks
+import dev.alvr.katana.buildlogic.configure
 import dev.alvr.katana.buildlogic.configureAndroid
+import dev.zacsweers.metro.gradle.MetroPluginExtension
 import java.io.FileInputStream
 import java.util.Properties
 import org.gradle.api.Plugin
@@ -19,17 +21,20 @@ internal class KatanaAppPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "com.android.application")
             apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+            apply(plugin = "dev.zacsweers.metro")
 
             with(extensions) {
                 commonExtensions()
-                configure<ApplicationExtension> { configureAndroid(project) }
+                configure<ApplicationExtension> { configureAndroid() }
+                configure<MetroPluginExtension> { configure() }
             }
 
             tasks.commonTasks()
         }
 
+    context(project: Project)
     @Suppress("StringLiteralDuplication")
-    private fun ApplicationExtension.configureAndroid(project: Project) {
+    private fun ApplicationExtension.configureAndroid() {
         fun ApplicationBuildType.configure(isDebug: Boolean) {
             isDebuggable = isDebug
             isDefault = isDebug

@@ -17,9 +17,14 @@ import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.remote.executeOrThrow
 import dev.alvr.katana.core.remote.toFailure
 import dev.alvr.katana.core.remote.watchFiltered
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 internal class UserRemoteSourceImpl(private val client: ApolloClient) : UserRemoteSource {
     override val userInfo =
         client

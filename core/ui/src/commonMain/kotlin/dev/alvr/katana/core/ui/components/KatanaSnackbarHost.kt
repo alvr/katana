@@ -5,6 +5,7 @@ import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -22,44 +23,55 @@ fun KatanaSnackbarHost(hostState: SnackbarHostState, modifier: Modifier = Modifi
 }
 
 suspend fun SnackbarHostState.showSnackbar(
-    stringResource: StringResource,
-    actionLabel: String? = null,
+    messageResource: StringResource,
+    actionLabelResource: StringResource? = null,
     withDismissAction: Boolean = false,
     duration: SnackbarDuration =
-        if (actionLabel == null) {
+        if (actionLabelResource == null) {
             SnackbarDuration.Short
         } else {
             SnackbarDuration.Indefinite
         },
-) =
-    showSnackbar(
-        KatanaSnackbarVisuals(
-            stringResource = stringResource,
-            actionLabel = actionLabel,
-            withDismissAction = withDismissAction,
-            duration = duration,
+    onAction: (() -> Unit)? = null,
+    onDismiss: (() -> Unit)? = null,
+) {
+    val result =
+        showSnackbar(
+            KatanaSnackbarVisuals(
+                messageResource = messageResource,
+                actionLabelResource = actionLabelResource,
+                withDismissAction = withDismissAction,
+                duration = duration,
+            )
         )
-    )
+
+    when (result) {
+        SnackbarResult.ActionPerformed -> onAction?.invoke()
+        SnackbarResult.Dismissed -> onDismiss?.invoke()
+    }
+}
 
 @Stable
-private class KatanaSnackbarVisuals(
-    val stringResource: StringResource,
-    override val actionLabel: String?,
-    override val withDismissAction: Boolean,
-    override val duration: SnackbarDuration,
+internal class KatanaSnackbarVisuals(
+    internal val messageResource: StringResource,
+    internal val actionLabelResource: StringResource? = null,
+    internal val onAction: (() -> Unit)? = null,
+    internal val onDismiss: (() -> Unit)? = null,
+    override val withDismissAction: Boolean = false,
+    override val duration: SnackbarDuration = SnackbarDuration.Short,
 ) : SnackbarVisuals {
     override val message: String = String.empty
+    override val actionLabel: String? = null
 }
 
 @Composable
-private fun KatanaSnackbarVisuals.toSnackbarVisuals(): SnackbarVisuals = let { visuals ->
+private fun KatanaSnackbarVisuals.toSnackbarVisuals(): SnackbarVisuals =
     object : SnackbarVisuals {
-        override val message: String = visuals.stringResource.value
-        override val withDismissAction: Boolean = visuals.withDismissAction
-        override val actionLabel: String? = visuals.actionLabel
-        override val duration: SnackbarDuration = visuals.duration
+        override val message: String = this@toSnackbarVisuals.messageResource.value
+        override val actionLabel: String? = this@toSnackbarVisuals.actionLabelResource?.value
+        override val withDismissAction: Boolean = this@toSnackbarVisuals.withDismissAction
+        override val duration: SnackbarDuration = this@toSnackbarVisuals.duration
     }
-}
 
 @Stable
 private class KatanaSnackbarData(data: SnackbarData, override val visuals: SnackbarVisuals) : SnackbarData by data

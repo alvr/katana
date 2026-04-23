@@ -1,7 +1,9 @@
 package dev.alvr.katana.features.lists.ui.viewmodel
 
 import androidx.compose.runtime.Stable
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.domain.usecases.FlowEitherUseCase
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
@@ -13,6 +15,8 @@ import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCase
 import dev.alvr.katana.features.lists.ui.entities.ListEntries
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.entities.mappers.toMediaList
+import dev.zacsweers.metro.DefaultBinding
+import dev.zacsweers.metro.ExperimentalMetroApi
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.FlowPreview
@@ -22,10 +26,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @Stable
+@DefaultBinding<ViewModel>
+@OptIn(ExperimentalMetroApi::class)
 internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
+    dispatcher: KatanaDispatcher,
     type: ListsState.ListType,
     private val updateListUseCase: UpdateListUseCase,
-) : KatanaViewModel<ListsState<I>, ListsEffect, ListsIntent>(ListsState(type)) {
+) : KatanaViewModel<ListsState<I>, ListsEffect, ListsIntent>(dispatcher, ListsState(type)) {
     protected abstract val observeListUseCase: FlowEitherUseCase<Unit, MediaCollection<E>>
 
     private val searchFlow = MutableStateFlow(String.empty)

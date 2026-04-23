@@ -7,9 +7,12 @@ import com.apollographql.apollo.interceptor.ApolloInterceptor
 import com.apollographql.apollo.interceptor.ApolloInterceptorChain
 import com.apollographql.cache.normalized.CacheAndNetworkInterceptor
 import com.apollographql.cache.normalized.NetworkFirstInterceptor
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.flow.Flow
 
+@ContributesBinding(AppScope::class)
 internal class ReloadInterceptor : ApolloInterceptor {
     private val firstQuery = atomic(true)
 

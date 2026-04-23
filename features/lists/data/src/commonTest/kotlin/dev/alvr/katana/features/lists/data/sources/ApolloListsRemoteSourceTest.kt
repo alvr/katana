@@ -29,6 +29,7 @@ import dev.alvr.katana.core.remote.type.MediaType
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
+import dev.alvr.katana.features.lists.data.di.createListsRemoteSourceTestGraph
 import dev.alvr.katana.features.lists.domain.failures.ListsFailure
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.ItemMediaId
@@ -617,6 +618,6 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        source = ListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
+        source = createListsRemoteSourceTestGraph(client, userIdManager, reloadInterceptor).listsRemoteSource
     }
 }

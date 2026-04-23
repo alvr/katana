@@ -27,6 +27,7 @@ import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
 import dev.alvr.katana.features.lists.data.MediaListCollectionQuery
 import dev.alvr.katana.features.lists.data.apolloErrorMock
+import dev.alvr.katana.features.lists.data.di.createListsRemoteSourceTestGraph
 import dev.alvr.katana.features.lists.data.mappers.requests.toMutation
 import dev.alvr.katana.features.lists.data.mediaListCollectionQueryMock
 import dev.alvr.katana.features.lists.data.mediaListMock
@@ -46,7 +47,8 @@ internal class ListsRemoteSourceTest : FreeSpec() {
     private val reloadInterceptor = mock<ApolloInterceptor>()
     private val client = ApolloClient.Builder().networkTransport(MapTestNetworkTransport()).build()
 
-    private val source: ListsRemoteSource = ListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
+    private val source: ListsRemoteSource =
+        createListsRemoteSourceTestGraph(client, userIdManager, reloadInterceptor).listsRemoteSource
 
     init {
         "querying" -
@@ -94,8 +96,9 @@ internal class ListsRemoteSourceTest : FreeSpec() {
                     {
                         val mockServer = MockServer()
                         val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
-                        val source: ListsRemoteSource =
-                            ListsRemoteSourceImpl(badClient, userIdManager, reloadInterceptor)
+                        val source =
+                            createListsRemoteSourceTestGraph(badClient, userIdManager, reloadInterceptor)
+                                .listsRemoteSource
 
                         afterSpec { mockServer.close() }
 

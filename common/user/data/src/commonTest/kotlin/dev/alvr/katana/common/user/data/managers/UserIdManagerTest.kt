@@ -2,7 +2,7 @@ package dev.alvr.katana.common.user.data.managers
 
 import arrow.core.left
 import arrow.core.right
-import dev.alvr.katana.common.user.data.di.fakeCommonUserDataModule
+import dev.alvr.katana.common.user.data.di.createUserDataTestGraph
 import dev.alvr.katana.common.user.domain.failures.UserFailure
 import dev.alvr.katana.common.user.domain.managers.UserIdManager
 import dev.alvr.katana.common.user.domain.models.UserId
@@ -14,15 +14,12 @@ import dev.mokkery.everySuspend
 import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.koin.KoinExtension
-import org.koin.core.parameter.parametersOf
-import org.koin.test.KoinTest
-import org.koin.test.inject
+import io.kotest.core.test.TestCase
 
-internal class UserIdManagerTest : FreeSpec(), KoinTest {
+internal class UserIdManagerTest : FreeSpec() {
     private val repo = mock<UserRepository>()
 
-    private val manager by inject<UserIdManager> { parametersOf(repo) }
+    private lateinit var manager: UserIdManager
 
     init {
         "server return viewer is valid" {
@@ -38,5 +35,7 @@ internal class UserIdManagerTest : FreeSpec(), KoinTest {
         }
     }
 
-    override val extensions = listOf(KoinExtension(fakeCommonUserDataModule))
+    override suspend fun beforeEach(testCase: TestCase) {
+        manager = createUserDataTestGraph(repo).userIdManager
+    }
 }

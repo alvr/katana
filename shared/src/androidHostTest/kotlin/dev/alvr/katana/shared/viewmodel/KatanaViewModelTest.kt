@@ -6,6 +6,7 @@ import dev.alvr.katana.common.session.domain.failures.SessionFailure
 import dev.alvr.katana.common.session.domain.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.tests.ui.test
+import dev.alvr.katana.shared.di.createSharedUiTestGraph
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
 import io.mockk.clearAllMocks
@@ -78,7 +79,7 @@ internal class KatanaViewModelTest : BehaviorSpec() {
 
     override suspend fun beforeEach(testCase: TestCase) {
         clearAllMocks()
-        viewModel = KatanaViewModel(observeActiveSession)
+        viewModel = createSharedUiTestGraph(observeActiveSession).katanaViewModel
     }
 
     private fun verifyMocks() {

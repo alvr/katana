@@ -25,7 +25,10 @@ ignore:
   ## Core
   - '**/core/**'
 
-  # UI
+  ## DI
+  - '**/di/**'
+
+  ## UI
   - '**/generated/resources/**'
   - '**/shared/navigation/**'
   - '**/shared/resources/**'
@@ -35,5 +38,5 @@ ignore:
   - '**/ui/resources/**'
   - '**/ui/screens/**'
 
-  # Projects
+  ## Projects
   - 'app/src/**'

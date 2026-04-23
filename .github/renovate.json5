@@ -47,10 +47,10 @@
             "matchManagers": ["gradle"],
         },
         {
-            "groupName": "Koin",
-            "groupSlug": "koin",
+            "groupName": "Metro",
+            "groupSlug": "metro",
             "matchPackagePrefixes": [
-                "io.insert-koin",
+                "dev.zacsweers.metro",
             ],
             "matchManagers": ["gradle"],
         },

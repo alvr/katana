@@ -3,10 +3,10 @@ package dev.alvr.katana.features.lists.domain.usecases
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
+import dev.alvr.katana.features.lists.domain.di.createListsDomainTestGraph
 import dev.alvr.katana.features.lists.domain.failures.ListsFailure
 import dev.alvr.katana.features.lists.domain.models.MediaCollection
 import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
@@ -18,11 +18,8 @@ import dev.mokkery.verify
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
 import kotlinx.coroutines.flow.flowOf
-import org.koin.test.KoinTest
-import org.koin.test.inject
 
-internal class ObserveMangaListUseCaseTest : FreeSpec(), KoinTest {
-    private val dispatcher by inject<KatanaDispatcher>()
+internal class ObserveMangaListUseCaseTest : FreeSpec() {
     private val repo = mock<ListsRepository>()
 
     private lateinit var useCase: ObserveMangaListUseCase
@@ -56,6 +53,6 @@ internal class ObserveMangaListUseCaseTest : FreeSpec(), KoinTest {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        useCase = ObserveMangaListUseCase(dispatcher, repo)
+        useCase = createListsDomainTestGraph(repo).observeMangaListUseCase
     }
 }

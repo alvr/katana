@@ -3,9 +3,9 @@ package dev.alvr.katana.common.session.domain.usecases
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.common.session.domain.anilistTokenMock
+import dev.alvr.katana.common.session.domain.di.createSessionDomainTestGraph
 import dev.alvr.katana.common.session.domain.failures.SessionFailure
 import dev.alvr.katana.common.session.domain.repositories.SessionRepository
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
@@ -15,11 +15,8 @@ import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
-import org.koin.test.KoinTest
-import org.koin.test.inject
 
-internal class SaveAnilistTokenUseCaseTest : FreeSpec(), KoinTest {
-    private val dispatcher by inject<KatanaDispatcher>()
+internal class SaveAnilistTokenUseCaseTest : FreeSpec() {
     private val repo = mock<SessionRepository>()
 
     private lateinit var useCase: SaveSessionUseCase
@@ -45,6 +42,6 @@ internal class SaveAnilistTokenUseCaseTest : FreeSpec(), KoinTest {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        useCase = SaveSessionUseCase(dispatcher, repo)
+        useCase = createSessionDomainTestGraph(repo).saveSessionUseCase
     }
 }

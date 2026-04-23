@@ -16,6 +16,7 @@ internal class KatanaMultiplatformTestsPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "com.android.kotlin.multiplatform.library")
             apply(plugin = "org.jetbrains.kotlin.multiplatform")
+            apply(plugin = "dev.zacsweers.metro")
 
             extensions.configure<KotlinMultiplatformExtension> { configureMultiplatform() }
             tasks.commonTasks()

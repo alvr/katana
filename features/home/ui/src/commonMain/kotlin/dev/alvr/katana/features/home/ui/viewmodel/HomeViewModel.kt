@@ -1,26 +1,34 @@
 package dev.alvr.katana.features.home.ui.viewmodel
 
 import androidx.compose.runtime.Stable
-import androidx.lifecycle.SavedStateHandle
 import co.touchlab.kermit.Logger
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.common.session.domain.usecases.SaveSessionUseCase
 import dev.alvr.katana.common.user.domain.usecases.SaveUserIdUseCase
+import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.alvr.katana.features.home.domain.usecases.HideWelcomeCardUseCase
 import dev.alvr.katana.features.home.domain.usecases.ObserveWelcomeCardVisibilityUseCase
-import dev.alvr.katana.features.home.ui.LOGIN_DEEP_LINK_TOKEN
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 
 @Stable
+@AssistedInject
 internal class HomeViewModel(
-    private val savedStateHandle: SavedStateHandle,
+    dispatcher: KatanaDispatcher,
+    @Assisted private val token: String?,
     private val hideWelcomeCardUseCase: HideWelcomeCardUseCase,
     private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,
     private val observeWelcomeCardVisibilityUseCase: ObserveWelcomeCardVisibilityUseCase,
     private val saveSessionUseCase: SaveSessionUseCase,
     private val saveUserIdUseCase: SaveUserIdUseCase,
-) : KatanaViewModel<HomeState, HomeEffect, HomeIntent>(HomeState()) {
+) : KatanaViewModel<HomeState, HomeEffect, HomeIntent>(dispatcher, HomeState()) {
 
     override fun init() {
         observeSession()
@@ -56,8 +64,7 @@ internal class HomeViewModel(
 
     // region [Initialization]
     private fun saveAnilistToken() {
-        val token = savedStateHandle.remove<String>(LOGIN_DEEP_LINK_TOKEN) ?: return
-        if (token.isBlank()) return
+        if (token.isNullOrBlank()) return
 
         intent(HomeIntent.SaveToken(token))
     }
@@ -141,8 +148,16 @@ internal class HomeViewModel(
     private fun handleNavigateToUpcoming() {
         effect(HomeEffect.ForYouEffect.NavigateToUpcoming)
     }
+
     // endregion [ForYou events]
     // endregion [ForYou Tab]
+
+    @AssistedFactory
+    @ManualViewModelAssistedFactoryKey
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ManualViewModelAssistedFactory {
+        fun create(@Assisted token: String?): HomeViewModel
+    }
 }
 
 private const val LogTag = "HomeViewModel"

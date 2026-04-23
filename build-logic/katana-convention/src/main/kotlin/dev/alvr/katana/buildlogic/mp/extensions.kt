@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinSourceSetConvention
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeCacheApi
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
@@ -36,7 +37,9 @@ private fun KotlinMultiplatformExtension.configureAndroid(
 ) {
     androidLibrary {
         buildToolsVersion = KatanaConfiguration.BuildTools
-        compileSdk = KatanaConfiguration.CompileSdk
+        compileSdk {
+            version = release(KatanaConfiguration.CompileSdk) { minorApiLevel = KatanaConfiguration.CompileSdkMinor }
+        }
         minSdk = KatanaConfiguration.MinSdk
         namespace = project.fullPackageName
 
@@ -54,6 +57,7 @@ private fun KotlinMultiplatformExtension.configureAndroid(
     }
 }
 
+@OptIn(KotlinNativeCacheApi::class)
 private fun KotlinMultiplatformExtension.configureIos(configure: KotlinNativeTarget.() -> Unit) {
     listOf(iosArm64(), iosSimulatorArm64()).forEach { ios ->
         ios.configure()

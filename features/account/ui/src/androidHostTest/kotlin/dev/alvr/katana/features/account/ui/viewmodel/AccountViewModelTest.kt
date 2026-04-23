@@ -9,6 +9,7 @@ import dev.alvr.katana.common.user.domain.models.UserInfo
 import dev.alvr.katana.common.user.domain.usecases.ObserveUserInfoUseCase
 import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.tests.ui.test
+import dev.alvr.katana.features.account.ui.di.createAccountUiTestGraph
 import dev.alvr.katana.features.account.ui.entities.UserInfoUi
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
@@ -81,7 +82,7 @@ internal class AccountViewModelTest : FreeSpec() {
 
     override suspend fun beforeEach(testCase: TestCase) {
         clearAllMocks()
-        viewModel = AccountViewModel(observeUserInfoUseCase, logOutUseCase)
+        viewModel = createAccountUiTestGraph(observeUserInfoUseCase, logOutUseCase).accountViewModel
     }
 
     private companion object {

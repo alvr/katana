@@ -12,6 +12,8 @@ import dev.alvr.katana.core.domain.usecases.EitherUseCase
 import dev.alvr.katana.core.domain.usecases.FlowEitherUseCase
 import dev.alvr.katana.core.domain.usecases.FlowOptionUseCase
 import dev.alvr.katana.core.domain.usecases.OptionUseCase
+import dev.zacsweers.metro.DefaultBinding
+import dev.zacsweers.metro.ExperimentalMetroApi
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -25,12 +27,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @Stable
-abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialState: S) : ViewModel(), KoinComponent {
-    internal val dispatcher by inject<KatanaDispatcher>()
+@DefaultBinding<ViewModel>
+@OptIn(ExperimentalMetroApi::class)
+abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
+    internal val dispatcher: KatanaDispatcher,
+    initialState: S,
+) : ViewModel() {
 
     private val initialized = atomic(false)
 

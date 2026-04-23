@@ -2,15 +2,23 @@ package dev.alvr.katana.shared.viewmodel
 
 import androidx.compose.runtime.Stable
 import dev.alvr.katana.common.session.domain.usecases.ObserveActiveSessionUseCase
+import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.ui.viewmodel.EmptyEffect
 import dev.alvr.katana.core.ui.viewmodel.EmptyIntent
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.alvr.katana.shared.navigation.mainNavigationBarItems
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.collections.immutable.toImmutableList
 
 @Stable
-internal class KatanaViewModel(private val observeActiveSessionUseCase: ObserveActiveSessionUseCase) :
-    KatanaViewModel<KatanaState, EmptyEffect, EmptyIntent>(KatanaState()) {
+@ViewModelKey
+@ContributesIntoMap(AppScope::class)
+internal class KatanaViewModel(
+    dispatcher: KatanaDispatcher,
+    private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,
+) : KatanaViewModel<KatanaState, EmptyEffect, EmptyIntent>(dispatcher, KatanaState()) {
     override fun init() {
         observeActiveSession()
     }
@@ -31,9 +39,5 @@ internal class KatanaViewModel(private val observeActiveSessionUseCase: ObserveA
     }
 
     private fun navigationBarItems(sessionActive: Boolean = false) =
-        if (sessionActive) {
-            mainNavigationBarItems
-        } else {
-            mainNavigationBarItems.filterNot { it.requireSession }.toImmutableList()
-        }
+        mainNavigationBarItems.filterNot { it.requireSession && !sessionActive }.toImmutableList()
 }

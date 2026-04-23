@@ -17,11 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import dev.alvr.katana.core.ui.components.KatanaScaffold
+import dev.alvr.katana.core.ui.components.KatanaSnackbarHost
 import dev.alvr.katana.core.ui.components.navigation.KatanaNavigationBar
 import dev.alvr.katana.core.ui.components.navigation.KatanaNavigationBarType
+import dev.alvr.katana.core.ui.components.snackbar.SnackbarController
 import dev.alvr.katana.core.ui.navigation.KatanaNavigationBarItem.Companion.hasRoute
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.noInsets
+import dev.alvr.katana.core.ui.utils.rememberSnackbarHostState
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.account.ui.navigation.account
 import dev.alvr.katana.features.explore.ui.navigation.explore
@@ -32,19 +35,23 @@ import dev.alvr.katana.shared.navigation.MainNavigationBarItem
 import dev.alvr.katana.shared.navigation.RootNavigator
 import dev.alvr.katana.shared.navigation.rememberKatanaNavigator
 import dev.alvr.katana.shared.viewmodel.KatanaViewModel
-import org.koin.compose.viewmodel.koinViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 @Composable
 internal fun Katana(
+    snackbarController: SnackbarController,
     modifier: Modifier = Modifier,
     navigator: RootNavigator = rememberKatanaNavigator(),
-    viewModel: KatanaViewModel = koinViewModel(),
+    viewModel: KatanaViewModel = metroViewModel(),
 ) {
     val currentNav by navigator.navController.currentBackStackEntryAsState()
     val uiState by viewModel.collectAsState()
 
     val items = uiState.navigationBarItems
     val currentNavEntry by rememberUpdatedState(currentNav)
+
+    val snackbarHostState = rememberSnackbarHostState()
+    with(snackbarHostState) { snackbarController.SnackbarMessageHandler() }
 
     val onItemClicked =
         remember(navigator) { { item: MainNavigationBarItem -> navigator.onNavigationBarItemClicked(item) } }
@@ -60,6 +67,7 @@ internal fun Katana(
         KatanaScaffold(
             contentWindowInsets = WindowInsets.noInsets,
             bottomBar = { navigationBar(KatanaNavigationBarType.Bottom) },
+            snackbarHost = { KatanaSnackbarHost(hostState = snackbarHostState) },
         ) { paddingValues ->
             Row(modifier = Modifier.fillMaxSize().statusBarsPadding().displayCutoutPadding().padding(paddingValues)) {
                 navigationBar(KatanaNavigationBarType.Rail)

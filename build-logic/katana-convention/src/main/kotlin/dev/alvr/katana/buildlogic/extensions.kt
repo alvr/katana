@@ -2,9 +2,16 @@ package dev.alvr.katana.buildlogic
 
 import com.android.build.api.dsl.ApplicationExtension
 import dev.alvr.katana.buildlogic.mp.capitalize
+import dev.zacsweers.metro.gradle.DangerousMetroGradleApi
+import dev.zacsweers.metro.gradle.DelicateMetroGradleApi
+import dev.zacsweers.metro.gradle.DiagnosticSeverity
+import dev.zacsweers.metro.gradle.ExperimentalMetroGradleApi
+import dev.zacsweers.metro.gradle.MetroPluginExtension
+import dev.zacsweers.metro.gradle.RequiresIdeSupport
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.provider.Provider
@@ -72,19 +79,44 @@ internal fun DependencyHandlerScope.detekt(provider: Provider<*>) {
     "detektPlugins"(provider)
 }
 
-internal fun KotlinMultiplatformExtension.kspDependencies(project: Project, catalogPrefix: String) {
-    project.dependencies {
-        targets.forEach { target ->
-            val configurationName = "ksp${target.configurationName()}"
-            val catalogAlias = "$catalogPrefix-${target.groupName}-ksp".lowercase()
+context(project: Project)
+internal fun KotlinMultiplatformExtension.kspDependencies(catalogPrefix: String) {
+    val prefix = catalogPrefix.lowercase()
 
-            project.optionalCatalogBundle(catalogAlias).ifPresent { bundle -> add(configurationName, bundle) }
-        }
+    fun DependencyHandler.addBundle(configurationName: String, alias: String) {
+        project.optionalCatalogBundle(alias).ifPresent { bundle -> add(configurationName, bundle) }
+    }
+
+    project.dependencies {
+        val commonMainAlias = "$prefix-common-ksp"
+        val commonTestAlias = "$prefix-common-test-ksp"
+
+        addBundle("kspCommonMainMetadata", commonMainAlias)
+
+        targets
+            .filter { it.platformType != common }
+            .forEach { target ->
+                val mainConfig = "ksp${target.configurationName()}"
+                val testConfig = "ksp${target.testConfigurationName()}"
+                val groupPrefix = "$prefix-${target.groupName}"
+
+                addBundle(mainConfig, commonMainAlias)
+                addBundle(mainConfig, "$groupPrefix-ksp")
+
+                if (project.configurations.findByName(testConfig) != null) {
+                    addBundle(testConfig, commonMainAlias)
+                    addBundle(testConfig, commonTestAlias)
+                    addBundle(testConfig, "$groupPrefix-ksp")
+                    addBundle(testConfig, "$groupPrefix-test-ksp")
+                }
+            }
     }
 }
 
 internal fun ApplicationExtension.configureAndroid(packageName: String) {
-    compileSdk { version = release(KatanaConfiguration.CompileSdk) }
+    compileSdk {
+        version = release(KatanaConfiguration.CompileSdk) { minorApiLevel = KatanaConfiguration.CompileSdkMinor }
+    }
     buildToolsVersion = KatanaConfiguration.BuildTools
 
     buildFeatures.buildConfig = false
@@ -108,6 +140,7 @@ internal fun ApplicationExtension.configureAndroid(packageName: String) {
         animationsDisabled = true
         unitTests {
             isIncludeAndroidResources = true
+            isReturnDefaultValues = true
             all { test ->
                 test.useJUnitPlatform()
                 test.enabled = !test.isRelease
@@ -159,6 +192,13 @@ private fun KotlinTarget.configurationName() =
         targetName.capitalize()
     }
 
+private fun KotlinTarget.testConfigurationName() =
+    when (platformType) {
+        androidJvm -> "AndroidHostTest"
+        native -> "${targetName.capitalize()}Test"
+        else -> "${configurationName()}Test"
+    }
+
 private val KotlinTarget.groupName
     get() =
         when (platformType) {
@@ -166,6 +206,23 @@ private val KotlinTarget.groupName
             androidJvm -> AndroidTarget
             else -> platformType.visibleName
         }
+
+context(project: Project)
+@OptIn(
+    RequiresIdeSupport::class,
+    DelicateMetroGradleApi::class,
+    DelicateMetroGradleApi::class,
+    DangerousMetroGradleApi::class,
+    ExperimentalMetroGradleApi::class,
+)
+internal fun MetroPluginExtension.configure() {
+    debug = project.providers.gradleProperty("katana.flavor").getOrElse("dev") == "dev"
+    enableFunctionProviders = true
+    enableTopLevelFunctionInjection = true
+    generateAssistedFactories = true
+    generateContributionProviders = true
+    unusedGraphInputsSeverity = DiagnosticSeverity.WARN
+}
 
 private const val AndroidTarget = "android"
 private const val IosTarget = "ios"

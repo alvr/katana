@@ -3,7 +3,12 @@ package dev.alvr.katana.common.session.data.repositories
 import dev.alvr.katana.common.session.data.sources.SessionLocalSource
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.repositories.SessionRepository
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 internal class SessionRepositoryImpl(private val source: SessionLocalSource) : SessionRepository {
     override val sessionActive = source.sessionActive
 

@@ -2,11 +2,11 @@ package dev.alvr.katana.features.home.domain.usecases
 
 import arrow.core.left
 import arrow.core.right
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.tests.shouldBeLeft
 import dev.alvr.katana.core.tests.shouldBeRight
+import dev.alvr.katana.features.home.domain.di.createHomeDomainTestGraph
 import dev.alvr.katana.features.home.domain.failures.HomeFailure
 import dev.alvr.katana.features.home.domain.repositories.HomeRepository
 import dev.mokkery.answering.returns
@@ -15,11 +15,8 @@ import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
-import org.koin.test.KoinTest
-import org.koin.test.inject
 
-internal class HideWelcomeCardUseCaseTest : FreeSpec(), KoinTest {
-    private val dispatcher by inject<KatanaDispatcher>()
+internal class HideWelcomeCardUseCaseTest : FreeSpec() {
     private val repo = mock<HomeRepository>()
 
     private lateinit var useCase: HideWelcomeCardUseCase
@@ -45,6 +42,6 @@ internal class HideWelcomeCardUseCaseTest : FreeSpec(), KoinTest {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        useCase = HideWelcomeCardUseCase(dispatcher, repo)
+        useCase = createHomeDomainTestGraph(repo).hideWelcomeCardUseCase
     }
 }
