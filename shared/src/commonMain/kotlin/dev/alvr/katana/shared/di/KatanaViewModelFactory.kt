@@ -4,19 +4,21 @@ import androidx.lifecycle.ViewModel
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
 import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
 import kotlin.reflect.KClass
 
+private typealias Provider<T> = Map<KClass<out T>, () -> T>
+
+private typealias FactoryProvider<T, R> = Map<KClass<out T>, () -> R>
+
 @Inject
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 internal class KatanaViewModelFactory(
-    override val viewModelProviders: Map<KClass<out ViewModel>, Provider<ViewModel>>,
-    override val assistedFactoryProviders: Map<KClass<out ViewModel>, Provider<ViewModelAssistedFactory>>,
-    override val manualAssistedFactoryProviders:
-        Map<KClass<out ManualViewModelAssistedFactory>, Provider<ManualViewModelAssistedFactory>>,
+    override val viewModelProviders: Provider<ViewModel>,
+    override val assistedFactoryProviders: FactoryProvider<ViewModel, ViewModelAssistedFactory>,
+    override val manualAssistedFactoryProviders: Provider<ManualViewModelAssistedFactory>,
 ) : MetroViewModelFactory()

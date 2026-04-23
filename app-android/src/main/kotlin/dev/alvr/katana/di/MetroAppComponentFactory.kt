@@ -18,16 +18,18 @@ internal class MetroAppComponentFactory : AppComponentFactory() {
             return MainActivity(state.viewModelFactory)
         }
 
-        return getInstanceOrNull<Activity>(cl, className, state.activityProviders) ?: super.instantiateActivityCompat(cl, className, intent)
+        return getInstanceOrNull<Activity>(cl, className, state.activityProviders)
+            ?: super.instantiateActivityCompat(cl, className, intent)
     }
 
     override fun instantiateApplicationCompat(cl: ClassLoader, className: String): Application =
         super.instantiateApplicationCompat(cl, className).also { app ->
             val componentProviders = (app as KatanaApp).appComponentProviders
-            state = ComponentState(
-                activityProviders = componentProviders.activityProviders,
-                viewModelFactory = componentProviders.metroViewModelFactory,
-            )
+            state =
+                ComponentState(
+                    activityProviders = componentProviders.activityProviders,
+                    viewModelFactory = componentProviders.metroViewModelFactory,
+                )
         }
 
     private inline fun <reified T : Any> getInstanceOrNull(
@@ -40,7 +42,7 @@ internal class MetroAppComponentFactory : AppComponentFactory() {
     }
 }
 
-private data class ComponentState(
+private class ComponentState(
     val activityProviders: Map<KClass<out Activity>, () -> Activity>,
     val viewModelFactory: MetroViewModelFactory,
 )

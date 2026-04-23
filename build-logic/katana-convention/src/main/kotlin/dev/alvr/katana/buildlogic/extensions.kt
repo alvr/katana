@@ -217,12 +217,11 @@ context(project: Project)
 )
 internal fun MetroPluginExtension.configure() {
     debug = project.providers.gradleProperty("katana.flavor").getOrElse("dev") == "dev"
+    enableFunctionProviders = true
+    enableTopLevelFunctionInjection = true
     generateAssistedFactories = true
     generateContributionProviders = true
-    enableFullBindingGraphValidation = true
-    enableTopLevelFunctionInjection = true
     unusedGraphInputsSeverity = DiagnosticSeverity.WARN
-    forceEnableFirInIde = true
 }
 
 private const val AndroidTarget = "android"
