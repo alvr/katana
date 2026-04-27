@@ -6,10 +6,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.home.KatanaHomeTopAppBar
+import dev.alvr.katana.core.ui.navigation.KatanaEntryProviderInstaller
+import dev.alvr.katana.core.ui.navigation.destinations.AccountDestination
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.viewmodel.collectUiStateWithLifecycle
 import dev.alvr.katana.features.account.ui.entities.UserInfoUi
-import dev.alvr.katana.features.account.ui.navigation.AccountNavigator
 import dev.alvr.katana.features.account.ui.resources.Res
 import dev.alvr.katana.features.account.ui.resources.title
 import dev.alvr.katana.features.account.ui.screens.components.UserInfo
@@ -17,9 +18,10 @@ import dev.alvr.katana.features.account.ui.viewmodel.AccountIntent
 import dev.alvr.katana.features.account.ui.viewmodel.AccountViewModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 
+internal fun account(): KatanaEntryProviderInstaller = { entry<AccountDestination.Root> { entry -> AccountScreen() } }
+
 @Composable
-@Suppress("UNUSED_PARAMETER")
-internal fun AccountScreen(navigator: AccountNavigator, viewModel: AccountViewModel = metroViewModel()) {
+private fun AccountScreen(viewModel: AccountViewModel = metroViewModel()) {
     val state by viewModel.collectUiStateWithLifecycle()
 
     AccountScreen(userInfo = state.userInfo, onIntent = viewModel::intent)
