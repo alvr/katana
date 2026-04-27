@@ -30,6 +30,8 @@ import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreProvider
 import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
+import dev.alvr.katana.core.ui.navigation.KatanaEntryProviderInstaller
+import dev.alvr.katana.core.ui.navigation.destinations.HomeDestination
 import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.theme.KatanaTheme
@@ -47,12 +49,26 @@ import dev.alvr.katana.features.home.ui.screens.activity.screens.ActivityTabCont
 import dev.alvr.katana.features.home.ui.screens.foryou.screens.ForYouTabContent
 import dev.alvr.katana.features.home.ui.viewmodel.HomeEffect
 import dev.alvr.katana.features.home.ui.viewmodel.HomeViewModel
+import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
+internal fun home(): KatanaEntryProviderInstaller = {
+    entry<HomeDestination.Root> { entry ->
+        val viewModel =
+            assistedMetroViewModel<HomeViewModel, HomeViewModel.Factory>(
+                viewModelStoreOwner = rememberViewModelStoreOwner()
+            ) {
+                create(token = null)
+            }
+
+        HomeScreen(viewModel)
+    }
+}
+
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-internal fun HomeScreen(homeNavigator: HomeNavigator, viewModel: HomeViewModel, modifier: Modifier = Modifier) {
+private fun HomeScreen(viewModel: HomeViewModel, modifier: Modifier = Modifier) {
     val snackbarController = LocalSnackbarController.current
     val tabs = remember { HomeTab.entries.toImmutableList() }
     val pagerState = rememberPagerState { HomeTab.entries.size }
