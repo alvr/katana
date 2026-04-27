@@ -130,23 +130,23 @@ internal class HomeViewModel(
     }
 
     private fun handleNavigateToAnimeLists() {
-        effect(HomeEffect.ForYouEffect.NavigateToAnimeLists)
+        TODO()
     }
 
     private fun handleNavigateToMangaLists() {
-        effect(HomeEffect.ForYouEffect.NavigateToMangaLists)
+        TODO()
     }
 
     private fun handleNavigateToTrending() {
-        effect(HomeEffect.ForYouEffect.NavigateToTrending)
+        TODO()
     }
 
     private fun handleNavigateToPopular() {
-        effect(HomeEffect.ForYouEffect.NavigateToPopular)
+        TODO()
     }
 
     private fun handleNavigateToUpcoming() {
-        effect(HomeEffect.ForYouEffect.NavigateToUpcoming)
+        TODO()
     }
 
     // endregion [ForYou events]

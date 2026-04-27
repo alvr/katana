@@ -9,17 +9,7 @@ internal interface HomeEffect : UiEffect {
 
     data object ObserveSessionFailure : HomeEffect
 
-    sealed interface ForYouEffect : HomeEffect {
-        data object NavigateToAnimeLists : ForYouEffect
-
-        data object NavigateToMangaLists : ForYouEffect
-
-        data object NavigateToTrending : ForYouEffect
-
-        data object NavigateToPopular : ForYouEffect
-
-        data object NavigateToUpcoming : ForYouEffect
-    }
+    sealed interface ForYouEffect : HomeEffect
 
     sealed interface ActivityEffect : HomeEffect
 }
