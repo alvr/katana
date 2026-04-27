@@ -8,7 +8,7 @@ import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 
 @SingleIn(AppScope::class)
-@DependencyGraph(AppScope::class)
+@DependencyGraph(AppScope::class, bindingContainers = [KatanaEntryProviderInstallerContainer::class])
 internal interface AppGraph : KatanaGraph {
 
     @Provides @AppContext @SingleIn(AppScope::class) fun appContext(): PlatformContext = PlatformContext
