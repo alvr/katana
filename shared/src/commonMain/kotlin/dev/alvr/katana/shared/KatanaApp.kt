@@ -1,5 +1,6 @@
 package dev.alvr.katana.shared
 
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -16,6 +17,7 @@ import dev.alvr.katana.core.common.KatanaBuildConfig
 import dev.alvr.katana.core.common.KatanaStorage
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.components.snackbar.SnackbarController
+import dev.alvr.katana.core.ui.navigation.KatanaNavigator
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.shared.screens.Katana
 import dev.zacsweers.metro.Inject
@@ -24,15 +26,22 @@ import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 
 @Inject
 @Composable
-fun Katana(viewModelFactory: MetroViewModelFactory, storage: KatanaStorage, snackbarController: SnackbarController) {
+fun Katana(
+    viewModelFactory: MetroViewModelFactory,
+    navigator: KatanaNavigator,
+    storage: KatanaStorage,
+    snackbarController: SnackbarController,
+) {
     Init(storage)
 
-    KatanaTheme {
-        CompositionLocalProvider(
-            LocalMetroViewModelFactory provides viewModelFactory,
-            LocalSnackbarController provides snackbarController,
-        ) {
-            Katana()
+    SharedTransitionLayout {
+        KatanaTheme {
+            CompositionLocalProvider(
+                LocalMetroViewModelFactory provides viewModelFactory,
+                LocalSnackbarController provides snackbarController,
+            ) {
+                Katana(navigator)
+            }
         }
     }
 }

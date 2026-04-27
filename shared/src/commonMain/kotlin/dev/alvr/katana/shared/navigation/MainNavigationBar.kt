@@ -2,19 +2,19 @@ package dev.alvr.katana.shared.navigation
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
-import dev.alvr.katana.core.ui.navigation.KatanaDestination
 import dev.alvr.katana.core.ui.navigation.KatanaNavigationBarItem
+import dev.alvr.katana.core.ui.navigation.destinations.AccountDestination
+import dev.alvr.katana.core.ui.navigation.destinations.AnimeListsDestination
+import dev.alvr.katana.core.ui.navigation.destinations.ExploreDestination
+import dev.alvr.katana.core.ui.navigation.destinations.HomeDestination
+import dev.alvr.katana.core.ui.navigation.destinations.KatanaDestination
+import dev.alvr.katana.core.ui.navigation.destinations.MangaListsDestination
 import dev.alvr.katana.core.ui.symbols.AccountCircle
 import dev.alvr.katana.core.ui.symbols.AnimeLibrary
 import dev.alvr.katana.core.ui.symbols.Explore
 import dev.alvr.katana.core.ui.symbols.Home
 import dev.alvr.katana.core.ui.symbols.KatanaSymbols
 import dev.alvr.katana.core.ui.symbols.MangaLibrary
-import dev.alvr.katana.features.account.ui.navigation.AccountDestination
-import dev.alvr.katana.features.explore.ui.navigation.ExploreDestination
-import dev.alvr.katana.features.home.ui.navigation.HomeDestination
-import dev.alvr.katana.features.lists.ui.navigation.AnimeListsDestination
-import dev.alvr.katana.features.lists.ui.navigation.MangaListsDestination
 import dev.alvr.katana.shared.resources.Res
 import dev.alvr.katana.shared.resources.navigation_bar_account
 import dev.alvr.katana.shared.resources.navigation_bar_anime
