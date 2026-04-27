@@ -4,6 +4,7 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import co.touchlab.kermit.DefaultFormatter
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.platformLogWriter
@@ -24,11 +25,12 @@ import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 @Composable
 fun Katana(
     viewModelFactory: MetroViewModelFactory,
-    navigator: KatanaNavigator,
+    navigator: () -> KatanaNavigator,
     imageLoader: ImageLoader,
     snackbarController: SnackbarController,
 ) {
     Init(imageLoader)
+    val navigator = remember { navigator() }
 
     SharedTransitionLayout {
         KatanaTheme {

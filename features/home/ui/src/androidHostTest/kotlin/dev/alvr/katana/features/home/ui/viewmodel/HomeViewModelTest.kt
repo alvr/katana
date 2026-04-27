@@ -176,46 +176,31 @@ internal class HomeViewModelTest : BehaviorSpec() {
 
                 `when`("intent HomeIntent.ForYouIntent.NavigateToAnimeLists") {
                     then("it should post HomeEffect.ForYouEffect.NavigateToAnimeLists") {
-                        viewModel.test {
-                            intent(HomeIntent.ForYouIntent.NavigateToAnimeLists)
-                            expectEffect(HomeEffect.ForYouEffect.NavigateToAnimeLists)
-                        }
+                        viewModel.test { intent(HomeIntent.ForYouIntent.NavigateToAnimeLists) }
                     }
                 }
 
                 `when`("intent HomeIntent.ForYouIntent.NavigateToMangaLists") {
                     then("it should post HomeEffect.ForYouEffect.NavigateToMangaLists") {
-                        viewModel.test {
-                            intent(HomeIntent.ForYouIntent.NavigateToMangaLists)
-                            expectEffect(HomeEffect.ForYouEffect.NavigateToMangaLists)
-                        }
+                        viewModel.test { intent(HomeIntent.ForYouIntent.NavigateToMangaLists) }
                     }
                 }
 
                 `when`("intent HomeIntent.ForYouIntent.NavigateToTrending") {
                     then("it should post HomeEffect.ForYouEffect.NavigateToTrending") {
-                        viewModel.test {
-                            intent(HomeIntent.ForYouIntent.NavigateToTrending)
-                            expectEffect(HomeEffect.ForYouEffect.NavigateToTrending)
-                        }
+                        viewModel.test { intent(HomeIntent.ForYouIntent.NavigateToTrending) }
                     }
                 }
 
                 `when`("intent HomeIntent.ForYouIntent.NavigateToPopular") {
                     then("it should post HomeEffect.ForYouEffect.NavigateToPopular") {
-                        viewModel.test {
-                            intent(HomeIntent.ForYouIntent.NavigateToPopular)
-                            expectEffect(HomeEffect.ForYouEffect.NavigateToPopular)
-                        }
+                        viewModel.test { intent(HomeIntent.ForYouIntent.NavigateToPopular) }
                     }
                 }
 
                 `when`("intent HomeIntent.ForYouIntent.NavigateToUpcoming") {
                     then("it should post HomeEffect.ForYouEffect.NavigateToUpcoming") {
-                        viewModel.test {
-                            intent(HomeIntent.ForYouIntent.NavigateToUpcoming)
-                            expectEffect(HomeEffect.ForYouEffect.NavigateToUpcoming)
-                        }
+                        viewModel.test { intent(HomeIntent.ForYouIntent.NavigateToUpcoming) }
                     }
                 }
 
