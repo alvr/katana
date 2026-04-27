@@ -39,9 +39,7 @@ materialkolor = "5.0.0-alpha07"
 metro = "1.0.0"
 mockk = "1.14.9"
 mokkery = "3.3.0"
-navigation = "2.9.2"
-navigation3 = "1.1.1"
-navigation-material = "1.10.3"
+navigation = "1.1.1"
 okio = "3.17.0"
 spotless = "8.4.0"
 turbine = "1.2.1"
@@ -91,6 +89,9 @@ compose-animation = { module = "org.jetbrains.compose.animation:animation", vers
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 compose-material3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "material3-adaptive" }
+compose-material3-adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "material3-adaptive" }
+compose-material3-adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "material3-adaptive" }
+compose-material3-adaptive-navigation-suite = { module = "org.jetbrains.compose.material3:material3-adaptive-navigation-suite", version.ref = "material3" }
 compose-placeholder = { module = "com.eygraber:compose-placeholder-material3", version.ref = "compose-placeholder" }
 compose-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
@@ -154,6 +155,7 @@ ktor-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 # Lifecycle
 lifecycle-runtime = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycle" }
 
 # MaterialKolor
 materialkolor = { module = "com.materialkolor:material-kolor", version.ref = "materialkolor" }
@@ -163,9 +165,7 @@ metrox-android = { module = "dev.zacsweers.metro:metrox-android", version.ref = 
 metrox-viewmodel = { module = "dev.zacsweers.metro:metrox-viewmodel-compose", version.ref = "metro" }
 
 # Navigation
-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
-navigation-material = { module = "org.jetbrains.compose.material:material-navigation", version.ref = "navigation-material" }
-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+navigation = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation" }
 
 # Okio
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
@@ -284,6 +284,9 @@ ui-common = [
     "compose-foundation",
     "compose-material3",
     "compose-material3-adaptive",
+    "compose-material3-adaptive-layout",
+    "compose-material3-adaptive-navigation",
+    "compose-material3-adaptive-navigation-suite",
     "compose-preview",
     "compose-resources",
     "compose-runtime",
@@ -292,11 +295,10 @@ ui-common = [
     "compose-ui",
     "lifecycle-runtime",
     "lifecycle-viewmodel",
+    "lifecycle-viewmodel-navigation3",
     "kotlinx-serialization-json",
     "metrox-viewmodel",
     "navigation",
-    "navigation-material",
-    "navigation3-ui",
 ]
 ui-android = [
     "metrox-android",
@@ -321,6 +323,7 @@ app-android = [
     "coil",
     "metrox-android",
     "metrox-viewmodel",
+    "navigation",
 ]
 
 build-config = [
