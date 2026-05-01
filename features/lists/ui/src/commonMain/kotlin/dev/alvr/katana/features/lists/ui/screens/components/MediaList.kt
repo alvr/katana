@@ -54,7 +54,6 @@ import dev.alvr.katana.core.ui.resources.format
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.contentPaddingSmall
-import dev.alvr.katana.core.ui.utils.imageRequest
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.resources.Res
@@ -109,7 +108,7 @@ private fun MediaList(
     ) {
         items(
             items = items,
-            key = { it.mediaId.value },
+            key = { it.entryId.value },
             contentType = {
                 when (it) {
                     is MediaListItem.AnimeListItem -> MediaListItemContentType.Anime
@@ -131,7 +130,9 @@ private fun MediaList(
             )
         }
 
-        item { Spacer(modifier = Modifier.height(KatanaTheme.sizes.lastItemListHeight)) }
+        item(key = "bottom_spacer", contentType = MediaListItemContentType.BottomSpacer) {
+            Spacer(modifier = Modifier.height(KatanaTheme.sizes.lastItemListHeight))
+        }
     }
 }
 
@@ -226,7 +227,7 @@ private fun CoverAndScore(cover: String, score: Double, title: String, modifier:
 private fun Cover(cover: String, title: String, modifier: Modifier = Modifier) {
     AsyncImage(
         modifier = modifier,
-        model = imageRequest { data(cover) },
+        model = cover,
         contentDescription = title,
         contentScale = ContentScale.Crop,
         error = Res.drawable.default_cover.asPainter,
@@ -355,4 +356,5 @@ internal const val ITEM_PLUSONE_TAG = "itemPlusOne"
 private enum class MediaListItemContentType {
     Anime,
     Manga,
+    BottomSpacer,
 }

@@ -16,7 +16,6 @@ import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImage
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.theme.KatanaTheme
-import dev.alvr.katana.core.ui.utils.imageRequest
 import dev.alvr.katana.features.account.ui.entities.UserInfoUi
 import dev.alvr.katana.features.account.ui.resources.Res
 import dev.alvr.katana.features.account.ui.resources.logout_button
@@ -39,7 +38,7 @@ private fun UsernameAvatar(avatar: String, username: String, modifier: Modifier 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         AsyncImage(
             modifier = Modifier.size(KatanaTheme.sizes.size18).clip(CircleShape),
-            model = imageRequest { data(avatar) },
+            model = avatar,
             contentDescription = null,
             contentScale = ContentScale.Crop,
         )

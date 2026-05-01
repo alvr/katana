@@ -31,16 +31,33 @@ internal fun ForYouTabContent(
         verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
     ) {
         if (!sessionActive && uiState.showWelcomeCard) {
-            item(key = "welcome_card") { WelcomeCard(modifier = Modifier.animateItem(), onIntent = onIntent) }
+            item(key = "welcome_card", contentType = ForYouItemContentType.WelcomeCard) {
+                WelcomeCard(modifier = Modifier.animateItem(), onIntent = onIntent)
+            }
         }
 
         if (sessionActive) {
-            item(key = "watching") { Watching(modifier = Modifier.animateItem(), onIntent = onIntent) }
-            item(key = "reading") { Reading(modifier = Modifier.animateItem(), onIntent = onIntent) }
+            item(key = "watching", contentType = ForYouItemContentType.ListSection) {
+                Watching(modifier = Modifier.animateItem(), onIntent = onIntent)
+            }
+            item(key = "reading", contentType = ForYouItemContentType.ListSection) {
+                Reading(modifier = Modifier.animateItem(), onIntent = onIntent)
+            }
         }
 
-        item(key = "trending") { Trending(modifier = Modifier.animateItem(), onIntent = onIntent) }
-        item(key = "popular") { Popular(modifier = Modifier.animateItem(), onIntent = onIntent) }
-        item(key = "upcoming") { Upcoming(modifier = Modifier.animateItem(), onIntent = onIntent) }
+        item(key = "trending", contentType = ForYouItemContentType.ListSection) {
+            Trending(modifier = Modifier.animateItem(), onIntent = onIntent)
+        }
+        item(key = "popular", contentType = ForYouItemContentType.ListSection) {
+            Popular(modifier = Modifier.animateItem(), onIntent = onIntent)
+        }
+        item(key = "upcoming", contentType = ForYouItemContentType.ListSection) {
+            Upcoming(modifier = Modifier.animateItem(), onIntent = onIntent)
+        }
     }
+}
+
+private enum class ForYouItemContentType {
+    WelcomeCard,
+    ListSection,
 }
