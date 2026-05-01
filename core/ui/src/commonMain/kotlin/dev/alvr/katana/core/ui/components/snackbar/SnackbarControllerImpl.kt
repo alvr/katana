@@ -3,14 +3,17 @@ package dev.alvr.katana.core.ui.components.snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.lifecycle.compose.LifecycleStartEffect
+import androidx.lifecycle.lifecycleScope
 import dev.alvr.katana.core.ui.components.KatanaSnackbarVisuals
 import dev.alvr.katana.core.ui.components.showSnackbar
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
 
 @Stable
@@ -62,17 +65,22 @@ internal class SnackbarControllerImpl : SnackbarController {
     @Composable
     context(snackbarHostState: SnackbarHostState)
     override fun SnackbarMessageHandler() {
-        LaunchedEffect(this, snackbarHostState) {
-            for (message in messages) {
-                snackbarHostState.showSnackbar(
-                    messageResource = message.messageResource,
-                    actionLabelResource = message.actionLabelResource,
-                    withDismissAction = message.withDismissAction,
-                    duration = message.duration,
-                    onAction = message.onAction,
-                    onDismiss = message.onDismiss,
-                )
-            }
+        LifecycleStartEffect(messages, snackbarHostState) {
+            val job =
+                lifecycleScope.launch {
+                    messages.receiveAsFlow().collect { message ->
+                        snackbarHostState.showSnackbar(
+                            messageResource = message.messageResource,
+                            actionLabelResource = message.actionLabelResource,
+                            withDismissAction = message.withDismissAction,
+                            duration = message.duration,
+                            onAction = message.onAction,
+                            onDismiss = message.onDismiss,
+                        )
+                    }
+                }
+
+            onStopOrDispose { job.cancel() }
         }
     }
 }

@@ -22,6 +22,7 @@ import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -80,7 +81,9 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
     @OptIn(FlowPreview::class)
     private fun observeSearch() {
         viewModelScope.launch {
-            searchFlow.debounce(SEARCH_DEBOUNCE).collect { query -> state { copy(searchQuery = query) } }
+            searchFlow.debounce(SEARCH_DEBOUNCE).distinctUntilChanged().collect { query ->
+                state { copy(searchQuery = query) }
+            }
         }
     }
 
