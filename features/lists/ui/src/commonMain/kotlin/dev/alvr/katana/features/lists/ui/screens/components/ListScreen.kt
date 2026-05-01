@@ -78,7 +78,6 @@ internal fun ListScreen(
         }.value
 
     val buttonsVisible = !state.error
-    katanaScaffoldState.showTopAppBarActions = buttonsVisible
 
     KatanaHomeScaffold(
         katanaScaffoldState = katanaScaffoldState,

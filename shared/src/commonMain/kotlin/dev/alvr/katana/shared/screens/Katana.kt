@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -36,6 +35,7 @@ import dev.alvr.katana.shared.navigation.RootNavigator
 import dev.alvr.katana.shared.navigation.rememberKatanaNavigator
 import dev.alvr.katana.shared.viewmodel.KatanaViewModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun Katana(
@@ -44,11 +44,9 @@ internal fun Katana(
     viewModel: KatanaViewModel = metroViewModel(),
 ) {
     val snackbarController = LocalSnackbarController.current
-    val currentNav by navigator.navController.currentBackStackEntryAsState()
     val uiState by viewModel.collectAsState()
 
     val items = uiState.navigationBarItems
-    val currentNavEntry by rememberUpdatedState(currentNav)
 
     val snackbarHostState = rememberSnackbarHostState()
     with(snackbarHostState) { snackbarController.SnackbarMessageHandler() }
@@ -56,21 +54,26 @@ internal fun Katana(
     val onItemClicked =
         remember(navigator) { { item: MainNavigationBarItem -> navigator.onNavigationBarItemClicked(item) } }
 
-    val isSelected = remember(currentNavEntry) { { item: MainNavigationBarItem -> currentNavEntry.hasRoute(item) } }
-
-    val navigationBar =
-        @Composable { type: KatanaNavigationBarType ->
-            KatanaNavigationBar(items = items, isSelected = isSelected, onClick = onItemClicked, type = type)
-        }
-
     Box(modifier = modifier) {
         KatanaScaffold(
             contentWindowInsets = WindowInsets.noInsets,
-            bottomBar = { navigationBar(KatanaNavigationBarType.Bottom) },
+            bottomBar = {
+                KatanaNavigationBarContent(
+                    type = KatanaNavigationBarType.Bottom,
+                    items = items,
+                    navigator = navigator,
+                    onItemClick = onItemClicked,
+                )
+            },
             snackbarHost = { KatanaSnackbarHost(hostState = snackbarHostState) },
         ) { paddingValues ->
             Row(modifier = Modifier.fillMaxSize().statusBarsPadding().displayCutoutPadding().padding(paddingValues)) {
-                navigationBar(KatanaNavigationBarType.Rail)
+                KatanaNavigationBarContent(
+                    type = KatanaNavigationBarType.Rail,
+                    items = items,
+                    navigator = navigator,
+                    onItemClick = onItemClicked,
+                )
 
                 NavHost(
                     modifier = Modifier,
@@ -89,4 +92,21 @@ internal fun Katana(
             Box(modifier = Modifier.fillMaxSize().background(KatanaTheme.colorScheme.background))
         }
     }
+}
+
+@Composable
+private fun KatanaNavigationBarContent(
+    type: KatanaNavigationBarType,
+    items: ImmutableList<MainNavigationBarItem>,
+    navigator: RootNavigator,
+    onItemClick: (MainNavigationBarItem) -> Unit,
+) {
+    val currentNav by navigator.navController.currentBackStackEntryAsState()
+
+    KatanaNavigationBar(
+        items = items,
+        isSelected = { item -> currentNav.hasRoute(item) },
+        onClick = onItemClick,
+        type = type,
+    )
 }

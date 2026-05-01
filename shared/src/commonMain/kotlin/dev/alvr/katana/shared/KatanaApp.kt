@@ -2,7 +2,7 @@ package dev.alvr.katana.shared
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import co.touchlab.kermit.DefaultFormatter
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.platformLogWriter
@@ -37,11 +37,13 @@ fun Katana(viewModelFactory: MetroViewModelFactory, imageLoader: ImageLoader, sn
 private fun Init(imageLoader: ImageLoader) {
     setSingletonImageLoaderFactory { imageLoader }
 
-    ComposeStabilityAnalyzer.setEnabled(KatanaBuildConfig.ENABLE_TRACE_RECOMPOSITION)
+    DisposableEffect(Unit) {
+        ComposeStabilityAnalyzer.setEnabled(KatanaBuildConfig.ENABLE_TRACE_RECOMPOSITION)
 
-    LaunchedEffect(Unit) {
         if (KatanaBuildConfig.DEBUG) {
             Logger.setLogWriters(platformLogWriter(DefaultFormatter))
         }
+
+        onDispose {}
     }
 }
