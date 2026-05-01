@@ -125,7 +125,7 @@ internal class HomeViewModel(
             useCase = hideWelcomeCardUseCase,
             params = Unit,
             onFailure = { state { copy(forYouTab = forYouTab.copy(showWelcomeCard = false)) } },
-            onSuccess = { /* no-op */ },
+            onSuccess = { state { copy(forYouTab = forYouTab.copy(showWelcomeCard = false)) } },
         )
     }
 

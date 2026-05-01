@@ -1,8 +1,5 @@
 package dev.alvr.katana.features.home.ui.screens.foryou.sections
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,10 +12,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -40,29 +33,25 @@ import dev.alvr.katana.features.home.ui.viewmodel.HomeIntent
 
 @Composable
 internal fun WelcomeCard(onIntent: (HomeIntent) -> Unit, modifier: Modifier = Modifier) {
-    var isCardVisible by remember { mutableStateOf(true) }
+    ElevatedCard(modifier = modifier) {
+        WelcomeCardHeader(
+            onCloseCard = { onIntent(HomeIntent.ForYouIntent.CloseWelcomeCard) },
+            modifier =
+                Modifier.padding(
+                    start = KatanaTheme.dimensions.spacing4,
+                    end = KatanaTheme.dimensions.spacing4,
+                    top = KatanaTheme.dimensions.spacing2,
+                ),
+        )
 
-    AnimatedVisibility(modifier = modifier, visible = isCardVisible, exit = fadeOut() + slideOutHorizontally { it }) {
-        ElevatedCard {
-            Column(
-                modifier =
-                    Modifier.padding(
-                        start = KatanaTheme.dimensions.spacing4,
-                        end = KatanaTheme.dimensions.spacing4,
-                        top = KatanaTheme.dimensions.spacing2,
-                        bottom = KatanaTheme.dimensions.spacing4,
-                    )
-            ) {
-                WelcomeCardHeader(
-                    onCloseCard = {
-                        isCardVisible = false
-                        onIntent(HomeIntent.ForYouIntent.CloseWelcomeCard)
-                    }
+        WelcomeCardBody(
+            modifier =
+                Modifier.padding(
+                    start = KatanaTheme.dimensions.spacing4,
+                    end = KatanaTheme.dimensions.spacing4,
+                    bottom = KatanaTheme.dimensions.spacing4,
                 )
-
-                WelcomeCardBody()
-            }
-        }
+        )
     }
 }
 

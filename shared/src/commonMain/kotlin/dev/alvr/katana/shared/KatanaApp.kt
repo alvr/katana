@@ -9,6 +9,7 @@ import co.touchlab.kermit.platformLogWriter
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
 import dev.alvr.katana.core.common.KatanaBuildConfig
+import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.components.snackbar.SnackbarController
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.shared.screens.Katana
@@ -22,7 +23,12 @@ fun Katana(viewModelFactory: MetroViewModelFactory, imageLoader: ImageLoader, sn
     Init(imageLoader)
 
     KatanaTheme {
-        CompositionLocalProvider(LocalMetroViewModelFactory provides viewModelFactory) { Katana(snackbarController) }
+        CompositionLocalProvider(
+            LocalMetroViewModelFactory provides viewModelFactory,
+            LocalSnackbarController provides snackbarController,
+        ) {
+            Katana()
+        }
     }
 }
 

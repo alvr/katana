@@ -20,7 +20,7 @@ import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.KatanaSnackbarHost
 import dev.alvr.katana.core.ui.components.navigation.KatanaNavigationBar
 import dev.alvr.katana.core.ui.components.navigation.KatanaNavigationBarType
-import dev.alvr.katana.core.ui.components.snackbar.SnackbarController
+import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.navigation.KatanaNavigationBarItem.Companion.hasRoute
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.noInsets
@@ -39,11 +39,11 @@ import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 @Composable
 internal fun Katana(
-    snackbarController: SnackbarController,
     modifier: Modifier = Modifier,
     navigator: RootNavigator = rememberKatanaNavigator(),
     viewModel: KatanaViewModel = metroViewModel(),
 ) {
+    val snackbarController = LocalSnackbarController.current
     val currentNav by navigator.navController.currentBackStackEntryAsState()
     val uiState by viewModel.collectAsState()
 

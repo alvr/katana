@@ -26,12 +26,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.util.fastForEach
 import dev.alvr.katana.core.ui.components.KatanaScaffold
-import dev.alvr.katana.core.ui.components.showSnackbar
+import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.noInsets
-import dev.alvr.katana.core.ui.utils.rememberSnackbarHostState
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.home.ui.navigation.HomeNavigator
@@ -53,17 +52,17 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun HomeScreen(homeNavigator: HomeNavigator, viewModel: HomeViewModel, modifier: Modifier = Modifier) {
+    val snackbarController = LocalSnackbarController.current
     val tabs = remember { HomeTab.entries.toImmutableList() }
     val pagerState = rememberPagerState { HomeTab.entries.size }
-    val snackbarHostState = rememberSnackbarHostState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val uiState by viewModel.collectAsState()
 
     viewModel.CollectEffect { effect ->
         when (effect) {
-            HomeEffect.SaveTokenFailure -> snackbarHostState.showSnackbar(Res.string.error_save_token)
-            HomeEffect.SaveUserIdFailure -> snackbarHostState.showSnackbar(Res.string.error_fetch_user_id)
-            HomeEffect.ObserveSessionFailure -> snackbarHostState.showSnackbar(Res.string.error_observe_session)
+            HomeEffect.SaveTokenFailure -> snackbarController.showMessage(Res.string.error_save_token)
+            HomeEffect.SaveUserIdFailure -> snackbarController.showMessage(Res.string.error_fetch_user_id)
+            HomeEffect.ObserveSessionFailure -> snackbarController.showMessage(Res.string.error_observe_session)
             HomeEffect.ForYouEffect.NavigateToAnimeLists -> homeNavigator.navigateToAnimeLists()
             HomeEffect.ForYouEffect.NavigateToMangaLists -> homeNavigator.navigateToMangaLists()
             HomeEffect.ForYouEffect.NavigateToTrending -> homeNavigator.navigateToTrending()
@@ -74,7 +73,6 @@ internal fun HomeScreen(homeNavigator: HomeNavigator, viewModel: HomeViewModel, 
 
     KatanaScaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        snackbarHostState = snackbarHostState,
         topBar = {
             TopBar(
                 scrollBehavior = scrollBehavior,

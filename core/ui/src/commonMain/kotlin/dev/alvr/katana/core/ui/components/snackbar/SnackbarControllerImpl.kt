@@ -13,6 +13,7 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
 
@@ -69,14 +70,23 @@ internal class SnackbarControllerImpl : SnackbarController {
             val job =
                 lifecycleScope.launch {
                     messages.receiveAsFlow().collect { message ->
-                        snackbarHostState.showSnackbar(
-                            messageResource = message.messageResource,
-                            actionLabelResource = message.actionLabelResource,
-                            withDismissAction = message.withDismissAction,
-                            duration = message.duration,
-                            onAction = message.onAction,
-                            onDismiss = message.onDismiss,
-                        )
+                        var shown = false
+
+                        try {
+                            snackbarHostState.showSnackbar(
+                                messageResource = message.messageResource,
+                                actionLabelResource = message.actionLabelResource,
+                                withDismissAction = message.withDismissAction,
+                                duration = message.duration,
+                                onAction = message.onAction,
+                                onDismiss = message.onDismiss,
+                            )
+                            shown = true
+                        } finally {
+                            if (!shown && !isActive) {
+                                messages.trySend(message)
+                            }
+                        }
                     }
                 }
 
