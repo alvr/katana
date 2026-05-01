@@ -16,7 +16,7 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -61,15 +61,19 @@ fun KatanaErrorState(
     ) {
         Spacer(Modifier.height(KatanaTheme.sizes.size4))
 
+        val alpha100 = KatanaTheme.alpha.alpha100
+        val alpha66 = KatanaTheme.alpha.alpha66
+
         OutlinedButton(
             modifier =
-                Modifier.alpha(
-                    if (loading) {
-                        KatanaTheme.alpha.alpha66
-                    } else {
-                        KatanaTheme.alpha.alpha100
-                    }
-                ),
+                Modifier.graphicsLayer {
+                    alpha =
+                        if (loading) {
+                            alpha66
+                        } else {
+                            alpha100
+                        }
+                },
             onClick = onRetry,
             enabled = !loading,
             colors =

@@ -18,7 +18,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -58,9 +57,8 @@ internal fun HomeScreen(homeNavigator: HomeNavigator, viewModel: HomeViewModel, 
     val pagerState = rememberPagerState { HomeTab.entries.size }
     val snackbarHostState = rememberSnackbarHostState()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-    val currentTab by remember { derivedStateOf { pagerState.currentPage } }
-
     val uiState by viewModel.collectAsState()
+
     viewModel.CollectEffect { effect ->
         when (effect) {
             HomeEffect.SaveTokenFailure -> snackbarHostState.showSnackbar(Res.string.error_save_token)
@@ -80,7 +78,7 @@ internal fun HomeScreen(homeNavigator: HomeNavigator, viewModel: HomeViewModel, 
         topBar = {
             TopBar(
                 scrollBehavior = scrollBehavior,
-                currentTab = currentTab,
+                currentTab = pagerState.currentPage,
                 tabs = tabs,
                 onTabClick = { tab -> pagerState.requestScrollToPage(tab.ordinal) },
             )
