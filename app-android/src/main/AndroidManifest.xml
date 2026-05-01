@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="false"
         tools:replace="android:appComponentFactory"
         tools:targetApi="tiramisu">
+
+        <profileable android:shell="true" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

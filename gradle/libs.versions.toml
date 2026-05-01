@@ -1,11 +1,15 @@
 [versions]
 android = "9.2.0"
 androidx-activity = "1.13.0"
+androidx-benchmark = "1.5.0-alpha05"
 androidx-splashscreen = "1.2.0"
+androidx-test-ext-junit = "1.3.0"
+androidx-test-uiautomator = "2.3.0"
 apollo = "5.0.0-rc.0"
 apollo-cache = "1.0.1"
 apollo-mockserver = "0.3.1"
 arrow = "2.2.2.1"
+baselineprofile = "1.5.0-alpha05"
 coil = "3.4.0"
 compose = "1.11.0-beta03"
 compose-placeholder = "1.0.12"
@@ -45,6 +49,7 @@ turbine = "1.2.1"
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
 android-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "android" }
+androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
 apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -61,7 +66,10 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 [libraries]
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "androidx-benchmark" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
+androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-test-uiautomator" }
 
 # Apollo
 apollo = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo" }
@@ -102,6 +110,7 @@ desugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "des
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version.ref = "android" }
 gradle-apollo = { module = "com.apollographql.apollo:apollo-gradle-plugin", version.ref = "apollo" }
+gradle-baselineprofile = { module = "androidx.baselineprofile:androidx.baselineprofile.gradle.plugin", version.ref = "baselineprofile" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
 gradle-compose-compiler = { module = "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin", version.ref = "kotlin" }
 gradle-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
@@ -319,6 +328,7 @@ build-config = [
 gradle = [
     "gradle-android",
     "gradle-apollo",
+    "gradle-baselineprofile",
     "gradle-compose",
     "gradle-compose-compiler",
     "gradle-detekt",

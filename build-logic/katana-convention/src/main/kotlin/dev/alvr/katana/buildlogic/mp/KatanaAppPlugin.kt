@@ -20,6 +20,7 @@ internal class KatanaAppPlugin : Plugin<Project> {
     override fun apply(target: Project) =
         with(target) {
             apply(plugin = "com.android.application")
+            apply(plugin = "androidx.baselineprofile")
             apply(plugin = "org.jetbrains.kotlin.plugin.compose")
             apply(plugin = "dev.zacsweers.metro")
 
@@ -32,8 +33,8 @@ internal class KatanaAppPlugin : Plugin<Project> {
             tasks.commonTasks()
         }
 
-    context(project: Project)
     @Suppress("StringLiteralDuplication")
+    context(project: Project)
     private fun ApplicationExtension.configureAndroid() {
         fun ApplicationBuildType.configure(isDebug: Boolean) {
             isDebuggable = isDebug
