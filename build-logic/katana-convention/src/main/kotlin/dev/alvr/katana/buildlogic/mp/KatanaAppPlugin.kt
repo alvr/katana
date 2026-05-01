@@ -22,6 +22,7 @@ internal class KatanaAppPlugin : Plugin<Project> {
             apply(plugin = "com.android.application")
             apply(plugin = "androidx.baselineprofile")
             apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+            apply(plugin = "com.github.skydoves.compose.stability.analyzer")
             apply(plugin = "dev.zacsweers.metro")
 
             with(extensions) {

@@ -8,6 +8,7 @@ import co.touchlab.kermit.Logger
 import co.touchlab.kermit.platformLogWriter
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
+import com.skydoves.compose.stability.runtime.ComposeStabilityAnalyzer
 import dev.alvr.katana.core.common.KatanaBuildConfig
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.components.snackbar.SnackbarController
@@ -35,6 +36,8 @@ fun Katana(viewModelFactory: MetroViewModelFactory, imageLoader: ImageLoader, sn
 @Composable
 private fun Init(imageLoader: ImageLoader) {
     setSingletonImageLoaderFactory { imageLoader }
+
+    ComposeStabilityAnalyzer.setEnabled(KatanaBuildConfig.ENABLE_TRACE_RECOMPOSITION)
 
     LaunchedEffect(Unit) {
         if (KatanaBuildConfig.DEBUG) {

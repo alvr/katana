@@ -13,6 +13,7 @@ baselineprofile = "1.5.0-alpha05"
 coil = "3.4.0"
 compose = "1.11.0-beta03"
 compose-placeholder = "1.0.12"
+compose-stability-analyzer = "0.7.4"
 desugaring = "2.1.5"
 detekt = "2.0.0-alpha.3"
 detekt-compose = "0.5.8"
@@ -53,6 +54,7 @@ androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "bas
 apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-stability-analyzer = { id = "com.github.skydoves.compose.stability.analyzer", version.ref = "compose-stability-analyzer" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
 kotest = { id = "io.kotest", version.ref = "kotest" }
 kotlin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -96,6 +98,7 @@ compose-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", vers
 compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
 compose-runtime-saveable = { module = "org.jetbrains.compose.runtime:runtime-saveable", version.ref = "compose" }
+compose-stability-analyzer-runtime = { module = "com.github.skydoves:compose-stability-runtime", version.ref = "compose-stability-analyzer" }
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
 compose-windowsize = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "material3" }
 
@@ -113,6 +116,7 @@ gradle-apollo = { module = "com.apollographql.apollo:apollo-gradle-plugin", vers
 gradle-baselineprofile = { module = "androidx.baselineprofile:androidx.baselineprofile.gradle.plugin", version.ref = "baselineprofile" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
 gradle-compose-compiler = { module = "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin", version.ref = "kotlin" }
+gradle-compose-stability-analyzer = { module = "com.github.skydoves.compose.stability.analyzer:com.github.skydoves.compose.stability.analyzer.gradle.plugin", version.ref = "compose-stability-analyzer" }
 gradle-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotest = { module = "io.kotest:io.kotest.gradle.plugin", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -286,6 +290,7 @@ ui-common = [
     "compose-resources",
     "compose-runtime",
     "compose-runtime-saveable",
+    "compose-stability-analyzer-runtime",
     "compose-ui",
     "lifecycle-runtime",
     "lifecycle-viewmodel",
@@ -331,6 +336,7 @@ gradle = [
     "gradle-baselineprofile",
     "gradle-compose",
     "gradle-compose-compiler",
+    "gradle-compose-stability-analyzer",
     "gradle-detekt",
     "gradle-kotest",
     "gradle-kotlin",

@@ -25,6 +25,7 @@ internal class KatanaMultiplatformComposePlugin : Plugin<Project> {
             apply(plugin = "org.jetbrains.kotlin.multiplatform")
             apply(plugin = "org.jetbrains.compose")
             apply(plugin = "org.jetbrains.kotlin.plugin.compose")
+            apply(plugin = "com.github.skydoves.compose.stability.analyzer")
 
             with(extensions) {
                 configure<KotlinMultiplatformExtension> { configureMultiplatform() }

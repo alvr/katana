@@ -12,11 +12,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@Suppress("MagicNumber")
 @RunWith(AndroidJUnit4::class)
 internal class KatanaBenchmarks {
 
-    @get:Rule
-    val macroRule = MacrobenchmarkRule()
+    @get:Rule val macroRule = MacrobenchmarkRule()
 
     @Test
     fun coldStartupTiming() {
@@ -64,8 +64,6 @@ internal class KatanaBenchmarks {
         device.swipe(centerX, startY, centerX, endY, 12)
         device.waitForIdle()
     }
-
-    private companion object {
-        const val AppPackage = "dev.alvr.katana"
-    }
 }
+
+private const val AppPackage = "dev.alvr.katana"
