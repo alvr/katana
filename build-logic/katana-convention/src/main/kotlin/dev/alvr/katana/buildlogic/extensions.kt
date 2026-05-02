@@ -216,7 +216,6 @@ context(project: Project)
     ExperimentalMetroGradleApi::class,
 )
 internal fun MetroPluginExtension.configure() {
-    debug = project.providers.gradleProperty("katana.flavor").getOrElse("dev") == "dev"
     enableFunctionProviders = true
     enableTopLevelFunctionInjection = true
     generateAssistedFactories = true

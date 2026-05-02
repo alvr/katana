@@ -1,14 +1,18 @@
 [versions]
 android = "9.2.0"
 androidx-activity = "1.13.0"
+androidx-benchmark = "1.5.0-alpha05"
 androidx-splashscreen = "1.2.0"
+androidx-test-ext-junit = "1.3.0"
 apollo = "5.0.0-rc.0"
 apollo-cache = "1.0.1"
 apollo-mockserver = "0.3.1"
 arrow = "2.2.2.1"
+baselineprofile = "1.5.0-alpha05"
 coil = "3.4.0"
-compose = "1.10.3"
+compose = "1.11.0-beta03"
 compose-placeholder = "1.0.12"
+compose-stability-analyzer = "0.7.4"
 desugaring = "2.1.5"
 detekt = "2.0.0-alpha.3"
 detekt-compose = "0.5.8"
@@ -20,7 +24,7 @@ kotlin = "2.3.21"
 kotlinpoet = "2.3.0"
 kotlinx-atomicfu = "0.32.1"
 kotlinx-coroutines = "1.10.2"
-kotlinx-datetime = "0.7.1-0.6.x-compat"
+kotlinx-datetime = "0.7.1"
 kotlinx-immutable = "0.4.0"
 kotlinx-io = "0.9.0"
 kotlinx-serialization = "1.11.0"
@@ -28,9 +32,9 @@ kover = "0.9.8"
 ksp = "2.3.7"
 kstore = "1.0.0"
 ktor = "3.4.3"
-lifecycle = "2.10.0"
+lifecycle = "2.11.0-alpha03"
 material3 = "1.11.0-alpha07"
-material3-adaptive = "1.2.0"
+material3-adaptive = "1.3.0-alpha07"
 materialkolor = "5.0.0-alpha07"
 metro = "1.0.0"
 mockk = "1.14.9"
@@ -45,9 +49,11 @@ turbine = "1.2.1"
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android" }
 android-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "android" }
+androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
 apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-stability-analyzer = { id = "com.github.skydoves.compose.stability.analyzer", version.ref = "compose-stability-analyzer" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
 kotest = { id = "io.kotest", version.ref = "kotest" }
 kotlin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -61,7 +67,9 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 [libraries]
 # AndroidX
 androidx-activity = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "androidx-benchmark" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
 
 # Apollo
 apollo = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo" }
@@ -88,6 +96,7 @@ compose-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", vers
 compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
 compose-runtime-saveable = { module = "org.jetbrains.compose.runtime:runtime-saveable", version.ref = "compose" }
+compose-stability-analyzer-runtime = { module = "com.github.skydoves:compose-stability-runtime", version.ref = "compose-stability-analyzer" }
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose" }
 compose-windowsize = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "material3" }
 
@@ -102,8 +111,10 @@ desugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "des
 # Gradle
 gradle-android = { module = "com.android.tools.build:gradle", version.ref = "android" }
 gradle-apollo = { module = "com.apollographql.apollo:apollo-gradle-plugin", version.ref = "apollo" }
+gradle-baselineprofile = { module = "androidx.baselineprofile:androidx.baselineprofile.gradle.plugin", version.ref = "baselineprofile" }
 gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
 gradle-compose-compiler = { module = "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin", version.ref = "kotlin" }
+gradle-compose-stability-analyzer = { module = "com.github.skydoves.compose.stability.analyzer:com.github.skydoves.compose.stability.analyzer.gradle.plugin", version.ref = "compose-stability-analyzer" }
 gradle-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-kotest = { module = "io.kotest:io.kotest.gradle.plugin", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -277,6 +288,7 @@ ui-common = [
     "compose-resources",
     "compose-runtime",
     "compose-runtime-saveable",
+    "compose-stability-analyzer-runtime",
     "compose-ui",
     "lifecycle-runtime",
     "lifecycle-viewmodel",
@@ -319,8 +331,10 @@ build-config = [
 gradle = [
     "gradle-android",
     "gradle-apollo",
+    "gradle-baselineprofile",
     "gradle-compose",
     "gradle-compose-compiler",
+    "gradle-compose-stability-analyzer",
     "gradle-detekt",
     "gradle-kotest",
     "gradle-kotlin",

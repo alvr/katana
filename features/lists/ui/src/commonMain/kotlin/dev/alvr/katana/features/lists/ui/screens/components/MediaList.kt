@@ -29,6 +29,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,7 +54,6 @@ import dev.alvr.katana.core.ui.resources.format
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.contentPaddingSmall
-import dev.alvr.katana.core.ui.utils.imageRequest
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.resources.Res
@@ -106,18 +106,33 @@ private fun MediaList(
         verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
         horizontalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
     ) {
-        items(items = items, key = { it.mediaId.value }) { item ->
+        items(
+            items = items,
+            key = { it.entryId.value },
+            contentType = {
+                when (it) {
+                    is MediaListItem.AnimeListItem -> MediaListItemContentType.Anime
+                    is MediaListItem.MangaListItem -> MediaListItemContentType.Manga
+                }
+            },
+        ) { item ->
+            val onAddPlusOneClick = remember(item.entryId, onAddPlusOne) { { onAddPlusOne(item.entryId) } }
+            val onEditEntryClick = remember(item.entryId, onEditEntry) { { onEditEntry(item.entryId) } }
+            val onEntryDetailsClick = remember(item.entryId, onEntryDetails) { { onEntryDetails(item.entryId) } }
+
             MediaListItem(
                 modifier = Modifier.fillMaxWidth().animateItem(),
                 item = item,
                 itemLoading = itemLoading,
-                onAddPlusOne = { onAddPlusOne(item.entryId) },
-                onEditEntry = { onEditEntry(item.entryId) },
-                onEntryDetails = { onEntryDetails(item.entryId) },
+                onAddPlusOne = onAddPlusOneClick,
+                onEditEntry = onEditEntryClick,
+                onEntryDetails = onEntryDetailsClick,
             )
         }
 
-        item { Spacer(modifier = Modifier.height(KatanaTheme.sizes.lastItemListHeight)) }
+        item(key = "bottom_spacer", contentType = MediaListItemContentType.BottomSpacer) {
+            Spacer(modifier = Modifier.height(KatanaTheme.sizes.lastItemListHeight))
+        }
     }
 }
 
@@ -212,7 +227,7 @@ private fun CoverAndScore(cover: String, score: Double, title: String, modifier:
 private fun Cover(cover: String, title: String, modifier: Modifier = Modifier) {
     AsyncImage(
         modifier = modifier,
-        model = imageRequest { data(cover) },
+        model = cover,
         contentDescription = title,
         contentScale = ContentScale.Crop,
         error = Res.drawable.default_cover.asPainter,
@@ -337,3 +352,9 @@ internal const val ITEM_TITLE_TAG = "itemTitle"
 internal const val ITEM_SUBTITLE_TAG = "itemSubtitle"
 internal const val ITEM_SCORE_TAG = "itemScore"
 internal const val ITEM_PLUSONE_TAG = "itemPlusOne"
+
+private enum class MediaListItemContentType {
+    Anime,
+    Manga,
+    BottomSpacer,
+}

@@ -6,8 +6,6 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import coil3.compose.LocalPlatformContext
-import coil3.request.ImageRequest
 
 @Composable
 fun isLandscape(): Boolean {
@@ -26,7 +24,3 @@ fun isLandscape(): Boolean {
 @Composable fun rememberSnackbarHostState() = remember { SnackbarHostState() }
 
 @Composable internal expect fun calculateWindowSizeClass(): WindowSizeClass
-
-@Composable
-fun imageRequest(builder: ImageRequest.Builder.() -> Unit) =
-    ImageRequest.Builder(LocalPlatformContext.current).apply(builder).build()

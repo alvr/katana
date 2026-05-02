@@ -36,6 +36,10 @@ gradlePlugin {
             id = "katana.kover"
             implementationClass = "dev.alvr.katana.buildlogic.common.KatanaKoverPlugin"
         }
+        register("macrobenchmark") {
+            id = "katana.macrobenchmark"
+            implementationClass = "dev.alvr.katana.buildlogic.mp.KatanaMacrobenchmarkPlugin"
+        }
         register("multiplatform-compose") {
             id = "katana.multiplatform.compose"
             implementationClass = "dev.alvr.katana.buildlogic.mp.ui.KatanaMultiplatformComposePlugin"

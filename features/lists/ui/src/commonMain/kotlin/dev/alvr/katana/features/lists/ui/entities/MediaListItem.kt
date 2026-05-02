@@ -2,7 +2,6 @@ package dev.alvr.katana.features.lists.ui.entities
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.ItemMediaId
@@ -58,7 +57,7 @@ internal sealed interface MediaListItem {
         override val updatedAt: LocalDateTime?,
         val nextEpisode: NextEpisode?,
     ) : MediaListItem {
-        @Stable data class NextEpisode(val number: Int, val date: LocalDateTime)
+        @Immutable data class NextEpisode(val number: Int, val date: LocalDateTime)
     }
 
     data class MangaListItem(

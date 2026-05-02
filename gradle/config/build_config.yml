@@ -3,24 +3,42 @@ android:
     - type: Boolean
       name: DEBUG
       value: true
+    - type: Boolean
+      name: ENABLE_TRACE_RECOMPOSITION
+      value: true
   beta:
     - type: Boolean
       name: DEBUG
       value: false
+    - type: Boolean
+      name: ENABLE_TRACE_RECOMPOSITION
+      value: true
   release:
     - type: Boolean
       name: DEBUG
+      value: false
+    - type: Boolean
+      name: ENABLE_TRACE_RECOMPOSITION
       value: false
 ios:
   dev:
     - type: Boolean
       name: DEBUG
       value: true
+    - type: Boolean
+      name: ENABLE_TRACE_RECOMPOSITION
+      value: true
   beta:
     - type: Boolean
       name: DEBUG
       value: false
+    - type: Boolean
+      name: ENABLE_TRACE_RECOMPOSITION
+      value: true
   release:
     - type: Boolean
       name: DEBUG
+      value: false
+    - type: Boolean
+      name: ENABLE_TRACE_RECOMPOSITION
       value: false
