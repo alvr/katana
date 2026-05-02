@@ -36,7 +36,7 @@ develocity {
 // Keep in sync with build-logic/settings.gradle.kts
 buildCache { local { directory = rootDir.resolve(".gradle/build-cache") } }
 
-include(":app-android", ":baselineprofile", ":macrobenchmark", ":shared")
+include(":app-android", ":macrobenchmark", ":shared")
 
 includes("common", "core", "features")
 

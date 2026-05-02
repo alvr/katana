@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="generateAllBaselineProfiles" />
+          <option value=":macrobenchmark:baseline" />
         </list>
       </option>
       <option name="vmOptions" />

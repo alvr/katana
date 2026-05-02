@@ -1,7 +1,7 @@
 plugins { id("katana.app") }
 
 dependencies {
-    baselineProfile(projects.baselineprofile)
+    baselineProfile(projects.macrobenchmark)
 
     coreLibraryDesugaring(libs.desugaring)
 

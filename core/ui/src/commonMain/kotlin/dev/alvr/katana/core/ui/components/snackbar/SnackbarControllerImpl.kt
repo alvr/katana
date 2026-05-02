@@ -13,7 +13,6 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
 
@@ -21,7 +20,7 @@ import org.jetbrains.compose.resources.StringResource
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 internal class SnackbarControllerImpl : SnackbarController {
-    private val messages = Channel<KatanaSnackbarVisuals>(Channel.BUFFERED)
+    private val messages = Channel<KatanaSnackbarVisuals>(Channel.UNLIMITED)
 
     override suspend fun showMessage(
         message: StringResource,
@@ -83,7 +82,7 @@ internal class SnackbarControllerImpl : SnackbarController {
                             )
                             shown = true
                         } finally {
-                            if (!shown && !isActive) {
+                            if (!shown) {
                                 messages.trySend(message)
                             }
                         }

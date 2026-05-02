@@ -14,16 +14,6 @@ internal class KatanaCommonPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(tasks) {
-                register("generateAllBaselineProfiles") {
-                    group = "verification"
-                    description = "Generate Baseline Profiles for all modules that support them"
-
-                    val generateTasks =
-                        subprojects.map { p -> p.tasks.matching { t -> t.name == "generateBaselineProfile" } }
-
-                    dependsOn(generateTasks)
-                }
-
                 register<TestReport>("unitTests") {
                     val testTasks = subprojects.map { p -> p.tasks.withType<Test>().matching { t -> !t.isRelease } }
 

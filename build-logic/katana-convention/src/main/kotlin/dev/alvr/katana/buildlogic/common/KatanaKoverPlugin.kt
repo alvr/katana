@@ -68,7 +68,9 @@ internal class KatanaKoverPlugin : Plugin<Project> {
 
     context(project: Project)
     private fun KoverProjectExtension.configureRoot() {
-        project.subprojects.filter { p -> p.childProjects.isEmpty() }.forEach { p -> with(p) { configureSubproject() } }
+        project.subprojects
+            .filter { p -> p.childProjects.isEmpty() && p.path !in projectsWithoutCoverage }
+            .forEach { p -> with(p) { configureSubproject() } }
 
         configureCommon()
     }
@@ -136,8 +138,7 @@ internal class KatanaKoverPlugin : Plugin<Project> {
             }
         }
     }
-
-    private companion object {
-        const val MIN_COVERED_PERCENTAGE = 80
-    }
 }
+
+private val projectsWithoutCoverage = setOf(":app-android", ":app-ios", ":macrobenchmark")
+private const val MIN_COVERED_PERCENTAGE = 80

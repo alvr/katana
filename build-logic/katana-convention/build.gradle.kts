@@ -20,10 +20,6 @@ gradlePlugin {
             id = "katana.app"
             implementationClass = "dev.alvr.katana.buildlogic.mp.KatanaAppPlugin"
         }
-        register("baselineprofile") {
-            id = "katana.baselineprofile"
-            implementationClass = "dev.alvr.katana.buildlogic.mp.KatanaBaselineProfilePlugin"
-        }
         register("common") {
             id = "katana.common"
             implementationClass = "dev.alvr.katana.buildlogic.common.KatanaCommonPlugin"

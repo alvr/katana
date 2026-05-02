@@ -1,4 +1,4 @@
-package dev.alvr.katana.baselineprofile
+package dev.alvr.katana.macrobenchmark
 
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4

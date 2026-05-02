@@ -44,7 +44,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     private val _uiState = MutableStateFlow(initialState)
     private val _effects = Channel<E>(Channel.BUFFERED)
     private val intents = Channel<I>()
-    private val executing = mutableMapOf<Int, Job>()
+    private val executing = mutableMapOf<Any, Job>()
 
     private val viewModelLogTag
         get() = this::class.simpleName ?: LogTag
@@ -155,13 +155,13 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     }
 
     private inline fun FlowUseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
-        executing.remove(hashCode())?.cancel()
-        executing[hashCode()] = viewModelScope.launch(dispatcher.io) { block() }
+        executing.remove(this)?.cancel()
+        executing[this] = viewModelScope.launch(dispatcher.io) { block() }
     }
 
     private inline fun UseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
-        executing.remove(hashCode())?.cancel()
-        executing[hashCode()] = viewModelScope.launch(dispatcher.io) { block() }
+        executing.remove(this)?.cancel()
+        executing[this] = viewModelScope.launch(dispatcher.io) { block() }
     }
 }
 

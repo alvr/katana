@@ -11,28 +11,26 @@ import org.gradle.kotlin.dsl.configure
 
 internal class KatanaMacrobenchmarkPlugin : Plugin<Project> {
 
-    override fun apply(target: Project) =
+    override fun apply(target: Project) {
         with(target) {
             apply(plugin = "com.android.test")
             apply(plugin = "androidx.baselineprofile")
 
             with(extensions) {
                 commonExtensions()
-                configure<TestExtension> { configureAndroid() }
+                configure<TestExtension> {
+                    compileSdk = KatanaConfiguration.CompileSdk
+                    namespace = "${KatanaConfiguration.PackageName}.macrobenchmark"
+                    targetProjectPath = ":app-android"
+
+                    defaultConfig {
+                        minSdk = KatanaConfiguration.MinSdk
+                        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+                    }
+                }
             }
 
             tasks.commonTasks()
-        }
-
-    private fun TestExtension.configureAndroid() {
-        compileSdk = KatanaConfiguration.CompileSdk
-        namespace = "${KatanaConfiguration.PackageName}.macrobenchmark"
-        targetProjectPath = ":app-android"
-
-        defaultConfig {
-            minSdk = KatanaConfiguration.MinSdk
-            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-            testInstrumentationRunnerArguments["androidx.benchmark.enabledRules"] = "Macrobenchmark"
         }
     }
 }
