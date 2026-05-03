@@ -10,7 +10,10 @@ import dev.zacsweers.metro.Provides
 @BindingContainer
 object ListsEntryProviderInstallerContainer {
 
-    @IntoSet @Provides fun provideAnimeListsEntries(): KatanaEntryProviderInstaller = animeLists()
-
-    @IntoSet @Provides fun provideMangaListsEntries(): KatanaEntryProviderInstaller = mangaLists()
+    @IntoSet
+    @Provides
+    fun provideListsEntries(): KatanaEntryProviderInstaller = {
+        animeLists()
+        mangaLists()
+    }
 }

@@ -16,18 +16,17 @@ import androidx.navigation3.scene.OverlayScene
 import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
-import dev.alvr.katana.core.ui.navigation.destinations.KatanaDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
-internal data class BottomSheetScene(
-    override val key: KatanaDestination,
-    override val previousEntries: List<NavEntry<KatanaDestination>>,
-    override val overlaidEntries: List<NavEntry<KatanaDestination>>,
-    private val entry: NavEntry<KatanaDestination>,
+internal data class BottomSheetScene<T : Any>(
+    override val key: T,
+    override val previousEntries: List<NavEntry<T>>,
+    override val overlaidEntries: List<NavEntry<T>>,
+    private val entry: NavEntry<T>,
     private val modalBottomSheetProperties: ModalBottomSheetProperties,
     private val onBack: () -> Unit,
-) : OverlayScene<KatanaDestination> {
-    override val entries: List<NavEntry<KatanaDestination>> = listOf(entry)
+) : OverlayScene<T> {
+    override val entries: List<NavEntry<T>> = listOf(entry)
 
     override val content: @Composable (() -> Unit) = {
         val lifecycleOwner = rememberLifecycleOwner()
@@ -39,14 +38,12 @@ internal data class BottomSheetScene(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-class BottomSheetSceneStrategy internal constructor() : SceneStrategy<KatanaDestination> {
-    override fun SceneStrategyScope<KatanaDestination>.calculateScene(
-        entries: List<NavEntry<KatanaDestination>>
-    ): Scene<KatanaDestination>? {
+class BottomSheetSceneStrategy<T : Any> internal constructor() : SceneStrategy<T> {
+    override fun SceneStrategyScope<T>.calculateScene(entries: List<NavEntry<T>>): Scene<T>? {
         val lastEntry = entries.lastOrNull() ?: return null
         return lastEntry.metadata[BottomSheetKey]?.let { bottomSheetProperties ->
             BottomSheetScene(
-                key = lastEntry.contentKey as KatanaDestination,
+                key = @Suppress("UNCHECKED_CAST") (lastEntry.contentKey as T),
                 previousEntries = entries.dropLast(1),
                 overlaidEntries = entries.dropLast(1),
                 entry = lastEntry,
@@ -57,13 +54,14 @@ class BottomSheetSceneStrategy internal constructor() : SceneStrategy<KatanaDest
     }
 
     companion object {
+        @OptIn(ExperimentalMaterial3Api::class)
         fun bottomSheet(modalBottomSheetProperties: ModalBottomSheetProperties = ModalBottomSheetProperties()) =
             metadata {
                 put(BottomSheetKey, modalBottomSheetProperties)
             }
-
-        object BottomSheetKey : NavMetadataKey<ModalBottomSheetProperties>
     }
 }
 
-@Composable fun rememberBottomSheetSceneStrategy() = remember { BottomSheetSceneStrategy() }
+@Composable fun <T : Any> rememberBottomSheetSceneStrategy() = remember { BottomSheetSceneStrategy<T>() }
+
+@OptIn(ExperimentalMaterial3Api::class) private object BottomSheetKey : NavMetadataKey<ModalBottomSheetProperties>

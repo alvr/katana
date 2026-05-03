@@ -4,6 +4,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.staticCompositionLocalOf
 import org.jetbrains.compose.resources.StringResource
 
 @Stable
@@ -30,3 +31,5 @@ interface SnackbarController {
     context(snackbarHostState: SnackbarHostState)
     fun SnackbarMessageHandler()
 }
+
+val LocalSnackbarController = staticCompositionLocalOf<SnackbarController> { error("No SnackbarController provided") }
