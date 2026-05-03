@@ -24,7 +24,7 @@ import androidx.navigation3.ui.NavDisplay
 import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.KatanaSnackbarHost
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
-import dev.alvr.katana.core.ui.navigation.KatanaNavigator
+import dev.alvr.katana.core.ui.navigation.LocalNavigator
 import dev.alvr.katana.core.ui.navigation.rememberBottomSheetSceneStrategy
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.theme.KatanaTheme
@@ -37,11 +37,8 @@ import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 @Composable
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
-internal fun Katana(
-    navigator: KatanaNavigator,
-    modifier: Modifier = Modifier,
-    viewModel: KatanaViewModel = metroViewModel(),
-) {
+internal fun Katana(modifier: Modifier = Modifier, viewModel: KatanaViewModel = metroViewModel()) {
+    val navigator = LocalNavigator.current
     val snackbarController = LocalSnackbarController.current
     val uiState by viewModel.collectUiStateWithLifecycle()
 

@@ -3,12 +3,8 @@ package dev.alvr.katana.shared.navigation
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 import dev.alvr.katana.core.ui.navigation.KatanaNavigationBarItem
-import dev.alvr.katana.core.ui.navigation.destinations.AccountDestination
-import dev.alvr.katana.core.ui.navigation.destinations.AnimeListsDestination
-import dev.alvr.katana.core.ui.navigation.destinations.ExploreDestination
-import dev.alvr.katana.core.ui.navigation.destinations.HomeDestination
 import dev.alvr.katana.core.ui.navigation.destinations.KatanaDestination
-import dev.alvr.katana.core.ui.navigation.destinations.MangaListsDestination
+import dev.alvr.katana.core.ui.navigation.destinations.MainDestination
 import dev.alvr.katana.core.ui.symbols.AccountCircle
 import dev.alvr.katana.core.ui.symbols.AnimeLibrary
 import dev.alvr.katana.core.ui.symbols.Explore
@@ -43,31 +39,31 @@ internal interface MainNavigationBarItem : KatanaNavigationBarItem {
 internal val mainNavigationBarItems: ImmutableList<MainNavigationBarItem> =
     persistentListOf(
         MainNavigationBar(
-            screen = HomeDestination.Root,
+            screen = MainDestination.Home(),
             icon = KatanaSymbols.Home,
             label = Res.string.navigation_bar_home,
             requireSession = false,
         ),
         MainNavigationBar(
-            screen = AnimeListsDestination.Root,
+            screen = MainDestination.Anime,
             icon = KatanaSymbols.AnimeLibrary,
             label = Res.string.navigation_bar_anime,
             requireSession = true,
         ),
         MainNavigationBar(
-            screen = MangaListsDestination.Root,
+            screen = MainDestination.Manga,
             icon = KatanaSymbols.MangaLibrary,
             label = Res.string.navigation_bar_manga,
             requireSession = true,
         ),
         MainNavigationBar(
-            screen = ExploreDestination.Root,
+            screen = MainDestination.Explore,
             icon = KatanaSymbols.Explore,
             label = Res.string.navigation_bar_explore,
             requireSession = false,
         ),
         MainNavigationBar(
-            screen = AccountDestination.Root,
+            screen = MainDestination.Account,
             icon = KatanaSymbols.AccountCircle,
             label = Res.string.navigation_bar_account,
             requireSession = false,

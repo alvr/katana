@@ -31,7 +31,7 @@ import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreProvider
 import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.navigation.KatanaEntryProviderInstaller
-import dev.alvr.katana.core.ui.navigation.destinations.HomeDestination
+import dev.alvr.katana.core.ui.navigation.destinations.MainDestination
 import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.theme.KatanaTheme
@@ -54,12 +54,12 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 internal fun home(): KatanaEntryProviderInstaller = {
-    entry<HomeDestination.Root> { entry ->
+    entry<MainDestination.Home> { entry ->
         val viewModel =
             assistedMetroViewModel<HomeViewModel, HomeViewModel.Factory>(
                 viewModelStoreOwner = rememberViewModelStoreOwner()
             ) {
-                create(token = null)
+                create(token = entry.token)
             }
 
         HomeScreen(viewModel)
