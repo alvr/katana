@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.home.KatanaHomeTopAppBar
 import dev.alvr.katana.core.ui.navigation.KatanaEntryProviderInstaller
-import dev.alvr.katana.core.ui.navigation.destinations.AccountDestination
+import dev.alvr.katana.core.ui.navigation.destinations.MainDestination
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.account.ui.entities.UserInfoUi
@@ -18,7 +18,7 @@ import dev.alvr.katana.features.account.ui.viewmodel.AccountIntent
 import dev.alvr.katana.features.account.ui.viewmodel.AccountViewModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 
-internal fun account(): KatanaEntryProviderInstaller = { entry<AccountDestination.Root> { entry -> AccountScreen() } }
+internal fun account(): KatanaEntryProviderInstaller = { entry<MainDestination.Account> { AccountScreen() } }
 
 @Composable
 private fun AccountScreen(viewModel: AccountViewModel = metroViewModel()) {

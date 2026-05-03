@@ -829,7 +829,7 @@ Compose:
     active: true
   CompositionLocalAllowlist:
     active: true
-    allowedCompositionLocals: LocalAlpha,LocalDimensions,LocalSizes,LocalSnackbarController
+    allowedCompositionLocals: LocalAlpha,LocalDimensions,LocalNavigator,LocalSizes,LocalSnackbarController
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:
