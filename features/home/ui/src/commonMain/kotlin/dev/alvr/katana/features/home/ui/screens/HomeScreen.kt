@@ -29,7 +29,7 @@ import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreOwner
 import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.navigation.KatanaEntryProviderInstaller
-import dev.alvr.katana.core.ui.navigation.destinations.MainDestination
+import dev.alvr.katana.core.ui.navigation.destinations.TopLevelDestination
 import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.theme.KatanaTheme
@@ -53,7 +53,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 internal fun home(): KatanaEntryProviderInstaller = {
-    entry<MainDestination.Home> { entry ->
+    entry<TopLevelDestination.Home> { entry ->
         val viewModel =
             assistedMetroViewModel<HomeViewModel, HomeViewModel.Factory>(
                 viewModelStoreOwner = rememberViewModelStoreOwner()
