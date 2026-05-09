@@ -23,6 +23,7 @@
     ],
     "rebaseWhen": "behind-base-branch",
     "recreateWhen": "never",
+    "schedule": ["on saturday"],
     "packageRules": [
         {
             "groupName": "JetBrains AndroidX",
@@ -75,7 +76,6 @@
             "groupName": "GitHub Actions",
             "groupSlug": "github-actions",
             "matchManagers": ["github-actions"],
-            "schedule": ["on saturday"],
         },
         {
             "automerge": false,
