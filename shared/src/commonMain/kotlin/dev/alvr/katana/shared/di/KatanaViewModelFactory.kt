@@ -14,7 +14,6 @@ private typealias Provider<T> = Map<KClass<out T>, () -> T>
 
 private typealias FactoryProvider<T, R> = Map<KClass<out T>, () -> R>
 
-@Inject
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 internal class KatanaViewModelFactory(

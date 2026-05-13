@@ -16,6 +16,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItem
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -24,6 +25,7 @@ import androidx.navigation3.ui.NavDisplay
 import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.KatanaSnackbarHost
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
+import dev.alvr.katana.core.ui.navigation.deeplink.KatanaDeepLinkDispatcher
 import dev.alvr.katana.core.ui.navigation.KatanaNavigator
 import dev.alvr.katana.core.ui.navigation.LocalNavigator
 import dev.alvr.katana.core.ui.navigation.destinations.TopLevelDestination
@@ -37,11 +39,13 @@ import dev.alvr.katana.shared.viewmodel.KatanaViewModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlin.collections.listOf
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.coroutines.flow.filterNotNull
 
 @Composable
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 internal fun Katana(
     navigator: KatanaNavigator.Factory,
+    deepLinkDispatcher: KatanaDeepLinkDispatcher,
     modifier: Modifier = Modifier,
     viewModel: KatanaViewModel = metroViewModel(),
 ) {
@@ -59,6 +63,15 @@ internal fun Katana(
                 ),
         )
     val navigator = remember<KatanaNavigator> { navigator.create(navigatorState) }
+
+    LaunchedEffect(navigator) {
+        deepLinkDispatcher.pendingUrl
+            .filterNotNull()
+            .collect { url ->
+                navigator.handleDeepLink(url)
+                deepLinkDispatcher.consume()
+            }
+    }
 
     val snackbarController = LocalSnackbarController.current
     val uiState by viewModel.collectAsState()

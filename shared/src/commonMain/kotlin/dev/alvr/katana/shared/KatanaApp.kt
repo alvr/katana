@@ -13,6 +13,7 @@ import com.skydoves.compose.stability.runtime.ComposeStabilityAnalyzer
 import dev.alvr.katana.core.common.KatanaBuildConfig
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.components.snackbar.SnackbarController
+import dev.alvr.katana.core.ui.navigation.deeplink.KatanaDeepLinkDispatcher
 import dev.alvr.katana.core.ui.navigation.KatanaNavigator
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.shared.screens.Katana
@@ -27,6 +28,7 @@ fun Katana(
     navigator: KatanaNavigator.Factory,
     imageLoader: ImageLoader,
     snackbarController: SnackbarController,
+    deepLinkDispatcher: KatanaDeepLinkDispatcher,
 ) {
     Init(imageLoader)
 
@@ -36,7 +38,7 @@ fun Katana(
                 LocalMetroViewModelFactory provides viewModelFactory,
                 LocalSnackbarController provides snackbarController,
             ) {
-                Katana(navigator)
+                Katana(navigator, deepLinkDispatcher)
             }
         }
     }

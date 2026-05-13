@@ -14,6 +14,7 @@ import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSerializer
 import androidx.savedstate.serialization.SavedStateConfiguration
+import dev.alvr.katana.core.ui.navigation.deeplink.KatanaDeepLink
 import dev.alvr.katana.core.ui.navigation.destinations.KatanaDestination
 import dev.alvr.katana.core.ui.navigation.destinations.TopLevelDestination
 import kotlinx.collections.immutable.ImmutableMap
@@ -139,6 +140,8 @@ private fun rememberSavedStateConfiguration() = remember {
                 subclass(TopLevelDestination.Manga::class, TopLevelDestination.Manga.serializer())
                 subclass(TopLevelDestination.Explore::class, TopLevelDestination.Explore.serializer())
                 subclass(TopLevelDestination.Account::class, TopLevelDestination.Account.serializer())
+                subclass(KatanaDeepLink.AnimeDetail::class, KatanaDeepLink.AnimeDetail.serializer())
+                subclass(KatanaDeepLink.MangaDetail::class, KatanaDeepLink.MangaDetail.serializer())
             }
         }
     }
