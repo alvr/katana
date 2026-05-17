@@ -3,6 +3,7 @@ package dev.alvr.katana.core.common.di
 import dev.alvr.katana.core.common.KatanaCachePath
 import dev.alvr.katana.core.common.KatanaFilesPath
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
@@ -14,16 +15,19 @@ import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface KatanaPathProviders {
+actual object KatanaPathContainer {
 
     @Provides
     @SingleIn(AppScope::class)
-    fun katanaCachePath(): KatanaCachePath = KatanaCachePath(createDirectoryPath(NSCachesDirectory))
+    actual fun katanaCachePath(@AppContext context: PlatformContext): KatanaCachePath =
+        KatanaCachePath(createDirectoryPath(NSCachesDirectory))
 
     @Provides
     @SingleIn(AppScope::class)
-    fun katanaFilesPath(): KatanaFilesPath = KatanaFilesPath(createDirectoryPath(NSDocumentDirectory))
+    actual fun katanaFilesPath(@AppContext context: PlatformContext): KatanaFilesPath =
+        KatanaFilesPath(createDirectoryPath(NSDocumentDirectory))
 }
 
 @OptIn(ExperimentalForeignApi::class)

@@ -1,5 +1,14 @@
 package dev.alvr.katana.core.remote.di
 
-expect interface ApolloDatabaseProviders
+import com.apollographql.cache.normalized.api.NormalizedCacheFactory
+import dev.alvr.katana.core.common.di.AppContext
+import dev.alvr.katana.core.common.di.PlatformContext
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
+
+expect object ApolloDatabaseProviders {
+
+    @SingleIn(AppScope::class) fun normalizedCacheFactory(@AppContext context: PlatformContext): NormalizedCacheFactory
+}
 
 internal const val CACHE_DATABASE = "katana_data.db"

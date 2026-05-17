@@ -6,7 +6,7 @@ import arrow.core.right
 import co.touchlab.kermit.Logger
 import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.preferences.KatanaPreferenceKey
-import dev.alvr.katana.core.preferences.utils.getFlow
+import dev.alvr.katana.core.preferences.utils.flow
 import dev.alvr.katana.core.preferences.utils.set
 import dev.alvr.katana.features.home.data.di.HomePreferences
 import dev.alvr.katana.features.home.domain.failures.HomeFailure
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.map
 internal class HomeLocalSourceImpl(@param:HomePreferences private val safe: KSafe) : HomeLocalSource {
     override val welcomeCardVisible =
         safe
-            .getFlow(WelcomeCardVisiblePrefKey, true)
+            .flow(WelcomeCardVisiblePrefKey, true)
             .map<_, Either<Failure, Boolean>> { visible -> visible.right() }
             .catch { error ->
                 Logger.e(tag = LogTag, throwable = error) {

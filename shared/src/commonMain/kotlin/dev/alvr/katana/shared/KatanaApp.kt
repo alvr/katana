@@ -8,8 +8,12 @@ import co.touchlab.kermit.Logger
 import co.touchlab.kermit.platformLogWriter
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
+import coil3.disk.DiskCache
+import coil3.memory.MemoryCache
+import coil3.request.crossfade
 import com.skydoves.compose.stability.runtime.ComposeStabilityAnalyzer
 import dev.alvr.katana.core.common.KatanaBuildConfig
+import dev.alvr.katana.core.common.KatanaCachePath
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.components.snackbar.SnackbarController
 import dev.alvr.katana.core.ui.theme.KatanaTheme
@@ -20,8 +24,12 @@ import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 
 @Inject
 @Composable
-fun Katana(viewModelFactory: MetroViewModelFactory, imageLoader: ImageLoader, snackbarController: SnackbarController) {
-    Init(imageLoader)
+fun Katana(
+    viewModelFactory: MetroViewModelFactory,
+    cachePath: KatanaCachePath,
+    snackbarController: SnackbarController,
+) {
+    Init(cachePath)
 
     KatanaTheme {
         CompositionLocalProvider(
@@ -34,8 +42,19 @@ fun Katana(viewModelFactory: MetroViewModelFactory, imageLoader: ImageLoader, sn
 }
 
 @Composable
-private fun Init(imageLoader: ImageLoader) {
-    setSingletonImageLoaderFactory { imageLoader }
+private fun Init(cachePath: KatanaCachePath) {
+    setSingletonImageLoaderFactory { context ->
+        ImageLoader.Builder(context)
+            .crossfade(true)
+            .memoryCache { MemoryCache.Builder().maxSizePercent(context, CoilMemoryCachePercent).build() }
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(cachePath.path / CoilImagesPath)
+                    .maxSizePercent(CoilDiskCachePercent)
+                    .build()
+            }
+            .build()
+    }
 
     DisposableEffect(Unit) {
         ComposeStabilityAnalyzer.setEnabled(KatanaBuildConfig.ENABLE_TRACE_RECOMPOSITION)
@@ -47,3 +66,7 @@ private fun Init(imageLoader: ImageLoader) {
         onDispose {}
     }
 }
+
+private const val CoilDiskCachePercent = 0.25
+private const val CoilMemoryCachePercent = 0.05
+private const val CoilImagesPath = "images_cache"

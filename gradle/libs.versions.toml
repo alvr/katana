@@ -9,7 +9,7 @@ apollo-cache = "1.0.3"
 apollo-mockserver = "0.3.1"
 arrow = "2.2.2.1"
 baselineprofile = "1.5.0-alpha06"
-coil = "3.4.0"
+coil = "3.5.0-beta01"
 compose = "1.11.0"
 compose-placeholder = "1.0.12"
 compose-stability-analyzer = "0.7.5"
@@ -338,4 +338,9 @@ gradle = [
     "gradle-metro",
     "gradle-mokkery",
     "gradle-spotless",
+]
+
+macrobenchmark = [
+    "androidx-benchmark-macro-junit4",
+    "androidx-test-ext-junit",
 ]

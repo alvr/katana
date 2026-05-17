@@ -10,8 +10,8 @@ import dev.alvr.katana.common.session.domain.failures.SessionFailure
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.preferences.KatanaPreferenceKey
+import dev.alvr.katana.core.preferences.utils.flow
 import dev.alvr.katana.core.preferences.utils.get
-import dev.alvr.katana.core.preferences.utils.getFlow
 import dev.alvr.katana.core.preferences.utils.set
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -26,8 +26,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 internal class SessionLocalSourceImpl(@param:SessionPreferences private val safe: KSafe) : SessionLocalSource {
     override val sessionActive =
         safe
-            .getFlow(SessionActivePrefKey, false)
-            .combine(safe.getFlow(AnilistTokenPrefKey, null)) { sessionActive, anilistToken ->
+            .flow(SessionActivePrefKey, false)
+            .combine(safe.flow(AnilistTokenPrefKey, null)) { sessionActive, anilistToken ->
                 (anilistToken != null && sessionActive).right() as Either<Failure, Boolean>
             }
             .catch { error ->
