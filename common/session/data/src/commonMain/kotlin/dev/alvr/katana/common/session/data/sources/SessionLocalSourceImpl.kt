@@ -1,31 +1,34 @@
 package dev.alvr.katana.common.session.data.sources
 
 import arrow.core.Either
-import arrow.core.None
 import arrow.core.left
 import arrow.core.right
 import arrow.core.toOption
 import co.touchlab.kermit.Logger
-import dev.alvr.katana.common.session.data.entities.Session
+import dev.alvr.katana.common.session.data.di.SessionPreferences
 import dev.alvr.katana.common.session.domain.failures.SessionFailure
 import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.core.domain.failures.Failure
-import dev.alvr.katana.core.preferences.di.store.KatanaStore
+import dev.alvr.katana.core.preferences.KatanaPreferenceKey
+import dev.alvr.katana.core.preferences.utils.get
+import dev.alvr.katana.core.preferences.utils.getFlow
+import dev.alvr.katana.core.preferences.utils.set
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import eu.anifantakis.lib.ksafe.KSafe
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) : SessionLocalSource {
+internal class SessionLocalSourceImpl(@param:SessionPreferences private val safe: KSafe) : SessionLocalSource {
     override val sessionActive =
-        store.data
-            .map<_, Either<Failure, Boolean>> { session ->
-                (session.anilistToken != null && session.sessionActive).right()
+        safe
+            .getFlow(SessionActivePrefKey, false)
+            .combine(safe.getFlow(AnilistTokenPrefKey, null)) { sessionActive, anilistToken ->
+                (anilistToken != null && sessionActive).right() as Either<Failure, Boolean>
             }
             .catch { error ->
                 Logger.e(tag = LogTag, throwable = error) { "There was an error observing the session" }
@@ -35,7 +38,7 @@ internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) :
 
     override suspend fun clearActiveSession() =
         Either.catch {
-                store.update { p -> p.copy(sessionActive = false) }
+                safe[SessionActivePrefKey] = false
                 Logger.d(tag = LogTag) { "Session cleared" }
             }
             .mapLeft { error ->
@@ -45,7 +48,7 @@ internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) :
 
     override suspend fun deleteAnilistToken() =
         Either.catch {
-                store.update { p -> p.copy(anilistToken = null) }
+                safe[AnilistTokenPrefKey] = null
                 Logger.d(tag = LogTag) { "Anilist token deleted" }
             }
             .mapLeft { error ->
@@ -54,19 +57,12 @@ internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) :
             }
 
     override suspend fun getAnilistToken() =
-        store.data
-            .map { session -> session.anilistToken.toOption() }
-            .catch { error ->
-                Logger.e(tag = LogTag, throwable = error) {
-                    "There was an error reading the token from the preferences"
-                }
-                emit(None)
-            }
-            .first()
+        safe[AnilistTokenPrefKey, null].toOption().map { token -> AnilistToken(token) }
 
     override suspend fun logout() =
         Either.catch {
-                store.update { p -> p.copy(anilistToken = null, sessionActive = false) }
+                safe[AnilistTokenPrefKey] = null
+                safe[SessionActivePrefKey] = false
                 Logger.d(tag = LogTag) { "Logged out" }
             }
             .mapLeft { error ->
@@ -76,7 +72,8 @@ internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) :
 
     override suspend fun saveSession(anilistToken: AnilistToken) =
         Either.catch {
-                store.update { p -> p.copy(anilistToken = anilistToken, sessionActive = true) }
+                safe[AnilistTokenPrefKey] = anilistToken.token
+                safe[SessionActivePrefKey] = true
                 Logger.d(tag = LogTag) { "Token saved successfully" }
             }
             .mapLeft { error ->
@@ -86,3 +83,7 @@ internal class SessionLocalSourceImpl(private val store: KatanaStore<Session>) :
 }
 
 private const val LogTag = "SessionLocalSource"
+
+private data object AnilistTokenPrefKey : KatanaPreferenceKey<String?>
+
+private data object SessionActivePrefKey : KatanaPreferenceKey<Boolean>
