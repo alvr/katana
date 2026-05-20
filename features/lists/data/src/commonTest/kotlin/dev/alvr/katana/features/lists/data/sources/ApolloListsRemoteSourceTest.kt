@@ -55,7 +55,7 @@ import io.kotest.matchers.types.shouldNotBeTypeOf
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 
-@ApolloExperimental
+@OptIn(ApolloExperimental::class)
 internal class ApolloListsRemoteSourceTest : FreeSpec() {
     private val userIdManager = mock<UserIdManager>()
     private val reloadInterceptor = mock<ApolloInterceptor>()

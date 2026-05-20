@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.none
 import arrow.core.right
 import arrow.core.some
+import dev.alvr.katana.common.session.data.di.createSessionRepositoryTestGraph
 import dev.alvr.katana.common.session.data.mocks.anilistTokenMock
 import dev.alvr.katana.common.session.data.sources.SessionLocalSource
 import dev.alvr.katana.common.session.domain.failures.SessionFailure
@@ -122,6 +123,6 @@ internal class SessionRepositoryTest : FreeSpec() {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        repo = SessionRepositoryImpl(source)
+        repo = createSessionRepositoryTestGraph(source).sessionRepository
     }
 }

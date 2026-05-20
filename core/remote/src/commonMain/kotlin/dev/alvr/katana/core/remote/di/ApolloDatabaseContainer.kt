@@ -6,7 +6,7 @@ import dev.alvr.katana.core.common.di.PlatformContext
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 
-expect object ApolloDatabaseProviders {
+expect object ApolloDatabaseContainer {
 
     @SingleIn(AppScope::class) fun normalizedCacheFactory(@AppContext context: PlatformContext): NormalizedCacheFactory
 }

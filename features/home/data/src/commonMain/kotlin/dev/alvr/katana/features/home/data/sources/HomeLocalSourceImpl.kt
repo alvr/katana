@@ -46,4 +46,4 @@ internal class HomeLocalSourceImpl(@param:HomePreferences private val safe: KSaf
 
 private const val LogTag = "HomeLocalSource"
 
-private data object WelcomeCardVisiblePrefKey : KatanaPreferenceKey<Boolean>
+internal data object WelcomeCardVisiblePrefKey : KatanaPreferenceKey<Boolean>

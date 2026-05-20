@@ -12,7 +12,7 @@ import dev.zacsweers.metro.SingleIn
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-actual object ApolloDatabaseProviders {
+actual object ApolloDatabaseContainer {
 
     @Provides
     @SingleIn(AppScope::class)
