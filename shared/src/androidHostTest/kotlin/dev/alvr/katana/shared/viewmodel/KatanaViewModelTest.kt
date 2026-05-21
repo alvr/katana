@@ -9,6 +9,7 @@ import dev.alvr.katana.core.tests.ui.test
 import dev.alvr.katana.shared.di.createSharedUiTestGraph
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.test.TestResult
 import io.mockk.clearAllMocks
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -78,8 +79,11 @@ internal class KatanaViewModelTest : BehaviorSpec() {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        clearAllMocks()
         viewModel = createSharedUiTestGraph(observeActiveSession).katanaViewModel
+    }
+
+    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
+        clearAllMocks()
     }
 
     private fun verifyMocks() {

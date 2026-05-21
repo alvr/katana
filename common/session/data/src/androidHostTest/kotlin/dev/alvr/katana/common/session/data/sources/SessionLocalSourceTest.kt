@@ -14,6 +14,8 @@ import dev.alvr.katana.core.tests.shouldBeSome
 import eu.anifantakis.lib.ksafe.KSafe
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.test.TestResult
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -175,6 +177,46 @@ internal class SessionLocalSourceTest : FreeSpec() {
                     source.logout().shouldBeLeft(SessionFailure.LoggingOut)
                     verify { safe.putDirect<String?>(AnilistTokenPrefKey.toString(), null) }
                 }
+
+                "saving session fails on second write AND it's a common Exception" {
+                    justRun { safe[AnilistTokenPrefKey] = anyNullable() }
+                    every { safe[SessionActivePrefKey] = any() } throws Exception()
+
+                    source.saveSession(anilistTokenMock).shouldBeLeft(SessionFailure.SavingSession)
+
+                    verify { safe.putDirect<String?>(AnilistTokenPrefKey.toString(), anilistTokenMock.token) }
+                    verify { safe.putDirect<Boolean>(SessionActivePrefKey.toString(), true) }
+                }
+
+                "saving session fails on second write AND it's a writing Exception" {
+                    justRun { safe[AnilistTokenPrefKey] = anyNullable() }
+                    every { safe[SessionActivePrefKey] = any() } throws IOException("Oops.")
+
+                    source.saveSession(anilistTokenMock).shouldBeLeft(SessionFailure.SavingSession)
+
+                    verify { safe.putDirect<String?>(AnilistTokenPrefKey.toString(), anilistTokenMock.token) }
+                    verify { safe.putDirect<Boolean>(SessionActivePrefKey.toString(), true) }
+                }
+
+                "logging out fails on second write AND it's a common Exception" {
+                    justRun { safe[AnilistTokenPrefKey] = anyNullable() }
+                    every { safe[SessionActivePrefKey] = any() } throws Exception()
+
+                    source.logout().shouldBeLeft(SessionFailure.LoggingOut)
+
+                    verify { safe.putDirect<String?>(AnilistTokenPrefKey.toString(), null) }
+                    verify { safe.putDirect<Boolean>(SessionActivePrefKey.toString(), false) }
+                }
+
+                "logging out fails on second write AND it's a writing Exception" {
+                    justRun { safe[AnilistTokenPrefKey] = anyNullable() }
+                    every { safe[SessionActivePrefKey] = any() } throws IOException("Oops.")
+
+                    source.logout().shouldBeLeft(SessionFailure.LoggingOut)
+
+                    verify { safe.putDirect<String?>(AnilistTokenPrefKey.toString(), null) }
+                    verify { safe.putDirect<Boolean>(SessionActivePrefKey.toString(), false) }
+                }
             }
     }
 
@@ -182,5 +224,9 @@ internal class SessionLocalSourceTest : FreeSpec() {
         every { safe.flow(AnilistTokenPrefKey, anyNullable()) } returns flowOf(null)
         every { safe.flow(SessionActivePrefKey, any()) } returns flowOf(false)
         source = createSessionLocalSourceTestGraph(safe).sessionLocalSource
+    }
+
+    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
+        clearAllMocks()
     }
 }

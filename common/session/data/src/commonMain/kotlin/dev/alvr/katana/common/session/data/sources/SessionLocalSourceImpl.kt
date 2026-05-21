@@ -84,6 +84,6 @@ internal class SessionLocalSourceImpl(@param:SessionPreferences private val safe
 
 private const val LogTag = "SessionLocalSource"
 
-internal data object AnilistTokenPrefKey : KatanaPreferenceKey<String?>
+internal val AnilistTokenPrefKey = KatanaPreferenceKey<String?>("anilistToken")
 
-internal data object SessionActivePrefKey : KatanaPreferenceKey<Boolean>
+internal val SessionActivePrefKey = KatanaPreferenceKey<Boolean>("sessionActive")

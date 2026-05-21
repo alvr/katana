@@ -1,3 +1,8 @@
 package dev.alvr.katana.core.preferences
 
-interface KatanaPreferenceKey<T>
+import kotlin.jvm.JvmInline
+
+@JvmInline
+value class KatanaPreferenceKey<T>(@PublishedApi internal val prefKey: String) {
+    override fun toString(): String = prefKey
+}

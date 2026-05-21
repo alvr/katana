@@ -10,6 +10,8 @@ import dev.alvr.katana.features.home.domain.failures.HomeFailure
 import eu.anifantakis.lib.ksafe.KSafe
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.test.TestResult
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -96,5 +98,9 @@ internal class HomeLocalSourceTest : FreeSpec() {
     override suspend fun beforeEach(testCase: TestCase) {
         every { safe.flow(WelcomeCardVisiblePrefKey, any<Boolean>()) } returns flowOf(true)
         source = createHomeLocalSourceTestGraph(safe).homeLocalSource
+    }
+
+    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
+        clearAllMocks()
     }
 }

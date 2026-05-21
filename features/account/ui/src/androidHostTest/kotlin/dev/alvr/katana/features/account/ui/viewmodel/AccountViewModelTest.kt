@@ -13,6 +13,7 @@ import dev.alvr.katana.features.account.ui.di.createAccountUiTestGraph
 import dev.alvr.katana.features.account.ui.entities.UserInfoUi
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.test.TestResult
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -81,8 +82,11 @@ internal class AccountViewModelTest : FreeSpec() {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        clearAllMocks()
         viewModel = createAccountUiTestGraph(observeUserInfoUseCase, logOutUseCase).accountViewModel
+    }
+
+    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
+        clearAllMocks()
     }
 
     private companion object {

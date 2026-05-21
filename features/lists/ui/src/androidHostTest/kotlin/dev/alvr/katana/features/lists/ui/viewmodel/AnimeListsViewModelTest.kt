@@ -22,6 +22,7 @@ import dev.alvr.katana.features.lists.ui.entities.UserList
 import dev.alvr.katana.features.lists.ui.entities.mappers.toMediaList
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.test.TestResult
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -294,8 +295,11 @@ internal class AnimeListsViewModelTest : FreeSpec() {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        clearAllMocks()
         viewModel = createListsUiTestGraph(updateList, observeAnime, mockk()).animeListsViewModel
+    }
+
+    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
+        clearAllMocks()
     }
 
     private fun mockAnimeFlow() {
