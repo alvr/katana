@@ -1,9 +1,6 @@
 plugins { id("katana.macrobenchmark") }
 
-dependencies {
-    implementation(libs.androidx.benchmark.macro.junit4)
-    implementation(libs.androidx.test.ext.junit)
-}
+dependencies { implementation(libs.bundles.macrobenchmark) }
 
 androidComponents {
     onVariants(selector().withBuildType("benchmark")) { variant ->

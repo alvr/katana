@@ -9,7 +9,7 @@ apollo-cache = "1.0.3"
 apollo-mockserver = "0.3.1"
 arrow = "2.2.2.1"
 baselineprofile = "1.5.0-alpha06"
-coil = "3.4.0"
+coil = "3.5.0-beta01"
 compose = "1.11.0"
 compose-placeholder = "1.0.12"
 compose-stability-analyzer = "0.7.5"
@@ -29,8 +29,8 @@ kotlinx-immutable = "0.4.0"
 kotlinx-io = "0.9.0"
 kotlinx-serialization = "1.11.0"
 kover = "0.9.8"
+ksafe = "2.0.0"
 ksp = "2.3.8"
-kstore = "1.0.0"
 ktor = "3.5.0"
 lifecycle = "2.11.0-beta01"
 material3 = "1.11.0-alpha07"
@@ -143,9 +143,8 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 # KotlinPoet
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 
-# KStore
-kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
-kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
+# KSafe
+ksafe = { module = "eu.anifantakis:ksafe", version.ref = "ksafe" }
 
 # Ktor
 ktor-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
@@ -225,14 +224,10 @@ core-ios-test-ksp = []
 # Deps for Data Preferences
 data-preferences-common = [
     "kotlinx-serialization-json",
-    "kstore",
+    "ksafe",
 ]
-data-preferences-android = [
-    "kstore-file",
-]
-data-preferences-ios = [
-    "kstore-file",
-]
+data-preferences-android = []
+data-preferences-ios = []
 
 data-preferences-common-ksp = []
 data-preferences-android-ksp = []
@@ -343,4 +338,9 @@ gradle = [
     "gradle-metro",
     "gradle-mokkery",
     "gradle-spotless",
+]
+
+macrobenchmark = [
+    "androidx-benchmark-macro-junit4",
+    "androidx-test-ext-junit",
 ]
