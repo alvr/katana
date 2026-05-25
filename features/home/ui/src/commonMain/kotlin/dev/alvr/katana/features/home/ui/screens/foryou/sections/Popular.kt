@@ -7,14 +7,14 @@ import dev.alvr.katana.features.home.ui.resources.Res
 import dev.alvr.katana.features.home.ui.resources.popular_icon_button_a11y
 import dev.alvr.katana.features.home.ui.resources.popular_title
 import dev.alvr.katana.features.home.ui.screens.foryou.components.Lists
-import dev.alvr.katana.features.home.ui.viewmodel.HomeIntent
+import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
 
 @Composable
-internal fun Popular(onIntent: (HomeIntent) -> Unit, modifier: Modifier = Modifier) {
+internal fun Popular(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = Modifier) {
     Lists(
         modifier = modifier,
         title = Res.string.popular_title.value,
         iconButtonContentDescription = Res.string.popular_icon_button_a11y.value,
-        onNavigateClick = { onIntent(HomeIntent.ForYouIntent.NavigateToPopular) },
+        onNavigateClick = { onIntent(ForYouIntent.NavigateToPopular) },
     )
 }

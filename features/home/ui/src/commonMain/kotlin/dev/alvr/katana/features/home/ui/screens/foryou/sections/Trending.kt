@@ -7,14 +7,14 @@ import dev.alvr.katana.features.home.ui.resources.Res
 import dev.alvr.katana.features.home.ui.resources.trending_icon_button_a11y
 import dev.alvr.katana.features.home.ui.resources.trending_title
 import dev.alvr.katana.features.home.ui.screens.foryou.components.Lists
-import dev.alvr.katana.features.home.ui.viewmodel.HomeIntent
+import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
 
 @Composable
-internal fun Trending(onIntent: (HomeIntent) -> Unit, modifier: Modifier = Modifier) {
+internal fun Trending(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = Modifier) {
     Lists(
         modifier = modifier,
         title = Res.string.trending_title.value,
         iconButtonContentDescription = Res.string.trending_icon_button_a11y.value,
-        onNavigateClick = { onIntent(HomeIntent.ForYouIntent.NavigateToTrending) },
+        onNavigateClick = { onIntent(ForYouIntent.NavigateToTrending) },
     )
 }

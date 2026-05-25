@@ -2,7 +2,6 @@ package dev.alvr.katana.features.home.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,6 +17,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,6 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.util.fastForEach
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreProvider
 import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.resources.asPainter
@@ -40,11 +43,9 @@ import dev.alvr.katana.features.home.ui.resources.error_observe_session
 import dev.alvr.katana.features.home.ui.resources.error_save_token
 import dev.alvr.katana.features.home.ui.resources.katana_logo
 import dev.alvr.katana.features.home.ui.resources.katana_logo_a11y
-import dev.alvr.katana.features.home.ui.screens.activity.ActivityTabContent
-import dev.alvr.katana.features.home.ui.screens.foryou.ForYouTabContent
+import dev.alvr.katana.features.home.ui.screens.activity.screens.ActivityTabContent
+import dev.alvr.katana.features.home.ui.screens.foryou.screens.ForYouTabContent
 import dev.alvr.katana.features.home.ui.viewmodel.HomeEffect
-import dev.alvr.katana.features.home.ui.viewmodel.HomeIntent
-import dev.alvr.katana.features.home.ui.viewmodel.HomeState
 import dev.alvr.katana.features.home.ui.viewmodel.HomeViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -63,11 +64,6 @@ internal fun HomeScreen(homeNavigator: HomeNavigator, viewModel: HomeViewModel, 
             HomeEffect.SaveTokenFailure -> snackbarController.showMessage(Res.string.error_save_token)
             HomeEffect.SaveUserIdFailure -> snackbarController.showMessage(Res.string.error_fetch_user_id)
             HomeEffect.ObserveSessionFailure -> snackbarController.showMessage(Res.string.error_observe_session)
-            HomeEffect.ForYouEffect.NavigateToAnimeLists -> homeNavigator.navigateToAnimeLists()
-            HomeEffect.ForYouEffect.NavigateToMangaLists -> homeNavigator.navigateToMangaLists()
-            HomeEffect.ForYouEffect.NavigateToTrending -> homeNavigator.navigateToTrending()
-            HomeEffect.ForYouEffect.NavigateToPopular -> homeNavigator.navigateToPopular()
-            HomeEffect.ForYouEffect.NavigateToUpcoming -> homeNavigator.navigateToUpcoming()
         }
     }
 
@@ -84,12 +80,10 @@ internal fun HomeScreen(homeNavigator: HomeNavigator, viewModel: HomeViewModel, 
         contentWindowInsets = WindowInsets.noInsets,
     ) { paddingValues ->
         PagerContent(
-            paddingValues = paddingValues,
+            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            navigator = homeNavigator,
             pagerState = pagerState,
             sessionActive = uiState.sessionActive,
-            forYouState = uiState.forYouTab,
-            activityState = uiState.activityTab,
-            onIntent = viewModel::intent,
         )
     }
 }
@@ -129,25 +123,26 @@ private fun TopBar(
 
 @Composable
 private fun PagerContent(
-    paddingValues: PaddingValues,
-    pagerState: PagerState,
+    navigator: HomeNavigator,
     sessionActive: Boolean,
-    forYouState: HomeState.ForYouTabState,
-    activityState: HomeState.ActivityTabState,
-    onIntent: (HomeIntent) -> Unit,
+    pagerState: PagerState,
+    modifier: Modifier = Modifier,
 ) {
+    val storeProvider = rememberViewModelStoreProvider()
+
     HorizontalPager(
-        modifier = Modifier.fillMaxSize().padding(paddingValues),
+        modifier = modifier,
         state = pagerState,
         verticalAlignment = Alignment.Top,
         pageSpacing = KatanaTheme.dimensions.pageSpacing,
     ) { page ->
-        when (page) {
-            HomeTab.ForYou.ordinal ->
-                ForYouTabContent(sessionActive = sessionActive, onIntent = onIntent, uiState = forYouState)
+        val owner = rememberViewModelStoreOwner(key = page, provider = storeProvider)
 
-            HomeTab.Activity.ordinal ->
-                ActivityTabContent(sessionActive = sessionActive, onIntent = onIntent, uiState = activityState)
+        CompositionLocalProvider(LocalViewModelStoreOwner provides owner) {
+            when (page) {
+                HomeTab.ForYou.ordinal -> ForYouTabContent(navigator = navigator, sessionActive = sessionActive)
+                HomeTab.Activity.ordinal -> ActivityTabContent(navigator = navigator, sessionActive = sessionActive)
+            }
         }
     }
 }
