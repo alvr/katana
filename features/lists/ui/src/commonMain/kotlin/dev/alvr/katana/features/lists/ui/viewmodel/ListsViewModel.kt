@@ -9,6 +9,7 @@ import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListType
 import dev.alvr.katana.features.lists.domain.usecases.ObserveListUseCase
 import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCase
+import dev.alvr.katana.features.lists.ui.entities.mappers.entryMap
 import dev.alvr.katana.features.lists.ui.entities.mappers.toMediaList
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted

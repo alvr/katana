@@ -133,11 +133,12 @@ internal class HomeViewModelTest : BehaviorSpec() {
     override suspend fun beforeEach(testCase: TestCase) {
         viewModel =
             createHomeUiTestGraph(
-                token = TOKEN_WITH_PARAMS,
-                observeActiveSessionUseCase = observeActiveSession,
-                saveSessionUseCase = saveSession,
-                saveUserIdUseCase = saveUserId,
-            )
+                    observeActiveSessionUseCase = observeActiveSession,
+                    saveSessionUseCase = saveSession,
+                    saveUserIdUseCase = saveUserId,
+                )
+                .homeViewModelFactory
+                .create(TOKEN_WITH_PARAMS)
     }
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {
@@ -152,11 +153,12 @@ internal class HomeViewModelTest : BehaviorSpec() {
 
         viewModel =
             createHomeUiTestGraph(
-                token = token,
-                observeActiveSessionUseCase = observeActiveSession,
-                saveSessionUseCase = saveSession,
-                saveUserIdUseCase = saveUserId,
-            )
+                    observeActiveSessionUseCase = observeActiveSession,
+                    saveSessionUseCase = saveSession,
+                    saveUserIdUseCase = saveUserId,
+                )
+                .homeViewModelFactory
+                .create(token)
     }
 }
 
