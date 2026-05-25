@@ -20,24 +20,20 @@ import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
 import dev.alvr.katana.core.ui.viewmodel.collectAsState
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
-import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
-import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.resources.Res
-import dev.alvr.katana.features.lists.ui.resources.anime_toolbar_search_placeholder
 import dev.alvr.katana.features.lists.ui.resources.error_message
-import dev.alvr.katana.features.lists.ui.resources.manga_toolbar_search_placeholder
 import dev.alvr.katana.features.lists.ui.screens.ChangeListButton
 import dev.alvr.katana.features.lists.ui.screens.ChangeListSheet
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsEffect
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsIntent
-import dev.alvr.katana.features.lists.ui.viewmodel.ListsState
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsViewModel
 
 @Composable
 internal fun ListScreen(
-    viewModel: ListsViewModel<out MediaEntry, out MediaListItem>,
+    viewModel: ListsViewModel,
     title: String,
-    emptyStateRes: String,
+    searchPlaceholder: String,
+    emptyState: String,
     onEditEntry: (ItemEntryId) -> Unit,
     onEntryDetails: (ItemEntryId) -> Unit,
     modifier: Modifier = Modifier,
@@ -71,12 +67,6 @@ internal fun ListScreen(
         },
     )
 
-    val searchPlaceholder =
-        when (state.type) {
-            ListsState.ListType.Anime -> Res.string.anime_toolbar_search_placeholder
-            ListsState.ListType.Manga -> Res.string.manga_toolbar_search_placeholder
-        }.value
-
     val buttonsVisible = !state.error
 
     KatanaHomeScaffold(
@@ -99,7 +89,7 @@ internal fun ListScreen(
                     loading = state.loading,
                 )
             state.empty && !state.loading ->
-                KatanaEmptyState(modifier = modifier.padding(paddingValues), text = emptyStateRes)
+                KatanaEmptyState(modifier = modifier.padding(paddingValues), text = emptyState)
             else ->
                 MediaList(
                     lazyGridState = lazyGridState,
