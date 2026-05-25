@@ -7,14 +7,14 @@ import dev.alvr.katana.features.home.ui.resources.Res
 import dev.alvr.katana.features.home.ui.resources.watching_icon_button_a11y
 import dev.alvr.katana.features.home.ui.resources.watching_title
 import dev.alvr.katana.features.home.ui.screens.foryou.components.Lists
-import dev.alvr.katana.features.home.ui.viewmodel.HomeIntent
+import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
 
 @Composable
-internal fun Watching(onIntent: (HomeIntent) -> Unit, modifier: Modifier = Modifier) {
+internal fun Watching(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = Modifier) {
     Lists(
         modifier = modifier,
         title = Res.string.watching_title.value,
         iconButtonContentDescription = Res.string.watching_icon_button_a11y.value,
-        onNavigateClick = { onIntent(HomeIntent.ForYouIntent.NavigateToAnimeLists) },
+        onNavigateClick = { onIntent(ForYouIntent.NavigateToAnimeLists) },
     )
 }
