@@ -27,7 +27,6 @@ internal interface HomeUiTestGraph : TestAppGraph {
 }
 
 internal fun createHomeUiTestGraph(
-    token: String?,
     observeActiveSessionUseCase: ObserveActiveSessionUseCase,
     saveSessionUseCase: SaveSessionUseCase,
     saveUserIdUseCase: SaveUserIdUseCase,
@@ -38,5 +37,3 @@ internal fun createHomeUiTestGraph(
             saveSessionUseCase = saveSessionUseCase,
             saveUserIdUseCase = saveUserIdUseCase,
         )
-        .homeViewModelFactory
-        .create(token)
