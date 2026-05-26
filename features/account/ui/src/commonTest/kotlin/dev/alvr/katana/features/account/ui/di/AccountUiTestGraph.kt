@@ -2,7 +2,6 @@ package dev.alvr.katana.features.account.ui.di
 
 import dev.alvr.katana.common.session.domain.usecases.LogOutUseCase
 import dev.alvr.katana.common.user.domain.usecases.ObserveUserInfoUseCase
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.tests.di.TestAppGraph
 import dev.alvr.katana.core.tests.di.TestAppScope
 import dev.alvr.katana.features.account.ui.viewmodel.AccountViewModel
@@ -18,10 +17,9 @@ internal interface AccountUiTestGraph : TestAppGraph {
 
     @Provides
     fun accountViewModel(
-        dispatcher: KatanaDispatcher,
         observeUserInfoUseCase: ObserveUserInfoUseCase,
         logOutUseCase: LogOutUseCase,
-    ): AccountViewModel = AccountViewModel(dispatcher, observeUserInfoUseCase, logOutUseCase)
+    ): AccountViewModel = AccountViewModel(observeUserInfoUseCase, logOutUseCase)
 
     @DependencyGraph.Factory
     interface Factory {

@@ -35,7 +35,7 @@ import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.noInsets
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
-import dev.alvr.katana.core.ui.viewmodel.collectAsState
+import dev.alvr.katana.core.ui.viewmodel.collectUiStateWithLifecycle
 import dev.alvr.katana.features.home.ui.navigation.HomeNavigator
 import dev.alvr.katana.features.home.ui.resources.Res
 import dev.alvr.katana.features.home.ui.resources.error_fetch_user_id
@@ -57,7 +57,7 @@ internal fun HomeScreen(homeNavigator: HomeNavigator, viewModel: HomeViewModel, 
     val tabs = remember { HomeTab.entries.toImmutableList() }
     val pagerState = rememberPagerState { HomeTab.entries.size }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-    val uiState by viewModel.collectAsState()
+    val uiState by viewModel.collectUiStateWithLifecycle()
 
     viewModel.CollectEffect { effect ->
         when (effect) {

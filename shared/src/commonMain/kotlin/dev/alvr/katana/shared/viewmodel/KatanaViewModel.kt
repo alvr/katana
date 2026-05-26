@@ -2,7 +2,6 @@ package dev.alvr.katana.shared.viewmodel
 
 import androidx.compose.runtime.Stable
 import dev.alvr.katana.common.session.domain.usecases.ObserveActiveSessionUseCase
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.ui.viewmodel.EmptyEffect
 import dev.alvr.katana.core.ui.viewmodel.EmptyIntent
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
@@ -15,10 +14,9 @@ import kotlinx.collections.immutable.toImmutableList
 @Stable
 @ViewModelKey
 @ContributesIntoMap(AppScope::class)
-internal class KatanaViewModel(
-    dispatcher: KatanaDispatcher,
-    private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,
-) : KatanaViewModel<KatanaState, EmptyEffect, EmptyIntent>(dispatcher, KatanaState()) {
+internal class KatanaViewModel(private val observeActiveSessionUseCase: ObserveActiveSessionUseCase) :
+    KatanaViewModel<KatanaState, EmptyEffect, EmptyIntent>(KatanaState()) {
+
     override fun init() {
         observeActiveSession()
     }

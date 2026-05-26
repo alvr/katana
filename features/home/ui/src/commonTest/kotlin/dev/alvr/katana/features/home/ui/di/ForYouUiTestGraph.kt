@@ -1,6 +1,5 @@
 package dev.alvr.katana.features.home.ui.di
 
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.tests.di.TestAppGraph
 import dev.alvr.katana.core.tests.di.TestAppScope
 import dev.alvr.katana.features.home.domain.usecases.HideWelcomeCardUseCase
@@ -18,10 +17,9 @@ internal interface ForYouUiTestGraph : TestAppGraph {
 
     @Provides
     fun forYouViewModel(
-        dispatcher: KatanaDispatcher,
         hideWelcomeCardUseCase: HideWelcomeCardUseCase,
         observeWelcomeCardVisibilityUseCase: ObserveWelcomeCardVisibilityUseCase,
-    ): ForYouViewModel = ForYouViewModel(dispatcher, hideWelcomeCardUseCase, observeWelcomeCardVisibilityUseCase)
+    ): ForYouViewModel = ForYouViewModel(hideWelcomeCardUseCase, observeWelcomeCardVisibilityUseCase)
 
     @DependencyGraph.Factory
     interface Factory {

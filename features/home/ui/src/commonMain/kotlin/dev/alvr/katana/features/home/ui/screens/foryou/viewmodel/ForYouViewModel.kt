@@ -1,7 +1,6 @@
 package dev.alvr.katana.features.home.ui.screens.foryou.viewmodel
 
 import androidx.compose.runtime.Stable
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.alvr.katana.features.home.domain.usecases.HideWelcomeCardUseCase
 import dev.alvr.katana.features.home.domain.usecases.ObserveWelcomeCardVisibilityUseCase
@@ -13,16 +12,15 @@ import dev.zacsweers.metrox.viewmodel.ViewModelKey
 @ViewModelKey
 @ContributesIntoMap(AppScope::class)
 internal class ForYouViewModel(
-    dispatcher: KatanaDispatcher,
     private val hideWelcomeCardUseCase: HideWelcomeCardUseCase,
     private val observeWelcomeCardVisibilityUseCase: ObserveWelcomeCardVisibilityUseCase,
-) : KatanaViewModel<ForYouState, ForYouEffect, ForYouIntent>(dispatcher, ForYouState()) {
+) : KatanaViewModel<ForYouState, ForYouEffect, ForYouIntent>(ForYouState()) {
 
     override fun init() {
         observeWelcomeCardVisibility()
     }
 
-    override fun handleIntent(intent: ForYouIntent) {
+    override fun intent(intent: ForYouIntent) {
         when (intent) {
             ForYouIntent.CloseWelcomeCard -> handleCloseWelcomeCard()
             ForYouIntent.NavigateToAnimeLists -> handleNavigateToAnimeLists()

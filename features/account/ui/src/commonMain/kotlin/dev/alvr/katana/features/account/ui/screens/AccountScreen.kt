@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.home.KatanaHomeTopAppBar
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.core.ui.viewmodel.collectAsState
+import dev.alvr.katana.core.ui.viewmodel.collectUiStateWithLifecycle
 import dev.alvr.katana.features.account.ui.entities.UserInfoUi
 import dev.alvr.katana.features.account.ui.navigation.AccountNavigator
 import dev.alvr.katana.features.account.ui.resources.Res
@@ -20,7 +20,7 @@ import dev.zacsweers.metrox.viewmodel.metroViewModel
 @Composable
 @Suppress("UNUSED_PARAMETER")
 internal fun AccountScreen(navigator: AccountNavigator, viewModel: AccountViewModel = metroViewModel()) {
-    val state by viewModel.collectAsState()
+    val state by viewModel.collectUiStateWithLifecycle()
 
     AccountScreen(userInfo = state.userInfo, onIntent = viewModel::intent)
 }

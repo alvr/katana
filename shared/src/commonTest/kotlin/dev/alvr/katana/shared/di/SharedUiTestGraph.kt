@@ -1,7 +1,6 @@
 package dev.alvr.katana.shared.di
 
 import dev.alvr.katana.common.session.domain.usecases.ObserveActiveSessionUseCase
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.tests.di.TestAppGraph
 import dev.alvr.katana.core.tests.di.TestAppScope
 import dev.alvr.katana.shared.viewmodel.KatanaViewModel
@@ -16,10 +15,8 @@ internal interface SharedUiTestGraph : TestAppGraph {
     val katanaViewModel: KatanaViewModel
 
     @Provides
-    fun katanaViewModel(
-        dispatcher: KatanaDispatcher,
-        observeActiveSessionUseCase: ObserveActiveSessionUseCase,
-    ): KatanaViewModel = KatanaViewModel(dispatcher, observeActiveSessionUseCase)
+    fun katanaViewModel(observeActiveSessionUseCase: ObserveActiveSessionUseCase): KatanaViewModel =
+        KatanaViewModel(observeActiveSessionUseCase)
 
     @DependencyGraph.Factory
     interface Factory {

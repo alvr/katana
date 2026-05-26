@@ -2,7 +2,6 @@ package dev.alvr.katana.features.lists.ui.viewmodel
 
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
@@ -30,11 +29,10 @@ import kotlinx.coroutines.launch
 @Stable
 @AssistedInject
 internal class ListsViewModel(
-    dispatcher: KatanaDispatcher,
     @Assisted private val type: MediaListType,
     private val observeListUseCase: ObserveListUseCase,
     private val updateListUseCase: UpdateListUseCase,
-) : KatanaViewModel<ListsState, ListsEffect, ListsIntent>(dispatcher, ListsState()) {
+) : KatanaViewModel<ListsState, ListsEffect, ListsIntent>(ListsState()) {
     private val searchFlow = MutableStateFlow(String.empty)
 
     override fun init() {
@@ -42,7 +40,7 @@ internal class ListsViewModel(
         observeSearch()
     }
 
-    override fun handleIntent(intent: ListsIntent) {
+    override fun intent(intent: ListsIntent) {
         when (intent) {
             is ListsIntent.Refresh -> observeLists()
             is ListsIntent.AddPlusOne -> addPlusOne(intent.id)

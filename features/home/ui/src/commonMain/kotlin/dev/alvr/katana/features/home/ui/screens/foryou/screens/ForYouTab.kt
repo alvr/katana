@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.contentPaddingMedium
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
-import dev.alvr.katana.core.ui.viewmodel.collectAsState
+import dev.alvr.katana.core.ui.viewmodel.collectUiStateWithLifecycle
 import dev.alvr.katana.features.home.ui.navigation.HomeNavigator
 import dev.alvr.katana.features.home.ui.screens.foryou.sections.Popular
 import dev.alvr.katana.features.home.ui.screens.foryou.sections.Reading
@@ -32,7 +32,7 @@ internal fun ForYouTabContent(
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel = metroViewModel(),
 ) {
-    val uiState by viewModel.collectAsState()
+    val uiState by viewModel.collectUiStateWithLifecycle()
 
     viewModel.CollectEffect { effect ->
         when (effect) {

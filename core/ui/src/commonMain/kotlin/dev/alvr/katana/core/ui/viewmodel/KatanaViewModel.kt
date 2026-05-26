@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import dev.alvr.katana.core.common.annotations.KatanaInternalApi
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
-import dev.alvr.katana.core.common.onSubscribe
 import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.domain.usecases.KatanaEitherUseCase
 import dev.alvr.katana.core.domain.usecases.KatanaFlowEitherUseCase
@@ -23,27 +21,21 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
-import kotlinx.coroutines.withContext
 
 @Stable
 @DefaultBinding<ViewModel>
 @OptIn(ExperimentalMetroApi::class)
-abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
-    internal val dispatcher: KatanaDispatcher,
-    initialState: S,
-) : ViewModel() {
+abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialState: S) : ViewModel() {
 
     private val initialized = atomic(false)
 
     private val _uiState = MutableStateFlow(initialState)
     private val _effects = Channel<E>(Channel.BUFFERED)
-    private val intents = Channel<I>()
     private val executing = mutableMapOf<Any, Job>()
 
     private val viewModelLogTag
@@ -52,9 +44,9 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     @KatanaInternalApi
     val uiState: StateFlow<S> =
         _uiState
-            .onSubscribe(::onCreate)
+            .onSubscription { onCreate() }
             .stateIn(
-                scope = viewModelScope + dispatcher.main,
+                scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(SubscriptionDuration),
                 initialValue = initialState,
             )
@@ -63,11 +55,10 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     protected val currentState
         get() = uiState.value
 
-    @KatanaInternalApi val effects: Flow<E> = _effects.receiveAsFlow().onSubscribe(::onCreate).flowOn(dispatcher.main)
+    @KatanaInternalApi val effects: Flow<E> = _effects.receiveAsFlow()
 
     private fun onCreate() {
         if (initialized.compareAndSet(expect = false, update = true)) {
-            collectIntents()
             init()
         }
     }
@@ -92,18 +83,10 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     }
 
     protected fun effect(effect: E) {
-        viewModelScope.launch(dispatcher.main) { _effects.send(effect) }
+        viewModelScope.launch { _effects.send(effect) }
     }
 
-    fun intent(intent: I) {
-        viewModelScope.launch(dispatcher.main) { intents.send(intent) }
-    }
-
-    private fun collectIntents() {
-        viewModelScope.launch(dispatcher.main) { intents.receiveAsFlow().collect { intent -> handleIntent(intent) } }
-    }
-
-    protected open fun handleIntent(intent: I) {
+    open fun intent(intent: I) {
         // no-op
     }
 
@@ -119,7 +102,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     ) {
         useCase.execute {
             val result = useCase(params)
-            withContext(dispatcher.main) { result.fold(onFailure, onSuccess) }
+            result.fold(onFailure, onSuccess)
         }
     }
 
@@ -131,7 +114,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     ) {
         useCase.execute {
             val result = useCase(params)
-            withContext(dispatcher.main) { result.fold(onEmpty, onSome) }
+            result.fold(onEmpty, onSome)
         }
     }
 
@@ -143,7 +126,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     ) {
         useCase.execute {
             useCase(params)
-            useCase.flow.collect { result -> withContext(dispatcher.main) { result.fold(onFailure, onSuccess) } }
+            useCase.flow.collect { result -> result.fold(onFailure, onSuccess) }
         }
     }
 
@@ -155,18 +138,18 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     ) {
         useCase.execute {
             useCase(params)
-            useCase.flow.collect { result -> withContext(dispatcher.main) { result.fold(onEmpty, onSome) } }
+            useCase.flow.collect { result -> result.fold(onEmpty, onSome) }
         }
     }
 
     private inline fun KatanaFlowUseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
         executing.remove(this)?.cancel()
-        executing[this] = viewModelScope.launch(dispatcher.io) { block() }
+        executing[this] = viewModelScope.launch { block() }
     }
 
     private inline fun KatanaUseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
         executing.remove(this)?.cancel()
-        executing[this] = viewModelScope.launch(dispatcher.io) { block() }
+        executing[this] = viewModelScope.launch { block() }
     }
 }
 
