@@ -8,12 +8,12 @@ import dev.alvr.katana.core.common.annotations.KatanaInternalApi
 import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.common.onSubscribe
 import dev.alvr.katana.core.domain.failures.Failure
-import dev.alvr.katana.core.domain.usecases.EitherUseCase
-import dev.alvr.katana.core.domain.usecases.FlowEitherUseCase
-import dev.alvr.katana.core.domain.usecases.FlowOptionUseCase
-import dev.alvr.katana.core.domain.usecases.FlowUseCase
-import dev.alvr.katana.core.domain.usecases.OptionUseCase
-import dev.alvr.katana.core.domain.usecases.UseCase
+import dev.alvr.katana.core.domain.usecases.KatanaEitherUseCase
+import dev.alvr.katana.core.domain.usecases.KatanaFlowEitherUseCase
+import dev.alvr.katana.core.domain.usecases.KatanaFlowOptionUseCase
+import dev.alvr.katana.core.domain.usecases.KatanaFlowUseCase
+import dev.alvr.katana.core.domain.usecases.KatanaOptionUseCase
+import dev.alvr.katana.core.domain.usecases.KatanaUseCase
 import dev.zacsweers.metro.DefaultBinding
 import dev.zacsweers.metro.ExperimentalMetroApi
 import kotlinx.atomicfu.atomic
@@ -112,7 +112,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     }
 
     protected fun <P, R> execute(
-        useCase: EitherUseCase<P, R>,
+        useCase: KatanaEitherUseCase<P, R>,
         params: P,
         onSuccess: (R) -> Unit,
         onFailure: (Failure) -> Unit,
@@ -123,7 +123,12 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
         }
     }
 
-    protected fun <P, R> execute(useCase: OptionUseCase<P, R>, params: P, onSome: (R) -> Unit, onEmpty: () -> Unit) {
+    protected fun <P, R> execute(
+        useCase: KatanaOptionUseCase<P, R>,
+        params: P,
+        onSome: (R) -> Unit,
+        onEmpty: () -> Unit,
+    ) {
         useCase.execute {
             val result = useCase(params)
             withContext(dispatcher.main) { result.fold(onEmpty, onSome) }
@@ -131,7 +136,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     }
 
     protected fun <P, R> execute(
-        useCase: FlowEitherUseCase<P, R>,
+        useCase: KatanaFlowEitherUseCase<P, R>,
         params: P,
         onSuccess: (R) -> Unit,
         onFailure: (Failure) -> Unit,
@@ -143,7 +148,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
     }
 
     protected fun <P, R> execute(
-        useCase: FlowOptionUseCase<P, R>,
+        useCase: KatanaFlowOptionUseCase<P, R>,
         params: P,
         onSome: (R) -> Unit,
         onEmpty: () -> Unit,
@@ -154,12 +159,12 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(
         }
     }
 
-    private inline fun FlowUseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
+    private inline fun KatanaFlowUseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
         executing.remove(this)?.cancel()
         executing[this] = viewModelScope.launch(dispatcher.io) { block() }
     }
 
-    private inline fun UseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
+    private inline fun KatanaUseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
         executing.remove(this)?.cancel()
         executing[this] = viewModelScope.launch(dispatcher.io) { block() }
     }

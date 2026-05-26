@@ -22,4 +22,4 @@ internal interface ActivityUiTestGraph : TestAppGraph {
     }
 }
 
-internal fun createActivityUiTestGraph() = createGraphFactory<ActivityUiTestGraph.Factory>().create().activityViewModel
+internal fun createActivityUiTestGraph() = createGraphFactory<ActivityUiTestGraph.Factory>().create()
