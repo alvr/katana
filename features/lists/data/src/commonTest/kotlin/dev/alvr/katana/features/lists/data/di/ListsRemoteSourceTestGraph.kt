@@ -2,7 +2,7 @@ package dev.alvr.katana.features.lists.data.di
 
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.interceptor.ApolloInterceptor
-import dev.alvr.katana.common.user.domain.managers.UserIdManager
+import dev.alvr.katana.common.user.domain.usecases.GetUserIdUseCase
 import dev.alvr.katana.core.tests.di.TestAppGraph
 import dev.alvr.katana.core.tests.di.TestAppScope
 import dev.alvr.katana.features.lists.data.sources.ListsRemoteSource
@@ -20,15 +20,16 @@ internal interface ListsRemoteSourceTestGraph : TestAppGraph {
     @Provides
     fun listsRemoteSource(
         client: ApolloClient,
-        userIdManager: UserIdManager,
+        getUserId: GetUserIdUseCase,
         reloadInterceptor: ApolloInterceptor,
-    ): ListsRemoteSource = ListsRemoteSourceImpl(client, userIdManager, reloadInterceptor)
+    ): ListsRemoteSource =
+        ListsRemoteSourceImpl(client = client, getUserId = getUserId, reloadInterceptor = reloadInterceptor)
 
     @DependencyGraph.Factory
     interface Factory {
         fun create(
             @Provides client: ApolloClient,
-            @Provides userIdManager: UserIdManager,
+            @Provides userId: GetUserIdUseCase,
             @Provides reloadInterceptor: ApolloInterceptor,
         ): ListsRemoteSourceTestGraph
     }
@@ -36,6 +37,8 @@ internal interface ListsRemoteSourceTestGraph : TestAppGraph {
 
 internal fun createListsRemoteSourceTestGraph(
     client: ApolloClient,
-    userIdManager: UserIdManager,
+    getUserId: GetUserIdUseCase,
     reloadInterceptor: ApolloInterceptor,
-) = createGraphFactory<ListsRemoteSourceTestGraph.Factory>().create(client, userIdManager, reloadInterceptor)
+) =
+    createGraphFactory<ListsRemoteSourceTestGraph.Factory>()
+        .create(client = client, userId = getUserId, reloadInterceptor = reloadInterceptor)

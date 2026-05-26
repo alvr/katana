@@ -7,8 +7,9 @@ import co.touchlab.kermit.Logger
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.interceptor.ApolloInterceptor
 import com.apollographql.cache.normalized.fetchPolicyInterceptor
-import dev.alvr.katana.common.user.domain.managers.UserIdManager
+import dev.alvr.katana.common.user.domain.usecases.GetUserIdUseCase
 import dev.alvr.katana.core.common.catchUnit
+import dev.alvr.katana.core.domain.usecases.invoke
 import dev.alvr.katana.core.remote.executeOrThrow
 import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.toFailure
@@ -34,7 +35,7 @@ import kotlinx.coroutines.flow.map
 @ContributesBinding(AppScope::class)
 internal class ListsRemoteSourceImpl(
     private val client: ApolloClient,
-    private val userId: UserIdManager,
+    private val getUserId: GetUserIdUseCase,
     private val reloadInterceptor: ApolloInterceptor,
 ) : ListsRemoteSource {
     override val animeCollection = getMediaCollection<MediaEntry.Anime>(MediaType.ANIME)
@@ -51,7 +52,7 @@ internal class ListsRemoteSourceImpl(
     private inline fun <reified T : MediaEntry> getMediaCollection(type: MediaType) = flow {
         val response =
             client
-                .query(MediaListCollectionQuery(userId.getId().optional, type))
+                .query(MediaListCollectionQuery(getUserId().map { it.id }.optional, type))
                 .fetchPolicyInterceptor(reloadInterceptor)
                 .watchFiltered()
                 .distinctUntilChanged { old, new -> old.data == new.data }

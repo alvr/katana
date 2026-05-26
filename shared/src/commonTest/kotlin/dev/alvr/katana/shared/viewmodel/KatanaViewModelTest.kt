@@ -30,7 +30,6 @@ internal class KatanaViewModelTest : BehaviorSpec() {
             `when`("observing if the user has an active session") {
                 and("the user has an active session") {
                     then("it should update the state with the active session") {
-                        everySuspend { observeActiveSession(Unit) } returns Unit
                         every { observeActiveSession.flow } returns flowOf(true.right())
 
                         viewModel.test { expectState { copy(loading = false, sessionActive = true) } }
@@ -41,7 +40,6 @@ internal class KatanaViewModelTest : BehaviorSpec() {
 
                     and("the session expires") {
                         then("it should update the state without the active session") {
-                            everySuspend { observeActiveSession(Unit) } returns Unit
                             every { observeActiveSession.flow } returns flowOf(true.right(), false.right())
 
                             viewModel.test {
@@ -57,7 +55,6 @@ internal class KatanaViewModelTest : BehaviorSpec() {
 
                 and("the user does not have an active session") {
                     then("it should update the state without the active session") {
-                        everySuspend { observeActiveSession(Unit) } returns Unit
                         every { observeActiveSession.flow } returns flowOf(false.right())
 
                         viewModel.test { expectState { copy(loading = false, sessionActive = false) } }
@@ -69,7 +66,6 @@ internal class KatanaViewModelTest : BehaviorSpec() {
 
                 and("an error occurs") {
                     then("it should update the state without the active session") {
-                        everySuspend { observeActiveSession(Unit) } returns Unit
                         every { observeActiveSession.flow } returns flowOf(SessionFailure.CheckingActiveSession.left())
 
                         viewModel.test { expectState { copy(loading = false, sessionActive = false) } }
@@ -83,6 +79,7 @@ internal class KatanaViewModelTest : BehaviorSpec() {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
+        everySuspend { observeActiveSession(Unit) } returns Unit
         viewModel = createSharedUiTestGraph(observeActiveSessionUseCase = observeActiveSession).katanaViewModel
     }
 

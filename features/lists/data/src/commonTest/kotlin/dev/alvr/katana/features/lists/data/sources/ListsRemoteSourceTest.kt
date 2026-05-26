@@ -14,7 +14,8 @@ import com.apollographql.mockserver.MockServer
 import com.apollographql.mockserver.enqueueError
 import com.apollographql.mockserver.enqueueString
 import com.benasher44.uuid.uuid4
-import dev.alvr.katana.common.user.domain.managers.UserIdManager
+import dev.alvr.katana.common.user.domain.models.UserId
+import dev.alvr.katana.common.user.domain.usecases.GetUserIdUseCase
 import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.remote.builder.Data
 import dev.alvr.katana.core.remote.builder.buildMediaListCollection
@@ -43,24 +44,24 @@ import kotlinx.coroutines.flow.Flow
 
 @OptIn(ApolloExperimental::class)
 internal class ListsRemoteSourceTest : FreeSpec() {
-    private val userIdManager = mock<UserIdManager>()
+    private val getUserId = mock<GetUserIdUseCase>()
     private val reloadInterceptor = mock<ApolloInterceptor>()
     private val client = ApolloClient.Builder().networkTransport(MapTestNetworkTransport()).build()
 
     private val source: ListsRemoteSource =
-        createListsRemoteSourceTestGraph(client, userIdManager, reloadInterceptor).listsRemoteSource
+        createListsRemoteSourceTestGraph(client, getUserId, reloadInterceptor).listsRemoteSource
 
     init {
         "querying" -
             {
                 queryList(source).forEach { (data, type, flow) ->
                     "the server responded with data or not ($data, $type)" {
-                        everySuspend { userIdManager.getId() } returns USER_ID.right()
+                        everySuspend { getUserId(Unit) } returns UserId.right()
                         val response =
                             ApolloResponse.Builder(operation = mediaListCollectionQueryMock, requestUuid = uuid4())
                                 .data(data)
                                 .build()
-                        client.registerTestResponse(MediaListCollectionQuery(USER_ID.optional, type), response)
+                        client.registerTestResponse(MediaListCollectionQuery(UserId.id.optional, type), response)
 
                         flow.test {
                             if (data == null) {
@@ -72,23 +73,23 @@ internal class ListsRemoteSourceTest : FreeSpec() {
                             awaitComplete()
                         }
 
-                        verifySuspend { userIdManager.getId() }
+                        verifySuspend { getUserId(Unit) }
                     }
 
                     "a HTTP error occurs ($data, $type)" {
-                        everySuspend { userIdManager.getId() } returns USER_ID.right()
+                        everySuspend { getUserId(Unit) } returns UserId.right()
                         val response =
                             ApolloResponse.Builder(operation = mediaListCollectionQueryMock, requestUuid = uuid4())
                                 .data(data)
                                 .errors(listOf(apolloErrorMock))
                                 .build()
-                        client.registerTestResponse(MediaListCollectionQuery(USER_ID.optional, type), response)
+                        client.registerTestResponse(MediaListCollectionQuery(UserId.id.optional, type), response)
 
                         flow.test {
                             awaitItem().shouldBeLeft(Failure.Unknown)
                             awaitComplete()
                         }
-                        verifySuspend { userIdManager.getId() }
+                        verifySuspend { getUserId(Unit) }
                     }
                 }
 
@@ -97,21 +98,20 @@ internal class ListsRemoteSourceTest : FreeSpec() {
                         val mockServer = MockServer()
                         val badClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
                         val source =
-                            createListsRemoteSourceTestGraph(badClient, userIdManager, reloadInterceptor)
-                                .listsRemoteSource
+                            createListsRemoteSourceTestGraph(badClient, getUserId, reloadInterceptor).listsRemoteSource
 
                         afterSpec { mockServer.close() }
 
                         mockServer.badClient(source).forEach { (type, enqueueAction, flow) ->
                             "a HTTP error occurs" {
-                                everySuspend { userIdManager.getId() } returns USER_ID.right()
+                                everySuspend { getUserId(Unit) } returns UserId.right()
                                 enqueueAction()
 
                                 flow.test {
                                     awaitItem().shouldBeLeft(ListsFailure.GetMediaCollection)
                                     awaitComplete()
                                 }
-                                verifySuspend { userIdManager.getId() }
+                                verifySuspend { getUserId(Unit) }
                             }
                         }
                     }
@@ -138,7 +138,7 @@ internal class ListsRemoteSourceTest : FreeSpec() {
                 this["MediaListCollection"] = buildMediaListCollection {
                     lists = emptyList()
                     user = buildUser {
-                        id = USER_ID
+                        id = UserId.id
                         mediaListOptions = buildMediaListOptions {
                             animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                             mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
@@ -198,11 +198,9 @@ internal class ListsRemoteSourceTest : FreeSpec() {
             }
         }
     }
-
-    private companion object {
-        const val USER_ID = 37_384
-    }
 }
+
+private val UserId = UserId(37_384)
 
 private typealias MediaCollectionFlow = Flow<Either<Failure, MediaCollection<MediaEntry>>>
 
