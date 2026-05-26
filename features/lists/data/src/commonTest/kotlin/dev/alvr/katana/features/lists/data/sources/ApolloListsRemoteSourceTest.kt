@@ -8,7 +8,8 @@ import com.apollographql.apollo.interceptor.ApolloInterceptor
 import com.apollographql.apollo.testing.MapTestNetworkTransport
 import com.apollographql.apollo.testing.registerTestNetworkError
 import com.apollographql.apollo.testing.registerTestResponse
-import dev.alvr.katana.common.user.domain.managers.UserIdManager
+import dev.alvr.katana.common.user.domain.models.UserId
+import dev.alvr.katana.common.user.domain.usecases.GetUserIdUseCase
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.remote.builder.Data
@@ -38,9 +39,12 @@ import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.mokkery.answering.returns
 import dev.mokkery.everySuspend
 import dev.mokkery.mock
+import dev.mokkery.resetAnswers
+import dev.mokkery.resetCalls
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.test.TestResult
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -57,18 +61,14 @@ import kotlinx.datetime.LocalDateTime
 
 @OptIn(ApolloExperimental::class)
 internal class ApolloListsRemoteSourceTest : FreeSpec() {
-    private val userIdManager = mock<UserIdManager>()
+    private val getUserId = mock<GetUserIdUseCase>()
     private val reloadInterceptor = mock<ApolloInterceptor>()
 
     private val client = ApolloClient.Builder().networkTransport(MapTestNetworkTransport()).build()
-    private val userId = 37_384.right()
-    private val userIdOpt = userId.getOrNull().optional
 
     private lateinit var source: ListsRemoteSource
 
     init {
-        beforeEach { everySuspend { userIdManager.getId() } returns userId }
-
         "anime" -
             {
                 "the collection has no lists" {
@@ -92,7 +92,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         awaitItem().shouldBeRight().lists.shouldBeEmpty()
                         awaitComplete()
                     }
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
 
                 "the entries are empty" {
@@ -137,7 +137,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         }
                         awaitComplete()
                     }
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
 
                 "the entry has null values" {
@@ -219,7 +219,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         }
                         awaitComplete()
                     }
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
 
                 "the entry has values" {
@@ -319,7 +319,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         }
                         awaitComplete()
                     }
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
 
                 "the returned data is null" {
@@ -330,7 +330,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         awaitComplete()
                     }
 
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
 
                 "an error occurs" {
@@ -341,7 +341,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         awaitComplete()
                     }
 
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
             }
 
@@ -369,7 +369,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         awaitComplete()
                     }
 
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
 
                 "the entries are empty" {
@@ -414,7 +414,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         }
                         awaitComplete()
                     }
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
 
                 "the entry has null values" {
@@ -497,7 +497,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         }
                         awaitComplete()
                     }
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
 
                 "the entry has values" {
@@ -590,7 +590,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         }
                         awaitComplete()
                     }
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
 
                 "the returned data is null" {
@@ -601,7 +601,7 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         awaitComplete()
                     }
 
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
 
                 "an error occurs" {
@@ -612,12 +612,21 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                         awaitComplete()
                     }
 
-                    verifySuspend { userIdManager.getId() }
+                    verifySuspend { getUserId(Unit) }
                 }
             }
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        source = createListsRemoteSourceTestGraph(client, userIdManager, reloadInterceptor).listsRemoteSource
+        everySuspend { getUserId(Unit) } returns userId
+        source = createListsRemoteSourceTestGraph(client, getUserId, reloadInterceptor).listsRemoteSource
+    }
+
+    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
+        resetAnswers(getUserId, reloadInterceptor)
+        resetCalls(getUserId, reloadInterceptor)
     }
 }
+
+private val userId = UserId(37_384).right()
+private val userIdOpt = userId.map { it.id }.optional
