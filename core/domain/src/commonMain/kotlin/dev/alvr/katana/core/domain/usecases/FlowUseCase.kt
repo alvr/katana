@@ -12,27 +12,39 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 
+interface KatanaFlowUseCase<in P, out R> {
+    val flow: Flow<R>
+
+    suspend operator fun invoke(params: P)
+}
+
 @OptIn(ExperimentalCoroutinesApi::class)
-abstract class FlowUseCase<in P, out R> internal constructor(private val dispatcher: KatanaDispatcher) {
+abstract class FlowUseCase<in P, out R> internal constructor(private val dispatcher: KatanaDispatcher) :
+    KatanaFlowUseCase<P, R> {
     private val paramState = MutableSharedFlow<P>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    val flow: Flow<R> =
+    override val flow: Flow<R> =
         paramState.distinctUntilChanged().flatMapLatest { params ->
             createFlow(params).flowOn(dispatcher.io).distinctUntilChanged()
         }
 
     protected abstract fun createFlow(params: P): Flow<R>
 
-    suspend operator fun invoke(params: P) {
+    override suspend operator fun invoke(params: P) {
         paramState.emit(params)
     }
 }
 
-suspend operator fun <R> FlowUseCase<Unit, R>.invoke() {
-    invoke(Unit)
-}
+interface KatanaFlowEitherUseCase<in P, out R> : KatanaFlowUseCase<P, Either<Failure, R>>
 
 abstract class FlowEitherUseCase<in P, out R>(dispatcher: KatanaDispatcher) :
-    FlowUseCase<P, Either<Failure, R>>(dispatcher)
+    FlowUseCase<P, Either<Failure, R>>(dispatcher), KatanaFlowEitherUseCase<P, R>
 
-abstract class FlowOptionUseCase<in P, out R>(dispatcher: KatanaDispatcher) : FlowUseCase<P, Option<R>>(dispatcher)
+interface KatanaFlowOptionUseCase<in P, out R> : KatanaFlowUseCase<P, Option<R>>
+
+abstract class FlowOptionUseCase<in P, out R>(dispatcher: KatanaDispatcher) :
+    FlowUseCase<P, Option<R>>(dispatcher), KatanaFlowOptionUseCase<P, R>
+
+suspend operator fun <R> KatanaFlowUseCase<Unit, R>.invoke() {
+    invoke(Unit)
+}
