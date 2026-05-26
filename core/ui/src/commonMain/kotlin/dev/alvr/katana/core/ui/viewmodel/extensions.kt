@@ -12,8 +12,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(KatanaInternalApi::class)
-fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.collectAsState() =
-    uiState.collectAsStateWithLifecycle(context = dispatcher.immediate)
+fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.collectUiStateWithLifecycle() =
+    uiState.collectAsStateWithLifecycle()
 
 @Composable
 @OptIn(KatanaInternalApi::class)
@@ -23,7 +23,7 @@ fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.CollectEf
     val currentOnEffect by rememberUpdatedState(onEffect)
 
     LifecycleStartEffect(effects) {
-        val job = lifecycleScope.launch(dispatcher.immediate) { effects.collect { effect -> currentOnEffect(effect) } }
+        val job = lifecycleScope.launch { effects.collect { effect -> currentOnEffect(effect) } }
 
         onStopOrDispose { job.cancel() }
     }

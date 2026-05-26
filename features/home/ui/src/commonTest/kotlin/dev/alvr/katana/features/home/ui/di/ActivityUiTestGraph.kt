@@ -1,6 +1,5 @@
 package dev.alvr.katana.features.home.ui.di
 
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.tests.di.TestAppGraph
 import dev.alvr.katana.core.tests.di.TestAppScope
 import dev.alvr.katana.features.home.ui.screens.activity.viewmodel.ActivityViewModel
@@ -14,7 +13,7 @@ import dev.zacsweers.metro.createGraphFactory
 internal interface ActivityUiTestGraph : TestAppGraph {
     val activityViewModel: ActivityViewModel
 
-    @Provides fun activityViewModel(dispatcher: KatanaDispatcher): ActivityViewModel = ActivityViewModel(dispatcher)
+    @Provides fun activityViewModel(): ActivityViewModel = ActivityViewModel()
 
     @DependencyGraph.Factory
     interface Factory {

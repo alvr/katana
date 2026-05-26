@@ -18,7 +18,7 @@ import dev.alvr.katana.core.ui.components.home.KatanaHomeScaffold
 import dev.alvr.katana.core.ui.components.home.rememberKatanaHomeScaffoldState
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
-import dev.alvr.katana.core.ui.viewmodel.collectAsState
+import dev.alvr.katana.core.ui.viewmodel.collectUiStateWithLifecycle
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.error_message
@@ -42,7 +42,7 @@ internal fun ListScreen(
     val lazyGridState = rememberLazyGridState()
     val haptics = LocalHapticFeedback.current
 
-    val state by viewModel.collectAsState()
+    val state by viewModel.collectUiStateWithLifecycle()
     val onIntent by rememberUpdatedState(viewModel::intent)
     viewModel.CollectEffect { effect ->
         when (effect) {

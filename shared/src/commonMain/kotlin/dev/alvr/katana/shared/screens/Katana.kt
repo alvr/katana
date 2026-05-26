@@ -24,7 +24,7 @@ import dev.alvr.katana.core.ui.navigation.KatanaNavigationBarItem.Companion.hasR
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.noInsets
 import dev.alvr.katana.core.ui.utils.rememberSnackbarHostState
-import dev.alvr.katana.core.ui.viewmodel.collectAsState
+import dev.alvr.katana.core.ui.viewmodel.collectUiStateWithLifecycle
 import dev.alvr.katana.features.account.ui.navigation.account
 import dev.alvr.katana.features.explore.ui.navigation.explore
 import dev.alvr.katana.features.home.ui.navigation.HomeDestination
@@ -44,7 +44,7 @@ internal fun Katana(
     viewModel: KatanaViewModel = metroViewModel(),
 ) {
     val snackbarController = LocalSnackbarController.current
-    val uiState by viewModel.collectAsState()
+    val uiState by viewModel.collectUiStateWithLifecycle()
 
     val items = uiState.navigationBarItems
 

@@ -5,7 +5,6 @@ import dev.alvr.katana.common.session.domain.models.AnilistToken
 import dev.alvr.katana.common.session.domain.usecases.ObserveActiveSessionUseCase
 import dev.alvr.katana.common.session.domain.usecases.SaveSessionUseCase
 import dev.alvr.katana.common.user.domain.usecases.SaveUserIdUseCase
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
@@ -18,12 +17,11 @@ import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 @Stable
 @AssistedInject
 internal class HomeViewModel(
-    dispatcher: KatanaDispatcher,
     @Assisted private val token: String?,
     private val observeActiveSessionUseCase: ObserveActiveSessionUseCase,
     private val saveSessionUseCase: SaveSessionUseCase,
     private val saveUserIdUseCase: SaveUserIdUseCase,
-) : KatanaViewModel<HomeState, HomeEffect, HomeIntent>(dispatcher, HomeState()) {
+) : KatanaViewModel<HomeState, HomeEffect, HomeIntent>(HomeState()) {
 
     override fun init() {
         observeSession()
