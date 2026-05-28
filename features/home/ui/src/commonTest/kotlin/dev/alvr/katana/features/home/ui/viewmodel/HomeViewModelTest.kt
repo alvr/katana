@@ -23,7 +23,9 @@ import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
 import io.kotest.engine.test.TestResult
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.yield
 
 internal class HomeViewModelTest : BehaviorSpec() {
     private val observeActiveSession = mock<ObserveActiveSessionUseCase>()
@@ -112,16 +114,22 @@ internal class HomeViewModelTest : BehaviorSpec() {
                 }
 
                 and("there is an error") {
-                    beforeTest {
-                        every { observeActiveSession.flow } returns flowOf(SessionFailure.CheckingActiveSession.left())
-                    }
-
                     then("it should expect HomeEffect.ObserveSessionFailure effect") {
+                        every { observeActiveSession.flow } returns flowOf(SessionFailure.CheckingActiveSession.left())
+
                         viewModel.test { expectEffect(HomeEffect.ObserveSessionFailure) }
                     }
 
                     then("it should set sessionActive to false") {
-                        viewModel.test(HomeState(sessionActive = true)) {
+                        every { observeActiveSession.flow } returns
+                            flow {
+                                emit(true.right())
+                                yield()
+                                emit(SessionFailure.CheckingActiveSession.left())
+                            }
+
+                        viewModel.test {
+                            expectState { copy(sessionActive = true) }
                             expectState { copy(sessionActive = false) }
                             expectEffect(HomeEffect.ObserveSessionFailure)
                         }
@@ -131,27 +139,16 @@ internal class HomeViewModelTest : BehaviorSpec() {
         }
     }
 
-    override suspend fun beforeEach(testCase: TestCase) {
-        viewModel =
-            createHomeUiTestGraph(
-                    observeActiveSessionUseCase = observeActiveSession,
-                    saveSessionUseCase = saveSession,
-                    saveUserIdUseCase = saveUserId,
-                )
-                .homeViewModelFactory
-                .create(TOKEN_WITH_PARAMS)
-    }
-
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {
         resetAnswers(observeActiveSession, saveSession, saveUserId)
         resetCalls(observeActiveSession, saveSession, saveUserId)
     }
 
-    private fun initMocks(token: String? = TOKEN_WITH_PARAMS, sessionActive: Boolean = false) {
+    private fun initMocks(token: String? = TOKEN_WITH_PARAMS) {
         everySuspend { observeActiveSession(Unit) } returns Unit
         everySuspend { saveSession(any()) } returns Unit.right()
         everySuspend { saveUserId(Unit) } returns Unit.right()
-        every { observeActiveSession.flow } returns flowOf(sessionActive.right())
+        every { observeActiveSession.flow } returns flowOf(false.right())
 
         viewModel =
             createHomeUiTestGraph(

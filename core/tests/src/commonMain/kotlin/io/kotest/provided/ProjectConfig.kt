@@ -10,6 +10,7 @@ import io.kotest.engine.config.IncludeTestScopeAffixes
 object ProjectConfig : AbstractProjectConfig() {
     override val assertionMode = AssertionMode.Warn
     override val coroutineDebugProbes = true
+    override val coroutineTestScope = true
     override val duplicateTestNameMode = DuplicateTestNameMode.Silent
     override val globalAssertSoftly = true
     override val includeTestScopeAffixes = IncludeTestScopeAffixes.ALWAYS

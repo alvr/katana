@@ -9,12 +9,14 @@ import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.domain.usecases.KatanaEitherUseCase
 import dev.alvr.katana.core.domain.usecases.KatanaFlowEitherUseCase
 import dev.alvr.katana.core.domain.usecases.KatanaFlowOptionUseCase
-import dev.alvr.katana.core.domain.usecases.KatanaFlowUseCase
 import dev.alvr.katana.core.domain.usecases.KatanaOptionUseCase
 import dev.alvr.katana.core.domain.usecases.KatanaUseCase
 import dev.zacsweers.metro.DefaultBinding
 import dev.zacsweers.metro.ExperimentalMetroApi
 import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -36,6 +38,8 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
 
     private val _uiState = MutableStateFlow(initialState)
     private val _effects = Channel<E>(Channel.BUFFERED)
+
+    private val executingLock = SynchronizedObject()
     private val executing = mutableMapOf<Any, Job>()
 
     private val viewModelLogTag
@@ -142,14 +146,13 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         }
     }
 
-    private inline fun KatanaFlowUseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
-        executing.remove(this)?.cancel()
-        executing[this] = viewModelScope.launch { block() }
-    }
-
     private inline fun KatanaUseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
-        executing.remove(this)?.cancel()
-        executing[this] = viewModelScope.launch { block() }
+        val job = viewModelScope.launch(start = CoroutineStart.LAZY) { block() }
+        synchronized(executingLock) {
+            executing.remove(this)?.cancel()
+            executing[this] = job
+        }
+        job.start()
     }
 }
 

@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 
-interface KatanaFlowUseCase<in P, out R> {
+interface KatanaFlowUseCase<in P, out R> : KatanaUseCase<P, Unit> {
     val flow: Flow<R>
 
-    suspend operator fun invoke(params: P)
+    override suspend operator fun invoke(params: P)
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)

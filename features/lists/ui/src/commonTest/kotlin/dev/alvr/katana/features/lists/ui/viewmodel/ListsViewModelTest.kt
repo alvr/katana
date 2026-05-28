@@ -42,9 +42,10 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class ListsViewModelTest : FreeSpec() {
     private val observeList = mock<ObserveListUseCase>()
     private val updateList = mock<UpdateListUseCase>()
@@ -227,7 +228,7 @@ internal class ListsViewModelTest : FreeSpec() {
                                         scenario.viewModel().test {
                                             expectStateWithLists(scenario)
                                             intent(ListsIntent.Search("non-existent entry"))
-                                            delay(300)
+
                                             expectState {
                                                 empty.shouldBeTrue()
                                                 items.shouldBeEmpty()
