@@ -14,5 +14,10 @@ interface GetUserIdUseCase : KatanaEitherUseCase<Unit, UserId>
 @ContributesBinding(AppScope::class, binding = binding<GetUserIdUseCase>())
 internal class GetUserIdUseCaseImpl(dispatcher: KatanaDispatcher, private val repository: UserRepository) :
     EitherUseCase<Unit, UserId>(dispatcher), GetUserIdUseCase {
-    override suspend fun run(params: Unit) = repository.getUserId()
+    /**
+ * Retrieves the current user's identifier from the repository.
+ *
+ * @return An `Either` result containing the `UserId` on success or an error on failure.
+ */
+override suspend fun run(params: Unit) = repository.getUserId()
 }

@@ -17,10 +17,18 @@ internal class AccountViewModel(
     private val logOutUseCase: LogOutUseCase,
 ) : KatanaViewModel<AccountState, AccountEffect, AccountIntent>(AccountState()) {
 
+    /**
+     * Initializes the ViewModel by starting observation of the current user information.
+     */
     override fun init() {
         observeUserInfo()
     }
 
+    /**
+     * Handles an AccountIntent and performs the corresponding account action; for AccountIntent.Logout this triggers a user logout.
+     *
+     * @param intent The incoming intent to handle.
+     */
     override fun intent(intent: AccountIntent) {
         when (intent) {
             AccountIntent.Logout -> logOut()

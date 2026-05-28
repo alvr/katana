@@ -13,7 +13,12 @@ import dev.zacsweers.metro.createGraphFactory
 internal interface ExploreUiTestGraph : TestAppGraph {
     val exploreViewModel: ExploreViewModel
 
-    @Provides fun exploreViewModel(): ExploreViewModel = ExploreViewModel()
+    /**
+ * Provides an ExploreViewModel for the test dependency graph.
+ *
+ * @return A new ExploreViewModel instance.
+ */
+@Provides fun exploreViewModel(): ExploreViewModel = ExploreViewModel()
 
     @DependencyGraph.Factory
     interface Factory {

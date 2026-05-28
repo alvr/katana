@@ -49,6 +49,14 @@ internal class ListsRemoteSourceImpl(
                 error.toFailure(network = ListsFailure.UpdatingList, response = ListsFailure.UpdatingList)
             }
 
+    /**
+     * Produces a flow that emits the remote media collection for the specified media type and updates when the remote data changes.
+     *
+     * Emits `Either.Right(MediaCollection)` when a successful response is received; on errors emits `Either.Left(ListsFailure.GetMediaCollection)`.
+     *
+     * @param type The media type (e.g., `MediaType.ANIME` or `MediaType.MANGA`) to fetch.
+     * @return A `Flow<Either<ListsFailure, MediaCollection>>` that publishes distinct updates based on the response `data`.
+     */
     private inline fun <reified T : MediaEntry> getMediaCollection(type: MediaType) = flow {
         val response =
             client

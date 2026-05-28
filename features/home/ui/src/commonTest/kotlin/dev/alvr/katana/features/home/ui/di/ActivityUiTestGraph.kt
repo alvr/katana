@@ -13,12 +13,27 @@ import dev.zacsweers.metro.createGraphFactory
 internal interface ActivityUiTestGraph : TestAppGraph {
     val activityViewModel: ActivityViewModel
 
-    @Provides fun activityViewModel(): ActivityViewModel = ActivityViewModel()
+    /**
+ * Provides a default ActivityViewModel instance for the test dependency graph.
+ *
+ * @return A new ActivityViewModel instance.
+ */
+@Provides fun activityViewModel(): ActivityViewModel = ActivityViewModel()
 
     @DependencyGraph.Factory
     interface Factory {
-        fun create(): ActivityUiTestGraph
+        /**
+ * Creates the test dependency graph used by the Activity UI.
+ *
+ * @return An ActivityUiTestGraph instance configured for the test scope.
+ */
+fun create(): ActivityUiTestGraph
     }
 }
 
+/**
+ * Creates the test dependency graph that provides dependencies for the ActivityViewModel used in UI tests.
+ *
+ * @return The created ActivityUiTestGraph instance.
+ */
 internal fun createActivityUiTestGraph() = createGraphFactory<ActivityUiTestGraph.Factory>().create()

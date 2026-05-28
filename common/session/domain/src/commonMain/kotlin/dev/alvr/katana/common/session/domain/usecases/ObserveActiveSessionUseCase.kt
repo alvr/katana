@@ -15,5 +15,10 @@ internal class ObserveActiveSessionUseCaseImpl(
     dispatcher: KatanaDispatcher,
     private val repository: SessionRepository,
 ) : FlowEitherUseCase<Unit, Boolean>(dispatcher), ObserveActiveSessionUseCase {
-    override fun createFlow(params: Unit) = repository.sessionActive
+    /**
+ * Provides the flow that emits whether an active session exists.
+ *
+ * @return A flow emitting `Either` results whose success value is a `Boolean`: `true` when an active session exists, `false` otherwise.
+ */
+override fun createFlow(params: Unit) = repository.sessionActive
 }

@@ -13,5 +13,10 @@ interface DeleteAnilistTokenUseCase : KatanaEitherUseCase<Unit, Unit>
 @ContributesBinding(AppScope::class, binding = binding<DeleteAnilistTokenUseCase>())
 internal class DeleteAnilistTokenUseCaseImpl(dispatcher: KatanaDispatcher, private val repository: SessionRepository) :
     EitherUseCase<Unit, Unit>(dispatcher), DeleteAnilistTokenUseCase {
-    override suspend fun run(params: Unit) = repository.deleteAnilistToken()
+    /**
+ * Deletes the stored AniList token via the session repository.
+ *
+ * @return An `Either`-style result with `Unit` on success and `Unit` on failure.
+ */
+override suspend fun run(params: Unit) = repository.deleteAnilistToken()
 }

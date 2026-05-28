@@ -17,6 +17,13 @@ internal interface ListsUiTestGraph : TestAppGraph {
 
     @DependencyGraph.Factory
     interface Factory {
+        /**
+         * Creates a test dependency graph for the Lists UI using the supplied use cases.
+         *
+         * @param observeListUseCase Use case that provides a stream of list state for observation in tests.
+         * @param updateListUseCase Use case that performs updates to list state during tests.
+         * @return A configured [ListsUiTestGraph] instance scoped for Lists UI testing.
+         */
         fun create(
             @Provides observeListUseCase: ObserveListUseCase,
             @Provides updateListUseCase: UpdateListUseCase,
@@ -24,6 +31,13 @@ internal interface ListsUiTestGraph : TestAppGraph {
     }
 }
 
-internal fun createListsUiTestGraph(observeListUseCase: ObserveListUseCase, updateListUseCase: UpdateListUseCase) =
+/**
+         * Create a ListsUiTestGraph configured with the provided list use cases.
+         *
+         * @param observeListUseCase Use case that observes list state for the UI.
+         * @param updateListUseCase Use case that updates list data for the UI.
+         * @return A fully constructed [ListsUiTestGraph] instance wired with the given dependencies.
+         */
+        internal fun createListsUiTestGraph(observeListUseCase: ObserveListUseCase, updateListUseCase: UpdateListUseCase) =
     createGraphFactory<ListsUiTestGraph.Factory>()
         .create(observeListUseCase = observeListUseCase, updateListUseCase = updateListUseCase)

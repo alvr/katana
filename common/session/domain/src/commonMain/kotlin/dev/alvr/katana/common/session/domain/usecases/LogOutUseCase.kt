@@ -13,5 +13,10 @@ interface LogOutUseCase : KatanaEitherUseCase<Unit, Unit>
 @ContributesBinding(AppScope::class, binding = binding<LogOutUseCase>())
 internal class LogOutUseCaseImpl(dispatcher: KatanaDispatcher, private val repository: SessionRepository) :
     EitherUseCase<Unit, Unit>(dispatcher), LogOutUseCase {
-    override suspend fun run(params: Unit) = repository.logout()
+    /**
+ * Performs logout by delegating to the session repository.
+ *
+ * @return `Unit` on success or an error wrapped in the use-case Either result.
+ */
+override suspend fun run(params: Unit) = repository.logout()
 }

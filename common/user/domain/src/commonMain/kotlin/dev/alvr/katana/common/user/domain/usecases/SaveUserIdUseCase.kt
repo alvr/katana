@@ -13,5 +13,10 @@ interface SaveUserIdUseCase : KatanaEitherUseCase<Unit, Unit>
 @ContributesBinding(AppScope::class, binding = binding<SaveUserIdUseCase>())
 internal class SaveUserIdUseCaseImpl(dispatcher: KatanaDispatcher, private val repository: UserRepository) :
     EitherUseCase<Unit, Unit>(dispatcher), SaveUserIdUseCase {
-    override suspend fun run(params: Unit) = repository.saveUserId()
+    /**
+ * Persists the current user's ID via the repository.
+ *
+ * @return An Either containing `Unit` on success or an error describing the failure.
+ */
+override suspend fun run(params: Unit) = repository.saveUserId()
 }

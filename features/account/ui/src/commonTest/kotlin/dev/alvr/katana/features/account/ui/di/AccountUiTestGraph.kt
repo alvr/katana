@@ -15,6 +15,13 @@ import dev.zacsweers.metro.createGraphFactory
 internal interface AccountUiTestGraph : TestAppGraph {
     val accountViewModel: AccountViewModel
 
+    /**
+     * Creates an AccountViewModel configured with the provided use cases.
+     *
+     * @param observeUserInfoUseCase Use case that supplies updates to the current user's information.
+     * @param logOutUseCase Use case that performs the user's log-out operation.
+     * @return An AccountViewModel wired with the given use cases.
+     */
     @Provides
     fun accountViewModel(
         observeUserInfoUseCase: ObserveUserInfoUseCase,

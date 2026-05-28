@@ -9,6 +9,12 @@ import dev.alvr.katana.features.home.ui.resources.popular_title
 import dev.alvr.katana.features.home.ui.screens.foryou.components.Lists
 import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
 
+/**
+ * Renders the "Popular" section and emits a navigation intent when the section's navigate action is clicked.
+ *
+ * @param onIntent Callback invoked with a [ForYouIntent]; called with `ForYouIntent.NavigateToPopular` when the navigate action is triggered.
+ * @param modifier Optional [Modifier] for layout or styling.
+ */
 @Composable
 internal fun Popular(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = Modifier) {
     Lists(

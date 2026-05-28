@@ -15,6 +15,13 @@ import dev.zacsweers.metro.createGraphFactory
 internal interface ForYouUiTestGraph : TestAppGraph {
     val forYouViewModel: ForYouViewModel
 
+    /**
+     * Creates a ForYouViewModel configured with the provided use cases.
+     *
+     * @param hideWelcomeCardUseCase Use case that hides the welcome card when invoked.
+     * @param observeWelcomeCardVisibilityUseCase Use case that observes welcome card visibility changes.
+     * @return A configured ForYouViewModel instance.
+     */
     @Provides
     fun forYouViewModel(
         hideWelcomeCardUseCase: HideWelcomeCardUseCase,
@@ -23,6 +30,13 @@ internal interface ForYouUiTestGraph : TestAppGraph {
 
     @DependencyGraph.Factory
     interface Factory {
+        /**
+         * Creates a ForYouUiTestGraph initialized with the given use cases.
+         *
+         * @param hideWelcomeCardUseCase Use case that hides the welcome card.
+         * @param observeWelcomeCardVisibilityUseCase Use case that observes the welcome card's visibility.
+         * @return A ForYouUiTestGraph wired with the provided use cases.
+         */
         fun create(
             @Provides hideWelcomeCardUseCase: HideWelcomeCardUseCase,
             @Provides observeWelcomeCardVisibilityUseCase: ObserveWelcomeCardVisibilityUseCase,
@@ -30,7 +44,14 @@ internal interface ForYouUiTestGraph : TestAppGraph {
     }
 }
 
-internal fun createForYouUiTestGraph(
+/**
+         * Creates a test dependency graph for the "For You" home UI and obtains its view model.
+         *
+         * @param hideWelcomeCardUseCase Use case that hides the welcome card.
+         * @param observeWelcomeCardVisibilityUseCase Use case that observes the welcome card's visibility.
+         * @return The initialized ForYouViewModel from the test graph.
+         */
+        internal fun createForYouUiTestGraph(
     hideWelcomeCardUseCase: HideWelcomeCardUseCase,
     observeWelcomeCardVisibilityUseCase: ObserveWelcomeCardVisibilityUseCase,
 ) =

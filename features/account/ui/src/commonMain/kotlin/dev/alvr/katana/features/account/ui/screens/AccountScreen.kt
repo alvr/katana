@@ -17,6 +17,12 @@ import dev.alvr.katana.features.account.ui.viewmodel.AccountIntent
 import dev.alvr.katana.features.account.ui.viewmodel.AccountViewModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 
+/**
+ * Entry-point composable for the account screen that collects UI state from the provided viewModel and renders the account UI.
+ *
+ * @param navigator Navigator used for account-related navigation (currently unused).
+ * @param viewModel ViewModel that supplies the screen's UI state and handles intents.
+ */
 @Composable
 @Suppress("UNUSED_PARAMETER")
 internal fun AccountScreen(navigator: AccountNavigator, viewModel: AccountViewModel = metroViewModel()) {

@@ -35,11 +35,25 @@ internal class ListsViewModel(
 ) : KatanaViewModel<ListsState, ListsEffect, ListsIntent>(ListsState()) {
     private val searchFlow = MutableStateFlow(String.empty)
 
+    /**
+     * Initializes the view model by starting observation of lists and search queries.
+     */
     override fun init() {
         observeLists()
         observeSearch()
     }
 
+    /**
+     * Dispatches a ListsIntent to perform the corresponding view-model action.
+     *
+     * Supported intents:
+     * - Refresh: triggers re-observation of lists.
+     * - AddPlusOne: increments progress for the item with the provided id.
+     * - SelectList: sets the currently selected list by name.
+     * - Search: updates the active search query.
+     *
+     * @param intent The intent to handle.
+     */
     override fun intent(intent: ListsIntent) {
         when (intent) {
             is ListsIntent.Refresh -> observeLists()
@@ -49,6 +63,14 @@ internal class ListsViewModel(
         }
     }
 
+    /**
+     * Observes list data for the configured media list type and updates view state.
+     *
+     * On failure clears the collection, sets `selectedList` to empty, marks `error = true` and `loading = false`,
+     * and emits `ListsEffect.LoadingListsFailure`. On success builds the collection grouped by list name,
+     * sets `selectedList` to the existing selection if present or to the first collection key otherwise,
+     * and marks `error = false` and `loading = false`.
+     */
     private fun observeLists() {
         state { copy(loading = true) }
 
@@ -98,11 +120,22 @@ internal class ListsViewModel(
         state { copy(selectedList = name) }
     }
 
+    /**
+     * Updates the current search query used to filter the lists.
+     *
+     * @param search The new search query; an empty string clears the query.
+     */
     private fun search(search: String) {
         searchFlow.update { search }
     }
 
-    @AssistedFactory
+    /**
+         * Factory that creates a ListsViewModel configured for a specific media list type.
+         *
+         * @param type The MediaListType to construct the view model for (e.g., WATCHLIST, FAVORITES).
+         * @return A new ListsViewModel instance configured for the provided `type`.
+         */
+        @AssistedFactory
     @ManualViewModelAssistedFactoryKey
     @ContributesIntoMap(AppScope::class)
     fun interface Factory : ManualViewModelAssistedFactory {

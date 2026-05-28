@@ -9,6 +9,12 @@ import dev.alvr.katana.features.home.ui.resources.reading_title
 import dev.alvr.katana.features.home.ui.screens.foryou.components.Lists
 import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
 
+/**
+ * Renders the "Reading" section using the Lists component and wires its navigation action to the provided intent callback.
+ *
+ * @param onIntent Callback invoked with a `ForYouIntent`; tapping the navigation control sends `ForYouIntent.NavigateToMangaLists`.
+ * @param modifier Modifier applied to the root composable.
+ */
 @Composable
 internal fun Reading(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = Modifier) {
     Lists(

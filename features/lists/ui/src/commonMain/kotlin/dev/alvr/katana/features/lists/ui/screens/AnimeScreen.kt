@@ -12,6 +12,11 @@ import dev.alvr.katana.features.lists.ui.screens.components.ListScreen
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsViewModel
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 
+/**
+ * Renders the anime list UI and supplies a ListsViewModel configured for anime.
+ *
+ * @param navigator Provides navigation actions for editing an anime entry and viewing anime entry details.
+ */
 @Composable
 internal fun AnimeScreen(navigator: AnimeListsNavigator) {
     ListScreen(

@@ -17,7 +17,13 @@ interface ObserveListUseCase : KatanaFlowEitherUseCase<MediaListType, MediaColle
 internal class ObserveListUseCaseImpl(dispatcher: KatanaDispatcher, private val repository: ListsRepository) :
     FlowEitherUseCase<MediaListType, MediaCollection<MediaEntry>>(dispatcher), ObserveListUseCase {
 
-    override fun createFlow(params: MediaListType) =
+    /**
+         * Produces a flow emitting the media collection corresponding to the given list type.
+         *
+         * @param params The media list type to observe.
+         * @return The repository's `MediaCollection<MediaEntry>` flow for the specified list type.
+         */
+        override fun createFlow(params: MediaListType) =
         when (params) {
             MediaListType.Anime -> repository.animeCollection
             MediaListType.Manga -> repository.mangaCollection

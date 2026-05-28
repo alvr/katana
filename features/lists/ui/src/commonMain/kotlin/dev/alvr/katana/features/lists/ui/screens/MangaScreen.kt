@@ -12,6 +12,14 @@ import dev.alvr.katana.features.lists.ui.screens.components.ListScreen
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsViewModel
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 
+/**
+ * Shows the manga list UI and wires manga-specific resources and navigation callbacks.
+ *
+ * Renders the list screen for manga entries with the appropriate title, search placeholder,
+ * empty-state text, view model, and handlers for editing or viewing entry details.
+ *
+ * @param navigator Navigator used to open the edit screen and entry details for manga items.
+ */
 @Composable
 internal fun MangaScreen(navigator: MangaListsNavigator) {
     ListScreen(

@@ -14,7 +14,13 @@ import dev.zacsweers.metro.createGraphFactory
 internal interface SharedUiTestGraph : TestAppGraph {
     val katanaViewModel: KatanaViewModel
 
-    @Provides
+    /**
+         * Provides a KatanaViewModel configured with the given ObserveActiveSessionUseCase.
+         *
+         * @param observeActiveSessionUseCase Observes active session state used by the view model.
+         * @return A KatanaViewModel that exposes active session updates.
+         */
+        @Provides
     fun katanaViewModel(observeActiveSessionUseCase: ObserveActiveSessionUseCase): KatanaViewModel =
         KatanaViewModel(observeActiveSessionUseCase)
 

@@ -50,6 +50,14 @@ import dev.alvr.katana.features.home.ui.viewmodel.HomeViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
+/**
+ * Host composable for the Home screen that sets up tabs, pager state, collapsing top app bar,
+ * collects UI state and side effects, and renders per-tab content.
+ *
+ * @param homeNavigator Navigator used for navigation actions originating from Home tab content.
+ * @param viewModel Source of UI state and effects for the Home screen.
+ * @param modifier Optional [Modifier] applied to the scaffold root.
+ */
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun HomeScreen(homeNavigator: HomeNavigator, viewModel: HomeViewModel, modifier: Modifier = Modifier) {
@@ -121,6 +129,17 @@ private fun TopBar(
     }
 }
 
+/**
+ * Displays horizontally swipeable home pages and scopes a distinct ViewModel store to each page.
+ *
+ * Each page is rendered using the provided `navigator` and `sessionActive` flag; a separate
+ * ViewModelStoreOwner is created per page so page-scoped ViewModels are retained independently.
+ *
+ * @param navigator Navigator used by page content to perform navigation from within tabs.
+ * @param sessionActive `true` if a user session is active; forwarded to page content for conditional UI.
+ * @param pagerState State object that controls and observes the pager's current page and animations.
+ * @param modifier Optional layout modifiers applied to the pager container.
+ */
 @Composable
 private fun PagerContent(
     navigator: HomeNavigator,

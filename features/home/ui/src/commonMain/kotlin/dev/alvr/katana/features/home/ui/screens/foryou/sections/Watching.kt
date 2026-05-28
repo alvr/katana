@@ -9,6 +9,13 @@ import dev.alvr.katana.features.home.ui.resources.watching_title
 import dev.alvr.katana.features.home.ui.screens.foryou.components.Lists
 import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
 
+/**
+ * Renders the "Watching" section and delegates its UI to the shared `Lists` component.
+ *
+ * @param onIntent Callback invoked to emit `ForYouIntent` actions; called with
+ * `ForYouIntent.NavigateToAnimeLists` when the section's navigate action is triggered.
+ * @param modifier Modifier applied to the `Lists` composable.
+ */
 @Composable
 internal fun Watching(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = Modifier) {
     Lists(

@@ -15,5 +15,10 @@ internal class ObserveWelcomeCardVisibilityUseCaseImpl(
     dispatcher: KatanaDispatcher,
     private val repository: HomeRepository,
 ) : FlowEitherUseCase<Unit, Boolean>(dispatcher), ObserveWelcomeCardVisibilityUseCase {
-    override fun createFlow(params: Unit) = repository.welcomeCardVisible
+    /**
+ * Provides a flow emitting the current welcome card visibility state.
+ *
+ * @return A `Flow` that emits `Either`-wrapped `Boolean` values indicating whether the welcome card is visible.
+ */
+override fun createFlow(params: Unit) = repository.welcomeCardVisible
 }

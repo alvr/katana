@@ -9,6 +9,12 @@ import dev.alvr.katana.features.home.ui.resources.upcoming_title
 import dev.alvr.katana.features.home.ui.screens.foryou.components.Lists
 import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
 
+/**
+ * Displays the "Upcoming" lists section with its title, icon accessibility label, and navigation action.
+ *
+ * @param onIntent Callback invoked with `ForYouIntent.NavigateToUpcoming` when the section's navigate action is triggered.
+ * @param modifier Modifier to be applied to the root `Lists` composable.
+ */
 @Composable
 internal fun Upcoming(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = Modifier) {
     Lists(

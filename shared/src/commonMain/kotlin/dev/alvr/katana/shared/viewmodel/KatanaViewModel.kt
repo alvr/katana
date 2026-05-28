@@ -17,6 +17,9 @@ import kotlinx.collections.immutable.toImmutableList
 internal class KatanaViewModel(private val observeActiveSessionUseCase: ObserveActiveSessionUseCase) :
     KatanaViewModel<KatanaState, EmptyEffect, EmptyIntent>(KatanaState()) {
 
+    /**
+     * Initializes the ViewModel by starting observation of the active session.
+     */
     override fun init() {
         observeActiveSession()
     }

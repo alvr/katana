@@ -9,6 +9,16 @@ import dev.alvr.katana.features.home.ui.resources.trending_title
 import dev.alvr.katana.features.home.ui.screens.foryou.components.Lists
 import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
 
+/**
+ * Renders a "Trending" section by delegating to the `Lists` composable.
+ *
+ * Shows the trending title and navigation icon; when the navigation button is activated,
+ * invokes `onIntent` with `ForYouIntent.NavigateToTrending`.
+ *
+ * @param onIntent Callback invoked with user/navigation intents; called with `ForYouIntent.NavigateToTrending`
+ *                 when the section's navigation button is clicked.
+ * @param modifier Modifier to apply to the section's layout.
+ */
 @Composable
 internal fun Trending(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = Modifier) {
     Lists(

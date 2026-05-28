@@ -8,18 +8,34 @@ import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import kotlinx.collections.immutable.toImmutableMap
 
-internal fun Iterable<MediaListGroup<MediaEntry>>.entryMap() =
+/**
+         * Builds an immutable map that keys each media list item's `entryId` to its corresponding `MediaListItem`.
+         *
+         * @return An immutable `Map` from `entryId` to `MediaListItem` containing one entry per `MediaListEntry` found in the input groups.
+         */
+        internal fun Iterable<MediaListGroup<MediaEntry>>.entryMap() =
     flatMap { group -> group.entries.map(MediaListEntry<out MediaEntry>::toMediaItem) }
         .associateBy { item -> item.entryId }
         .toImmutableMap()
 
-private fun MediaListEntry<MediaEntry>.toMediaItem() =
+/**
+     * Converts this MediaListEntry containing a MediaEntry into the corresponding UI MediaListItem.
+     *
+     * @receiver The MediaListEntry to convert; its `list` context is used when mapping the underlying entry.
+     * @return The MediaListItem representing the underlying `MediaEntry.Anime` or `MediaEntry.Manga`.
+     */
+    private fun MediaListEntry<MediaEntry>.toMediaItem() =
     when (val media = entry) {
         is MediaEntry.Anime -> media.toMediaItem(list)
         is MediaEntry.Manga -> media.toMediaItem(list)
     }
 
-internal fun CommonMediaEntry.Format.toEntity() =
+/**
+     * Maps a CommonMediaEntry.Format value to the corresponding MediaListItem.Format.
+     *
+     * @return The corresponding MediaListItem.Format value.
+     */
+    internal fun CommonMediaEntry.Format.toEntity() =
     when (this) {
         CommonMediaEntry.Format.TV -> MediaListItem.Format.Tv
         CommonMediaEntry.Format.TV_SHORT -> MediaListItem.Format.TvShort

@@ -5,7 +5,13 @@ import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 
-internal fun MediaEntry.Manga.toMediaItem(list: MediaList) =
+/**
+     * Create a MangaListItem by combining this manga entry with data from the provided media list.
+     *
+     * @param list The MediaList whose list-scoped fields (for example list id, status flags, and timestamps) are applied to the resulting item.
+     * @return A MediaListItem.MangaListItem representing the merged entry and list data.
+     */
+    internal fun MediaEntry.Manga.toMediaItem(list: MediaList) =
     with(list) {
         MediaListItem.MangaListItem(
             entryId = id,

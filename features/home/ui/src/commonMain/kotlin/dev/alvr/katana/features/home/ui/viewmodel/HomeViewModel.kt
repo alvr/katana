@@ -23,17 +23,33 @@ internal class HomeViewModel(
     private val saveUserIdUseCase: SaveUserIdUseCase,
 ) : KatanaViewModel<HomeState, HomeEffect, HomeIntent>(HomeState()) {
 
+    /**
+     * Starts observing the active session and, if a token was supplied, begins persisting the AniList token.
+     *
+     * Observation updates the view state with the session activity; token persistence is skipped when the provided token is null or blank.
+     */
     override fun init() {
         observeSession()
         saveAnilistToken()
     }
 
+    /**
+     * Persists the AniList token supplied to the ViewModel if it is not null or blank.
+     *
+     * Does nothing when the token is null or blank.
+     */
     private fun saveAnilistToken() {
         if (token.isNullOrBlank()) return
 
         handleSaveAnilistToken(token)
     }
 
+    /**
+     * Persists an AniList session token (truncating at the first '&'), emits `HomeEffect.SaveTokenFailure` on failure,
+     * and triggers saving the user id on success.
+     *
+     * @param token The raw AniList token; any content after the first `&` is ignored. 
+     */
     private fun handleSaveAnilistToken(token: String) {
         execute(
             useCase = saveSessionUseCase,
@@ -52,6 +68,12 @@ internal class HomeViewModel(
         )
     }
 
+    /**
+     * Observes the active session status and updates the view state.
+     *
+     * On each successful update sets `sessionActive` to the observed value.
+     * On failure sets `sessionActive` to false and emits `HomeEffect.ObserveSessionFailure`.
+     */
     private fun observeSession() {
         execute(
             useCase = observeActiveSessionUseCase,
@@ -64,7 +86,13 @@ internal class HomeViewModel(
         )
     }
 
-    @AssistedFactory
+    /**
+         * Factory for creating HomeViewModel instances with an optional AniList token.
+         *
+         * @param token An optional AniList OAuth token (may be null) supplied to the created ViewModel for session persistence.
+         * @return A new HomeViewModel configured with the provided token.
+         */
+        @AssistedFactory
     @ManualViewModelAssistedFactoryKey
     @ContributesIntoMap(AppScope::class)
     fun interface Factory : ManualViewModelAssistedFactory {

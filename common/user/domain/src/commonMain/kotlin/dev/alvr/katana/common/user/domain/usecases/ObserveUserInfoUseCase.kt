@@ -14,5 +14,10 @@ interface ObserveUserInfoUseCase : KatanaFlowEitherUseCase<Unit, UserInfo>
 @ContributesBinding(AppScope::class, binding = binding<ObserveUserInfoUseCase>())
 internal class ObserveUserInfoUseCaseImpl(dispatcher: KatanaDispatcher, private val repository: UserRepository) :
     FlowEitherUseCase<Unit, UserInfo>(dispatcher), ObserveUserInfoUseCase {
-    override fun createFlow(params: Unit) = repository.userInfo
+    /**
+ * Observes user information updates from the repository.
+ *
+ * @return A flow emitting the repository's `UserInfo` values wrapped in the use case's Either result.
+ */
+override fun createFlow(params: Unit) = repository.userInfo
 }

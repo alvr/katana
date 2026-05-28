@@ -9,6 +9,9 @@ import dev.alvr.katana.features.home.ui.screens.HomeTab
 import dev.alvr.katana.features.home.ui.screens.activity.viewmodel.ActivityViewModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 
+/**
+ * Displays the Activity tab title as a Text composable.
+ */
 @Composable
 @Suppress("UNUSED_PARAMETER")
 internal fun ActivityTabContent(

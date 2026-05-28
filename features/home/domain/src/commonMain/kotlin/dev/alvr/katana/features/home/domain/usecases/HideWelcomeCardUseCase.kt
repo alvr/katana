@@ -13,5 +13,12 @@ interface HideWelcomeCardUseCase : KatanaEitherUseCase<Unit, Unit>
 @ContributesBinding(AppScope::class, binding = binding<HideWelcomeCardUseCase>())
 internal class HideWelcomeCardUseCaseImpl(dispatcher: KatanaDispatcher, private val repository: HomeRepository) :
     EitherUseCase<Unit, Unit>(dispatcher), HideWelcomeCardUseCase {
-    override suspend fun run(params: Unit) = repository.hideWelcomeCard()
+    /**
+ * Hides the welcome card.
+ *
+ * Ignores the `params` argument.
+ *
+ * @return `Either` with `Right(Unit)` on success or `Left` containing an error on failure.
+ */
+override suspend fun run(params: Unit) = repository.hideWelcomeCard()
 }

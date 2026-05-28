@@ -32,6 +32,11 @@ internal data class ListsState(
     val empty = items.isEmpty()
     val lists = collection.toUserList()
 
+    /**
+     * Determines whether [other] represents the same ListsState.
+     *
+     * @return `true` if [other] is a ListsState and has equal `error`, `loading`, `selectedList`, `collection`, and `items`; `false` otherwise.
+     */
     @CoverageExcluded
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -48,6 +53,11 @@ internal data class ListsState(
         return true
     }
 
+    /**
+     * Computes a hash code for this state instance based on its significant properties.
+     *
+     * @return An integer hash code derived from `error`, `loading`, `selectedList`, `collection`, and `items`.
+     */
     @CoverageExcluded
     override fun hashCode(): Int {
         var result = error.hashCode()

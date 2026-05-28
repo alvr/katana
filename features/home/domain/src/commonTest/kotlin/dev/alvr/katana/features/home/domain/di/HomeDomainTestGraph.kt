@@ -19,12 +19,24 @@ internal interface HomeDomainTestGraph : TestAppGraph {
     val hideWelcomeCardUseCase: HideWelcomeCardUseCase
     val observeWelcomeCardVisibilityUseCase: ObserveWelcomeCardVisibilityUseCase
 
+    /**
+     * Provides a test binding for HideWelcomeCardUseCase backed by its concrete implementation.
+     *
+     * @param dispatcher Dispatcher used by the use case for coroutine execution.
+     * @param repository Repository providing home-related data and persistence.
+     * @return An instance of [HideWelcomeCardUseCase].
+     */
     @Provides
     fun provideHideWelcomeCardUseCase(
         dispatcher: KatanaDispatcher,
         repository: HomeRepository,
     ): HideWelcomeCardUseCase = HideWelcomeCardUseCaseImpl(dispatcher, repository)
 
+    /**
+     * Creates an ObserveWelcomeCardVisibilityUseCase implementation backed by the HomeRepository.
+     *
+     * @return An ObserveWelcomeCardVisibilityUseCase that emits welcome-card visibility changes. 
+     */
     @Provides
     fun provideObserveWelcomeCardVisibilityUseCase(
         dispatcher: KatanaDispatcher,
@@ -33,7 +45,13 @@ internal interface HomeDomainTestGraph : TestAppGraph {
 
     @DependencyGraph.Factory
     interface Factory {
-        fun create(@Provides homeRepository: HomeRepository): HomeDomainTestGraph
+        /**
+ * Creates a HomeDomainTestGraph configured with the provided HomeRepository.
+ *
+ * @param homeRepository The HomeRepository instance to supply into the graph's bindings.
+ * @return A HomeDomainTestGraph that uses the given HomeRepository.
+ */
+fun create(@Provides homeRepository: HomeRepository): HomeDomainTestGraph
     }
 }
 

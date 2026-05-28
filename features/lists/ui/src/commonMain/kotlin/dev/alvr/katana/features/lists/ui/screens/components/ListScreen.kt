@@ -28,6 +28,19 @@ import dev.alvr.katana.features.lists.ui.viewmodel.ListsEffect
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsIntent
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsViewModel
 
+/**
+ * Renders the lists screen UI and orchestrates interactions with the provided ListsViewModel.
+ *
+ * Shows a scaffold with a title, current selected list as subtitle, and a search field; exposes a FAB to open a list selector sheet. Displays an error state, an empty state, or a media grid depending on view model state. User actions (search, select list, refresh, add +1) are forwarded to the view model as intents; successful "+1" additions trigger a confirmation haptic. Edit and details actions are delegated to the provided callbacks. The passed modifier is applied to content and respects scaffold padding.
+ *
+ * @param viewModel Source of UI state, side effects, and intent handling for this screen.
+ * @param title Top-level title shown in the scaffold header.
+ * @param searchPlaceholder Placeholder text shown in the scaffold search field.
+ * @param emptyState Text displayed when the list is empty and not loading.
+ * @param onEditEntry Callback invoked with an entry id when the user requests to edit an entry.
+ * @param onEntryDetails Callback invoked with an entry id when the user requests to view entry details.
+ * @param modifier Optional layout modifier applied to the screen content.
+ */
 @Composable
 internal fun ListScreen(
     viewModel: ListsViewModel,

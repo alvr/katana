@@ -12,9 +12,24 @@ import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(KatanaInternalApi::class)
-fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.collectUiStateWithLifecycle() =
+/**
+     * Collects the view model's UI state as a lifecycle-aware Compose State.
+     *
+     * @return A `State<S>` representing the current UI state exposed by the view model.
+     */
+    fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.collectUiStateWithLifecycle() =
     uiState.collectAsStateWithLifecycle()
 
+/**
+ * Starts collecting the view model's `effects` when the lifecycle is at least `STARTED` and invokes
+ * `onEffect` for each emitted `UiEffect` until the lifecycle stops or the composable is disposed.
+ *
+ * The most recent `onEffect` handler is used for delivery. The `onEffect` callback is invoked from
+ * a suspend context and is annotated with `@DisallowComposableCalls`, so it must not call composable
+ * functions.
+ *
+ * @param onEffect Handler called for every emitted `UiEffect`.
+ */
 @Composable
 @OptIn(KatanaInternalApi::class)
 fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.CollectEffect(

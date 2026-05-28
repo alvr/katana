@@ -31,6 +31,13 @@ import dev.alvr.katana.features.home.ui.resources.welcome_card_register_button
 import dev.alvr.katana.features.home.ui.resources.welcome_card_title
 import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
 
+/**
+ * Displays an elevated welcome card containing a header and body with register/login actions.
+ *
+ * The header's close button dispatches `ForYouIntent.CloseWelcomeCard` through [onIntent].
+ *
+ * @param onIntent Callback invoked with `ForYouIntent` values representing user actions from the card.
+ */
 @Composable
 internal fun WelcomeCard(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = Modifier) {
     ElevatedCard(modifier = modifier) {

@@ -14,5 +14,11 @@ interface UpdateListUseCase : KatanaEitherUseCase<MediaList, Unit>
 @ContributesBinding(AppScope::class, binding = binding<UpdateListUseCase>())
 internal class UpdateListUseCaseImpl(dispatcher: KatanaDispatcher, private val repository: ListsRepository) :
     EitherUseCase<MediaList, Unit>(dispatcher), UpdateListUseCase {
-    override suspend fun run(params: MediaList) = repository.updateList(params)
+    /**
+ * Updates the provided media list using the repository.
+ *
+ * @param params The `MediaList` to update.
+ * @return An `Either` containing `Unit` on success, or an error on failure.
+ */
+override suspend fun run(params: MediaList) = repository.updateList(params)
 }

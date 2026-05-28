@@ -14,5 +14,11 @@ interface SaveSessionUseCase : KatanaEitherUseCase<AnilistToken, Unit>
 @ContributesBinding(AppScope::class, binding = binding<SaveSessionUseCase>())
 internal class SaveSessionUseCaseImpl(dispatcher: KatanaDispatcher, private val repository: SessionRepository) :
     EitherUseCase<AnilistToken, Unit>(dispatcher), SaveSessionUseCase {
-    override suspend fun run(params: AnilistToken) = repository.saveSession(params)
+    /**
+ * Saves the provided Anilist authentication token as the current session.
+ *
+ * @param params The Anilist access token to persist.
+ * @return An either-style result that yields `Unit` on success or an error on failure.
+ */
+override suspend fun run(params: AnilistToken) = repository.saveSession(params)
 }

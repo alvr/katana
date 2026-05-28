@@ -37,6 +37,15 @@ import dev.alvr.katana.shared.viewmodel.KatanaViewModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.collections.immutable.ImmutableList
 
+/**
+ * Hosts the main application UI: a scaffold with bottom navigation, navigation rail, a NavHost for screen routing,
+ * a snackbar host, and a loading overlay driven by the view model state.
+ *
+ * The composable collects UI state from the provided view model to determine navigation items and loading visibility,
+ * and wires navigation actions to the provided navigator.
+ *
+ * @param modifier Modifier applied to the root container.
+ */
 @Composable
 internal fun Katana(
     modifier: Modifier = Modifier,

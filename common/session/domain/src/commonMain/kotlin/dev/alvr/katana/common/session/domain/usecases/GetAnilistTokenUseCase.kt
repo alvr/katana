@@ -14,5 +14,10 @@ interface GetAnilistTokenUseCase : KatanaOptionUseCase<Unit, AnilistToken>
 @ContributesBinding(AppScope::class, binding = binding<GetAnilistTokenUseCase>())
 internal class GetAnilistTokenUseCaseImpl(dispatcher: KatanaDispatcher, private val repository: SessionRepository) :
     OptionUseCase<Unit, AnilistToken>(dispatcher), GetAnilistTokenUseCase {
-    override suspend fun run(params: Unit) = repository.getAnilistToken()
+    /**
+ * Retrieves the stored Anilist authentication token from the session repository.
+ *
+ * @return An optional `AnilistToken` containing the token if present, otherwise an empty option.
+ */
+override suspend fun run(params: Unit) = repository.getAnilistToken()
 }
