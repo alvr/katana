@@ -9,7 +9,6 @@ import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.domain.usecases.KatanaEitherUseCase
 import dev.alvr.katana.core.domain.usecases.KatanaFlowEitherUseCase
 import dev.alvr.katana.core.domain.usecases.KatanaFlowOptionUseCase
-import dev.alvr.katana.core.domain.usecases.KatanaFlowUseCase
 import dev.alvr.katana.core.domain.usecases.KatanaOptionUseCase
 import dev.alvr.katana.core.domain.usecases.KatanaUseCase
 import dev.zacsweers.metro.DefaultBinding
@@ -36,6 +35,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
 
     private val _uiState = MutableStateFlow(initialState)
     private val _effects = Channel<E>(Channel.BUFFERED)
+
     private val executing = mutableMapOf<Any, Job>()
 
     private val viewModelLogTag
@@ -140,11 +140,6 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
             useCase(params)
             useCase.flow.collect { result -> result.fold(onEmpty, onSome) }
         }
-    }
-
-    private inline fun KatanaFlowUseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
-        executing.remove(this)?.cancel()
-        executing[this] = viewModelScope.launch { block() }
     }
 
     private inline fun KatanaUseCase<*, *>.execute(crossinline block: suspend () -> Unit) {

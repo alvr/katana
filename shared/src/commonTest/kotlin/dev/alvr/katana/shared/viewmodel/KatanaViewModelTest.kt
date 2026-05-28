@@ -18,7 +18,9 @@ import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
 import io.kotest.engine.test.TestResult
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.yield
 
 internal class KatanaViewModelTest : BehaviorSpec() {
     private val observeActiveSession = mock<ObserveActiveSessionUseCase>()
@@ -40,7 +42,12 @@ internal class KatanaViewModelTest : BehaviorSpec() {
 
                     and("the session expires") {
                         then("it should update the state without the active session") {
-                            every { observeActiveSession.flow } returns flowOf(true.right(), false.right())
+                            every { observeActiveSession.flow } returns
+                                flow {
+                                    emit(true.right())
+                                    yield()
+                                    emit(false.right())
+                                }
 
                             viewModel.test {
                                 expectState { copy(loading = false, sessionActive = true) }

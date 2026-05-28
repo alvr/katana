@@ -1,5 +1,6 @@
 package dev.alvr.katana.features.lists.ui.viewmodel
 
+import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import dev.alvr.katana.core.common.empty
@@ -26,14 +27,11 @@ import dev.mokkery.every
 import dev.mokkery.everySuspend
 import dev.mokkery.matcher.any
 import dev.mokkery.mock
-import dev.mokkery.resetAnswers
-import dev.mokkery.resetCalls
 import dev.mokkery.verify
 import dev.mokkery.verify.VerifyMode
 import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.core.test.TestCase
-import io.kotest.engine.test.TestResult
+import io.kotest.datatest.withContexts
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -42,251 +40,255 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class ListsViewModelTest : FreeSpec() {
-    private val observeList = mock<ObserveListUseCase>()
-    private val updateList = mock<UpdateListUseCase>()
-
     init {
         "common lists behavior" -
             {
-                listScenarios.forEach { scenario ->
-                    scenario.name -
+                withContexts(listScenarios) { scenario ->
+                    "initializing viewModel" -
                         {
-                            "initializing viewModel" -
-                                {
-                                    "the collections observed are empty" {
-                                        every { observeList.flow } returns
-                                            flowOf(MediaCollection<MediaEntry>(lists = emptyList()).right())
-                                        everySuspend { observeList(scenario.type) } returns Unit
+                            "the collections observed are empty" {
+                                val scope =
+                                    createListTestScope(
+                                        scenario,
+                                        flowOf(MediaCollection<MediaEntry>(lists = emptyList()).right()),
+                                    )
 
-                                        scenario.viewModel().test {
-                                            expectState {
-                                                empty.shouldBeTrue()
-                                                items.shouldBeEmpty()
+                                scope.viewModel.test {
+                                    expectState {
+                                        empty.shouldBeTrue()
+                                        items.shouldBeEmpty()
 
-                                                copy(loading = false)
-                                            }
-                                        }
-
-                                        verifySuspend(mode = VerifyMode.exactly(1)) { observeList(scenario.type) }
-                                        verify(mode = VerifyMode.exactly(1)) { observeList.flow }
-                                    }
-
-                                    "the collection has entries" {
-                                        scenario.mockFlow()
-
-                                        scenario.viewModel().test {
-                                            expectStateWithLists(scenario)
-                                            currentState.empty.shouldBeFalse()
-                                        }
-
-                                        verifySuspend(mode = VerifyMode.exactly(1)) { observeList(scenario.type) }
-                                        verify(mode = VerifyMode.exactly(1)) { observeList.flow }
-                                    }
-
-                                    "the collection has entries AND getting the userLists" {
-                                        scenario.mockFlow()
-
-                                        scenario.viewModel().test {
-                                            expectStateWithLists(scenario)
-                                            currentState.empty.shouldBeFalse()
-
-                                            currentState.lists
-                                                .shouldHaveSize(2)
-                                                .shouldContainInOrder(
-                                                    UserList(scenario.listName1 to 1),
-                                                    UserList(scenario.listName2 to 1),
-                                                )
-                                        }
-
-                                        verifySuspend(mode = VerifyMode.exactly(1)) { observeList(scenario.type) }
-                                        verify(mode = VerifyMode.exactly(1)) { observeList.flow }
-                                    }
-
-                                    "something went wrong collecting" {
-                                        every { observeList.flow } returns
-                                            flowOf(ListsFailure.GetMediaCollection.left())
-                                        everySuspend { observeList(scenario.type) } returns Unit
-
-                                        scenario.viewModel().test {
-                                            expectState {
-                                                empty.shouldBeTrue()
-                                                copy(error = true, loading = false)
-                                            }
-
-                                            expectEffect(ListsEffect.LoadingListsFailure)
-                                        }
-
-                                        verifySuspend(mode = VerifyMode.exactly(1)) { observeList(scenario.type) }
-                                        verify(mode = VerifyMode.exactly(1)) { observeList.flow }
+                                        copy(loading = false)
                                     }
                                 }
 
-                            "plus one" -
-                                {
-                                    "is successful" {
-                                        scenario.mockFlow()
-                                        everySuspend { updateList(any()) } returns Unit.right()
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
+                            }
 
-                                        scenario.viewModel().test {
-                                            expectStateWithLists(scenario)
-                                            intent(ListsIntent.AddPlusOne(scenario.item1.entryId))
-                                            expectEffect(ListsEffect.AddPlusOneSuccess)
-                                        }
+                            "the collection has entries" {
+                                val scope = createListTestScope(scenario)
 
-                                        verifySuspend(mode = VerifyMode.exactly(1)) { observeList(scenario.type) }
-                                        verify(mode = VerifyMode.exactly(1)) { observeList.flow }
+                                scope.viewModel.test {
+                                    expectStateWithLists(scenario)
+                                    currentState.empty.shouldBeFalse()
+                                }
 
-                                        verifySuspend(mode = VerifyMode.exactly(1)) {
-                                            updateList(
-                                                scenario.item1
-                                                    .copyWithProgress(scenario.item1.progress.inc())
-                                                    .toMediaList()
-                                            )
-                                        }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
+                            }
+
+                            "the collection has entries AND getting the userLists" {
+                                val scope = createListTestScope(scenario)
+
+                                scope.viewModel.test {
+                                    expectStateWithLists(scenario)
+                                    currentState.empty.shouldBeFalse()
+
+                                    currentState.lists
+                                        .shouldHaveSize(2)
+                                        .shouldContainInOrder(
+                                            UserList(scenario.listName1 to 1),
+                                            UserList(scenario.listName2 to 1),
+                                        )
+                                }
+
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
+                            }
+
+                            "something went wrong collecting" {
+                                val scope =
+                                    createListTestScope(scenario, flowOf(ListsFailure.GetMediaCollection.left()))
+
+                                scope.viewModel.test {
+                                    expectState {
+                                        empty.shouldBeTrue()
+                                        copy(error = true, loading = false)
                                     }
 
-                                    "is failure" {
-                                        scenario.mockFlow()
-                                        everySuspend { updateList(any()) } returns ListsFailure.UpdatingList.left()
+                                    expectEffect(ListsEffect.LoadingListsFailure)
+                                }
 
-                                        scenario.viewModel().test {
-                                            expectStateWithLists(scenario)
-                                            intent(ListsIntent.AddPlusOne(scenario.item1.entryId))
-                                            expectEffect(ListsEffect.AddPlusOneFailure)
-                                        }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
+                            }
+                        }
 
-                                        verifySuspend(mode = VerifyMode.exactly(1)) {
-                                            updateList(
-                                                scenario.item1
-                                                    .copyWithProgress(scenario.item1.progress.inc())
-                                                    .toMediaList()
-                                            )
-                                        }
-                                    }
+                    "plus one" -
+                        {
+                            "is successful" {
+                                val scope = createListTestScope(scenario)
+                                everySuspend { scope.updateList(any()) } returns Unit.right()
 
-                                    "the element is not found" {
-                                        scenario.mockFlow()
+                                scope.viewModel.test {
+                                    expectStateWithLists(scenario)
+                                    intent(ListsIntent.AddPlusOne(scenario.item1.entryId))
+                                    expectEffect(ListsEffect.AddPlusOneSuccess)
+                                }
 
-                                        scenario.viewModel().test {
-                                            expectStateWithLists(scenario)
-                                            intent(ListsIntent.AddPlusOne(ItemEntryId(1)))
-                                        }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
 
-                                        verifySuspend(mode = VerifyMode.exactly(1)) { observeList(scenario.type) }
-                                        verify(mode = VerifyMode.exactly(1)) { observeList.flow }
-                                        verifySuspend(mode = VerifyMode.exactly(0)) { updateList(any()) }
+                                verifySuspend(mode = VerifyMode.exactly(1)) {
+                                    scope.updateList(
+                                        scenario.item1.copyWithProgress(scenario.item1.progress.inc()).toMediaList()
+                                    )
+                                }
+                            }
+
+                            "is failure" {
+                                val scope = createListTestScope(scenario)
+                                everySuspend { scope.updateList(any()) } returns ListsFailure.UpdatingList.left()
+
+                                scope.viewModel.test {
+                                    expectStateWithLists(scenario)
+                                    intent(ListsIntent.AddPlusOne(scenario.item1.entryId))
+                                    expectEffect(ListsEffect.AddPlusOneFailure)
+                                }
+
+                                verifySuspend(mode = VerifyMode.exactly(1)) {
+                                    scope.updateList(
+                                        scenario.item1.copyWithProgress(scenario.item1.progress.inc()).toMediaList()
+                                    )
+                                }
+                            }
+
+                            "the element is not found" {
+                                val scope = createListTestScope(scenario)
+
+                                scope.viewModel.test {
+                                    expectStateWithLists(scenario)
+                                    intent(ListsIntent.AddPlusOne(ItemEntryId(1)))
+                                }
+
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
+                                verifySuspend(mode = VerifyMode.exactly(0)) { scope.updateList(any()) }
+                            }
+                        }
+
+                    "searching" -
+                        {
+                            "selecting a list filters the current entries" {
+                                val scope = createListTestScope(scenario)
+
+                                scope.viewModel.test {
+                                    expectStateWithLists(scenario)
+                                    currentState.empty.shouldBeFalse()
+                                    intent(ListsIntent.SelectList(scenario.listName2))
+                                    expectState {
+                                        items shouldBe persistentListOf(scenario.item2)
+
+                                        copy(selectedList = scenario.listName2)
                                     }
                                 }
 
-                            "searching" -
-                                {
-                                    "selecting a list filters the current entries" {
-                                        scenario.mockFlow()
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
+                            }
 
-                                        scenario.viewModel().test {
-                                            expectStateWithLists(scenario)
-                                            currentState.empty.shouldBeFalse()
-                                            intent(ListsIntent.SelectList(scenario.listName2))
-                                            expectState {
-                                                items shouldBe persistentListOf(scenario.item2)
+                            "try to select a non-existent list" {
+                                val scope = createListTestScope(scenario)
 
-                                                copy(selectedList = scenario.listName2)
-                                            }
-                                        }
+                                scope.viewModel.test {
+                                    expectStateWithLists(scenario)
+                                    intent(ListsIntent.SelectList(scenario.nonExistentListName))
 
-                                        verifySuspend(mode = VerifyMode.exactly(1)) { observeList(scenario.type) }
-                                        verify(mode = VerifyMode.exactly(1)) { observeList.flow }
-                                    }
+                                    expectState {
+                                        empty.shouldBeTrue()
+                                        items.shouldBeEmpty()
 
-                                    "try to select a non-existent list" {
-                                        scenario.mockFlow()
-
-                                        scenario.viewModel().test {
-                                            expectStateWithLists(scenario)
-                                            intent(ListsIntent.SelectList(scenario.nonExistentListName))
-
-                                            expectState {
-                                                empty.shouldBeTrue()
-                                                items.shouldBeEmpty()
-
-                                                copy(loading = false, selectedList = scenario.nonExistentListName)
-                                            }
-                                        }
-
-                                        verifySuspend(mode = VerifyMode.exactly(1)) { observeList(scenario.type) }
-                                        verify(mode = VerifyMode.exactly(1)) { observeList.flow }
-                                    }
-
-                                    "searching a non-existent entry should return an empty list" {
-                                        scenario.mockFlow()
-
-                                        scenario.viewModel().test {
-                                            expectStateWithLists(scenario)
-                                            intent(ListsIntent.Search("non-existent entry"))
-                                            delay(300)
-                                            expectState {
-                                                empty.shouldBeTrue()
-                                                items.shouldBeEmpty()
-
-                                                copy(loading = false, searchQuery = "non-existent entry")
-                                            }
-                                        }
-
-                                        verifySuspend(mode = VerifyMode.exactly(1)) { observeList(scenario.type) }
-                                        verify(mode = VerifyMode.exactly(1)) { observeList.flow }
+                                        copy(loading = false, selectedList = scenario.nonExistentListName)
                                     }
                                 }
 
-                            "refreshing" -
-                                {
-                                    "is successful" {
-                                        scenario.mockFlow()
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
+                            }
 
-                                        scenario.viewModel().test(finalizationType = FinalizationType.Drop) {
-                                            expectStateWithLists(scenario)
-                                            intent(ListsIntent.Refresh)
-                                        }
+                            "searching a non-existent entry should return an empty list" {
+                                val scope = createListTestScope(scenario)
 
-                                        verifySuspend(mode = VerifyMode.exactly(2)) { observeList(scenario.type) }
-                                        verify(mode = VerifyMode.exactly(2)) { observeList.flow }
-                                    }
+                                scope.viewModel.test {
+                                    expectStateWithLists(scenario)
+                                    intent(ListsIntent.Search("non-existent entry"))
 
-                                    "is failure" {
-                                        everySuspend { observeList(scenario.type) } returns Unit
-                                        every { observeList.flow } sequentiallyReturns
-                                            listOf(
-                                                flowOf(scenario.collection().right()),
-                                                flowOf(ListsFailure.GetMediaCollection.left()),
-                                            )
+                                    expectState {
+                                        empty.shouldBeTrue()
+                                        items.shouldBeEmpty()
 
-                                        scenario.viewModel().test {
-                                            expectStateWithLists(scenario)
-
-                                            intent(ListsIntent.Refresh)
-
-                                            expectState { copy(loading = true) }
-                                            expectState {
-                                                empty.shouldBeTrue()
-                                                items.shouldBeEmpty()
-
-                                                copy(
-                                                    collection = persistentMapOf(),
-                                                    selectedList = String.empty,
-                                                    error = true,
-                                                    loading = false,
-                                                )
-                                            }
-                                            expectEffect(ListsEffect.LoadingListsFailure)
-                                        }
-
-                                        verifySuspend(mode = VerifyMode.exactly(2)) { observeList(scenario.type) }
-                                        verify(mode = VerifyMode.exactly(2)) { observeList.flow }
+                                        copy(loading = false, searchQuery = "non-existent entry")
                                     }
                                 }
+
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
+                            }
+                        }
+
+                    "refreshing" -
+                        {
+                            "is successful" {
+                                val scope = createListTestScope(scenario)
+
+                                scope.viewModel.test(finalizationType = FinalizationType.Drop) {
+                                    expectStateWithLists(scenario)
+                                    intent(ListsIntent.Refresh)
+                                }
+
+                                verifySuspend(mode = VerifyMode.exactly(2)) { scope.observeList(scenario.type) }
+                                verify(mode = VerifyMode.exactly(2)) { scope.observeList.flow }
+                            }
+
+                            "is failure" {
+                                val observeList = mock<ObserveListUseCase>()
+                                val updateList = mock<UpdateListUseCase>()
+
+                                everySuspend { observeList(scenario.type) } returns Unit
+                                every { observeList.flow } sequentiallyReturns
+                                    listOf(
+                                        flowOf(scenario.collection().right()),
+                                        flowOf(ListsFailure.GetMediaCollection.left()),
+                                    )
+
+                                val viewModel =
+                                    createListsUiTestGraph(
+                                            observeListUseCase = observeList,
+                                            updateListUseCase = updateList,
+                                        )
+                                        .listsViewModelFactory
+                                        .create(scenario.type)
+
+                                viewModel.test {
+                                    expectStateWithLists(scenario)
+
+                                    intent(ListsIntent.Refresh)
+
+                                    expectState { copy(loading = true) }
+                                    expectState {
+                                        empty.shouldBeTrue()
+                                        items.shouldBeEmpty()
+
+                                        copy(
+                                            collection = persistentMapOf(),
+                                            selectedList = String.empty,
+                                            error = true,
+                                            loading = false,
+                                        )
+                                    }
+                                    expectEffect(ListsEffect.LoadingListsFailure)
+                                }
+
+                                verifySuspend(mode = VerifyMode.exactly(2)) { observeList(scenario.type) }
+                                verify(mode = VerifyMode.exactly(2)) { observeList.flow }
+                            }
                         }
                 }
             }
@@ -294,9 +296,9 @@ internal class ListsViewModelTest : FreeSpec() {
         "anime-specific behavior" -
             {
                 "maps next episode data" {
-                    animeScenario.mockFlow()
+                    val scope = createListTestScope(animeScenario)
 
-                    animeScenario.viewModel().test {
+                    scope.viewModel.test {
                         expectStateWithLists(animeScenario)
                         intent(ListsIntent.SelectList(animeScenario.listName2))
 
@@ -313,9 +315,9 @@ internal class ListsViewModelTest : FreeSpec() {
         "manga-specific behavior" -
             {
                 "maps volume data" {
-                    mangaScenario.mockFlow()
+                    val scope = createListTestScope(mangaScenario)
 
-                    mangaScenario.viewModel().test {
+                    scope.viewModel.test {
                         expectStateWithLists(mangaScenario)
 
                         val item = currentState.items.single() as MediaListItem.MangaListItem
@@ -326,20 +328,29 @@ internal class ListsViewModelTest : FreeSpec() {
             }
     }
 
-    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
-        resetCalls(observeList, updateList)
-        resetAnswers(observeList, updateList)
+    private fun createListTestScope(
+        scenario: ListScenario,
+        flow: Flow<Either<ListsFailure, MediaCollection<MediaEntry>>> = flowOf(scenario.collection().right()),
+    ): ListsTestScope {
+        val observeList = mock<ObserveListUseCase>()
+        val updateList = mock<UpdateListUseCase>()
+
+        every { observeList.flow } returns flow
+        everySuspend { observeList(scenario.type) } returns Unit
+
+        val viewModel =
+            createListsUiTestGraph(observeListUseCase = observeList, updateListUseCase = updateList)
+                .listsViewModelFactory
+                .create(scenario.type)
+
+        return ListsTestScope(viewModel, observeList, updateList)
     }
 
-    private fun ListScenario.viewModel() =
-        createListsUiTestGraph(observeListUseCase = observeList, updateListUseCase = updateList)
-            .listsViewModelFactory
-            .create(type)
-
-    private fun ListScenario.mockFlow() {
-        every { observeList.flow } returns flowOf(collection().right())
-        everySuspend { observeList(type) } returns Unit
-    }
+    private data class ListsTestScope(
+        val viewModel: ListsViewModel,
+        val observeList: ObserveListUseCase,
+        val updateList: UpdateListUseCase,
+    )
 
     private fun ListScenario.collection() =
         MediaCollection(

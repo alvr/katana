@@ -17,7 +17,9 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
 import io.kotest.engine.test.TestResult
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.yield
 
 internal class ForYouViewModelTest : BehaviorSpec() {
     private val hideWelcomeCard = mock<HideWelcomeCardUseCase>()
@@ -47,9 +49,16 @@ internal class ForYouViewModelTest : BehaviorSpec() {
                 and("there is an error") {
                     then("it should set showWelcomeCard to false") {
                         every { observeWelcomeCardVisibility.flow } returns
-                            flowOf(HomeFailure.GettingWelcomeCardVisibility.left())
+                            flow {
+                                emit(true.right())
+                                yield()
+                                emit(HomeFailure.GettingWelcomeCardVisibility.left())
+                            }
 
-                        viewModel.test(initialStateWithCard) { expectState { copy(showWelcomeCard = false) } }
+                        viewModel.test {
+                            expectState { copy(showWelcomeCard = true) }
+                            expectState { copy(showWelcomeCard = false) }
+                        }
                     }
                 }
             }
@@ -64,10 +73,12 @@ internal class ForYouViewModelTest : BehaviorSpec() {
                 }
 
                 and("is failure") {
-                    everySuspend { hideWelcomeCard(Unit) } returns HomeFailure.HidingWelcomeCard.left()
-
                     then("it should hide the card") {
-                        viewModel.test(initialStateWithCard) {
+                        everySuspend { hideWelcomeCard(Unit) } returns HomeFailure.HidingWelcomeCard.left()
+                        every { observeWelcomeCardVisibility.flow } returns flowOf(true.right())
+
+                        viewModel.test {
+                            expectState { copy(showWelcomeCard = true) }
                             intent(ForYouIntent.CloseWelcomeCard)
                             expectState { copy(showWelcomeCard = false) }
                         }
@@ -125,6 +136,7 @@ internal class ForYouViewModelTest : BehaviorSpec() {
     override suspend fun beforeEach(testCase: TestCase) {
         everySuspend { observeWelcomeCardVisibility(Unit) } returns Unit
         every { observeWelcomeCardVisibility.flow } returns emptyFlow()
+
         viewModel =
             createForYouUiTestGraph(
                 hideWelcomeCardUseCase = hideWelcomeCard,
@@ -137,5 +149,3 @@ internal class ForYouViewModelTest : BehaviorSpec() {
         resetCalls(hideWelcomeCard, observeWelcomeCardVisibility)
     }
 }
-
-private val initialStateWithCard = ForYouState(showWelcomeCard = true)

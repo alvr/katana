@@ -36,7 +36,6 @@ internal class AccountViewModelTest : FreeSpec() {
             {
                 "successfully" {
                     every { observeUserInfoUseCase.flow } returns flowOf(userInfo.right())
-                    everySuspend { observeUserInfoUseCase(Unit) } returns Unit
 
                     viewModel.test { expectState { copy(userInfo = userInfoUi, loading = false, error = false) } }
 
@@ -46,7 +45,6 @@ internal class AccountViewModelTest : FreeSpec() {
 
                 "unsuccessfully" {
                     every { observeUserInfoUseCase.flow } returns flowOf(UserFailure.GettingUserInfo.left())
-                    everySuspend { observeUserInfoUseCase(Unit) } returns Unit
 
                     viewModel.test { expectState { copy(loading = false, error = true) } }
 
@@ -58,9 +56,11 @@ internal class AccountViewModelTest : FreeSpec() {
         "logging out from the account" -
             {
                 "is successful" {
+                    every { observeUserInfoUseCase.flow } returns flowOf(userInfo.right())
                     everySuspend { logOutUseCase(Unit) } returns Unit.right()
 
-                    viewModel.test(AccountState(userInfo = UserInfoUi())) {
+                    viewModel.test {
+                        expectState { copy(userInfo = userInfoUi, loading = false, error = false) }
                         intent(AccountIntent.Logout)
                         expectState { copy(userInfo = null) }
                         expectEffect(AccountEffect.LoggingOutSuccess)
@@ -70,9 +70,11 @@ internal class AccountViewModelTest : FreeSpec() {
                 }
 
                 "is failure" {
+                    every { observeUserInfoUseCase.flow } returns flowOf(userInfo.right())
                     everySuspend { logOutUseCase(Unit) } returns SessionFailure.LoggingOut.left()
 
-                    viewModel.test(AccountState(userInfo = UserInfoUi())) {
+                    viewModel.test {
+                        expectState { copy(userInfo = userInfoUi, loading = false, error = false) }
                         intent(AccountIntent.Logout)
                         expectState { copy(userInfo = null) }
                         expectEffect(AccountEffect.LoggingOutFailure)
@@ -86,6 +88,7 @@ internal class AccountViewModelTest : FreeSpec() {
     override suspend fun beforeEach(testCase: TestCase) {
         everySuspend { observeUserInfoUseCase(Unit) } returns Unit
         every { observeUserInfoUseCase.flow } returns emptyFlow()
+
         viewModel =
             createAccountUiTestGraph(observeUserInfoUseCase = observeUserInfoUseCase, logOutUseCase = logOutUseCase)
                 .accountViewModel
@@ -95,10 +98,8 @@ internal class AccountViewModelTest : FreeSpec() {
         resetAnswers(observeUserInfoUseCase, logOutUseCase)
         resetCalls(observeUserInfoUseCase, logOutUseCase)
     }
-
-    private companion object {
-        val userInfo = UserInfo(username = "username", avatar = "avatar", banner = "banner")
-
-        val userInfoUi = UserInfoUi(username = "username", avatar = "avatar", banner = "banner")
-    }
 }
+
+private val userInfo = UserInfo(username = "username", avatar = "avatar", banner = "banner")
+
+private val userInfoUi = UserInfoUi(username = "username", avatar = "avatar", banner = "banner")
