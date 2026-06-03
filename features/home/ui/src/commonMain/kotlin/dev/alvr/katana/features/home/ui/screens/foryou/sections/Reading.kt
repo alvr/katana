@@ -7,14 +7,14 @@ import dev.alvr.katana.features.home.ui.resources.Res
 import dev.alvr.katana.features.home.ui.resources.reading_icon_button_a11y
 import dev.alvr.katana.features.home.ui.resources.reading_title
 import dev.alvr.katana.features.home.ui.screens.foryou.components.Lists
-import dev.alvr.katana.features.home.ui.viewmodel.HomeIntent
+import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
 
 @Composable
-internal fun Reading(onIntent: (HomeIntent) -> Unit, modifier: Modifier = Modifier) {
+internal fun Reading(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = Modifier) {
     Lists(
         modifier = modifier,
         title = Res.string.reading_title.value,
         iconButtonContentDescription = Res.string.reading_icon_button_a11y.value,
-        onNavigateClick = { onIntent(HomeIntent.ForYouIntent.NavigateToMangaLists) },
+        onNavigateClick = { onIntent(ForYouIntent.NavigateToMangaLists) },
     )
 }

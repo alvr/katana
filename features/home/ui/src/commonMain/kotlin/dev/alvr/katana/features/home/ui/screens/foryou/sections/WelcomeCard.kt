@@ -29,13 +29,13 @@ import dev.alvr.katana.features.home.ui.resources.welcome_card_login_button
 import dev.alvr.katana.features.home.ui.resources.welcome_card_message
 import dev.alvr.katana.features.home.ui.resources.welcome_card_register_button
 import dev.alvr.katana.features.home.ui.resources.welcome_card_title
-import dev.alvr.katana.features.home.ui.viewmodel.HomeIntent
+import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
 
 @Composable
-internal fun WelcomeCard(onIntent: (HomeIntent) -> Unit, modifier: Modifier = Modifier) {
+internal fun WelcomeCard(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = Modifier) {
     ElevatedCard(modifier = modifier) {
         WelcomeCardHeader(
-            onCloseCard = { onIntent(HomeIntent.ForYouIntent.CloseWelcomeCard) },
+            onCloseCard = { onIntent(ForYouIntent.CloseWelcomeCard) },
             modifier =
                 Modifier.padding(
                     start = KatanaTheme.dimensions.spacing4,

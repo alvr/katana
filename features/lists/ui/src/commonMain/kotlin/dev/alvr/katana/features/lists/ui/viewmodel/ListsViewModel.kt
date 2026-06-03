@@ -1,22 +1,22 @@
 package dev.alvr.katana.features.lists.ui.viewmodel
 
 import androidx.compose.runtime.Stable
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.common.empty
-import dev.alvr.katana.core.domain.usecases.FlowEitherUseCase
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
-import dev.alvr.katana.features.lists.domain.models.MediaCollection
-import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
-import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
+import dev.alvr.katana.features.lists.domain.models.lists.MediaListType
+import dev.alvr.katana.features.lists.domain.usecases.ObserveListUseCase
 import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCase
-import dev.alvr.katana.features.lists.ui.entities.ListEntries
-import dev.alvr.katana.features.lists.ui.entities.MediaListItem
+import dev.alvr.katana.features.lists.ui.entities.mappers.entryMap
 import dev.alvr.katana.features.lists.ui.entities.mappers.toMediaList
-import dev.zacsweers.metro.DefaultBinding
-import dev.zacsweers.metro.ExperimentalMetroApi
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.FlowPreview
@@ -27,25 +27,20 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @Stable
-@DefaultBinding<ViewModel>
-@OptIn(ExperimentalMetroApi::class)
-internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
-    dispatcher: KatanaDispatcher,
-    type: ListsState.ListType,
+@AssistedInject
+internal class ListsViewModel(
+    @Assisted private val type: MediaListType,
+    private val observeListUseCase: ObserveListUseCase,
     private val updateListUseCase: UpdateListUseCase,
-) : KatanaViewModel<ListsState<I>, ListsEffect, ListsIntent>(dispatcher, ListsState(type)) {
-    protected abstract val observeListUseCase: FlowEitherUseCase<Unit, MediaCollection<E>>
-
+) : KatanaViewModel<ListsState, ListsEffect, ListsIntent>(ListsState()) {
     private val searchFlow = MutableStateFlow(String.empty)
-
-    protected abstract fun List<MediaListGroup<E>>.entryMap(): ListEntries<I>
 
     override fun init() {
         observeLists()
         observeSearch()
     }
 
-    override fun handleIntent(intent: ListsIntent) {
+    override fun intent(intent: ListsIntent) {
         when (intent) {
             is ListsIntent.Refresh -> observeLists()
             is ListsIntent.AddPlusOne -> addPlusOne(intent.id)
@@ -59,7 +54,7 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
 
         execute(
             useCase = observeListUseCase,
-            params = Unit,
+            params = type,
             onFailure = {
                 state {
                     copy(collection = persistentMapOf(), selectedList = String.empty, error = true, loading = false)
@@ -105,6 +100,13 @@ internal sealed class ListsViewModel<E : MediaEntry, I : MediaListItem>(
 
     private fun search(search: String) {
         searchFlow.update { search }
+    }
+
+    @AssistedFactory
+    @ManualViewModelAssistedFactoryKey
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ManualViewModelAssistedFactory {
+        fun create(@Assisted type: MediaListType): ListsViewModel
     }
 }
 

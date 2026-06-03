@@ -3,11 +3,17 @@ package dev.alvr.katana.common.session.domain.usecases
 import dev.alvr.katana.common.session.domain.repositories.SessionRepository
 import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.domain.usecases.FlowEitherUseCase
-import dev.zacsweers.metro.Inject
+import dev.alvr.katana.core.domain.usecases.KatanaFlowEitherUseCase
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.binding
 
-@Inject
-class ObserveActiveSessionUseCase
-internal constructor(dispatcher: KatanaDispatcher, private val repository: SessionRepository) :
-    FlowEitherUseCase<Unit, Boolean>(dispatcher) {
+interface ObserveActiveSessionUseCase : KatanaFlowEitherUseCase<Unit, Boolean>
+
+@ContributesBinding(AppScope::class, binding = binding<ObserveActiveSessionUseCase>())
+internal class ObserveActiveSessionUseCaseImpl(
+    dispatcher: KatanaDispatcher,
+    private val repository: SessionRepository,
+) : FlowEitherUseCase<Unit, Boolean>(dispatcher), ObserveActiveSessionUseCase {
     override fun createFlow(params: Unit) = repository.sessionActive
 }

@@ -1,8 +1,23 @@
 package dev.alvr.katana.features.lists.ui.entities.mappers
 
 import dev.alvr.katana.features.lists.domain.models.entries.CommonMediaEntry
+import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaList
+import dev.alvr.katana.features.lists.domain.models.lists.MediaListEntry
+import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
+import kotlinx.collections.immutable.toImmutableMap
+
+internal fun Iterable<MediaListGroup<MediaEntry>>.entryMap() =
+    flatMap { group -> group.entries.map(MediaListEntry<out MediaEntry>::toMediaItem) }
+        .associateBy { item -> item.entryId }
+        .toImmutableMap()
+
+private fun MediaListEntry<MediaEntry>.toMediaItem() =
+    when (val media = entry) {
+        is MediaEntry.Anime -> media.toMediaItem(list)
+        is MediaEntry.Manga -> media.toMediaItem(list)
+    }
 
 internal fun CommonMediaEntry.Format.toEntity() =
     when (this) {
