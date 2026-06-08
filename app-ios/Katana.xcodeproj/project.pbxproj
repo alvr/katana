@@ -8,6 +8,8 @@
 
 /* Begin PBXFileReference section */
 		814390FC2F606C3600F3E707 /* Katana.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Katana.xcodeproj; sourceTree = "<group>"; };
+		817925CB2FD6D90A00C5D3D3 /* Katana.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Katana.xcodeproj; sourceTree = "<group>"; };
+		817925DE2FD6DC5D00C5D3D3 /* Katana.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Katana.xcodeproj; sourceTree = "<group>"; };
 		84BE69862ED8820300A5C28F /* Katana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Katana.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -31,6 +33,20 @@
 
 /* Begin PBXGroup section */
 		814390FE2F606C3600F3E707 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		817925CE2FD6D90A00C5D3D3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		817925E12FD6DC5D00C5D3D3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -107,6 +123,14 @@
 			productRefGroup = 84BE69872ED8820300A5C28F /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 817925CE2FD6D90A00C5D3D3 /* Products */;
+					ProjectRef = 817925CB2FD6D90A00C5D3D3 /* Katana.xcodeproj */;
+				},
+				{
+					ProductGroup = 817925E12FD6DC5D00C5D3D3 /* Products */;
+					ProjectRef = 817925DE2FD6DC5D00C5D3D3 /* Katana.xcodeproj */;
+				},
 				{
 					ProductGroup = 814390FE2F606C3600F3E707 /* Products */;
 					ProjectRef = 814390FC2F606C3600F3E707 /* Katana.xcodeproj */;
@@ -297,6 +321,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = x86_64;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Katana;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -341,6 +366,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = x86_64;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Katana;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

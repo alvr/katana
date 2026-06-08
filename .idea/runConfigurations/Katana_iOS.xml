@@ -1,8 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Katana iOS" type="AppleRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Katana" TARGET_NAME="Katana" CONFIG_NAME="Debug" IS_LOCATION_SIMULATION_SUPPORTED="true" SCHEME_NAME="Katana iOS" IS_LOCATION_SIMULATION_ALLOWED="false" LOCATION_SCENARIO_ID="com.apple.dt.IDEFoundation.CurrentLocationScenarioIdentifier" LOCATION_SCENARIO_TYPE="1" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" DEVELOPMENT_TEAM="278P6L85U8" RUN_TARGET_PROJECT_NAME="Katana" RUN_TARGET_NAME="Katana" MAKE_ACTIVE="FALSE" SHOULD_DEBUG_EXTENSIONS="false">
+  <configuration default="false" name="Katana iOS" type="AppleRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Katana" TARGET_NAME="Katana" CONFIG_NAME="Debug" IS_LOCATION_SIMULATION_SUPPORTED="true" SCHEME_NAME="Katana iOS" IS_LOCATION_SIMULATION_ALLOWED="false" LOCATION_SCENARIO_ID="com.apple.dt.IDEFoundation.CurrentLocationScenarioIdentifier" LOCATION_SCENARIO_TYPE="1" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" DEVELOPMENT_TEAM="" RUN_TARGET_PROJECT_NAME="Katana" RUN_TARGET_NAME="Katana" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
     <embedded_app_extension_list />
     <method v="2">
-      <option name="Gradle.BeforeRunTask" enabled="false" tasks=":core:common:generateBuildConfig" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
       <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
     </method>
   </configuration>
