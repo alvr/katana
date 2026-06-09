@@ -1,5 +1,6 @@
 package dev.alvr.katana.features.home.data.di
 
+import dev.alvr.katana.core.common.KatanaStorage
 import dev.alvr.katana.core.common.di.AppContext
 import dev.alvr.katana.core.common.di.PlatformContext
 import dev.zacsweers.metro.AppScope
@@ -9,7 +10,9 @@ import eu.anifantakis.lib.ksafe.KSafe
 
 expect object HomePreferencesContainer {
 
-    @HomePreferences @SingleIn(AppScope::class) fun homePreferences(@AppContext context: PlatformContext): KSafe
+    @HomePreferences
+    @SingleIn(AppScope::class)
+    fun homePreferences(@AppContext context: PlatformContext, storage: KatanaStorage): KSafe
 }
 
 @Qualifier internal annotation class HomePreferences

@@ -1,5 +1,6 @@
 package dev.alvr.katana.common.session.data.di
 
+import dev.alvr.katana.core.common.KatanaStorage
 import dev.alvr.katana.core.common.di.AppContext
 import dev.alvr.katana.core.common.di.PlatformContext
 import dev.zacsweers.metro.AppScope
@@ -16,5 +17,6 @@ actual object SessionPreferencesContainer {
     @Provides
     @SessionPreferences
     @SingleIn(AppScope::class)
-    actual fun sessionPreferences(@AppContext context: PlatformContext): KSafe = KSafe(fileName = SafeFileName)
+    actual fun sessionPreferences(@AppContext context: PlatformContext, storage: KatanaStorage): KSafe =
+        KSafe(fileName = SafeFileName, directory = storage.files.toString())
 }
