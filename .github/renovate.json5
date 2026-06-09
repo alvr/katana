@@ -1,7 +1,7 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
-        "config:base",
+        "config:recommended",
         ":disableDependencyDashboard",
         "helpers:pinGitHubActionDigests",
     ],
@@ -17,6 +17,7 @@
     "prConcurrentLimit": 5,
     "prHourlyLimit": 3,
     "enabledManagers": [
+        "bundler",
         "gradle",
         "gradle-wrapper",
         "github-actions",
@@ -26,49 +27,47 @@
     "schedule": ["on saturday"],
     "packageRules": [
         {
-            "groupName": "JetBrains AndroidX",
-            "groupSlug": "jetbrains-androidx",
-            "matchPackagePatterns": [
-                "org.jetbrains.androidx.*",
-            ],
-            "matchManagers": ["gradle"],
-        },
-        {
             "groupName": "Kotlin Dependants",
             "groupSlug": "kotlin",
-            "matchPackagePrefixes": [
-                "com.google.devtools.ksp",
-                "dev.mokkery",
-                "org.jetbrains.compose",
-                "org.jetbrains.kotlinx",
-            ],
-            "matchPackagePatterns": [
+            "matchPackageNames": [
+                "com.github.skydoves.compose.stability.analyzer*",
+                "com.google.devtools.ksp*",
+                "dev.mokkery*",
+                "dev.zacsweers.metro*",
+                "org.jetbrains.kotlin:*",
                 "org.jetbrains.kotlin.*",
             ],
             "matchManagers": ["gradle"],
         },
         {
-            "groupName": "Metro",
-            "groupSlug": "metro",
-            "matchPackagePrefixes": [
-                "dev.zacsweers.metro",
+            "groupName": "Compose Multiplatform",
+            "groupSlug": "compose",
+            "matchPackageNames": [
+                "org.jetbrains.compose*",
+            ],
+            "matchManagers": ["gradle"],
+        },
+        {
+            "groupName": "JetBrains AndroidX",
+            "groupSlug": "jetbrains-androidx",
+            "matchPackageNames": [
+                "org.jetbrains.androidx*",
             ],
             "matchManagers": ["gradle"],
         },
         {
             "groupName": "Kotest",
             "groupSlug": "kotest",
-            "matchPackagePrefixes": [
-                "io.kotest",
-                "io.kotest.extensions",
+            "matchPackageNames": [
+                "io.kotest*",
             ],
             "matchManagers": ["gradle"],
         },
         {
             "groupName": "Apollo",
             "groupSlug": "apollo",
-            "matchPackagePatterns": [
-                "com.apollographql.*",
+            "matchPackageNames": [
+                "com.apollographql*",
             ],
             "matchManagers": ["gradle"],
         },
@@ -76,6 +75,11 @@
             "groupName": "GitHub Actions",
             "groupSlug": "github-actions",
             "matchManagers": ["github-actions"],
+        },
+        {
+            "groupName": "Ruby Gems",
+            "groupSlug": "ruby-gems",
+            "matchManagers": ["bundler"],
         },
         {
             "automerge": false,
