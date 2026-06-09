@@ -113,7 +113,7 @@ jobs:
 
   unit-tests:
     name: Unit testing
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     permissions:
       contents: write
     steps:
@@ -126,13 +126,15 @@ jobs:
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Run unit tests
+        run: ./gradlew allTests --no-daemon --stacktrace
+      - name: Run coverage
         run: ./gradlew :koverXmlReport :koverVerify --no-daemon --stacktrace
       - name: Upload tests reports artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: tests-reports
           path: |
-            **/build/reports/tests/testAndroidHostTest
+            **/build/reports/tests/allTests
           retention-days: 7
       - name: Upload report to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
@@ -206,7 +208,7 @@ jobs:
 
   deploy-production:
     name: Production deployment
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [static-analysis, unit-tests]
     strategy:

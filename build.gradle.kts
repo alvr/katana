@@ -1,5 +1,4 @@
 plugins {
-    id("katana.common")
     id("katana.detekt")
     id("katana.kover")
     id("katana.spotless")
