@@ -64,6 +64,12 @@ jobs:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
       - name: Build Katana Debug
         run: bundle exec fastlane ${{ matrix.platform }} build_debug
+      - name: Sanitize compose report filenames
+        if: always() && matrix.platform == 'android'
+        run: |
+          find . -type f \( -path '*/build/compose-metrics/*' -o -path '*/build/compose-reports/*' \) -name '*:*' | while read -r f; do
+            mv "$f" "$(dirname "$f")/$(basename "$f" | tr ':' '_')"
+          done
       - name: Upload compose reports artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always() && matrix.platform == 'android'
@@ -182,6 +188,12 @@ jobs:
           SIGNING_ALIAS_PASS: ${{ secrets.SIGNING_ALIAS_PASS }}
           SIGNING_FILE: ${{ secrets.SIGNING_FILE }}
           SIGNING_FILE_PASS: ${{ secrets.SIGNING_FILE_PASS }}
+      - name: Sanitize compose report filenames
+        if: always() && matrix.platform == 'android'
+        run: |
+          find . -type f \( -path '*/build/compose-metrics/*' -o -path '*/build/compose-reports/*' \) -name '*:*' | while read -r f; do
+            mv "$f" "$(dirname "$f")/$(basename "$f" | tr ':' '_')"
+          done
       - name: Upload compose reports artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always() && matrix.platform == 'android'

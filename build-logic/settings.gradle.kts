@@ -2,11 +2,25 @@
 
 rootProject.name = "build-logic"
 
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            mavenContent { snapshotsOnly() }
+        }
+    }
+}
+
 dependencyResolutionManagement {
     repositories {
-        google()
-        mavenCentral()
         gradlePluginPortal()
+        mavenCentral()
+        google()
+        maven {
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            mavenContent { snapshotsOnly() }
+        }
     }
     versionCatalogs { register("libs") { from(files("../gradle/libs.versions.toml")) } }
 }

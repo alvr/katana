@@ -181,7 +181,8 @@ internal fun KotlinCommonCompilerOptions.configureKotlinCompiler() {
         "-opt-in=kotlin.RequiresOptIn",
         "-Xexpect-actual-classes",
         "-Xconsistent-data-class-copy-visibility",
-        "-Xcontext-parameters",
+        "-Xcollection-literals",
+        "-Xintrinsic-const-evaluation",
     )
 }
 
@@ -207,7 +208,7 @@ private val KotlinTarget.groupName
             else -> platformType.visibleName
         }
 
-context(project: Project)
+context(_: Project)
 @OptIn(
     RequiresIdeSupport::class,
     DelicateMetroGradleApi::class,
