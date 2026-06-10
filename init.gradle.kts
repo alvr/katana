@@ -1,7 +1,13 @@
 import org.gradle.github.GitHubDependencyGraphPlugin
 
 initscript {
-    repositories { gradlePluginPortal() }
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            mavenContent { snapshotsOnly() }
+        }
+    }
     dependencies { classpath("org.gradle:github-dependency-graph-gradle-plugin:1.4.1") }
 }
 

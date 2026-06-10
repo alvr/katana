@@ -6,6 +6,10 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
+        maven {
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            mavenContent { snapshotsOnly() }
+        }
     }
 }
 
@@ -13,8 +17,12 @@ pluginManagement {
     includeBuild("build-logic")
     repositories {
         gradlePluginPortal()
-        google()
         mavenCentral()
+        google()
+        maven {
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            mavenContent { snapshotsOnly() }
+        }
     }
 }
 
