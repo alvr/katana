@@ -825,6 +825,8 @@ Compose:
     active: true
   ComposableNaming:
     active: true
+  ComposableNestingDepth:
+    active: true
   ComposableParamOrder:
     active: true
   CompositionLocalAllowlist:
@@ -832,18 +834,24 @@ Compose:
     allowedCompositionLocals: LocalAlpha,LocalDimensions,LocalSizes,LocalSnackbarController
   CompositionLocalNaming:
     active: true
+  ConditionHoist:
+    active: true
   ContentEmitterReturningValues:
     active: true
   ContentSlotReused:
     active: true
   DefaultsVisibility:
     active: true
+  InvalidReadOnlyComposable:
+    active: true
   LambdaParameterEventTrailing:
     active: true
   LambdaParameterInRestartableEffect:
     active: true
   Material2:
-    active: false
+    active: true
+  MissingReadOnlyComposable:
+    active: true
   ModifierClickableOrder:
     active: true
   ModifierComposable:
@@ -875,11 +883,17 @@ Compose:
     active: true
   PreviewPublic:
     active: true
-  RememberMissing:
-    active: true
   RememberContentMissing:
     active: true
+  RememberMissing:
+    active: true
+  StaleRememberUpdatedStateInRemember:
+    active: true
+  UnnecessaryComposable:
+    active: true
   UnstableCollections:
+    active: true
+  VarsWithoutStateBacking:
     active: true
   ViewModelForwarding:
     active: true
@@ -887,6 +901,7 @@ Compose:
   ViewModelInjection:
     active: true
     viewModelFactories: metroViewModel
+
 
 compose:
   # appKode
