@@ -4,9 +4,11 @@ import androidx.compose.runtime.Stable
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.ExposeImplBinding
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 
 @Stable
 @ViewModelKey
+@ExposeImplBinding
 @ContributesIntoMap(AppScope::class)
 internal class ActivityViewModel : KatanaViewModel<ActivityState, ActivityEffect, ActivityIntent>(ActivityState)

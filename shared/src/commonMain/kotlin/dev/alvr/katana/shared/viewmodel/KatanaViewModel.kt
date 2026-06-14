@@ -8,11 +8,13 @@ import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.alvr.katana.shared.navigation.mainNavigationBarItems
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.ExposeImplBinding
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.collections.immutable.toImmutableList
 
 @Stable
 @ViewModelKey
+@ExposeImplBinding
 @ContributesIntoMap(AppScope::class)
 internal class KatanaViewModel(private val observeActiveSessionUseCase: ObserveActiveSessionUseCase) :
     KatanaViewModel<KatanaState, EmptyEffect, EmptyIntent>(KatanaState()) {

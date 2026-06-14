@@ -208,7 +208,6 @@ private val KotlinTarget.groupName
             else -> platformType.visibleName
         }
 
-context(_: Project)
 @OptIn(
     RequiresIdeSupport::class,
     DelicateMetroGradleApi::class,
@@ -217,6 +216,7 @@ context(_: Project)
     ExperimentalMetroGradleApi::class,
 )
 internal fun MetroPluginExtension.configure() {
+    compilerOptions.put("member-naming-strategy", "TYPED")
     enableFunctionProviders = true
     enableTopLevelFunctionInjection = true
     generateAssistedFactories = true

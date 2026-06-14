@@ -7,10 +7,12 @@ import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.alvr.katana.features.account.ui.entities.mappers.toEntity
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.ExposeImplBinding
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 
 @Stable
 @ViewModelKey
+@ExposeImplBinding
 @ContributesIntoMap(AppScope::class)
 internal class AccountViewModel(
     private val observeUserInfoUseCase: ObserveUserInfoUseCase,

@@ -6,10 +6,12 @@ import dev.alvr.katana.features.home.domain.usecases.HideWelcomeCardUseCase
 import dev.alvr.katana.features.home.domain.usecases.ObserveWelcomeCardVisibilityUseCase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.ExposeImplBinding
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 
 @Stable
 @ViewModelKey
+@ExposeImplBinding
 @ContributesIntoMap(AppScope::class)
 internal class ForYouViewModel(
     private val hideWelcomeCardUseCase: HideWelcomeCardUseCase,
