@@ -20,6 +20,10 @@ gradlePlugin {
             id = "katana.app"
             implementationClass = "dev.alvr.katana.buildlogic.mp.KatanaAppPlugin"
         }
+        register("common") {
+            id = "katana.common"
+            implementationClass = "dev.alvr.katana.buildlogic.common.KatanaCommonPlugin"
+        }
         register("build-config") {
             id = "katana.build-config"
             implementationClass = "dev.alvr.katana.buildlogic.common.KatanaBuildConfigPlugin"
