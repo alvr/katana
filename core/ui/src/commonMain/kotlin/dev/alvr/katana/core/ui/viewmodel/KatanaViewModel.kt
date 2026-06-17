@@ -36,10 +36,9 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
     private val _uiState = MutableStateFlow(initialState)
     private val _effects = Channel<E>(Channel.BUFFERED)
 
-    private val executing = mutableMapOf<Any, Job>()
+    private val executing = mutableMapOf<KatanaUseCase<*, *>, Job>()
 
-    private val viewModelLogTag
-        get() = this::class.simpleName ?: LogTag
+    private val viewModelLogTag = this::class.simpleName ?: LogTag
 
     @KatanaInternalApi
     val uiState: StateFlow<S> =
@@ -100,10 +99,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         onSuccess: (R) -> Unit,
         onFailure: (Failure) -> Unit,
     ) {
-        useCase.execute {
-            val result = useCase(params)
-            result.fold(onFailure, onSuccess)
-        }
+        useCase.execute(params) { result -> result.fold(onFailure, onSuccess) }
     }
 
     protected fun <P, R> execute(
@@ -112,10 +108,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         onSome: (R) -> Unit,
         onEmpty: () -> Unit,
     ) {
-        useCase.execute {
-            val result = useCase(params)
-            result.fold(onEmpty, onSome)
-        }
+        useCase.execute(params) { result -> result.fold(onEmpty, onSome) }
     }
 
     protected fun <P, R> execute(
@@ -124,10 +117,7 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         onSuccess: (R) -> Unit,
         onFailure: (Failure) -> Unit,
     ) {
-        useCase.execute {
-            useCase(params)
-            useCase.flow.collect { result -> result.fold(onFailure, onSuccess) }
-        }
+        useCase.execute(params) { flow.collect { result -> result.fold(onFailure, onSuccess) } }
     }
 
     protected fun <P, R> execute(
@@ -136,15 +126,15 @@ abstract class KatanaViewModel<S : UiState, E : UiEffect, I : UiIntent>(initialS
         onSome: (R) -> Unit,
         onEmpty: () -> Unit,
     ) {
-        useCase.execute {
-            useCase(params)
-            useCase.flow.collect { result -> result.fold(onEmpty, onSome) }
-        }
+        useCase.execute(params) { flow.collect { result -> result.fold(onEmpty, onSome) } }
     }
 
-    private inline fun KatanaUseCase<*, *>.execute(crossinline block: suspend () -> Unit) {
+    private inline fun <UC : KatanaUseCase<P, R>, P, R> UC.execute(
+        params: P,
+        crossinline block: suspend UC.(R) -> Unit,
+    ) {
         executing.remove(this)?.cancel()
-        executing[this] = viewModelScope.launch { block() }
+        executing[this] = viewModelScope.launch { block(invoke(params)) }
     }
 }
 
