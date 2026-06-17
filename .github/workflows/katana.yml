@@ -55,7 +55,7 @@ jobs:
             runner: ubuntu-latest
           - name: iOS
             platform: ios
-            runner: macos-latest
+            runner: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
@@ -116,7 +116,7 @@ jobs:
 
   unit-tests:
     name: Unit testing
-    runs-on: macos-latest
+    runs-on: macos-26
     permissions:
       contents: write
     steps:
