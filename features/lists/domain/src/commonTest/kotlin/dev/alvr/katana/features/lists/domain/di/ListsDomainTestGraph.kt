@@ -4,8 +4,6 @@ import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.tests.di.TestAppGraph
 import dev.alvr.katana.core.tests.di.TestAppScope
 import dev.alvr.katana.features.lists.domain.repositories.ListsRepository
-import dev.alvr.katana.features.lists.domain.usecases.ObserveListUseCase
-import dev.alvr.katana.features.lists.domain.usecases.ObserveListUseCaseImpl
 import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCase
 import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCaseImpl
 import dev.zacsweers.metro.DependencyGraph
@@ -16,12 +14,7 @@ import dev.zacsweers.metro.createGraphFactory
 @SingleIn(TestAppScope::class)
 @DependencyGraph(TestAppScope::class)
 internal interface ListsDomainTestGraph : TestAppGraph {
-    val observeListUseCase: ObserveListUseCase
     val updateListUseCase: UpdateListUseCase
-
-    @Provides
-    fun provideObserveListUseCase(dispatcher: KatanaDispatcher, repository: ListsRepository): ObserveListUseCase =
-        ObserveListUseCaseImpl(dispatcher, repository)
 
     @Provides
     fun provideUpdateListUseCase(dispatcher: KatanaDispatcher, repository: ListsRepository): UpdateListUseCase =

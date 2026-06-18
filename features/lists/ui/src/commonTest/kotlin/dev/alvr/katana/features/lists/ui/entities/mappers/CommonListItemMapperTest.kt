@@ -1,11 +1,11 @@
 package dev.alvr.katana.features.lists.ui.entities.mappers
 
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
+import dev.alvr.katana.common.media.domain.models.ItemMediaId
+import dev.alvr.katana.common.media.domain.models.entries.CommonMediaEntry
+import dev.alvr.katana.common.media.domain.models.lists.MediaList
 import dev.alvr.katana.core.common.noData
 import dev.alvr.katana.core.common.zero
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
-import dev.alvr.katana.features.lists.domain.models.ItemMediaId
-import dev.alvr.katana.features.lists.domain.models.entries.CommonMediaEntry
-import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.equals.shouldBeEqual

@@ -22,6 +22,6 @@ mutation MediaListEntries(
         startedAt: $startedAt,
         completedAt: $completedAt,
     ) {
-        ...mediaListEntry
+        id
     }
 }

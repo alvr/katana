@@ -1,9 +1,9 @@
 package dev.alvr.katana.features.lists.domain.usecases
 
+import dev.alvr.katana.common.media.domain.models.lists.MediaList
 import dev.alvr.katana.core.common.coroutines.KatanaDispatcher
 import dev.alvr.katana.core.domain.usecases.EitherUseCase
 import dev.alvr.katana.core.domain.usecases.KatanaEitherUseCase
-import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import dev.alvr.katana.features.lists.domain.repositories.ListsRepository
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding

@@ -1,7 +1,7 @@
 package dev.alvr.katana.features.lists.ui.viewmodel
 
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
 import dev.alvr.katana.core.ui.viewmodel.UiIntent
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 
 internal sealed interface ListsIntent : UiIntent {
     data object Refresh : ListsIntent

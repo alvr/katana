@@ -141,7 +141,7 @@ internal class ForYouViewModelTest : BehaviorSpec() {
             createForYouUiTestGraph(
                 hideWelcomeCardUseCase = hideWelcomeCard,
                 observeWelcomeCardVisibilityUseCase = observeWelcomeCardVisibility,
-            )
+            ).forYouViewModel as ForYouViewModel
     }
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {

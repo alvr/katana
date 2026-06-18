@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.ui.components.KatanaEmptyState
 import dev.alvr.katana.core.ui.components.KatanaErrorState
@@ -19,7 +20,6 @@ import dev.alvr.katana.core.ui.components.home.rememberKatanaHomeScaffoldState
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
 import dev.alvr.katana.core.ui.viewmodel.collectUiStateWithLifecycle
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.error_message
 import dev.alvr.katana.features.lists.ui.screens.ChangeListButton

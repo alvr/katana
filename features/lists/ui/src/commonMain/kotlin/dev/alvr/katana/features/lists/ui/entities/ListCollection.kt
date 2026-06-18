@@ -1,6 +1,6 @@
 package dev.alvr.katana.features.lists.ui.entities
 
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
 import kotlinx.collections.immutable.ImmutableMap
 
 internal typealias ListEntries<T> = ImmutableMap<ItemEntryId, T>

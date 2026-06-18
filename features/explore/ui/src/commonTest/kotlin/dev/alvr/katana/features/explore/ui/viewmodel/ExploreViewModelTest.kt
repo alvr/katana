@@ -22,7 +22,7 @@ internal class ExploreViewModelTest : BehaviorSpec() {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        viewModel = createExploreUiTestGraph().exploreViewModel
+        viewModel = createExploreUiTestGraph().exploreViewModel as ExploreViewModel
     }
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {

@@ -1,14 +1,14 @@
 package dev.alvr.katana.features.lists.data.mappers.requests
 
 import com.apollographql.apollo.api.Optional
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
+import dev.alvr.katana.common.media.domain.models.lists.MediaList
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.core.remote.present
 import dev.alvr.katana.core.remote.type.FuzzyDateInput
 import dev.alvr.katana.features.lists.data.MediaListEntriesMutation
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
-import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.equals.shouldBeEqual
 import kotlin.time.Clock

@@ -91,7 +91,7 @@ internal class AccountViewModelTest : FreeSpec() {
 
         viewModel =
             createAccountUiTestGraph(observeUserInfoUseCase = observeUserInfoUseCase, logOutUseCase = logOutUseCase)
-                .accountViewModel
+                .accountViewModel as AccountViewModel
     }
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {

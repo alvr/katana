@@ -2,9 +2,9 @@ package dev.alvr.katana.features.lists.ui.navigation
 
 import androidx.navigation.NavHostController
 import co.touchlab.kermit.Logger
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
 import dev.alvr.katana.core.ui.navigation.KatanaNavigator
 import dev.alvr.katana.core.ui.navigation.overridden
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 
 interface MangaListsNavigator : KatanaNavigator {
     fun mangaEntryDetails(id: ItemEntryId)

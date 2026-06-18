@@ -1,8 +1,8 @@
 package dev.alvr.katana.features.lists.data.mappers.requests
 
+import dev.alvr.katana.common.media.domain.models.lists.MediaList
 import dev.alvr.katana.core.remote.optional
 import dev.alvr.katana.features.lists.data.MediaListEntriesMutation
-import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 
 internal fun MediaList.toMutation() =
     MediaListEntriesMutation(

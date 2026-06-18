@@ -87,7 +87,9 @@ internal class KatanaViewModelTest : BehaviorSpec() {
 
     override suspend fun beforeEach(testCase: TestCase) {
         everySuspend { observeActiveSession(Unit) } returns Unit
-        viewModel = createSharedUiTestGraph(observeActiveSessionUseCase = observeActiveSession).katanaViewModel
+        viewModel =
+            createSharedUiTestGraph(observeActiveSessionUseCase = observeActiveSession).katanaViewModel
+                as KatanaViewModel
     }
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {

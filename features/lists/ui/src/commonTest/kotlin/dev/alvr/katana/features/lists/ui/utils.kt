@@ -1,12 +1,12 @@
 package dev.alvr.katana.features.lists.ui
 
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
-import dev.alvr.katana.features.lists.domain.models.ItemMediaId
-import dev.alvr.katana.features.lists.domain.models.entries.CommonMediaEntry
-import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
-import dev.alvr.katana.features.lists.domain.models.lists.MediaList
-import dev.alvr.katana.features.lists.domain.models.lists.MediaListEntry
-import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
+import dev.alvr.katana.common.media.domain.models.ItemMediaId
+import dev.alvr.katana.common.media.domain.models.entries.CommonMediaEntry
+import dev.alvr.katana.common.media.domain.models.entries.MediaEntry
+import dev.alvr.katana.common.media.domain.models.lists.MediaList
+import dev.alvr.katana.common.media.domain.models.lists.MediaListEntry
+import dev.alvr.katana.common.media.domain.models.lists.MediaListGroup
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.arbitrary
 import io.kotest.property.arbitrary.boolean

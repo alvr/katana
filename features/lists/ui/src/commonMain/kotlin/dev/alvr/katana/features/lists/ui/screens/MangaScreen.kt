@@ -1,8 +1,8 @@
 package dev.alvr.katana.features.lists.ui.screens
 
 import androidx.compose.runtime.Composable
+import dev.alvr.katana.common.media.domain.models.lists.MediaListType
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.features.lists.domain.models.lists.MediaListType
 import dev.alvr.katana.features.lists.ui.navigation.MangaListsNavigator
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.empty_manga_list

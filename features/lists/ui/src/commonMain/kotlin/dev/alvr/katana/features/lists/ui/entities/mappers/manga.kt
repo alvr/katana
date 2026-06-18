@@ -1,8 +1,8 @@
 package dev.alvr.katana.features.lists.ui.entities.mappers
 
+import dev.alvr.katana.common.media.domain.models.entries.MediaEntry
+import dev.alvr.katana.common.media.domain.models.lists.MediaList
 import dev.alvr.katana.core.common.orZero
-import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
-import dev.alvr.katana.features.lists.domain.models.lists.MediaList
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 
 internal fun MediaEntry.Manga.toMediaItem(list: MediaList) =

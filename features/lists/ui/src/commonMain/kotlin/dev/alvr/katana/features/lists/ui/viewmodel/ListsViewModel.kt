@@ -2,11 +2,12 @@ package dev.alvr.katana.features.lists.ui.viewmodel
 
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
+import dev.alvr.katana.common.media.domain.models.lists.MediaListStatus
+import dev.alvr.katana.common.media.domain.models.lists.MediaListType
+import dev.alvr.katana.common.media.domain.usecases.ObserveMediaCollectionUseCase
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
-import dev.alvr.katana.features.lists.domain.models.lists.MediaListType
-import dev.alvr.katana.features.lists.domain.usecases.ObserveListUseCase
 import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCase
 import dev.alvr.katana.features.lists.ui.entities.mappers.entryMap
 import dev.alvr.katana.features.lists.ui.entities.mappers.toMediaList
@@ -30,7 +31,7 @@ import kotlinx.coroutines.launch
 @AssistedInject
 internal class ListsViewModel(
     @Assisted private val type: MediaListType,
-    private val observeListUseCase: ObserveListUseCase,
+    private val observeListUseCase: ObserveMediaCollectionUseCase,
     private val updateListUseCase: UpdateListUseCase,
 ) : KatanaViewModel<ListsState, ListsEffect, ListsIntent>(ListsState()) {
     private val searchFlow = MutableStateFlow(String.empty)
@@ -54,7 +55,7 @@ internal class ListsViewModel(
 
         execute(
             useCase = observeListUseCase,
-            params = type,
+            params = ObserveMediaCollectionUseCase.Params(type, MediaListStatus.All),
             onFailure = {
                 state {
                     copy(collection = persistentMapOf(), selectedList = String.empty, error = true, loading = false)

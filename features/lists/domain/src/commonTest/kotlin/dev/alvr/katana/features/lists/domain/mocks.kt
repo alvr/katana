@@ -1,7 +1,7 @@
 package dev.alvr.katana.features.lists.domain
 
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
-import dev.alvr.katana.features.lists.domain.models.lists.MediaList
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
+import dev.alvr.katana.common.media.domain.models.lists.MediaList
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.boolean
 import io.kotest.property.arbitrary.double

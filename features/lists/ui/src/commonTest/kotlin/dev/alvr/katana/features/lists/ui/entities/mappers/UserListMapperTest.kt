@@ -1,7 +1,7 @@
 package dev.alvr.katana.features.lists.ui.entities.mappers
 
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
 import dev.alvr.katana.core.common.zero
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.ui.viewmodel.animeListItem1
 import dev.alvr.katana.features.lists.ui.viewmodel.animeListItem2
 import dev.alvr.katana.features.lists.ui.viewmodel.mangaListItem1

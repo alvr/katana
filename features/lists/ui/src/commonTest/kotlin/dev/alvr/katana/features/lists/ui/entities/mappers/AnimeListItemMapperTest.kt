@@ -1,6 +1,6 @@
 package dev.alvr.katana.features.lists.ui.entities.mappers
 
-import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
+import dev.alvr.katana.common.media.domain.models.entries.MediaEntry
 import dev.alvr.katana.features.lists.ui.COLLECTION_SIZE
 import dev.alvr.katana.features.lists.ui.randomCollection
 import io.kotest.core.spec.style.FreeSpec

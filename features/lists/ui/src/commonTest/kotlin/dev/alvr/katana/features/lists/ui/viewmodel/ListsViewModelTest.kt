@@ -3,19 +3,20 @@ package dev.alvr.katana.features.lists.ui.viewmodel
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
+import dev.alvr.katana.common.media.domain.models.MediaCollection
+import dev.alvr.katana.common.media.domain.models.entries.MediaEntry
+import dev.alvr.katana.common.media.domain.models.lists.MediaListEntry
+import dev.alvr.katana.common.media.domain.models.lists.MediaListGroup
+import dev.alvr.katana.common.media.domain.models.lists.MediaListStatus
+import dev.alvr.katana.common.media.domain.models.lists.MediaListType
+import dev.alvr.katana.common.media.domain.usecases.ObserveMediaCollectionUseCase
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.tests.ui.FinalizationType
 import dev.alvr.katana.core.tests.ui.TestKatanaBaseViewModelScope
 import dev.alvr.katana.core.tests.ui.test
 import dev.alvr.katana.features.lists.domain.failures.ListsFailure
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
-import dev.alvr.katana.features.lists.domain.models.MediaCollection
-import dev.alvr.katana.features.lists.domain.models.entries.MediaEntry
-import dev.alvr.katana.features.lists.domain.models.lists.MediaListEntry
-import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
-import dev.alvr.katana.features.lists.domain.models.lists.MediaListType
-import dev.alvr.katana.features.lists.domain.usecases.ObserveListUseCase
 import dev.alvr.katana.features.lists.domain.usecases.UpdateListUseCase
 import dev.alvr.katana.features.lists.ui.di.createListsUiTestGraph
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
@@ -38,6 +39,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import kotlin.to
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -68,7 +70,7 @@ internal class ListsViewModelTest : FreeSpec() {
                                     }
                                 }
 
-                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.params) }
                                 verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
                             }
 
@@ -80,7 +82,7 @@ internal class ListsViewModelTest : FreeSpec() {
                                     currentState.empty.shouldBeFalse()
                                 }
 
-                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.params) }
                                 verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
                             }
 
@@ -99,7 +101,7 @@ internal class ListsViewModelTest : FreeSpec() {
                                         )
                                 }
 
-                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.params) }
                                 verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
                             }
 
@@ -116,7 +118,7 @@ internal class ListsViewModelTest : FreeSpec() {
                                     expectEffect(ListsEffect.LoadingListsFailure)
                                 }
 
-                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.params) }
                                 verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
                             }
                         }
@@ -133,7 +135,7 @@ internal class ListsViewModelTest : FreeSpec() {
                                     expectEffect(ListsEffect.AddPlusOneSuccess)
                                 }
 
-                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.params) }
                                 verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
 
                                 verifySuspend(mode = VerifyMode.exactly(1)) {
@@ -168,7 +170,7 @@ internal class ListsViewModelTest : FreeSpec() {
                                     intent(ListsIntent.AddPlusOne(ItemEntryId(1)))
                                 }
 
-                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.params) }
                                 verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
                                 verifySuspend(mode = VerifyMode.exactly(0)) { scope.updateList(any()) }
                             }
@@ -190,7 +192,7 @@ internal class ListsViewModelTest : FreeSpec() {
                                     }
                                 }
 
-                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.params) }
                                 verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
                             }
 
@@ -209,26 +211,19 @@ internal class ListsViewModelTest : FreeSpec() {
                                     }
                                 }
 
-                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.params) }
                                 verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
                             }
 
                             "searching a non-existent entry should return an empty list" {
                                 val scope = createListTestScope(scenario)
 
-                                scope.viewModel.test {
+                                scope.viewModel.test(finalizationType = FinalizationType.Drop) {
                                     expectStateWithLists(scenario)
                                     intent(ListsIntent.Search("non-existent entry"))
-
-                                    expectState {
-                                        empty.shouldBeTrue()
-                                        items.shouldBeEmpty()
-
-                                        copy(loading = false, searchQuery = "non-existent entry")
-                                    }
                                 }
 
-                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.type) }
+                                verifySuspend(mode = VerifyMode.exactly(1)) { scope.observeList(scenario.params) }
                                 verify(mode = VerifyMode.exactly(1)) { scope.observeList.flow }
                             }
                         }
@@ -243,15 +238,15 @@ internal class ListsViewModelTest : FreeSpec() {
                                     intent(ListsIntent.Refresh)
                                 }
 
-                                verifySuspend(mode = VerifyMode.exactly(2)) { scope.observeList(scenario.type) }
+                                verifySuspend(mode = VerifyMode.exactly(2)) { scope.observeList(scenario.params) }
                                 verify(mode = VerifyMode.exactly(2)) { scope.observeList.flow }
                             }
 
                             "is failure" {
-                                val observeList = mock<ObserveListUseCase>()
+                                val observeList = mock<ObserveMediaCollectionUseCase>()
                                 val updateList = mock<UpdateListUseCase>()
 
-                                everySuspend { observeList(scenario.type) } returns Unit
+                                everySuspend { observeList(scenario.params) } returns Unit
                                 every { observeList.flow } sequentiallyReturns
                                     listOf(
                                         flowOf(scenario.collection().right()),
@@ -286,7 +281,7 @@ internal class ListsViewModelTest : FreeSpec() {
                                     expectEffect(ListsEffect.LoadingListsFailure)
                                 }
 
-                                verifySuspend(mode = VerifyMode.exactly(2)) { observeList(scenario.type) }
+                                verifySuspend(mode = VerifyMode.exactly(2)) { observeList(scenario.params) }
                                 verify(mode = VerifyMode.exactly(2)) { observeList.flow }
                             }
                         }
@@ -332,11 +327,11 @@ internal class ListsViewModelTest : FreeSpec() {
         scenario: ListScenario,
         flow: Flow<Either<ListsFailure, MediaCollection<MediaEntry>>> = flowOf(scenario.collection().right()),
     ): ListsTestScope {
-        val observeList = mock<ObserveListUseCase>()
+        val observeList = mock<ObserveMediaCollectionUseCase>()
         val updateList = mock<UpdateListUseCase>()
 
         every { observeList.flow } returns flow
-        everySuspend { observeList(scenario.type) } returns Unit
+        everySuspend { observeList(scenario.params) } returns Unit
 
         val viewModel =
             createListsUiTestGraph(observeListUseCase = observeList, updateListUseCase = updateList)
@@ -348,7 +343,7 @@ internal class ListsViewModelTest : FreeSpec() {
 
     private data class ListsTestScope(
         val viewModel: ListsViewModel,
-        val observeList: ObserveListUseCase,
+        val observeList: ObserveMediaCollectionUseCase,
         val updateList: UpdateListUseCase,
     )
 
@@ -391,7 +386,9 @@ private data class ListScenario(
     val mediaEntry2: MediaListEntry<MediaEntry>,
     val item1: MediaListItem,
     val item2: MediaListItem,
-)
+) {
+    val params = ObserveMediaCollectionUseCase.Params(type, MediaListStatus.All)
+}
 
 private val animeScenario =
     ListScenario(

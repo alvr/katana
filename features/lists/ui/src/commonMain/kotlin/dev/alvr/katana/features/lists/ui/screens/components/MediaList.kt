@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
 import dev.alvr.katana.core.common.formatters.KatanaDateFormats
 import dev.alvr.katana.core.common.formatters.KatanaNumberFormatter
 import dev.alvr.katana.core.common.unknown
@@ -54,7 +55,6 @@ import dev.alvr.katana.core.ui.resources.format
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.contentPaddingSmall
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.default_cover

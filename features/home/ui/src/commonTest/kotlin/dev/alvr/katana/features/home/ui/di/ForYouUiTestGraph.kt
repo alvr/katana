@@ -2,24 +2,30 @@ package dev.alvr.katana.features.home.ui.di
 
 import dev.alvr.katana.core.tests.di.TestAppGraph
 import dev.alvr.katana.core.tests.di.TestAppScope
+import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.alvr.katana.features.home.domain.usecases.HideWelcomeCardUseCase
 import dev.alvr.katana.features.home.domain.usecases.ObserveWelcomeCardVisibilityUseCase
+import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouEffect
+import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
+import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouState
 import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouViewModel
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.createGraphFactory
 
+private typealias ForYouVM = KatanaViewModel<ForYouState, ForYouEffect, ForYouIntent>
+
 @SingleIn(TestAppScope::class)
 @DependencyGraph(TestAppScope::class)
 internal interface ForYouUiTestGraph : TestAppGraph {
-    val forYouViewModel: ForYouViewModel
+    val forYouViewModel: ForYouVM
 
     @Provides
     fun forYouViewModel(
         hideWelcomeCardUseCase: HideWelcomeCardUseCase,
         observeWelcomeCardVisibilityUseCase: ObserveWelcomeCardVisibilityUseCase,
-    ): ForYouViewModel = ForYouViewModel(hideWelcomeCardUseCase, observeWelcomeCardVisibilityUseCase)
+    ): ForYouVM = ForYouViewModel(hideWelcomeCardUseCase, observeWelcomeCardVisibilityUseCase)
 
     @DependencyGraph.Factory
     interface Factory {
@@ -39,4 +45,3 @@ internal fun createForYouUiTestGraph(
             hideWelcomeCardUseCase = hideWelcomeCardUseCase,
             observeWelcomeCardVisibilityUseCase = observeWelcomeCardVisibilityUseCase,
         )
-        .forYouViewModel

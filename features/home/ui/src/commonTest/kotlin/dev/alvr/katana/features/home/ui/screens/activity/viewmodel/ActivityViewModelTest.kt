@@ -22,7 +22,7 @@ internal class ActivityViewModelTest : BehaviorSpec() {
     }
 
     override suspend fun beforeEach(testCase: TestCase) {
-        viewModel = createActivityUiTestGraph().activityViewModel
+        viewModel = createActivityUiTestGraph().activityViewModel as ActivityViewModel
     }
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {

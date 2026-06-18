@@ -2,18 +2,24 @@ package dev.alvr.katana.features.home.ui.di
 
 import dev.alvr.katana.core.tests.di.TestAppGraph
 import dev.alvr.katana.core.tests.di.TestAppScope
+import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
+import dev.alvr.katana.features.home.ui.screens.activity.viewmodel.ActivityEffect
+import dev.alvr.katana.features.home.ui.screens.activity.viewmodel.ActivityIntent
+import dev.alvr.katana.features.home.ui.screens.activity.viewmodel.ActivityState
 import dev.alvr.katana.features.home.ui.screens.activity.viewmodel.ActivityViewModel
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.createGraphFactory
 
+private typealias ActivityVM = KatanaViewModel<ActivityState, ActivityEffect, ActivityIntent>
+
 @SingleIn(TestAppScope::class)
 @DependencyGraph(TestAppScope::class)
 internal interface ActivityUiTestGraph : TestAppGraph {
-    val activityViewModel: ActivityViewModel
+    val activityViewModel: ActivityVM
 
-    @Provides fun activityViewModel(): ActivityViewModel = ActivityViewModel()
+    @Provides fun activityViewModel(): ActivityVM = ActivityViewModel()
 
     @DependencyGraph.Factory
     interface Factory {

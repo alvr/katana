@@ -2,9 +2,9 @@ package dev.alvr.katana.features.lists.ui.entities
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
+import dev.alvr.katana.common.media.domain.models.ItemMediaId
 import dev.alvr.katana.core.ui.resources.value
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
-import dev.alvr.katana.features.lists.domain.models.ItemMediaId
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.entry_format_manga
 import dev.alvr.katana.features.lists.ui.resources.entry_format_movie

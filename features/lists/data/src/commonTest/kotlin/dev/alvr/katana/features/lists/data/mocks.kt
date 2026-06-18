@@ -1,13 +1,10 @@
 package dev.alvr.katana.features.lists.data
 
 import com.apollographql.apollo.api.Error
-import dev.alvr.katana.core.remote.optional
-import dev.alvr.katana.core.remote.type.MediaType
-import dev.alvr.katana.features.lists.domain.models.ItemEntryId
-import dev.alvr.katana.features.lists.domain.models.lists.MediaList
+import dev.alvr.katana.common.media.domain.models.ItemEntryId
+import dev.alvr.katana.common.media.domain.models.lists.MediaList
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.boolean
-import io.kotest.property.arbitrary.enum
 import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.next
 import io.kotest.property.arbitrary.orNull
@@ -16,9 +13,6 @@ import io.kotest.property.arbitrary.positiveInt
 import io.kotest.property.arbitrary.string
 import io.kotest.property.kotlinx.datetime.date
 import io.kotest.property.kotlinx.datetime.datetime
-
-internal val mediaListCollectionQueryMock =
-    MediaListCollectionQuery(user = Arb.positiveInt().orNull().next().optional, type = Arb.enum<MediaType>().next())
 
 internal val mediaListMock =
     MediaList(
