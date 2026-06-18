@@ -3,6 +3,8 @@ plugins { id("katana.multiplatform.ui") }
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            api(projects.common.media.data)
+            api(projects.common.media.domain)
             api(projects.common.session.data)
             api(projects.common.session.domain)
             api(projects.common.user.data)

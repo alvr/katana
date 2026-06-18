@@ -10,7 +10,8 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="allTests" />
+          <option value="androidTests" />
+          <option value="iosTests" />
         </list>
       </option>
       <option name="vmOptions" value="" />

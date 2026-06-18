@@ -1,0 +1,17 @@
+fragment mediaEntry on Media {
+    id
+    title {
+        userPreferred
+    }
+    episodes
+    chapters
+    volumes
+    format
+    coverImage {
+        large
+    }
+    nextAiringEpisode {
+        airingAt
+        episode
+    }
+}

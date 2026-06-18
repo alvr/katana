@@ -1,0 +1,20 @@
+query MediaListCollection($user: Int, $type: MediaType!, $status: MediaListStatus) {
+    MediaListCollection(userId: $user, type: $type, status: $status) {
+        lists {
+            name
+            entries {
+                ...mediaListEntry
+            }
+        }
+        user {
+            mediaListOptions {
+                animeList {
+                    sectionOrder
+                }
+                mangaList {
+                    sectionOrder
+                }
+            }
+        }
+    }
+}
