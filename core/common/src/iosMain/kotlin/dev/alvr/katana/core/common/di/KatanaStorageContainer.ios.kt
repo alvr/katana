@@ -1,7 +1,7 @@
 package dev.alvr.katana.core.common.di
 
-import dev.alvr.katana.core.common.KatanaCachePath
-import dev.alvr.katana.core.common.KatanaFilesPath
+import dev.alvr.katana.core.common.KatanaStorage
+import dev.alvr.katana.core.common.KatanaStorageImpl
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
@@ -10,24 +10,22 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.cinterop.ExperimentalForeignApi
 import okio.Path
 import okio.Path.Companion.toPath
+import platform.Foundation.NSApplicationSupportDirectory
 import platform.Foundation.NSCachesDirectory
-import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-actual object KatanaPathContainer {
+actual object KatanaStorageContainer {
 
     @Provides
     @SingleIn(AppScope::class)
-    actual fun katanaCachePath(@AppContext context: PlatformContext): KatanaCachePath =
-        KatanaCachePath(createDirectoryPath(NSCachesDirectory))
-
-    @Provides
-    @SingleIn(AppScope::class)
-    actual fun katanaFilesPath(@AppContext context: PlatformContext): KatanaFilesPath =
-        KatanaFilesPath(createDirectoryPath(NSDocumentDirectory))
+    actual fun katanaStorage(@AppContext context: PlatformContext): KatanaStorage =
+        KatanaStorageImpl(
+            files = createDirectoryPath(NSApplicationSupportDirectory),
+            cache = createDirectoryPath(NSCachesDirectory),
+        )
 }
 
 @OptIn(ExperimentalForeignApi::class)
@@ -43,6 +41,6 @@ private fun createDirectoryPath(directory: ULong): Path {
 
     return with(url?.path) {
         requireNotNull(this) { "Failed to get path from URL: $url" }
-        toPath()
+        toPath(normalize = true)
     }
 }

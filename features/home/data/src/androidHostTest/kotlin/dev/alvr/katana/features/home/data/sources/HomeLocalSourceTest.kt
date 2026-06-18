@@ -18,7 +18,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.io.IOException
+import okio.IOException
 
 @Suppress("UnusedFlow")
 internal class HomeLocalSourceTest : FreeSpec() {

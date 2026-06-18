@@ -48,11 +48,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        name: [Android]
+        name: [Android, iOS]
         include:
           - name: Android
             platform: android
             runner: ubuntu-latest
+          - name: iOS
+            platform: ios
+            runner: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
@@ -113,7 +116,18 @@ jobs:
 
   unit-tests:
     name: Unit testing
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [Android, iOS]
+        include:
+          - name: Android
+            platform: android
+            runner: ubuntu-latest
+          - name: iOS
+            platform: ios
+            runner: macos-26
     permissions:
       contents: write
     steps:
@@ -125,17 +139,22 @@ jobs:
         uses: ./.github/actions/common-steps
         with:
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-      - name: Run unit tests
-        run: ./gradlew :koverXmlReport :koverVerify --no-daemon --stacktrace
+      - name: Run Android unit tests
+        if: matrix.platform == 'android'
+        run: ./gradlew androidTests :koverXmlReport :koverVerify --no-daemon --stacktrace
+      - name: Run iOS unit tests
+        if: matrix.platform == 'ios'
+        run: ./gradlew iosTests --no-daemon --stacktrace
       - name: Upload tests reports artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: tests-reports
+          name: ${{ matrix.platform }}-tests-reports
           path: |
-            **/build/reports/tests/testAndroidHostTest
+            **/build/reports/${{ matrix.platform }}-tests
           retention-days: 7
       - name: Upload report to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        if: matrix.platform == 'android'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build/reports/kover/report.xml
@@ -206,7 +225,7 @@ jobs:
 
   deploy-production:
     name: Production deployment
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [static-analysis, unit-tests]
     strategy:

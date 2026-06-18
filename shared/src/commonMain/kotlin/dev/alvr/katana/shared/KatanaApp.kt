@@ -13,7 +13,7 @@ import coil3.memory.MemoryCache
 import coil3.request.crossfade
 import com.skydoves.compose.stability.runtime.ComposeStabilityAnalyzer
 import dev.alvr.katana.core.common.KatanaBuildConfig
-import dev.alvr.katana.core.common.KatanaCachePath
+import dev.alvr.katana.core.common.KatanaStorage
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.components.snackbar.SnackbarController
 import dev.alvr.katana.core.ui.theme.KatanaTheme
@@ -24,12 +24,8 @@ import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 
 @Inject
 @Composable
-fun Katana(
-    viewModelFactory: MetroViewModelFactory,
-    cachePath: KatanaCachePath,
-    snackbarController: SnackbarController,
-) {
-    Init(cachePath)
+fun Katana(viewModelFactory: MetroViewModelFactory, storage: KatanaStorage, snackbarController: SnackbarController) {
+    Init(storage)
 
     KatanaTheme {
         CompositionLocalProvider(
@@ -42,14 +38,14 @@ fun Katana(
 }
 
 @Composable
-private fun Init(cachePath: KatanaCachePath) {
+private fun Init(storage: KatanaStorage) {
     setSingletonImageLoaderFactory { context ->
         ImageLoader.Builder(context)
             .crossfade(true)
             .memoryCache { MemoryCache.Builder().maxSizePercent(context, CoilMemoryCachePercent).build() }
             .diskCache {
                 DiskCache.Builder()
-                    .directory(cachePath.path / CoilImagesPath)
+                    .directory(storage.cache / CoilImagesPath)
                     .maxSizePercent(CoilDiskCachePercent)
                     .build()
             }

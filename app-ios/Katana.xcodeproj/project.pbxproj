@@ -6,18 +6,23 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXFileReference section */
-		814390FC2F606C3600F3E707 /* Katana.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Katana.xcodeproj; sourceTree = "<group>"; };
-		84BE69862ED8820300A5C28F /* Katana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Katana.app; sourceTree = BUILT_PRODUCTS_DIR; };
-/* End PBXFileReference section */
+/* Begin PBXBuildFile section */
+		845485AC2FE31C59004836BE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845485A72FE31C59004836BE /* ContentView.swift */; };
+		845485AD2FE31C59004836BE /* KatanaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845485A92FE31C59004836BE /* KatanaApp.swift */; };
+		845485AE2FE31C59004836BE /* KatanaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845485AA2FE31C59004836BE /* KatanaView.swift */; };
+		846AB22D2FE2B0E70022B299 /* Katana.icon in Resources */ = {isa = PBXBuildFile; fileRef = 846AB22C2FE2B0E70022B299 /* Katana.icon */; };
+/* End PBXBuildFile section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		84BE69882ED8820300A5C28F /* Katana */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Katana;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
+/* Begin PBXFileReference section */
+		845485942FE31538004836BE /* Katana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Katana.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		845485A62FE31C59004836BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		845485A72FE31C59004836BE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		845485A92FE31C59004836BE /* KatanaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KatanaApp.swift; sourceTree = "<group>"; };
+		845485AA2FE31C59004836BE /* KatanaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KatanaView.swift; sourceTree = "<group>"; };
+		846AB21C2FE1F3450022B299 /* Katana.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Katana.xcodeproj; sourceTree = "<group>"; };
+		846AB22C2FE2B0E70022B299 /* Katana.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Katana.icon; sourceTree = "<group>"; };
+		84BE69AE2ED8943100A5C28F /* Katana.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Katana.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		84BE69832ED8820300A5C28F /* Frameworks */ = {
@@ -30,7 +35,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		814390FE2F606C3600F3E707 /* Products */ = {
+		845485AB2FE31C59004836BE /* Katana */ = {
+			isa = PBXGroup;
+			children = (
+				845485A62FE31C59004836BE /* Assets.xcassets */,
+				845485A72FE31C59004836BE /* ContentView.swift */,
+				845485A92FE31C59004836BE /* KatanaApp.swift */,
+				845485AA2FE31C59004836BE /* KatanaView.swift */,
+			);
+			path = Katana;
+			sourceTree = "<group>";
+		};
+		846AB21E2FE1F3450022B299 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -40,15 +56,15 @@
 		84BE697D2ED8820300A5C28F = {
 			isa = PBXGroup;
 			children = (
-				84BE69882ED8820300A5C28F /* Katana */,
-				84BE69872ED8820300A5C28F /* Products */,
+				846AB22C2FE2B0E70022B299 /* Katana.icon */,
+				845485AB2FE31C59004836BE /* Katana */,
+				845485942FE31538004836BE /* Katana.app */,
 			);
 			sourceTree = "<group>";
 		};
-		84BE69872ED8820300A5C28F /* Products */ = {
+		84BE69B02ED8943100A5C28F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				84BE69862ED8820300A5C28F /* Katana.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -69,14 +85,11 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				84BE69882ED8820300A5C28F /* Katana */,
-			);
 			name = Katana;
 			packageProductDependencies = (
 			);
 			productName = Katana;
-			productReference = 84BE69862ED8820300A5C28F /* Katana.app */;
+			productReference = 845485942FE31538004836BE /* Katana.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -104,12 +117,16 @@
 			mainGroup = 84BE697D2ED8820300A5C28F;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 84BE69872ED8820300A5C28F /* Products */;
+			productRefGroup = 84BE697D2ED8820300A5C28F;
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 814390FE2F606C3600F3E707 /* Products */;
-					ProjectRef = 814390FC2F606C3600F3E707 /* Katana.xcodeproj */;
+					ProductGroup = 846AB21E2FE1F3450022B299 /* Products */;
+					ProjectRef = 846AB21C2FE1F3450022B299 /* Katana.xcodeproj */;
+				},
+				{
+					ProductGroup = 84BE69B02ED8943100A5C28F /* Products */;
+					ProjectRef = 84BE69AE2ED8943100A5C28F /* Katana.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -124,6 +141,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				846AB22D2FE2B0E70022B299 /* Katana.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,6 +173,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				845485AC2FE31C59004836BE /* ContentView.swift in Sources */,
+				845485AD2FE31C59004836BE /* KatanaApp.swift in Sources */,
+				845485AE2FE31C59004836BE /* KatanaView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,8 +308,7 @@
 		84BE69922ED8820400A5C28F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Katana;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -296,9 +316,10 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = x86_64;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Katana;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -331,8 +352,7 @@
 		84BE69932ED8820400A5C28F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Katana;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -340,9 +360,10 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = x86_64;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Katana;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

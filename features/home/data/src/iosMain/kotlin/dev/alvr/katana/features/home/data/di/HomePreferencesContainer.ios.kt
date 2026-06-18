@@ -1,5 +1,6 @@
 package dev.alvr.katana.features.home.data.di
 
+import dev.alvr.katana.core.common.KatanaStorage
 import dev.alvr.katana.core.common.di.AppContext
 import dev.alvr.katana.core.common.di.PlatformContext
 import dev.zacsweers.metro.AppScope
@@ -16,5 +17,6 @@ actual object HomePreferencesContainer {
     @Provides
     @HomePreferences
     @SingleIn(AppScope::class)
-    actual fun homePreferences(@AppContext context: PlatformContext): KSafe = KSafe(fileName = SafeFileName)
+    actual fun homePreferences(@AppContext context: PlatformContext, storage: KatanaStorage): KSafe =
+        KSafe(fileName = SafeFileName, directory = storage.files.toString())
 }
