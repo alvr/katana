@@ -27,10 +27,8 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.invoke
-import org.gradle.kotlin.dsl.provideDelegate
-import org.gradle.kotlin.dsl.registering
+import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
@@ -42,8 +40,8 @@ internal class KatanaBuildConfigPlugin : Plugin<Project> {
             val sourceOutputDirs =
                 OutputDir.entries.associateWith { output -> project.outputDir(output.sourceSet).get() }
 
-            val generateBuildConfig by
-                tasks.registering(GenerateBuildConfigTask::class) {
+            val task =
+                tasks.register<GenerateBuildConfigTask>("generateBuildConfig") {
                     config = rootProject.file("gradle/config/build_config.yml")
                     flavor = providers.gradleProperty("katana.flavor").getOrElse("dev")
                     packageName = fullPackageName
@@ -59,7 +57,7 @@ internal class KatanaBuildConfigPlugin : Plugin<Project> {
                 }
             }
 
-            tasks.withType<KotlinCompilationTask<*>>().configureEach { dependsOn(generateBuildConfig) }
+            tasks.withType<KotlinCompilationTask<*>>().configureEach { dependsOn(task) }
         }
 
     private fun Project.outputDir(name: String) = layout.buildDirectory.dir("$GENERATED_DIR/$name")
