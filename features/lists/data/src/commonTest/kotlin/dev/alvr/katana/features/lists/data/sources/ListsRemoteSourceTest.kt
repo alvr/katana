@@ -133,19 +133,18 @@ internal class ListsRemoteSourceTest : FreeSpec() {
     }
 
     private fun queryList(source: ListsRemoteSource): List<GoodQuery> {
-        val empty =
-            MediaListCollectionQuery.Data {
-                this["MediaListCollection"] = buildMediaListCollection {
-                    lists = emptyList()
-                    user = buildUser {
-                        id = UserId.id
-                        mediaListOptions = buildMediaListOptions {
-                            animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                            mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                        }
+        val empty = MediaListCollectionQuery.Data {
+            this["MediaListCollection"] = buildMediaListCollection {
+                lists = emptyList()
+                user = buildUser {
+                    id = UserId.id
+                    mediaListOptions = buildMediaListOptions {
+                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                     }
                 }
             }
+        }
 
         val values = buildList {
             add(null)

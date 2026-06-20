@@ -66,28 +66,27 @@ internal class SnackbarControllerImpl : SnackbarController {
     context(snackbarHostState: SnackbarHostState)
     override fun SnackbarMessageHandler() {
         LifecycleStartEffect(messages, snackbarHostState) {
-            val job =
-                lifecycleScope.launch {
-                    messages.receiveAsFlow().collect { message ->
-                        var shown = false
+            val job = lifecycleScope.launch {
+                messages.receiveAsFlow().collect { message ->
+                    var shown = false
 
-                        try {
-                            snackbarHostState.showSnackbar(
-                                messageResource = message.messageResource,
-                                actionLabelResource = message.actionLabelResource,
-                                withDismissAction = message.withDismissAction,
-                                duration = message.duration,
-                                onAction = message.onAction,
-                                onDismiss = message.onDismiss,
-                            )
-                            shown = true
-                        } finally {
-                            if (!shown) {
-                                messages.trySend(message)
-                            }
+                    try {
+                        snackbarHostState.showSnackbar(
+                            messageResource = message.messageResource,
+                            actionLabelResource = message.actionLabelResource,
+                            withDismissAction = message.withDismissAction,
+                            duration = message.duration,
+                            onAction = message.onAction,
+                            onDismiss = message.onDismiss,
+                        )
+                        shown = true
+                    } finally {
+                        if (!shown) {
+                            messages.trySend(message)
                         }
                     }
                 }
+            }
 
             onStopOrDispose { job.cancel() }
         }

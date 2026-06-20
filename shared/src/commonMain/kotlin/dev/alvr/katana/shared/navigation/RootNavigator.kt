@@ -121,18 +121,17 @@ internal fun rememberKatanaNavigator(): RootNavigator {
 private fun NavHostController.loggerObserver() = apply {
     if (KatanaBuildConfig.DEBUG) {
         DisposableEffect(this, LocalLifecycleOwner.current.lifecycle) {
-            val listener =
-                NavController.OnDestinationChangedListener { navController, destination, args ->
-                    Logger.d(tag = LogTag) {
-                        buildString {
-                            append("Navigating to route ${destination.route}")
+            val listener = NavController.OnDestinationChangedListener { navController, destination, args ->
+                Logger.d(tag = LogTag) {
+                    buildString {
+                        append("Navigating to route ${destination.route}")
 
-                            navController.previousBackStackEntry?.destination?.route?.let { previousRoute ->
-                                append(" from $previousRoute")
-                            }
+                        navController.previousBackStackEntry?.destination?.route?.let { previousRoute ->
+                            append(" from $previousRoute")
                         }
                     }
                 }
+            }
 
             addOnDestinationChangedListener(listener)
             onDispose { removeOnDestinationChangedListener(listener) }
