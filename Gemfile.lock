@@ -249,7 +249,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  faraday (>= 1.10.5, < 2.14.3)
+  faraday (>= 1.10.5, < 2.14.4)
   fastlane (~> 2.236)
   fastlane-plugin-appcircle_testing_distribution
 
