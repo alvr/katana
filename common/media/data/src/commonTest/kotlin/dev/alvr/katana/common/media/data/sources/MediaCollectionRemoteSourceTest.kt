@@ -113,7 +113,7 @@ internal class MediaCollectionRemoteSourceTest : FreeSpec() {
                         afterSpec { mockServer.close() }
 
                         mockServer.badClient(source).forEach { (type, enqueueAction, flow) ->
-                            "a HTTP error occurs" {
+                            "a HTTP error occurs ($enqueueAction, $type)" {
                                 everySuspend { getUserId(Unit) } returns UserId.right()
                                 enqueueAction()
 
@@ -134,19 +134,18 @@ internal class MediaCollectionRemoteSourceTest : FreeSpec() {
     }
 
     private fun queryList(source: MediaCollectionRemoteSource): List<GoodQuery> {
-        val empty =
-            MediaListCollectionQuery.Data {
-                this["MediaListCollection"] = buildMediaListCollection {
-                    lists = emptyList()
-                    user = buildUser {
-                        id = UserId.id
-                        mediaListOptions = buildMediaListOptions {
-                            animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                            mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                        }
+        val empty = MediaListCollectionQuery.Data {
+            this["MediaListCollection"] = buildMediaListCollection {
+                lists = emptyList()
+                user = buildUser {
+                    id = UserId.id
+                    mediaListOptions = buildMediaListOptions {
+                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                     }
                 }
             }
+        }
 
         val values = buildList {
             add(null)

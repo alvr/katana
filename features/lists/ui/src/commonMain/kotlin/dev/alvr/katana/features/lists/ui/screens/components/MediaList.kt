@@ -215,11 +215,13 @@ private fun CardContent(
 }
 
 @Composable
-private fun CoverAndScore(cover: String, score: Double, title: String, modifier: Modifier = Modifier) {
+private fun CoverAndScore(cover: String, score: Float?, title: String, modifier: Modifier = Modifier) {
     Box(modifier = modifier.width(KatanaTheme.sizes.coverWidth)) {
         Cover(cover = cover, title = title, modifier = Modifier.fillMaxSize())
 
-        Score(score = score, modifier = Modifier.align(AbsoluteAlignment.BottomLeft).testTag(ITEM_SCORE_TAG))
+        if (score != null) {
+            Score(score = score, modifier = Modifier.align(AbsoluteAlignment.BottomLeft).testTag(ITEM_SCORE_TAG))
+        }
     }
 }
 
@@ -270,24 +272,22 @@ private fun Subtitle(
 }
 
 @Composable
-private fun Score(score: Double, modifier: Modifier = Modifier) {
-    if (score != Double.zero) {
-        Box(
-            modifier =
-                modifier
-                    .background(
-                        color = KatanaTheme.colorScheme.surface.copy(alpha = KatanaTheme.alpha.alpha66),
-                        shape = RoundedCornerShape(topEnd = KatanaTheme.sizes.size1),
-                    )
-                    .padding(KatanaTheme.dimensions.spacing1)
-                    .defaultMinSize(minWidth = KatanaTheme.sizes.size5)
-        ) {
-            Text(
-                text = KatanaNumberFormatter.Score(score),
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.align(Alignment.Center),
-            )
-        }
+private fun Score(score: Float, modifier: Modifier = Modifier) {
+    Box(
+        modifier =
+            modifier
+                .background(
+                    color = KatanaTheme.colorScheme.surface.copy(alpha = KatanaTheme.alpha.alpha66),
+                    shape = RoundedCornerShape(topEnd = KatanaTheme.sizes.size1),
+                )
+                .padding(KatanaTheme.dimensions.spacing1)
+                .defaultMinSize(minWidth = KatanaTheme.sizes.size5)
+    ) {
+        Text(
+            text = KatanaNumberFormatter.Score(score),
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.align(Alignment.Center),
+        )
     }
 }
 

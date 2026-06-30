@@ -26,7 +26,7 @@ internal sealed interface MediaListItem {
     val entryId: ItemEntryId
     val mediaId: ItemMediaId
     val title: String
-    val score: Double
+    val score: Float?
     val format: Format
     val cover: String
     val progress: Int
@@ -43,7 +43,7 @@ internal sealed interface MediaListItem {
         override val entryId: ItemEntryId,
         override val mediaId: ItemMediaId,
         override val title: String,
-        override val score: Double,
+        override val score: Float?,
         override val format: Format,
         override val cover: String,
         override val progress: Int,
@@ -64,7 +64,7 @@ internal sealed interface MediaListItem {
         override val entryId: ItemEntryId,
         override val mediaId: ItemMediaId,
         override val title: String,
-        override val score: Double,
+        override val score: Float?,
         override val format: Format,
         override val cover: String,
         override val progress: Int,

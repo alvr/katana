@@ -271,7 +271,7 @@ internal class MediaListMapperTest :
                                                         id = 100
                                                         mediaId = 100
                                                         userId = 37_384
-                                                        score = 7.3
+                                                        score = 7.3f
                                                         progress = 12
                                                         progressVolumes = null
                                                         repeat = 2
@@ -322,7 +322,7 @@ internal class MediaListMapperTest :
                             list.entries.forAll { entry ->
                                 with(entry.list) {
                                     id shouldBe ItemEntryId(100)
-                                    score shouldBe 7.3
+                                    score shouldBe 7.3f
                                     progress shouldBe 12
                                     progressVolumes.shouldBeNull()
                                     repeat shouldBe 2
@@ -367,7 +367,7 @@ internal class MediaListMapperTest :
                                                         id = Int.zero
                                                         mediaId = Int.zero
                                                         userId = 37_384
-                                                        score = Double.zero
+                                                        score = null
                                                         progress = null
                                                         progressVolumes = null
                                                         repeat = null
@@ -403,7 +403,7 @@ internal class MediaListMapperTest :
                             list.entries.forAll { entry ->
                                 with(entry.list) {
                                     id shouldBe ItemEntryId(Int.zero)
-                                    score shouldBe Double.zero
+                                    score.shouldBeNull()
                                     progress shouldBe Int.zero
                                     progressVolumes.shouldBeNull()
                                     repeat shouldBe Int.zero
@@ -613,7 +613,7 @@ internal class MediaListMapperTest :
                                                         id = 100
                                                         mediaId = 100
                                                         userId = 37_384
-                                                        score = 7.3
+                                                        score = 7.3f
                                                         progress = 12
                                                         progressVolumes = 1
                                                         repeat = 2
@@ -660,7 +660,7 @@ internal class MediaListMapperTest :
                             list.entries.forAll { entry ->
                                 with(entry.list) {
                                     id shouldBe ItemEntryId(100)
-                                    score shouldBe 7.3
+                                    score shouldBe 7.3f
                                     progress shouldBe 12
                                     progressVolumes shouldBe 1
                                     repeat shouldBe 2
@@ -702,7 +702,7 @@ internal class MediaListMapperTest :
                                                         id = Int.zero
                                                         mediaId = Int.zero
                                                         userId = 37_384
-                                                        score = Double.zero
+                                                        score = null
                                                         progress = null
                                                         progressVolumes = null
                                                         repeat = null
@@ -739,7 +739,7 @@ internal class MediaListMapperTest :
                             list.entries.forAll { entry ->
                                 with(entry.list) {
                                     id shouldBe ItemEntryId(Int.zero)
-                                    score shouldBe Double.zero
+                                    score.shouldBeNull()
                                     progress shouldBe Int.zero
                                     progressVolumes.shouldBeNull()
                                     repeat shouldBe Int.zero

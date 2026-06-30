@@ -24,7 +24,7 @@ internal class CommonListItemMapperTest : FreeSpec() {
             entryId = ItemEntryId(1234),
             mediaId = ItemMediaId(Arb.int().next()),
             title = Arb.string().next(),
-            score = 9.8,
+            score = 9.8f,
             format = MediaListItem.Format.Tv,
             cover = Arb.string().next(),
             progress = 132,
@@ -43,7 +43,7 @@ internal class CommonListItemMapperTest : FreeSpec() {
             entryId = ItemEntryId(5678),
             mediaId = ItemMediaId(Arb.int().next()),
             title = Arb.string().next(),
-            score = 6.9,
+            score = 6.9f,
             format = MediaListItem.Format.Manga,
             cover = Arb.string().next(),
             progress = 46,
@@ -62,7 +62,7 @@ internal class CommonListItemMapperTest : FreeSpec() {
     private val animeMediaList =
         MediaList(
             id = ItemEntryId(1234),
-            score = 9.8,
+            score = 9.8f,
             progress = 132,
             progressVolumes = null,
             repeat = 1,
@@ -76,7 +76,7 @@ internal class CommonListItemMapperTest : FreeSpec() {
     private val mangaMediaList =
         MediaList(
             id = ItemEntryId(5678),
-            score = 6.9,
+            score = 6.9f,
             progress = 46,
             progressVolumes = 12,
             repeat = Int.zero,

@@ -7,6 +7,7 @@ import dev.alvr.katana.common.media.domain.models.entries.MediaEntry
 import dev.alvr.katana.common.media.domain.models.lists.MediaList
 import dev.alvr.katana.common.media.domain.models.lists.MediaListEntry
 import dev.alvr.katana.common.media.domain.models.lists.MediaListGroup
+import dev.alvr.katana.core.common.zero
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.arbitrary
 import io.kotest.property.arbitrary.boolean
@@ -37,7 +38,7 @@ internal inline fun <reified T : MediaEntry> randomCollection(): List<MediaListG
 private val mediaListArb = arbitrary {
     MediaList(
         id = ItemEntryId(Arb.int().bind()),
-        score = 0.0,
+        score = Float.zero,
         progress = Arb.int().bind(),
         progressVolumes = null,
         repeat = Arb.int().bind(),

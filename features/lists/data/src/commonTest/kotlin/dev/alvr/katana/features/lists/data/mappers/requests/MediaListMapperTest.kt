@@ -23,7 +23,7 @@ internal class MediaListMapperTest :
         "a MediaList with all values present" {
             MediaList(
                     id = ItemEntryId(Int.zero),
-                    score = Double.zero,
+                    score = Float.zero,
                     progress = Int.zero,
                     progressVolumes = Int.zero,
                     repeat = Int.zero,
@@ -37,7 +37,7 @@ internal class MediaListMapperTest :
                 .toMutation() shouldBeEqual
                 MediaListEntriesMutation(
                     id = Int.zero,
-                    score = Double.zero.present,
+                    score = Float.zero.present,
                     progress = Int.zero.present,
                     progressVolumes = Int.zero.present,
                     repeat = Int.zero.present,
@@ -58,7 +58,7 @@ internal class MediaListMapperTest :
         "a MediaList with nullable values" {
             MediaList(
                     id = ItemEntryId(Int.zero),
-                    score = Double.zero,
+                    score = Float.zero,
                     progress = Int.zero,
                     progressVolumes = null,
                     repeat = Int.zero,
@@ -72,7 +72,7 @@ internal class MediaListMapperTest :
                 .toMutation() shouldBeEqual
                 MediaListEntriesMutation(
                     id = Int.zero,
-                    score = Double.zero.present,
+                    score = Float.zero.present,
                     progress = Int.zero.present,
                     progressVolumes = null.optional,
                     repeat = Int.zero.present,

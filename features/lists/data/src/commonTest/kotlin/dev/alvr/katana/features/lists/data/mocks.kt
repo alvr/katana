@@ -8,7 +8,7 @@ import io.kotest.property.arbitrary.boolean
 import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.next
 import io.kotest.property.arbitrary.orNull
-import io.kotest.property.arbitrary.positiveDouble
+import io.kotest.property.arbitrary.positiveFloat
 import io.kotest.property.arbitrary.positiveInt
 import io.kotest.property.arbitrary.string
 import io.kotest.property.kotlinx.datetime.date
@@ -17,7 +17,7 @@ import io.kotest.property.kotlinx.datetime.datetime
 internal val mediaListMock =
     MediaList(
         id = ItemEntryId(Arb.int().next()),
-        score = Arb.positiveDouble().next(),
+        score = Arb.positiveFloat().next(),
         progress = Arb.positiveInt().next(),
         progressVolumes = Arb.positiveInt().orNull().next(),
         repeat = Arb.positiveInt().next(),

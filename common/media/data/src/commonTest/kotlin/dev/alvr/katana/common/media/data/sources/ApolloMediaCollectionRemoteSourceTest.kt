@@ -74,19 +74,18 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
         "anime" -
             {
                 "the collection has no lists" {
-                    val query =
-                        MediaListCollectionQuery.Data {
-                            this["MediaListCollection"] = buildMediaListCollection {
-                                lists = emptyList()
-                                user = buildUser {
-                                    id = 37_384
-                                    mediaListOptions = buildMediaListOptions {
-                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                                    }
+                    val query = MediaListCollectionQuery.Data {
+                        this["MediaListCollection"] = buildMediaListCollection {
+                            lists = emptyList()
+                            user = buildUser {
+                                id = 37_384
+                                mediaListOptions = buildMediaListOptions {
+                                    animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                 }
                             }
                         }
+                    }
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(userIdOpt, MediaType.ANIME, MediaListStatus.All()),
@@ -101,35 +100,34 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
                 }
 
                 "the entries are empty" {
-                    val query =
-                        MediaListCollectionQuery.Data {
-                            this["MediaListCollection"] = buildMediaListCollection {
-                                lists =
-                                    listOf(
-                                        buildMediaListGroup {
-                                            name = "Watching"
-                                            entries = emptyList()
-                                        },
-                                        buildMediaListGroup {
-                                            name = "Completed TV"
-                                            entries = emptyList()
-                                        },
-                                        buildMediaListGroup {
-                                            name = "Custom List"
-                                            entries = emptyList()
-                                        },
-                                    )
-                                user = buildUser {
-                                    id = 37_384
-                                    mediaListOptions = buildMediaListOptions {
-                                        animeList = buildMediaListTypeOptions {
-                                            sectionOrder = listOf("Watching", "Completed TV", "Custom List")
-                                        }
-                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                    val query = MediaListCollectionQuery.Data {
+                        this["MediaListCollection"] = buildMediaListCollection {
+                            lists =
+                                listOf(
+                                    buildMediaListGroup {
+                                        name = "Watching"
+                                        entries = emptyList()
+                                    },
+                                    buildMediaListGroup {
+                                        name = "Completed TV"
+                                        entries = emptyList()
+                                    },
+                                    buildMediaListGroup {
+                                        name = "Custom List"
+                                        entries = emptyList()
+                                    },
+                                )
+                            user = buildUser {
+                                id = 37_384
+                                mediaListOptions = buildMediaListOptions {
+                                    animeList = buildMediaListTypeOptions {
+                                        sectionOrder = listOf("Watching", "Completed TV", "Custom List")
                                     }
+                                    mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                 }
                             }
                         }
+                    }
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(userIdOpt, MediaType.ANIME, MediaListStatus.All()),
@@ -149,49 +147,48 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
                 }
 
                 "the entry has null values" {
-                    val query =
-                        MediaListCollectionQuery.Data {
-                            this["MediaListCollection"] = buildMediaListCollection {
-                                lists =
-                                    listOf(
-                                        buildMediaListGroup {
-                                            name = "Watching"
-                                            entries =
-                                                listOf(
-                                                    buildMediaList {
+                    val query = MediaListCollectionQuery.Data {
+                        this["MediaListCollection"] = buildMediaListCollection {
+                            lists =
+                                listOf(
+                                    buildMediaListGroup {
+                                        name = "Watching"
+                                        entries =
+                                            listOf(
+                                                buildMediaList {
+                                                    id = Int.zero
+                                                    mediaId = 100
+                                                    userId = 37_384
+                                                    score = null
+                                                    progress = null
+                                                    progressVolumes = null
+                                                    repeat = null
+                                                    private = null
+                                                    notes = null
+                                                    hiddenFromStatusLists = null
+                                                    startedAt = null
+                                                    completedAt = null
+                                                    media = buildMedia {
                                                         id = Int.zero
-                                                        mediaId = 100
-                                                        userId = 37_384
-                                                        score = Double.zero
-                                                        progress = null
-                                                        progressVolumes = null
-                                                        repeat = null
-                                                        private = null
-                                                        notes = null
-                                                        hiddenFromStatusLists = null
-                                                        startedAt = null
-                                                        completedAt = null
-                                                        media = buildMedia {
-                                                            id = Int.zero
-                                                            title = buildMediaTitle { userPreferred = String.empty }
-                                                            episodes = null
-                                                            format = null
-                                                            coverImage = buildMediaCoverImage { large = String.empty }
-                                                            nextAiringEpisode = null
-                                                        }
+                                                        title = buildMediaTitle { userPreferred = String.empty }
+                                                        episodes = null
+                                                        format = null
+                                                        coverImage = buildMediaCoverImage { large = String.empty }
+                                                        nextAiringEpisode = null
                                                     }
-                                                )
-                                        }
-                                    )
-                                user = buildUser {
-                                    id = 37_384
-                                    mediaListOptions = buildMediaListOptions {
-                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                                }
+                                            )
                                     }
+                                )
+                            user = buildUser {
+                                id = 37_384
+                                mediaListOptions = buildMediaListOptions {
+                                    animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                 }
                             }
                         }
+                    }
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(userIdOpt, MediaType.ANIME, MediaListStatus.All()),
@@ -204,7 +201,7 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
 
                             with(entry.list) {
                                 id shouldBe ItemEntryId(Int.zero)
-                                score shouldBe Double.zero
+                                score.shouldBeNull()
                                 progress shouldBe Int.zero
                                 progressVolumes.shouldBeNull()
                                 repeat shouldBe Int.zero
@@ -234,64 +231,63 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
                 }
 
                 "the entry has values" {
-                    val query =
-                        MediaListCollectionQuery.Data {
-                            this["MediaListCollection"] = buildMediaListCollection {
-                                lists =
-                                    listOf(
-                                        buildMediaListGroup {
-                                            name = "Watching"
-                                            entries =
-                                                listOf(
-                                                    buildMediaList {
+                    val query = MediaListCollectionQuery.Data {
+                        this["MediaListCollection"] = buildMediaListCollection {
+                            lists =
+                                listOf(
+                                    buildMediaListGroup {
+                                        name = "Watching"
+                                        entries =
+                                            listOf(
+                                                buildMediaList {
+                                                    id = 100
+                                                    mediaId = 100
+                                                    userId = 37_384
+                                                    score = 7.3f
+                                                    progress = 12
+                                                    progressVolumes = null
+                                                    repeat = 2
+                                                    private = true
+                                                    notes = "My notes :)"
+                                                    hiddenFromStatusLists = true
+                                                    startedAt = buildFuzzyDate {
+                                                        day = 23
+                                                        month = 12
+                                                        year = 1999
+                                                    }
+                                                    completedAt = buildFuzzyDate {
+                                                        day = 5
+                                                        month = 5
+                                                        year = 2009
+                                                    }
+                                                    media = buildMedia {
                                                         id = 100
-                                                        mediaId = 100
-                                                        userId = 37_384
-                                                        score = 7.3
-                                                        progress = 12
-                                                        progressVolumes = null
-                                                        repeat = 2
-                                                        private = true
-                                                        notes = "My notes :)"
-                                                        hiddenFromStatusLists = true
-                                                        startedAt = buildFuzzyDate {
-                                                            day = 23
-                                                            month = 12
-                                                            year = 1999
+                                                        title = buildMediaTitle { userPreferred = "My anime entry" }
+                                                        episodes = 23
+                                                        format = MediaFormat.TV
+                                                        coverImage = buildMediaCoverImage {
+                                                            large = "https://placehold.co/128x256"
                                                         }
-                                                        completedAt = buildFuzzyDate {
-                                                            day = 5
-                                                            month = 5
-                                                            year = 2009
-                                                        }
-                                                        media = buildMedia {
-                                                            id = 100
-                                                            title = buildMediaTitle { userPreferred = "My anime entry" }
-                                                            episodes = 23
-                                                            format = MediaFormat.TV
-                                                            coverImage = buildMediaCoverImage {
-                                                                large = "https://placehold.co/128x256"
-                                                            }
-                                                            nextAiringEpisode = buildAiringSchedule {
-                                                                id = 1
-                                                                airingAt = 1_649_790_000
-                                                                episode = 13
-                                                                mediaId = 100
-                                                            }
+                                                        nextAiringEpisode = buildAiringSchedule {
+                                                            id = 1
+                                                            airingAt = 1_649_790_000
+                                                            episode = 13
+                                                            mediaId = 100
                                                         }
                                                     }
-                                                )
-                                        }
-                                    )
-                                user = buildUser {
-                                    id = 37_384
-                                    mediaListOptions = buildMediaListOptions {
-                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                                }
+                                            )
                                     }
+                                )
+                            user = buildUser {
+                                id = 37_384
+                                mediaListOptions = buildMediaListOptions {
+                                    animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                 }
                             }
                         }
+                    }
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(userIdOpt, MediaType.ANIME, MediaListStatus.All()),
@@ -304,7 +300,7 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
 
                             with(entry.list) {
                                 id shouldBe ItemEntryId(100)
-                                score shouldBe 7.3
+                                score shouldBe 7.3f
                                 progress shouldBe 12
                                 progressVolumes.shouldBeNull()
                                 repeat shouldBe 2
@@ -367,19 +363,18 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
         "manga" -
             {
                 "the collection has no lists" {
-                    val query =
-                        MediaListCollectionQuery.Data {
-                            this["MediaListCollection"] = buildMediaListCollection {
-                                lists = emptyList()
-                                user = buildUser {
-                                    id = 37_384
-                                    mediaListOptions = buildMediaListOptions {
-                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                                    }
+                    val query = MediaListCollectionQuery.Data {
+                        this["MediaListCollection"] = buildMediaListCollection {
+                            lists = emptyList()
+                            user = buildUser {
+                                id = 37_384
+                                mediaListOptions = buildMediaListOptions {
+                                    animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                 }
                             }
                         }
+                    }
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(userIdOpt, MediaType.MANGA, MediaListStatus.All()),
@@ -395,35 +390,34 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
                 }
 
                 "the entries are empty" {
-                    val query =
-                        MediaListCollectionQuery.Data {
-                            this["MediaListCollection"] = buildMediaListCollection {
-                                lists =
-                                    listOf(
-                                        buildMediaListGroup {
-                                            name = "Rereading"
-                                            entries = emptyList()
-                                        },
-                                        buildMediaListGroup {
-                                            name = "Reading"
-                                            entries = emptyList()
-                                        },
-                                        buildMediaListGroup {
-                                            name = "Custom List"
-                                            entries = emptyList()
-                                        },
-                                    )
-                                user = buildUser {
-                                    id = 37_384
-                                    mediaListOptions = buildMediaListOptions {
-                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                                        mangaList = buildMediaListTypeOptions {
-                                            sectionOrder = listOf("Custom List", "Reading", "Rereading")
-                                        }
+                    val query = MediaListCollectionQuery.Data {
+                        this["MediaListCollection"] = buildMediaListCollection {
+                            lists =
+                                listOf(
+                                    buildMediaListGroup {
+                                        name = "Rereading"
+                                        entries = emptyList()
+                                    },
+                                    buildMediaListGroup {
+                                        name = "Reading"
+                                        entries = emptyList()
+                                    },
+                                    buildMediaListGroup {
+                                        name = "Custom List"
+                                        entries = emptyList()
+                                    },
+                                )
+                            user = buildUser {
+                                id = 37_384
+                                mediaListOptions = buildMediaListOptions {
+                                    animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    mangaList = buildMediaListTypeOptions {
+                                        sectionOrder = listOf("Custom List", "Reading", "Rereading")
                                     }
                                 }
                             }
                         }
+                    }
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(userIdOpt, MediaType.MANGA, MediaListStatus.All()),
@@ -443,50 +437,49 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
                 }
 
                 "the entry has null values" {
-                    val query =
-                        MediaListCollectionQuery.Data {
-                            this["MediaListCollection"] = buildMediaListCollection {
-                                lists =
-                                    listOf(
-                                        buildMediaListGroup {
-                                            name = "Reading"
-                                            entries =
-                                                listOf(
-                                                    buildMediaList {
+                    val query = MediaListCollectionQuery.Data {
+                        this["MediaListCollection"] = buildMediaListCollection {
+                            lists =
+                                listOf(
+                                    buildMediaListGroup {
+                                        name = "Reading"
+                                        entries =
+                                            listOf(
+                                                buildMediaList {
+                                                    id = Int.zero
+                                                    mediaId = 100
+                                                    userId = 37_384
+                                                    score = null
+                                                    progress = null
+                                                    progressVolumes = null
+                                                    repeat = null
+                                                    private = null
+                                                    notes = null
+                                                    hiddenFromStatusLists = null
+                                                    startedAt = null
+                                                    completedAt = null
+                                                    media = buildMedia {
                                                         id = Int.zero
-                                                        mediaId = 100
-                                                        userId = 37_384
-                                                        score = Double.zero
-                                                        progress = null
-                                                        progressVolumes = null
-                                                        repeat = null
-                                                        private = null
-                                                        notes = null
-                                                        hiddenFromStatusLists = null
-                                                        startedAt = null
-                                                        completedAt = null
-                                                        media = buildMedia {
-                                                            id = Int.zero
-                                                            title = buildMediaTitle { userPreferred = String.empty }
-                                                            chapters = null
-                                                            volumes = null
-                                                            format = null
-                                                            coverImage = buildMediaCoverImage { large = String.empty }
-                                                            nextAiringEpisode = null
-                                                        }
+                                                        title = buildMediaTitle { userPreferred = String.empty }
+                                                        chapters = null
+                                                        volumes = null
+                                                        format = null
+                                                        coverImage = buildMediaCoverImage { large = String.empty }
+                                                        nextAiringEpisode = null
                                                     }
-                                                )
-                                        }
-                                    )
-                                user = buildUser {
-                                    id = 37_384
-                                    mediaListOptions = buildMediaListOptions {
-                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                                }
+                                            )
                                     }
+                                )
+                            user = buildUser {
+                                id = 37_384
+                                mediaListOptions = buildMediaListOptions {
+                                    animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                 }
                             }
                         }
+                    }
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(userIdOpt, MediaType.MANGA, MediaListStatus.All()),
@@ -499,7 +492,7 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
 
                             with(entry.list) {
                                 id shouldBe ItemEntryId(Int.zero)
-                                score shouldBe Double.zero
+                                score.shouldBeNull()
                                 progress shouldBe Int.zero
                                 progressVolumes.shouldBeNull()
                                 repeat shouldBe Int.zero
@@ -529,60 +522,59 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
                 }
 
                 "the entry has values" {
-                    val query =
-                        MediaListCollectionQuery.Data {
-                            this["MediaListCollection"] = buildMediaListCollection {
-                                lists =
-                                    listOf(
-                                        buildMediaListGroup {
-                                            name = "Reading"
-                                            entries =
-                                                listOf(
-                                                    buildMediaList {
-                                                        id = 100
-                                                        mediaId = 100
-                                                        userId = 37_384
-                                                        score = 7.3
-                                                        progress = 12
-                                                        progressVolumes = 1
-                                                        repeat = 2
-                                                        private = true
-                                                        notes = "My notes :)"
-                                                        hiddenFromStatusLists = true
-                                                        startedAt = buildFuzzyDate {
-                                                            day = 23
-                                                            month = 12
-                                                            year = 1999
-                                                        }
-                                                        completedAt = buildFuzzyDate {
-                                                            day = 5
-                                                            month = 5
-                                                            year = 2009
-                                                        }
-                                                        media = buildMedia {
-                                                            id = 100
-                                                            title = buildMediaTitle { userPreferred = "My manga entry" }
-                                                            chapters = 23
-                                                            volumes = 2
-                                                            format = MediaFormat.NOVEL
-                                                            coverImage = buildMediaCoverImage {
-                                                                large = "https://placehold.co/128x256"
-                                                            }
-                                                            nextAiringEpisode = null
-                                                        }
+                    val query = MediaListCollectionQuery.Data {
+                        this["MediaListCollection"] = buildMediaListCollection {
+                            lists =
+                                listOf(
+                                    buildMediaListGroup {
+                                        name = "Reading"
+                                        entries =
+                                            listOf(
+                                                buildMediaList {
+                                                    id = 100
+                                                    mediaId = 100
+                                                    userId = 37_384
+                                                    score = 7.3f
+                                                    progress = 12
+                                                    progressVolumes = 1
+                                                    repeat = 2
+                                                    private = true
+                                                    notes = "My notes :)"
+                                                    hiddenFromStatusLists = true
+                                                    startedAt = buildFuzzyDate {
+                                                        day = 23
+                                                        month = 12
+                                                        year = 1999
                                                     }
-                                                )
-                                        }
-                                    )
-                                user = buildUser {
-                                    id = 37_384
-                                    mediaListOptions = buildMediaListOptions {
-                                        animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
-                                        mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                                    completedAt = buildFuzzyDate {
+                                                        day = 5
+                                                        month = 5
+                                                        year = 2009
+                                                    }
+                                                    media = buildMedia {
+                                                        id = 100
+                                                        title = buildMediaTitle { userPreferred = "My manga entry" }
+                                                        chapters = 23
+                                                        volumes = 2
+                                                        format = MediaFormat.NOVEL
+                                                        coverImage = buildMediaCoverImage {
+                                                            large = "https://placehold.co/128x256"
+                                                        }
+                                                        nextAiringEpisode = null
+                                                    }
+                                                }
+                                            )
                                     }
+                                )
+                            user = buildUser {
+                                id = 37_384
+                                mediaListOptions = buildMediaListOptions {
+                                    animeList = buildMediaListTypeOptions { sectionOrder = emptyList() }
+                                    mangaList = buildMediaListTypeOptions { sectionOrder = emptyList() }
                                 }
                             }
                         }
+                    }
 
                     client.registerTestResponse(
                         MediaListCollectionQuery(userIdOpt, MediaType.MANGA, MediaListStatus.All()),
@@ -595,7 +587,7 @@ internal class ApolloMediaCollectionRemoteSourceTest : FreeSpec() {
 
                             with(entry.list) {
                                 id shouldBe ItemEntryId(100)
-                                score shouldBe 7.3
+                                score shouldBe 7.3f
                                 progress shouldBe 12
                                 progressVolumes shouldBe 1
                                 repeat shouldBe 2

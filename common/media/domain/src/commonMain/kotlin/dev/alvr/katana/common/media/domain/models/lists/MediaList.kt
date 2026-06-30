@@ -6,7 +6,7 @@ import kotlinx.datetime.LocalDateTime
 
 data class MediaList(
     val id: ItemEntryId,
-    val score: Double,
+    val score: Float?,
     val progress: Int,
     val progressVolumes: Int?,
     val repeat: Int,
