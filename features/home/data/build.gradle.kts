@@ -6,9 +6,11 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.common)
+            implementation(projects.common.media.data)
+            implementation(projects.common.media.domain)
             implementation(projects.common.user.domain)
 
+            implementation(projects.core.common)
             implementation(projects.core.preferences)
             implementation(projects.core.remote)
 
@@ -17,4 +19,8 @@ kotlin {
 
         commonTest.dependencies { implementation(projects.core.tests) }
     }
+}
+
+katanaApollo.configure {
+    dependsOn(projects.common.media.data)
 }

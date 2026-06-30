@@ -11,6 +11,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
@@ -70,9 +71,16 @@ internal class KatanaMultiplatformDataRemotePlugin : Plugin<Project> {
                     endpointUrl = "https://graphql.anilist.co"
                     schemaFile = project.file("src/commonMain/graphql/schema.graphqls")
                 }
+
+                mapScalarToKotlinBoolean("Boolean")
+                mapScalarToKotlinInt("Int")
+                mapScalarToKotlinFloat("Float")
+                mapScalarToKotlinString("String")
             } else {
                 dependsOn(project.project(CORE_PROJECT))
             }
+
+            project.extensions.create<KatanaMultiplatformDataRemoteExtension>("katanaApollo", this)
         }
     }
 }

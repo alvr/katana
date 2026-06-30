@@ -13,3 +13,7 @@ kotlin {
         commonTest.dependencies { implementation(projects.core.tests) }
     }
 }
+
+katanaApollo.configure {
+    generateAsInternal = false
+}

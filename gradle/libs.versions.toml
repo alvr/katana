@@ -17,6 +17,7 @@ desugaring = "2.1.5"
 detekt = "2.0.0-alpha.6"
 detekt-compose = "0.6.4"
 detekt-compose2 = "1.4.0"
+github-dependency-graph = "1.4.1"
 kermit = "2.1.0"
 kaml = "0.104.0"
 kotest = "6.2.4"
@@ -115,6 +116,7 @@ gradle-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", versi
 gradle-compose-compiler = { module = "org.jetbrains.kotlin.plugin.compose:org.jetbrains.kotlin.plugin.compose.gradle.plugin", version.ref = "kotlin" }
 gradle-compose-stability-analyzer = { module = "com.github.skydoves.compose.stability.analyzer:com.github.skydoves.compose.stability.analyzer.gradle.plugin", version.ref = "compose-stability-analyzer" }
 gradle-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+gradle-github-dependency-graph = { module = "org.gradle:github-dependency-graph-gradle-plugin", version.ref = "github-dependency-graph" }
 gradle-kotest = { module = "io.kotest:io.kotest.gradle.plugin", version.ref = "kotest" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
