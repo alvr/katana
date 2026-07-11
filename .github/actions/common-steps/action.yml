@@ -21,7 +21,7 @@ runs:
         bundler-cache: true
     - name: Restore Kotlin/Native cache
       if: runner.os == 'macOS' && github.event_name == 'pull_request'
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ~/.konan
         key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
@@ -29,7 +29,7 @@ runs:
           konan-${{ runner.os }}-
     - name: Cache Kotlin/Native
       if: runner.os == 'macOS' && github.event_name != 'pull_request'
-      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ~/.konan
         key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
