@@ -1,0 +1,7 @@
+query TrendingMedia($type: MediaType!) {
+    Page(page: 1, perPage: 10) {
+        media(type: $type, sort: TRENDING_DESC) {
+            ...homeMediaEntry
+        }
+    }
+}

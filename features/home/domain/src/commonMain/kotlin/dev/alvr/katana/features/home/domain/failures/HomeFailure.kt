@@ -6,4 +6,10 @@ sealed interface HomeFailure : Failure {
     data object GettingWelcomeCardVisibility : HomeFailure
 
     data object HidingWelcomeCard : HomeFailure
+
+    data object GettingTrendingMedia : HomeFailure
+
+    data object GettingPopularMedia : HomeFailure
+
+    data object GettingUpcomingMedia : HomeFailure
 }

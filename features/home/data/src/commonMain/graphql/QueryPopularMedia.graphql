@@ -1,0 +1,7 @@
+query PopularMedia($type: MediaType!) {
+    Page(page: 1, perPage: 10) {
+        media(type: $type, sort: POPULARITY_DESC) {
+            ...homeMediaEntry
+        }
+    }
+}

@@ -1,5 +1,6 @@
 package dev.alvr.katana.features.home.data.di
 
+import com.apollographql.apollo.ApolloClient
 import dev.alvr.katana.core.tests.di.TestAppGraph
 import dev.alvr.katana.core.tests.di.TestAppScope
 import dev.alvr.katana.features.home.data.sources.HomeRemoteSource
@@ -14,12 +15,13 @@ import dev.zacsweers.metro.createGraphFactory
 internal interface HomeRemoteSourceTestGraph : TestAppGraph {
     val homeRemoteSource: HomeRemoteSource
 
-    @Provides fun homeRemoteSource(): HomeRemoteSource = HomeRemoteSourceImpl()
+    @Provides fun homeRemoteSource(client: ApolloClient): HomeRemoteSource = HomeRemoteSourceImpl(client)
 
     @DependencyGraph.Factory
     interface Factory {
-        fun create(): HomeRemoteSourceTestGraph
+        fun create(@Provides client: ApolloClient): HomeRemoteSourceTestGraph
     }
 }
 
-internal fun createHomeRemoteSourceTestGraph() = createGraphFactory<HomeRemoteSourceTestGraph.Factory>().create()
+internal fun createHomeRemoteSourceTestGraph(client: ApolloClient) =
+    createGraphFactory<HomeRemoteSourceTestGraph.Factory>().create(client = client)

@@ -10,8 +10,8 @@ mutation MediaListEntries(
     $startedAt: FuzzyDateInput,
     $completedAt: FuzzyDateInput,
 ) {
-    updateEntry: UpdateMediaListEntries(
-        ids: [$id],
+    updateEntry: SaveMediaListEntry(
+        id: $id,
         score: $score,
         progress: $progress,
         progressVolumes: $progressVolumes,
@@ -22,6 +22,6 @@ mutation MediaListEntries(
         startedAt: $startedAt,
         completedAt: $completedAt,
     ) {
-        id
+        ...mutationMediaListEntry
     }
 }

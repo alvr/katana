@@ -1,0 +1,10 @@
+fragment homeMediaEntry on Media {
+    id
+    title {
+        userPreferred
+    }
+    format
+    coverImage {
+        large
+    }
+}

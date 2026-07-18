@@ -1,0 +1,9 @@
+query UpcomingAnime($airingAt: Int!) {
+    Page(page: 1, perPage: 10) {
+        airingSchedules(notYetAired: true, episode: 1, airingAt_greater: $airingAt, sort: TIME) {
+            media {
+                ...homeMediaEntry
+            }
+        }
+    }
+}

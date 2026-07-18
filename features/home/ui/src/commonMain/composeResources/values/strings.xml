@@ -29,4 +29,9 @@
 
     <string name="upcoming_title">Upcoming</string>
     <string name="upcoming_icon_button_a11y">Go to upcoming</string>
+
+    <string name="media_type_anime">Anime</string>
+    <string name="media_type_manga">Manga</string>
+    <string name="media_section_error">There was an error loading this section.</string>
+    <string name="media_section_empty">There is nothing to show yet.</string>
 </resources>

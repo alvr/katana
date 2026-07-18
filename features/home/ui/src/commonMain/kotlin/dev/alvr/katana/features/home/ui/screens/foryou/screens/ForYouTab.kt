@@ -1,11 +1,15 @@
 package dev.alvr.katana.features.home.ui.screens.foryou.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import dev.alvr.katana.core.ui.theme.KatanaTheme
@@ -34,6 +38,8 @@ internal fun ForYouTabContent(
 ) {
     val uiState by viewModel.collectUiStateWithLifecycle()
 
+    LaunchedEffect(sessionActive) { viewModel.intent(ForYouIntent.SessionChanged(sessionActive)) }
+
     viewModel.CollectEffect { effect ->
         when (effect) {
             ForYouEffect.NavigateToAnimeLists -> navigator.navigateToAnimeLists()
@@ -59,39 +65,23 @@ private fun ForYouTab(
     onIntent: (ForYouIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = WindowInsets.contentPaddingMedium.asPaddingValues(),
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = modifier.verticalScroll(scrollState).padding(WindowInsets.contentPaddingMedium.asPaddingValues()),
         verticalArrangement = Arrangement.spacedBy(KatanaTheme.dimensions.itemSpacing),
     ) {
         if (!sessionActive && uiState.showWelcomeCard) {
-            item(key = "welcome_card", contentType = ForYouItemContentType.WelcomeCard) {
-                WelcomeCard(modifier = Modifier.animateItem(), onIntent = onIntent)
-            }
+            WelcomeCard(onIntent = onIntent)
         }
 
         if (sessionActive) {
-            item(key = "watching", contentType = ForYouItemContentType.ListSection) {
-                Watching(modifier = Modifier.animateItem(), onIntent = onIntent)
-            }
-            item(key = "reading", contentType = ForYouItemContentType.ListSection) {
-                Reading(modifier = Modifier.animateItem(), onIntent = onIntent)
-            }
+            Watching(status = uiState.watching, onIntent = onIntent)
+            Reading(status = uiState.reading, onIntent = onIntent)
         }
 
-        item(key = "trending", contentType = ForYouItemContentType.ListSection) {
-            Trending(modifier = Modifier.animateItem(), onIntent = onIntent)
-        }
-        item(key = "popular", contentType = ForYouItemContentType.ListSection) {
-            Popular(modifier = Modifier.animateItem(), onIntent = onIntent)
-        }
-        item(key = "upcoming", contentType = ForYouItemContentType.ListSection) {
-            Upcoming(modifier = Modifier.animateItem(), onIntent = onIntent)
-        }
+        Trending(state = uiState.trending, onIntent = onIntent)
+        Popular(state = uiState.popular, onIntent = onIntent)
+        Upcoming(status = uiState.upcoming, onIntent = onIntent)
     }
-}
-
-private enum class ForYouItemContentType {
-    WelcomeCard,
-    ListSection,
 }

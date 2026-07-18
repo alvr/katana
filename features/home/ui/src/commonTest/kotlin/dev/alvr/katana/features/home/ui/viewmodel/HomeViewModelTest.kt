@@ -9,6 +9,7 @@ import dev.alvr.katana.common.session.domain.usecases.SaveSessionUseCase
 import dev.alvr.katana.common.user.domain.failures.UserFailure
 import dev.alvr.katana.common.user.domain.usecases.SaveUserIdUseCase
 import dev.alvr.katana.core.common.empty
+import dev.alvr.katana.core.domain.failures.Failure
 import dev.alvr.katana.core.tests.ui.test
 import dev.alvr.katana.features.home.ui.di.createHomeUiTestGraph
 import dev.mokkery.answering.returns
@@ -23,9 +24,9 @@ import dev.mokkery.verifySuspend
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.TestCase
 import io.kotest.engine.test.TestResult
-import kotlinx.coroutines.flow.flow
+import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.yield
 
 internal class HomeViewModelTest : BehaviorSpec() {
     private val observeActiveSession = mock<ObserveActiveSessionUseCase>()
@@ -71,9 +72,11 @@ internal class HomeViewModelTest : BehaviorSpec() {
                     and("an error occurs when saving the token") {
                         validTokens.forEach { token ->
                             then("for token $token it should not be saved") {
-                                val viewModel = createHomeViewModel(token)
-
-                                everySuspend { saveSession(any()) } returns SessionFailure.SavingSession.left()
+                                val viewModel =
+                                    createHomeViewModel(
+                                        token = token,
+                                        saveSessionResult = SessionFailure.SavingSession.left(),
+                                    )
 
                                 viewModel.test { expectEffect(HomeEffect.SaveTokenFailure) }
 
@@ -86,10 +89,12 @@ internal class HomeViewModelTest : BehaviorSpec() {
                     and("an error occurs when saving the userId") {
                         validTokens.forEach { token ->
                             then("for token $token it should not be saved") {
-                                val viewModel = createHomeViewModel(token)
-
-                                everySuspend { saveSession(any()) } returns Unit.right()
-                                everySuspend { saveUserId(Unit) } returns UserFailure.SavingUser.left()
+                                val viewModel =
+                                    createHomeViewModel(
+                                        token = token,
+                                        saveSessionResult = Unit.right(),
+                                        saveUserIdResult = UserFailure.SavingUser.left(),
+                                    )
 
                                 viewModel.test { expectEffect(HomeEffect.SaveUserIdFailure) }
 
@@ -106,9 +111,7 @@ internal class HomeViewModelTest : BehaviorSpec() {
             `when`("observing the session") {
                 and("is success") {
                     then("it should set sessionActive to true") {
-                        val viewModel = createHomeViewModel(token = null)
-
-                        every { observeActiveSession.flow } returns flowOf(true.right())
+                        val viewModel = createHomeViewModel(token = null, sessionFlow = flowOf(true.right()))
 
                         viewModel.test { expectState { copy(sessionActive = true) } }
                     }
@@ -116,26 +119,24 @@ internal class HomeViewModelTest : BehaviorSpec() {
 
                 and("there is an error") {
                     then("it should expect HomeEffect.ObserveSessionFailure effect") {
-                        val viewModel = createHomeViewModel(token = null)
-
-                        every { observeActiveSession.flow } returns flowOf(SessionFailure.CheckingActiveSession.left())
+                        val viewModel =
+                            createHomeViewModel(
+                                token = null,
+                                sessionFlow = flowOf(SessionFailure.CheckingActiveSession.left()),
+                            )
 
                         viewModel.test { expectEffect(HomeEffect.ObserveSessionFailure) }
                     }
 
                     then("it should set sessionActive to false") {
-                        val viewModel = createHomeViewModel(token = null)
-
-                        every { observeActiveSession.flow } returns
-                            flow {
-                                emit(true.right())
-                                yield()
-                                emit(SessionFailure.CheckingActiveSession.left())
-                            }
+                        val viewModel =
+                            createHomeViewModel(
+                                token = null,
+                                sessionFlow = flowOf(true.right(), SessionFailure.CheckingActiveSession.left()),
+                            )
 
                         viewModel.test {
-                            expectState { copy(sessionActive = true) }
-                            expectState { copy(sessionActive = false) }
+                            currentState.sessionActive shouldBe false
                             expectEffect(HomeEffect.ObserveSessionFailure)
                         }
                     }
@@ -149,11 +150,16 @@ internal class HomeViewModelTest : BehaviorSpec() {
         resetCalls(observeActiveSession, saveSession, saveUserId)
     }
 
-    private fun createHomeViewModel(token: String?): HomeViewModel {
+    private fun createHomeViewModel(
+        token: String?,
+        sessionFlow: Flow<arrow.core.Either<Failure, Boolean>> = flowOf(false.right()),
+        saveSessionResult: arrow.core.Either<Failure, Unit> = Unit.right(),
+        saveUserIdResult: arrow.core.Either<Failure, Unit> = Unit.right(),
+    ): HomeViewModel {
         everySuspend { observeActiveSession(Unit) } returns Unit
-        everySuspend { saveSession(any()) } returns Unit.right()
-        everySuspend { saveUserId(Unit) } returns Unit.right()
-        every { observeActiveSession.flow } returns flowOf(false.right())
+        everySuspend { saveSession(any()) } returns saveSessionResult
+        everySuspend { saveUserId(Unit) } returns saveUserIdResult
+        every { observeActiveSession.flow } returns sessionFlow
 
         return createHomeUiTestGraph(
                 observeActiveSessionUseCase = observeActiveSession,

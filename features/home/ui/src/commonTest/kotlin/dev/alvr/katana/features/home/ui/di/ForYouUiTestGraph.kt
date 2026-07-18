@@ -1,9 +1,13 @@
 package dev.alvr.katana.features.home.ui.di
 
+import dev.alvr.katana.common.media.domain.usecases.ObserveMediaCollectionUseCase
 import dev.alvr.katana.core.tests.di.TestAppGraph
 import dev.alvr.katana.core.tests.di.TestAppScope
 import dev.alvr.katana.core.ui.viewmodel.KatanaViewModel
 import dev.alvr.katana.features.home.domain.usecases.HideWelcomeCardUseCase
+import dev.alvr.katana.features.home.domain.usecases.ObservePopularMediaUseCase
+import dev.alvr.katana.features.home.domain.usecases.ObserveTrendingMediaUseCase
+import dev.alvr.katana.features.home.domain.usecases.ObserveUpcomingAnimeUseCase
 import dev.alvr.katana.features.home.domain.usecases.ObserveWelcomeCardVisibilityUseCase
 import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouEffect
 import dev.alvr.katana.features.home.ui.screens.foryou.viewmodel.ForYouIntent
@@ -24,13 +28,29 @@ internal interface ForYouUiTestGraph : TestAppGraph {
     @Provides
     fun forYouViewModel(
         hideWelcomeCardUseCase: HideWelcomeCardUseCase,
+        observePopularMediaUseCase: ObservePopularMediaUseCase,
+        observeTrendingMediaUseCase: ObserveTrendingMediaUseCase,
+        observeUpcomingAnimeUseCase: ObserveUpcomingAnimeUseCase,
+        observeMediaCollectionUseCase: ObserveMediaCollectionUseCase,
         observeWelcomeCardVisibilityUseCase: ObserveWelcomeCardVisibilityUseCase,
-    ): ForYouVM = ForYouViewModel(hideWelcomeCardUseCase, observeWelcomeCardVisibilityUseCase)
+    ): ForYouVM =
+        ForYouViewModel(
+            hideWelcomeCardUseCase = hideWelcomeCardUseCase,
+            observePopularMediaUseCase = observePopularMediaUseCase,
+            observeTrendingMediaUseCase = observeTrendingMediaUseCase,
+            observeUpcomingAnimeUseCase = observeUpcomingAnimeUseCase,
+            observeMediaCollectionUseCase = observeMediaCollectionUseCase,
+            observeWelcomeCardVisibilityUseCase = observeWelcomeCardVisibilityUseCase,
+        )
 
     @DependencyGraph.Factory
     interface Factory {
         fun create(
             @Provides hideWelcomeCardUseCase: HideWelcomeCardUseCase,
+            @Provides observePopularMediaUseCase: ObservePopularMediaUseCase,
+            @Provides observeTrendingMediaUseCase: ObserveTrendingMediaUseCase,
+            @Provides observeUpcomingAnimeUseCase: ObserveUpcomingAnimeUseCase,
+            @Provides observeMediaCollectionUseCase: ObserveMediaCollectionUseCase,
             @Provides observeWelcomeCardVisibilityUseCase: ObserveWelcomeCardVisibilityUseCase,
         ): ForYouUiTestGraph
     }
@@ -38,10 +58,18 @@ internal interface ForYouUiTestGraph : TestAppGraph {
 
 internal fun createForYouUiTestGraph(
     hideWelcomeCardUseCase: HideWelcomeCardUseCase,
+    observePopularMediaUseCase: ObservePopularMediaUseCase,
+    observeTrendingMediaUseCase: ObserveTrendingMediaUseCase,
+    observeUpcomingAnimeUseCase: ObserveUpcomingAnimeUseCase,
+    observeMediaCollectionUseCase: ObserveMediaCollectionUseCase,
     observeWelcomeCardVisibilityUseCase: ObserveWelcomeCardVisibilityUseCase,
 ) =
     createGraphFactory<ForYouUiTestGraph.Factory>()
         .create(
             hideWelcomeCardUseCase = hideWelcomeCardUseCase,
+            observePopularMediaUseCase = observePopularMediaUseCase,
+            observeTrendingMediaUseCase = observeTrendingMediaUseCase,
+            observeUpcomingAnimeUseCase = observeUpcomingAnimeUseCase,
+            observeMediaCollectionUseCase = observeMediaCollectionUseCase,
             observeWelcomeCardVisibilityUseCase = observeWelcomeCardVisibilityUseCase,
         )
