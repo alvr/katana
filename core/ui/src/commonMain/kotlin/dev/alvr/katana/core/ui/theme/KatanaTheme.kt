@@ -4,27 +4,21 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import com.materialkolor.DynamicMaterialExpressiveTheme
-import com.materialkolor.PaletteStyle
-import com.materialkolor.dynamiccolor.ColorSpec
-import com.materialkolor.rememberDynamicMaterialThemeState
 
 @Composable
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 fun KatanaTheme(content: @Composable () -> Unit) {
     DynamicMaterialExpressiveTheme(
-        state =
-            rememberDynamicMaterialThemeState(
-                seedColor = Color(ColorSeed),
-                isDark = isSystemInDarkTheme(),
-                specVersion = ColorSpec.SpecVersion.SPEC_2025,
-                style = PaletteStyle.Expressive,
-            ),
+        seedColor = Color(ColorSeed),
+        motionScheme = MotionScheme.expressive(),
+        isDark = isSystemInDarkTheme(),
         animate = true,
         typography = KatanaTypography,
         content = content,
