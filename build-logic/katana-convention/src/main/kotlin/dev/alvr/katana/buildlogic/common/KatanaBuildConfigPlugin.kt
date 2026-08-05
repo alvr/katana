@@ -29,9 +29,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 internal class KatanaBuildConfigPlugin : Plugin<Project> {
     override fun apply(target: Project) =
@@ -52,12 +50,10 @@ internal class KatanaBuildConfigPlugin : Plugin<Project> {
                 sourceSets {
                     sourceOutputDirs.forEach { (output, dir) ->
                         val sourceSet = getByName(output.sourceSet)
-                        sourceSet.kotlin.srcDir(dir)
+                        sourceSet.kotlin.srcDir(files(dir).builtBy(task))
                     }
                 }
             }
-
-            tasks.withType<KotlinCompilationTask<*>>().configureEach { dependsOn(task) }
         }
 
     private fun Project.outputDir(name: String) = layout.buildDirectory.dir("$GENERATED_DIR/$name")
