@@ -109,7 +109,7 @@ jobs:
             **/build/reports/lint-results-debug.xml
           retention-days: 1
       - name: Analyze detekt report
-        uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4.37.8
+        uses: github/codeql-action/upload-sarif@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
         with:
           sarif_file: build/reports/detekt/all.sarif
           checkout_path: ${{ github.workspace }}
