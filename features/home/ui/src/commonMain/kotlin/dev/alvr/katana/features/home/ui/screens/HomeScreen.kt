@@ -31,14 +31,13 @@ import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreProvider
 import dev.alvr.katana.core.ui.components.KatanaScaffold
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.navigation.KatanaEntryProviderInstaller
-import dev.alvr.katana.core.ui.navigation.destinations.MainDestination
+import dev.alvr.katana.core.ui.navigation.destinations.TopLevelDestination
 import dev.alvr.katana.core.ui.resources.asPainter
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.noInsets
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
 import dev.alvr.katana.core.ui.viewmodel.collectUiStateWithLifecycle
-import dev.alvr.katana.features.home.ui.navigation.HomeNavigator
 import dev.alvr.katana.features.home.ui.resources.Res
 import dev.alvr.katana.features.home.ui.resources.error_fetch_user_id
 import dev.alvr.katana.features.home.ui.resources.error_observe_session
@@ -49,21 +48,12 @@ import dev.alvr.katana.features.home.ui.screens.activity.screens.ActivityTabCont
 import dev.alvr.katana.features.home.ui.screens.foryou.screens.ForYouTabContent
 import dev.alvr.katana.features.home.ui.viewmodel.HomeEffect
 import dev.alvr.katana.features.home.ui.viewmodel.HomeViewModel
-import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 internal fun home(): KatanaEntryProviderInstaller = {
-    entry<MainDestination.Home> { entry ->
-        val viewModel =
-            assistedMetroViewModel<HomeViewModel, HomeViewModel.Factory>(
-                viewModelStoreOwner = rememberViewModelStoreOwner()
-            ) {
-                create(token = entry.token)
-            }
-
-        HomeScreen(viewModel)
-    }
+    entry<TopLevelDestination.Home> { HomeScreen(viewModel = metroViewModel()) }
 }
 
 @Composable
@@ -97,7 +87,6 @@ private fun HomeScreen(viewModel: HomeViewModel, modifier: Modifier = Modifier) 
     ) { paddingValues ->
         PagerContent(
             modifier = Modifier.fillMaxSize().padding(paddingValues),
-            navigator = homeNavigator,
             pagerState = pagerState,
             sessionActive = uiState.sessionActive,
         )
@@ -139,7 +128,6 @@ private fun TopBar(
 
 @Composable
 private fun PagerContent(
-    navigator: HomeNavigator,
     sessionActive: Boolean,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
@@ -156,8 +144,8 @@ private fun PagerContent(
 
         CompositionLocalProvider(LocalViewModelStoreOwner provides owner) {
             when (page) {
-                HomeTab.ForYou.ordinal -> ForYouTabContent(navigator = navigator, sessionActive = sessionActive)
-                HomeTab.Activity.ordinal -> ActivityTabContent(navigator = navigator, sessionActive = sessionActive)
+                HomeTab.ForYou.ordinal -> ForYouTabContent(sessionActive = sessionActive)
+                HomeTab.Activity.ordinal -> ActivityTabContent(sessionActive = sessionActive)
             }
         }
     }

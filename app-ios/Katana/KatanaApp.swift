@@ -1,10 +1,13 @@
+import KatanaShared
 import SwiftUI
 
 @main
 internal struct KatanaApp: App {
     internal var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().onOpenURL { url in
+                DeepLinkKt.onDeepLink(uri: url.absoluteString)
+            }
         }
     }
 }

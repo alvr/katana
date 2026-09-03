@@ -61,6 +61,7 @@ private fun KotlinMultiplatformExtension.configureIos(configure: KotlinNativeTar
         compilerOptions.configureKotlinCompiler()
         ios.binaries.framework {
             baseName = project.frameworkIdentifier
+            freeCompilerArgs += "-Xbinary=bundleId=${project.fullPackageName}"
             isStatic = true
         }
     }

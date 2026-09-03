@@ -8,11 +8,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import dev.alvr.katana.core.ui.navigation.LocalNavigator
+import dev.alvr.katana.core.ui.navigation.activateResumed
+import dev.alvr.katana.core.ui.navigation.destinations.TopLevelDestination
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.core.ui.theme.contentPaddingMedium
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
 import dev.alvr.katana.core.ui.viewmodel.collectUiStateWithLifecycle
-import dev.alvr.katana.features.home.ui.navigation.HomeNavigator
 import dev.alvr.katana.features.home.ui.screens.foryou.sections.Popular
 import dev.alvr.katana.features.home.ui.screens.foryou.sections.Reading
 import dev.alvr.katana.features.home.ui.screens.foryou.sections.Trending
@@ -27,20 +29,24 @@ import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 @Composable
 internal fun ForYouTabContent(
-    navigator: HomeNavigator,
     sessionActive: Boolean,
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel = metroViewModel(),
 ) {
+    val navigator = LocalNavigator.current
     val uiState by viewModel.collectUiStateWithLifecycle()
+
+    val goToAnime = navigator.activateResumed(TopLevelDestination.Anime)
+    val goToManga = navigator.activateResumed(TopLevelDestination.Manga)
+    val goToExplore = navigator.activateResumed(TopLevelDestination.Explore)
 
     viewModel.CollectEffect { effect ->
         when (effect) {
-            ForYouEffect.NavigateToAnimeLists -> navigator.navigateToAnimeLists()
-            ForYouEffect.NavigateToMangaLists -> navigator.navigateToMangaLists()
-            ForYouEffect.NavigateToTrending -> navigator.navigateToTrending()
-            ForYouEffect.NavigateToPopular -> navigator.navigateToPopular()
-            ForYouEffect.NavigateToUpcoming -> navigator.navigateToUpcoming()
+            ForYouEffect.NavigateToAnimeLists -> goToAnime()
+            ForYouEffect.NavigateToMangaLists -> goToManga()
+            ForYouEffect.NavigateToTrending,
+            ForYouEffect.NavigateToPopular,
+            ForYouEffect.NavigateToUpcoming -> goToExplore()
         }
     }
 

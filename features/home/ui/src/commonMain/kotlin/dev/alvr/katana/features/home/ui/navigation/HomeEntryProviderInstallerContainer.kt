@@ -1,5 +1,6 @@
 package dev.alvr.katana.features.home.ui.navigation
 
+import dev.alvr.katana.core.ui.navigation.DeepLinkHandler
 import dev.alvr.katana.core.ui.navigation.KatanaEntryProviderInstaller
 import dev.alvr.katana.features.home.ui.screens.home
 import dev.zacsweers.metro.BindingContainer
@@ -10,4 +11,6 @@ import dev.zacsweers.metro.Provides
 object HomeEntryProviderInstallerContainer {
 
     @IntoSet @Provides fun provideHomeEntries(): KatanaEntryProviderInstaller = home()
+
+    @IntoSet @Provides fun provideHomeDeepLinkHandler(handler: HomeDeepLinkHandler): DeepLinkHandler = handler
 }

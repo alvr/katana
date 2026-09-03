@@ -25,8 +25,10 @@ internal class MainActivity(viewModelFactory: MetroViewModelFactory) : Component
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        val app = (application as KatanaApp).appComponentProviders.app
+        val providers = (application as KatanaApp).appComponentProviders
 
-        setContent { app() }
+        intent?.dataString?.let(providers.deepLinkState::onDeepLink)
+
+        setContent { providers.app() }
     }
 }

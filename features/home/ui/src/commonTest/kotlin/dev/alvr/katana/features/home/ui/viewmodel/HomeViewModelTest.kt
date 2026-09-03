@@ -10,6 +10,7 @@ import dev.alvr.katana.common.user.domain.failures.UserFailure
 import dev.alvr.katana.common.user.domain.usecases.SaveUserIdUseCase
 import dev.alvr.katana.core.common.empty
 import dev.alvr.katana.core.tests.ui.test
+import dev.alvr.katana.core.ui.navigation.DeepLinkState
 import dev.alvr.katana.features.home.ui.di.createHomeUiTestGraph
 import dev.mokkery.answering.returns
 import dev.mokkery.every
@@ -155,13 +156,16 @@ internal class HomeViewModelTest : BehaviorSpec() {
         everySuspend { saveUserId(Unit) } returns Unit.right()
         every { observeActiveSession.flow } returns flowOf(false.right())
 
+        val deepLinkState = DeepLinkState()
+        token?.let(deepLinkState::onToken)
+
         return createHomeUiTestGraph(
+                deepLinkState = deepLinkState,
                 observeActiveSessionUseCase = observeActiveSession,
                 saveSessionUseCase = saveSession,
                 saveUserIdUseCase = saveUserId,
             )
-            .homeViewModelFactory
-            .create(token)
+            .homeViewModel
     }
 }
 

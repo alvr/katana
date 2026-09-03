@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Immutable
 @JvmInline
 @Serializable
-internal value class UserList(private val data: Pair<String, Int>) {
+value class UserList(private val data: Pair<String, Int>) {
     operator fun component1() = data.first
 
     operator fun component2() = data.second

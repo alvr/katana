@@ -4,22 +4,28 @@ rootProject.name = "build-logic"
 
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         maven {
-            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
-            mavenContent { snapshotsOnly() }
+            url = uri("https://gluoneurope.jfrog.io/artifactory/ods-maven-android-public/")
+            credentials {
+                username = providers.gradleProperty("artifactory_user")
+                    .getOrElse(System.getenv("JFROG_USER").orEmpty())
+                password = providers.gradleProperty("artifactory_password")
+                    .getOrElse(System.getenv("JFROG_PASSWORD").orEmpty())
+            }
         }
     }
 }
 
 dependencyResolutionManagement {
     repositories {
-        gradlePluginPortal()
-        mavenCentral()
-        google()
         maven {
-            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
-            mavenContent { snapshotsOnly() }
+            url = uri("https://gluoneurope.jfrog.io/artifactory/ods-maven-android-public/")
+            credentials {
+                username = providers.gradleProperty("artifactory_user")
+                    .getOrElse(System.getenv("JFROG_USER").orEmpty())
+                password = providers.gradleProperty("artifactory_password")
+                    .getOrElse(System.getenv("JFROG_PASSWORD").orEmpty())
+            }
         }
     }
     versionCatalogs { register("libs") { from(files("../gradle/libs.versions.toml")) } }
