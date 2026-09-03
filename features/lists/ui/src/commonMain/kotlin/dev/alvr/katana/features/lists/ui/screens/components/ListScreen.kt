@@ -4,26 +4,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import dev.alvr.katana.core.common.zero
 import dev.alvr.katana.core.ui.components.KatanaEmptyState
 import dev.alvr.katana.core.ui.components.KatanaErrorState
 import dev.alvr.katana.core.ui.components.home.KatanaHomeScaffold
 import dev.alvr.katana.core.ui.components.home.rememberKatanaHomeScaffoldState
+import dev.alvr.katana.core.ui.navigation.LocalNavigator
 import dev.alvr.katana.core.ui.resources.value
 import dev.alvr.katana.core.ui.viewmodel.CollectEffect
 import dev.alvr.katana.core.ui.viewmodel.collectUiStateWithLifecycle
 import dev.alvr.katana.features.lists.domain.models.ItemEntryId
+import dev.alvr.katana.features.lists.ui.navigation.ListsDestination
 import dev.alvr.katana.features.lists.ui.resources.Res
 import dev.alvr.katana.features.lists.ui.resources.error_message
 import dev.alvr.katana.features.lists.ui.screens.ChangeListButton
-import dev.alvr.katana.features.lists.ui.screens.ChangeListSheet
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsEffect
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsIntent
 import dev.alvr.katana.features.lists.ui.viewmodel.ListsViewModel
@@ -40,10 +37,13 @@ internal fun ListScreen(
 ) {
     val katanaScaffoldState = rememberKatanaHomeScaffoldState()
     val lazyGridState = rememberLazyGridState()
+
     val haptics = LocalHapticFeedback.current
+    val navigator = LocalNavigator.current
 
     val state by viewModel.collectUiStateWithLifecycle()
     val onIntent by rememberUpdatedState(viewModel::intent)
+
     viewModel.CollectEffect { effect ->
         when (effect) {
             ListsEffect.AddPlusOneFailure -> TODO()
@@ -52,20 +52,7 @@ internal fun ListScreen(
         }
     }
 
-    var showListSelector by rememberSaveable { mutableStateOf(false) }
-
-    ChangeListSheet(
-        visible = showListSelector,
-        lists = state.lists,
-        selectedList = state.selectedList,
-        onDismissRequest = { showListSelector = false },
-        onClick = { name ->
-            showListSelector = false
-            onIntent(ListsIntent.SelectList(name))
-            lazyGridState.requestScrollToItem(Int.zero)
-            katanaScaffoldState.resetToolbar()
-        },
-    )
+    // TODO: Listen to results
 
     val buttonsVisible = !state.error
 
@@ -75,7 +62,11 @@ internal fun ListScreen(
         subtitle = state.selectedList,
         searchPlaceholder = searchPlaceholder,
         onSearch = { search -> onIntent(ListsIntent.Search(search)) },
-        fab = { ChangeListButton(visible = buttonsVisible && state.lists.isNotEmpty()) { showListSelector = true } },
+        fab = {
+            ChangeListButton(visible = buttonsVisible && state.lists.isNotEmpty()) {
+                navigator.add(ListsDestination.Selector(selected = state.selectedList, lists = state.lists))
+            }
+        },
     ) { paddingValues ->
         when {
             state.error ->

@@ -18,7 +18,6 @@ import dev.alvr.katana.core.common.KatanaStorage
 import dev.alvr.katana.core.ui.components.snackbar.LocalSnackbarController
 import dev.alvr.katana.core.ui.components.snackbar.SnackbarController
 import dev.alvr.katana.core.ui.navigation.KatanaNavigator
-import dev.alvr.katana.core.ui.navigation.LocalNavigator
 import dev.alvr.katana.core.ui.theme.KatanaTheme
 import dev.alvr.katana.shared.screens.Katana
 import dev.zacsweers.metro.Inject
@@ -29,7 +28,7 @@ import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 @Composable
 fun Katana(
     viewModelFactory: MetroViewModelFactory,
-    navigator: KatanaNavigator,
+    navigator: KatanaNavigator.Factory,
     storage: KatanaStorage,
     snackbarController: SnackbarController,
 ) {
@@ -39,10 +38,9 @@ fun Katana(
         KatanaTheme {
             CompositionLocalProvider(
                 LocalMetroViewModelFactory provides viewModelFactory,
-                LocalNavigator provides navigator,
                 LocalSnackbarController provides snackbarController,
             ) {
-                Katana()
+                Katana(navigator)
             }
         }
     }

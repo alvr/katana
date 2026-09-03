@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 import dev.alvr.katana.core.ui.navigation.KatanaNavigationBarItem
 import dev.alvr.katana.core.ui.navigation.destinations.KatanaDestination
-import dev.alvr.katana.core.ui.navigation.destinations.MainDestination
+import dev.alvr.katana.core.ui.navigation.destinations.TopLevelDestination
 import dev.alvr.katana.core.ui.symbols.AccountCircle
 import dev.alvr.katana.core.ui.symbols.AnimeLibrary
 import dev.alvr.katana.core.ui.symbols.Explore
@@ -39,31 +39,31 @@ internal interface MainNavigationBarItem : KatanaNavigationBarItem {
 internal val mainNavigationBarItems: ImmutableList<MainNavigationBarItem> =
     persistentListOf(
         MainNavigationBar(
-            screen = MainDestination.Home(),
+            screen = TopLevelDestination.Home(),
             icon = KatanaSymbols.Home,
             label = Res.string.navigation_bar_home,
             requireSession = false,
         ),
         MainNavigationBar(
-            screen = MainDestination.Anime,
+            screen = TopLevelDestination.Anime,
             icon = KatanaSymbols.AnimeLibrary,
             label = Res.string.navigation_bar_anime,
             requireSession = true,
         ),
         MainNavigationBar(
-            screen = MainDestination.Manga,
+            screen = TopLevelDestination.Manga,
             icon = KatanaSymbols.MangaLibrary,
             label = Res.string.navigation_bar_manga,
             requireSession = true,
         ),
         MainNavigationBar(
-            screen = MainDestination.Explore,
+            screen = TopLevelDestination.Explore,
             icon = KatanaSymbols.Explore,
             label = Res.string.navigation_bar_explore,
             requireSession = false,
         ),
         MainNavigationBar(
-            screen = MainDestination.Account,
+            screen = TopLevelDestination.Account,
             icon = KatanaSymbols.AccountCircle,
             label = Res.string.navigation_bar_account,
             requireSession = false,
