@@ -109,7 +109,7 @@ jobs:
             **/build/reports/lint-results-debug.xml
           retention-days: 1
       - name: Analyze detekt report
-        uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
+        uses: github/codeql-action/upload-sarif@1c5b675653bb5c22dbe9b12b556ec555138e09fd # v4.38.1
         with:
           sarif_file: build/reports/detekt/all.sarif
           checkout_path: ${{ github.workspace }}
@@ -153,7 +153,7 @@ jobs:
             **/build/reports/${{ matrix.platform }}-tests
           retention-days: 7
       - name: Upload report to Codecov
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: matrix.platform == 'android'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
