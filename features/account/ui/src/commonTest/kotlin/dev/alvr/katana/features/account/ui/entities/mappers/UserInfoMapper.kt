@@ -21,15 +21,14 @@ internal class UserInfoMapper :
 
         context("map with random values") {
             should("return the expected value") {
-                val model =
-                    arbitrary {
-                            UserInfo(
-                                username = Arb.string().bind(),
-                                avatar = Arb.string().bind(),
-                                banner = Arb.string().bind(),
-                            )
-                        }
-                        .next()
+                val model = arbitrary {
+                    UserInfo(
+                        username = Arb.string().bind(),
+                        avatar = Arb.string().bind(),
+                        banner = Arb.string().bind(),
+                    )
+                }
+                    .next()
 
                 val result = model.toEntity()
 
