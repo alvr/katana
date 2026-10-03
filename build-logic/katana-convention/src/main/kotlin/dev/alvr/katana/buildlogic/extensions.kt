@@ -183,7 +183,6 @@ internal fun KotlinCommonCompilerOptions.configureKotlinCompiler() {
         "-Xconsistent-data-class-copy-visibility",
         "-Xcollection-literals",
         "-Xintrinsic-const-evaluation",
-        "-Xcontext-parameters",
     )
 }
 

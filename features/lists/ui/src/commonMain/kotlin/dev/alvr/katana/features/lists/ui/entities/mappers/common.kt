@@ -8,10 +8,11 @@ import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
 import dev.alvr.katana.features.lists.ui.entities.MediaListItem
 import kotlinx.collections.immutable.toImmutableMap
 
-internal fun Iterable<MediaListGroup<MediaEntry>>.entryMap() =
-    flatMap { group -> group.entries.map(MediaListEntry<MediaEntry>::toMediaItem) }
-        .associateBy { item -> item.entryId }
-        .toImmutableMap()
+internal fun Iterable<MediaListGroup<MediaEntry>>.entryMap() = flatMap { group ->
+    group.entries.map(MediaListEntry<MediaEntry>::toMediaItem)
+}
+    .associateBy { item -> item.entryId }
+    .toImmutableMap()
 
 private fun MediaListEntry<MediaEntry>.toMediaItem() =
     when (val media = entry) {
