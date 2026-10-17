@@ -911,17 +911,31 @@ compose:
     active: true
   UnnecessaryEventHandlerParameter:
     active: true
+    reportConstantArguments: true
   ComposableEventParameterNaming:
     active: true
   ComposableParametersOrdering:
-    active: false
+    active: true
+    trailingSlotNames: [ 'content' ]
+    allowTrailingEventHandlers: true
+    allowTrailingLambdas: true
   ModifierHeightWithText:
     active: true
   ModifierDefaultValue:
     active: true
+    checkAbstractFunctions: true
   MissingModifierDefaultValue:
     active: true
   PublicComposablePreview:
     active: true
   TopLevelComposableFunctions:
+    active: true
+    allowInObjects: false
+    allowInInterfaces: true
+  ComposableFunctionName:
+    active: true
+  ConditionCouldBeLifted:
+    active: true
+    ignoreCallsWithArgumentNames: [ 'modifier', 'contentAlignment' ]
+  UnnecessaryLayoutWrapper:
     active: true

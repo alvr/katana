@@ -16,7 +16,7 @@ compose-stability-analyzer = "0.15.0"
 desugaring = "2.1.5"
 detekt = "2.0.0-alpha.6"
 detekt-compose = "0.6.8"
-detekt-compose2 = "1.4.0"
+detekt-compose2 = "2.1.2"
 kermit = "2.2.0"
 kaml = "0.104.0"
 kotest = "6.2.6"
@@ -101,7 +101,7 @@ compose-windowsize = { module = "org.jetbrains.compose.material3:material3-windo
 
 # Detekt
 detekt-compose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detekt-compose" }
-detekt-compose2 = { module = "ru.kode:detekt-rules-compose", version.ref = "detekt-compose2" }
+detekt-compose2 = { module = "ru.kode:detekt-rules-compose-detekt2", version.ref = "detekt-compose2" }
 detekt-rules = { module = "dev.detekt:detekt-rules", version.ref = "detekt" }
 
 # Desugaring
