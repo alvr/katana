@@ -7,8 +7,10 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.maps.shouldHaveSize
 
 internal class AnimeListItemMapperTest :
-    FreeSpec({
-        "a random collection of anime" {
-            randomCollection<MediaEntry.Anime>().entryMap().shouldHaveSize(COLLECTION_SIZE * COLLECTION_SIZE)
-        }
-    })
+    FreeSpec(
+        {
+            "a random collection of anime" {
+                randomCollection<MediaEntry.Anime>().entryMap().shouldHaveSize(COLLECTION_SIZE * COLLECTION_SIZE)
+            }
+        },
+    )

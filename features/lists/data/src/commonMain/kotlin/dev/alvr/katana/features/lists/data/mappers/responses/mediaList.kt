@@ -12,7 +12,7 @@ import dev.alvr.katana.features.lists.domain.models.lists.MediaListEntry
 import dev.alvr.katana.features.lists.domain.models.lists.MediaListGroup
 
 internal inline operator fun <reified T : MediaEntry> MediaListCollectionQuery.Data.invoke(
-    type: MediaType
+    type: MediaType,
 ): List<MediaListGroup<T>> =
     mediaListCollection.lists
         .map { list ->

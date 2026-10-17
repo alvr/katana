@@ -29,7 +29,7 @@ internal inline fun <reified T : MediaEntry> randomCollection(): List<MediaListG
                             add(MediaListEntry(list = mediaListArb.next(), entry = entryArb<T>().next()))
                         }
                     },
-            )
+            ),
         )
     }
 }

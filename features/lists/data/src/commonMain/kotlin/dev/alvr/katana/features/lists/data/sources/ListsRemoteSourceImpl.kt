@@ -66,7 +66,7 @@ internal class ListsRemoteSourceImpl(
                                 network = ListsFailure.GetMediaCollection,
                                 response = ListsFailure.GetMediaCollection,
                             )
-                            .left()
+                            .left(),
                     )
                 }
 

@@ -17,7 +17,7 @@ fun NavGraphBuilder.home(homeNavigator: HomeNavigator) {
             homeBackStackEntry ->
             val viewModel =
                 assistedMetroViewModel<HomeViewModel, HomeViewModel.Factory>(
-                    viewModelStoreOwner = homeNavigator.viewModelStoreOwner
+                    viewModelStoreOwner = homeNavigator.viewModelStoreOwner,
                 ) {
                     create(token = homeBackStackEntry.savedStateHandle.remove<String>(LOGIN_DEEP_LINK_TOKEN))
                 }

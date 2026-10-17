@@ -12,114 +12,118 @@ import io.kotest.matchers.equals.shouldBeEqual
 import kotlinx.datetime.LocalDateTime
 
 internal class AnimeEntryMapperTest :
-    FreeSpec({
-        "an entry with null values" {
-            val entry =
-                MediaEntryFragment(
-                    __typename = "MediaEntry",
-                    id = Int.zero,
-                    title = MediaEntryFragment.Title(__typename = "MediaEntryTitle", userPreferred = String.empty),
-                    episodes = null,
-                    chapters = null,
-                    volumes = null,
-                    format = null,
-                    coverImage =
-                        MediaEntryFragment.CoverImage(__typename = "MediaEntryCoverImage", large = String.empty),
-                    nextAiringEpisode = null,
-                )
-            entry.animeEntry().also { result ->
-                result shouldBeEqual
-                    MediaEntry.Anime(
-                        entry =
-                            CommonMediaEntry(
-                                id = ItemMediaId(Int.zero),
-                                title = String.empty,
-                                coverImage = String.empty,
-                                format = CommonMediaEntry.Format.UNKNOWN,
-                            ),
+    FreeSpec(
+        {
+            "an entry with null values" {
+                val entry =
+                    MediaEntryFragment(
+                        __typename = "MediaEntry",
+                        id = Int.zero,
+                        title = MediaEntryFragment.Title(__typename = "MediaEntryTitle", userPreferred = String.empty),
                         episodes = null,
-                        nextEpisode = null,
+                        chapters = null,
+                        volumes = null,
+                        format = null,
+                        coverImage =
+                            MediaEntryFragment.CoverImage(__typename = "MediaEntryCoverImage", large = String.empty),
+                        nextAiringEpisode = null,
                     )
-                result shouldBeEqual MediaEntry.Anime(entry = entry.mediaEntry(), episodes = null, nextEpisode = null)
+                entry.animeEntry().also { result ->
+                    result shouldBeEqual
+                        MediaEntry.Anime(
+                            entry =
+                                CommonMediaEntry(
+                                    id = ItemMediaId(Int.zero),
+                                    title = String.empty,
+                                    coverImage = String.empty,
+                                    format = CommonMediaEntry.Format.UNKNOWN,
+                                ),
+                            episodes = null,
+                            nextEpisode = null,
+                        )
+                    result shouldBeEqual
+                        MediaEntry.Anime(entry = entry.mediaEntry(), episodes = null, nextEpisode = null)
+                }
             }
-        }
 
-        "an entry with null values but data classes with null" {
-            val entry =
-                MediaEntryFragment(
-                    __typename = "MediaEntry",
-                    id = Int.zero,
-                    title = MediaEntryFragment.Title(__typename = "MediaEntryTitle", userPreferred = String.empty),
-                    episodes = null,
-                    chapters = null,
-                    volumes = null,
-                    format = null,
-                    coverImage =
-                        MediaEntryFragment.CoverImage(__typename = "MediaEntryCoverImage", large = String.empty),
-                    nextAiringEpisode = null,
-                )
-
-            entry.animeEntry().also { result ->
-                result shouldBeEqual
-                    MediaEntry.Anime(
-                        entry =
-                            CommonMediaEntry(
-                                id = ItemMediaId(Int.zero),
-                                title = String.empty,
-                                coverImage = String.empty,
-                                format = CommonMediaEntry.Format.UNKNOWN,
-                            ),
+            "an entry with null values but data classes with null" {
+                val entry =
+                    MediaEntryFragment(
+                        __typename = "MediaEntry",
+                        id = Int.zero,
+                        title = MediaEntryFragment.Title(__typename = "MediaEntryTitle", userPreferred = String.empty),
                         episodes = null,
-                        nextEpisode = null,
+                        chapters = null,
+                        volumes = null,
+                        format = null,
+                        coverImage =
+                            MediaEntryFragment.CoverImage(__typename = "MediaEntryCoverImage", large = String.empty),
+                        nextAiringEpisode = null,
                     )
-                result shouldBeEqual MediaEntry.Anime(entry = entry.mediaEntry(), episodes = null, nextEpisode = null)
+
+                entry.animeEntry().also { result ->
+                    result shouldBeEqual
+                        MediaEntry.Anime(
+                            entry =
+                                CommonMediaEntry(
+                                    id = ItemMediaId(Int.zero),
+                                    title = String.empty,
+                                    coverImage = String.empty,
+                                    format = CommonMediaEntry.Format.UNKNOWN,
+                                ),
+                            episodes = null,
+                            nextEpisode = null,
+                        )
+                    result shouldBeEqual
+                        MediaEntry.Anime(entry = entry.mediaEntry(), episodes = null, nextEpisode = null)
+                }
             }
-        }
 
-        "an entry with all properties" {
-            val entry =
-                MediaEntryFragment(
-                    __typename = "MediaEntry",
-                    id = Int.zero,
-                    title = MediaEntryFragment.Title(__typename = "MediaEntryTitle", userPreferred = "One Piece"),
-                    episodes = 1000,
-                    chapters = null,
-                    volumes = null,
-                    format = MediaFormat.ONA,
-                    coverImage =
-                        MediaEntryFragment.CoverImage(
-                            __typename = "MediaEntryCoverImage",
-                            large = "https://placehold.co/128x256",
-                        ),
-                    nextAiringEpisode =
-                        MediaEntryFragment.NextAiringEpisode(
-                            __typename = "MediaEntryNextAiringEpisode",
-                            id = Int.zero,
-                            mediaId = Int.zero,
-                            airingAt = 1_241_517_600,
-                            episode = 1001,
-                        ),
-                )
-
-            entry.animeEntry().also { result ->
-                result shouldBeEqual
-                    MediaEntry.Anime(
-                        entry =
-                            CommonMediaEntry(
-                                id = ItemMediaId(Int.zero),
-                                title = "One Piece",
-                                coverImage = "https://placehold.co/128x256",
-                                format = CommonMediaEntry.Format.ONA,
+            "an entry with all properties" {
+                val entry =
+                    MediaEntryFragment(
+                        __typename = "MediaEntry",
+                        id = Int.zero,
+                        title = MediaEntryFragment.Title(__typename = "MediaEntryTitle", userPreferred = "One Piece"),
+                        episodes = 1000,
+                        chapters = null,
+                        volumes = null,
+                        format = MediaFormat.ONA,
+                        coverImage =
+                            MediaEntryFragment.CoverImage(
+                                __typename = "MediaEntryCoverImage",
+                                large = "https://placehold.co/128x256",
                             ),
-                        episodes = 1000,
-                        nextEpisode = MediaEntry.Anime.NextEpisode(1001, LocalDateTime(2009, 5, 5, 10, 0, 0)),
+                        nextAiringEpisode =
+                            MediaEntryFragment.NextAiringEpisode(
+                                __typename = "MediaEntryNextAiringEpisode",
+                                id = Int.zero,
+                                mediaId = Int.zero,
+                                airingAt = 1_241_517_600,
+                                episode = 1001,
+                            ),
                     )
-                result shouldBeEqual
-                    MediaEntry.Anime(
-                        entry = entry.mediaEntry(),
-                        episodes = 1000,
-                        nextEpisode = MediaEntry.Anime.NextEpisode(1001, LocalDateTime(2009, 5, 5, 10, 0, 0)),
-                    )
+
+                entry.animeEntry().also { result ->
+                    result shouldBeEqual
+                        MediaEntry.Anime(
+                            entry =
+                                CommonMediaEntry(
+                                    id = ItemMediaId(Int.zero),
+                                    title = "One Piece",
+                                    coverImage = "https://placehold.co/128x256",
+                                    format = CommonMediaEntry.Format.ONA,
+                                ),
+                            episodes = 1000,
+                            nextEpisode = MediaEntry.Anime.NextEpisode(1001, LocalDateTime(2009, 5, 5, 10, 0, 0)),
+                        )
+                    result shouldBeEqual
+                        MediaEntry.Anime(
+                            entry = entry.mediaEntry(),
+                            episodes = 1000,
+                            nextEpisode = MediaEntry.Anime.NextEpisode(1001, LocalDateTime(2009, 5, 5, 10, 0, 0)),
+                        )
+                }
             }
-        }
-    })
+        },
+    )

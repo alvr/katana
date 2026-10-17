@@ -7,8 +7,10 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.maps.shouldHaveSize
 
 internal class MangaListItemMapperTest :
-    FreeSpec({
-        "a random collection of manga" {
-            randomCollection<MediaEntry.Manga>().entryMap().shouldHaveSize(COLLECTION_SIZE * COLLECTION_SIZE)
-        }
-    })
+    FreeSpec(
+        {
+            "a random collection of manga" {
+                randomCollection<MediaEntry.Manga>().entryMap().shouldHaveSize(COLLECTION_SIZE * COLLECTION_SIZE)
+            }
+        },
+    )

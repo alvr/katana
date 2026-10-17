@@ -18,7 +18,7 @@ fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.collectUi
 @Composable
 @OptIn(KatanaInternalApi::class)
 fun <S : UiState, E : UiEffect, I : UiIntent> KatanaViewModel<S, E, I>.CollectEffect(
-    onEffect: @DisallowComposableCalls suspend (E) -> Unit
+    onEffect: @DisallowComposableCalls suspend (E) -> Unit,
 ) {
     val currentOnEffect by rememberUpdatedState(onEffect)
 
