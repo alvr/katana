@@ -101,7 +101,7 @@ compose-windowsize = { module = "org.jetbrains.compose.material3:material3-windo
 
 # Detekt
 detekt-compose = { module = "io.nlopez.compose.rules:detekt", version.ref = "detekt-compose" }
-detekt-compose2 = { module = "ru.kode:detekt-rules-compose", version.ref = "detekt-compose2" }
+detekt-compose2 = { module = "ru.kode:detekt-rules-compose-detekt2", version.ref = "detekt-compose2" }
 detekt-rules = { module = "dev.detekt:detekt-rules", version.ref = "detekt" }
 
 # Desugaring
