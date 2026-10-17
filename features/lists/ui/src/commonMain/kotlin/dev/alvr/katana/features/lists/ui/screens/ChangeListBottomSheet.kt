@@ -70,7 +70,7 @@ internal fun ChangeListSheet(
                                     baselineShift = BaselineShift.Superscript,
                                     fontSize = 12.sp,
                                     color = KatanaTheme.colorScheme.onSurfaceVariant,
-                                )
+                                ),
                             ) {
                                 append(" $count")
                             }

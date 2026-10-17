@@ -14,7 +14,7 @@ import kotlin.contracts.contract
 
 @OptIn(ExperimentalContracts::class)
 fun <A, B> Either<A, B>.shouldBeRight(
-    failureMessage: (A) -> String = { "Expected Either.Right, but found Either.Left with value $it" }
+    failureMessage: (A) -> String = { "Expected Either.Right, but found Either.Left with value $it" },
 ): B {
     contract { returns() implies (this@shouldBeRight is Right<B>) }
     assertionCounter.inc()
@@ -30,7 +30,7 @@ infix fun <A, B> Either<A, B>.shouldNotBeRight(b: B): B = shouldBeRight().should
 
 @OptIn(ExperimentalContracts::class)
 fun <A, B> Either<A, B>.shouldBeLeft(
-    failureMessage: (B) -> String = { "Expected Either.Left, but found Either.Right with value $it" }
+    failureMessage: (B) -> String = { "Expected Either.Left, but found Either.Right with value $it" },
 ): A {
     contract { returns() implies (this@shouldBeLeft is Left<A>) }
     assertionCounter.inc()
@@ -60,7 +60,7 @@ infix fun <A> Option<A>.shouldNotBeSome(a: A): A = shouldBeSome().shouldNotBe(a)
 
 @OptIn(ExperimentalContracts::class)
 fun <A> Option<A>.shouldBeNone(
-    failureMessage: (Some<A>) -> String = { "Expected None, but found Some with value ${it.value}" }
+    failureMessage: (Some<A>) -> String = { "Expected None, but found Some with value ${it.value}" },
 ): None {
     contract { returns() implies (this@shouldBeNone is None) }
     assertionCounter.inc()

@@ -42,7 +42,7 @@ suspend fun SnackbarHostState.showSnackbar(
                 actionLabelResource = actionLabelResource,
                 withDismissAction = withDismissAction,
                 duration = duration,
-            )
+            ),
         )
 
     when (result) {

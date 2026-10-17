@@ -168,9 +168,9 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                         coverImage = buildMediaCoverImage { large = String.empty }
                                                         nextAiringEpisode = null
                                                     }
-                                                }
+                                                },
                                             )
-                                    }
+                                    },
                                 )
                             user = buildUser {
                                 id = 37_384
@@ -264,9 +264,9 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                             mediaId = 100
                                                         }
                                                     }
-                                                }
+                                                },
                                             )
-                                    }
+                                    },
                                 )
                             user = buildUser {
                                 id = 37_384
@@ -442,9 +442,9 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                         coverImage = buildMediaCoverImage { large = String.empty }
                                                         nextAiringEpisode = null
                                                     }
-                                                }
+                                                },
                                             )
-                                    }
+                                    },
                                 )
                             user = buildUser {
                                 id = 37_384
@@ -534,9 +534,9 @@ internal class ApolloListsRemoteSourceTest : FreeSpec() {
                                                         }
                                                         nextAiringEpisode = null
                                                     }
-                                                }
+                                                },
                                             )
-                                    }
+                                    },
                                 )
                             user = buildUser {
                                 id = 37_384

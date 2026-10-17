@@ -50,7 +50,7 @@ internal fun WelcomeCard(onIntent: (ForYouIntent) -> Unit, modifier: Modifier = 
                     start = KatanaTheme.dimensions.spacing4,
                     end = KatanaTheme.dimensions.spacing4,
                     bottom = KatanaTheme.dimensions.spacing4,
-                )
+                ),
         )
     }
 }

@@ -70,7 +70,7 @@ fun KatanaSearchTopAppBar(
                 onClick = {
                     search = String.empty
                     onClear()
-                }
+                },
             ) {
                 Icon(imageVector = KatanaSymbols.Cross, contentDescription = clearContentDescription)
             }

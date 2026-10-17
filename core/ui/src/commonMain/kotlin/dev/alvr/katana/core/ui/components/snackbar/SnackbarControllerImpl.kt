@@ -38,7 +38,7 @@ internal class SnackbarControllerImpl : SnackbarController {
                 duration = duration,
                 onAction = onAction,
                 onDismiss = onDismiss,
-            )
+            ),
         )
     }
 
@@ -58,7 +58,7 @@ internal class SnackbarControllerImpl : SnackbarController {
                 duration = duration,
                 onAction = onAction,
                 onDismiss = onDismiss,
-            )
+            ),
         )
     }
 

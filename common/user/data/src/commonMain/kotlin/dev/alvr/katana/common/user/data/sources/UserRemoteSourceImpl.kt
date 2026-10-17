@@ -38,7 +38,7 @@ internal class UserRemoteSourceImpl(private val client: ApolloClient) : UserRemo
                 emit(
                     error
                         .toFailure(network = UserFailure.GettingUserInfo, response = UserFailure.GettingUserInfo)
-                        .left()
+                        .left(),
                 )
             }
 

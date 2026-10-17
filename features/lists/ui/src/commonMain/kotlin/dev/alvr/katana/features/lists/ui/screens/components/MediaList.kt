@@ -150,7 +150,7 @@ private fun MediaListItem(
         modifier =
             modifier
                 .height(KatanaTheme.sizes.cardHeight)
-                .combinedClickable(onClick = onEntryDetails, onDoubleClick = onAddPlusOne, onLongClick = onEditEntry)
+                .combinedClickable(onClick = onEntryDetails, onDoubleClick = onAddPlusOne, onLongClick = onEditEntry),
     ) {
         CardContent(item = item, itemLoading = itemLoading, onAddPlusOne = onAddPlusOne)
     }
@@ -261,7 +261,7 @@ private fun Subtitle(
                 Res.string.entry_next_episode.format(
                     nextEpisode.number,
                     KatanaDateFormats.nextEpisodeFormat(nextEpisode.date),
-                )
+                ),
             )
         }
     }
@@ -280,7 +280,7 @@ private fun Score(score: Double, modifier: Modifier = Modifier) {
                         shape = RoundedCornerShape(topEnd = KatanaTheme.sizes.size1),
                     )
                     .padding(KatanaTheme.dimensions.spacing1)
-                    .defaultMinSize(minWidth = KatanaTheme.sizes.size5)
+                    .defaultMinSize(minWidth = KatanaTheme.sizes.size5),
         ) {
             Text(
                 text = KatanaNumberFormatter.Score(score),

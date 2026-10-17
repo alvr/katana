@@ -18,6 +18,6 @@ fun Modifier.katanaPlaceholder(visible: Boolean, shape: Shape? = null): Modifier
         shape = shape,
         highlight =
             PlaceholderHighlight.shimmer(
-                highlightColor = PlaceholderDefaults.shimmerHighlightColor(alpha = KatanaTheme.alpha.alpha33)
+                highlightColor = PlaceholderDefaults.shimmerHighlightColor(alpha = KatanaTheme.alpha.alpha33),
             ),
     )

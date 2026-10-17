@@ -164,7 +164,7 @@ internal class ListsRemoteSourceTest : FreeSpec() {
                                     MediaType.MANGA -> source.mangaCollection
                                     else -> error("Unknown type")
                                 },
-                        )
+                        ),
                     )
                 }
             }
@@ -191,7 +191,7 @@ internal class ListsRemoteSourceTest : FreeSpec() {
                                     MediaType.MANGA -> source.mangaCollection
                                     else -> error("Unknown type")
                                 },
-                        )
+                        ),
                     )
                 }
             }

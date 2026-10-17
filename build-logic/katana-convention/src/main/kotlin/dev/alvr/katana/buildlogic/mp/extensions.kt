@@ -31,7 +31,7 @@ internal fun KotlinMultiplatformExtension.hierarchy(
 }
 
 private fun KotlinMultiplatformExtension.configureAndroid(
-    configure: KotlinMultiplatformAndroidLibraryTarget.() -> Unit
+    configure: KotlinMultiplatformAndroidLibraryTarget.() -> Unit,
 ) {
     androidLibrary {
         buildToolsVersion = KatanaConfiguration.BuildTools

@@ -138,7 +138,7 @@ internal class ListsViewModelTest : FreeSpec() {
 
                                 verifySuspend(mode = VerifyMode.exactly(1)) {
                                     scope.updateList(
-                                        scenario.item1.copyWithProgress(scenario.item1.progress.inc()).toMediaList()
+                                        scenario.item1.copyWithProgress(scenario.item1.progress.inc()).toMediaList(),
                                     )
                                 }
                             }
@@ -155,7 +155,7 @@ internal class ListsViewModelTest : FreeSpec() {
 
                                 verifySuspend(mode = VerifyMode.exactly(1)) {
                                     scope.updateList(
-                                        scenario.item1.copyWithProgress(scenario.item1.progress.inc()).toMediaList()
+                                        scenario.item1.copyWithProgress(scenario.item1.progress.inc()).toMediaList(),
                                     )
                                 }
                             }
@@ -358,11 +358,11 @@ internal class ListsViewModelTest : FreeSpec() {
                 listOf(
                     MediaListGroup(name = listName1, entries = listOf(mediaEntry1)),
                     MediaListGroup(name = listName2, entries = listOf(mediaEntry2)),
-                )
+                ),
         )
 
     private suspend fun TestKatanaBaseViewModelScope<ListsState, ListsEffect, ListsIntent>.expectStateWithLists(
-        scenario: ListScenario
+        scenario: ListScenario,
     ) {
         expectState {
             items shouldBe persistentListOf(scenario.item1)

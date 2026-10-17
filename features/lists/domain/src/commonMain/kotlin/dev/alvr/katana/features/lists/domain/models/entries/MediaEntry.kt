@@ -10,7 +10,7 @@ sealed class MediaEntry(
     val format: CommonMediaEntry.Format,
 ) {
     constructor(
-        entry: CommonMediaEntry
+        entry: CommonMediaEntry,
     ) : this(id = entry.id, title = entry.title, coverImage = entry.coverImage, format = entry.format)
 
     data class Anime(val entry: CommonMediaEntry, val episodes: Int?, val nextEpisode: NextEpisode?) :

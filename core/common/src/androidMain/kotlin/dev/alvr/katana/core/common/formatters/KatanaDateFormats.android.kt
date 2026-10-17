@@ -7,7 +7,7 @@ import java.time.format.FormatStyle
 internal actual typealias KatanaPlatformDateTimeFormatterBuilder = DateTimeFormatterBuilder
 
 internal actual fun dateTimeFormatterBuilder(
-    block: KatanaPlatformDateTimeFormatterBuilder.() -> Unit
+    block: KatanaPlatformDateTimeFormatterBuilder.() -> Unit,
 ): KatanaDateTimeFormatter =
     DateTimeFormatterBuilder().apply(block).toFormatter(KatanaLocale.default().locale).let {
         KatanaDateTimeFormatter(it)
