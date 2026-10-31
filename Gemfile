@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "faraday", ">= 1.10.5", "< 2.15.1"
+gem "faraday", ">= 1.10.5", "< 2.15.2"
 gem "fastlane", "~> 2.236"
 
 plugins_path = File.join(File.dirname(__FILE__), 'fastlane', 'Pluginfile')
