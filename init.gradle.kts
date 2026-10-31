@@ -8,7 +8,7 @@ initscript {
             mavenContent { snapshotsOnly() }
         }
     }
-    dependencies { classpath("org.gradle:github-dependency-graph-gradle-plugin:1.5.0") }
+    dependencies { classpath("org.gradle:github-dependency-graph-gradle-plugin:1.5.1") }
 }
 
 beforeSettings {
